@@ -51,7 +51,16 @@ class DungeonFloorSwitchMarker extends MapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'dungeonfloorswitchmarker'});
 
+        let self = this;
+
         this.label = 'DungeonFloorSwitchMarker';
+        // Listen for floor changes
+        getState().register('floorid:changed', this, function () {
+            // Invalidate the cache
+            self._cachedAttributes = null;
+            // Rebuild the popup so that we have proper
+            self._assignPopup();
+        });
     }
 
     /**
@@ -65,22 +74,6 @@ class DungeonFloorSwitchMarker extends MapObject {
             return this._cachedAttributes;
         }
 
-        // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-        let currentFloorId = getState().getCurrentFloor().id;
-        let dungeonData = getState().getMapContext().getDungeon();
-        let selectFloors = [];
-        for (let i in dungeonData.floors) {
-            if (dungeonData.floors.hasOwnProperty(i)) {
-                let floor = dungeonData.floors[i];
-                if (floor.id !== currentFloorId) {
-                    selectFloors.push({
-                        id: floor.id,
-                        name: floor.name,
-                    });
-                }
-            }
-        }
-
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
                 name: 'floor_id',
@@ -91,7 +84,26 @@ class DungeonFloorSwitchMarker extends MapObject {
             new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
-                values: selectFloors,
+                values: function () {
+                    // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
+                    let currentFloorId = self.floor_id;
+                    let dungeonData = getState().getMapContext().getDungeon();
+                    let selectFloors = [];
+
+                    for (let i in dungeonData.floors) {
+                        if (dungeonData.floors.hasOwnProperty(i)) {
+                            let floor = dungeonData.floors[i];
+                            if (floor.id !== currentFloorId) {
+                                selectFloors.push({
+                                    id: floor.id,
+                                    name: floor.name,
+                                });
+                            }
+                        }
+                    }
+
+                    return selectFloors;
+                },
                 default: -1
             }),
             new Attribute({
@@ -111,6 +123,38 @@ class DungeonFloorSwitchMarker extends MapObject {
                 }
             })
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        switch (remoteMapObject.direction) {
+            case 'up':
+                this.layer = new LeafletDungeonFloorSwitchMarkerUp();
+                break;
+            case 'down':
+                this.layer = new LeafletDungeonFloorSwitchMarkerDown();
+                break;
+            case 'left':
+                this.layer = new LeafletDungeonFloorSwitchMarkerLeft();
+                break;
+            case 'right':
+                this.layer = new LeafletDungeonFloorSwitchMarkerRight();
+                break;
+            default:
+                // layer = new LeafletDungeonFloorSwitchMarker();
+                break;
+        }
+
+        if (this.layer !== null) {
+            this.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+
+            let mapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            mapObjectGroup.setLayerToMapObject(this.layer, this);
+        }
     }
 
     /**
@@ -138,14 +182,20 @@ class DungeonFloorSwitchMarker extends MapObject {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
         // If we've fully loaded this marker
-        if (value && typeof this.layer !== 'undefined') {
+        if (value && this.layer !== null) {
             let targetFloor = this.map.getFloorById(this.target_floor_id);
 
             if (targetFloor !== false) {
-                this.layer.bindTooltip('Go to ' + targetFloor.name, {
+                this.layer.bindTooltip(`Go to ${targetFloor.name}`, {
                     direction: 'top'
                 });
             }
         }
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        getState().unregister('floorid:changed', this);
     }
 }

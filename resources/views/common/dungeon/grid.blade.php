@@ -3,7 +3,7 @@
 /** @var $expansion \App\Models\Expansion */
 $expansion = $expansionService->getCurrentExpansion();
 $rowCount = 4;
-$colCount = $expansion->dungeons()->active()->count() / $rowCount;
+$colCount = (int) round($expansion->dungeons()->active()->count() / $rowCount);
 
 $names = isset($names) ? $names : true;
 $links = isset($links) ? $links : collect();
@@ -23,11 +23,11 @@ $links = isset($links) ? $links : collect();
 
         @isset($link)
             <a href="{{ __($link['link']) }}">
-        @endisset
+                @endisset
 
-        <img src="images/dungeons/{{ $dungeon->key }}.jpg" style="width: 100%" alt="{{ __($dungeon->name) }}"/>
+                <img src="images/dungeons/{{ $dungeon->key }}.jpg" style="width: 100%" alt="{{ __($dungeon->name) }}"/>
 
-        @isset($link)
+                @isset($link)
             </a>
         @endisset
     </div>

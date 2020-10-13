@@ -52,40 +52,4 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
             </div>
         </div>
     </div>
-
-    <!-- Floor settings -->
-    <div class="form-group">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Floor settings') }}</h5>
-                @isset($model)
-                    {{ Form::model($model, ['route' => ['admin.floor.update', 'floor' => $model->id], 'method' => 'patch']) }}
-                @else
-                    {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $model->dungeon->id]]) }}
-                @endisset
-
-                <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
-                    {!! Form::label('index', __('Index'), ['class' => 'font-weight-bold']) !!}:
-                    {!! Form::text('index', null, ['class' => 'form-control']) !!}
-                    @include('common.forms.form-error', ['key' => 'index'])
-                </div>
-
-                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    {!! Form::label('name', __('Floor name'), ['class' => 'font-weight-bold']) !!}:
-                    {!! Form::text('name', null, ['class' => 'form-control']) !!}
-                    @include('common.forms.form-error', ['key' => 'name'])
-                </div>
-
-                <div class="form-group">
-                    {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}:
-                    {!! Form::select('connectedfloors[]', $model->dungeon->floors->pluck('name', 'id'), $model->connectedFloors()->pluck('id')->all(),
-                        ['multiple' => 'multiple', 'class' => 'form-control']) !!}
-                </div>
-
-                {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
-
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
 @endcomponent

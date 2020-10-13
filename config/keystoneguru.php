@@ -76,6 +76,16 @@ return [
     ],
 
     /**
+     * The minimum size for enemies for floors if none was set
+     */
+    'min_enemy_size_default' => 12,
+
+    /**
+     * The maximum size for enemies for floors if none was set
+     */
+    'max_enemy_size_default' => 26,
+
+    /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
      */

@@ -57,8 +57,13 @@ class Save extends Command
     private function _saveDungeons(string $dungeonDataDir)
     {
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion', 'floors'])->get();
-        $this->saveDataToJsonFile($dungeons->makeHidden(['key', 'active', 'floor_count', 'expansion', 'floors'])->toArray(), $dungeonDataDir, 'dungeons.json');
+        $dungeons = Dungeon::without(['expansion'])->with('floors.floorcouplings')->get();
+
+        $this->saveDataToJsonFile(
+            $dungeons->makeHidden(['active', 'floor_count', 'expansion'])
+                ->makeVisible(['expansion_id'])
+                ->toArray(),
+            $dungeonDataDir, 'dungeons.json');
     }
 
     /**

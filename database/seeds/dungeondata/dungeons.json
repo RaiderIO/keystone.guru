@@ -1,282 +1,1579 @@
 [
     {
         "id": 1,
+        "expansion_id": 1,
         "zone_id": 7855,
+        "key": "arcway",
         "name": "Arcway",
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": 466,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 1,
+                "index": 1,
+                "name": "Arcway",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 2,
+        "expansion_id": 1,
         "zone_id": 7805,
+        "key": "blackrookhold",
         "name": "Black Rook Hold",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 2,
+                "index": 1,
+                "name": "The Ravenscrypt",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 3,
+                "index": 2,
+                "name": "The Grand Hall",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 4,
+                "index": 3,
+                "name": "Ravenshold",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 5,
+                "index": 4,
+                "name": "The Rook's Roost",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 6,
+                "index": 5,
+                "name": "Lord Ravencrest's Chamber",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 7,
+                "index": 6,
+                "name": "The Raven's Crown",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 3,
+        "expansion_id": 1,
         "zone_id": 8527,
+        "key": "cathedralofeternalnight",
         "name": "Cathedral of Eternal Night",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 8,
+                "index": 1,
+                "name": "Hall of the Moon",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 9,
+                "index": 2,
+                "name": "Twilight Grove",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 10,
+                "index": 3,
+                "name": "The Emerald Archives",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 11,
+                "index": 4,
+                "name": "Path of Illumination",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 12,
+                "index": 5,
+                "name": "Sacristy of Elune",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 4,
+        "expansion_id": 1,
         "zone_id": 8079,
+        "key": "courtofstars",
         "name": "Court of Stars",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 60
+        "timer_max_seconds": 60,
+        "floors": [
+            {
+                "id": 13,
+                "index": 1,
+                "name": "Court of Stars",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 5,
+        "expansion_id": 1,
         "zone_id": 7673,
+        "key": "darkheartthicket",
         "name": "Darkheart Thicket",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 14,
+                "index": 1,
+                "name": "Darkheart Thicket",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 6,
+        "expansion_id": 1,
         "zone_id": 8040,
+        "key": "eyeofazshara",
         "name": "Eye of Azshara",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 15,
+                "index": 1,
+                "name": "Eye of Azshara",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 7,
+        "expansion_id": 1,
         "zone_id": 7672,
+        "key": "hallsofvalor",
         "name": "Halls of Valor",
         "enemy_forces_required": 115,
         "enemy_forces_required_teeming": 151,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 16,
+                "index": 2,
+                "name": "The High Gate",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1,
+                        "floor1_id": 16,
+                        "floor2_id": 17,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 3,
+                        "floor1_id": 16,
+                        "floor2_id": 18,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 17,
+                "index": 1,
+                "name": "Fields of the Eternal Hunt",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 2,
+                        "floor1_id": 17,
+                        "floor2_id": 16,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 18,
+                "index": 3,
+                "name": "Halls of Valor",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 4,
+                        "floor1_id": 18,
+                        "floor2_id": 16,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 8,
+        "expansion_id": 1,
         "zone_id": 8443,
+        "key": "lowerkarazhan",
         "name": "Lower Karazhan",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 19,
+                "index": 6,
+                "name": "Master's Terrace",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 20,
+                "index": 5,
+                "name": "Opera Hall Balcony",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 21,
+                "index": 4,
+                "name": "The Guest Chambers",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 22,
+                "index": 3,
+                "name": "The Banquet Hall",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 23,
+                "index": 2,
+                "name": "Upper Livery Stables",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 24,
+                "index": 1,
+                "name": "Servant's Quarters",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 9,
+        "expansion_id": 1,
         "zone_id": 7812,
+        "key": "mawofsouls",
         "name": "Maw of Souls",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 25,
+                "index": 1,
+                "name": "Hellmouth Cliffs",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 26,
+                "index": 2,
+                "name": "The Hold",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 27,
+                "index": 3,
+                "name": "The Naglfar",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 10,
+        "expansion_id": 1,
         "zone_id": 7546,
+        "key": "neltharionslair",
         "name": "Neltharion's Lair",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 28,
+                "index": 1,
+                "name": "Neltharion's Lair",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 11,
+        "expansion_id": 1,
         "zone_id": 8443,
+        "key": "upperkarazhan",
         "name": "Upper Karazhan",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 29,
+                "index": 7,
+                "name": "Lower Broken Stair",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 30,
+                "index": 8,
+                "name": "Upper Broken Stair",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 31,
+                "index": 9,
+                "name": "The Menagerie",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 32,
+                "index": 10,
+                "name": "Guardian's Library",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 33,
+                "index": 11,
+                "name": "Library Floor",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 34,
+                "index": 12,
+                "name": "Upper Library",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 35,
+                "index": 13,
+                "name": "Gamesman's Hall",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 36,
+                "index": 14,
+                "name": "Netherspace",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 12,
+        "expansion_id": 1,
         "zone_id": 8910,
+        "key": "theseatofthetriumvirate",
         "name": "The Seat of the Triumvirate",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 37,
+                "index": 1,
+                "name": "The Seat of the Triumvirate",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 13,
+        "expansion_id": 1,
         "zone_id": 7787,
+        "key": "vaultofthewardens",
         "name": "Vault of the Wardens",
         "enemy_forces_required": 210,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 38,
+                "index": 1,
+                "name": "The Warden's Court",
+                "default": 1,
+                "floorcouplings": []
+            },
+            {
+                "id": 39,
+                "index": 2,
+                "name": "Vault of the Wardens",
+                "default": 0,
+                "floorcouplings": []
+            },
+            {
+                "id": 40,
+                "index": 3,
+                "name": "Vault of the Betrayer",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 14,
+        "expansion_id": 2,
         "zone_id": 9028,
+        "key": "ataldazar",
         "name": "Atal'Dazar",
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
-        "timer_max_seconds": 1800
+        "timer_max_seconds": 1800,
+        "floors": [
+            {
+                "id": 41,
+                "index": 1,
+                "name": "Atal'Dazar",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 5,
+                        "floor1_id": 41,
+                        "floor2_id": 42,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 42,
+                "index": 2,
+                "name": "Sacrificial Pits",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 6,
+                        "floor1_id": 42,
+                        "floor2_id": 41,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 15,
+        "expansion_id": 2,
         "zone_id": 9164,
+        "key": "freehold",
         "name": "Freehold",
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
-        "timer_max_seconds": 1980
+        "timer_max_seconds": 1980,
+        "floors": [
+            {
+                "id": 43,
+                "index": 1,
+                "name": "Freehold",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 16,
+        "expansion_id": 2,
         "zone_id": 9526,
+        "key": "kingsrest",
         "name": "Kings' Rest",
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
-        "timer_max_seconds": 2520
+        "timer_max_seconds": 2520,
+        "floors": [
+            {
+                "id": 44,
+                "index": 1,
+                "name": "Kings' Rest",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 17,
+        "expansion_id": 2,
         "zone_id": 9525,
+        "key": "shrineofthestorm",
         "name": "Shrine of the Storm",
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
-        "timer_max_seconds": 2520
+        "timer_max_seconds": 2520,
+        "floors": [
+            {
+                "id": 45,
+                "index": 1,
+                "name": "Shrine of the Storm",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 7,
+                        "floor1_id": 45,
+                        "floor2_id": 46,
+                        "direction": "right"
+                    }
+                ]
+            },
+            {
+                "id": 46,
+                "index": 2,
+                "name": "Storm's End",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 8,
+                        "floor1_id": 46,
+                        "floor2_id": 45,
+                        "direction": "left"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 18,
+        "expansion_id": 2,
         "zone_id": 9354,
+        "key": "siegeofboralus",
         "name": "Siege of Boralus",
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
-        "timer_max_seconds": 2160
+        "timer_max_seconds": 2160,
+        "floors": [
+            {
+                "id": 47,
+                "index": 1,
+                "name": "Siege of Boralus",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 19,
+        "expansion_id": 2,
         "zone_id": 9527,
+        "key": "templeofsethraliss",
         "name": "Temple of Sethraliss",
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
-        "timer_max_seconds": 2160
+        "timer_max_seconds": 2160,
+        "floors": [
+            {
+                "id": 48,
+                "index": 1,
+                "name": "Temple of Sethraliss",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 9,
+                        "floor1_id": 48,
+                        "floor2_id": 49,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 49,
+                "index": 2,
+                "name": "Atrium of the Wardens",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 10,
+                        "floor1_id": 49,
+                        "floor2_id": 48,
+                        "direction": "right"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 20,
+        "expansion_id": 2,
         "zone_id": 8064,
+        "key": "themotherlode",
         "name": "The MOTHERLODE!!",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
-        "timer_max_seconds": 2340
+        "timer_max_seconds": 2340,
+        "floors": [
+            {
+                "id": 50,
+                "index": 1,
+                "name": "The Motherlode",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 21,
+        "expansion_id": 2,
         "zone_id": 9391,
+        "key": "theunderrot",
         "name": "The Underrot",
         "enemy_forces_required": 252,
         "enemy_forces_required_teeming": 286,
-        "timer_max_seconds": 1980
+        "timer_max_seconds": 1980,
+        "floors": [
+            {
+                "id": 51,
+                "index": 1,
+                "name": "The Underrot",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 11,
+                        "floor1_id": 51,
+                        "floor2_id": 52,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 52,
+                "index": 2,
+                "name": "Ruin's Descent",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 12,
+                        "floor1_id": 52,
+                        "floor2_id": 51,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 22,
+        "expansion_id": 2,
         "zone_id": 9327,
+        "key": "toldagor",
         "name": "Tol Dagor",
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
-        "timer_max_seconds": 2160
+        "timer_max_seconds": 2160,
+        "floors": [
+            {
+                "id": 53,
+                "index": 1,
+                "name": "Tol Dagor",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 13,
+                        "floor1_id": 53,
+                        "floor2_id": 54,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 54,
+                "index": 2,
+                "name": "The Drain",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 14,
+                        "floor1_id": 54,
+                        "floor2_id": 53,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 15,
+                        "floor1_id": 54,
+                        "floor2_id": 55,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 55,
+                "index": 3,
+                "name": "The Brig",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 16,
+                        "floor1_id": 55,
+                        "floor2_id": 54,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 17,
+                        "floor1_id": 55,
+                        "floor2_id": 56,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 56,
+                "index": 4,
+                "name": "Detention Block",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 18,
+                        "floor1_id": 56,
+                        "floor2_id": 55,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 19,
+                        "floor1_id": 56,
+                        "floor2_id": 57,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 57,
+                "index": 5,
+                "name": "Officer Quarters",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 20,
+                        "floor1_id": 57,
+                        "floor2_id": 56,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 21,
+                        "floor1_id": 57,
+                        "floor2_id": 58,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 58,
+                "index": 6,
+                "name": "Overseer's Redoubt",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 22,
+                        "floor1_id": 58,
+                        "floor2_id": 57,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 23,
+                        "floor1_id": 58,
+                        "floor2_id": 59,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 59,
+                "index": 7,
+                "name": "Overseer's Summit",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 24,
+                        "floor1_id": 59,
+                        "floor2_id": 58,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 23,
+        "expansion_id": 2,
         "zone_id": 9424,
+        "key": "waycrestmanor",
         "name": "Waycrest Manor",
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
-        "timer_max_seconds": 2340
+        "timer_max_seconds": 2340,
+        "floors": [
+            {
+                "id": 60,
+                "index": 1,
+                "name": "The Grand Foyer",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 77,
+                        "floor1_id": 60,
+                        "floor2_id": 61,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 78,
+                        "floor1_id": 60,
+                        "floor2_id": 62,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 61,
+                "index": 2,
+                "name": "Upstairs",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 26,
+                        "floor1_id": 61,
+                        "floor2_id": 60,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 62,
+                "index": 3,
+                "name": "The Cellar",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 28,
+                        "floor1_id": 62,
+                        "floor2_id": 60,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 29,
+                        "floor1_id": 62,
+                        "floor2_id": 63,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 63,
+                "index": 4,
+                "name": "Catacombs",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 30,
+                        "floor1_id": 63,
+                        "floor2_id": 62,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 31,
+                        "floor1_id": 63,
+                        "floor2_id": 64,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 64,
+                "index": 5,
+                "name": "The Rupture",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 32,
+                        "floor1_id": 64,
+                        "floor2_id": 63,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 24,
+        "expansion_id": 2,
         "zone_id": 10225,
+        "key": "mechagonjunkyard",
         "name": "Mechagon: Junkyard",
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
-        "timer_max_seconds": 2280
+        "timer_max_seconds": 2280,
+        "floors": [
+            {
+                "id": 65,
+                "index": 1,
+                "name": "Mechagon Island",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 33,
+                        "floor1_id": 65,
+                        "floor2_id": 66,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 66,
+                "index": 2,
+                "name": "Tunnels",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 34,
+                        "floor1_id": 66,
+                        "floor2_id": 65,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 25,
+        "expansion_id": 2,
         "zone_id": 10225,
+        "key": "mechagonworkshop",
         "name": "Mechagon: Workshop",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
-        "timer_max_seconds": 1920
+        "timer_max_seconds": 1920,
+        "floors": [
+            {
+                "id": 67,
+                "index": 1,
+                "name": "The Robodrome",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 35,
+                        "floor1_id": 67,
+                        "floor2_id": 68,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 68,
+                "index": 3,
+                "name": "The Under Junk",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 36,
+                        "floor1_id": 68,
+                        "floor2_id": 67,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 37,
+                        "floor1_id": 68,
+                        "floor2_id": 69,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "index": 4,
+                "name": "Mechagon City",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 38,
+                        "floor1_id": 69,
+                        "floor2_id": 68,
+                        "direction": "right"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 26,
+        "expansion_id": 2,
         "zone_id": 0,
+        "key": "orgrimmarhorrificvision",
         "name": "Orgrimmar (Horrific Vision)",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 70,
+                "index": 1,
+                "name": "Orgrimmar",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 39,
+                        "floor1_id": 70,
+                        "floor2_id": 71,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 71,
+                "index": 2,
+                "name": "The Drag",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 40,
+                        "floor1_id": 71,
+                        "floor2_id": 70,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 27,
+        "expansion_id": 2,
         "zone_id": 0,
+        "key": "stormwindcityhorrificvision",
         "name": "Stormwind City (Horrific Vision)",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 0,
+        "floors": [
+            {
+                "id": 72,
+                "index": 1,
+                "name": "Stormwind City",
+                "default": 0,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 28,
+        "expansion_id": 3,
         "zone_id": 13309,
+        "key": "deotherside_ardenweald",
         "name": "De Other Side",
         "enemy_forces_required": 399,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2340
+        "timer_max_seconds": 2340,
+        "floors": [
+            {
+                "id": 73,
+                "index": 1,
+                "name": "De Other Side",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 41,
+                        "floor1_id": 73,
+                        "floor2_id": 74,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 43,
+                        "floor1_id": 73,
+                        "floor2_id": 75,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 45,
+                        "floor1_id": 73,
+                        "floor2_id": 76,
+                        "direction": "right"
+                    }
+                ]
+            },
+            {
+                "id": 74,
+                "index": 2,
+                "name": "Mechagon",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 42,
+                        "floor1_id": 74,
+                        "floor2_id": 73,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 75,
+                "index": 3,
+                "name": "Zul'Gurub",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 44,
+                        "floor1_id": 75,
+                        "floor2_id": 73,
+                        "direction": "right"
+                    }
+                ]
+            },
+            {
+                "id": 76,
+                "index": 4,
+                "name": "Ardenweald",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 46,
+                        "floor1_id": 76,
+                        "floor2_id": 73,
+                        "direction": "left"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 29,
+        "expansion_id": 3,
         "zone_id": 12831,
+        "key": "hallsofatonement_a",
         "name": "Halls of Atonement",
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 1920
+        "timer_max_seconds": 1920,
+        "floors": [
+            {
+                "id": 77,
+                "index": 1,
+                "name": "Halls of Atonement",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 47,
+                        "floor1_id": 77,
+                        "floor2_id": 78,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 78,
+                "index": 2,
+                "name": "The Nave of Pain",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 48,
+                        "floor1_id": 78,
+                        "floor2_id": 77,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 49,
+                        "floor1_id": 78,
+                        "floor2_id": 79,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 79,
+                "index": 3,
+                "name": "The Sanctuary of Souls",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 50,
+                        "floor1_id": 79,
+                        "floor2_id": 78,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 30,
+        "expansion_id": 3,
         "zone_id": 13334,
+        "key": "mistsoftirnescithe",
         "name": "Mists of Tirna Scithe",
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 1800
+        "timer_max_seconds": 1800,
+        "floors": [
+            {
+                "id": 80,
+                "index": 1,
+                "name": "Mists of Tirna Scithe",
+                "default": 1,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 31,
+        "expansion_id": 3,
         "zone_id": 13228,
+        "key": "plaguefall",
         "name": "Plaguefall",
         "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2280
+        "timer_max_seconds": 2280,
+        "floors": [
+            {
+                "id": 81,
+                "index": 1,
+                "name": "Plaguefall",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 51,
+                        "floor1_id": 81,
+                        "floor2_id": 82,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 82,
+                "index": 2,
+                "name": "The Festering Sanctum",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 52,
+                        "floor1_id": 82,
+                        "floor2_id": 81,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 32,
+        "expansion_id": 3,
         "zone_id": 12842,
+        "key": "sanguinedepths_a",
         "name": "Sanguine Depths",
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2460
+        "timer_max_seconds": 2460,
+        "floors": [
+            {
+                "id": 83,
+                "index": 1,
+                "name": "A",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 53,
+                        "floor1_id": 83,
+                        "floor2_id": 84,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 84,
+                "index": 2,
+                "name": "B",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 54,
+                        "floor1_id": 84,
+                        "floor2_id": 83,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 33,
+        "expansion_id": 3,
         "zone_id": 12837,
+        "key": "spiresofascension_a",
         "name": "Spires of Ascension",
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2340
+        "timer_max_seconds": 2340,
+        "floors": [
+            {
+                "id": 85,
+                "index": 1,
+                "name": "Honor's Ascent",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 56,
+                        "floor1_id": 85,
+                        "floor2_id": 86,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 86,
+                "index": 2,
+                "name": "Gardens of Repose",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 55,
+                        "floor1_id": 86,
+                        "floor2_id": 85,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 57,
+                        "floor1_id": 86,
+                        "floor2_id": 87,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 87,
+                "index": 3,
+                "name": "Spire of the Firstborne",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 58,
+                        "floor1_id": 87,
+                        "floor2_id": 86,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 60,
+                        "floor1_id": 87,
+                        "floor2_id": 88,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 88,
+                "index": 4,
+                "name": "Seat of the Archon",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 59,
+                        "floor1_id": 88,
+                        "floor2_id": 87,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 34,
+        "expansion_id": 3,
         "zone_id": 12916,
+        "key": "necroticwake_a",
         "name": "The Necrotic Wake",
         "enemy_forces_required": 275,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2040
+        "timer_max_seconds": 2040,
+        "floors": [
+            {
+                "id": 89,
+                "index": 1,
+                "name": "The Necrotic Wake",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 61,
+                        "floor1_id": 89,
+                        "floor2_id": 90,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 90,
+                "index": 2,
+                "name": "Stitchwerks",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 62,
+                        "floor1_id": 90,
+                        "floor2_id": 89,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 63,
+                        "floor1_id": 90,
+                        "floor2_id": 91,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 91,
+                "index": 3,
+                "name": "Zolramus",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 64,
+                        "floor1_id": 91,
+                        "floor2_id": 90,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 35,
+        "expansion_id": 3,
         "zone_id": 12841,
+        "key": "theaterofpain",
         "name": "Theater of Pain",
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2220
+        "timer_max_seconds": 2220,
+        "floors": [
+            {
+                "id": 92,
+                "index": 1,
+                "name": "Theater of Pain",
+                "default": 1,
+                "floorcouplings": [
+                    {
+                        "id": 65,
+                        "floor1_id": 92,
+                        "floor2_id": 93,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 67,
+                        "floor1_id": 92,
+                        "floor2_id": 94,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 69,
+                        "floor1_id": 92,
+                        "floor2_id": 96,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 93,
+                "index": 2,
+                "name": "Chamber of Conquest",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 66,
+                        "floor1_id": 93,
+                        "floor2_id": 92,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 94,
+                "index": 3,
+                "name": "Altars of Agony",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 68,
+                        "floor1_id": 94,
+                        "floor2_id": 92,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 95,
+                "index": 4,
+                "name": "Lower Barrow of Carnage",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 71,
+                        "floor1_id": 95,
+                        "floor2_id": 96,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 96,
+                "index": 5,
+                "name": "Upper Barrow of Carnage",
+                "default": 0,
+                "floorcouplings": [
+                    {
+                        "id": 70,
+                        "floor1_id": 96,
+                        "floor2_id": 92,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 72,
+                        "floor1_id": 96,
+                        "floor2_id": 95,
+                        "direction": "up"
+                    }
+                ]
+            }
+        ]
     }
 ]

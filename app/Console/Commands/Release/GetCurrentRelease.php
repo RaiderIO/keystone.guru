@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Release;
 
 use App\Models\Release;
 use Illuminate\Console\Command;
