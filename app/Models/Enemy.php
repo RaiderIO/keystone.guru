@@ -41,7 +41,7 @@ class Enemy extends Model
     use Reportable;
 
     public $appends = ['active_auras'];
-    public $with = ['npc'];
+    public $with = ['npc', 'activeauras'];
     public $hidden = ['laravel_through_key'];
     public $timestamps = false;
 
