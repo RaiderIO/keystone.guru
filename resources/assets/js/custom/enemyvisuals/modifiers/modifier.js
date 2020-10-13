@@ -71,8 +71,8 @@ class EnemyVisualModifier extends EnemyVisualIcon {
      * @param width {float}
      * @param height {float}
      * @param margin {float}
-     * @returns {Object}
-     * @private
+     * @returns {{}}
+     * @protected
      */
     _getLocation(width, height, margin) {
         console.assert(false, 'Must implement _getLocation() function!');

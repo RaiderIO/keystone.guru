@@ -83,7 +83,10 @@ class KillZoneEnemySelection extends EnemySelection {
         // Save all the killzones that were changed
         for (let i = 0; i < this._changedKillZoneIds.length; i++) {
             let killZone = killZoneMapObjectGroup.findMapObjectById(this._changedKillZoneIds[i]);
-            killZone.save();
+            // Only when the killzone was not deleted already
+            if (killZone !== null) {
+                killZone.save();
+            }
         }
     }
 

@@ -6,6 +6,8 @@ use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -30,15 +32,31 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Npc $npc
  * @property Floor $floor
  *
+ * @property EnemyActiveAura[]|Collection $enemyactiveauras
+ *
  * @mixin Eloquent
  */
 class Enemy extends Model
 {
     use Reportable;
 
+    public $appends = ['active_auras'];
     public $with = ['npc'];
-//    public $hidden = ['npc_id'];
+    public $hidden = ['laravel_through_key'];
     public $timestamps = false;
+
+    /**
+     * @return array
+     */
+    function getActiveAurasAttribute(){
+        $result = [];
+
+        foreach($this->enemyactiveauras as $activeaura){
+            $result[] = $activeaura->spell_id;
+        }
+
+        return $result;
+    }
 
     /**
      * @return BelongsTo
@@ -62,5 +80,13 @@ class Enemy extends Model
     function npc()
     {
         return $this->belongsTo('App\Models\Npc');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function enemyactiveauras()
+    {
+        return $this->hasMany('App\Models\EnemyActiveAura');
     }
 }

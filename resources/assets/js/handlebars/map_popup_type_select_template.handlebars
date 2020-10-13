@@ -1,7 +1,11 @@
 <div class="form-group">
     <label class="font-weight-bold" for="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}">{{label}}:</label>
     <select id="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}" class="selectpicker popup_select"
-            data-live-search="{{live_search}}" data-width="300px">
+            data-live-search="{{live_search}}" data-width="300px"
+        {{#if multiple}}
+            multiple="multiple"
+        {{/if}}
+    >
         {{#select value}}
             {{#if show_default}}
                 <option value="-1">{{select_default_label}}</option>

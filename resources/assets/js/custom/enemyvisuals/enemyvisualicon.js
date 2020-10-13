@@ -28,7 +28,11 @@ class EnemyVisualIcon extends Signalable {
      * @param name
      */
     setIcon(name) {
-        console.assert(this._getValidIconNames().indexOf(name) >= 0, 'Invalid icon name passed -> ' + name, this);
+        let validIconNames = this._getValidIconNames();
+        // May enter * to match everything
+        if (validIconNames.length > 0 && validIconNames[0] !== '*') {
+            console.assert(this._getValidIconNames().indexOf(name) >= 0, 'Invalid icon name passed -> ' + name, this);
+        }
         this.iconName = name;
         this.enemyvisual.buildVisual();
     }

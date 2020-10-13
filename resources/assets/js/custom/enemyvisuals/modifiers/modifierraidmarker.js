@@ -35,8 +35,8 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
     _getLocation(width, height, margin) {
         // Center
         return {
-            left: (width / 2) + margin - 13,
-            top: (height / 2) + margin - 13
+            left: (width / 2) - 13,
+            top: (height / 2) - 13
         }
     }
 
