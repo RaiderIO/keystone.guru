@@ -215,12 +215,37 @@ class MapContext extends Signalable {
     getMinEnemySizeDefault() {
         return this._options.minEnemySizeDefault;
     }
-    
+
     /**
      *
      * @returns {Number}
      */
     getMaxEnemySizeDefault() {
         return this._options.maxEnemySizeDefault;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getAuras() {
+        return this._options.auras;
+    }
+
+    /**
+     * @param auraId {Number}
+     * @returns {[]}
+     */
+    findAuraById(auraId) {
+        let result = null;
+
+        for (let i = 0; i < this._options.auras.length; i++) {
+            if (this._options.auras[i].id === auraId) {
+                result = this._options.auras[i];
+                break;
+            }
+        }
+
+        return result;
     }
 }

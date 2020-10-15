@@ -37,6 +37,7 @@ let c = {
             teeming_display_zoom: 3,
             awakened_display_zoom: 3,
             inspiring_display_zoom: 3,
+            active_aura_display_zoom: 3,
             colors: [
                 /*'#C000F0',
                 '#E25D5D',

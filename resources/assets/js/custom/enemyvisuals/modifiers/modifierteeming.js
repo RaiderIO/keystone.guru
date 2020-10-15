@@ -36,7 +36,7 @@ class EnemyVisualModifierTeeming extends EnemyVisualModifier {
         // Bottom left corner
         return {
             left: -8, // 16px wide; divided by 2
-            top: height
+            top: height - 8 // 16px wide; divided by 2
         }
     }
 

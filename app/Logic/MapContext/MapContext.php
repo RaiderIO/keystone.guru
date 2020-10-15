@@ -9,6 +9,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
 use App\Models\RaidMarker;
+use App\Models\Spell;
 use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -66,8 +67,9 @@ abstract class MapContext
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->_floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
-                'enemies'                   => $dungeon->enemies()->without(['npc'])->get(),
+                'enemies'                   => $dungeon->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
                 'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
+                'auras'                     => Spell::where('aura', true)->get(),
                 'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
@@ -100,6 +102,7 @@ abstract class MapContext
             'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,
             'static'              => $static,
+            'auras'               => Spell::where('aura', true)->get(),
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             // @TODO Probably move this? Temp fix

@@ -36,7 +36,7 @@ class NpcController extends Controller
 
     /**
      * @param NpcFormRequest $request
-     * @param Npc $npc
+     * @param Npc|null $npc
      * @return array|mixed
      * @throws Exception
      */
@@ -69,29 +69,31 @@ class NpcController extends Controller
         $npc->bolstering = $request->get('bolstering', 0);
         $npc->sanguine = $request->get('sanguine', 0);
 
-        // Bolstering whitelist, if set
-        $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);
-        // Clear current whitelists
-        $npc->npcbolsteringwhitelists()->delete();
-        foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
-            NpcBolsteringWhitelist::insert([
-                'npc_id'           => $npc->id,
-                'whitelist_npc_id' => $whitelistNpcId
-            ]);
-        }
-
-        // Spells, if set
-        $spells = $request->get('spells', []);
-        // Clear current spells
-        $npc->npcspells()->delete();
-        foreach ($spells as $spellId) {
-            NpcSpell::insert([
-                'npc_id'   => $npc->id,
-                'spell_id' => $spellId
-            ]);
-        }
-
         if ($npc->save()) {
+
+            // Bolstering whitelist, if set
+            $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);
+            // Clear current whitelists
+            $npc->npcbolsteringwhitelists()->delete();
+            foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
+                NpcBolsteringWhitelist::insert([
+                    'npc_id'           => $npc->id,
+                    'whitelist_npc_id' => $whitelistNpcId
+                ]);
+            }
+
+            // Spells, if set
+            $spells = $request->get('spells', []);
+            // Clear current spells
+            $npc->npcspells()->delete();
+            foreach ($spells as $spellId) {
+                NpcSpell::insert([
+                    'npc_id'   => $npc->id,
+                    'spell_id' => $spellId
+                ]);
+            }
+
+
             if ($oldId > 0) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
@@ -104,6 +106,9 @@ class NpcController extends Controller
             } else {
                 broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
             }
+
+            // Re-load the relations so we're echoing back a fully updated npc
+            $npc->load(['npcbolsteringwhitelists', 'spells']);
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
@@ -134,9 +139,21 @@ class NpcController extends Controller
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
-                [-1 => __('All npcs')] +
                 Npc::orderByRaw('dungeon_id, name')
-                    ->pluck('name', 'id')
+                    ->get()
+                    ->groupBy('dungeon_id')
+                    ->mapWithKeys(function ($value, $key)
+                    {
+                        // Halls of Valor => [npcs]
+                        $dungeonName = $key === -1 ? __('All dungeons') : Dungeon::find($key)->name;
+                        return [$dungeonName => $value->pluck('name', 'id')
+                            ->map(function ($value, $key)
+                            {
+                                // Make sure the value is formatted as 'Hymdal (123456)'
+                                return sprintf('%s (%s)', $value, $key);
+                            })
+                        ];
+                    })
                     ->toArray(),
             'headerTitle'     => __('New npc')
         ]);
@@ -159,6 +176,10 @@ class NpcController extends Controller
                     ->orWhere('dungeon_id', -1)
                     ->orderByRaw('dungeon_id, name')
                     ->pluck('name', 'id')
+                    ->map(function ($value, $key)
+                    {
+                        return sprintf('%s (%s)', $value, $key);
+                    })
                     ->toArray(),
             'headerTitle'     => __('Edit npc')
         ]);

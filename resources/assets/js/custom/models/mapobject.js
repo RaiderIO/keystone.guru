@@ -450,7 +450,8 @@ class MapObject extends Signalable {
                             : [],
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
-                        live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false
+                        live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
+                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false
                     }));
                 }
             }
@@ -839,14 +840,24 @@ class MapObject extends Signalable {
                             if (attribute.attributes.hasOwnProperty(childIndex)) {
                                 let childAttribute = attribute.attributes[childIndex];
                                 if (childAttribute.isSaveable() && childAttribute.isEditableAdmin()) {
-                                    obj[childAttribute.name] = this._getValue(childAttribute.name, attribute);
+                                    // Multiple select means send as an array
+                                    if (attribute.hasOwnProperty('multiple') && attribute.multiple) {
+                                        obj[childAttribute.name + '[]'] = this._getValue(childAttribute.name, attribute);
+                                    } else {
+                                        obj[childAttribute.name] = this._getValue(childAttribute.name, attribute);
+                                    }
                                 }
                             }
                         }
 
                         data[name] = obj;
                     } else {
-                        data[name] = this._getValue(name);
+                        // Multiple select means send as an array
+                        if (attribute.hasOwnProperty('multiple') && attribute.multiple) {
+                            data[name + '[]'] = this._getValue(name);
+                        } else {
+                            data[name] = this._getValue(name);
+                        }
                     }
                 }
             }

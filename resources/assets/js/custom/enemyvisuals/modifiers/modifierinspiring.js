@@ -35,8 +35,8 @@ class EnemyVisualModifierInspiring extends EnemyVisualModifier {
     _getLocation(width, height, margin) {
         // Bottom left
         return {
-            left: width,
-            top: height
+            left: width - 6, // width of 16px / 2, then 2 px more because it looks better
+            top: height - 10, // height of 16px / 2, then 2 px more because it looks better
         }
     }
 
