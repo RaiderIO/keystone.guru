@@ -29,12 +29,16 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
+        let mapObject = data.context;
 
         $.each(this.objects, function (i, obj) {
             obj.setIndex(i + 1);
         });
 
         this.saveAll();
+
+        mapObject.unregister('killzone:enemyremoved', this);
+        mapObject.unregister('killzone:enemyadded', this);
     }
 
     _createMapObject(layer, options = {}) {
@@ -53,11 +57,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     _onKillZoneEnemyRemoved(killZoneEnemyRemovedEvent){
-        this.signal('killzone:enemyremoved', {killzone: killZoneEnemyRemovedEvent.context});
+        this.signal('killzone:enemyremoved', {killzone: killZoneEnemyRemovedEvent.context, enemy: killZoneEnemyRemovedEvent.context});
     }
 
     _onKillZoneEnemyAdded(killZoneEnemyAddedEvent){
-        this.signal('killzone:enemyadded', {killzone: killZoneEnemyAddedEvent.context});
+        this.signal('killzone:enemyadded', {killzone: killZoneEnemyAddedEvent.context, enemy: killZoneEnemyAddedEvent.context});
     }
 
     /**

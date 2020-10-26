@@ -28,29 +28,18 @@ class EnemyForcesControls extends MapControl {
             }
         };
 
-        // Listen for when all enemies are loaded
-        this.map.register('map:mapobjectgroupsloaded', this, function () {
-            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
-            // For each enemy we've loaded
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-                // Local changes will update the counter
-                enemy.register('killzone:attached', self, function (data) {
-                    // This is also triggered
-                    if (self.map.getMapState() instanceof EnemySelection) {
-                        self._setEnemyForces(self.enemyForces + data.context.getEnemyForces());
-                    }
-                });
-                enemy.register('killzone:detached', self, function (data) {
-                    if (self.map.getMapState() instanceof EnemySelection) {
-                        self._setEnemyForces(self.enemyForces - data.context.getEnemyForces());
-                    }
-                });
-            });
+        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
+            if (self.map.getMapState() instanceof EnemySelection) {
+                self._setEnemyForces(self.enemyForces + addEvent.data.enemy.getEnemyForces());
+            }
         });
-
-        let killzoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
+        killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
+            if (self.map.getMapState() instanceof EnemySelection) {
+                self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
+            }
+        });
+        killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
         });
 
@@ -192,10 +181,8 @@ class EnemyForcesControls extends MapControl {
     }
 
     cleanup() {
-        super.cleanup();
-
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
-        let self = this;
+        super.cleanup();
 
         getState().getMapContext().unregister('teeming:changed', this);
         // Unreg from map
@@ -203,14 +190,8 @@ class EnemyForcesControls extends MapControl {
         // Unreg killzones
         let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.unregister('object:add', this);
-
-        // Unreg enemies
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-            // Unreg
-            enemy.unregister('killzone:attached', self);
-            enemy.unregister('killzone:detached', self);
-        });
+        killzoneMapObjectGroup.unregister('killzone:enemyremoved', this);
+        killzoneMapObjectGroup.unregister('killzone:enemyadded', this);
     }
 
 }

@@ -34,6 +34,14 @@ class Release extends Model
     protected $with = ['changelog'];
     protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 
+    /**
+     * @return Release|Model
+     */
+    private function _getPreviousRelease()
+    {
+        return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
+    }
+
     public function getRouteKeyName()
     {
         return 'version';
@@ -153,12 +161,7 @@ class Release extends Model
      */
     public function isMajorUpgrade()
     {
-        if ($this->id === 1) {
-            $result = true;
-        } else {
-            $result = Release::findOrFail($this->id - 1)->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
-        }
-        return $result;
+        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
     }
 
     /**
@@ -168,12 +171,7 @@ class Release extends Model
      */
     public function isMinorUpgrade()
     {
-        if ($this->id === 1) {
-            $result = true;
-        } else {
-            $result = Release::findOrFail($this->id - 1)->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
-        }
-        return $result;
+        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
     }
 
     /**
@@ -183,11 +181,6 @@ class Release extends Model
      */
     public function isBugfixUpgrade()
     {
-        if ($this->id === 1) {
-            $result = true;
-        } else {
-            $result = Release::findOrFail($this->id - 1)->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
-        }
-        return $result;
+        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
     }
 }

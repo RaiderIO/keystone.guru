@@ -3,15 +3,16 @@
 
 namespace App\Service\Cache;
 
+use DateInterval;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService implements CacheServiceInterface
 {
-    private function _getTtl(string $key): ?\DateInterval
+    private function _getTtl(string $key): ?DateInterval
     {
         $cacheConfig = config('keystoneguru.cache');
 
-        return isset($cacheConfig[$key]) ? \DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
+        return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
     }
 
     public function getOtherwiseSet(string $key, $closure, $ttl = null)

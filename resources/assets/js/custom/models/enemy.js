@@ -103,6 +103,20 @@ class Enemy extends MapObject {
             }
         }
 
+        let selectAuras = [];
+        let auras = getState().getMapContext().getAuras();
+        for (let index in auras) {
+            if (auras.hasOwnProperty(index)) {
+                let aura = auras[index];
+                selectAuras.push({
+                    id: aura.id,
+                    name: `${aura.name} (${aura.id})`,
+                    html: `<img src="${aura.icon_url}" width="32px"/> ${aura.name}</a>`
+                });
+            }
+        }
+
+
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
                 name: 'enemy_pack_id',
@@ -182,6 +196,17 @@ class Enemy extends MapObject {
                         value = null;
                     }
                     self.seasonal_index = value;
+                }
+            }),
+            new Attribute({
+                name: 'active_auras',
+                type: 'select',
+                admin: true,
+                default: null,
+                values: selectAuras,
+                multiple: true,
+                setter: function (value) {
+                    self.active_auras = value;
                 }
             }),
             new Attribute({

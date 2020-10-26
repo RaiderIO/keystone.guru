@@ -68,15 +68,18 @@ class CreateGithubReleaseTicket extends Command
             /** @var Issue $githubIssueClient */
             $githubIssueClient = GitHub::issues();
             // May throw an exception if it doesn't exist
+            $existingIssueId = 0;
+            $issueTitle = sprintf('Release %s', $release->version);
+
             foreach ($githubIssueClient->all($username, $repository, ['filter' => 'all', 'state' => 'open', 'labels' => 'release']) as $githubIssue) {
-                if ($githubIssue['title'] === $version && !is_array($githubIssue['pull_request'])) {
-                    $this->error(sprintf('Unable to create release issue for %s; already exists!', $version));
-                    return 0;
+                if ($githubIssue['title'] === $issueTitle && !isset($githubIssue['pull_request'])) {
+                    $existingIssueId = $githubIssue['number'];
+                    break;
                 }
             }
 
-            $githubIssueClient->create($username, $repository, [
-                'title'     => sprintf('Release %s', $release->version),
+            $params = [
+                'title'     => $issueTitle,
                 'body'      => $release->github_body,
                 'labels'    => [
                     'release'
@@ -84,10 +87,19 @@ class CreateGithubReleaseTicket extends Command
                 'assignees' => [
                     $username
                 ]
-            ]);
-            $this->info(sprintf('Successfully created GitHub issue %s', $version));
+            ];
 
-            $result = 1;
+            if ($existingIssueId === 0) {
+                $githubIssueClient->create($username, $repository, $params);
+                $this->info(sprintf('Successfully created GitHub issue %s', $version));
+                $result = 1;
+            } else {
+                $githubIssueClient->update($username, $repository, $existingIssueId, $params);
+                $this->info(sprintf('Successfully updated GitHub issue %s', $version));
+                $result = 2;
+            }
+
+
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }

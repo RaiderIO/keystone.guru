@@ -134,15 +134,15 @@
     <div class="form-group">
         {!! Form::label('spells[]', __('Spells'), [], false) !!}
         @php($selectedSpells = isset($model) ? $model->spells->pluck(['id'])->toArray() : [])
-         <select class="form-control selectpicker" name="spells[]" multiple="multiple"
-                 data-live-search="true" data-selected-text-format="count > 1" data-count-selected-text="{{ __('{0} Spells') }}">
-             @foreach($spells as $spell)
-             <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
-                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{$spell->name}} </span>">
-                 {{$spell->name}}
-             </option>
-             @endforeach
-         </select>
+        <select class="form-control selectpicker" name="spells[]" multiple="multiple"
+                data-live-search="true" data-selected-text-format="count > 1"
+                data-count-selected-text="{{ __('{0} Spells') }}">
+            @foreach($spells as $spell)
+                <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
+                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{$spell->name}} ({{$spell->id}}) </span>">
+                </option>
+            @endforeach
+        </select>
     </div>
 
 
