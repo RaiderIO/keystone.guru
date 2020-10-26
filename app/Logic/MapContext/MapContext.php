@@ -61,7 +61,7 @@ abstract class MapContext
         $cacheService = App::make(CacheService::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->getOtherwiseSet(sprintf('dungeon_%s', $this->_context->id), function ()
+        $dungeonData = $cacheService->getOtherwiseSet(sprintf('dungeon_%s', $this->_floor->dungeon->id), function ()
         {
             $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
 
