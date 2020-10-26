@@ -1,9 +1,11 @@
 <?php
 /** @var $expansionService \App\Service\Expansion\ExpansionService */
 /** @var $expansion \App\Models\Expansion */
+/** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
+$dungeons = isset($dungeons) ? $dungeons : $expansion->dungeons()->active()->get();
 $expansion = $expansionService->getCurrentExpansion();
 $colCount = 3;
-$rowCount = (int)ceil($expansion->dungeons()->active()->count() / $colCount);
+$rowCount = (int)ceil($dungeons->count() / $colCount);
 
 $names = isset($names) ? $names : true;
 $links = isset($links) ? $links : collect();
@@ -14,8 +16,8 @@ $links = isset($links) ? $links : collect();
 <div class="row no-gutters mt-2">
     <?php for( $j = 0; $j < $colCount; $j++ ) {
     $index = $i * $colCount + $j;
-    if( $expansion->dungeons->has($index) ){
-        $dungeon = $expansion->dungeons->get($index);
+    if( $dungeons->has($index) ){
+        $dungeon = $dungeons->get($index);
         $link = $links->where('dungeon', $dungeon->key)->first();
         ?>
         <div class="col-md-4">
