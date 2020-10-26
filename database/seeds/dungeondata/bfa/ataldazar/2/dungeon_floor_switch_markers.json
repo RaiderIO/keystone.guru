@@ -7,7 +7,21 @@
         "lng": 266
     },
     {
+        "id": 9,
+        "floor_id": 42,
+        "target_floor_id": 41,
+        "lat": -226.51,
+        "lng": 266
+    },
+    {
         "id": 10,
+        "floor_id": 42,
+        "target_floor_id": 41,
+        "lat": -76.75,
+        "lng": 263.5
+    },
+    {
+        "id": 11,
         "floor_id": 42,
         "target_floor_id": 41,
         "lat": -76.75,

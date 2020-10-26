@@ -594,7 +594,7 @@
         "npc_id": 161243,
         "floor_id": 57,
         "mdt_id": 1,
-        "seasonal_type": null,
+        "seasonal_type": "awakened",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
