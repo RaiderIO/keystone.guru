@@ -196,13 +196,17 @@
                         "id": 1,
                         "floor1_id": 16,
                         "floor2_id": 17,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 3,
                         "floor1_id": 16,
                         "floor2_id": 18,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -216,7 +220,9 @@
                         "id": 2,
                         "floor1_id": 17,
                         "floor2_id": 16,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -230,7 +236,9 @@
                         "id": 4,
                         "floor1_id": 18,
                         "floor2_id": 16,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -482,7 +490,9 @@
                         "id": 5,
                         "floor1_id": 41,
                         "floor2_id": 42,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -496,7 +506,9 @@
                         "id": 6,
                         "floor1_id": 42,
                         "floor2_id": 41,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -560,7 +572,9 @@
                         "id": 7,
                         "floor1_id": 45,
                         "floor2_id": 46,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -574,7 +588,9 @@
                         "id": 8,
                         "floor1_id": 46,
                         "floor2_id": 45,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -619,7 +635,9 @@
                         "id": 9,
                         "floor1_id": 48,
                         "floor2_id": 49,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -633,7 +651,9 @@
                         "id": 10,
                         "floor1_id": 49,
                         "floor2_id": 48,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -678,7 +698,9 @@
                         "id": 11,
                         "floor1_id": 51,
                         "floor2_id": 52,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -692,7 +714,9 @@
                         "id": 12,
                         "floor1_id": 52,
                         "floor2_id": 51,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -718,7 +742,9 @@
                         "id": 13,
                         "floor1_id": 53,
                         "floor2_id": 54,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -732,13 +758,17 @@
                         "id": 14,
                         "floor1_id": 54,
                         "floor2_id": 53,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 15,
                         "floor1_id": 54,
                         "floor2_id": 55,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -752,13 +782,17 @@
                         "id": 16,
                         "floor1_id": 55,
                         "floor2_id": 54,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 17,
                         "floor1_id": 55,
                         "floor2_id": 56,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -772,13 +806,17 @@
                         "id": 18,
                         "floor1_id": 56,
                         "floor2_id": 55,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 19,
                         "floor1_id": 56,
                         "floor2_id": 57,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -792,13 +830,17 @@
                         "id": 20,
                         "floor1_id": 57,
                         "floor2_id": 56,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 21,
                         "floor1_id": 57,
                         "floor2_id": 58,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -812,13 +854,17 @@
                         "id": 22,
                         "floor1_id": 58,
                         "floor2_id": 57,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 23,
                         "floor1_id": 58,
                         "floor2_id": 59,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -832,7 +878,9 @@
                         "id": 24,
                         "floor1_id": 59,
                         "floor2_id": 58,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -855,16 +903,20 @@
                 "default": 1,
                 "floorcouplings": [
                     {
-                        "id": 77,
+                        "id": 25,
                         "floor1_id": 60,
                         "floor2_id": 61,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
-                        "id": 78,
+                        "id": 27,
                         "floor1_id": 60,
                         "floor2_id": 62,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -878,7 +930,9 @@
                         "id": 26,
                         "floor1_id": 61,
                         "floor2_id": 60,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -892,13 +946,17 @@
                         "id": 28,
                         "floor1_id": 62,
                         "floor2_id": 60,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 29,
                         "floor1_id": 62,
                         "floor2_id": 63,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -912,13 +970,17 @@
                         "id": 30,
                         "floor1_id": 63,
                         "floor2_id": 62,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 31,
                         "floor1_id": 63,
                         "floor2_id": 64,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -932,7 +994,9 @@
                         "id": 32,
                         "floor1_id": 64,
                         "floor2_id": 63,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -958,7 +1022,9 @@
                         "id": 33,
                         "floor1_id": 65,
                         "floor2_id": 66,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -972,7 +1038,9 @@
                         "id": 34,
                         "floor1_id": 66,
                         "floor2_id": 65,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -998,7 +1066,9 @@
                         "id": 35,
                         "floor1_id": 67,
                         "floor2_id": 68,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1012,13 +1082,17 @@
                         "id": 36,
                         "floor1_id": 68,
                         "floor2_id": 67,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 37,
                         "floor1_id": 68,
                         "floor2_id": 69,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1032,7 +1106,9 @@
                         "id": 38,
                         "floor1_id": 69,
                         "floor2_id": 68,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1058,7 +1134,9 @@
                         "id": 39,
                         "floor1_id": 70,
                         "floor2_id": 71,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1072,7 +1150,9 @@
                         "id": 40,
                         "floor1_id": 71,
                         "floor2_id": 70,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1117,19 +1197,25 @@
                         "id": 41,
                         "floor1_id": 73,
                         "floor2_id": 74,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 43,
                         "floor1_id": 73,
                         "floor2_id": 75,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 45,
                         "floor1_id": 73,
                         "floor2_id": 76,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1143,7 +1229,9 @@
                         "id": 42,
                         "floor1_id": 74,
                         "floor2_id": 73,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1157,7 +1245,9 @@
                         "id": 44,
                         "floor1_id": 75,
                         "floor2_id": 73,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1171,7 +1261,9 @@
                         "id": 46,
                         "floor1_id": 76,
                         "floor2_id": 73,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1197,7 +1289,9 @@
                         "id": 47,
                         "floor1_id": 77,
                         "floor2_id": 78,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1211,13 +1305,17 @@
                         "id": 48,
                         "floor1_id": 78,
                         "floor2_id": 77,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 49,
                         "floor1_id": 78,
                         "floor2_id": 79,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1231,7 +1329,9 @@
                         "id": 50,
                         "floor1_id": 79,
                         "floor2_id": 78,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1276,7 +1376,9 @@
                         "id": 51,
                         "floor1_id": 81,
                         "floor2_id": 82,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1290,7 +1392,9 @@
                         "id": 52,
                         "floor1_id": 82,
                         "floor2_id": 81,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1309,28 +1413,23 @@
             {
                 "id": 83,
                 "index": 1,
-                "name": "A",
+                "name": "Depths of Despair",
                 "default": 1,
-                "floorcouplings": [
-                    {
-                        "id": 53,
-                        "floor1_id": 83,
-                        "floor2_id": 84,
-                        "direction": "down"
-                    }
-                ]
+                "floorcouplings": []
             },
             {
                 "id": 84,
                 "index": 2,
-                "name": "B",
+                "name": "Amphitheater of Sorrow",
                 "default": 0,
                 "floorcouplings": [
                     {
-                        "id": 54,
+                        "id": 74,
                         "floor1_id": 84,
                         "floor2_id": 83,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1356,7 +1455,9 @@
                         "id": 56,
                         "floor1_id": 85,
                         "floor2_id": 86,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1370,13 +1471,17 @@
                         "id": 55,
                         "floor1_id": 86,
                         "floor2_id": 85,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 57,
                         "floor1_id": 86,
                         "floor2_id": 87,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1390,13 +1495,17 @@
                         "id": 58,
                         "floor1_id": 87,
                         "floor2_id": 86,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 60,
                         "floor1_id": 87,
                         "floor2_id": 88,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1410,7 +1519,9 @@
                         "id": 59,
                         "floor1_id": 88,
                         "floor2_id": 87,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1436,7 +1547,9 @@
                         "id": 61,
                         "floor1_id": 89,
                         "floor2_id": 90,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1450,13 +1563,17 @@
                         "id": 62,
                         "floor1_id": 90,
                         "floor2_id": 89,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 63,
                         "floor1_id": 90,
                         "floor2_id": 91,
-                        "direction": "up"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1470,7 +1587,9 @@
                         "id": 64,
                         "floor1_id": 91,
                         "floor2_id": 90,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             }
@@ -1496,19 +1615,17 @@
                         "id": 65,
                         "floor1_id": 92,
                         "floor2_id": 93,
-                        "direction": "right"
+                        "direction": "right",
+                        "created_at": null,
+                        "updated_at": null
                     },
                     {
                         "id": 67,
                         "floor1_id": 92,
                         "floor2_id": 94,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 69,
-                        "floor1_id": 92,
-                        "floor2_id": 96,
-                        "direction": "down"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1522,7 +1639,9 @@
                         "id": 66,
                         "floor1_id": 93,
                         "floor2_id": 92,
-                        "direction": "left"
+                        "direction": "left",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1536,7 +1655,9 @@
                         "id": 68,
                         "floor1_id": 94,
                         "floor2_id": 92,
-                        "direction": "down"
+                        "direction": "down",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1547,10 +1668,20 @@
                 "default": 0,
                 "floorcouplings": [
                     {
-                        "id": 71,
+                        "id": 78,
+                        "floor1_id": 95,
+                        "floor2_id": 92,
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
+                    },
+                    {
+                        "id": 79,
                         "floor1_id": 95,
                         "floor2_id": 96,
-                        "direction": "down"
+                        "direction": "up",
+                        "created_at": null,
+                        "updated_at": null
                     }
                 ]
             },
@@ -1559,20 +1690,7 @@
                 "index": 5,
                 "name": "Upper Barrow of Carnage",
                 "default": 0,
-                "floorcouplings": [
-                    {
-                        "id": 70,
-                        "floor1_id": 96,
-                        "floor2_id": 92,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 72,
-                        "floor1_id": 96,
-                        "floor2_id": 95,
-                        "direction": "up"
-                    }
-                ]
+                "floorcouplings": []
             }
         ]
     }
