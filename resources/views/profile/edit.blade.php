@@ -44,8 +44,6 @@ $deleteConsequences = $user->getDeleteConsequences();
 @endsection
 
 @section('content')
-    @include('common.general.modal', ['id' => 'team_select_modal'])
-
     <div class="tab-content">
 
         <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">

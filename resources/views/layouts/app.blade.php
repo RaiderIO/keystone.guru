@@ -422,82 +422,38 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
 @auth
     @if(!$user->legal_agreed)
-@section('modal-content')
-    <div class="form-group">
-        {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
-         '<a href="' . route('legal.terms') . '">terms of service</a>',
-         '<a href="' . route('legal.privacy') . '">privacy policy</a>',
-         '<a href="' . route('legal.cookies') . '">cookie policy</a>')
-         !!}
-    </div>
-    <div id="legal_confirm_btn" class="btn btn-primary">
-        {{ __('I agree') }}
-    </div>
-@overwrite
-@include('common.general.modal', ['id' => 'legal_modal', 'static' => true])
-@endif
+        @component('common.general.modal', ['id' => 'legal_modal', 'static' => true])
+            @include('common.modal.legal')
+        @endcomponent
+    @endif
 @endauth
 
 <!-- Modal sandbox -->
-@section('modal-content')
-    @include('common.forms.sandbox', ['modal' => true])
-@overwrite
-@include('common.general.modal', ['id' => 'sandbox_modal'])
+@component('common.general.modal', ['id' => 'sandbox_modal'])
+    @include('common.forms.sandbox')
+@endcomponent
 <!-- END modal sandbox -->
 
 <!-- Modal MDT import -->
-@section('modal-content')
-    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
-    <h3>
-        {{ __('Import from MDT string') }}
-    </h3>
-    <div class="form-group">
-        {!! Form::label('import_string', __('Paste your Mythic Dungeon Tools export string')) !!}
-        {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea', 'data-simplebar' => '']) }}
-        {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
-    </div>
-    <div class="form-group">
-        <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
-            <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
-            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="import_mdt_string_details">
-
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="import_mdt_string_warnings">
-
-        </div>
-    </div>
-    <div class="form-group">
-        {!! Form::hidden('sandbox', 0, ['class' => 'hidden_sandbox']) !!}
-        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
-        <div class="col-md">
-
-        </div>
-    </div>
-    {{ Form::close() }}
-@overwrite
-@include('common.general.modal', ['id' => 'mdt_import_modal'])
-@include('common.general.modal', ['id' => 'sandbox_mdt_import_modal'])
+@component('common.general.modal', ['id' => 'mdt_import_modal'])
+    @include('common.modal.mdtimport')
+@endcomponent
+@component('common.general.modal', ['id' => 'sandbox_mdt_import_modal'])
+    @include('common.modal.mdtimport')
+@endcomponent
 <!-- END modal MDT import -->
 
 @guest
     <!-- Modal login -->
-@section('modal-content')
+@component('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
     @include('common.forms.login', array_merge(['modal' => true], $loginParams))
-@overwrite
-@include('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
+@endcomponent
 <!-- END modal login -->
 
 <!-- Modal register -->
-@section('modal-content')
+@component('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
     @include('common.forms.register', array_merge(['modal' => true], $registerParams))
-@overwrite
-@include('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
+@endcomponent
 <!-- END modal register -->
 @endguest
 
