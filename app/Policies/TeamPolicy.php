@@ -58,11 +58,12 @@ class TeamPolicy
     /**
      * @param User $user
      * @param Team $team
+     * @param User $member
      * @return boolean
      */
-    public function removeMember(User $user, Team $team)
+    public function removeMember(User $user, Team $team, User $member)
     {
-        return $team->isUserModerator($user);
+        return $team->canRemoveMember($user, $member);
     }
 
     /**

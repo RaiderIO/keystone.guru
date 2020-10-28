@@ -104,31 +104,27 @@ class APITeamController extends Controller
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
-        $this->authorize('remove-member', $team);
+        $this->authorize('remove-member', [$team, $user]);
 
-        if ($team->canRemoveMember(Auth::user(), $user)) {
-            // Only when successful
-            if ($team->removeMember($user)) {
-                $result = response()->noContent();
+        // Only when successful
+        if ($team->removeMember($user)) {
+            $result = response()->noContent();
 
-                // Disband if no team members are left
-                if ($team->members->isEmpty()) {
-                    $team->delete();
-                } else {
-                    // Promote someone else to be the new admin
-                    $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
-                    if ($newAdmin !== null) {
-                        $team->changeRole(
-                            $newAdmin,
-                            'admin'
-                        );
-                    }
-                }
+            // Disband if no team members are left
+            if ($team->members->isEmpty()) {
+                $team->delete();
             } else {
-                $result = response('Unable to remove member from team', Http::INTERNAL_SERVER_ERROR);
+                // Promote someone else to be the new admin
+                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
+                if ($newAdmin !== null) {
+                    $team->changeRole(
+                        $newAdmin,
+                        'admin'
+                    );
+                }
             }
         } else {
-            $result = response('Forbidden', Http::FORBIDDEN);
+            $result = response('Unable to remove member from team', Http::INTERNAL_SERVER_ERROR);
         }
 
         return $result;
