@@ -293,6 +293,13 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
         {
 
+            Route::group(['prefix' => 'tag'], function ()
+            {
+                // Echo controller misc
+                Route::post('/', 'APITagController@store')->name('api.tag.create');
+                Route::delete('/{tag}', 'APITagController@delete')->name('api.tag.delete');
+            });
+
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
                 Route::patch('/', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');

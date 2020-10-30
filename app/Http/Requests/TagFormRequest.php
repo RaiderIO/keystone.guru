@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FloorFormRequest extends FormRequest
+class TagFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class FloorFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('user');
     }
 
     /**
@@ -24,8 +25,9 @@ class FloorFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'index' => ['required']
+            'model_id'    => 'required|string',
+            'model_class' => 'required|string',
+            'tag'         => 'required|string'
         ];
     }
 }

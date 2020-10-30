@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,15 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Polyline extends Model
 {
+    use HasGenericModelRelation;
+
     public $timestamps = false;
     public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
     public $fillable = ['model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    function model()
-    {
-        return $this->hasOne($this->model_class, 'model_id');
-    }
 }
