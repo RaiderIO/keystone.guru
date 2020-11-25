@@ -188,5 +188,100 @@
         "npc": {
             "id": 163457
         }
+    },
+    {
+        "id": 5778,
+        "enemy_pack_id": -1,
+        "npc_id": 173729,
+        "floor_id": 85,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -175.875,
+        "lng": 169.25,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 5779,
+        "enemy_pack_id": -1,
+        "npc_id": 173729,
+        "floor_id": 85,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -175.875,
+        "lng": 179.25,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 5780,
+        "enemy_pack_id": -1,
+        "npc_id": 173729,
+        "floor_id": 85,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -181.875,
+        "lng": 174.375,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 5781,
+        "enemy_pack_id": -1,
+        "npc_id": 173729,
+        "floor_id": 85,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -186.375,
+        "lng": 168.875,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 5782,
+        "enemy_pack_id": -1,
+        "npc_id": 173729,
+        "floor_id": 85,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -186.625,
+        "lng": 179.375,
+        "npc": {
+            "id": 173729
+        }
     }
 ]
