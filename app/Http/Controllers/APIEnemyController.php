@@ -11,7 +11,9 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
+use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;
+use App\Models\Spell;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -76,13 +78,32 @@ class APIEnemyController extends Controller
         $enemy->floor_id = (int)$request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
-        $enemy->unskippable = (int) $request->get('unskippable', false);
+        $enemy->unskippable = (int)$request->get('unskippable', false);
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
-        $enemy->lat = (float) $request->get('lat');
-        $enemy->lng = (float) $request->get('lng');
+        $enemy->lat = (float)$request->get('lat');
+        $enemy->lng = (float)$request->get('lng');
 
         if ($enemy->save()) {
+
+            // Bolstering whitelist, if set
+            $activeAuras = $request->get('active_auras', []);
+            // Clear current active auras
+            $enemy->enemyactiveauras()->delete();
+            foreach ($activeAuras as $activeAura) {
+                if (!empty($activeAura)) {
+                    $spell = Spell::findOrFail($activeAura);
+                    // Only when the passed spell is actually an aura
+                    if ($spell->aura) {
+                        EnemyActiveAura::insert([
+                            'enemy_id' => $enemy->id,
+                            'spell_id' => $activeAura
+                        ]);
+                    }
+                }
+            }
+
+
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($beforeEnemy, $enemy);
         } else {

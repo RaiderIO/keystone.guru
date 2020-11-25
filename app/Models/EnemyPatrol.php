@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  * @property string $faction
  *
  * @property Floor $floor
- * @property Enemy $enemy
  * @property Polyline $polyline
  *
  * @mixin Eloquent

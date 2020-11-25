@@ -100,8 +100,12 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
-            enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
+            if( enemy !== null ) {
+                // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
+                enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
+            } else {
+                console.warn(`Unable to find enemy with id ${rawEnemy.id} for enemy pack ${this.id}`);
+            }
         }
     }
 

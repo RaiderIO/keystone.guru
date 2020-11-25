@@ -35,7 +35,7 @@ class EnemyVisualModifierClassification extends EnemyVisualModifier {
     _getLocation(width, height, margin) {
         // Top right
         return {
-            left: width,
+            left: width - 6, // width of 16px / 2, then 2 px more because it looks better
             top: 0
         }
     }

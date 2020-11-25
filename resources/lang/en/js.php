@@ -256,6 +256,8 @@ return [
     'enemy_seasonal_type_select_default_label'                      => 'Not set',
     'enemy_seasonal_index_label'                                    => 'Seasonal index',
     'enemy_seasonal_index_select_default_label'                     => 'Not set',
+    'enemy_active_auras_label'                                      => 'Active auras',
+    'enemy_active_auras_select_default_label'                       => 'Not set',
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
     'enemy_unskippable_label'                                       => 'Unskippable',
