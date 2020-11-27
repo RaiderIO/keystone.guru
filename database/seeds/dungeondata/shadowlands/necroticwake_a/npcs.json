@@ -593,7 +593,7 @@
         "dungeon_id": 34,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 4,
         "name": "Flesh Crafter",
         "base_health": 112140,
         "enemy_forces": 5,
