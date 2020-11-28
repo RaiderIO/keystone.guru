@@ -32,7 +32,11 @@ class SeasonsSeeder extends Seeder
                 'seasonal_affix_id' => 18,
                 'start' => '2020-01-21 00:00:00',
                 'presets' => 0,
-            ])
+            ]), new App\Models\Season([
+                'seasonal_affix_id' => 18,
+                'start' => '2020-12-08 00:00:00',
+                'presets' => 0,
+            ]),
         ];
 
 

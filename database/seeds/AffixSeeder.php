@@ -36,9 +36,16 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Teeming', 'icon_file_id' => -1, 'description' => 'Additional non-boss enemies are present throughout the dungeon.']),
             new Affix(['name' => 'Tyrannical', 'icon_file_id' => -1, 'description' => 'Boss enemies have 40% more health and inflict up to 15% increased damage.']),
             new Affix(['name' => 'Volcanic', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically cause gouts of flame to erupt beneath the feet of distant players.']),
+
             new Affix(['name' => 'Reaping', 'icon_file_id' => -1, 'description' => 'Non-boss enemies are empowered by Bwonsamdi and periodically seek vengeance from beyond the grave.']),
             new Affix(['name' => 'Beguiling', 'icon_file_id' => -1, 'description' => 'Azshara\'s Emissaries are present throughout the dungeon.']),
-            new Affix(['name' => 'Awakened', 'icon_file_id' => -1, 'description' => 'Obelisks throughout the dungeon allow players to enter Ny\'alotha and confront powerful servants of N\'Zoth. If a servant is not dealt with, they must be faced during the final boss encounter.'])
+            new Affix(['name' => 'Awakened', 'icon_file_id' => -1, 'description' => 'Obelisks throughout the dungeon allow players to enter Ny\'alotha and confront powerful servants of N\'Zoth. If a servant is not dealt with, they must be faced during the final boss encounter.']),
+
+            new Affix(['name' => 'Inspiring', 'icon_file_id' => -1, 'description' => 'Some non-boss enemies have an inspiring presence that strengthens their allies.']),
+            new Affix(['name' => 'Spiteful', 'icon_file_id' => -1, 'description' => 'Fiends rise from the corpses of non-boss enemies and pursue random players.']),
+            new Affix(['name' => 'Storming', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically summon damaging whirlwinds.']),
+
+            new Affix(['name' => 'Prideful', 'icon_file_id' => -1, 'description' => 'Players overflow with pride as they defeat non-boss enemies, eventually forming a Manifestation of Pride. Defeating this Manifestation greatly empowers players.']),
         ];
 
         foreach ($affixes as $affix) {
@@ -109,6 +116,19 @@ class AffixSeeder extends Seeder
             ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Awakened']],
             ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Awakened']],
             ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Awakened']],
+
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Sanguine', 'Grievous', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Inspiring', 'Explosive', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Quaking', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Spiteful', 'Grievous', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Bolstering', 'Storming', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Inspiring', 'Necrotic', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Sanguine', 'Quaking', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Spiteful', 'Volcanic', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Bolstering', 'Necrotic', 'Prideful']],
         ];
 
         foreach ($groups as $groupArr) {
@@ -145,8 +165,8 @@ class AffixSeeder extends Seeder
                 break;
             }
         }
-        
-        if( !$result ) {
+
+        if (!$result) {
             $this->command->error(sprintf('Unable to find affix %s', $affixName));
         }
 
