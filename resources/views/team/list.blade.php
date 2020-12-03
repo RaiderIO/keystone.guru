@@ -12,23 +12,6 @@ setcookie('viewed_teams', true);
 @include('common.general.inline', ['path' => 'team/list'])
 
 @section('content')
-    <div class="container">
-        @if(!isAlertDismissed('3479213'))
-            <div class="alert alert-info alert-dismissible">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="3479213">
-                    <i class="fas fa-times"></i>
-                </a>
-                <i class="fas fa-info-circle"></i>
-                {{ __('Welcome to the new teams feature of Keystone.guru! A team is a group of people that (frequently)
-                play together. You can attach routes to a team which can then be easily viewed by other team
-                members. This allows for a better organization than ever before!') }}
-                <br><br>
-                {{ __('To get started, create a team for your group or ask your friends to invite you to their group
-                using their invite link.') }}
-            </div>
-        @endif
-    </div>
-
     <table id="team_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>

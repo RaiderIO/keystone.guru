@@ -32,6 +32,7 @@
         "@simonwep/pickr": "^1.5.1",
         "ajv": "^6.10.0",
         "bootstrap": "^4.3.1",
+        "bootstrap-4-autocomplete": "^1.2.3",
         "bootstrap-select": "^1.13.12",
         "bootswatch": "^4.3.1",
         "color-interpolate": "^1.0.4",

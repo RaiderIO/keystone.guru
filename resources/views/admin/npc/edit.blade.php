@@ -42,7 +42,7 @@
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
-    @include('common.dungeon.select', ['activeOnly' => false, 'showShadowlandsPromo' => false])
+    @include('common.dungeon.select', ['activeOnly' => false])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('Classification') . '<span class="form-required">*</span>', [], false) !!}

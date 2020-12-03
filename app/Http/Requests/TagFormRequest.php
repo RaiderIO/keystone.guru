@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Tags\TagCategory;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TagFormRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class TagFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->hasRole('user');
+        return Auth::user()->hasRole('user') || Auth::user()->hasRole('admin');
     }
 
     /**
@@ -25,9 +27,10 @@ class TagFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'model_id'    => 'required|string',
-            'model_class' => 'required|string',
-            'tag'         => 'required|string'
+            'category' => [Rule::in(TagCategory::all()->pluck(['name']))],
+            'model_id' => 'required|string',
+            'name'     => 'required|string',
+            'color'    => 'nullable|string',
         ];
     }
 }

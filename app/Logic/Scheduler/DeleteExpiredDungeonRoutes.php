@@ -10,7 +10,6 @@ namespace App\Logic\Scheduler;
 
 use App\Models\DungeonRoute;
 use Exception;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;

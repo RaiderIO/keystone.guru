@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReleaseChangelogCategorySeeder::class);
         $this->call(ReleasesSeeder::class);
         $this->call(MapIconTypesSeeder::class);
+        $this->call(TagCategorySeeder::class);
 
         // Depends on SeasonsSeeder
         $this->call(SeasonsSeeder::class);

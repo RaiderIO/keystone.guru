@@ -2,7 +2,6 @@
 
 namespace App\Models\Traits;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

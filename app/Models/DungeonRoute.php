@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\Tags\TagModel;
+use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
@@ -77,6 +79,8 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|PageView[] $pageviews
  *
+ * @property Collection|TagModel[] $tagmodels
+ *
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
  *
@@ -89,6 +93,7 @@ class DungeonRoute extends Model
 {
     use SerializesDates;
     use Reportable;
+    use HasTags;
 
     /**
      * The accessors to append to the model's array form.

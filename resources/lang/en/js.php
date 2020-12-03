@@ -194,6 +194,8 @@ return [
     'sidebar_enemy_skippable_label'                                 => 'Skippable',
     'user_report_enemy_success'                                     => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
     'dungeonroute_report_enemy_success'                             => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
+    'tag_delete_success'                                            => 'Tag removed successfully',
+    'tag_create_success'                                            => 'Tag created successfully',
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',

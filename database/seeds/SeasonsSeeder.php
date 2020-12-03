@@ -41,7 +41,6 @@ class SeasonsSeeder extends Seeder
 
 
         foreach ($seasons as $season) {
-            /** @var $race \Illuminate\Database\Eloquent\Model */
             $season->save();
         }
     }

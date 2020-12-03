@@ -7,12 +7,6 @@
 <?php
 /** @var $models \Illuminate\Support\Collection */
 ?>
-@include('common.general.inline', ['path' => 'admin/user/list',
-        'options' =>  [
-            'patreon_select_selector' => 'select.patreon_paid_tiers'
-        ]
-])
-
 @section('scripts')
     <script type="text/javascript">
         /** @type object */
@@ -28,6 +22,23 @@
                 },
                 'drawCallback': function (settings) {
                     refreshSelectPickers();
+
+                    // Add a new row when the button is pressed
+                    $('select.patreon_paid_tiers').bind('change', function () {
+                        let $this = $(this);
+
+                        $.ajax({
+                            type: 'PUT',
+                            url: `/ajax/user/${$this.data('userid')}/patreon/paidtier`,
+                            data: {
+                                paidtiers: $this.val()
+                            },
+                            dataType: 'json',
+                            success: function () {
+                                showSuccessNotification('Paid tiers updated successfully');
+                            }
+                        });
+                    });
                 },
                 'lengthMenu': [25],
                 'bLengthChange': false,

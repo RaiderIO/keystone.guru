@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Seeder;
 use App\Models\File;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class ExpansionsSeeder extends Seeder
 {
@@ -30,7 +29,7 @@ class ExpansionsSeeder extends Seeder
             ]), 'Shadowlands' => new App\Models\Expansion([
                 'shortname' => 'shadowlands',
                 'color' => '#5832a8',
-                'released_at' => Carbon::make('2020-12-31 00:00:00')
+                'released_at' => Carbon::make('2020-11-24 00:00:00')
             ])
         ];
 

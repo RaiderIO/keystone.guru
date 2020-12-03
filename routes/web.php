@@ -219,6 +219,16 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         });
     });
 
+    Route::group(['prefix' => 'ajax'], function ()
+    {
+        Route::group(['prefix' => 'tag'], function ()
+        {
+            Route::get('/', 'APITagController@all')->name('api.tag.all');
+            Route::get('/{category}', 'APITagController@list')->name('api.tag.list');
+            Route::post('/', 'APITagController@store')->name('api.tag.create');
+            Route::delete('/{tagmodel}', 'APITagController@delete')->name('api.tag.delete');
+        });
+    });
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function ()
     {
@@ -292,13 +302,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Must be logged in to perform these actions
         Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
         {
-
-            Route::group(['prefix' => 'tag'], function ()
-            {
-                // Echo controller misc
-                Route::post('/', 'APITagController@store')->name('api.tag.create');
-                Route::delete('/{tag}', 'APITagController@delete')->name('api.tag.delete');
-            });
 
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
