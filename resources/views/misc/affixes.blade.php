@@ -21,7 +21,8 @@ if ($timezone === null) {
                 <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="shadowlands-affixes-alert">
                     <i class="fas fa-times"></i>
                 </a>
-                {{ __('The Shadowlands affixes are preliminary and not final. As soon as an affix schedule is known, this page will be updated. Please stay tuned.') }}
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ __('The Shadowlands affixes are preliminary and not final. As soon as an affix schedule is known, this page will be updated.') }}
             </div>
         @endif
     </div>
