@@ -381,3 +381,7 @@
 #team_members_table .dropdown.bootstrap-select {
     background-color: #4E5D6C;
 }
+
+.tag.edit {
+    cursor: pointer;
+}
