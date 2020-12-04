@@ -19,7 +19,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion
                 'draw-settings' => true,
                 'route-settings' => true,
                 'route-publish' => true,
-                'tags' => true,
+                'tags' => false, // Temporarily disabled
             ]
         ])
 

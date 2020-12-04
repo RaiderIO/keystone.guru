@@ -56,7 +56,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     @endisset
 
     <!-- Tags -->
-    @isset($show['tags'])
+    @if(isset($show['tags']) && $show['tags'])
         <div class="form-group">
             <div class="card">
                 <div class="card-body">
