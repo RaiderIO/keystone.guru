@@ -14,6 +14,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -136.25,
         "lng": 153.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 165529
         }
@@ -33,6 +35,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -121,
         "lng": 154,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 165414
         }
@@ -52,6 +56,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -141,
         "lng": 182.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 167615
         }
@@ -71,6 +77,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -114.75,
         "lng": 183.5,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 167615
         }
@@ -90,6 +98,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -163.75,
         "lng": 169.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 174175
         }
@@ -109,6 +119,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -92.5,
         "lng": 170,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 174175
         }
@@ -128,6 +140,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -128.5,
         "lng": 99.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 165410
         }
@@ -147,6 +161,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -121,
         "lng": 247.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 164562
         }
@@ -166,6 +182,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -133.25,
         "lng": 248.5,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 164562
         }
@@ -185,6 +203,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -127.5,
         "lng": 253.75,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 164563
         }
@@ -204,6 +224,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -135.75,
         "lng": 254,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 164563
         }
@@ -223,6 +245,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -118.25,
         "lng": 254.25,
+        "active_auras": [],
+        "enemyactiveauras": [],
         "npc": {
             "id": 164563
         }
