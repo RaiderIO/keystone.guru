@@ -141,7 +141,6 @@ class TeamEdit extends InlineCode {
             },
             dataType: 'json',
             success: function () {
-                showSuccessNotification(lang.get('messages.remove_member_success'));
 
                 // Remove the user from the data
                 for (let index in self.options.data) {
@@ -157,6 +156,8 @@ class TeamEdit extends InlineCode {
                 if (userId === self.options.currentUserId) {
                     window.location.href = '/';
                 } else {
+                    showSuccessNotification(lang.get('messages.remove_member_success'));
+
                     self.refreshTable();
                 }
             }
@@ -178,7 +179,7 @@ class TeamEdit extends InlineCode {
         let columns = [{
             'data': 'name',
             'title': lang.get('messages.name_label'),
-            'width': self.options.userIsModerator ? '45%' : '60%'
+            'width': '45%'
         }, {
             'data': 'join_date',
             'title': lang.get('messages.join_date_label'),
@@ -239,31 +240,6 @@ class TeamEdit extends InlineCode {
                 },
                 'orderable': false
             });
-            columns.push({
-                'data': 'join_date',
-                'title': lang.get('messages.actions_label'),
-                'width': '15%',
-                'render': function (data, type, row, meta) {
-                    let result = '';
-                    let template = null;
-                    if (row.user_id === self.options.currentUserId) {
-                        // Handlebars the entire thing
-                        template = Handlebars.templates['team_member_table_actions_self_template'];
-                    } else if (self.options.currentUserRole !== 'admin') {
-                        // Handlebars the entire thing
-                        template = Handlebars.templates['team_member_table_actions_template'];
-                    }
-
-                    if (template !== null) {
-                        let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
-                            user_id: row.user_id
-                        });
-
-                        result = template(templateData);
-                    }
-                    return result;
-                }
-            });
         } else {
             columns.push({
                 'data': 'role',
@@ -275,6 +251,32 @@ class TeamEdit extends InlineCode {
                 'orderable': true
             });
         }
+
+        columns.push({
+            'data': 'join_date',
+            'title': lang.get('messages.actions_label'),
+            'width': '15%',
+            'render': function (data, type, row, meta) {
+                let result = '';
+                let template = null;
+                if (row.user_id === self.options.currentUserId) {
+                    // Handlebars the entire thing
+                    template = Handlebars.templates['team_member_table_actions_self_template'];
+                } else if (self.options.userIsModerator && self.options.currentUserRole !== 'admin') {
+                    // Handlebars the entire thing
+                    template = Handlebars.templates['team_member_table_actions_template'];
+                }
+
+                if (template !== null) {
+                    let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
+                        user_id: row.user_id
+                    });
+
+                    result = template(templateData);
+                }
+                return result;
+            }
+        });
 
         this._dt = $table.DataTable({
             'data': this.options.data,

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Faction;
 use App\Models\File;
+use Illuminate\Database\Seeder;
 
 class FactionsSeeder extends Seeder
 {

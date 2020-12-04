@@ -11,7 +11,6 @@ namespace App\Logic\Scheduler;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Queue;
 

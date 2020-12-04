@@ -14,7 +14,7 @@ $static = isset($static) ? $static : false;
             </button>
             <div class="probootstrap-modal-flex">
                 <div class="probootstrap-modal-content">
-                    @yield('modal-content')
+                    {{ $slot }}
                 </div>
             </div>
         </div>

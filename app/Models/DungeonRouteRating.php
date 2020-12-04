@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
  * @property int $user_id
  * @property int $rating
- * @property \App\Models\DungeonRoute $dungeonroute
- * @property \App\User $user
+ * @property DungeonRoute $dungeonroute
+ * @property User $user
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class DungeonRouteRating extends Model
 {
@@ -20,7 +23,7 @@ class DungeonRouteRating extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {
@@ -28,7 +31,7 @@ class DungeonRouteRating extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function user()
     {

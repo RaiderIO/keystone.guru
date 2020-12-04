@@ -219,6 +219,16 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         });
     });
 
+    Route::group(['prefix' => 'ajax'], function ()
+    {
+        Route::group(['prefix' => 'tag'], function ()
+        {
+            Route::get('/', 'APITagController@all')->name('api.tag.all');
+            Route::get('/{category}', 'APITagController@list')->name('api.tag.list');
+            Route::post('/', 'APITagController@store')->name('api.tag.create');
+            Route::delete('/{tagmodel}', 'APITagController@delete')->name('api.tag.delete');
+        });
+    });
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function ()
     {

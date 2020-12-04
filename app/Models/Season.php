@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use App\Service\Season\SeasonService;
+use Eloquent;
+use Exception;
+use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +21,7 @@ use Illuminate\Support\Facades\Log;
  *
  * @property Collection $affixgroups
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Season extends Model
 {
@@ -25,7 +29,7 @@ class Season extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Config\Repository|mixed|string
+     * @return Repository|mixed|string
      */
     private function _getUserTimezone()
     {
@@ -49,7 +53,7 @@ class Season extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function affixgroups()
     {
@@ -122,7 +126,7 @@ class Season extends Model
         $result = false;
         try {
             $result = $this->getAffixGroupAtTime($this->_getNow());
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             Log::error('Error getting current affix group: ' . $ex->getMessage());
         }
         return $result;
@@ -134,14 +138,14 @@ class Season extends Model
      *
      * @param Carbon $date The date at which you want to know the affix group.
      * @return AffixGroup The affix group that is active at that point in time for your passed timezone.
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAffixGroupAtTime($date)
     {
         /** @var SeasonService $seasonService */
         $start = $this->start();
         if ($date->lt($start)) {
-            throw new \Exception('Cannot find an affix group of this season before it\'s started!');
+            throw new Exception('Cannot find an affix group of this season before it\'s started!');
         }
 
         // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,

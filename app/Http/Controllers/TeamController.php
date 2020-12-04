@@ -11,9 +11,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeamFormRequest;
 use App\Models\File;
 use App\Models\Team;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Session;
 
 class TeamController extends Controller
 {
@@ -21,7 +26,7 @@ class TeamController extends Controller
      * @param TeamFormRequest $request
      * @param Team $team
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store($request, Team $team = null)
     {
@@ -53,7 +58,7 @@ class TeamController extends Controller
                     // Update the expansion to reflect the new file ID
                     $team->icon_file_id = $icon->id;
                     $team->save();
-                } catch (\Exception $ex) {
+                } catch (Exception $ex) {
                     if ($new) {
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $team->delete();
@@ -72,7 +77,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
@@ -82,7 +87,7 @@ class TeamController extends Controller
     /**
      * @param Request $request
      * @param Team $team
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      * @throws AuthorizationException
      */
     public function edit(Request $request, Team $team)
@@ -95,7 +100,7 @@ class TeamController extends Controller
     /**
      * @param Request $request
      * @param Team $team
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function delete(Request $request, Team $team)
@@ -104,7 +109,7 @@ class TeamController extends Controller
 
         try {
             $team->delete();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             abort(500);
         }
 
@@ -114,8 +119,8 @@ class TeamController extends Controller
     /**
      * @param TeamFormRequest $request
      * @param Team $team
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function update(TeamFormRequest $request, Team $team)
     {
@@ -125,7 +130,7 @@ class TeamController extends Controller
         $team = $this->store($request, $team);
 
         // Message to the user
-        \Session::flash('status', __('Team updated'));
+        Session::flash('status', __('Team updated'));
 
         // Display the edit page
         return $this->edit($request, $team);
@@ -133,8 +138,8 @@ class TeamController extends Controller
 
     /**
      * @param TeamFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(TeamFormRequest $request)
     {
@@ -142,7 +147,7 @@ class TeamController extends Controller
         $team = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Team created'));
+        Session::flash('status', __('Team created'));
 
         return redirect()->route('team.edit', ['team' => $team]);
     }
@@ -150,7 +155,7 @@ class TeamController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function list()
     {
@@ -161,9 +166,9 @@ class TeamController extends Controller
     /**
      * @param Request $request
      * @param string $invitecode
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function invite(Request $request, $invitecode)
+    public function invite(Request $request, string $invitecode)
     {
         /** @var Team $team */
         $team = Team::where('invite_code', $invitecode)->first();
@@ -180,9 +185,9 @@ class TeamController extends Controller
     /**
      * @param Request $request
      * @param string $invitecode
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function inviteaccept(Request $request, $invitecode)
+    public function inviteaccept(Request $request, string $invitecode)
     {
         /** @var Team $team */
         $team = Team::where('invite_code', $invitecode)->first();
@@ -192,7 +197,7 @@ class TeamController extends Controller
         } else {
             $team->addMember(Auth::getUser(), 'member');
 
-            \Session::flash('status', sprintf(__('Success! You are now a member of team %s.'), $team->name));
+            Session::flash('status', sprintf(__('Success! You are now a member of team %s.'), $team->name));
             $result = redirect()->route('team.edit', ['team' => $team]);
         }
 

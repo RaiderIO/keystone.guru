@@ -124,15 +124,13 @@ if ($isAdmin) {
 </header>
 @endif
 
-@section('modal-content')
+@component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
     @include('common.userreport.dungeonroute')
-@overwrite
-@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+@endcomponent
 
-@section('modal-content')
+@component('common.general.modal', ['id' => 'userreport_enemy_modal'])
     @include('common.userreport.enemy')
-@overwrite
-@include('common.general.modal', ['id' => 'userreport_enemy_modal'])
+@endcomponent
 
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">

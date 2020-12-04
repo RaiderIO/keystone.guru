@@ -7,13 +7,12 @@ $required = isset($required) ? $required : true;
 $showAll = isset($showAll) ? $showAll : true;
 $activeOnly = isset($activeOnly) ? $activeOnly : true;
 $showSiegeWarning = isset($showSiegeWarning) ? $showSiegeWarning : false;
-$showShadowlandsPromo = isset($showShadowlandsPromo) ? $showShadowlandsPromo : true;
 
 $dungeonsSelect = [];
 if ($showAll) {
     $dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
 }
-$dungeonsBuilder = \App\Models\Dungeon::orderByRaw('expansion_id, name');
+$dungeonsBuilder = \App\Models\Dungeon::orderByRaw('expansion_id DESC, name');
 if ($activeOnly) {
     $dungeonsBuilder = $dungeonsBuilder->active();
 }
@@ -46,11 +45,6 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
 
 <div class="form-group">
     {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
-    @if($showShadowlandsPromo)
-        <div class="text-primary mb-2">
-            {{ __('We are hard at work to map all Shadowlands dungeons. We have finished The Necrotic Wake, try it now!') }}
-        </div>
-    @endif
     {!! Form::select($name, $dungeonsSelect, null, array_merge($id ? ['id' => $id] : [], ['class' => 'form-control selectpicker'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">

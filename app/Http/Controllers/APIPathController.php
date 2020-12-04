@@ -11,7 +11,6 @@ use App\Models\DungeonRoute;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Release;
+use App\Models\ReleaseChangelog;
+use App\Models\ReleaseChangelogChange;
 use Illuminate\Database\Seeder;
 
 class ReleasesSeeder extends Seeder
@@ -27,9 +30,9 @@ class ReleasesSeeder extends Seeder
             if (isset($modelsData['changelog'])) {
                 $changelogData = $modelsData['changelog'];
                 // Changelog
-                $changelog = new \App\Models\ReleaseChangelog([
-                    'id' => $changelogData['id'],
-                    'release_id' => $changelogData['release_id'],
+                $changelog = new ReleaseChangelog([
+                    'id'          => $changelogData['id'],
+                    'release_id'  => $changelogData['release_id'],
                     'description' => $changelogData['description'],
                 ]);
                 $changelog->save();
@@ -37,11 +40,11 @@ class ReleasesSeeder extends Seeder
                 // Save the changes for each changelog
                 foreach ($changelogData['changes'] as $changeData) {
                     // Changelog changes
-                    $changelogChange = new \App\Models\ReleaseChangelogChange([
-                        'release_changelog_id' => $changeData['release_changelog_id'],
+                    $changelogChange = new ReleaseChangelogChange([
+                        'release_changelog_id'          => $changeData['release_changelog_id'],
                         'release_changelog_category_id' => $changeData['release_changelog_category_id'],
-                        'ticket_id' => $changeData['ticket_id'],
-                        'change' => $changeData['change'],
+                        'ticket_id'                     => $changeData['ticket_id'],
+                        'change'                        => $changeData['change'],
                     ]);
                     $changelogChange->save();
                 }
@@ -49,12 +52,13 @@ class ReleasesSeeder extends Seeder
 
             // Save the release last!
             $this->command->info(sprintf('Adding release %s', $modelsData['version']));
-            $release = new \App\Models\Release([
-                'id' => $modelsData['id'],
+            $release = new Release([
+                'id'                   => $modelsData['id'],
                 'release_changelog_id' => $modelsData['release_changelog_id'],
-                'version' => $modelsData['version'],
-                'created_at' => $modelsData['created_at'],
-                'updated_at' => $modelsData['updated_at'],
+                'version'              => $modelsData['version'],
+                'silent'               => $modelsData['silent'],
+                'created_at'           => $modelsData['created_at'],
+                'updated_at'           => $modelsData['updated_at'],
             ]);
             $release->save();
         }

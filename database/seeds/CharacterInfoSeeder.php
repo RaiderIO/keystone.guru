@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\Models\CharacterRace;
 use App\Models\CharacterClass;
-use App\Models\CharacterRaceClassCoupling;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
+use App\Models\CharacterRaceClassCoupling;
 use App\Models\File;
+use Illuminate\Database\Seeder;
 
 class CharacterInfoSeeder extends Seeder
 {

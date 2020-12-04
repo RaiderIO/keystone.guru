@@ -1,0 +1,20 @@
+<span
+    class="tag badge badge-pill mr-1
+     {{#ifCond color '==' null}}
+        badge-primary
+     {{/ifCond}}
+
+     {{#if edit}}
+        edit
+     {{/if}}
+    "
+    data-id="{{id}}"
+     {{#ifCond color '!=' null}}
+    style="background-color: {{color}}"
+     {{/ifCond}}
+>
+    {{tag.name}}
+    {{#if edit}}
+    x
+    {{/if}}
+</span>

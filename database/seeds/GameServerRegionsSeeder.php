@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\GameServerRegion;
+use Illuminate\Database\Seeder;
 
 class GameServerRegionsSeeder extends Seeder
 {

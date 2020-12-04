@@ -2,10 +2,10 @@
 
 namespace App\Models\Mapping;
 
+use App\Models\Traits\HasGenericModelRelation;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -21,15 +21,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class MappingChangeLog extends Model
 {
-    protected $fillable = ['model_id', 'model_class', 'before_model', 'after_model'];
+    use HasGenericModelRelation;
 
-    /**
-     * @return HasOne
-     */
-    function model()
-    {
-        return $this->hasOne($this->model_class, 'model_id');
-    }
+    protected $fillable = ['model_id', 'model_class', 'before_model', 'after_model'];
 
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool
     {
