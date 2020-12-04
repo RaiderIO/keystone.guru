@@ -1,0 +1,55 @@
+{
+    "id": 69,
+    "release_changelog_id": 75,
+    "version": "v3.7",
+    "silent": 0,
+    "created_at": "2020-12-04T21:48:00+00:00",
+    "updated_at": "2020-12-04T21:48:00+00:00",
+    "changelog": {
+        "id": 75,
+        "release_id": 69,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 75,
+                "release_changelog_category_id": 1,
+                "ticket_id": 417,
+                "change": "Various minor changes and bugfixes for the Shadowlands release.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 75,
+                "release_changelog_category_id": 1,
+                "ticket_id": 487,
+                "change": "New affix rotation added (beware: this may be incorrect, will update when correct data becomes available).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 75,
+                "release_changelog_category_id": 1,
+                "ticket_id": 222,
+                "change": "Reduced technical debt in the code.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 75,
+                "release_changelog_category_id": 7,
+                "ticket_id": 480,
+                "change": "Fixed various issues related to leaving a team.",
+                "category": {
+                    "id": 7,
+                    "category": "Team changes"
+                }
+            }
+        ]
+    }
+}
