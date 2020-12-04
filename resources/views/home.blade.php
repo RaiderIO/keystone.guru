@@ -27,10 +27,10 @@
                            data-toggle="modal" data-target="#sandbox_modal">
                             <i class="fas fa-play"></i> {{ __('Sandbox') }}
                         </a>
-                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">
-                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}
-                        </a>
+{{--                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"--}}
+{{--                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">--}}
+{{--                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}--}}
+{{--                        </a>--}}
 
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
@@ -58,16 +58,16 @@
                             <p>{{ __('Powered by Leaflet, Keystone.guru features interactive maps with 4 zoom levels and visibility controls. All maps have been upscaled to provide high detail when zoomed in.') }}</p>
                         </li>
                         <li>
-                            <a href="#">{{ __('All BFA dungeons supported') }}</a>
-                            <p>{{ __('From the depths of The Underrot to the pirate city of Freehold, all current BFA dungeons are supported. In the future, any new dungeons will also be added.') }}</p>
+                            <a href="#">{{ __('All Shadowlands dungeons supported') }}</a>
+                            <p>{{ __('All current Shadowlands dungeons are supported and ready to go. In the future, any new dungeons will also be added.') }}</p>
                         </li>
+{{--                        <li>--}}
+{{--                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>--}}
+{{--                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>--}}
+{{--                        </li>--}}
                         <li>
-                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>
-                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Awakened affix supported') }}</a>
-                            <p>{{ __('Awakened enemies are added, allowing your to plan your skips using N\'Zoth\'s shadow realm.') }}</p>
+                            <a href="#">{{ __('Prideful affix supported') }}</a>
+                            <p>{{ __('Prideful enemies may be placed freely in your route and included in your pulls.') }}</p>
                         </li>
                         <li>
                             <a href="#">{{ __('Define your setup') }}</a>
@@ -94,9 +94,9 @@
                                     <li>
                                         <img src="images/home/2.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
-                                    <li>
-                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
+{{--                                    <li>--}}
+{{--                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">--}}
+{{--                                    </li>--}}
                                     <li>
                                         <img src="images/home/4.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
