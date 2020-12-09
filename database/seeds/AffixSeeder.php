@@ -117,18 +117,18 @@ class AffixSeeder extends Seeder
             ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Awakened']],
             ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Awakened']],
 
-            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Sanguine', 'Grievous', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Fortified', 'Inspiring', 'Explosive', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Quaking', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Spiteful', 'Grievous', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Fortified', 'Bolstering', 'Storming', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Inspiring', 'Necrotic', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Fortified', 'Sanguine', 'Quaking', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Fortified', 'Spiteful', 'Volcanic', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Bolstering', 'Necrotic', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Sanguine', 'Grievous', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Inspiring', 'Explosive', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Quaking', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Spiteful', 'Grievous', 'Prideful']],
         ];
 
         foreach ($groups as $groupArr) {
