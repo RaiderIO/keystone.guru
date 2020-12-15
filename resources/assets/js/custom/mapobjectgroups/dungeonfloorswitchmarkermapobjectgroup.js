@@ -19,6 +19,9 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     _createLayer(remoteMapObject) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
         return null;
+        // let layer = new LeafletDungeonFloorSwitchIcon();
+        // layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        // return layer;
     }
 
     /**
