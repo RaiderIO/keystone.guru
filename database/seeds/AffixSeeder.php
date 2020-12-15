@@ -128,7 +128,7 @@ class AffixSeeder extends Seeder
             ['season_id' => 5, 'affixes' => ['Fortified', 'Inspiring', 'Explosive', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Quaking', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Prideful']],
-            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Spiteful', 'Grievous', 'Prideful']],
+            ['season_id' => 5, 'affixes' => ['Tyrannical', 'Bolstering', 'Storming', 'Prideful']],
         ];
 
         foreach ($groups as $groupArr) {

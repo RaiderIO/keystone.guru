@@ -57,13 +57,15 @@ class Enemy extends MapObject {
         this.npc = null;
         /** @type Enemy If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
-        // The visual display of this enemy
-        this.visual = null;
-        this.isPopupEnabled = false;
+        this.active_auras = [];
 
         // MDT
         this.mdt_id = -1;
         this.is_mdt = false;
+
+        // The visual display of this enemy
+        this.visual = null;
+        this.isPopupEnabled = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {

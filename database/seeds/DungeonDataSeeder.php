@@ -259,7 +259,8 @@ class DungeonDataSeeder extends Seeder
         DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
 
         // Truncating these before the above will cause some issues
-        DB::table('dungeons')->truncate();
+        // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset
+        // DB::table('dungeons')->truncate();
         DB::table('floors')->truncate();
         DB::table('floor_couplings')->truncate();
     }
