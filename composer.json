@@ -21,10 +21,10 @@
     {
       "type": "package",
       "package": {
-        "name": "nnoggie/methoddungeontools",
-        "version": "3.0.4",
+        "name": "nnoggie/mythicdungeontools",
+        "version": "3.3.4",
         "source": {
-          "url": "https://github.com/nnoggie/MethodDungeonTools.git",
+          "url": "https://github.com/nnoggie/MythicDungeonTools.git",
           "type": "git",
           "reference": "master"
         }
@@ -48,7 +48,7 @@
     "laravel/ui": "^2.0",
     "laravelcollective/html": "6.1.*",
     "lefuturiste/monolog-discord-handler": "^0.2.0",
-    "nnoggie/methoddungeontools": "*",
+    "nnoggie/mythicdungeontools": "*",
     "patreon/patreon": "^0.3.1",
     "phlak/semver": "^3.2",
     "php-http/guzzle6-adapter": "^2.0",
@@ -56,8 +56,8 @@
     "predis/predis": "^1.1",
     "santigarcor/laratrust": "^6.0",
     "shrikeh/teapot": "^2.3",
-    "socialiteproviders/battlenet": "dev-master#4418c2dfd7823e883a83c292704cc90d2fe950a5",
-    "socialiteproviders/discord": "^2.0",
+    "socialiteproviders/battlenet": "^4.1.0",
+    "socialiteproviders/discord": "^4.1.0",
     "tremby/laravel-git-version": "^1.1",
     "yajra/laravel-datatables-oracle": "~9.0"
   },
