@@ -10,22 +10,38 @@ namespace App\Logic\MDT;
 
 use App\Models\AffixGroup;
 use App\Service\Season\SeasonService;
+use Exception;
 
 class Conversion
 {
-    private static $dungeonNameMapping = [
-        'Atal\'Dazar' => 'AtalDazar',
-        'Freehold' => 'Freehold',
-        'Kings\' Rest' => 'KingsRest',
-        'Shrine of the Storm' => 'ShrineoftheStorm',
-        'Siege of Boralus' => 'SiegeofBoralus',
-        'Temple of Sethraliss' => 'TempleofSethraliss',
-        'The MOTHERLODE!!' => 'TheMotherlode',
-        'The Underrot' => 'TheUnderrot',
-        'Tol Dagor' => 'TolDagor',
-        'Waycrest Manor' => 'WaycrestManor',
-        'Mechagon: Junkyard' => 'MechagonIsland',
-        'Mechagon: Workshop' => 'MechagonCity',
+    const DUNGEON_NAME_MAPPING = [
+        'BattleForAzeroth' => [
+            // Battle for Azeroth
+            'Atal\'Dazar'          => 'AtalDazar',
+            'Freehold'             => 'Freehold',
+            'Kings\' Rest'         => 'KingsRest',
+            'Shrine of the Storm'  => 'ShrineoftheStorm',
+            'Siege of Boralus'     => 'SiegeofBoralus',
+            'Temple of Sethraliss' => 'TempleofSethraliss',
+            'The MOTHERLODE!!'     => 'TheMotherlode',
+            'The Underrot'         => 'TheUnderrot',
+            'Tol Dagor'            => 'TolDagor',
+            'Waycrest Manor'       => 'WaycrestManor',
+            'Mechagon: Junkyard'   => 'MechagonIsland',
+            'Mechagon: Workshop'   => 'MechagonCity',
+        ],
+
+        'Shadowlands' => [
+            // Shadowlands
+            'De Other Side'         => 'DeOtherSide',
+            'Halls of Atonement'    => 'HallsOfAtonement',
+            'Mists of Tirna Scithe' => 'MistsOfTirnaScithe',
+            'Plaguefall'            => 'Plaguefall',
+            'Sanguine Depths'       => 'SanguineDepths',
+            'Spires of Ascension'   => 'SpiresOfAscension',
+            'The Necrotic Wake'     => 'TheNecroticWake',
+            'Theater of Pain'       => 'TheaterOfPain',
+        ],
     ];
 
     /**
@@ -39,38 +55,64 @@ class Conversion
     }
 
     /**
-     * @param $dungeonName string
-     * @return mixed Gets the MDT version of a dungeon name.
+     * @param string $dungeonName
+     * @return string|null
      */
-    public static function hasMDTDungeonName($dungeonName)
+    public static function getExpansionName(string $dungeonName): ?string
     {
-        return isset(self::$dungeonNameMapping[$dungeonName]);
+        $result = null;
+        foreach (self::DUNGEON_NAME_MAPPING as $expansionName => $dungeons) {
+            if (isset($dungeons[$dungeonName])) {
+                $result = $expansionName;
+            }
+        }
+        return $result;
     }
 
     /**
      * @param $dungeonName string
-     * @return mixed Gets the MDT version of a dungeon name.
+     * @return bool True if MDT has a dungeon name, false if it has not.
      */
-    public static function getMDTDungeonName($dungeonName)
+    public static function hasMDTDungeonName(string $dungeonName): bool
     {
-        return self::$dungeonNameMapping[$dungeonName];
+        return is_string(self::getMDTDungeonName($dungeonName));
+    }
+
+    /**
+     * @param $dungeonName string
+     * @return string|null Gets the MDT version of a dungeon name.
+     */
+    public static function getMDTDungeonName(string $dungeonName): ?string
+    {
+        $result = false;
+
+        $expansionName = self::getExpansionName($dungeonName);
+        if (is_string($expansionName)) {
+            $result = self::DUNGEON_NAME_MAPPING[$expansionName][$dungeonName];
+        }
+
+        return $result;
     }
 
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      * @param $mdtDungeonId int
      * @return int
-     * @throws \Exception An exception if the found dungeon ID was incorrect/not supported.
+     * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
-    public static function convertMDTDungeonID($mdtDungeonId)
+    public static function convertMDTDungeonID(int $mdtDungeonId): int
     {
         // May be a double, convert it first
         $mdtDungeonId = (int)$mdtDungeonId;
-        // BFA, there's 10 valid dungeons
-        if ($mdtDungeonId >= 15 && $mdtDungeonId <= 26) {
+
+        if (
+            // BFA
+            ($mdtDungeonId >= 15 && $mdtDungeonId <= 26) ||
+            // Shadowlands
+            ($mdtDungeonId >= 29 && $mdtDungeonId <= 36)) {
             return $mdtDungeonId - 1;
         } else {
-            throw new \Exception('Unsupported dungeon found.');
+            throw new Exception('Unsupported dungeon found.');
         }
     }
 
@@ -79,7 +121,7 @@ class Conversion
      * @param $xy array
      * @return array
      */
-    public static function convertMDTCoordinateToLatLng($xy)
+    public static function convertMDTCoordinateToLatLng(array $xy): array
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
@@ -91,7 +133,7 @@ class Conversion
      * @param $latLng array
      * @return array
      */
-    public static function convertLatLngToMDTCoordinate($latLng)
+    public static function convertLatLngToMDTCoordinate(array $latLng): array
     {
         return ['y' => $latLng['lat'] * 2.185, 'x' => $latLng['lng'] * 2.185];
     }
@@ -102,19 +144,19 @@ class Conversion
      * @param $mdtWeek int
      * @return AffixGroup
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, int $mdtWeek)
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, int $mdtWeek): AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
         $weekMapping = [
-            1 => 12,
-            2 => 1,
-            3 => 2,
-            4 => 3,
-            5 => 4,
-            6 => 5,
-            7 => 6,
-            8 => 7,
-            9 => 8,
+            1  => 12,
+            2  => 1,
+            3  => 2,
+            4  => 3,
+            5  => 4,
+            6  => 5,
+            7  => 6,
+            8  => 7,
+            9  => 8,
             10 => 9,
             11 => 10,
             12 => 11
