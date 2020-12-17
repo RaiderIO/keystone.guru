@@ -17,7 +17,7 @@ use App\Models\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MethodDungeonTools/blob/master/Transmission.lua
+ * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MythicDungeonTools/blob/master/Transmission.lua
  * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
  * to PHP to allow for importing of the exported strings.
  * @package App\Logic\MDT
@@ -28,7 +28,7 @@ class MDTDungeon
 {
 
     /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
-    private $_dungeonName;
+    private string $_dungeonName;
 
 
     function __construct($dungeonName)
@@ -66,26 +66,29 @@ class MDTDungeon
     {
         $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
-            $lua = new \Lua();
-            $lua->eval(
-                'local MethodDungeonTools = {}
-                MethodDungeonTools.dungeonTotalCount = {}
-                MethodDungeonTools.mapInfo = {}
-                MethodDungeonTools.mapPOIs = {}
-                MethodDungeonTools.dungeonEnemies = {}
-                MethodDungeonTools.scaleMultiplier = {}
+            $mdtHome = base_path('vendor/nnoggie/mythicdungeontools/');
+            $dungeonHome = sprintf('%s/%s', $mdtHome, Conversion::getExpansionName($this->_dungeonName));
+
+            $eval = '
+                local MDT = {}
+                MDT.dungeonTotalCount = {}
+                MDT.mapInfo = {}
+                MDT.mapPOIs = {}
+                MDT.dungeonEnemies = {}
+                MDT.scaleMultiplier = {}
                 ' .
                 // Some files require LibStub
-                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
-                file_get_contents(
-                    base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
-                ) .
+                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                file_get_contents(sprintf('%s/%s.lua', $dungeonHome, Conversion::getMDTDungeonName($this->_dungeonName))) . PHP_EOL .
                 // Insert dummy function to get what we need
                 '
                 function GetDungeonEnemies() 
-                    return MethodDungeonTools.dungeonEnemies[dungeonIndex]
+                    return MDT.dungeonEnemies[dungeonIndex]
                 end
-            ');
+            ';
+
+            $lua = new \Lua();
+            $lua->eval($eval);
             $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
