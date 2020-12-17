@@ -32,10 +32,10 @@ class Commit extends Command
     public function handle()
     {
         $this->shell([
-            sprintf('cd %s && ' .
+            sprintf('cd %s; ' .
                 // Commit current changes
                 'git add database/seeds/dungeondata/* && ' .
-                'git commit -m "Automated commit for mapping updates" && ' .
+                'git commit -m "Automated commit for mapping updates"; ' .
                 // Merge master into mapping
                 'git checkout development && ' .
                 'git pull && ' .
