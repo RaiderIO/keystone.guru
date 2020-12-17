@@ -137,7 +137,7 @@
         "dungeon_id": 33,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 4,
         "name": "Forsworn Mender",
         "base_health": 64100,
         "enemy_forces": 4,
