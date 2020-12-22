@@ -3,7 +3,7 @@ name: Mapping Deploy
 
 on:
   push:
-    branches: master
+    branches: development
 
 jobs:
   deploy-mapping:

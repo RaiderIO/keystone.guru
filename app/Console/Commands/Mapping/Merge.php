@@ -20,7 +20,7 @@ class Merge extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:merge {branch=master}';
+    protected $signature = 'mapping:merge {branch=development}';
 
     /**
      * The console command description.
@@ -41,15 +41,15 @@ class Merge extends Command
         $username = config('keystoneguru.github_username');
         $repository = config('keystoneguru.github_repository');
         $head = 'mapping';
-        $base = 'master';
+        $base = 'development';
 
         /** @var PullRequest $githubPrClient */
         $githubPrClient = GitHub::pr();
 
         $mrList = $githubPrClient->all($username, $repository, [
             'state' => 'open',
-            'head'  => 'mapping',
-            'base'  => 'master'
+            'head'  => $head,
+            'base'  => $base
         ]);
 
         $existingMrId = 0;
