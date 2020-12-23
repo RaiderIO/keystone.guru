@@ -1249,7 +1249,7 @@
         "name": "De Other Side",
         "enemy_forces_required": 399,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2340,
+        "timer_max_seconds": 2460,
         "floors": [
             {
                 "id": 73,
