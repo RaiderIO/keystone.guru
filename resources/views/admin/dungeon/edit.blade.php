@@ -96,8 +96,8 @@
         <tr>
             <th width="10%">{{ __('Id') }}</th>
             <th width="10%">{{ __('Index') }}</th>
-            <th width="65%">{{ __('Name') }}</th>
-            <th width="15%">{{ __('Actions') }}</th>
+            <th width="60%">{{ __('Name') }}</th>
+            <th width="20%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 

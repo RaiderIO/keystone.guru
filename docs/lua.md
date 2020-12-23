@@ -19,6 +19,17 @@ sudo pecl install lua-2.0.6
 This is the PHP coupling with lua. This uses `phpize` to determine the current module version (ex. `/usr/lib/php/20170718`), and compiles against it. Make sure you have a correct version of `php-dev` or `php7.2-dev` or whatever installed.
 If you run this command and see that it doesn't grab the correct version (ex. `20160303`), PHP LUA will NOT WORK.
 
+Make sure to `sudo apt-get remove php7.3-dev` and `sudo apt-get install php7.4-dev` if you're upgrading.
+
+`php-config --version` output should match `php --version` output. If it does not: `sudo apt-get install php7.4-dev` (or any other version).
+
+Also, make sure that the symlink for `php-config` is set correctly. 
+```
+root@homestead:/usr/bin# ls -ltra | grep php-config
+root@homestead:/usr/bin# cd /etc/alternatives && ls -ltra | grep php-config
+``` 
+should output your correct version, if not change it: `rm php-config && ln -s /usr/bin/php-config7.4 php-config`
+
 ## Bit.so
 This is extracted and compiled from the `storage/lua/LuaBitOp-1.0.3.zip`. This must be done because otherwise versions aren't matching and it won't work.
 
