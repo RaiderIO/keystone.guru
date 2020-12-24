@@ -71,14 +71,18 @@ class MDTDungeon
 
             $eval = '
                 local MDT = {}
+                MDT.L = {}
                 MDT.dungeonTotalCount = {}
                 MDT.mapInfo = {}
                 MDT.mapPOIs = {}
                 MDT.dungeonEnemies = {}
                 MDT.scaleMultiplier = {}
+                
+                local L = {}
                 ' .
                 // Some files require LibStub
                 file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+//                file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
                 file_get_contents(sprintf('%s/%s.lua', $dungeonHome, Conversion::getMDTDungeonName($this->_dungeonName))) . PHP_EOL .
                 // Insert dummy function to get what we need
                 '
@@ -86,6 +90,8 @@ class MDTDungeon
                     return MDT.dungeonEnemies[dungeonIndex]
                 end
             ';
+
+//            dd($eval);
 
             $lua = new \Lua();
             $lua->eval($eval);
