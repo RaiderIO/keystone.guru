@@ -1247,7 +1247,7 @@
         "zone_id": 13309,
         "key": "deotherside_ardenweald",
         "name": "De Other Side",
-        "enemy_forces_required": 399,
+        "enemy_forces_required": 384,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2460,
         "floors": [
@@ -1466,7 +1466,7 @@
         "zone_id": 12842,
         "key": "sanguinedepths_a",
         "name": "Sanguine Depths",
-        "enemy_forces_required": 392,
+        "enemy_forces_required": 364,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2460,
         "floors": [
