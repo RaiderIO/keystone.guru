@@ -1337,7 +1337,7 @@
         "name": "Halls of Atonement",
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 1920,
+        "timer_max_seconds": 1860,
         "floors": [
             {
                 "id": 77,
