@@ -431,7 +431,6 @@ class KillZone extends MapObject {
             }
         });
 
-
         // Alpha shapes
         if (this.layer !== null && this.floor_id > 0) {
             // Killzone not on this floor, draw a line to the floor that it is
@@ -657,6 +656,9 @@ class KillZone extends MapObject {
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            if (this.enemiesLayer !== null) {
+                this.enemyConnectionsLayerGroup.removeLayer(this.enemiesLayer);
+            }
             killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
         }
     }
