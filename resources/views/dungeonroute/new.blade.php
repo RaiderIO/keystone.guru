@@ -93,13 +93,13 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                 {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
             </div>
         </div>
-        @if(!Auth::user()->hasPaidTier('unlimited-routes'))
-            {{ sprintf(__('You may create %s more route(s).'),  Auth::user()->getRemainingRouteCount()) }}
+{{--        @if(!Auth::user()->hasPaidTier('unlimited-routes'))--}}
+{{--            {{ sprintf(__('You may create %s more route(s).'),  Auth::user()->getRemainingRouteCount()) }}--}}
 
-            <a href="https://www.patreon.com/keystoneguru">
-                <i class="fab fa-patreon"></i> {{ __('Patrons have no limits!') }}
-            </a>
-        @endif
+{{--            <a href="https://www.patreon.com/keystoneguru">--}}
+{{--                <i class="fab fa-patreon"></i> {{ __('Patrons have no limits!') }}--}}
+{{--            </a>--}}
+{{--        @endif--}}
     </div>
 
     {!! Form::close() !!}
