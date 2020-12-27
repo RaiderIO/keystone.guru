@@ -30,14 +30,10 @@ class EnemyForcesControls extends MapControl {
 
         let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
-            if (self.map.getMapState() instanceof EnemySelection) {
-                self._setEnemyForces(self.enemyForces + addEvent.data.enemy.getEnemyForces());
-            }
+            self._setEnemyForces(self.enemyForces + addEvent.data.enemy.getEnemyForces());
         });
         killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
-            if (self.map.getMapState() instanceof EnemySelection) {
-                self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
-            }
+            self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
         });
         killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
@@ -146,7 +142,7 @@ class EnemyForcesControls extends MapControl {
 
         $('#map_enemy_forces_count').html(this.enemyForces);
         $('#map_enemy_forces_count_total').html(enemyForcesRequired);
-        $('#map_enemy_forces_percent').html(enemyForcesPercent.toFixed(2));
+        $('#map_enemy_forces_percent').html(Math.round(enemyForcesPercent * 10) / 10);
 
         refreshTooltips($enemyForces);
     }

@@ -18,14 +18,21 @@ class SidebarNavigation extends Sidebar {
         map.register('map:mapobjectgroupsloaded', this, this._mapObjectGroupVisibilityChanged);
 
         let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
-        let cookieHiddenMapObjectGroups = Cookies.get('hidden_map_object_groups');
+        let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
 
         for (let i in mapObjectGroups) {
             if (mapObjectGroups.hasOwnProperty(i)) {
                 let group = mapObjectGroups[i];
 
-                // Always assume the first name since all others are aliases of the first
-                let selected = !cookieHiddenMapObjectGroups.includes(group.names[0]) ? {selected: 'selected'} : {};
+                // If any of the names of a map object group is found in the array, hide the selection
+                let selected = {selected: 'selected'};
+                for (let index in group.names) {
+                    if (group.names.hasOwnProperty(index) && cookieHiddenMapObjectGroups.includes(group.names[index])) {
+                        selected = {};
+                        break;
+                    }
+                }
+
                 $mapObjectGroupVisibilitySelect.append($('<option>', $.extend(selected, {
                     text: lang.get(`messages.${group.names[0]}_map_object_group_label`),
                     value: group.names[0]
@@ -33,9 +40,15 @@ class SidebarNavigation extends Sidebar {
             }
         }
 
+        // Trigger the change event now to initialize the map object groups
         $mapObjectGroupVisibilitySelect.bind('change', this._mapObjectGroupVisibilityChanged);
+        this._mapObjectGroupVisibilityChanged();
     }
 
+    /**
+     *
+     * @private
+     */
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilitySelect = $('#map_map_object_group_visibility');
         let selected = $mapObjectGroupVisibilitySelect.val();

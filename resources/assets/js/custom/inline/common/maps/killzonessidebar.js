@@ -281,16 +281,22 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
         let killZoneEnemyForces = killZone.getEnemyForces();
+        let enemyForcesCumulativePercent = ((killZone.getEnemyForcesCumulative() / this.map.getEnemyForcesRequired()) * 100);
+        // Round to 1 decimal at best
+        enemyForcesCumulativePercent = Math.round(enemyForcesCumulativePercent * 10) / 10;
+        let enemyForcesPercent = ((killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100);
+        enemyForcesPercent = Math.round(enemyForcesPercent * 10) / 10;
 
         // let color = isColorDark(killZone.color) ? 'white' : 'black';
         // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color).css('border-color', color).css('color', color);
         $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemies:not(.draggable--original)`)
-            .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
+            .text(`${enemyForcesCumulativePercent}%`);
 
-        // Show enemy forces or not
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(`${killZoneEnemyForces}`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(
+            `+${enemyForcesPercent}%`
+        );
 
         // Show boss icon or not
         let hasBoss = false;

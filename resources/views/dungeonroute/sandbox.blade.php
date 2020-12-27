@@ -2,6 +2,7 @@
 /** @var $model \App\Models\DungeonRoute */
 ?>
 @extends('layouts.app', [
+    'showAds' => false,
     'custom' => isset($model),
     'footer' => !isset($model),
     'header' => !isset($model),

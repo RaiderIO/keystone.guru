@@ -19,6 +19,8 @@ class MapObjectGroup extends Signalable {
 
         // False initially when not loaded anything in yet (from server). True after the initial loading.
         this._initialized = false;
+        // May be set depending on which map object groups are hidden or not
+        this._visible = true;
 
         this.objects = [];
         this.layerGroup = new L.LayerGroup();
@@ -93,7 +95,8 @@ class MapObjectGroup extends Signalable {
         console.assert(typeof e.model !== 'undefined', 'model was not defined in received event!', this, e);
         console.assert(typeof e.model.floor_id !== 'undefined', 'model.floor_id was not defined in received event!', this, e);
 
-        return this._shouldHandleEchoEvent(e) && e.model.floor_id === getState().getCurrentFloor().id;
+        // floor -1 means it's omnipresent (such as killzones)
+        return this._shouldHandleEchoEvent(e) && (e.model.floor_id === getState().getCurrentFloor().id || e.model.floor_id === -1);
     }
 
     /**
@@ -153,7 +156,8 @@ class MapObjectGroup extends Signalable {
         // Remove any layers that were added before
         this._hideAllMapObjects();
 
-        this.setVisibility(false);
+        // Do not use this.setVisibility(false), this will interfere with the Map Elements selector (hide/show this map object group)
+        this._updateVisibility(false);
     }
 
     /**
@@ -463,8 +467,7 @@ class MapObjectGroup extends Signalable {
 
         if (this._initialized) {
             // Set it to be visible if it was
-            // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
-            this.setVisibility(true);
+            this.setVisibility(this._visible);
         }
     }
 
@@ -576,6 +579,11 @@ class MapObjectGroup extends Signalable {
         }
     }
 
+    /**
+     *
+     * @param layer
+     * @returns {MapObject}
+     */
     onNewLayerCreated(layer) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
 
@@ -602,6 +610,9 @@ class MapObjectGroup extends Signalable {
      */
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
+
+        this._visible = visible;
+
         if (this.layerGroup !== null) {
             let added = (!this.isShown() && visible);
             let removed = (this.isShown() && !visible);
