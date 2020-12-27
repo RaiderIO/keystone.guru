@@ -161,20 +161,21 @@ return [
 
     'intro_visibility_tools'                          => 'Here you can select different visualization options.',
     'intro_map_enemy_visuals'                         => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
-    'intro_map_map_object_group_visibility_container' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own pulls, all map icons, start markers and floor switch markers.',
+    'intro_map_map_object_group_visibility_container' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own paths, your own pulls, all map icons, start markers and floor switch markers.',
     'intro_floor_selection'                           => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
 
     'intro_route_actions'                           => 'These are various actions you can perform while viewing or editing your route.',
     'intro_route_actions_draw_settings'             => 'Opening the draw settings will allow you adjust some default variables and behaviour to make editing your route easier.',
     'intro_route_actions_map_login_and_continue'    => 'If you\'re already a member of Keystone.guru but not logged in, you can log in here and save the current route to your profile.',
     'intro_route_actions_map_register_and_continue' => 'If you\'re not yet a member of Keystone.guru, you can register here and save the current route to your profile.',
-    'intro_route_actions_save_and_continue'         => 'While trying out a route when you\'re loggedin, you can opt to save it to your profile.',
+    'intro_route_actions_save_and_continue'         => 'While trying out a route when you\'re logged in, you can opt to save it to your profile.',
 
     'intro_route_manipulation_tools' => 'These are your route manipulation tools.',
-    'intro_draw_path'                => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
+    'intro_draw_path'                => 'You can draw paths with this tool. Click it, then click on the map once to start, then as much times as you want to mark your path from A to B. Once finished, you can click
             the line on the map to change its color or thickness.',
     'intro_draw_mapicon'             => 'Use this tool to place icons on the map with an optional comment.',
-    'intro_draw_brushline'           => 'Use this tool to draw lines in a more flexible manner on your route.',
+    'intro_draw_brushline'           => 'Use this tool to draw lines in a more flexible manner on your route, without directional arrows.',
+    'intro_draw_pridefulenemy'       => 'The current seasonal affix is Prideful which spawns a Prideful Manifestation every 20% enemy forces. Use this button to spawn Prideful Manifestations where you desire to kill them.',
 
     'intro_draw_edit'   => 'You can use the edit button to adjust your created elements such as icons or drawn lines.',
     'intro_draw_remove' => 'You can use the delete button to remove elements you have created. Click it once, then select the highlighted elements you wish to delete. Deleting happens in a preview mode, you have to confirm your delete by pressing the \'Finish\' button, or hit the \'Cancel\' button to undo them. If you confirm the deletion, there is no turning back!',
