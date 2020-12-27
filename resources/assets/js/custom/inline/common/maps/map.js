@@ -59,6 +59,7 @@ class CommonMapsMap extends InlineCode {
                 ['intro_draw_path', '.leaflet-draw-draw-path', 'left'],
                 ['intro_draw_mapicon', '.leaflet-draw-draw-mapicon', 'left'],
                 ['intro_draw_brushline', '.leaflet-draw-draw-brushline', 'left'],
+                ['intro_draw_pridefulenemy', '.leaflet-draw-draw-pridefulenemy', 'left'],
 
                 ['intro_draw_edit', '.leaflet-draw-edit-edit', 'left'],
                 ['intro_draw_remove', '.leaflet-draw-edit-remove', 'left'],
