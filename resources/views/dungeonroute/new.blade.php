@@ -30,15 +30,15 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         </div>
         @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
 
-        <div class="form-group">
-            <label for="teeming">
-                {{ __('Teeming') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('Check to change the dungeon to resemble Teeming week.')
-                 }}"></i>
-            </label>
-            {!! Form::checkbox('teeming', 1, $teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
-        </div>
+{{--        <div class="form-group">--}}
+{{--            <label for="teeming">--}}
+{{--                {{ __('Teeming') }}--}}
+{{--                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
+{{--                __('Check to change the dungeon to resemble Teeming week.')--}}
+{{--                 }}"></i>--}}
+{{--            </label>--}}
+{{--            {!! Form::checkbox('teeming', 1, $teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
+{{--        </div>--}}
 
 {{--        <div class="form-group">--}}
 {{--            <label for="template">--}}

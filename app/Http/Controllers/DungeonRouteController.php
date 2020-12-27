@@ -43,7 +43,7 @@ class DungeonRouteController extends Controller
             $dungeonRoute->author_id = -1;
             $dungeonRoute->faction_id = 1; // Unspecified
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-            $dungeonRoute->teeming = (int)$request->get('teeming', 0) === 1;
+            $dungeonRoute->teeming = 0; //(int)$request->get('teeming', 0) === 1;
             $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
             $dungeonRoute->save();
 
