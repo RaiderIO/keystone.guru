@@ -226,6 +226,10 @@ html, body, #map, #app, .wrapper {
     height: 100%;
 }
 
+#killzonesidebar .map_killzonessidebar_killzone .selected .text-success {
+    color: unset !important;
+}
+
 .grapick_color_picker_button_outer {
     left: -6px;
     top: -9px;
@@ -236,12 +240,6 @@ html, body, #map, #app, .wrapper {
     height: 12px !important;
     padding: 0 !important;
 }
-
-/*#killzonesidebar .map_killzonessidebar_killzone.selected {*/
-/*    border: #DF691A 3px solid;*/
-
-/*    padding: 3px;*/
-/*}*/
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
     background-color: inherit;
