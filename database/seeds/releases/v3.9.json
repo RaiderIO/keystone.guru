@@ -42,6 +42,16 @@
             },
             {
                 "release_changelog_id": 80,
+                "release_changelog_category_id": 4,
+                "ticket_id": 0,
+                "change": "Many minor mapping updates to a lot of dungeons. If you find any issues, please use the 'Report an issue' button when hovering your mouse over an enemy to report an issue directly. Thanks in advance!",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 80,
                 "release_changelog_category_id": 5,
                 "ticket_id": 509,
                 "change": "Fixed an issue with Necrotic Wake route importing from MDT.",

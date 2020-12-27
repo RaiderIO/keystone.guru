@@ -72,16 +72,16 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull(enemyIds = []) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
         // Construct an object equal to that received from the server
-        let killzoneEnemies = [];
+        let killZoneEnemies = [];
         for (let i = 0; i < enemyIds.length; i++) {
-            killzoneEnemies.push({enemy_id: enemyIds[i]});
+            killZoneEnemies.push({enemy_id: enemyIds[i]});
         }
 
         let killZone = this._loadMapObject({
             id: -1,
             color: c.map.killzone.polygonOptions.color(),
             floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
-            killzoneenemies: killzoneEnemies,
+            killzoneenemies: killZoneEnemies,
             lat: null,
             lng: null,
             index: this.objects.length + 1,

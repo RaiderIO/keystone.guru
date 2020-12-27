@@ -519,6 +519,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         }
 
+        $('#killzones_new_pull').on('click', this._onNewKillZoneClicked.bind(this));
+
         if (this.map.options.edit) {
             this._draggable = new Draggable.Sortable(document.querySelectorAll('#killzones_container'), {
                 draggable: '.map_killzonessidebar_killzone',
@@ -568,6 +570,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (!this.map.isRefreshingMap()) {
             this._refreshKillZone(killZone);
         }
+    }
+
+    /**
+     * User clicked on the "New pull" button in the sidebar
+     * @private
+     */
+    _onNewKillZoneClicked() {
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZone = killZoneMapObjectGroup.createNewPull();
+
+        this.map.setMapState(new KillZoneEnemySelection(this.map, killZone));
     }
 
     _draggedKillZoneRow() {
