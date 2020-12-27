@@ -527,7 +527,7 @@ class DungeonRoute extends Model
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = (int)$request->get('teeming', $this->teeming) ?? 0;
+        $this->teeming = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient = $request->get('pull_gradient', '');
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);

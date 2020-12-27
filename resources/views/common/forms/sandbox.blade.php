@@ -43,10 +43,10 @@ $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 
     @include('common.dungeon.select', ['showAll' => false])
 
-    <div class="form-group">
-        {!! Form::label('teeming', __('Teeming')) !!}
-        {!! Form::checkbox('teeming', 1, $currentAffixGroup->isTeeming(), ['class' => 'form-control left_checkbox']) !!}
-    </div>
+{{--    <div class="form-group">--}}
+{{--        {!! Form::label('teeming', __('Teeming')) !!}--}}
+{{--        {!! Form::checkbox('teeming', 1, $currentAffixGroup->isTeeming(), ['class' => 'form-control left_checkbox']) !!}--}}
+{{--    </div>--}}
 
     <div class="form-group">
         {!! Form::submit(__('Play around!'), ['class' => 'btn btn-primary col-md-auto']) !!}
