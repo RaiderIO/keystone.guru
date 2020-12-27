@@ -77,6 +77,8 @@ class KillZone extends Model
             // Kill them off
             KillZoneEnemy::destroy($existingKillZoneEnemiesIds);
         }
+
+        $this->unsetRelation('killzoneenemies');
     }
 
     public static function boot()
