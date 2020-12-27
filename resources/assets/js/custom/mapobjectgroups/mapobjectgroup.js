@@ -95,7 +95,8 @@ class MapObjectGroup extends Signalable {
         console.assert(typeof e.model !== 'undefined', 'model was not defined in received event!', this, e);
         console.assert(typeof e.model.floor_id !== 'undefined', 'model.floor_id was not defined in received event!', this, e);
 
-        return this._shouldHandleEchoEvent(e) && e.model.floor_id === getState().getCurrentFloor().id;
+        // floor -1 means it's omnipresent (such as killzones)
+        return this._shouldHandleEchoEvent(e) && (e.model.floor_id === getState().getCurrentFloor().id || e.model.floor_id === -1);
     }
 
     /**
