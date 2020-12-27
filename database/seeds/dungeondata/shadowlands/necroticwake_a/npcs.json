@@ -45,7 +45,7 @@
         "npc_class_id": 1,
         "name": "Amarth",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": 0,
         "aggressiveness": "aggressive",
         "dangerous": 0,
