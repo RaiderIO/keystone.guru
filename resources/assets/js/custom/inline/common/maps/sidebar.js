@@ -55,6 +55,9 @@ class Sidebar {
             history.pushState({page: 1},
                 newUrl,
                 newUrl);
+
+            // Make sure that the sidebar's select picker gets updated with the newly selected value
+            refreshSelectPickers();
         });
 
         $(this.options.switchDungeonFloorSelect).change(function () {
