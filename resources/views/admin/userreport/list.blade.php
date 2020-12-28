@@ -15,8 +15,8 @@
         $(function () {
             let userReportsDatatable = $('#admin_user_reports_table').DataTable({
                 'drawCallback': function (settings) {
-                    console.log('draw');
-                    
+                    refreshTooltips();
+
                     $('.mark_as_handled_btn').bind('click', function () {
                         let $this = $(this);
                         let id = $this.data('id');
@@ -61,8 +61,10 @@
             <tr>
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>
-                <td><span data-toggle="tooltip"
-                          title="{{ isset($report->model) ? json_encode($report->model->toArray(), JSON_PRETTY_PRINT) : '' }}">{{ $report->category }}</span>
+                <td>
+                    <span data-toggle="tooltip"
+                          title="{{ isset($report->model) ? json_encode($report->model->toArray(), JSON_PRETTY_PRINT) : '' }}">{{ $report->category }}
+                    </span>
                 </td>
                 <td>{{ $report->message }}</td>
                 <td>{{ $report->contact_ok ? $report->user->email : '-' }}</td>
