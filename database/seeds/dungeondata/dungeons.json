@@ -217,6 +217,22 @@
         "timer_max_seconds": 0,
         "floors": [
             {
+                "id": 17,
+                "index": 1,
+                "name": "Fields of the Eternal Hunt",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 2,
+                        "floor1_id": 17,
+                        "floor2_id": 16,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
                 "id": 16,
                 "index": 2,
                 "name": "The High Gate",
@@ -234,22 +250,6 @@
                         "id": 3,
                         "floor1_id": 16,
                         "floor2_id": 18,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
-                "id": 17,
-                "index": 1,
-                "name": "Fields of the Eternal Hunt",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": [
-                    {
-                        "id": 2,
-                        "floor1_id": 17,
-                        "floor2_id": 16,
                         "direction": "up"
                     }
                 ]
@@ -283,36 +283,9 @@
         "timer_max_seconds": 0,
         "floors": [
             {
-                "id": 19,
-                "index": 6,
-                "name": "Master's Terrace",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 20,
-                "index": 5,
-                "name": "Opera Hall Balcony",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 21,
-                "index": 4,
-                "name": "The Guest Chambers",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 22,
-                "index": 3,
-                "name": "The Banquet Hall",
+                "id": 24,
+                "index": 1,
+                "name": "Servant's Quarters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -328,10 +301,37 @@
                 "floorcouplings": []
             },
             {
-                "id": 24,
-                "index": 1,
-                "name": "Servant's Quarters",
+                "id": 22,
+                "index": 3,
+                "name": "The Banquet Hall",
                 "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 21,
+                "index": 4,
+                "name": "The Guest Chambers",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 20,
+                "index": 5,
+                "name": "Opera Hall Balcony",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 19,
+                "index": 6,
+                "name": "Master's Terrace",
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": []
