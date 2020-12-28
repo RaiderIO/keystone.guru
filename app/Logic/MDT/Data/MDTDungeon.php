@@ -14,7 +14,9 @@ use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\Npc;
+use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MythicDungeonTools/blob/master/Transmission.lua
@@ -67,11 +69,17 @@ class MDTDungeon
         $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
             $mdtHome = base_path('vendor/nnoggie/mythicdungeontools/');
-            $dungeonHome = sprintf('%s/%s', $mdtHome, Conversion::getExpansionName($this->_dungeonName));
+            $expansionName = Conversion::getExpansionName($this->_dungeonName);
+            /** @var ExpansionService $expansionService */
+            $expansionService = App::make(ExpansionService::class);
 
-            $eval = '
+            $mdtDungeonName = Conversion::getMDTDungeonName($this->_dungeonName);
+            if (!empty($expansionName) && !empty($mdtDungeonName) && $expansionService->getCurrentExpansion()->name === $expansionName) {
+                $dungeonHome = sprintf('%s/%s', $mdtHome, $expansionName);
+
+                $eval = '
                 local MDT = {}
-                MDT.L = {}
+                MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
                 MDT.dungeonTotalCount = {}
                 MDT.mapInfo = {}
                 MDT.mapPOIs = {}
@@ -80,25 +88,28 @@ class MDTDungeon
                 
                 local L = {}
                 ' .
-                // Some files require LibStub
-                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                    // Some files require LibStub
+                    file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
 //                file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                file_get_contents(sprintf('%s/%s.lua', $dungeonHome, Conversion::getMDTDungeonName($this->_dungeonName))) . PHP_EOL .
-                // Insert dummy function to get what we need
-                '
+                    file_get_contents(sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName)) . PHP_EOL .
+                    // Insert dummy function to get what we need
+                    '
                 function GetDungeonEnemies() 
                     return MDT.dungeonEnemies[dungeonIndex]
                 end
             ';
 
-//            dd($eval);
+                try {
+                    $lua = new \Lua();
+                    $lua->eval($eval);
+                    $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
-            $lua = new \Lua();
-            $lua->eval($eval);
-            $rawMdtEnemies = $lua->call('GetDungeonEnemies');
-
-            foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
-                $result->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+                    foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
+                        $result->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+                    }
+                } catch (\LuaException $ex) {
+                    dd($ex, $expansionName, $mdtDungeonName, $eval);
+                }
             }
         }
 

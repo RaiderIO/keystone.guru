@@ -76,14 +76,14 @@
                     $old = isset($data['old']) ? $data['old'] : '';
                     $new = isset($data['new']) ? $data['new'] : '';
                     $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                    $dungeonName = isset($data['npc']) ? $data['npc']->dungeon->name : 0;
+                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : 'No dungeon name found';
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
                             {{ $dungeonName }}
                         </td>
                         <td>
-                            {{ sprintf( '%s (%s, %s usages)', $mdtNpc->name, $mdtNpc->id, $count) }}
+                            {{ sprintf( '%s (%s, %s usages)', $mdtNpc->name ?? 'No NPC name found', $mdtNpc->id, $count) }}
                         </td>
                         <td>
                             {{ $importWarning->getMessage() }}
