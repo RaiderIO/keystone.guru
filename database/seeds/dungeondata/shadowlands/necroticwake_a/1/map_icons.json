@@ -163,5 +163,16 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -177.4237758382,
+        "lng": 171.5,
+        "comment": "Bloody Javelin",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
