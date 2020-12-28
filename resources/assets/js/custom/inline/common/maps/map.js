@@ -65,6 +65,7 @@ class CommonMapsMap extends InlineCode {
                 ['intro_draw_remove', '.leaflet-draw-edit-remove', 'left'],
 
                 ['intro_map_enemy_forces_numbers', '#map_enemy_forces_numbers', 'left'],
+                ['intro_new_pull', '#killzones_new_pull', 'left'],
             ];
 
             this._dungeonMap.register('map:refresh', null, function () {

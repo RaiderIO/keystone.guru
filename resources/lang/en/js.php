@@ -181,6 +181,7 @@ return [
     'intro_draw_remove' => 'You can use the delete button to remove elements you have created. Click it once, then select the highlighted elements you wish to delete. Deleting happens in a preview mode, you have to confirm your delete by pressing the \'Finish\' button, or hit the \'Cancel\' button to undo them. If you confirm the deletion, there is no turning back!',
 
     'intro_map_enemy_forces_numbers'                                => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
+    'intro_new_pull'                                                => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
 
     // Sidebar
     'sidebar_expand'                                                => 'Expand the sidebar',

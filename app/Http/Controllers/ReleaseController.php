@@ -35,6 +35,7 @@ class ReleaseController extends Controller
         $changelog->description = $request->get('changelog_description');
         $changelog->save();
 
+
         // Update changes
         $tickets = $request->get('tickets', []);
         $changes = $request->get('changes', []);
@@ -51,7 +52,7 @@ class ReleaseController extends Controller
                 $changelogChange = new ReleaseChangelogChange();
                 $changelogChange->release_changelog_id = $changelog->id;
                 $changelogChange->release_changelog_category_id = $categories[$i];
-                $changelogChange->ticket_id = intval(str_replace('#', '', $tickets[$i]));
+                $changelogChange->ticket_id = is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i]));
                 $changelogChange->change = $changes[$i];
                 $changelogChange->save();
             }

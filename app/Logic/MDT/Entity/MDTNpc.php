@@ -61,9 +61,15 @@ class MDTNpc
         $this->_scale = (float)$rawMdtNpc['scale'];
         $this->_countTeeming = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
         $this->_count = (int)$rawMdtNpc['count'];
-        $this->_name = $rawMdtNpc['name'];
+        // May not always be set?
+        if (isset($rawMdtNpc['name'])) {
+            $this->_name = $rawMdtNpc['name'];
+        }
         $this->_displayId = (int)$rawMdtNpc['displayId'];
-        $this->_creatureType = $rawMdtNpc['creatureType'];
+        // May not always be set?
+        if (isset($rawMdtNpc['creatureType'])) {
+            $this->_creatureType = $rawMdtNpc['creatureType'];
+        }
         $this->_level = (int)$rawMdtNpc['level'];
         $this->_health = (int)$rawMdtNpc['health'];
         $this->_characteristics = isset($rawMdtNpc['characteristics']) ? $rawMdtNpc['characteristics'] : [];
@@ -167,9 +173,9 @@ class MDTNpc
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->_name;
     }
@@ -183,9 +189,9 @@ class MDTNpc
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCreatureType(): string
+    public function getCreatureType(): ?string
     {
         return $this->_creatureType;
     }

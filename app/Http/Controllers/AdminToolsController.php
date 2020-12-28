@@ -9,7 +9,7 @@ use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\Npc;
 use App\Models\NpcType;
-use App\Models\Release;
+use App\Service\Cache\CacheService;
 use App\Service\Season\SeasonService;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
@@ -17,9 +17,11 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Session;
 use Throwable;
 
 class AdminToolsController extends Controller
@@ -280,6 +282,22 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @param CacheService $cacheService
+     * @return RedirectResponse
+     */
+    public function dropCache(Request $request, CacheService $cacheService)
+    {
+        if ($cacheService->dropCaches()) {
+            Session::flash('status', __('Dungeon caches dropped successfully'));
+        } else {
+            Session::flash('warning', __('Dungeon caches NOT dropped; perhaps caches were not there?'));
+        }
+
+        return redirect()->route('admin.tools');
+    }
+
+    /**
+     * @param Request $request
      * @return array
      */
     public function applychange(Request $request)
@@ -325,7 +343,7 @@ class AdminToolsController extends Controller
     {
         Artisan::call('release:save');
 
-        \Session::flash('status', __('Releases exported'));
+        Session::flash('status', __('Releases exported'));
 
         return view('admin.tools.list');
     }

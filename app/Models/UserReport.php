@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasGenericModelRelation;
 use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -18,12 +21,14 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property User $author
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class UserReport extends Model
 {
+    use HasGenericModelRelation;
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function user()
     {
