@@ -217,6 +217,22 @@
         "timer_max_seconds": 0,
         "floors": [
             {
+                "id": 17,
+                "index": 1,
+                "name": "Fields of the Eternal Hunt",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 2,
+                        "floor1_id": 17,
+                        "floor2_id": 16,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
                 "id": 16,
                 "index": 2,
                 "name": "The High Gate",
@@ -234,22 +250,6 @@
                         "id": 3,
                         "floor1_id": 16,
                         "floor2_id": 18,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
-                "id": 17,
-                "index": 1,
-                "name": "Fields of the Eternal Hunt",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": [
-                    {
-                        "id": 2,
-                        "floor1_id": 17,
-                        "floor2_id": 16,
                         "direction": "up"
                     }
                 ]
@@ -283,36 +283,9 @@
         "timer_max_seconds": 0,
         "floors": [
             {
-                "id": 19,
-                "index": 6,
-                "name": "Master's Terrace",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 20,
-                "index": 5,
-                "name": "Opera Hall Balcony",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 21,
-                "index": 4,
-                "name": "The Guest Chambers",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 22,
-                "index": 3,
-                "name": "The Banquet Hall",
+                "id": 24,
+                "index": 1,
+                "name": "Servant's Quarters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -328,10 +301,37 @@
                 "floorcouplings": []
             },
             {
-                "id": 24,
-                "index": 1,
-                "name": "Servant's Quarters",
+                "id": 22,
+                "index": 3,
+                "name": "The Banquet Hall",
                 "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 21,
+                "index": 4,
+                "name": "The Guest Chambers",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 20,
+                "index": 5,
+                "name": "Opera Hall Balcony",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 19,
+                "index": 6,
+                "name": "Master's Terrace",
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": []
@@ -1477,7 +1477,14 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 106,
+                        "floor1_id": 83,
+                        "floor2_id": 84,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 84,
@@ -1670,16 +1677,10 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 65,
+                        "id": 89,
                         "floor1_id": 92,
                         "floor2_id": 93,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 67,
-                        "floor1_id": 92,
-                        "floor2_id": 94,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ]
             },
@@ -1692,9 +1693,21 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 66,
+                        "id": 93,
                         "floor1_id": 93,
                         "floor2_id": 92,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 94,
+                        "floor1_id": 93,
+                        "floor2_id": 94,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 95,
+                        "floor1_id": 93,
+                        "floor2_id": 96,
                         "direction": "left"
                     }
                 ]
@@ -1708,43 +1721,56 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 68,
+                        "id": 85,
                         "floor1_id": 94,
-                        "floor2_id": 92,
+                        "floor2_id": 93,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 96,
+                "index": 4,
+                "name": "Upper Barrow of Carnage",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 102,
+                        "floor1_id": 96,
+                        "floor2_id": 93,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 103,
+                        "floor1_id": 96,
+                        "floor2_id": 95,
                         "direction": "down"
                     }
                 ]
             },
             {
                 "id": 95,
-                "index": 4,
+                "index": 5,
                 "name": "Lower Barrow of Carnage",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 78,
+                        "id": 104,
                         "floor1_id": 95,
-                        "floor2_id": 92,
-                        "direction": "up"
+                        "floor2_id": 93,
+                        "direction": "right"
                     },
                     {
-                        "id": 79,
+                        "id": 105,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
                     }
                 ]
-            },
-            {
-                "id": 96,
-                "index": 5,
-                "name": "Upper Barrow of Carnage",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
             }
         ]
     }
