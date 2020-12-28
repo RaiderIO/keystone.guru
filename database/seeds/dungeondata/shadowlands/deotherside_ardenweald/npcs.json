@@ -672,7 +672,7 @@
         "npc_class_id": 1,
         "name": "Atal'ai Devoted",
         "base_health": 16000,
-        "enemy_forces": 0,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,

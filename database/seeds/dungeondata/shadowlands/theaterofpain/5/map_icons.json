@@ -1,11 +1,11 @@
 [
     {
-        "floor_id": 96,
+        "floor_id": 95,
         "team_id": null,
-        "map_icon_type_id": 44,
-        "lat": -139.875,
-        "lng": 241.25,
-        "comment": "NECROLORD: Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members.",
+        "map_icon_type_id": 41,
+        "lat": -135.375,
+        "lng": 144.625,
+        "comment": "The pack jumps out from both sides when you step out onto the bridge",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

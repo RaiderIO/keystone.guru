@@ -20,5 +20,38 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 93,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -127.3125,
+        "lng": 223.1875,
+        "comment": "Only one is available - so pick one and not both.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 93,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -159.5625,
+        "lng": 175.125,
+        "comment": "Only one is available - so pick one and not both.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 93,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -188.0625,
+        "lng": 268.6875,
+        "comment": "Only one is available - so pick one and not both.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
