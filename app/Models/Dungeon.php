@@ -111,7 +111,7 @@ class Dungeon extends Model
      */
     public function floors()
     {
-        return $this->hasMany('App\Models\Floor');
+        return $this->hasMany('App\Models\Floor')->orderBy('index');
     }
 
     /**

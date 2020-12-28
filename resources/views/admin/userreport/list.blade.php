@@ -13,24 +13,29 @@
 @section('scripts')
     <script type="text/javascript">
         $(function () {
-            let userReportsDatatable = $('#admin_user_reports_table').DataTable({});
-            $('.mark_as_handled_btn').bind('click', function () {
-                let $this = $(this);
-                let id = $this.data('id');
-                $.ajax({
-                    type: 'PUT',
-                    url: `/ajax/userreport/${id}/status`,
-                    dataType: 'json',
-                    data: {
-                        status: 1
-                    },
-                    success: function (json) {
-                        showSuccessNotification(lang.get('messages.user_report_handled_success'));
+            let userReportsDatatable = $('#admin_user_reports_table').DataTable({
+                'drawCallback': function (settings) {
+                    refreshTooltips();
 
-                        // Refresh the table
-                        userReportsDatatable.row($this.closest('tr')).remove().draw();
-                    },
-                });
+                    $('.mark_as_handled_btn').bind('click', function () {
+                        let $this = $(this);
+                        let id = $this.data('id');
+                        $.ajax({
+                            type: 'PUT',
+                            url: `/ajax/userreport/${id}/status`,
+                            dataType: 'json',
+                            data: {
+                                status: 1
+                            },
+                            success: function (json) {
+                                showSuccessNotification(lang.get('messages.user_report_handled_success'));
+
+                                // Refresh the table
+                                userReportsDatatable.row($this.closest('tr')).remove().draw();
+                            },
+                        });
+                    });
+                },
             });
         });
     </script>
@@ -56,7 +61,11 @@
             <tr>
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>
-                <td>{{ $report->category }}</td>
+                <td>
+                    <span data-toggle="tooltip"
+                          title="{{ isset($report->model) ? json_encode($report->model->toArray(), JSON_PRETTY_PRINT) : '' }}">{{ $report->category }}
+                    </span>
+                </td>
                 <td>{{ $report->message }}</td>
                 <td>{{ $report->contact_ok ? $report->user->email : '-' }}</td>
                 <td>{{ $report->created_at }}</td>

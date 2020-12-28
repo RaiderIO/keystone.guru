@@ -17,6 +17,6 @@ trait HasGenericModelRelation
      */
     function model()
     {
-        return $this->hasOne($this->model_class, 'model_id');
+        return $this->hasOne($this->model_class, 'id', 'model_id');
     }
 }
