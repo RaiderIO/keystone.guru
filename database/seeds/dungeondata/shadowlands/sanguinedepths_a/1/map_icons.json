@@ -130,5 +130,27 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 83,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -33.0625,
+        "lng": 163.875,
+        "comment": "This tick seems to be bugged in the ground - this will however pull when the boss is pulled.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 83,
+        "team_id": null,
+        "map_icon_type_id": -1,
+        "lat": -86.8125,
+        "lng": 123.875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

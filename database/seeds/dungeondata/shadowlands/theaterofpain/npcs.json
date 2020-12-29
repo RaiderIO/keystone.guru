@@ -4,7 +4,7 @@
         "dungeon_id": 35,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 2,
+        "npc_class_id": 3,
         "name": "Maniacal Soulbinder",
         "base_health": 71400,
         "enemy_forces": 4,
@@ -251,7 +251,7 @@
         "dungeon_id": 35,
         "classification_id": 2,
         "npc_type_id": 10,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Shambling Arbalest",
         "base_health": 68100,
         "enemy_forces": 4,
@@ -456,6 +456,25 @@
         "npcspells": []
     },
     {
+        "id": 169838,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "name": "Nefarious Darkspeaker",
+        "base_health": 112000,
+        "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
         "id": 169875,
         "dungeon_id": 35,
         "classification_id": 2,
@@ -479,7 +498,7 @@
         "dungeon_id": 35,
         "classification_id": 2,
         "npc_type_id": 10,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Nefarious Darkspeaker",
         "base_health": 112100,
         "enemy_forces": 6,
@@ -612,7 +631,7 @@
         "dungeon_id": 35,
         "classification_id": 2,
         "npc_type_id": 10,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Bone Magus",
         "base_health": 40000,
         "enemy_forces": 4,
@@ -624,7 +643,13 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [
+            {
+                "id": 1,
+                "npc_id": 170882,
+                "spell_id": 333293
+            }
+        ]
     },
     {
         "id": 174197,
