@@ -11,7 +11,7 @@ $edit = isset($edit) && $edit ? true : false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode = isset($sandboxMode) && $sandboxMode ? true : false;
-$enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
+$enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
 
 // Easy switch
 $isProduction = config('app.env') === 'production';
