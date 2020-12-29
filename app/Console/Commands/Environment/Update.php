@@ -70,8 +70,12 @@ class Update extends Command
         ]);
 
         // After seed, create a release if necessary
-        if( $environment === 'live' ) {
+        if ($environment === 'live') {
             $this->call('make:githubrelease');
+            // With the release created, pull the latest tag
+            $this->shell([
+                'git pull',
+            ]);
         }
 
         //

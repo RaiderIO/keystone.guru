@@ -48,7 +48,6 @@ class CreateGithubReleaseTicket extends Command
         $result = 0;
 
         $version = $this->argument('version');
-        $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
         if ($version === null) {
             $release = Release::latest()->first();
@@ -60,6 +59,8 @@ class CreateGithubReleaseTicket extends Command
             /** @var Release $release */
             $release = Release::where('version', $version)->first();
         }
+
+        $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
         if ($release !== null) {
             $username = config('keystoneguru.github_username');
