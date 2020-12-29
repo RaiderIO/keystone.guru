@@ -112,7 +112,7 @@ return [
     // Visualisation
     'npc_type_label'                              => 'Type',
     'npc_class_label'                             => 'Class',
-    'npc_portrait_label'                          => 'Portrait',
+    'enemy_portrait_label'                        => 'Portrait',
 
 
     // Admin

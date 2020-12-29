@@ -167,11 +167,17 @@ class Season extends Model
         return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;
     }
 
-    public function getSeasonalIndexesAsLetters()
+    /**
+     * @return array
+     */
+    public function getSeasonalIndexesAsLetters(): array
     {
         $seasonalIndexLetters = [];
         foreach ($this->affixgroups as $affixGroup) {
-            $seasonalIndexLetters[] = $affixGroup->getSeasonalIndexAsLetter();
+            $seasonalIndexLetter = $affixGroup->getSeasonalIndexAsLetter();
+            if ($seasonalIndexLetter !== null) {
+                $seasonalIndexLetters[] = $seasonalIndexLetter;
+            }
         }
         return array_values(array_unique($seasonalIndexLetters));
     }

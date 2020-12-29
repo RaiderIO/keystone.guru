@@ -39,7 +39,7 @@ class APIKillZoneController extends Controller
         $killZone->color = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
         $killZone->lat = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
         $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
-        $killZone->index = (int)(isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index;
+        $killZone->index = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
 
         if (!$killZone->exists) {
             // Find out of there is a duplicate
@@ -47,7 +47,6 @@ class APIKillZoneController extends Controller
         }
 
         if ($killZone->save()) {
-
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
                 $killZone->deleteEnemies();

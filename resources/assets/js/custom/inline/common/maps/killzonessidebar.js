@@ -281,11 +281,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
         let killZoneEnemyForces = killZone.getEnemyForces();
-        let enemyForcesCumulativePercent = ((killZone.getEnemyForcesCumulative() / this.map.getEnemyForcesRequired()) * 100);
-        // Round to 1 decimal at best
-        enemyForcesCumulativePercent = Math.round(enemyForcesCumulativePercent * 10) / 10;
-        let enemyForcesPercent = ((killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100);
-        enemyForcesPercent = Math.round(enemyForcesPercent * 10) / 10;
+        let enemyForcesCumulativePercent = getFormattedPercentage(killZone.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
+        let enemyForcesPercent = getFormattedPercentage(killZone.getEnemyForces(), this.map.getEnemyForcesRequired());
 
         // let color = isColorDark(killZone.color) ? 'white' : 'black';
         // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color).css('border-color', color).css('color', color);
