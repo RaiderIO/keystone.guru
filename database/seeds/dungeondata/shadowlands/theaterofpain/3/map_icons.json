@@ -185,5 +185,27 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 51,
+        "lat": -189.25,
+        "lng": 274.75,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 51,
+        "lat": -199.75,
+        "lng": 279.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
