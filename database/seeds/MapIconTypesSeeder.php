@@ -65,17 +65,20 @@ class MapIconTypesSeeder extends Seeder
             'exclamation_blue'   => ['name' => 'Exclamation'],
             'exclamation_orange' => ['name' => 'Exclamation'],
 
-            'neonbutton_blue'   => ['name' => 'Button blue'],
-            'neonbutton_cyan'   => ['name' => 'Button cyan'],
-            'neonbutton_green'  => ['name' => 'Button green'],
-            'neonbutton_orange' => ['name' => 'Button orange'],
-            'neonbutton_pink'   => ['name' => 'Button pink'],
-            'neonbutton_purple' => ['name' => 'Button purple'],
-            'neonbutton_red'    => ['name' => 'Button red'],
-            'neonbutton_yellow' => ['name' => 'Button yellow'],
-            'neonbutton_darkred' => ['name' => 'Button dark red'],
+            'neonbutton_blue'      => ['name' => 'Button blue'],
+            'neonbutton_cyan'      => ['name' => 'Button cyan'],
+            'neonbutton_green'     => ['name' => 'Button green'],
+            'neonbutton_orange'    => ['name' => 'Button orange'],
+            'neonbutton_pink'      => ['name' => 'Button pink'],
+            'neonbutton_purple'    => ['name' => 'Button purple'],
+            'neonbutton_red'       => ['name' => 'Button red'],
+            'neonbutton_yellow'    => ['name' => 'Button yellow'],
+            'neonbutton_darkred'   => ['name' => 'Button dark red'],
             'neonbutton_darkgreen' => ['name' => 'Button dark green'],
-            'neonbutton_darkblue' => ['name' => 'Button dark blue'],
+            'neonbutton_darkblue'  => ['name' => 'Button dark blue'],
+
+            'spell_mind_soothe' => ['name' => 'Mind Soothe'],
+            'spell_combustion'  => ['name' => 'Combustion'],
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {
