@@ -379,7 +379,7 @@ class MapObjectGroup extends Signalable {
     /**
      * Called whenever an object we created has finished wrapping up and is now synced
      * @param objectChangedEvent {object}
-     * @private
+     * @protected
      */
     _onObjectChanged(objectChangedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
@@ -390,7 +390,7 @@ class MapObjectGroup extends Signalable {
     /**
      * Called whenever an object has deleted itself.
      * @param objectDeletedEvent {object}
-     * @private
+     * @protected
      */
     _onObjectDeleted(objectDeletedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
