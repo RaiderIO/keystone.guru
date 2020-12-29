@@ -51,28 +51,30 @@ class SidebarNavigation extends Sidebar {
      */
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilitySelect = $('#map_map_object_group_visibility');
-        let selected = $mapObjectGroupVisibilitySelect.val();
+        if ($mapObjectGroupVisibilitySelect.length > 0) {
+            let selected = $mapObjectGroupVisibilitySelect.val();
 
-        // Make a copy so we don't modify the OG array
-        let toHide = MAP_OBJECT_GROUP_NAMES.slice();
-        // Show everything that needs to be shown
-        for (let i = 0; i < selected.length; i++) {
-            let name = selected[i];
-            let group = getState().getDungeonMap().mapObjectGroupManager.getByName(name);
-            group.setVisibility(true);
+            // Make a copy so we don't modify the OG array
+            let toHide = MAP_OBJECT_GROUP_NAMES.slice();
+            // Show everything that needs to be shown
+            for (let i = 0; i < selected.length; i++) {
+                let name = selected[i];
+                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(name);
+                group.setVisibility(true);
 
-            // Remove it from the toHide list
-            toHide.splice(toHide.indexOf(name), 1);
-        }
+                // Remove it from the toHide list
+                toHide.splice(toHide.indexOf(name), 1);
+            }
 
-        // Update our cookie so that we know upon page refresh
-        Cookies.set('hidden_map_object_groups', toHide);
+            // Update our cookie so that we know upon page refresh
+            Cookies.set('hidden_map_object_groups', toHide);
 
-        // Hide everything that needs to be hidden
-        for (let index in toHide) {
-            if (toHide.hasOwnProperty(index)) {
-                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(toHide[index]);
-                group.setVisibility(false);
+            // Hide everything that needs to be hidden
+            for (let index in toHide) {
+                if (toHide.hasOwnProperty(index)) {
+                    let group = getState().getDungeonMap().mapObjectGroupManager.getByName(toHide[index]);
+                    group.setVisibility(false);
+                }
             }
         }
     }

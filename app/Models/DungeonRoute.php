@@ -852,6 +852,26 @@ class DungeonRoute extends Model
     }
 
     /**
+     * Bit of an ugly way of making a generic function for the subtext, I don't have time to figure out a better solution now
+     * @return string
+     */
+    public function getSubHeaderHtml()
+    {
+        // Only add the 'clone of' when the user cloned it from someone else as a form of credit
+        if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
+            $subTitle = sprintf('%s %s', __('Clone of'),
+                ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $this->clone_of]) . '">' . $this->clone_of . '</a>'
+            );
+        } else if ($this->demo) {
+            $subTitle = sprintf(__('Used with Dratnos\' permission'));
+        } else {
+            $subTitle = sprintf(__('By %s'), $this->author->name);
+        }
+
+        return $subTitle;
+    }
+
+    /**
      * @return string Generates a random public key that is displayed to the user in the URL.
      */
     public static function generateRandomPublicKey()

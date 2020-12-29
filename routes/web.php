@@ -42,7 +42,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::get('timetest', 'SiteController@timetest')->name('misc.timetest');
 
-    Route::get('looptest', 'SiteController@looptest')->name('misc.looptest');
+    Route::get('embed/{dungeonroute}', 'SiteController@embed')->name('misc.embed');
 
     Route::get('status', 'SiteController@status')->name('misc.status');
 
@@ -340,6 +340,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     // View any dungeon route (catch all)
     Route::get('{dungeonroute}', 'DungeonRouteController@view')->name('dungeonroute.view');
+    Route::get('{dungeonroute}/embed/', 'DungeonRouteController@embed')->name('dungeonroute.embed');
+    Route::get('{dungeonroute}/embed/{floorindex}', 'DungeonRouteController@embed')->name('dungeonroute.embed.floor');
     Route::get('{dungeonroute}/{floor}', 'DungeonRouteController@viewfloor')->name('dungeonroute.view.floor');
     // Preview of a route for image capturing library
     Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')->name('dungeonroute.preview');

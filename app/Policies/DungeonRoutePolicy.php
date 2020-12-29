@@ -13,11 +13,24 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view the dungeon route.
      *
-     * @param User $user
+     * @param User|null $user
      * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function view(?User $user, DungeonRoute $dungeonroute)
+    {
+        // Everyone can view dungeon routes (for now)
+        return $dungeonroute->published;
+    }
+
+    /**
+     * Determine whether the user can view an embedded the dungeon route.
+     *
+     * @param User|null $user
+     * @param DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function embed(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
         return $dungeonroute->published;

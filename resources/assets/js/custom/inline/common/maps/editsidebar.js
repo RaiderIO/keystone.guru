@@ -20,15 +20,11 @@ class CommonMapsEditsidebar extends InlineCode {
         let self = this;
 
         // Copy to clipboard functionality
-        $('#map_copy_to_clipboard').bind('click', function () {
-            // https://codepen.io/shaikmaqsood/pen/XmydxJ
-            let $temp = $("<input>");
-            $("body").append($temp);
-            $temp.val($('#map_shareable_link').val()).select();
-            document.execCommand("copy");
-            $temp.remove();
-
-            showInfoNotification(lang.get('messages.copied_to_clipboard'));
+        $('#map_shareable_link_copy_to_clipboard').bind('click', function () {
+            copyToClipboard($('#map_shareable_link').val());
+        });
+        $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
+            copyToClipboard($('#map_embedable_link').val());
         });
 
         // Setup line weight

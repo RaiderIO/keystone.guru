@@ -24,7 +24,7 @@
 
         @include('common.maps.admineditsidebar', [
             'show' => [
-                'shareable-link' => true,
+                'sharing' => true,
                 'draw-settings' => true,
                 'route-settings' => true,
                 'route-publish' => true

@@ -5,13 +5,16 @@ $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
-// Enabled by default if it's not set, but may be explicitly disabled
-// Do not show if it does not make sense (only one floor)
-$edit = isset($edit) && $edit ? true : false;
+$embed = isset($embed) && $embed;
+$edit = isset($edit) && $edit;
+
+$mapClasses = isset($mapClasses) ? $mapClasses : '';
 
 // Set the key to 'sandbox' if sandbox mode is enabled
-$sandboxMode = isset($sandboxMode) && $sandboxMode ? true : false;
-$enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
+$sandboxMode = isset($sandboxMode) && $sandboxMode;
+$enemyVisualType = (isset($enemyVisualType) ? $enemyVisualType : isset($_COOKIE['enemy_display_type'])) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
+// Allow echo to be overridden
+$echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
 
 // Easy switch
 $isProduction = config('app.env') === 'production';
@@ -22,7 +25,7 @@ if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FR
     $showAds = false;
 }
 // No UI on the map
-$noUI = isset($noUI) && $noUI ? true : false;
+$noUI = isset($noUI) && $noUI;
 // Default zoom for the map
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
@@ -50,6 +53,7 @@ if ($isAdmin) {
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
+    'embed' => $embed,
     'edit' => $edit,
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
@@ -69,7 +73,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
-        'echo' => Auth::check() && !$sandboxMode,
+        'echo' => $echo,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,
@@ -106,22 +110,25 @@ if ($isAdmin) {
 
 
 
+
+
+
+
     </script>
 @endsection
 
-<div id="map" class="virtual-tour-element"
-     data-position="auto">
+<div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
 @if(!$edit)
-<header class="fixed-top route_echo_top_header">
-    <div class="container">
-        <!-- Echo controls injected here through echocontrols.js -->
-        <span id="route_echo_container" class="text-center">
+    <header class="fixed-top route_echo_top_header">
+        <div class="container">
+            <!-- Echo controls injected here through echocontrols.js -->
+            <span id="route_echo_container" class="text-center">
 
         </span>
-    </div>
-</header>
+        </div>
+    </header>
 @endif
 
 @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
@@ -132,7 +139,7 @@ if ($isAdmin) {
     @include('common.userreport.enemy')
 @endcomponent
 
-@if($edit)
+@if($edit && !$noUI)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
             <!-- Draw actions are injected here through drawcontrols.js -->

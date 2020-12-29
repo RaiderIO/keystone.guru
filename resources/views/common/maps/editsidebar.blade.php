@@ -32,19 +32,32 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'anchor' => 'left',
     'id' => 'editsidebar'
 ])
-    @isset($show['shareable-link'])
+    @isset($show['sharing'])
         <!-- Shareable link -->
         <div class="form-group">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ __('Shareable link') }}</h5>
-                    <div class="row">
+                    <h5 class="card-title">{{ __('Share') }}</h5>
+                    <div class="row mb-2">
                         <div class="input-group">
                             {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
                             ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
-                                <button id="map_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Copy shareable link to clipboard') }}">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            {!! Form::text('map_embedable_link',
+                            sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeonroute' => $model])),
+                            ['id' => 'map_embedable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                            <div class="input-group-append">
+                                <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Copy embed code to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
                             </div>
@@ -73,7 +86,15 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             <div class="card-body">
                 <h5 class="card-title">{{ __('Visibility') }}</h5>
                 <div class="row">
-                    <div id="map_enemy_visuals_container" class="col">
+                    <div class="col">
+                        <div class="leaflet-draw-section">
+                            <div id="map_enemy_visuals" class="form-group">
+                                <div class="font-weight-bold">{{ __('Enemy display type') }}:</div>
+                                <div id="map_enemy_visuals_container">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

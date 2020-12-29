@@ -248,6 +248,17 @@ function getFormattedPercentage(value, max) {
     return Math.round(percent * 10) / 10;
 }
 
+function copyToClipboard(value) {
+    // https://codepen.io/shaikmaqsood/pen/XmydxJ
+    let $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(value).select();
+    document.execCommand("copy");
+    $temp.remove();
+
+    showInfoNotification(lang.get('messages.copied_to_clipboard'));
+}
+
 
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);

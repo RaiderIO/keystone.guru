@@ -319,6 +319,10 @@
     height: 100px;
 }
 
+.affixselect.bootstrap-select.show-tick .dropdown-menu li a span.text {
+    margin-right: 16px;
+}
+
 .affixes_overview_table td {
     padding: 0;
 }
@@ -346,6 +350,7 @@
 .affixes_overview_table .current_week.first_column:not(.current_week) {
     border-top-left-radius: 5px;
 }
+
 .affixes_overview_table .last_column.last_row {
     border-bottom: orange 3px solid;
     border-bottom-right-radius: 5px;

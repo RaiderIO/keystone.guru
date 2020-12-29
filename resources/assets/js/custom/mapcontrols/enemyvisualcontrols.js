@@ -12,7 +12,7 @@ class EnemyVisualControls extends MapControl {
 
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', self);
-                if( enemy.visual !== null ) {
+                if (enemy.visual !== null) {
                     enemy.visual.setVisualType(changedEvent.data.enemyDisplayType);
                 }
             });
@@ -30,8 +30,6 @@ class EnemyVisualControls extends MapControl {
                 // Build the status bar from the template
                 self.domElement = $(template(data));
                 let $domElement = $(self.domElement);
-                $domElement.find('#map_enemy_visuals_dropdown').bind('change', self._enemyVisualChanged.bind(self));
-                $domElement.find('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', self._mdtEnemyMappingChanged.bind(self));
 
                 self.domElement = self.domElement[0];
 
@@ -87,8 +85,10 @@ class EnemyVisualControls extends MapControl {
         let $targetContainer = $('#map_enemy_visuals_container');
         $targetContainer.append(container);
 
+        $('#map_enemy_visuals_dropdown').bind('change', this._enemyVisualChanged.bind(this))
         // Restore what the user had selected
-        $('#map_enemy_visuals_dropdown').val(getState().getEnemyDisplayType());
+            .val(getState().getEnemyDisplayType());
+        $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', this._mdtEnemyMappingChanged.bind(this));
 
         // Now handled by dungeonmap refresh
         // refreshSelectPickers();

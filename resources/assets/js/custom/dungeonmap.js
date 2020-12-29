@@ -477,7 +477,9 @@ class DungeonMap extends Signalable {
             if (!getState().isMapAdmin()) {
                 mapControls.push(new EnemyForcesControls(this));
             }
-            mapControls.push(new EnemyVisualControls(this));
+            if (!this.options.embed) {
+                mapControls.push(new EnemyVisualControls(this));
+            }
 
             if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
                 mapControls.push(new FactionDisplayControls(this));
