@@ -98,6 +98,7 @@ class StateManager extends Signalable {
     setMapIconTypes(mapIconTypes) {
         this.mapIconTypes = [];
     }
+
     /**
      *
      * @param paidTiers
@@ -184,10 +185,14 @@ class StateManager extends Signalable {
 
         // Only when actually changed..
         if (zoom !== this._mapZoomLevel) {
+            let previousZoomLevel = this._mapZoomLevel;
             this._mapZoomLevel = zoom;
 
             // Let everyone know it's changed
-            this.signal('mapzoomlevel:changed', {mapZoomLevel: this._mapZoomLevel});
+            this.signal('mapzoomlevel:changed', {
+                mapZoomLevel: this._mapZoomLevel,
+                previousMapZoomLevel: previousZoomLevel
+            });
         }
     }
 

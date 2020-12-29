@@ -236,6 +236,18 @@ function pickHexFromHandlers(handlers, weight) {
     return result.toLowerCase();
 }
 
+/**
+ *
+ * @param value {number}
+ * @param max {number}
+ * @returns {number}
+ */
+function getFormattedPercentage(value, max) {
+    let percent = ((value / max) * 100);
+    // Round to 1 decimal at best
+    return Math.round(percent * 10) / 10;
+}
+
 
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
