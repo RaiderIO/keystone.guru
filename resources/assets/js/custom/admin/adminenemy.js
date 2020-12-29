@@ -359,18 +359,16 @@ class AdminEnemy extends Enemy {
             let enemy_forces = this.npc.enemy_forces;
 
             // Admin maps have 0 enemy forces
-            if (this.map.getEnemyForcesRequired() > 0) {
-                if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
-                    // @TODO This HTML probably needs to go somewhere else
-                    if (this.enemy_forces_override >= 0) {
-                        enemy_forces = '<s>' + enemy_forces + '</s> ' +
-                            '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
-                    } else if (enemy_forces >= 1) {
-                        enemy_forces += ' ' + this._getPercentageString(enemy_forces);
-                    }
-                } else if (enemy_forces === -1) {
-                    enemy_forces = 'unknown';
+            if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+                // @TODO This HTML probably needs to go somewhere else
+                if (this.enemy_forces_override >= 0) {
+                    enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                        '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
+                } else if (enemy_forces >= 1) {
+                    enemy_forces += ' ' + this._getPercentageString(enemy_forces);
                 }
+            } else if (enemy_forces === -1) {
+                enemy_forces = 'unknown';
             }
 
             data = $.extend({}, getHandlebarsDefaultVariables(), {

@@ -58,10 +58,18 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     _onKillZoneEnemyRemoved(killZoneEnemyRemovedEvent){
         this.signal('killzone:enemyremoved', {killzone: killZoneEnemyRemovedEvent.context, enemy: killZoneEnemyRemovedEvent.data.enemy});
+        this.signal('killzone:changed', {killzone: killZoneEnemyRemovedEvent.context});
     }
 
     _onKillZoneEnemyAdded(killZoneEnemyAddedEvent){
         this.signal('killzone:enemyadded', {killzone: killZoneEnemyAddedEvent.context, enemy: killZoneEnemyAddedEvent.data.enemy});
+        this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
+    }
+
+    _onObjectChanged(objectChangedEvent) {
+        super._onObjectChanged(objectChangedEvent);
+
+        this.signal('killzone:changed', {killzone: objectChangedEvent.context});
     }
 
     /**

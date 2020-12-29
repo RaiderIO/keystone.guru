@@ -150,6 +150,7 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
+            percentage_display_zoom: 3,
             colors: {
                 unsavedBorder: '#E25D5D',
 

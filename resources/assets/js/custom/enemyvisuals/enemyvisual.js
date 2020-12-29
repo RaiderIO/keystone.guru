@@ -576,9 +576,6 @@ class EnemyVisual extends Signalable {
                 this.mainVisual = new EnemyVisualMainMDT(this);
             } else {
                 switch (name) {
-                    case 'npc_class':
-                        this.mainVisual = new EnemyVisualMainEnemyClass(this);
-                        break;
                     case 'npc_type':
                         this.mainVisual = new EnemyVisualMainNpcType(this);
                         break;
@@ -587,6 +584,9 @@ class EnemyVisual extends Signalable {
                         break;
                     case 'enemy_portrait':
                         this.mainVisual = new EnemyVisualMainEnemyPortrait(this);
+                        break;
+                    default:
+                        this.mainVisual = new EnemyVisualMainEnemyClass(this);
                         break;
                 }
             }

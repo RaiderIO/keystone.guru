@@ -120,7 +120,7 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "name": "Manifestation of Pride",
-        "base_health": 12345,
+        "base_health": 160000,
         "enemy_forces": 0,
         "enemy_forces_teeming": 0,
         "aggressiveness": "aggressive",

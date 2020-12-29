@@ -588,7 +588,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .map_enemy_visual_fade {
-    opacity: 40%;
+    opacity: 50%;
 }
 
 .map_enemy_visual_fade.unskippable {
@@ -599,30 +599,35 @@ html, body, #map, #app, .wrapper {
     background-color: hotpink;
 }
 
+.enemy_icon_npc_enemy_portrait.aggressive,
 .enemy_icon_npc_enemy_forces.aggressive,
 .enemy_icon_npc_class.aggressive,
 .enemy_icon_npc_type.aggressive {
     background-color: #dc3c3c !important;
 }
 
+.enemy_icon_npc_enemy_portrait.neutral,
 .enemy_icon_npc_enemy_forces.neutral,
 .enemy_icon_npc_class.neutral,
 .enemy_icon_npc_type.neutral {
     background-color: #cccc2d !important;
 }
 
+.enemy_icon_npc_enemy_portrait.unfriendly,
 .enemy_icon_npc_enemy_forces.unfriendly,
 .enemy_icon_npc_class.unfriendly,
 .enemy_icon_npc_type.unfriendly {
     background-color: #ff9900 !important;
 }
 
+.enemy_icon_npc_enemy_portrait.friendly,
 .enemy_icon_npc_enemy_forces.friendly,
 .enemy_icon_npc_class.friendly,
 .enemy_icon_npc_type.friendly {
     background-color: #15c415 !important;
 }
 
+.enemy_icon_npc_enemy_portrait.awakened,
 .enemy_icon_npc_enemy_forces.awakened,
 .enemy_icon_npc_class.awakened,
 .enemy_icon_npc_type.awakened {
