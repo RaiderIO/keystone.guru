@@ -607,6 +607,8 @@ html, body, #map, #app, .wrapper {
     opacity: 50%;
 }
 
+.map_enemy_visual_fade.prideful,
+.map_enemy_visual_fade.inspiring,
 .map_enemy_visual_fade.unskippable {
     opacity: 80%;
 }
@@ -729,7 +731,7 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
-.inspiring {
+.modifier_inspiring {
     background: white url('/images/enemymodifiers/inspiring.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
