@@ -1,0 +1,45 @@
+{
+    "id": 78,
+    "release_changelog_id": 84,
+    "version": "v3.13",
+    "silent": 0,
+    "created_at": "2020-12-30T23:15:25+00:00",
+    "updated_at": "2020-12-30T23:15:25+00:00",
+    "changelog": {
+        "id": 84,
+        "release_id": 78,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 84,
+                "release_changelog_category_id": 4,
+                "ticket_id": 550,
+                "change": "Inspiring enemies have been added. Note: three areas are missing still. Sanguine Depths before second boss, the anti-clockwise route to the boss may have missing Inspired enemies. Spires of Ascension going left after the first boss. Mists of Tirna Scithe maze south route and past the maze boss on the right may not be accurate. These are either random or very unpopular routes so they shouldn't affect most people. I'll await more footage showing up so I can add these areas too.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 84,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Halls of Atonement: Added missing floor switch marker on the last floor back to the second floor.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 84,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Various minor adjustments across most dungeons.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
