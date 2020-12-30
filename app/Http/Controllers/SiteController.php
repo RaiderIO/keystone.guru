@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DungeonRoute;
 use App\Models\Release;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
@@ -132,15 +133,6 @@ class SiteController extends Controller
      * @param Request $request
      * @return Factory|View
      */
-    public function looptest(Request $request)
-    {
-        return view('misc.looptest');
-    }
-
-    /**
-     * @param Request $request
-     * @return Factory|View
-     */
     public function status(Request $request)
     {
         return view('misc.status');
@@ -148,7 +140,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return Factory|View
+     * @return Application|Factory|RedirectResponse|Redirector|View
      */
     public function dungeonroutes(Request $request)
     {
@@ -161,5 +153,15 @@ class SiteController extends Controller
     public function phpinfo(Request $request)
     {
         phpinfo();
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return Application|Factory|RedirectResponse|Redirector|View
+     */
+    public function embed(Request $request, DungeonRoute $dungeonroute)
+    {
+        return view('misc.embed', ['model' => $dungeonroute]);
     }
 }

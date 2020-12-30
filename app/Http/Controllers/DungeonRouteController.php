@@ -7,7 +7,6 @@ use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
-use App\Models\Npc;
 use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\Season\SeasonService;
@@ -131,7 +130,7 @@ class DungeonRouteController extends Controller
                 'model'          => $dungeonroute,
                 'current_report' => $currentReport,
                 'floor'          => $floor,
-                'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
             ]);
         }
     }
@@ -147,8 +146,8 @@ class DungeonRouteController extends Controller
         /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
         return view('dungeonroute.preview', [
-            'model'   => $dungeonroute,
-            'floorId' => $floor->id,
+            'model'      => $dungeonroute,
+            'floorId'    => $floor->id,
             'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
         ]);
     }
@@ -258,6 +257,27 @@ class DungeonRouteController extends Controller
                 ]);
             }
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param int|null $floorIndex
+     * @return Application|Factory|View
+     * @throws AuthorizationException
+     */
+    public function embed(Request $request, DungeonRoute $dungeonroute, ?int $floorIndex = 1)
+    {
+        $this->authorize('embed', $dungeonroute);
+
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+
+        return view('dungeonroute.embed', [
+            'model'      => $dungeonroute,
+            'floor'      => $floor,
+            'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+        ]);
     }
 
 

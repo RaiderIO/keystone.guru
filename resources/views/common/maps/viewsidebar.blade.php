@@ -1,17 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->floors->count() !== 1;
-
-// Only add the 'clone of' when the user cloned it from someone else as a form of credit
-if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0) {
-    $subTitle = sprintf('%s %s', __('Clone of'),
-        ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>'
-    );
-} else if( $model->demo ) {
-    $subTitle = sprintf(__('Used with Dratnos\' permission'));
-} else {
-    $subTitle = sprintf(__('By %s'), $model->author->name);
-}
 ?>
 
 @include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => [
@@ -28,22 +17,25 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 @component('common.maps.sidebar', [
     'dungeon' => $dungeon,
     'header' => $model->title,
-    'subHeader' => $subTitle,
+    'subHeader' => $model->getSubHeaderHtml(),
     'anchor' => 'left',
     'id' => 'viewsidebar'])
+
+    @include('common.maps.share', ['model' => $model])
+
     <!-- Details -->
     <div class="form-group">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Details') }}</h5>
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Dungeon') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->dungeon->name }}
-                    </div>
-                </div>
+{{--                <div class="row view_dungeonroute_details_row mt-2">--}}
+{{--                    <div class="col-5 col-md-6 font-weight-bold">--}}
+{{--                        {{ __('Dungeon') }}:--}}
+{{--                    </div>--}}
+{{--                    <div class="col-7 col-md-6">--}}
+{{--                        {{ $model->dungeon->name }}--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Timer') }}:
@@ -63,14 +55,14 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                 {{--{{ $model->difficulty }}--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Teeming') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->teeming ? __('Yes') : __('No') }}
-                    </div>
-                </div>
+{{--                <div class="row view_dungeonroute_details_row mt-2">--}}
+{{--                    <div class="col-5 col-md-6 font-weight-bold">--}}
+{{--                        {{ __('Teeming') }}:--}}
+{{--                    </div>--}}
+{{--                    <div class="col-7 col-md-6">--}}
+{{--                        {{ $model->teeming ? __('Yes') : __('No') }}--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col font-weight-bold">
                         {{ __('Group setup') }}:
@@ -91,7 +83,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                             ['id' => 'affixes',
                             'class' => 'form-control affixselect selectpicker',
                             'multiple' => 'multiple',
-                            'title' => __('Expand to view'),
+                            'title' => __('Affixes'),
                             'readonly' => 'readonly',
                             'data-selected-text-format' => 'count > 1',
                             'data-count-selected-text' => __('{0} affixes selected')]) !!}
@@ -107,7 +99,15 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
             <div class="card-body">
                 <h5 class="card-title">{{ __('Visibility') }}</h5>
                 <div class="row">
-                    <div id="map_enemy_visuals_container" class="col">
+                    <div class="col">
+                        <div class="leaflet-draw-section">
+                            <div id="map_enemy_visuals" class="form-group">
+                                <div class="font-weight-bold">{{ __('Enemy display type') }}:</div>
+                                <div id="map_enemy_visuals_container">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

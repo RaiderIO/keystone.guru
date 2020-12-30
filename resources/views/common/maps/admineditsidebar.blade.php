@@ -30,7 +30,21 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
             <div class="card-body">
                 <h5 class="card-title">{{ __('Visibility') }}</h5>
                 <div class="row">
-                    <div id="map_enemy_visuals_container" class="col">
+                    <div class="col">
+                        <div class="leaflet-draw-section">
+                            <div id="map_enemy_visuals" class="form-group">
+                                <div class="font-weight-bold">{{ __('Enemy display type') }}:</div>
+                                <div id="map_enemy_visuals_container">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="font-weight-bold">{{ __('MDT enemy mapping') }}:</div>
+                            <input type="checkbox" class="form-control left_checkbox" value="1"
+                                   id="map_enemy_visuals_map_mdt_clones_to_enemies"
+                                   name="map_enemy_visuals_map_mdt_clones_to_enemies"/>
+                        </div>
                     </div>
                 </div>
 

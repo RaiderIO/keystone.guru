@@ -32,27 +32,8 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'anchor' => 'left',
     'id' => 'editsidebar'
 ])
-    @isset($show['shareable-link'])
-        <!-- Shareable link -->
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ __('Shareable link') }}</h5>
-                    <div class="row">
-                        <div class="input-group">
-                            {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
-                            ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                            <div class="input-group-append">
-                                <button id="map_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
-                                    <i class="far fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    @isset($show['sharing'])
+        @include('common.maps.share', ['model' => $model])
     @endisset
 
     <!-- Tags -->
@@ -73,7 +54,15 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             <div class="card-body">
                 <h5 class="card-title">{{ __('Visibility') }}</h5>
                 <div class="row">
-                    <div id="map_enemy_visuals_container" class="col">
+                    <div class="col">
+                        <div class="leaflet-draw-section">
+                            <div id="map_enemy_visuals" class="form-group">
+                                <div class="font-weight-bold">{{ __('Enemy display type') }}:</div>
+                                <div id="map_enemy_visuals_container">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

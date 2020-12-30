@@ -9,6 +9,11 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
+/** Embed map needs space for the top header */
+.wrapper.embed_wrapper {
+    height: calc(100vh - 96px);
+}
+
 #map.leaflet-container {
     font: unset;
     font-size: 12px;
@@ -128,11 +133,19 @@ html, body, #map, #app, .wrapper {
     color: #FFF;
 }
 
+.embed,
 .sidebar .sidebar-header {
     padding: 10px 20px;
+    text-shadow: black 2px 2px;
+}
+
+.embed {
+    border-bottom: 1px black solid;
+}
+
+.sidebar .sidebar-header {
     background: #2B3E50;
     height: 106px;
-    text-shadow: black 2px 2px;
 }
 
 .sidebar-background {
@@ -142,6 +155,7 @@ html, body, #map, #app, .wrapper {
 }
 
 /* Force reserve height */
+.embed h4,
 .sidebar .sidebar-header h4 {
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
@@ -149,6 +163,7 @@ html, body, #map, #app, .wrapper {
     white-space: nowrap
 }
 
+.embed .embed-header-subtitle,
 .sidebar .sidebar-header-subtitle {
     padding-left: 10px;
     min-height: 25px;
@@ -240,6 +255,7 @@ html, body, #map, #app, .wrapper {
     height: 12px !important;
     padding: 0 !important;
 }
+
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
     background-color: inherit;

@@ -4,14 +4,14 @@
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute $model */
-if(!isset($affixgroups) ){
+if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
 ?>
 <script>
     let _affixGroups = {!! $affixgroups !!};
 
-    $(function(){
+    $(function () {
         handlebarsLoadAffixGroupSelect('#affixes');
     });
 
@@ -21,14 +21,14 @@ if(!isset($affixgroups) ){
      */
     function handlebarsLoadAffixGroupSelect(affixSelectSelector) {
         // @TODO make one template with multiple options, rather than calling this template N amount of times?
-        for( let i in _affixGroups ){
-            if( _affixGroups.hasOwnProperty(i) ){
+        for (let i in _affixGroups) {
+            if (_affixGroups.hasOwnProperty(i)) {
                 let affixGroup = _affixGroups[i];
                 let template = Handlebars.templates['affixgroup_select_option_template'];
 
                 let affixes = [];
-                for( let j in affixGroup.affixes ){
-                    if( affixGroup.affixes.hasOwnProperty(j) ){
+                for (let j in affixGroup.affixes) {
+                    if (affixGroup.affixes.hasOwnProperty(j)) {
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
@@ -50,13 +50,21 @@ if(!isset($affixgroups) ){
 
         refreshSelectPickers();
 
-        // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
-        // So remove the span
-        $(".bootstrap-select.affixselect .text").each(function(index, el){
-            let $el = $(el);
-            let $ours = $el.children();
-            $el.parent().append($ours);
-            $el.remove();
+        let $affixSelect = $(affixSelectSelector);
+        $affixSelect.on('shown.bs.select', function () {
+            // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
+            // So remove the span
+            $('.affixselect.bootstrap-select .text').each(function (index, el) {
+                let $el = $(el);
+                let $ours = $el.children();
+                $el.parent().append($ours);
+                $el.remove();
+            });
+
+            if( typeof $affixSelect.attr('readonly') !== 'undefined' ) {
+                $affixSelect.find('option').attr('disabled', true);
+            }
         });
+
     }
 </script>
