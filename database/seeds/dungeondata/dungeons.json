@@ -1386,7 +1386,7 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 50,
+                        "id": 107,
                         "floor1_id": 79,
                         "floor2_id": 78,
                         "direction": "down"

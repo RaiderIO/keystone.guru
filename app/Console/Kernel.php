@@ -9,6 +9,7 @@ use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Save as MappingSave;
+use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -48,6 +49,7 @@ class Kernel extends ConsoleKernel
         MappingCommit::class,
         MappingMerge::class,
         MappingSave::class,
+        MappingRestore::class,
 
         // Test
         Test::class,

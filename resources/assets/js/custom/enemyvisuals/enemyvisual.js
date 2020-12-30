@@ -200,7 +200,7 @@ class EnemyVisual extends Signalable {
         }
 
         // For each active aura, add a new modifier
-        for(let i = 0; i < this.enemy.active_auras.length; i++ ){
+        for (let i = 0; i < this.enemy.active_auras.length; i++) {
             modifiers.push(new EnemyVisualModifierActiveAura(this, 5 + i, this.enemy.active_auras[i]));
         }
 
@@ -365,6 +365,14 @@ class EnemyVisual extends Signalable {
 
             if (this.enemy.unskippable) {
                 data.root_classes += ' unskippable';
+            }
+
+            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
+                data.root_classes += ' prideful';
+            }
+
+            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
+                data.root_classes += ' inspiring';
             }
 
             data.outer_border = border;

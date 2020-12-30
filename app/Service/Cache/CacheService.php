@@ -3,6 +3,7 @@
 
 namespace App\Service\Cache;
 
+use App\Models\Dungeon;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
 
@@ -56,17 +57,16 @@ class CacheService implements CacheServiceInterface
         return Cache::has($key);
     }
 
-    public function dropCaches(): bool
+    public function dropCaches(): void
     {
-        $result = true;
         $keys = array_keys(config('keystoneguru.cache'));
         foreach ($keys as $key) {
-            if (!($result = $this->unset($key))) {
-                break;
-            }
+            $this->unset($key);
         }
 
-        return $result;
+        foreach (Dungeon::all() as $dungeon) {
+            $this->unset(sprintf('dungeon_%s', $dungeon->id));
+        }
     }
 
 
