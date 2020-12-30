@@ -13,5 +13,5 @@ interface CacheServiceInterface
 
     public function has(string $key): bool;
 
-    public function dropCaches(): bool;
+    public function dropCaches(): void;
 }

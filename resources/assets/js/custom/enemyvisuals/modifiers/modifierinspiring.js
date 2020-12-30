@@ -47,7 +47,7 @@ class EnemyVisualModifierInspiring extends EnemyVisualModifier {
         console.assert(this instanceof EnemyVisualModifierInspiring, 'this is not an EnemyVisualModifierAwakened!', this);
 
         return $.extend({}, super._getTemplateData(width, height, margin), this._getLocation(width, height, margin), {
-            classes: 'modifier_external ' + this.iconName,
+            classes: 'modifier_external modifier_' + this.iconName,
         });
     }
 }

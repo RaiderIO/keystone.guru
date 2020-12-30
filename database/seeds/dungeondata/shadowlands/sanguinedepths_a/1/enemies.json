@@ -2378,7 +2378,7 @@
         "npc_id": 171384,
         "floor_id": 83,
         "mdt_id": 8,
-        "seasonal_type": null,
+        "seasonal_type": "inspiring",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

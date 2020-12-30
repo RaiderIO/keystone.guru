@@ -287,11 +287,9 @@ class AdminToolsController extends Controller
      */
     public function dropCache(Request $request, CacheService $cacheService)
     {
-        if ($cacheService->dropCaches()) {
-            Session::flash('status', __('Dungeon caches dropped successfully'));
-        } else {
-            Session::flash('warning', __('Dungeon caches NOT dropped; perhaps caches were not there?'));
-        }
+        $cacheService->dropCaches();
+
+        Session::flash('status', __('Dungeon caches dropped successfully'));
 
         return redirect()->route('admin.tools');
     }
