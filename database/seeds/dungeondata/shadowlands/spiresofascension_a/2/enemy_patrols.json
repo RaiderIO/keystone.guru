@@ -118,5 +118,77 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-49.375,\"lng\":198.1875},{\"lat\":-39.125,\"lng\":214.3125}]"
         }
+    },
+    {
+        "id": 268,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#6dfaff",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-176.1875,\"lng\":199.5},{\"lat\":-198.40625,\"lng\":206.28125}]"
+        }
+    },
+    {
+        "id": 269,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#6dfaff",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-104.3125,\"lng\":168.5},{\"lat\":-84.5625,\"lng\":157}]"
+        }
+    },
+    {
+        "id": 270,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#ffbd67",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-214.34375,\"lng\":228.4375},{\"lat\":-206.0625,\"lng\":251.5625}]"
+        }
+    },
+    {
+        "id": 271,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#ffbd67",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-57,\"lng\":165.125},{\"lat\":-50.125,\"lng\":185.8125}]"
+        }
+    },
+    {
+        "id": 272,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b45de2",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-58.4375,\"lng\":227.4375},{\"lat\":-81.4375,\"lng\":231.5625}]"
+        }
+    },
+    {
+        "id": 273,
+        "floor_id": 86,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b45de2",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-169.625,\"lng\":275.1875},{\"lat\":-147.5625,\"lng\":258.8125}]"
+        }
     }
 ]
