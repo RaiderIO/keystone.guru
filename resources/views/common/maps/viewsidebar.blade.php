@@ -20,19 +20,22 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
     'subHeader' => $model->getSubHeaderHtml(),
     'anchor' => 'left',
     'id' => 'viewsidebar'])
+
+    @include('common.maps.share', ['model' => $model])
+
     <!-- Details -->
     <div class="form-group">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Details') }}</h5>
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Dungeon') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->dungeon->name }}
-                    </div>
-                </div>
+{{--                <div class="row view_dungeonroute_details_row mt-2">--}}
+{{--                    <div class="col-5 col-md-6 font-weight-bold">--}}
+{{--                        {{ __('Dungeon') }}:--}}
+{{--                    </div>--}}
+{{--                    <div class="col-7 col-md-6">--}}
+{{--                        {{ $model->dungeon->name }}--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Timer') }}:
@@ -52,14 +55,14 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
                 {{--{{ $model->difficulty }}--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Teeming') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->teeming ? __('Yes') : __('No') }}
-                    </div>
-                </div>
+{{--                <div class="row view_dungeonroute_details_row mt-2">--}}
+{{--                    <div class="col-5 col-md-6 font-weight-bold">--}}
+{{--                        {{ __('Teeming') }}:--}}
+{{--                    </div>--}}
+{{--                    <div class="col-7 col-md-6">--}}
+{{--                        {{ $model->teeming ? __('Yes') : __('No') }}--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col font-weight-bold">
                         {{ __('Group setup') }}:
