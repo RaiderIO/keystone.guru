@@ -43,7 +43,7 @@ class Sidebar {
                 newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
             } else {
                 // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
-                if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
+                if (isNumeric(pathSplit[pathSplit.length - 1])) {
                     // Strip the last two elements (<number>/mapping)
                     pathSplit.splice(-1);
                     pathname = pathSplit.join('/');
