@@ -1,16 +1,56 @@
 class KillZoneEnemySelection extends EnemySelection {
 
 
-    constructor(map, sourceMapObject) {
+    constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
         super(map, sourceMapObject);
 
-        this.sourceMapObject.register('object:deleted', this, this._onSourceMapObjectDeleted.bind(this));
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        killZoneMapObjectGroup.register('object:deleted', this, this._onMapObjectDeleted.bind(this));
 
         this._changedKillZoneIds = [];
+        this._previousKillZoneEnemySelection = previousKillZoneEnemySelection;
+
+        // Ignore these KillZone's events until they're removed from the blacklist
+        this._blackListedKillZoneIds = [];
+
+        // Prevent the previous killzone selection from triggering change events in THIS selection
+        // This would cause a cascade of .save() calls since the previous change would cause this selection to
+        // save it as 'this killzone changed', which is not what we want. This code prevents those calls from
+        // affecting the new selection instance
+        if (this._previousKillZoneEnemySelection instanceof KillZoneEnemySelection) {
+            this._blackListedKillZoneIds = this._previousKillZoneEnemySelection._changedKillZoneIds;
+
+            // Once the save:success is called, we can safely remove them from the blacklist
+            for (let index in this._blackListedKillZoneIds) {
+                if (this._blackListedKillZoneIds.hasOwnProperty(index)) {
+                    let killZoneId = this._blackListedKillZoneIds[index];
+                    let killZone = killZoneMapObjectGroup.findMapObjectById(killZoneId);
+                    if (killZone !== null) {
+                        killZone.register('save:success', this, this._killZoneSaveSuccess.bind(this));
+                    }
+                }
+            }
+        }
     }
 
     getName() {
         return 'KillZoneEnemySelection';
+    }
+
+    /**
+     *
+     * @param saveSuccessEvent
+     * @private
+     */
+    _killZoneSaveSuccess(saveSuccessEvent) {
+        let index = $.inArray(saveSuccessEvent.context.id, this._blackListedKillZoneIds);
+        if (index !== -1) {
+            // Remove it
+            this._blackListedKillZoneIds.splice(index, 1);
+        }
+
+        // Unreg - we're done
+        saveSuccessEvent.context.unregister('save:success', this);
     }
 
     /**
@@ -49,10 +89,12 @@ class KillZoneEnemySelection extends EnemySelection {
      * Called when the source map object was deleted by the user, while currently selecting enemies.
      * @private
      */
-    _onSourceMapObjectDeleted() {
+    _onMapObjectDeleted(mapObjectDeletedEvent) {
         console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
 
-        this.map.setMapState(null);
+        if (mapObjectDeletedEvent.data.object.id === this.sourceMapObject.id) {
+            this.map.setMapState(null);
+        }
     }
 
 
@@ -68,8 +110,9 @@ class KillZoneEnemySelection extends EnemySelection {
 
             // Keep track of all killzones that were ever changed
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved'], this, function (killZoneChangedEvent) {
-                if (!self._changedKillZoneIds.includes(killZoneChangedEvent.context.id)) {
-                    self._changedKillZoneIds.push(killZoneChangedEvent.context.id);
+                let killZoneId = killZoneChangedEvent.context.id;
+                if (!self._blackListedKillZoneIds.includes(killZoneId) && !self._changedKillZoneIds.includes(killZoneId)) {
+                    self._changedKillZoneIds.push(killZoneId);
                 }
             });
         }
@@ -92,12 +135,15 @@ class KillZoneEnemySelection extends EnemySelection {
                 killZone.save();
             }
         }
+
+        this.cleanup();
     }
 
     cleanup() {
         super.cleanup();
 
-        this.sourceMapObject.unregister('object:deleted', this);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        killZoneMapObjectGroup.unregister('object:deleted', this);
     }
 
     /**
@@ -106,7 +152,7 @@ class KillZoneEnemySelection extends EnemySelection {
      * @returns {boolean}
      */
     static isEnemySelectable(enemy) {
-        // If it's stupid and it works it's not stupid
+        // If it's looks stupid and it works it's not stupid
         let source = new KillZone(getState().getDungeonMap());
         let result = (new KillZoneEnemySelection(getState().getDungeonMap(), source))._filter(source, enemy);
         source.cleanup();

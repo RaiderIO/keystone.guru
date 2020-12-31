@@ -40,7 +40,11 @@
     </div>
     <div id="killzones_no_pulls" class="row" style="display: none;">
         <div class="col text-center">
-            <h5>{{ __('No pulls created. Click on the button above or on an enemy to add them to your first pull.') }}</h5>
+            @if($edit)
+                <h5>{{ __('No pulls created. Click on the button above or on an enemy to add them to your first pull.') }}</h5>
+            @else
+                <h5>{{ __('No pulls created.') }}</h5>
+            @endif
         </div>
     </div>
     <div id="killzones_container">
