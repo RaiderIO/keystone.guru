@@ -248,6 +248,10 @@ function getFormattedPercentage(value, max) {
     return Math.round(percent * 10) / 10;
 }
 
+/**
+ *
+ * @param value
+ */
 function copyToClipboard(value) {
     // https://codepen.io/shaikmaqsood/pen/XmydxJ
     let $temp = $("<input>");
@@ -257,6 +261,17 @@ function copyToClipboard(value) {
     $temp.remove();
 
     showInfoNotification(lang.get('messages.copied_to_clipboard'));
+}
+
+/**
+ * https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
+ * @param str
+ * @returns {boolean}
+ */
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
 

@@ -3,6 +3,10 @@ class EnemySelection extends MapObjectMapState {
         super(map, sourceMapObject);
     }
 
+    getName() {
+        return 'EnemySelection';
+    }
+
     /**
      * Filter function which should be overriden in implementing classes.
      * @param source MapObject

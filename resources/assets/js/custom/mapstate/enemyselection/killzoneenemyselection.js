@@ -9,6 +9,10 @@ class KillZoneEnemySelection extends EnemySelection {
         this._changedKillZoneIds = [];
     }
 
+    getName() {
+        return 'KillZoneEnemySelection';
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param source MapObject

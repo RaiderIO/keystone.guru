@@ -3,6 +3,9 @@ class PatherMapState extends MapState {
         super(map);
     }
 
+    getName() {
+        return 'PatherMapState';
+    }
 
     start() {
         super.start();
