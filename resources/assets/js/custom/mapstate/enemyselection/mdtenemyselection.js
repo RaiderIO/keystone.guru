@@ -3,6 +3,10 @@ class MDTEnemySelection extends EnemySelection {
         super(map, sourceMapObject);
     }
 
+    getName() {
+        return 'MDTEnemySelection';
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param source MapObject

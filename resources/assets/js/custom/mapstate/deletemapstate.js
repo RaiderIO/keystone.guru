@@ -3,6 +3,9 @@ class DeleteMapState extends MapState {
         super(map);
     }
 
+    getName() {
+        return 'DeleteMapState';
+    }
 
     start() {
         super.start();

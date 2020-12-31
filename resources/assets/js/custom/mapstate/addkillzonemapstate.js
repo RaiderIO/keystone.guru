@@ -4,6 +4,10 @@ class AddKillZoneMapState extends MapObjectMapState {
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', killZone);
     }
 
+    getName() {
+        return 'AddKillZoneMapState';
+    }
+
     start() {
         console.assert(this instanceof AddKillZoneMapState, 'this is not a AddKillZoneMapState', this);
         super.start();

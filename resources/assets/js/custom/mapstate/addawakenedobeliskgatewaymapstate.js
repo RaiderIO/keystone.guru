@@ -8,6 +8,11 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         mapIconManager.register('save:success', this, this._onSaveSuccess.bind(this));
     }
 
+    getName() {
+        return 'AddAwakenedObeliskGatewayMapState';
+    }
+
+
     start() {
         console.assert(this instanceof AddAwakenedObeliskGatewayMapState, 'this is not a AddAwakenedObeliskGatewayMapState', this);
         super.start();

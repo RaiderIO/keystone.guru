@@ -3,6 +3,10 @@ class ViewKillZoneEnemySelection extends EnemySelection {
         super(map, sourceMapObject);
     }
 
+    getName() {
+        return 'ViewKillZoneEnemySelection';
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param source MapObject

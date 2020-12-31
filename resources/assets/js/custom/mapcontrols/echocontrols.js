@@ -140,9 +140,10 @@ class EchoControls extends MapControl {
         // Gets funky here, create a new CSS class with the user's color so we can direct some elements to use this class
         $("<style id='" + styleID + "'>")
             .prop('type', 'text/css')
+            // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html("\
             .user_color_" + convertToSlug(user.name) + " {\
-                background-color: " + user.color + " !important\
+                background-color: " + getState().getEcho().getUserColor(user.name) + " !important\
             }")
             .appendTo('head');
 

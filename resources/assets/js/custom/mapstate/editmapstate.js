@@ -3,6 +3,9 @@ class EditMapState extends MapState {
         super(map);
     }
 
+    getName() {
+        return 'EditMapState';
+    }
 
     start() {
         super.start();

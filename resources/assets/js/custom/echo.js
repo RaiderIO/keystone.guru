@@ -101,7 +101,7 @@ class Echo extends Signalable {
      */
     getUserColor(name) {
         let user = this.getUserByName(name);
-        return user === null ? '#000' : user.color;
+        return user === null || user.color.length === 0 ? '#000' : user.color;
     }
 
     /**
