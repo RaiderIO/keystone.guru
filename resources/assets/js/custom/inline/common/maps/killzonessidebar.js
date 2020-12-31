@@ -489,11 +489,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         });
 
-        // this.map.register('map:beforerefresh', this, function(beforeRefreshEvent){
-        //     $('#killzones_no_pulls').hide();
-        //     $('#killzones_loading').show();
-        // });
-
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // User interface action created a new killzone
         killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {

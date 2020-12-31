@@ -808,6 +808,7 @@ class MapObject extends Signalable {
     onDeleteSuccess(json) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        // this.cleanup();
     }
 
     /**
