@@ -87,6 +87,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let newMapState = null;
         if (selectedKillZoneId > 0) {
             let killZoneMapObjectGroup = map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+            /** @type KillZone */
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
                 // Same as this.options.edit, really
@@ -95,6 +97,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 } else {
                     // Just highlight the pull when the user clicked a pull
                     newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                }
+
+                // Switch floors if the floor is not on the current map
+                let floorIds = killZone.getFloorIds();
+                if (!floorIds.includes(getState().getCurrentFloor().id)) {
+                    getState().setFloorId(floorIds[0]);
                 }
 
                 // Center the map to this killzone
