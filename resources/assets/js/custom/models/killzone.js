@@ -611,6 +611,26 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Get the floor IDs that this KillZone is spread across.
+     * @returns {[]}
+     */
+    getFloorIds() {
+        let result = [];
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        $.each(this.enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+
+            if (enemy !== null && !result.includes(enemy.floor_id)) {
+                result.push(enemy.floor_id);
+            }
+        });
+
+        return result;
+    }
+
+    /**
      * Get the enemy forces that will be added if this enemy pack is killed.
      */
     getEnemyForces() {
