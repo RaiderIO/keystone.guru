@@ -6,6 +6,10 @@ class MapObjectMapState extends MapState {
         this.sourceMapObject = sourceMapObject;
     }
 
+    getName() {
+        return 'MapObjectMapState';
+    }
+
     /**
      * Get the map object that initiated this selection.
      * @returns {*}

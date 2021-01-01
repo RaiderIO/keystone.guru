@@ -87,6 +87,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let newMapState = null;
         if (selectedKillZoneId > 0) {
             let killZoneMapObjectGroup = map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+            /** @type KillZone */
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
                 // Same as this.options.edit, really
@@ -95,6 +97,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 } else {
                     // Just highlight the pull when the user clicked a pull
                     newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                }
+
+                // Switch floors if the floor is not on the current map
+                let floorIds = killZone.getFloorIds();
+                if (!floorIds.includes(getState().getCurrentFloor().id)) {
+                    getState().setFloorId(floorIds[0]);
                 }
 
                 // Center the map to this killzone
@@ -296,20 +304,48 @@ class CommonMapsKillzonessidebar extends InlineCode {
         );
 
         // Show boss icon or not
-        let hasBoss = false;
+        let hasBoss, hasAwakened, hasPrideful, hasInspiring = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < killZone.enemies.length; i++) {
             let enemyId = killZone.enemies[i];
             for (let j = 0; j < enemyMapObjectGroup.objects.length; j++) {
                 let enemy = enemyMapObjectGroup.objects[j];
-                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id >= 3) {
-                    hasBoss = true;
+                if (enemy.id === enemyId) {
+                    if (!hasBoss && enemy.isBossNpc()) {
+                        hasBoss = true;
+                    } else if (!hasAwakened && enemy.isAwakenedNpc()) {
+                        hasAwakened = true;
+                    } else if (!hasAwakened && enemy.isPridefulNpc()) {
+                        hasPrideful = true;
+                    } else if (!hasAwakened && enemy.isInspiring()) {
+                        hasInspiring = true;
+                    }
                     break;
                 }
             }
         }
-        $(`#map_killzonessidebar_killzone_${killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
+
+        // Reset any previous states
+        let $hasBoss = $(`#map_killzonessidebar_killzone_${killZone.id}_has_boss:not(.draggable--original)`).hide();
+        let $hasAwakened = $(`#map_killzonessidebar_killzone_${killZone.id}_has_awakened:not(.draggable--original)`).hide();
+        let $hasPrideful = $(`#map_killzonessidebar_killzone_${killZone.id}_has_prideful:not(.draggable--original)`).hide();
+        let $hasInspiring = $(`#map_killzonessidebar_killzone_${killZone.id}_has_inspiring:not(.draggable--original)`).hide();
+
+        // Apply new state - but only one
+        if (hasBoss) {
+            $hasBoss.show();
+        } else if (hasAwakened) {
+            $hasAwakened.show()
+        } else if (hasPrideful) {
+            $hasPrideful.show();
+        } else if (hasInspiring) {
+            $hasInspiring.show();
+        }
+
+        if (hasBoss || hasAwakened || hasPrideful || hasInspiring) {
+            refreshTooltips();
+        }
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_grip:not(.draggable--original)`).css('color', killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
@@ -372,7 +408,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     if (!npcs.hasOwnProperty(enemy.npc.id)) {
                         npcs[enemy.npc.id] = {
                             awakened: enemy.isAwakenedNpc(),
-                            npc: enemy.npc,
+                            prideful: enemy.isPridefulNpc(),
+                            inspiring: false, // Will be set below
+                            enemy: enemy,
                             count: 0,
                             enemy_forces: 0
                         };
@@ -380,6 +418,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                     npcs[enemy.npc.id].count++;
                     npcs[enemy.npc.id].enemy_forces += enemy.getEnemyForces();
+                    npcs[enemy.npc.id].inspiring = npcs[enemy.npc.id].inspiring || enemy.isInspiring()
                 }
             }
         }
@@ -395,10 +434,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     'enemy_forces': obj.enemy_forces,
                     'count': obj.count,
-                    'name': obj.npc.name,
+                    'name': obj.enemy.npc.name,
                     'awakened': obj.awakened,
-                    'boss': obj.npc.classification_id >= 3,
-                    'dangerous': obj.npc.dangerous === 1
+                    'prideful': obj.prideful,
+                    'inspiring': obj.inspiring,
+                    'boss': obj.enemy.isBossNpc(),
+                    'dangerous': obj.enemy.npc.dangerous === 1
                 });
 
                 $enemyList.append($(template(data)));
@@ -480,11 +521,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 self._killZoneSelected(newMapState.getMapObject(), true);
             }
         });
-
-        // this.map.register('map:beforerefresh', this, function(beforeRefreshEvent){
-        //     $('#killzones_no_pulls').hide();
-        //     $('#killzones_loading').show();
-        // });
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // User interface action created a new killzone
@@ -623,7 +659,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             if (getState().getMapContext().getPullGradientApplyAlways()) {
                 killZoneMapObjectGroup.applyPullGradient();
             }
-            killZoneMapObjectGroup.saveAll(['index', 'color']);
+            killZoneMapObjectGroup.massSave(['index', 'color']);
         }
         this._dragHasSwitchedOrder = false;
     }

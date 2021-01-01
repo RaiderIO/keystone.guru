@@ -1518,12 +1518,12 @@
                 "id": 85,
                 "index": 1,
                 "name": "Honor's Ascent",
-                "default": 0,
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 56,
+                        "id": 108,
                         "floor1_id": 85,
                         "floor2_id": 86,
                         "direction": "up"
@@ -1534,18 +1534,18 @@
                 "id": 86,
                 "index": 2,
                 "name": "Gardens of Repose",
-                "default": 1,
+                "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 55,
+                        "id": 109,
                         "floor1_id": 86,
                         "floor2_id": 85,
                         "direction": "down"
                     },
                     {
-                        "id": 57,
+                        "id": 110,
                         "floor1_id": 86,
                         "floor2_id": 87,
                         "direction": "up"

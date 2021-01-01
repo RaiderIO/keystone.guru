@@ -11,14 +11,18 @@ class MapState extends Signalable {
 
     start() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
-        console.warn('Starting MapState ' + this.constructor.name);
+        console.warn('Starting MapState ' + this.getName());
         this._started = true;
     }
 
     stop() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
-        console.warn('Stopping MapState ' + this.constructor.name);
+        console.warn('Stopping MapState ' + this.getName());
         this._stopped = true;
+    }
+
+    getName() {
+        return 'UnknownMapState';
     }
 
     isModal() {

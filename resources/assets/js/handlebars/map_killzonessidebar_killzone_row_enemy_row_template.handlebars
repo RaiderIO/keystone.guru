@@ -2,12 +2,26 @@
     <div class="col">
         <div class="input-group">
             <div class="input-group-prepend" style="width: 24px;">
-                {{#if awakened}}
-                    <img class="mt-1" src="/images/enemymodifiers/awakened.png" title="Awakened" data-toggle="tooltip" style="width: 16px; height: 16px; border-radius: 18px" />
-                {{else if boss}}
-                    <img class="mt-1" src="/images/mapicon/raid_marker_skull.png" title="Boss" data-toggle="tooltip" style="width: 16px; height: 16px;" />
+                {{#if boss}}
+                    <img class="mt-1" src="/images/mapicon/raid_marker_skull.png"
+                         title="{{kill_zone_enemy_row_has_boss_label}}" data-toggle="tooltip"
+                         style="width: 16px; height: 16px;"/>
+                {{else if awakened}}
+                    <img class="mt-1" src="/images/enemymodifiers/awakened.png"
+                         title="{{kill_zone_enemy_row_has_awakened_label}}" data-toggle="tooltip"
+                         style="width: 16px; height: 16px; border-radius: 18px"/>
+                {{else if prideful}}
+                    <img class="mt-1" src="/images/enemymodifiers/prideful.png"
+                         title="{{kill_zone_enemy_row_has_prideful_label}}" data-toggle="tooltip"
+                         style="width: 16px; height: 16px; border-radius: 16px;"/>
+                {{else if inspiring}}
+                    <img class="mt-1" src="/images/enemymodifiers/inspiring.png"
+                         title="{{kill_zone_enemy_row_has_inspiring_label}}" data-toggle="tooltip"
+                         style="width: 16px; height: 16px;"/>
                 {{else if dangerous}}
-                    <i class="fa fa-exclamation-triangle text-warning" title="Dangerous" data-toggle="tooltip" style="line-height: 1.6"></i>
+                    <i class="fa fa-exclamation-triangle text-warning"
+                       title="{{kill_zone_enemy_row_has_dangerous_label}}" data-toggle="tooltip"
+                       style="line-height: 1.6"></i>
                 {{/if}}
             </div>
             <div class="input-group-prepend" style="width: 24px;">

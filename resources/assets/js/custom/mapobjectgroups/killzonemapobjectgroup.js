@@ -31,11 +31,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         super._onObjectDeleted(data);
         let mapObject = data.context;
 
+        let toSave = [];
+
         $.each(this.objects, function (i, obj) {
+            if (obj.getIndex() >= mapObject.getIndex()) {
+                toSave.push(obj);
+            }
             obj.setIndex(i + 1);
         });
 
-        this.saveAll();
+        // If last pull is deleted, we don't need to change anything to pulls ahead of us (indices)
+        if (toSave.length > 1) {
+            this.massSave('*', null, toSave);
+        }
 
         mapObject.unregister('killzone:enemyremoved', this);
         mapObject.unregister('killzone:enemyadded', this);
@@ -47,7 +55,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return new KillZone(this.manager.map, layer);
     }
 
-    _createNewMapObject(layer, options){
+    _createNewMapObject(layer, options) {
         let mapObject = super._createNewMapObject(layer, options);
 
         mapObject.register('killzone:enemyremoved', this, this._onKillZoneEnemyRemoved.bind(this));
@@ -56,13 +64,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return mapObject;
     }
 
-    _onKillZoneEnemyRemoved(killZoneEnemyRemovedEvent){
-        this.signal('killzone:enemyremoved', {killzone: killZoneEnemyRemovedEvent.context, enemy: killZoneEnemyRemovedEvent.data.enemy});
+    _onKillZoneEnemyRemoved(killZoneEnemyRemovedEvent) {
+        this.signal('killzone:enemyremoved', {
+            killzone: killZoneEnemyRemovedEvent.context,
+            enemy: killZoneEnemyRemovedEvent.data.enemy
+        });
         this.signal('killzone:changed', {killzone: killZoneEnemyRemovedEvent.context});
     }
 
-    _onKillZoneEnemyAdded(killZoneEnemyAddedEvent){
-        this.signal('killzone:enemyadded', {killzone: killZoneEnemyAddedEvent.context, enemy: killZoneEnemyAddedEvent.data.enemy});
+    _onKillZoneEnemyAdded(killZoneEnemyAddedEvent) {
+        this.signal('killzone:enemyadded', {
+            killzone: killZoneEnemyAddedEvent.context,
+            enemy: killZoneEnemyAddedEvent.data.enemy
+        });
         this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
     }
 
@@ -133,22 +147,27 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         if (save) {
-            this.saveAll(['color'], saveOnComplete);
+            this.massSave(['color'], saveOnComplete);
         }
     }
 
     /**
      * Saves all KillZones using the mass update endpoint.
      * @param fields {string|array}
-     * @param onComplete {function|null} Called when saveAll completed
+     * @param onComplete {function|null} Called when massSave completed
+     * @param killZones {array}
      */
-    saveAll(fields = '*', onComplete = null) {
+    massSave(fields = '*', onComplete = null, killZones = []) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
-        let self = this;
+
+        // All killzones if not supplied
+        if (killZones.length === 0) {
+            killZones = this.objects;
+        }
 
         let killZonesData = [];
-        for (let i = 0; i < this.objects.length; i++) {
-            let killZone = this.objects[i];
+        for (let i = 0; i < killZones.length; i++) {
+            let killZone = killZones[i];
 
             // Only those that can be saved
             if (killZone.id > 0) {
@@ -164,9 +183,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 killzones: killZonesData
             },
             success: function (json) {
-                for (let i = 0; i < self.objects.length; i++) {
-                    self.objects[i].setSynced(true);
-                    self.objects[i].onSaveSuccess(json);
+                for (let i = 0; i < killZones.length; i++) {
+                    killZones[i].setSynced(true);
+                    killZones[i].onSaveSuccess(json);
                 }
             },
             complete: function () {
@@ -213,7 +232,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || (enemy.teeming === 'invisible' && !mapContext.getTeeming()))
             ) {
                 // But if it's not..
-                if( !this.isEnemyKilled(enemy.id) ){
+                if (!this.isEnemyKilled(enemy.id)) {
                     // console.warn(`Has not killed enemy ${enemy.id}!`);
                     result = false;
                     break;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Faker\Provider\Color;
 
 class DiscordLoginController extends OAuthLoginController
 {
@@ -13,6 +14,7 @@ class DiscordLoginController extends OAuthLoginController
             // Prefer nickname over full name
             'name' => $oauthUser->nickname,
             'email' => $oauthUser->email !== null ? $oauthUser->email : sprintf('%s@discordapp.com', $oauthUser->id),
+            'echo_color' => Color::hexColor(),
             'password' => '',
             'legal_agreed' => 1,
             'legal_agreed_ms' => -1

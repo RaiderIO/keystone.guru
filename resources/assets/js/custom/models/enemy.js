@@ -147,7 +147,7 @@ class Enemy extends MapObject {
                     let mapContext = getState().getMapContext();
 
                     let npc = mapContext.findNpcById(value);
-                    if( npc !== null ) {
+                    if (npc !== null) {
                         self.setNpc(npc);
                     }
 
@@ -595,11 +595,11 @@ class Enemy extends MapObject {
         let self = this;
 
         // Show a permanent tooltip for the enemy's name
-        this.layer.on('click', function () {
-            if (self.map.getMapState() instanceof EnemySelection && self.selectable) {
-                self.signal('enemy:selected');
+        this.layer.on('click', function (clickEvent) {
+            if (self.map.getMapState() instanceof EnemySelection && self.selectable && !clickEvent.originalEvent.shiftKey) {
+                self.signal('enemy:selected', {clickEvent: clickEvent});
             } else {
-                self.signal('enemy:clicked');
+                self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
         });
 
@@ -653,10 +653,37 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isBossNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && this.npc.classification_id >= 3;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isAwakenedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.npc !== null &&
             (this.npc.id === 161124 || this.npc.id === 161241 || this.npc.id === 161244 || this.npc.id === 161243);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isPridefulNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && this.npc.id === 173729;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isInspiring() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
     }
 
     /**
