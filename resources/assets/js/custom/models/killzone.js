@@ -203,6 +203,15 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Called whenever a prideful enemy has changed (moved its position, is deleted etc.)
+     * @param objectChangedEvent
+     * @private
+     */
+    _pridefulEnemyChanged(objectChangedEvent) {
+        this.redrawConnectionsToEnemies();
+    }
+
+    /**
      * Removes an enemy from this killzone.
      * @param enemy Object The enemy object to remove.
      * @private
@@ -223,8 +232,12 @@ class KillZone extends MapObject {
             let deleted = this.enemies.splice(index, 1);
             if (deleted.length === 1) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 // This enemy left us, no longer interested in it
-                enemyMapObjectGroup.findMapObjectById(deleted[0]).unregister('killzone:detached', this);
+                enemy.unregister('killzone:detached', this);
+                if (enemy.isPridefulNpc()) {
+                    enemy.unregister('object:changed', this);
+                }
             }
             this.signal('killzone:enemyremoved', {enemy: enemy});
         }
@@ -261,8 +274,6 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
         // console.warn(`KZ ${this.id} (${this.index}) adding enemy ${enemy.id} (${enemy.npc.name})`);
 
-        let self = this;
-
         enemy.setKillZone(this);
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
@@ -270,6 +281,9 @@ class KillZone extends MapObject {
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
+            if (enemy.isPridefulNpc()) {
+                enemy.register('object:changed', this, this._pridefulEnemyChanged.bind(this));
+            }
             this.signal('killzone:enemyadded', {enemy: enemy});
         }
 
