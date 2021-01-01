@@ -653,6 +653,15 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isPridefulNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && this.npc.id === 173729;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isAwakenedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.npc !== null &&
