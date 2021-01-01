@@ -334,13 +334,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Apply new state - but only one
         if (hasBoss) {
-            refreshTooltips($hasBoss.show());
+            $hasBoss.show();
         } else if (hasAwakened) {
-            refreshTooltips($hasAwakened.show());
+            $hasAwakened.show()
         } else if (hasPrideful) {
-            refreshTooltips($hasPrideful.show());
+            $hasPrideful.show();
         } else if (hasInspiring) {
-            refreshTooltips($hasInspiring.show());
+            $hasInspiring.show();
+        }
+
+        if (hasBoss || hasAwakened || hasPrideful || hasInspiring) {
+            refreshTooltips();
         }
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_grip:not(.draggable--original)`).css('color', killZone.color);
