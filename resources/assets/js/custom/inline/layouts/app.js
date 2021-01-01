@@ -168,8 +168,7 @@ class LayoutsApp extends InlineCode {
 /**
  * The default function that should be called when an ajax request fails (error handler)
  **/
-function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
-{
+function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
     let message = lang.get('messages.ajax_error_default');
 
     switch (xhr.status) {
@@ -213,11 +212,18 @@ function refreshTooltips($element = null) {
     // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         $('.tooltip').remove();
-        if( $element === null ){
+        if ($element === null) {
             $element = $('[data-toggle="tooltip"]');
         }
         $element.tooltip('_fixTitle').tooltip();
     }
+}
+
+/**
+ * Does the same as above, but then on a jQuery function
+ */
+$.fn.refreshTooltips = function () {
+    return refreshTooltips($(this));
 }
 
 /**

@@ -144,7 +144,7 @@ class EnemyForcesControls extends MapControl {
         $('#map_enemy_forces_count_total').html(enemyForcesRequired);
         $('#map_enemy_forces_percent').html(Math.round(enemyForcesPercent * 10) / 10);
 
-        refreshTooltips($enemyForces);
+        $enemyForces.refreshTooltips();
     }
 
     /**

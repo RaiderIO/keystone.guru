@@ -468,8 +468,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // $killAreaLabel.attr('data-haskillarea', killZone.hasKillArea() ? '1' : '0');
             // If something was changed
             if ($hasKillArea !== (killZone.hasKillArea() ? '1' : '0')) {
-                $killAreaLabel.attr('title', resultMessage);
-                refreshTooltips($killAreaLabel);
+                $killAreaLabel.attr('title', resultMessage).refreshTooltips();
             }
 
 
