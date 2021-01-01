@@ -22,6 +22,16 @@
             },
             {
                 "release_changelog_id": 85,
+                "release_changelog_category_id": 3,
+                "ticket_id": 531,
+                "change": "You can now hold the shift-button while clicking on an enemy to force create a new pull when you have another pull selected. This should speed up the creation of routes significantly.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 85,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
                 "change": "All bosses are now marked as Dangerous.",
