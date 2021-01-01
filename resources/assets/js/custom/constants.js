@@ -36,6 +36,7 @@ let c = {
             truesight_display_zoom: 3,
             teeming_display_zoom: 3,
             awakened_display_zoom: 3,
+            prideful_display_zoom: 3,
             inspiring_display_zoom: 3,
             active_aura_display_zoom: 3,
             colors: [

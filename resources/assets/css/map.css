@@ -725,8 +725,14 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
-.awakened_obelisk {
+.modifier_awakened {
     background: white url('/images/enemymodifiers/awakened.png') repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
+.modifier_prideful {
+    background: white url('/images/enemymodifiers/prideful.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }

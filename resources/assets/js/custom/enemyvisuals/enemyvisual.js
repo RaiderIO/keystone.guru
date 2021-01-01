@@ -189,6 +189,10 @@ class EnemyVisual extends Signalable {
             if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
                 modifiers.push(new EnemyVisualModifierAwakened(this, 3));
             }
+            // Prideful marker
+            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
+                modifiers.push(new EnemyVisualModifierPrideful(this, 3));
+            }
             // Inspiring marker
             else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
                 modifiers.push(new EnemyVisualModifierInspiring(this, 3));
@@ -347,16 +351,19 @@ class EnemyVisual extends Signalable {
 
             let template = Handlebars.templates['map_enemy_visual_template'];
 
-            // Set a default color which may be overridden by any visuals
-            let data = {};
+            let data = {
+                root_classes: '',
+                selection_classes_base: '',
+            };
 
             let isDeletable = this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable();
             let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
                 (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
-            // Either no border or a solid border in the color of the killzone
+            // Set a default color which may be overridden by any visuals
             let border = `${getState().getMapZoomLevel()}px solid white`;
             if (this.enemy.getKillZone() instanceof KillZone) {
+                // Either no border or a solid border in the color of the killzone
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
             } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
                 // If not selected in a killzone, fade the enemy
