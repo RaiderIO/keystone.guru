@@ -21,9 +21,6 @@ class DungeonMap extends Signalable {
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
         this.mapObjectGroupManager.register('loaded', this, function () {
-            // Add new controls; we're all loaded now and user should now be able to edit their route
-            self._addMapControls(self.editableLayers);
-
             self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
@@ -678,6 +675,11 @@ class DungeonMap extends Signalable {
         this.refreshPather();
         // Not enabled at this time
         this.togglePather(false);
+
+        // Add new controls; we're all loaded now and user should now be able to edit their route
+        this._addMapControls(this.editableLayers);
+
+        refreshTooltips();
 
         this._refreshingMap = false;
     }

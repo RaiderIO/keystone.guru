@@ -114,6 +114,7 @@ if ($isAdmin) {
 
 
 
+
     </script>
 @endsection
 
@@ -157,12 +158,14 @@ if ($isAdmin) {
 
                     </div>
                 </div>
-                <div class="col route_echo mt-2 mb-2">
-                    <!-- Echo controls injected here through echocontrols.js -->
-                    <span id="route_echo_container" class="text-center">
+                @if($echo)
+                    <div class="col route_echo mt-2 mb-2">
+                        <!-- Echo controls injected here through echocontrols.js -->
+                        <span id="route_echo_container" class="text-center">
 
                     </span>
-                </div>
+                    </div>
+                @endif
             </div>
         </div>
     </footer>
