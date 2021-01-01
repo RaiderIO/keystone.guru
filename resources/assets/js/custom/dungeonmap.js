@@ -128,7 +128,7 @@ class DungeonMap extends Signalable {
             });
         }
 
-        /** @var Array Stores all possible objects that are displayed on the map */
+        /** @type MapObject[] Stores all possible objects that are displayed on the map */
         this.mapObjects = [];
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];

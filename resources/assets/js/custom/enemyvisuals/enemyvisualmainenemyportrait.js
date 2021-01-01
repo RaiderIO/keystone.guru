@@ -26,7 +26,8 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_portrait text-white text-center';
 
         let npcId = this.enemyvisual.enemy.npc === null ? 'unknown' : this.enemyvisual.enemy.npc.id;
-        data.main_visual_html = `<div style="width:100%; height: 100%; background-image: url('/images/enemyportraits/${npcId}.png'); background-size: contain; border-radius: ${width}px;">&nbsp;</div>`;
+        // #040C1F is the same blue as the background color of portraits
+        data.main_visual_html = `<div style="width:100%; height: 100%; background-image: url('/images/enemyportraits/${npcId}.png'); background-size: contain; background-color: #040C1F; border-radius: ${width}px;">&nbsp;</div>`;
 
         return data;
     }
