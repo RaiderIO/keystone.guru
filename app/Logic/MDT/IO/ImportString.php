@@ -230,8 +230,10 @@ class ImportString
                 $killZone->enemies = new Collection();
             }
 
-            // Init some variables
-            $totalEnemiesKilled = 0;
+            // The amount of enemies selected in MDT pull
+            $totalEnemiesSelected = 0;
+            // The amount of enemies that we actually matched with
+            $totalEnemiesMatched = 0;
 
             try {
                 $seasonalIndexSkip = false;
@@ -242,6 +244,8 @@ class ImportString
                     if (is_numeric($pullKey)) {
                         $npcIndex = (int)$pullKey;
                         $mdtClones = $pullValue;
+
+                        $totalEnemiesSelected += count($mdtClones);
                         // Only if filled
                         foreach ($mdtClones as $index => $cloneIndex) {
                             // This comes in through as a double, cast to int
@@ -319,7 +323,7 @@ class ImportString
                                 // Save enemies to the killzones regardless
                                 $killZone->killzoneenemies->push($kzEnemy);
                                 $killZone->enemies->push($enemy);
-                                $totalEnemiesKilled++;
+                                $totalEnemiesMatched++;
                             } else {
                                 $seasonalIndexSkip = true;
                             }
@@ -333,7 +337,7 @@ class ImportString
                     }
                 }
 
-                if ($totalEnemiesKilled > 0) {
+                if ($totalEnemiesMatched > 0) {
                     // In order to import Awakened Bosses that are killed at the final boss, we need to identify if this
                     // pull contains the final boss, and if so, convert all its Awakened enemies to the correct enemies
                     // that are around the boss instead
@@ -347,7 +351,7 @@ class ImportString
 
                     if ($hasFinalBoss) {
                         foreach ($killZone->killzoneenemies as $kzEnemy) {
-                            if( $kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->isAwakened() ){
+                            if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->isAwakened()) {
                                 // Find the equivalent Awakened Enemy that's next to the boss.
                                 /** @var Enemy $bossAwakenedEnemy */
                                 $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->enemy->npc_id)
@@ -355,7 +359,7 @@ class ImportString
                                     ->where('enemy_pack_id', '>', 0)
                                     ->first();
 
-                                if( $bossAwakenedEnemy !== null ) {
+                                if ($bossAwakenedEnemy !== null) {
                                     $kzEnemy->enemy_id = $bossAwakenedEnemy->id;
                                     // Just to be sure
                                     $kzEnemy->unsetRelation('enemy');
@@ -379,8 +383,10 @@ class ImportString
                         $dungeonRoute->killzones->push($killZone);
                     }
                     $newPullIndex++;
-                } // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
-                else if (!$seasonalIndexSkip) {
+                }
+                // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
+                // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
+                else if (!$seasonalIndexSkip && $totalEnemiesSelected > 0) {
                     if ($save) {
                         $killZone->delete();
                     }
@@ -424,7 +430,7 @@ class ImportString
                      * 3 = sublevel
                      * 4 = enabled/visible?
                      * 5 = color
-                     * 6 = layer sublevel
+                     * 6 = drawlayer
                      * 7 = smooth
                      */
                     $details = $object['d'];
@@ -435,67 +441,73 @@ class ImportString
                     /** @var Floor $floor */
                     $floor = ($floors->all())[$floorIndex];
 
-                    // If it's a line
-                    // MethodDungeonTools.lua:2529
-                    if (isset($object['l'])) {
-                        $line = $object['l'];
+                    // Only if shown/visible
+                    if ($details['4']) {
+                        // If it's a line
+                        // MethodDungeonTools.lua:2529
+                        if (isset($object['l'])) {
+                            $line = $object['l'];
 
-                        $brushline = new Brushline();
-                        // Assign the proper ID
-                        $brushline->floor_id = $floor->id;
-                        $brushline->polyline_id = -1;
+                            $brushline = new Brushline();
+                            // Assign the proper ID
+                            $brushline->floor_id = $floor->id;
+                            $brushline->polyline_id = -1;
 
-                        $polyline = new Polyline();
-                        $polyline->color = '#' . $details['5'];
-                        $polyline->weight = (int)$details['1'];
+                            $polyline = new Polyline();
 
-                        $vertices = [];
-                        for ($i = 1; $i < count($line); $i += 2) {
-                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
+                            // Make sure there is a pound sign in front of the value at all times, but never double up should
+                            // MDT decide to suddenly place it here
+                            $polyline->color = (substr($details['5'], 0, 1) !== '#' ? '#' : '') . $details['5'];
+                            $polyline->weight = (int)$details['1'];
+
+                            $vertices = [];
+                            for ($i = 1; $i < count($line); $i += 2) {
+                                $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
+                            }
+
+                            $polyline->vertices_json = json_encode($vertices);
+
+                            if ($save) {
+                                // Only assign when saving
+                                $brushline->dungeon_route_id = $dungeonRoute->id;
+                                $brushline->save();
+
+                                $polyline->model_id = $brushline->id;
+                                $polyline->model_class = get_class($brushline);
+                                $polyline->save();
+                            } else {
+                                // Otherwise inject
+                                $brushline->polyline = $polyline;
+                                $dungeonRoute->brushlines->push($brushline);
+                            }
                         }
+                        // Map comment (n = note)
+                        // MethodDungeonTools.lua:2523
+                        else if (isset($object['n']) && $object['n']) {
+                            $mapComment = new MapIcon();
+                            $mapComment->floor_id = $floor->id;
+                            // Bit hacky? But should work
+                            $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
+                            $mapComment->comment = $details['5'];
 
-                        $polyline->vertices_json = json_encode($vertices);
+                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
+                            $mapComment->lat = $latLng['lat'];
+                            $mapComment->lng = $latLng['lng'];
 
-                        if ($save) {
-                            // Only assign when saving
-                            $brushline->dungeon_route_id = $dungeonRoute->id;
-                            $brushline->save();
-
-                            $polyline->model_id = $brushline->id;
-                            $polyline->model_class = get_class($brushline);
-                            $polyline->save();
-                        } else {
-                            // Otherwise inject
-                            $brushline->polyline = $polyline;
-                            $dungeonRoute->brushlines->push($brushline);
+                            if ($save) {
+                                // Save
+                                $mapComment->dungeon_route_id = $dungeonRoute->id;
+                                $mapComment->save();
+                            } else {
+                                // Inject
+                                $dungeonRoute->mapicons->push($mapComment);
+                            }
                         }
-                    }
-                    // Map comment (n = note)
-                    // MethodDungeonTools.lua:2523
-                    else if (isset($object['n']) && $object['n']) {
-                        $mapComment = new MapIcon();
-                        $mapComment->floor_id = $floor->id;
-                        // Bit hacky? But should work
-                        $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
-                        $mapComment->comment = $details['5'];
+                        // Triangles (t = triangle)
+                        // MethodDungeonTools.lua:2554
+                        else if (isset($object['t']) && $object['t']) {
 
-                        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
-                        $mapComment->lat = $latLng['lat'];
-                        $mapComment->lng = $latLng['lng'];
-
-                        if ($save) {
-                            // Save
-                            $mapComment->dungeon_route_id = $dungeonRoute->id;
-                            $mapComment->save();
-                        } else {
-                            // Inject
-                            $dungeonRoute->mapicons->push($mapComment);
                         }
-                    }
-                    // Triangles (t = triangle)
-                    // MethodDungeonTools.lua:2554
-                    else if (isset($object['t']) && $object['t']) {
-
                     }
                 } catch (ImportWarning $warning) {
                     $warnings->push($warning);
@@ -557,7 +569,7 @@ class ImportString
             $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
             // Must expire if we're trying
             if ($sandbox) {
-                $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+                $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
             }
 
             if ($save) {

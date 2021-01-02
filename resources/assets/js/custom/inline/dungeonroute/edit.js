@@ -105,7 +105,7 @@ class DungeonrouteEdit extends InlineCode {
                 showSuccessNotification(lang.get('messages.settings_saved'));
 
                 getState().getMapContext().setSeasonalIndex(parseInt($('#seasonal_index').val()));
-                getState().setTeeming($('#teeming').is(':checked'));
+                getState().getMapContext().setTeeming($('#teeming').is(':checked'));
             },
             complete: function () {
                 $('#save_route_settings').show();

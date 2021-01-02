@@ -14,8 +14,8 @@ class EchoControls extends MapControl {
         echo.register('user:remove', this, this._onUserRemove.bind(this));
         echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
 
-        this.map.register('map:mapobjectgroupsloaded', this, this._onMapObjectGroupsFetchSuccess.bind(this));
 
+        this.map.register('map:mapobjectgroupsloaded', this, this._onMapObjectGroupsFetchSuccess.bind(this));
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -55,6 +55,12 @@ class EchoControls extends MapControl {
     }
 
     _onMapObjectGroupsFetchSuccess(fetchSuccessEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        this._restoreExistingEchoState();
+    }
+
+    _restoreExistingEchoState() {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
         // Initial status while we wait for status changes
@@ -178,6 +184,11 @@ class EchoControls extends MapControl {
         $(container).removeClass('leaflet-control');
         let $targetContainer = $('#route_echo_container');
         $targetContainer.append(container);
+
+        // In case the control was recreated by switching floors
+        if (getState().getEcho().getUsers().length > 0) {
+            this._restoreExistingEchoState();
+        }
     }
 
     cleanup() {
