@@ -71,7 +71,7 @@
         "map_icon_type_id": 42,
         "lat": -199.75,
         "lng": 243,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -82,7 +82,7 @@
         "map_icon_type_id": 42,
         "lat": -220,
         "lng": 231.25,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -93,7 +93,7 @@
         "map_icon_type_id": 42,
         "lat": -226.375,
         "lng": 204.625,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -104,7 +104,7 @@
         "map_icon_type_id": 42,
         "lat": -199.875,
         "lng": 178.125,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -115,7 +115,7 @@
         "map_icon_type_id": 42,
         "lat": -172.625,
         "lng": 185.25,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -126,7 +126,7 @@
         "map_icon_type_id": 42,
         "lat": -160.875,
         "lng": 211.375,
-        "comment": "Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
+        "comment": "Keystone.guru: Stone Gargoyles may activate to become Chamber Sentinels. No guaranteed activation.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 42,
         "lat": -33.0625,
         "lng": 163.875,
-        "comment": "This tick seems to be bugged in the ground - this will however pull when the boss is pulled.",
+        "comment": "Keystone.guru: This tick seems to be bugged in the ground - this will however pull when the boss is pulled.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
