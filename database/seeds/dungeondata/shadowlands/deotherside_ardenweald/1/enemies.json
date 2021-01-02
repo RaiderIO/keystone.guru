@@ -69,7 +69,7 @@
         "floor_id": 73,
         "mdt_id": 2,
         "seasonal_type": "inspiring",
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
