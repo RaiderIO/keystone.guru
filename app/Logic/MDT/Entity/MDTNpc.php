@@ -7,49 +7,49 @@ namespace App\Logic\MDT\Entity;
 class MDTNpc
 {
     /** @var int */
-    private $_index;
+    private int $_index;
 
     /** @var array */
-    private $_rawMdtNpc;
+    private array $_rawMdtNpc;
 
     /** @var array */
-    private $_clones;
+    private array $_clones;
 
     /** @var int */
-    private $_reaping;
+    private int $_reaping;
 
     /** @var int */
-    private $_id = 0;
+    private int $_id = 0;
 
     /** @var array */
-    private $_spells = [];
+    private array $_spells = [];
 
     /** @var float */
-    private $_scale = 0.0;
+    private float $_scale = 0.0;
 
     /** @var int */
-    private $_countTeeming = 0;
+    private int $_countTeeming = 0;
 
     /** @var int */
-    private $_count = 0;
+    private int $_count = 0;
 
     /** @var string */
-    private $_name;
+    private string $_name;
 
     /** @var int */
-    private $_displayId = 0;
+    private int $_displayId = 0;
 
     /** @var string */
-    private $_creatureType;
+    private string $_creatureType;
 
     /** @var int */
-    private $_level = 0;
+    private int $_level = 0;
 
     /** @var int */
-    private $_health = 0;
+    private int $_health = 0;
 
     /** @var array */
-    private $_characteristics = [];
+    private array $_characteristics = [];
 
     function __construct(int $index, array $rawMdtNpc)
     {

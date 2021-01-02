@@ -276,22 +276,9 @@ class Enemy extends MapObject {
 
         // Only if we should display this enemy
         if (this.layer !== null) {
-            // Synced, can now build the popup since we know our ID
-            this._rebuildPopup(syncedEvent);
-
             // Recreate the tooltip
             this.bindTooltip();
         }
-    }
-
-    /**
-     * Since the ID may not be known at spawn time, this needs to be callable from when it is known (when it's synced to server).
-     *
-     * @param event
-     * @private
-     */
-    _rebuildPopup(event) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
     }
 
     /**
@@ -452,10 +439,14 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        //
+        // if( this.id === 4406 ) {
+        //     console.warn('setPopupEnabled', enabled);
+        // }
 
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
-                this._rebuildPopup();
+                this._assignPopup();
             } else if (!enabled && this.isPopupEnabled) {
                 this.layer.unbindPopup();
             }
