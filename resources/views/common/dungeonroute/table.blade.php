@@ -70,6 +70,10 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             'data-count-selected-text' => __('{0} affixes selected')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
+        {!! Form::label('keystone_level', __('Keystone level')) !!}
+        {!! Form::select('keystone_level', array_combine(range(2,30), range(2,30)), 10, ['class' => 'form-control selectpicker', 'id' => 'keystone_level']) !!}
+    </div>
+    <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
         'selectedIds' => array_merge( [-1], \App\Models\RouteAttribute::all()->pluck('id')->toArray() ),
         'showNoAttributes' => true])

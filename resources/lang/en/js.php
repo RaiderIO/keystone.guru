@@ -327,6 +327,7 @@ return [
     'preview_label'      => 'Preview',
     'title_label'        => 'Title',
     'dungeon_label'      => 'Dungeon',
+    'keystone_level_label'  => 'Keystone Level',
     'features_label'     => 'Features',
     // 'affixes_label' => 'Affixes',
     // 'attributes_label' => 'Attributes',

@@ -28,6 +28,7 @@ class RoutesTableView extends TableView {
         this._columns = {
             list: [
                 {name: 'dungeon', width: '15%'},
+                {name: 'keystone_level', width: '5%'},
                 {name: 'affixes', width: '15%'},
                 {name: 'attributes', width: '15%'},
                 {name: 'setup', width: '15%'},
@@ -39,6 +40,7 @@ class RoutesTableView extends TableView {
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
+                {name: 'keystone_level', width: '5%'},
                 {name: 'features', width: '20%'},
                 {name: 'author', width: '10%'},
                 {name: 'enemy_forces', width: '5%'},
@@ -61,6 +63,7 @@ class ProfileTableView extends TableView {
             list: [
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%'},
+                {name: 'keystone_level', width: '5%'},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
@@ -71,6 +74,7 @@ class ProfileTableView extends TableView {
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
+                {name: 'keystone_level', width: '5%'},
                 {name: 'features', width: '25%'},
                 {name: 'actions', width: '7%', clickable: false},
             ]

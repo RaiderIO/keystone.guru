@@ -322,6 +322,17 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 {{--                </label>--}}
 {{--                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
             </div>
+
+            <div class="form-group">
+                <label for="keystone_level">
+                    {{ __('Keystone Level') }}<span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('For which keystone level is the route planned for?')
+                     }}"></i>
+                </label>
+                {!! Form::select('keystone_level', array_combine(range(2,30), range(2,30)), $model->keystone_level, ['class' => 'form-control selectpicker', 'id' => 'keystone_level']) !!}
+            </div>
+
             @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
             <h3 class='mt-1'>

@@ -64,6 +64,14 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
 {{--                    </div>--}}
 {{--                </div>--}}
                 <div class="row view_dungeonroute_details_row mt-2">
+                    <div class="col-5 col-md-6 font-weight-bold">
+                        {{ __('Key Level') }}:
+                    </div>
+                    <div class="col-7 col-md-6">
+                        {{ $model->keystone_level }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col font-weight-bold">
                         {{ __('Group setup') }}:
                     </div>

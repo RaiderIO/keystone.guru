@@ -77,6 +77,7 @@ class DungeonrouteEdit extends InlineCode {
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
                 seasonal_index: $('#seasonal_index').val(),
+                keystone_level: $('#keystone_level').val(),
                 specialization:
                     $('.specializationselect select').map(function () {
                         return $(this).val();

@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property $published boolean
  * @property $unlisted boolean
  * @property $demo boolean
+ * @property $keystone_level int
  *
  * @property $setup array
  * @property $avg_rating double
@@ -531,6 +532,7 @@ class DungeonRoute extends Model
 
         $this->pull_gradient = $request->get('pull_gradient', '');
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
+        $this->keystone_level = $request->get('keystone_level', 2);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());
@@ -677,6 +679,7 @@ class DungeonRoute extends Model
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming = $this->teeming;
         $dungeonroute->published = $published;
+        $dungeonroute->keystone_level = $this->keystone_level;
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.

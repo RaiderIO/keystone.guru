@@ -32,7 +32,7 @@ class DungeonrouteTable extends InlineCode {
             }
             let affixes = $('#affixes').val();
             let attributes = $('#attributes').val();
-
+            let keystone_level = $('#keystone_level').val();
             // Find wherever the columns are we're looking for, then filter using them
             // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
             $.each(self._dt.settings().init().columns, function (index, value) {
@@ -42,6 +42,8 @@ class DungeonrouteTable extends InlineCode {
                     self._dt.column(index).search(affixes);
                 } else if (value.name === 'routeattributes.name') {
                     self._dt.column(index).search(attributes);
+                } else if (value.name === 'keystone_level') {
+                    self._dt.column(index).search(keystone_level);
                 }
             });
             self._dt.draw();
@@ -142,7 +144,7 @@ class DungeonrouteTable extends InlineCode {
             'lengthMenu': [25],
             'bLengthChange': false,
             // Order by affixes by default
-            'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
+            'order': [[2 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
             'columns': self._getColumns(),
             'language': {
                 'emptyTable': lang.get('messages.datatable_no_routes_in_table')
@@ -239,6 +241,14 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('messages.dungeon_label'),
                 'data': 'dungeon.name',
                 'name': 'dungeon_id',
+                'render': function (data, type, row, meta) {
+                    return data;
+                },
+            },
+            keystone_level: {
+                'title': lang.get('messages.keystone_level_label'),
+                'data': 'keystone_level',
+                'name': 'keystone_level',
                 'render': function (data, type, row, meta) {
                     return data;
                 },

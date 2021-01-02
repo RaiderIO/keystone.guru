@@ -34,6 +34,7 @@ class DungeonRouteFormRequest extends FormRequest
             'teeming' => 'nullable|int',
             'template' => 'nullable|int',
             'seasonal_index' => 'int',
+            'keystone_level' => 'int|min:2|max:30',
 
             'faction_id' => ['required', Rule::exists('factions', 'id'), new SiegeOfBoralusFactionRule($this->request)],
 

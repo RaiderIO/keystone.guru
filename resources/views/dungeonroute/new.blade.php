@@ -49,6 +49,16 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 {{--            </label>--}}
 {{--            {!! Form::checkbox('template', 1, 0, ['class' => 'form-control left_checkbox']) !!}--}}
 {{--        </div>--}}
+        <div class="form-group">
+            <label for="keystone_level">
+                {{ __('Keystone Level') }}<span class="form-required">*</span>
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('For which keystone level is the route planned for?')
+                     }}"></i>
+            </label>
+            {!! Form::select('keystone_level', array_combine(range(2,30), range(2,30)), 10, ['class' => 'form-control selectpicker']) !!}
+        </div>
+
         <h3>
             {{ __('Affixes') }} <span class="form-required">*</span>
         </h3>

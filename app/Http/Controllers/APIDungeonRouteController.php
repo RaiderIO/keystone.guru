@@ -16,6 +16,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonRouteAttributesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
+use App\Logic\Datatables\ColumnHandler\DungeonRoutes\KeystoneLevelColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
@@ -181,7 +182,10 @@ class APIDungeonRouteController extends Controller
             // Allow sorting by views
             new ViewsColumnHandler($dtHandler),
             // Allow sorting by rating
-            new RatingColumnHandler($dtHandler)
+            new RatingColumnHandler($dtHandler),
+            // Allow sorting by keystone level
+            new KeystoneLevelColumnHandler($dtHandler),
+
         ])->applyRequestToBuilder()->getResult();
     }
 
