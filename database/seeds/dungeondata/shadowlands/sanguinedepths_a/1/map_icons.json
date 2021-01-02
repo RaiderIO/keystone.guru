@@ -137,7 +137,7 @@
         "map_icon_type_id": 42,
         "lat": -33.0625,
         "lng": 163.875,
-        "comment": "Keystone.guru: This tick seems to be bugged in the ground - this will however pull when the boss is pulled.",
+        "comment": "Keystone.guru: This tick seems to (sometimes) be bugged in the ground - it will however pull when the boss is pulled.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
