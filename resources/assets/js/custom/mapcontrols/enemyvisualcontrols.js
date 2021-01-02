@@ -86,7 +86,7 @@ class EnemyVisualControls extends MapControl {
         $targetContainer.append(container);
 
         $('#map_enemy_visuals_dropdown').bind('change', this._enemyVisualChanged.bind(this))
-        // Restore what the user had selected
+            // Restore what the user had selected
             .val(getState().getEnemyDisplayType());
         $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', this._mdtEnemyMappingChanged.bind(this));
 
@@ -100,5 +100,6 @@ class EnemyVisualControls extends MapControl {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         getState().unregister('enemydisplaytype:changed', this);
+        $('#map_enemy_visuals_container').empty();
     }
 }

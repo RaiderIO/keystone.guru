@@ -106,7 +106,7 @@
     },
     {
         "id": 5281,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1162,
         "npc_id": 162059,
         "floor_id": 86,
         "mdt_id": 1,
@@ -117,8 +117,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -145.47,
-        "lng": 172.31,
+        "lat": -147,
+        "lng": 173.125,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
@@ -127,7 +127,7 @@
     },
     {
         "id": 5282,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1162,
         "npc_id": 163077,
         "floor_id": 86,
         "mdt_id": 1,
@@ -138,8 +138,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -144.47,
-        "lng": 171.66,
+        "lat": -143.875,
+        "lng": 171.125,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {

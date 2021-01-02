@@ -36,7 +36,9 @@ class Commit extends Command
                 // Commit current changes
                 'git add database/seeds/dungeondata/* && ' .
                 'git commit -m "Automated commit for mapping updates"; ' .
-                // Merge master into mapping
+                // Merge development into mapping
+                'git checkout . && ' .
+                'git clean -f && ' .
                 'git checkout development && ' .
                 'git pull && ' .
                 'git checkout mapping && ' .

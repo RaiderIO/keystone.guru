@@ -57,8 +57,8 @@ class EnemySelection extends MapObjectMapState {
 
         // Cannot start editing things while we're doing this.
         // @TODO https://stackoverflow.com/questions/40414970/disable-leaflet-draw-delete-button
-        $('.leaflet-draw-edit-edit').addClass('leaflet-disabled');
-        $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
+        $('.leaflet-draw-edit-edit').addClass('leaflet-disabled').refreshTooltips();
+        $('.leaflet-draw-edit-remove').addClass('leaflet-disabled').refreshTooltips();
     }
 
     /**
@@ -84,8 +84,8 @@ class EnemySelection extends MapObjectMapState {
 
         // Ok we're clear, may edit again (there's always something to edit because this EnemySelectionMapState was triggered by one)
         if (this.map.editableLayers.getLayers().length > 0) {
-            $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
-            $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
+            $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled').refreshTooltips();
+            $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled').refreshTooltips();
         }
     }
 }
