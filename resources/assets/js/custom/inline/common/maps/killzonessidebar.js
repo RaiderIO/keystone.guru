@@ -101,13 +101,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                 // Switch floors if the floor is not on the current map
                 let floorIds = killZone.getFloorIds();
-                if (!floorIds.includes(getState().getCurrentFloor().id)) {
+                if (floorIds.length > 0 && !floorIds.includes(getState().getCurrentFloor().id)) {
                     getState().setFloorId(floorIds[0]);
                 }
 
                 // Center the map to this killzone
                 if (killZone.enemies.length > 0 && killZone.isVisible()) {
-                    getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel())
+                    getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel());
                 }
             }
         }
