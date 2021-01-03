@@ -8,8 +8,10 @@
 
 namespace App\Http\Controllers\Traits;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Teapot\StatusCode\Http;
 
 trait ChecksForDuplicates
 {
@@ -19,20 +21,18 @@ trait ChecksForDuplicates
      * @param bool $abort True to abort, false to return true|false upon completion.
      * @return bool False if no duplicate was found, true if there was a duplicate.
      */
-    function checkForDuplicate($candidate, $fields = [], $abort = true)
+    function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
     {
         // Find out of there is a duplicate
         /** @var Builder $query */
         // Round it like MySql does, otherwise we get strange rounding errors and it won't detect it as a duplicate
-        /** @var \Eloquent $modelClass */
+        /** @var Eloquent $modelClass */
         $modelClass = get_class($candidate);
         $query = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
             ->where('lng', round($candidate->lng, 2, PHP_ROUND_HALF_EVEN));
 
-        $fields[] = 'dungeon_route_id';
-
         foreach ($fields as $field) {
-            if( isset($candidate[$field]) ){
+            if (isset($candidate[$field])) {
                 $query->where($field, $candidate->$field);
             }
         }
@@ -56,7 +56,7 @@ trait ChecksForDuplicates
      */
     function abortDuplicate()
     {
-        abort(\Teapot\StatusCode\Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
+        abort(Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
     }
 
     /**

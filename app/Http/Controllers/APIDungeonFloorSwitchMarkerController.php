@@ -42,7 +42,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
 
         // Find out of there is a duplicate
         if (!$dungeonFloorSwitchMarker->exists) {
-            $this->checkForDuplicate($dungeonFloorSwitchMarker);
+            $this->checkForDuplicate($dungeonFloorSwitchMarker, ['floor_id']);
         }
 
         if ($dungeonFloorSwitchMarker->save()) {

@@ -15,6 +15,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
@@ -41,7 +42,7 @@ class APIKillZoneController extends Controller
         $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
         $killZone->index = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
 
-        if (!$killZone->exists) {
+        if (!$killZone->exists && $killZone->lat !== null && $killZone->lng !== null) {
             // Find out of there is a duplicate
             $this->checkForDuplicate($killZone);
         }
@@ -135,13 +136,50 @@ class APIKillZoneController extends Controller
 
         // We're deliberately overwriting the $result constantly, we're only interested in the last result
         $result = null;
+
+        // Update killzones
+        $killZones = new Collection();
         foreach ($request->get('killzones', []) as $killZoneData) {
             try {
-                $this->_saveKillZone($dungeonroute, $killZoneData);
+                // Unset the enemies since we're quicker to update that in bulk here
+                $kzDataWithoutEnemies = $killZoneData;
+                unset($kzDataWithoutEnemies['enemies']);
+                $killZones->push($this->_saveKillZone($dungeonroute, $kzDataWithoutEnemies));
             } catch (Exception $ex) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
         }
+
+        // Save enemy data at once and not one by one - it's slow
+        $killZoneEnemies = [];
+        $enemyIds = Enemy::select('id')->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())->get()->pluck('id')->toArray();
+
+        // Delete existing enemies
+        KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
+
+        // Insert new enemies based on what was sent
+        foreach ($request->get('killzones', []) as $killZoneData) {
+            try {
+                // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
+                $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($enemyIds)
+                {
+                    return in_array($item, $enemyIds);
+                });
+
+                // Assign kill zone to each passed enemy
+                foreach($killZoneDataEnemies as $killZoneDataEnemy ){
+                    $killZoneEnemies[] = [
+                        'kill_zone_id' => $killZoneData['id'],
+                        'enemy_id'     => $killZoneDataEnemy
+                    ];
+                }
+            } catch (Exception $ex) {
+                return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
+            }
+        }
+
+        // Save all new enemies at once
+        KillZoneEnemy::insert($killZoneEnemies);
 
         // Touch the route so that the thumbnail gets updated
         $dungeonroute->touch();
