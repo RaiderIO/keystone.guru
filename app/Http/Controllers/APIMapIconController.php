@@ -99,7 +99,7 @@ class APIMapIconController extends Controller
         $mapIcon->lng = (float) $request->get('lng');
 
         if (!$mapIcon->exists) {
-            $this->checkForDuplicate($mapIcon);
+            $this->checkForDuplicate($mapIcon, ['floor_id', 'dungeon_route_id']);
         }
 
         if ($mapIcon->save()) {
