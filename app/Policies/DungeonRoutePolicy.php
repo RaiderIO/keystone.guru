@@ -20,6 +20,10 @@ class DungeonRoutePolicy
     public function view(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
+        if (!$dungeonroute->published) {
+            return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
+        }
+
         return $dungeonroute->published;
     }
 
