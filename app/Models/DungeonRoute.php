@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +95,18 @@ class DungeonRoute extends Model
     use SerializesDates;
     use Reportable;
     use HasTags;
+
+    const PUBLISHED_STATE_UNPUBLISHED = 'unpublished';
+    const PUBLISHED_STATE_TEAM = 'team';
+    const PUBLISHED_STATE_WORLD = 'world';
+    const PUBLISHED_STATE_WORLD_WITH_LINK = 'world_with_link';
+
+    const ALL_PUBLISHED_STATES = [
+        'Unpublished'             => self::PUBLISHED_STATE_UNPUBLISHED,
+        'Team only'               => self::PUBLISHED_STATE_TEAM,
+        'World visible'           => self::PUBLISHED_STATE_WORLD,
+        'World visible with link' => self::PUBLISHED_STATE_WORLD_WITH_LINK,
+    ];
 
     /**
      * The accessors to append to the model's array form.
@@ -241,6 +254,14 @@ class DungeonRoute extends Model
     public function pridefulenemies()
     {
         return $this->hasMany('App\Models\PridefulEnemy');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function publishedstate()
+    {
+        return $this->hasOne('App\Models\PublishedState');
     }
 
     /**

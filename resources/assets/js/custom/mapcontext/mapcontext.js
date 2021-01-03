@@ -86,6 +86,14 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {[]}
+     */
+    getStaticPublishStates() {
+        return this._options.static.publishStates;
+    }
+
+    /**
+     *
      * @returns {string}
      */
     getType() {

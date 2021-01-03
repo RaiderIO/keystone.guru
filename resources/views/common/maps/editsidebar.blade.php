@@ -157,18 +157,10 @@ if (\Illuminate\Support\Facades\Auth::check()) {
                     <div class="form-group mb-0">
                         <div class="row">
                             <div id="map_route_publish_container" class="col"
-                                 data-toggle="tooltip"
-                                 title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"
+{{--                                 data-toggle="tooltip"--}}
+{{--                                 title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"--}}
                                  style="display: block">
-                                <button id="map_route_publish"
-                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
-                                        disabled>
-                                    <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
-                                </button>
-                                <button id="map_route_unpublish"
-                                        class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                                    <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
-                                </button>
+                                @include('common.dungeonroute.publish', ['model' => $model])
                             </div>
                         </div>
                     </div>

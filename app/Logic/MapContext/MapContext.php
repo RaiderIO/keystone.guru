@@ -8,6 +8,7 @@ use App\Models\CharacterClass;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
+use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheService;
@@ -86,6 +87,7 @@ abstract class MapContext
                 'classColors'                       => CharacterClass::all()->pluck('color'),
                 'raidMarkers'                       => RaidMarker::all(),
                 'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+                'publishStates'                     => PublishedState::all(),
             ];
         });
 
