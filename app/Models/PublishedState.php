@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property $id int
@@ -15,14 +16,14 @@ class PublishedState extends Model
 {
     public const UNPUBLISHED = 'unpublished';
     public const TEAM = 'team';
-    public const WORLD = 'world';
     public const WORLD_WITH_LINK = 'world_with_link';
+    public const WORLD = 'world';
 
     public const ALL = [
         self::UNPUBLISHED,
         self::TEAM,
+        self::WORLD_WITH_LINK,
         self::WORLD,
-        self::WORLD_WITH_LINK
     ];
 
     public $timestamps = false;
@@ -32,6 +33,14 @@ class PublishedState extends Model
     ];
 
     protected $hidden = ['pivot'];
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonroutes()
+    {
+        return $this->hasMany('App\Models\DungeonRoute');
+    }
 
     public static function boot()
     {

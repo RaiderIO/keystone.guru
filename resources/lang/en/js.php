@@ -55,6 +55,19 @@ return [
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
 
+    'publish_state_title_unpublished'   => 'Unpublished',
+    'publish_state_subtext_unpublished' => 'Only you may view this route',
+
+    'publish_state_title_team'   => 'Team only',
+    'publish_state_subtext_team' => 'Only members of this route\'s assigned team may view this route',
+
+    'publish_state_title_world_with_link'   => 'Anyone with link',
+    'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route',
+
+    'publish_state_title_world'   => 'Public',
+    'publish_state_subtext_world' => 'Your route may be viewed by anyone and can be found on Keystone.guru',
+
+
     'publish_label'          => 'Publish',
     'unpublish_label'        => 'Unpublish',
     'clone_label'            => 'Clone',

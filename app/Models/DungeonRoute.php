@@ -257,11 +257,11 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return HasOne
+     * @return BelongsTo
      */
     public function publishedstate()
     {
-        return $this->hasOne('App\Models\PublishedState');
+        return $this->belongsTo('App\Models\PublishedState', 'published_state_id');
     }
 
     /**
