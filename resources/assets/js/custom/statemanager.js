@@ -410,9 +410,9 @@ class StateManager extends Signalable {
      * Gets the currently logged in user's name, or null if not logged in.
      * @returns {*|null}
      */
-    getUserName() {
+    getUser() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._userData !== null ? this._userData.name : null;
+        return this._userData;
     }
 }

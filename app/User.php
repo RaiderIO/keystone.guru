@@ -68,7 +68,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'name'
+        'id', 'name', 'echo_color'
     ];
 
 
