@@ -51,7 +51,7 @@ class ContextEvent implements ShouldBroadcast
     {
         return [
             'context_class' => get_class($this->_context),
-            'user'          => $this->_user->name
+            'user'          => $this->_user
         ];
     }
 }

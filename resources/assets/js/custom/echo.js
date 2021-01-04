@@ -51,7 +51,7 @@ class Echo extends Signalable {
                 self._removeUser(user);
             })
             .listen('.user-color-changed', (e) => {
-                self._setUserColor(e.user, e.color);
+                self._setUserColorById(e.user.id, e.color);
             });
     }
 
@@ -77,15 +77,15 @@ class Echo extends Signalable {
 
     /**
      * Gets a user by its name.
-     * @param name string The name of the user.
+     * @param id int The ID of the user.
      * @returns {null|object}
      */
-    getUserByName(name) {
+    getUserById(id) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
         let result = null;
 
         for (let i = 0; i < this._users.length; i++) {
-            if (this._users[i].name === name) {
+            if (this._users[i].id === id) {
                 result = this._users[i];
                 break;
             }
@@ -125,13 +125,10 @@ class Echo extends Signalable {
     _addUser(user) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let existingUser = this.getUserByName(user.name);
+        let existingUser = this.getUserById(user.id);
         if (existingUser === null) {
             // May be unset when not our own user, but this confuses handlebars
-            user.self = user.name === getState().getUserName();
-
-            // Make sure spaces and special characters don't cause issues
-            user.slug = convertToSlug(user.name);
+            user.self = user.id === getState().getUser().id;
 
             this._users.push(user);
             this.signal('user:add', {user: user});
@@ -149,7 +146,7 @@ class Echo extends Signalable {
 
         for (let i = 0; i < this._users.length; i++) {
             let userCandidate = this._users[i];
-            if (userCandidate.name === user.name) {
+            if (userCandidate.id === user.id) {
                 this._users.splice(i, 1);
                 this.signal('user:remove', {user: user});
                 // Remove all by the same user name
@@ -160,13 +157,22 @@ class Echo extends Signalable {
 
     /**
      * Sets a user's color.
-     * @param name The user's name.
-     * @param color The color of the user.
+     * @param id int The user's id.
+     * @param color string The new color of the user.
      * @private
      */
-    _setUserColor(name, color) {
-        let user = this.getUserByName(name);
-        user.color = color;
+    _setUserColorById(id, color) {
+        // Update by reference - do not use getUserById()
+        let user = null;
+
+        for (let i = 0; i < this._users.length; i++) {
+            if (this._users[i].id === id) {
+                user = this._users[i];
+                this._users[i].color = color;
+                break;
+            }
+        }
+
         this.signal('user:colorchanged', {user: user});
     }
 }

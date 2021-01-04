@@ -81,7 +81,7 @@ class MapObjectGroup extends Signalable {
     _shouldHandleEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        return e.user !== getState().getUserName();
+        return e.user.id !== getState().getUser().id;
     }
 
     /**
@@ -232,11 +232,11 @@ class MapObjectGroup extends Signalable {
      *
      * @param remoteMapObject {object}
      * @param layer {L.layer|null} Optional layer that was created already
-     * @param username {string|null} The user that created this object (if done from Echo)
+     * @param user {Object|null} The user that created this object (if done from Echo)
      * @return {MapObject}
      * @protected
      */
-    _loadMapObject(remoteMapObject, layer = null, username = null) {
+    _loadMapObject(remoteMapObject, layer = null, user = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this.findMapObjectById(remoteMapObject.id);
@@ -259,7 +259,7 @@ class MapObjectGroup extends Signalable {
         }
 
         // Show echo notification or not
-        this._showReceivedFromEcho(mapObject, username);
+        this._showReceivedFromEcho(mapObject, user);
 
         return mapObject;
     }
@@ -290,20 +290,19 @@ class MapObjectGroup extends Signalable {
     /**
      *
      * @param localMapObject {MapObject}
-     * @param username {string}
+     * @param user {object|null}
      * @protected
      */
-    _showReceivedFromEcho(localMapObject, username) {
+    _showReceivedFromEcho(localMapObject, user = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && getState().getUserName() !== username && username !== null) {
-            let userColor = getState().getEcho().getUserColor(username);
+        if (getState().isEchoEnabled() && user !== null && getState().getUser().id !== user.id) {
             let fontClass = '';
 
             // Must be a hex color
-            if (userColor.indexOf('#') === 0) {
+            if (user.color.indexOf('#') === 0) {
                 // Check if the user's color is 'dark' or 'light'. When it's dark we want a white font, black otherwise.
-                fontClass = isColorDark(userColor) ? 'text-white' : 'text-dark';
+                fontClass = isColorDark(user.color) ? 'text-white' : 'text-dark';
             }
 
             // @TODO Bit hacky?
@@ -316,9 +315,9 @@ class MapObjectGroup extends Signalable {
             if (layer !== null) {
                 let oldTooltip = layer.getTooltip();
 
-                let tooltip = layer.bindTooltip(username, {
+                let tooltip = layer.bindTooltip(user.name, {
                     permanent: true,
-                    className: `user_color_${convertToSlug(username)} ${fontClass}`,
+                    className: `user_color_${user.id} ${fontClass}`,
                     direction: 'top'
                 });
 
@@ -343,17 +342,17 @@ class MapObjectGroup extends Signalable {
     /**
      *
      * @param localMapObject {MapObject}
-     * @param username {string}
+     * @param user {Object}
      * @protected
      */
-    _showDeletedFromEcho(localMapObject, username) {
+    _showDeletedFromEcho(localMapObject, user) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && getState().getUserName() !== username && username !== null) {
+        if (getState().isEchoEnabled() && getState().getUser().id !== user.id && user.name !== null) {
             showInfoNotification(
                 lang.get('messages.echo_object_deleted_notification')
                     .replace('{object}', localMapObject.toString())
-                    .replace('{user}', username)
+                    .replace('{user}', user.name)
             );
         }
     }
