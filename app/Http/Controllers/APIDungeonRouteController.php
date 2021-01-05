@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
+use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonRouteAffixesColumnHandler;
@@ -22,6 +23,7 @@ use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
+use App\Models\PublishedState;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -246,17 +248,19 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PublishFormRequest $request
      * @param DungeonRoute $dungeonroute
      *
      * @return Response
      * @throws Exception
      */
-    function publish(Request $request, DungeonRoute $dungeonroute)
+    function publishedState(PublishFormRequest $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('publish', $dungeonroute);
 
-        $dungeonroute->published = 1;
+        $publishedState = $request->get('published_state', PublishedState::UNPUBLISHED);
+
+        $dungeonroute->published_state_id = PublishedState::where('name', $publishedState)->first()->id;
         $dungeonroute->save();
 
         return response()->noContent();

@@ -29,13 +29,13 @@ use Illuminate\Support\Facades\DB;
  * @property $dungeon_id int
  * @property $faction_id int
  * @property $team_id int
+ * @property $published_state_id int
  *
  * @property $clone_of string
  * @property $title string
  * @property $difficulty string
  * @property $seasonal_index int
  * @property $teeming boolean
- * @property $published boolean
  * @property $unlisted boolean
  * @property $demo boolean
  *

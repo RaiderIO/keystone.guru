@@ -33,7 +33,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'id' => 'editsidebar'
 ])
     @isset($show['sharing'])
-        @include('common.maps.share', ['model' => $model])
+        @include('common.maps.share', ['model' => $model, 'show' => $show])
     @endisset
 
     <!-- Tags -->
@@ -146,21 +146,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
                                         data-target="#route_settings_modal">
                                     <i class='fas fa-cog'></i> {{ __('Route settings') }}
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-
-                @isset($show['route-publish'])
-                <!-- Published state -->
-                    <div class="form-group mb-0">
-                        <div class="row">
-                            <div id="map_route_publish_container" class="col"
-{{--                                 data-toggle="tooltip"--}}
-{{--                                 title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"--}}
-                                 style="display: block">
-                                @include('common.dungeonroute.publish', ['model' => $model])
                             </div>
                         </div>
                     </div>

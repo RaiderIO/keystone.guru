@@ -5,6 +5,8 @@ class CommonDungeonroutePublish extends InlineCode {
     activate() {
         super.activate();
 
+        let self = this;
+
         let $select = $(this.options.publishSelector);
 
         let icons = {
@@ -21,9 +23,9 @@ class CommonDungeonroutePublish extends InlineCode {
                 let template = Handlebars.templates['select_option_icon_subtext_template'];
 
                 let option = jQuery('<option>', {
-                    value: index,
+                    value: publishState,
                     text: lang.get(`messages.publish_state_title_${publishState}`),
-                    selected: this.options.publishStateSelected === publishState
+                    selected: this.options.publishStateSelected === publishState ? 'selected' : false
                 });
 
                 let data = {
@@ -37,6 +39,30 @@ class CommonDungeonroutePublish extends InlineCode {
                 );
             }
         }
+
+        // When changed, trigger the change in the backend too
+        $select.bind('change', function () {
+            self._setPublished($(this).val());
+        });
+    }
+
+    /**
+     *
+     * @param value string Must be one of the available published states
+     * @private
+     */
+    _setPublished(value) {
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/publishedState`,
+            dataType: 'json',
+            data: {
+                published_state: value
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.route_published_state_changed'));
+            }
+        });
     }
 
     /**
