@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
 class APIDungeonRouteController extends Controller
@@ -112,6 +113,9 @@ class APIDungeonRouteController extends Controller
                 ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
         }
 
+        // Check if we're filtering based on team or not
+        $teamName = $teamName = $request->get('team_name', false);
+
         // If logged in
         if ($user !== null) {
             $mine = $request->get('mine', false);
@@ -131,7 +135,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Handle team if set
-            if ($teamName = $request->get('team_name', false)) {
+            if ($teamName) {
                 // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
                 $team = Team::where('name', $teamName)->firstOrFail();
@@ -149,6 +153,10 @@ class APIDungeonRouteController extends Controller
                     // Where the route is part of the requested team
                     $routes = $routes->where('team_id', $team->id);
                 }
+
+                $routes = $routes->whereIn('published_state_id',
+                    PublishedState::whereIn('name', [PublishedState::TEAM, PublishedState::WORLD])->get()->pluck('id')
+                );
 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
 //                    /** @var $query Builder */
 //                    $query->where('team_dungeon_routes.team_id', $teamId);
@@ -156,16 +164,17 @@ class APIDungeonRouteController extends Controller
             }
         }
 
-        if (!$mine) {
-            $routes = $routes->where('published', true);
+        // Only show routes that are visible to the world, unless we're viewing our own routes
+        if (!$mine && !$teamName) {
+            $routes = $routes->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
         }
-
-        // Visible here to allow proper usage of indexes
-        if ($available === 1 || $team !== null || $mine) {
-            $routes = $routes->visibleWithUnlisted();
-        } else {
-            $routes = $routes->visible();
-        }
+//
+//        // Visible here to allow proper usage of indexes
+//        if ($available === 1 || $team !== null || $mine) {
+//            $routes = $routes->visibleWithUnlisted();
+//        } else {
+//            $routes = $routes->visible();
+//        }
 
         $dtHandler = new DungeonRoutesDatatablesHandler($request);
 
@@ -260,24 +269,11 @@ class APIDungeonRouteController extends Controller
 
         $publishedState = $request->get('published_state', PublishedState::UNPUBLISHED);
 
+        if (!PublishedState::getAvailablePublishedStates($dungeonroute, Auth::user())->contains($publishedState)) {
+            abort(422, 'This sharing state is not available for this route');
+        }
+
         $dungeonroute->published_state_id = PublishedState::where('name', $publishedState)->first()->id;
-        $dungeonroute->save();
-
-        return response()->noContent();
-    }
-
-    /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     *
-     * @return Response
-     * @throws Exception
-     */
-    function unpublish(Request $request, DungeonRoute $dungeonroute)
-    {
-        $this->authorize('unpublish', $dungeonroute);
-
-        $dungeonroute->published = 0;
         $dungeonroute->save();
 
         return response()->noContent();

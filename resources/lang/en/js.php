@@ -61,11 +61,11 @@ return [
     'publish_state_title_team'   => 'Team only',
     'publish_state_subtext_team' => 'Only members of this route\'s assigned team may view this route',
 
-    'publish_state_title_world_with_link'   => 'Anyone with link',
-    'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route',
-
     'publish_state_title_world'   => 'Public',
     'publish_state_subtext_world' => 'Your route may be viewed by anyone and can be found on Keystone.guru',
+
+    'publish_state_title_world_with_link'   => 'Public with link',
+    'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route (Patreon only)',
 
 
     'publish_label'          => 'Publish',
@@ -151,35 +151,37 @@ return [
     'classification_label' => 'Classification',
     'edit_label'           => 'Edit',
 
-    'make_user_label'               => 'Make user',
-    'make_admin_label'              => 'Make admin',
-    'delete_user_label'             => 'Delete user',
+    'make_user_label'                                           => 'Make user',
+    'make_admin_label'                                          => 'Make admin',
+    'delete_user_label'                                         => 'Delete user',
 
     // Home page
-    'warnings_label'                => 'Warnings',
-    'category_label'                => 'Category',
-    'message_label'                 => 'Message',
+    'warnings_label'                                            => 'Warnings',
+    'category_label'                                            => 'Category',
+    'message_label'                                             => 'Message',
 
     // Dungeonroute edit
-    'settings_saved'                => 'Settings saved successfully',
-    'pull_gradient_settings_saved'  => 'Pull gradient settings saved successfully',
-    'route_published_state_changed' => 'Route sharing settings updated successfully',
-    'datatable_no_routes_in_table'  => 'No routes found',
+    'settings_saved'                                            => 'Settings saved successfully',
+    'pull_gradient_settings_saved'                              => 'Pull gradient settings saved successfully',
+    'route_published_state_changed'                             => 'Route sharing settings updated successfully',
+    'datatable_no_routes_in_table'                              => 'No routes found',
+    'cannot_change_sharing_settings_not_all_unkillables_killed' => 'Unable to change sharing settings: not all unskippable enemies have been killed',
 
     // Dungeonroute table
-    'vote'                          => 'vote',
-    'votes'                         => 'votes',
-    'route_delete_confirm'          => 'Are you sure you wish to delete this route?',
-    'route_delete_successful'       => 'Route deleted successfully',
-    'route_clone_successful'        => 'Route cloned successfully',
-    'route_publish_successful'      => 'Route published',
-    'route_unpublish_successful'    => 'Route unpublished',
-    'route_table_route_published'   => 'This route is published',
-    'route_table_route_unpublished' => 'This route is unpublished',
+    'vote'                                                      => 'vote',
+    'votes'                                                     => 'votes',
+    'route_delete_confirm'                                      => 'Are you sure you wish to delete this route?',
+    'route_delete_successful'                                   => 'Route deleted successfully',
+    'route_clone_successful'                                    => 'Route cloned successfully',
+    'sharing_label'                                             => 'Sharing',
+    'route_table_published_state_unpublished'                   => 'This route is unpublished',
+    'route_table_published_state_team'                          => 'This route is visible for all members of the team that is assigned to this route',
+    'route_table_published_state_world'                         => 'This route is visible for everyone',
+    'route_table_published_state_world_with_link'               => 'This route is visible for everyone that has the link',
 
     // Map
-    'intro_sidebar'                 => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_sidebar_toggle'          => 'You can use this button to hide or show the sidebar.',
+    'intro_sidebar'                                             => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_sidebar_toggle'                                      => 'You can use this button to hide or show the sidebar.',
 
     'intro_visibility_tools'                          => 'Here you can select different visualization options.',
     'intro_map_enemy_visuals'                         => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',

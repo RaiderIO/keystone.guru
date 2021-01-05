@@ -20,11 +20,11 @@ class DungeonRoutePolicy
     public function view(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
-        if (!$dungeonroute->published) {
+        if (!$dungeonroute->mayUserView($user)) {
             return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
         }
 
-        return $dungeonroute->published;
+        return true;
     }
 
     /**
@@ -37,7 +37,11 @@ class DungeonRoutePolicy
     public function embed(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
-        return $dungeonroute->published;
+        if (!$dungeonroute->mayUserView($user)) {
+            return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
+        }
+
+        return true;
     }
 
     /**
@@ -50,7 +54,7 @@ class DungeonRoutePolicy
     public function publish(User $user, DungeonRoute $dungeonroute)
     {
         if (!$dungeonroute->hasKilledAllUnskippables()) {
-            return $this->deny('Unable to publish route: not all unskippable enemies have been killed');
+            return $this->deny('Unable to change sharing settings: not all unskippable enemies have been killed');
         }
         // Only authors or if the user is an admin
         return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin'));

@@ -22,11 +22,18 @@ class CommonDungeonroutePublish extends InlineCode {
 
                 let template = Handlebars.templates['select_option_icon_subtext_template'];
 
-                let option = jQuery('<option>', {
+                let optionData = {
                     value: publishState,
                     text: lang.get(`messages.publish_state_title_${publishState}`),
-                    selected: this.options.publishStateSelected === publishState ? 'selected' : false
-                });
+                    selected: this.options.publishStateSelected === publishState ? 'selected' : false,
+                };
+
+                // If the user cannot activate an option for some reason, disable it but keep it visible
+                if (!this.options.publishStatesAvailable.includes(publishState)) {
+                    optionData.disabled = true;
+                }
+                let option = jQuery('<option>', optionData);
+
 
                 let data = {
                     title: lang.get(`messages.publish_state_title_${publishState}`),

@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +57,7 @@ use Illuminate\Support\Facades\DB;
  * @property User $author
  * @property MDTImport $mdtImport
  * @property Team $team
+ * @property PublishedState $publishedState
  *
  * @property Collection $specializations
  * @property Collection $classes
@@ -96,28 +96,17 @@ class DungeonRoute extends Model
     use Reportable;
     use HasTags;
 
-    const PUBLISHED_STATE_UNPUBLISHED = 'unpublished';
-    const PUBLISHED_STATE_TEAM = 'team';
-    const PUBLISHED_STATE_WORLD = 'world';
-    const PUBLISHED_STATE_WORLD_WITH_LINK = 'world_with_link';
-
-    const ALL_PUBLISHED_STATES = [
-        'Unpublished'             => self::PUBLISHED_STATE_UNPUBLISHED,
-        'Team only'               => self::PUBLISHED_STATE_TEAM,
-        'World visible'           => self::PUBLISHED_STATE_WORLD,
-        'World visible with link' => self::PUBLISHED_STATE_WORLD_WITH_LINK,
-    ];
-
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count', 'has_thumbnail', 'views', 'has_team'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'has_thumbnail', 'views', 'has_team', 'published'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
                          'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
-                         'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at'];
+                         'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at',
+                         'published_state_id', 'published_state'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -374,17 +363,25 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return string
+     */
+    public function getPublishedAttribute(): string
+    {
+        return $this->publishedState->name;
+    }
+
+    /**
      * @return bool
      */
-    public function getHasTeamAttribute()
+    public function getHasTeamAttribute(): bool
     {
         return $this->team_id > 0;
     }
 
     /**
-     * @return double
+     * @return float
      */
-    public function getAvgRatingAttribute()
+    public function getAvgRatingAttribute(): float
     {
         $avg = 1;
         if (!$this->ratings->isEmpty()) {
@@ -401,7 +398,7 @@ class DungeonRoute extends Model
     /**
      * @return int
      */
-    public function getViewsAttribute()
+    public function getViewsAttribute(): int
     {
         return $this->pageviews->count();
     }
@@ -409,7 +406,7 @@ class DungeonRoute extends Model
     /**
      * @return integer
      */
-    public function getRatingCountAttribute()
+    public function getRatingCountAttribute(): int
     {
         return $this->ratings->count();
     }
@@ -417,15 +414,16 @@ class DungeonRoute extends Model
     /**
      * @return bool
      */
-    public function getHasThumbnailAttribute()
+    public function getHasThumbnailAttribute(): bool
     {
         return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
     }
 
     /**
      * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
+     * @return int
      */
-    public function getEnemyForces()
+    public function getEnemyForces(): int
     {
         // Build an ID => amount array of NPCs we've killed in this route
         /** @var Collection|Npc[] $npcs */
@@ -476,7 +474,7 @@ class DungeonRoute extends Model
     /**
      * @return array The setup as used in the front-end.
      */
-    public function getSetupAttribute()
+    public function getSetupAttribute(): array
     {
         return [
             'faction'         => $this->faction,
@@ -487,16 +485,41 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @param User $user
+     * @param User|null $user
+     *
      * @return bool
      */
-    public function mayUserEdit(?User $user)
+    public function mayUserView(?User $user): bool
+    {
+        $result = false;
+        switch ($this->publishedState->name) {
+            case PublishedState::UNPUBLISHED:
+                $result = $this->mayUserEdit($user);
+                break;
+            case PublishedState::TEAM:
+                $result = $this->team !== null && $this->team->isUserMember($user);
+                break;
+            case PublishedState::WORLD_WITH_LINK:
+            case PublishedState::WORLD:
+                $result = true;
+                break;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
+    public function mayUserEdit(?User $user): bool
     {
         if ($user === null) {
             return $this->isSandbox();
         } else {
-            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin')
-                || ($this->team !== null && $this->team->isUserCollaborator($user));
+            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin') ||
+                // Route is part of a team, user is a collaborator, and route is not unpublished
+                ($this->team !== null && $this->team->isUserCollaborator($user) && $this->publishedState->name !== PublishedState::UNPUBLISHED);
         }
     }
 
@@ -506,7 +529,7 @@ class DungeonRoute extends Model
      * @param int $userId
      * @return bool
      */
-    public function claim(int $userId)
+    public function claim(int $userId): bool
     {
         if ($result = $this->isSandbox()) {
             $this->author_id = $userId;
@@ -519,7 +542,7 @@ class DungeonRoute extends Model
     /**
      * @return bool True if this route is in sandbox mode, false if it is not.
      */
-    public function isSandbox()
+    public function isSandbox(): bool
     {
         return $this->author_id === -1 && $this->expires_at !== null;
     }
@@ -531,7 +554,7 @@ class DungeonRoute extends Model
      * @param SeasonService $seasonService
      * @return bool
      */
-    public function saveFromRequest(Request $request, SeasonService $seasonService)
+    public function saveFromRequest(Request $request, SeasonService $seasonService): bool
     {
         $result = false;
 

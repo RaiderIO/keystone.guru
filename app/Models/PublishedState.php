@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property $id int
@@ -40,6 +42,27 @@ class PublishedState extends Model
     public function dungeonroutes()
     {
         return $this->hasMany('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @param User|null $user
+     * @return Collection|string[]
+     */
+    public static function getAvailablePublishedStates(DungeonRoute $dungeonRoute, ?User $user = null): Collection
+    {
+        $result = new Collection();
+        $result->push(PublishedState::UNPUBLISHED);
+        $result->push(PublishedState::TEAM);
+
+
+        if ($user !== null && $user->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
+            $result->push(PublishedState::WORLD_WITH_LINK);
+        }
+
+        $result->push(PublishedState::WORLD);
+
+        return $result;
     }
 
     public static function boot()
