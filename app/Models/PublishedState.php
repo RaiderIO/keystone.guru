@@ -60,7 +60,10 @@ class PublishedState extends Model
             $result->push(PublishedState::WORLD_WITH_LINK);
         }
 
-        $result->push(PublishedState::WORLD);
+        // Only active dungeons may be made public
+        if ($dungeonRoute->dungeon->active) {
+            $result->push(PublishedState::WORLD);
+        }
 
         return $result;
     }

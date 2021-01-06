@@ -316,16 +316,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
             @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
 
-            @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
-                <h3>
-                    {{ __('Sharing') }}
-                </h3>
-                <div class='form-group'>
-                    {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
-                    {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
-
             @if(Auth::user()->hasRole('admin'))
                 <h3>
                     {{ __('Admin') }}

@@ -56,9 +56,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         </div>
     @endisset
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('dungeon_id', __('Dungeon')) !!}
-        {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->orderBy('name')->pluck('name', 'id')->toArray(), 0,
-            ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control selectpicker']) !!}
+        @include('common.dungeon.select', ['id' => 'dungeonroute_search_dungeon_id', 'showAll' => true, 'required' => false])
     </div>
     <div class="col-lg pl-1 pr-1">
         {!! Form::label('affixes[]', __('Affixes')) !!}

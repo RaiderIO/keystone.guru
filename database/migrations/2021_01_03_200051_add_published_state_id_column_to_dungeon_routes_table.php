@@ -18,7 +18,8 @@ class AddPublishedStateIdColumnToDungeonRoutesTable extends Migration
             $table->integer('published_state_id')->default(1)->after('team_id');
         });
 
-        DB::update('update dungeon_routes SET published_state_id = 3 WHERE published = true;');
+        DB::update('update dungeon_routes SET published_state_id = 3 WHERE unlisted = true AND published = true;');
+        DB::update('update dungeon_routes SET published_state_id = 4 WHERE unlisted = false AND published = true;');
     }
 
     /**

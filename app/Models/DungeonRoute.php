@@ -35,7 +35,6 @@ use Illuminate\Support\Facades\DB;
  * @property $difficulty string
  * @property $seasonal_index int
  * @property $teeming boolean
- * @property $unlisted boolean
  * @property $demo boolean
  *
  * @property $setup array
@@ -330,29 +329,12 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Scope a query to only include active dungeons.
+     * Scope a query to only include active dungeons and non-demo routes.
      *
      * @param Builder $query
      * @return Builder
      */
     public function scopeVisible($query)
-    {
-        return $query->where('unlisted', false)
-            ->where('demo', false)
-            ->whereHas('dungeon', function ($dungeon)
-            {
-                /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $dungeon->active();
-            });
-    }
-
-    /**
-     * Scope a query to only include active dungeons but shows unlisted routes
-     *
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopeVisibleWithUnlisted($query)
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', function ($dungeon)
@@ -578,9 +560,6 @@ class DungeonRoute extends Model
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());
-            if ($user->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
-                $this->unlisted = intval($request->get('unlisted', 0)) > 0;
-            }
             if ($user->hasRole('admin')) {
                 $this->demo = intval($request->get('demo', 0)) > 0;
             }

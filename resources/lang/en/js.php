@@ -59,7 +59,7 @@ return [
     'publish_state_subtext_unpublished' => 'Only you may view this route',
 
     'publish_state_title_team'   => 'Team only',
-    'publish_state_subtext_team' => 'Only members of this route\'s assigned team may view this route',
+    'publish_state_subtext_team' => 'Only members of teams you are in may view this route',
 
     'publish_state_title_world'   => 'Public',
     'publish_state_subtext_world' => 'Your route may be viewed by anyone and can be found on Keystone.guru',
@@ -175,7 +175,7 @@ return [
     'route_clone_successful'                                    => 'Route cloned successfully',
     'sharing_label'                                             => 'Sharing',
     'route_table_published_state_unpublished'                   => 'This route is unpublished',
-    'route_table_published_state_team'                          => 'This route is visible for all members of the team that is assigned to this route',
+    'route_table_published_state_team'                          => 'This route is visible for all members of teams you are in',
     'route_table_published_state_world'                         => 'This route is visible for everyone',
     'route_table_published_state_world_with_link'               => 'This route is visible for everyone that has the link',
 

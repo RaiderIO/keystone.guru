@@ -168,13 +168,11 @@ class APIDungeonRouteController extends Controller
         if (!$mine && !$teamName) {
             $routes = $routes->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
         }
-//
-//        // Visible here to allow proper usage of indexes
-//        if ($available === 1 || $team !== null || $mine) {
-//            $routes = $routes->visibleWithUnlisted();
-//        } else {
-//            $routes = $routes->visible();
-//        }
+
+        // Visible here to allow proper usage of indexes
+        if (!$mine) {
+            $routes = $routes->visible();
+        }
 
         $dtHandler = new DungeonRoutesDatatablesHandler($request);
 
