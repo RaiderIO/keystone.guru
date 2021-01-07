@@ -44,18 +44,10 @@ class Update extends Command
     {
         $environment = $this->argument('environment');
 
-        // Composer is fine though
-        $this->shell([
-            'composer install',
-        ]);
-
         // Regenerate IDE helper
         $this->call('clear-compiled');
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
-
-        // Prevent root warning from blocking the entire thing
-        $this->shell('export COMPOSER_ALLOW_SUPERUSER=1; composer show; composer dump-autoload');
 
         // Give dump-autoload time to execute
         sleep(3);

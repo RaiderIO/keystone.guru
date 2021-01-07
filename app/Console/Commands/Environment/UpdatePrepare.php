@@ -41,6 +41,14 @@ class UpdatePrepare extends Command
             'npm audit fix',
         ]);
 
+        // Install composer here - a next command can then have the updated definitions of the autoloader when called
+        // Any code after this will use the old definitions and get class not found errors
+        $this->shell([
+            'composer install',
+            // Prevent root warning from blocking the entire thing
+            'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload'
+        ]);
+
         return 0;
     }
 }
