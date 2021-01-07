@@ -54,8 +54,11 @@ class Update extends Command
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
 
-        //
-        $this->shell('composer dump-autoload');
+        // Prevent root warning from blocking the entire thing
+        $this->shell('export COMPOSER_ALLOW_SUPERUSER=1; composer show; composer dump-autoload');
+
+        // Give dump-autoload time to execute
+        sleep(3);
 
         $this->call('horizon:publish');
 
