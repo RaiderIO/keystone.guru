@@ -2,7 +2,7 @@
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
 $numUserReports = \App\Models\UserReport::where('status', 0)->count();
 /** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
-$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published', true)->orderBy('dungeon_id')->get();
+$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->orderBy('dungeon_id')->get();
 $dungeons = \App\Models\Dungeon::all();
 
 $user = \Illuminate\Support\Facades\Auth::user();
