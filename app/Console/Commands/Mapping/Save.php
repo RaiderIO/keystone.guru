@@ -118,7 +118,7 @@ class Save extends Command
                 $demoRoute->setAppends([]);
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
-                $demoRoute->setHidden(['id', 'thumbnail_updated_at']);
+                $demoRoute->setHidden(['id', 'thumbnail_updated_at', 'published', 'unlisted']);
                 $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                                   'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
                                   'pridefulenemies', 'mapicons']);
