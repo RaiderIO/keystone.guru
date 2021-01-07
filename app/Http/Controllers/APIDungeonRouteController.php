@@ -32,7 +32,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
 class APIDungeonRouteController extends Controller
@@ -196,8 +195,8 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteFormRequest $request
-     * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
+     * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
@@ -221,6 +220,8 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
+     *
+     * @return Response
      */
     function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
@@ -392,7 +393,7 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws Exception
      */
-    function data(Request $request, $publickey)
+    function data(Request $request, string $publickey)
     {
         // Init the fields we should get for this request
         $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
