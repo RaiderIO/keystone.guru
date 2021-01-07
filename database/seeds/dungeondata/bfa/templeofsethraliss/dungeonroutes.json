@@ -6,11 +6,11 @@
         "dungeon_id": 19,
         "faction_id": 1,
         "team_id": -1,
+        "published_state_id": 1,
         "title": "4.12 TOS by Dratnos",
         "difficulty": "Casual",
         "seasonal_index": 1,
         "teeming": 0,
-        "published": 1,
         "unlisted": 1,
         "demo": 1,
         "pull_gradient": "",
@@ -99,13 +99,13 @@
                 "index": 1,
                 "killzoneenemies": [
                     {
+                        "enemy_id": 645
+                    },
+                    {
                         "enemy_id": 646
                     },
                     {
                         "enemy_id": 647
-                    },
-                    {
-                        "enemy_id": 645
                     }
                 ]
             },
@@ -132,16 +132,16 @@
                         "enemy_id": 581
                     },
                     {
-                        "enemy_id": 583
-                    },
-                    {
                         "enemy_id": 582
                     },
                     {
-                        "enemy_id": 3069
+                        "enemy_id": 583
                     },
                     {
                         "enemy_id": 3068
+                    },
+                    {
+                        "enemy_id": 3069
                     }
                 ]
             },
@@ -195,10 +195,10 @@
                         "enemy_id": 613
                     },
                     {
-                        "enemy_id": 621
+                        "enemy_id": 618
                     },
                     {
-                        "enemy_id": 618
+                        "enemy_id": 621
                     },
                     {
                         "enemy_id": 622
@@ -216,10 +216,10 @@
                         "enemy_id": 612
                     },
                     {
-                        "enemy_id": 620
+                        "enemy_id": 617
                     },
                     {
-                        "enemy_id": 617
+                        "enemy_id": 620
                     }
                 ]
             },
@@ -231,19 +231,19 @@
                 "index": 9,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 615
+                        "enemy_id": 610
+                    },
+                    {
+                        "enemy_id": 611
                     },
                     {
                         "enemy_id": 614
                     },
                     {
+                        "enemy_id": 615
+                    },
+                    {
                         "enemy_id": 616
-                    },
-                    {
-                        "enemy_id": 610
-                    },
-                    {
-                        "enemy_id": 611
                     }
                 ]
             },
@@ -324,10 +324,10 @@
                 "index": 15,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 631
+                        "enemy_id": 630
                     },
                     {
-                        "enemy_id": 630
+                        "enemy_id": 631
                     },
                     {
                         "enemy_id": 632
@@ -396,10 +396,10 @@
                 "index": 20,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3414
+                        "enemy_id": 3413
                     },
                     {
-                        "enemy_id": 3413
+                        "enemy_id": 3414
                     }
                 ]
             },
@@ -423,10 +423,10 @@
                 "index": 22,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 642
+                        "enemy_id": 641
                     },
                     {
-                        "enemy_id": 641
+                        "enemy_id": 642
                     }
                 ]
             },
@@ -438,10 +438,10 @@
                 "index": 23,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 644
+                        "enemy_id": 643
                     },
                     {
-                        "enemy_id": 643
+                        "enemy_id": 644
                     }
                 ]
             },
@@ -456,13 +456,13 @@
                         "enemy_id": 163
                     },
                     {
-                        "enemy_id": 640
+                        "enemy_id": 638
                     },
                     {
                         "enemy_id": 639
                     },
                     {
-                        "enemy_id": 638
+                        "enemy_id": 640
                     }
                 ]
             }

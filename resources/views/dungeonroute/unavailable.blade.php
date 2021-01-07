@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="text-center">
-        {{ __('This route is unpublished. Ask the author of the route to publish the route before you can view it.') }}
+        {{ __('You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.') }}
     </div>
 @endsection
 

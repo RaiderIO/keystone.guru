@@ -313,8 +313,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::post('/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
                 Route::delete('/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
 
-                Route::post('/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
-                Route::post('/unpublish', 'APIDungeonRouteController@unpublish')->name('api.dungeonroute.unpublish');
+                Route::post('/publishedState', 'APIDungeonRouteController@publishedState')->name('api.dungeonroute.publishedstate');
 
                 Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
                 Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');

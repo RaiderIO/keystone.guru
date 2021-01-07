@@ -33,7 +33,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'id' => 'editsidebar'
 ])
     @isset($show['sharing'])
-        @include('common.maps.share', ['model' => $model])
+        @include('common.maps.share', ['model' => $model, 'show' => $show])
     @endisset
 
     <!-- Tags -->
@@ -145,29 +145,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
                                 <button class="btn btn-info col" data-toggle="modal"
                                         data-target="#route_settings_modal">
                                     <i class='fas fa-cog'></i> {{ __('Route settings') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-
-                @isset($show['route-publish'])
-                <!-- Published state -->
-                    <div class="form-group mb-0">
-                        <div class="row">
-                            <div id="map_route_publish_container" class="col"
-                                 data-toggle="tooltip"
-                                 title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"
-                                 style="display: block">
-                                <button id="map_route_publish"
-                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
-                                        disabled>
-                                    <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
-                                </button>
-                                <button id="map_route_unpublish"
-                                        class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                                    <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
                                 </button>
                             </div>
                         </div>
@@ -338,16 +315,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 
             @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
             @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
-
-            @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
-                <h3>
-                    {{ __('Sharing') }}
-                </h3>
-                <div class='form-group'>
-                    {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
-                    {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
 
             @if(Auth::user()->hasRole('admin'))
                 <h3>
