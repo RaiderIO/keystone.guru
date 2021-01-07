@@ -228,7 +228,6 @@ class DungeonrouteTable extends InlineCode {
                 'data': 'title',
                 'name': 'title',
                 'render': function (data, type, row, meta) {
-                    console.log(data);
                     let published = '';
                     switch (row.published) {
                         case 'unpublished':
