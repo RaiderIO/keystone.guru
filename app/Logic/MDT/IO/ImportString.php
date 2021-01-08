@@ -280,10 +280,11 @@ class ImportString
                             }
 
                             if ($mdtEnemy === null) {
-                                throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
+                                $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                                     sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
                                     ['details' => __('This indicates MDT has mapped an enemy that is not known in Keystone.guru yet.')]
-                                );
+                                ));
+                                continue;
                             }
 
                             // We now know the MDT enemy that the user was trying to import. However, we need to know
@@ -298,10 +299,11 @@ class ImportString
                             }
 
                             if ($enemy === null) {
-                                throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
+                                $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                                     sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC %s (id: %s).'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
                                     ['details' => __('This indicates that your route kills an enemy of which its NPC is known to Keystone.guru, but Keystone.guru doesn\'t have that enemy mapped yet.')]
-                                );
+                                ));
+                                continue;
                             }
 
                             // Don't add any teeming enemies
