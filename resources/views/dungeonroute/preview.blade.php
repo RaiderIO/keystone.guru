@@ -29,6 +29,7 @@ $dungeon->load('floors');
         'defaultZoom' => 1,
         'floorId' => $floorId,
         'showAttribution' => false,
+        'zoomToContents' => true,
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',

@@ -274,6 +274,19 @@ function isNumeric(str) {
         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
+/**
+ * @param latLngs
+ * @see https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
+ * @return {object}
+ */
+function getCenteroid(latLngs) {
+    let reduce = latLngs.reduce(function (x, y) {
+        return [x[0] + y[0] / latLngs.length, x[1] + y[1] / latLngs.length]
+    }, [0, 0]);
+
+    return L.latLng(reduce[0], reduce[1]);
+}
+
 
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);

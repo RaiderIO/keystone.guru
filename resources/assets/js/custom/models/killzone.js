@@ -513,7 +513,7 @@ class KillZone extends MapObject {
                     console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
 
                     // Calculate a rough center of our bounds
-                    let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
+                    let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : getCenteroid(latLngs);
                     let closestFloorSwitchMarker = null;
                     let closestDistance = 999999999999999;
 
@@ -552,20 +552,6 @@ class KillZone extends MapObject {
         }
 
         return latLngs;
-    }
-
-    /**
-     * Get the center LatLng of this killzone's layer
-     * @param arr
-     * @see https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
-     * @return {object}
-     */
-    _getLayerCenteroid(arr) {
-        let reduce = arr.reduce(function (x, y) {
-            return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
-        }, [0, 0]);
-
-        return L.latLng(reduce[0], reduce[1]);
     }
 
     /**
@@ -809,14 +795,6 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Get a latlng object describing the centeroid of the enemies layer.
-     * @returns {object}
-     */
-    getLayerCenteroid() {
-        return this._getLayerCenteroid(this._getVisibleEntitiesLatLngs());
-    }
-
-    /**
      * The index of this KillZone.
      * @returns {number}
      */
@@ -851,7 +829,7 @@ class KillZone extends MapObject {
         let result = false;
         console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
-            result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
+            result = this.map.leafletMap.getBounds().contains(getCenteroid(this._getVisibleEntitiesLatLngs()))
         }
         return result;
     }
