@@ -6,11 +6,11 @@
         "dungeon_id": 24,
         "faction_id": 1,
         "team_id": -1,
+        "published_state_id": 4,
         "title": "4.12 YARD by Dratnos",
         "difficulty": "Casual",
         "seasonal_index": 1,
         "teeming": 0,
-        "published": 1,
         "unlisted": 1,
         "demo": 1,
         "pull_gradient": "",
@@ -172,10 +172,7 @@
                 "index": 1,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4217
-                    },
-                    {
-                        "enemy_id": 4216
+                        "enemy_id": 4090
                     },
                     {
                         "enemy_id": 4122
@@ -184,10 +181,13 @@
                         "enemy_id": 4123
                     },
                     {
-                        "enemy_id": 4090
+                        "enemy_id": 4215
                     },
                     {
-                        "enemy_id": 4215
+                        "enemy_id": 4216
+                    },
+                    {
+                        "enemy_id": 4217
                     }
                 ]
             },
@@ -202,10 +202,10 @@
                         "enemy_id": 4149
                     },
                     {
-                        "enemy_id": 4151
+                        "enemy_id": 4150
                     },
                     {
-                        "enemy_id": 4150
+                        "enemy_id": 4151
                     }
                 ]
             },
@@ -217,7 +217,7 @@
                 "index": 3,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4087
+                        "enemy_id": 4084
                     },
                     {
                         "enemy_id": 4085
@@ -226,13 +226,13 @@
                         "enemy_id": 4086
                     },
                     {
+                        "enemy_id": 4087
+                    },
+                    {
                         "enemy_id": 4088
                     },
                     {
                         "enemy_id": 4089
-                    },
-                    {
-                        "enemy_id": 4084
                     }
                 ]
             },
@@ -244,16 +244,16 @@
                 "index": 4,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4079
-                    },
-                    {
                         "enemy_id": 4072
                     },
                     {
-                        "enemy_id": 4082
+                        "enemy_id": 4079
                     },
                     {
                         "enemy_id": 4081
+                    },
+                    {
+                        "enemy_id": 4082
                     }
                 ]
             },
@@ -265,16 +265,16 @@
                 "index": 5,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4075
+                        "enemy_id": 4071
                     },
                     {
-                        "enemy_id": 4071
+                        "enemy_id": 4073
                     },
                     {
                         "enemy_id": 4074
                     },
                     {
-                        "enemy_id": 4073
+                        "enemy_id": 4075
                     }
                 ]
             },
@@ -286,10 +286,10 @@
                 "index": 6,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4069
+                        "enemy_id": 4065
                     },
                     {
-                        "enemy_id": 4065
+                        "enemy_id": 4069
                     }
                 ]
             },
@@ -325,10 +325,10 @@
                 "index": 9,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4040
+                        "enemy_id": 4039
                     },
                     {
-                        "enemy_id": 4039
+                        "enemy_id": 4040
                     }
                 ]
             },
@@ -358,13 +358,13 @@
                 "index": 11,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4116
+                        "enemy_id": 4114
                     },
                     {
                         "enemy_id": 4115
                     },
                     {
-                        "enemy_id": 4114
+                        "enemy_id": 4116
                     }
                 ]
             },
@@ -376,19 +376,19 @@
                 "index": 12,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4109
-                    },
-                    {
-                        "enemy_id": 4108
+                        "enemy_id": 4106
                     },
                     {
                         "enemy_id": 4107
                     },
                     {
-                        "enemy_id": 4110
+                        "enemy_id": 4108
                     },
                     {
-                        "enemy_id": 4106
+                        "enemy_id": 4109
+                    },
+                    {
+                        "enemy_id": 4110
                     }
                 ]
             },
@@ -412,13 +412,13 @@
                 "index": 14,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4101
+                        "enemy_id": 4099
                     },
                     {
                         "enemy_id": 4100
                     },
                     {
-                        "enemy_id": 4099
+                        "enemy_id": 4101
                     }
                 ]
             },
@@ -433,10 +433,10 @@
                         "enemy_id": 4103
                     },
                     {
-                        "enemy_id": 4105
+                        "enemy_id": 4104
                     },
                     {
-                        "enemy_id": 4104
+                        "enemy_id": 4105
                     }
                 ]
             },
@@ -463,10 +463,10 @@
                 "index": 17,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3929
+                        "enemy_id": 3928
                     },
                     {
-                        "enemy_id": 3928
+                        "enemy_id": 3929
                     }
                 ]
             },
@@ -478,16 +478,13 @@
                 "index": 18,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3982
-                    },
-                    {
                         "enemy_id": 3960
                     },
                     {
-                        "enemy_id": 4037
+                        "enemy_id": 3981
                     },
                     {
-                        "enemy_id": 3981
+                        "enemy_id": 3982
                     },
                     {
                         "enemy_id": 3983
@@ -497,6 +494,9 @@
                     },
                     {
                         "enemy_id": 4036
+                    },
+                    {
+                        "enemy_id": 4037
                     }
                 ]
             },
@@ -523,13 +523,13 @@
                         "enemy_id": 3994
                     },
                     {
-                        "enemy_id": 3997
-                    },
-                    {
                         "enemy_id": 3995
                     },
                     {
                         "enemy_id": 3996
+                    },
+                    {
+                        "enemy_id": 3997
                     }
                 ]
             },
@@ -541,16 +541,16 @@
                 "index": 21,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3998
-                    },
-                    {
-                        "enemy_id": 3999
+                        "enemy_id": 3992
                     },
                     {
                         "enemy_id": 3993
                     },
                     {
-                        "enemy_id": 3992
+                        "enemy_id": 3998
+                    },
+                    {
+                        "enemy_id": 3999
                     },
                     {
                         "enemy_id": 4009
@@ -577,16 +577,16 @@
                 "index": 23,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4146
-                    },
-                    {
-                        "enemy_id": 4145
+                        "enemy_id": 4143
                     },
                     {
                         "enemy_id": 4144
                     },
                     {
-                        "enemy_id": 4143
+                        "enemy_id": 4145
+                    },
+                    {
+                        "enemy_id": 4146
                     },
                     {
                         "enemy_id": 4147
@@ -604,10 +604,10 @@
                         "enemy_id": 4140
                     },
                     {
-                        "enemy_id": 4142
+                        "enemy_id": 4141
                     },
                     {
-                        "enemy_id": 4141
+                        "enemy_id": 4142
                     }
                 ]
             },
@@ -619,13 +619,13 @@
                 "index": 25,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4139
-                    },
-                    {
                         "enemy_id": 4137
                     },
                     {
                         "enemy_id": 4138
+                    },
+                    {
+                        "enemy_id": 4139
                     }
                 ]
             },
@@ -649,13 +649,13 @@
                 "index": 27,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4156
-                    },
-                    {
                         "enemy_id": 4154
                     },
                     {
                         "enemy_id": 4155
+                    },
+                    {
+                        "enemy_id": 4156
                     }
                 ]
             },
@@ -667,13 +667,13 @@
                 "index": 28,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4159
-                    },
-                    {
                         "enemy_id": 4157
                     },
                     {
                         "enemy_id": 4158
+                    },
+                    {
+                        "enemy_id": 4159
                     }
                 ]
             },

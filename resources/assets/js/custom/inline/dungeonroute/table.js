@@ -155,9 +155,11 @@ class DungeonrouteTable extends InlineCode {
             $publishBtns.unbind('click');
             $publishBtns.bind('click', self._publishDungeonRouteClicked);
 
-            let $unpublishBtns = $('.dungeonroute-unpublish');
-            $unpublishBtns.unbind('click');
-            $unpublishBtns.bind('click', self._unpublishDungeonRouteClicked);
+            let $publishedStateBtns = $('.dungeonroute-publishedstate');
+            $publishedStateBtns.unbind('click');
+            $publishedStateBtns.bind('click', function (clickEvent) {
+                self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
+            });
 
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click');
@@ -227,10 +229,19 @@ class DungeonrouteTable extends InlineCode {
                 'name': 'title',
                 'render': function (data, type, row, meta) {
                     let published = '';
-                    if (row.published === 1) {
-                        published = `<i class="fa fa-plane-departure text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_route_published')}"></i>`
-                    } else {
-                        published = `<i class="fa fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_table_route_unpublished')}"></i>`
+                    switch (row.published) {
+                        case 'unpublished':
+                            published = `<i class="fas fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_unpublished')}"></i>`
+                            break;
+                        case 'team':
+                            published = `<i class="fas fa-users text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_team')}"></i>`
+                            break;
+                        case 'world':
+                            published = `<i class="fas fa-globe text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world')}"></i>`
+                            break;
+                        case 'world_with_link':
+                            published = `<i class="fas fa-link text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world_with_link')}"></i>`
+                            break;
                     }
                     return `${published} ${row.title}`;
                 }
@@ -333,7 +344,7 @@ class DungeonrouteTable extends InlineCode {
 
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
-                        published: row.published === 1
+                        published: row.published
                     }));
                 }
             },
@@ -380,45 +391,23 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Publishes a dungeon route.
-     * @param clickEvent
+     * Changes the publish state of a dungeon route.
+     * @param publicKey string
+     * @param value string
      * @private
      */
-    _publishDungeonRouteClicked(clickEvent) {
-        let publicKey = $(clickEvent.target).data('publickey');
+    _changePublishState(publicKey, value) {
+        console.log(publicKey, value);
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${publicKey}/publish`,
+            url: `/ajax/${publicKey}/publishedState`,
             data: {
-                published: 1
+                published_state: value
             },
             dataType: 'json',
             success: function (json) {
-                showSuccessNotification(lang.get('messages.route_publish_successful'));
-                // Refresh the table
-                $('#dungeonroute_filter').trigger('click');
-            }
-        });
-    }
-
-    /**
-     * Unpublishes a dungeon route.
-     * @param clickEvent
-     * @private
-     */
-    _unpublishDungeonRouteClicked(clickEvent) {
-        let publicKey = $(clickEvent.target).data('publickey');
-
-        $.ajax({
-            type: 'POST',
-            url: `/ajax/${publicKey}/publish`,
-            data: {
-                published: 0
-            },
-            dataType: 'json',
-            success: function (json) {
-                showSuccessNotification(lang.get('messages.route_unpublish_successful'));
+                showSuccessNotification(lang.get('messages.route_published_state_changed'));
                 // Refresh the table
                 $('#dungeonroute_filter').trigger('click');
             }

@@ -62,22 +62,6 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         </h3>
         @include('common.group.composition')
 
-
-        @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES))
-            <h3>
-                {{ __('Sharing') }}
-            </h3>
-            <div class="form-group">
-                <label for="unlisted">
-                    {{ __('Private') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('When checked, only people with the link can view your route. It will not be listed in the Routes page.')
-                 }}"></i>
-                </label>
-                {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
-            </div>
-        @endif
-
         @if(Auth::user()->hasRole('admin'))
             <h3>
                 {{ __('Admin') }}

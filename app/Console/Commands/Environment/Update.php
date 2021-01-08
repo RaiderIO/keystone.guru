@@ -44,18 +44,13 @@ class Update extends Command
     {
         $environment = $this->argument('environment');
 
-        // Composer is fine though
-        $this->shell([
-            'composer install',
-        ]);
-
         // Regenerate IDE helper
         $this->call('clear-compiled');
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
 
-        //
-        $this->shell('composer dump-autoload');
+        // Give dump-autoload time to execute
+        sleep(3);
 
         $this->call('horizon:publish');
 

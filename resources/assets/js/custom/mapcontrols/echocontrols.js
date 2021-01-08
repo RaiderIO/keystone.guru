@@ -139,7 +139,9 @@ class EchoControls extends MapControl {
     _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let styleID = 'style_color_' + user.name;
+        console.log(user);
+
+        let styleID = 'style_color_' + user.id;
         // Delete any previous styles
         $('#' + styleID).remove();
 
@@ -148,13 +150,13 @@ class EchoControls extends MapControl {
             .prop('type', 'text/css')
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html("\
-            .user_color_" + convertToSlug(user.name) + " {\
-                background-color: " + getState().getEcho().getUserColor(user.name) + " !important\
+            .user_color_" + user.id + " {\
+                background-color: " + user.color + " !important\
             }")
             .appendTo('head');
 
         // Update the text color depending on the luminance
-        let $user = $(`.echo_user_${convertToSlug(user.name)}`);
+        let $user = $(`.echo_user_${user.id}`);
         if (isColorDark(user.color)) {
             $user.addClass('text-white');
             $user.removeClass('text-dark');

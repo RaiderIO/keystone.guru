@@ -6,11 +6,11 @@
         "dungeon_id": 18,
         "faction_id": 2,
         "team_id": -1,
+        "published_state_id": 4,
         "title": "4.12 SIEGE by Dratnos",
         "difficulty": "Casual",
         "seasonal_index": 1,
         "teeming": 0,
-        "published": 1,
         "unlisted": 1,
         "demo": 1,
         "pull_gradient": "",
@@ -99,31 +99,31 @@
                 "index": 1,
                 "killzoneenemies": [
                     {
+                        "enemy_id": 1954
+                    },
+                    {
+                        "enemy_id": 1955
+                    },
+                    {
+                        "enemy_id": 1956
+                    },
+                    {
                         "enemy_id": 1957
                     },
                     {
                         "enemy_id": 1958
                     },
                     {
-                        "enemy_id": 1954
-                    },
-                    {
-                        "enemy_id": 1956
-                    },
-                    {
-                        "enemy_id": 1955
-                    },
-                    {
-                        "enemy_id": 3454
-                    },
-                    {
-                        "enemy_id": 3451
+                        "enemy_id": 3449
                     },
                     {
                         "enemy_id": 3450
                     },
                     {
-                        "enemy_id": 3449
+                        "enemy_id": 3451
+                    },
+                    {
+                        "enemy_id": 3454
                     }
                 ]
             },
@@ -134,15 +134,6 @@
                 "lng": null,
                 "index": 2,
                 "killzoneenemies": [
-                    {
-                        "enemy_id": 3479
-                    },
-                    {
-                        "enemy_id": 3478
-                    },
-                    {
-                        "enemy_id": 3480
-                    },
                     {
                         "enemy_id": 1959
                     },
@@ -157,6 +148,15 @@
                     },
                     {
                         "enemy_id": 3467
+                    },
+                    {
+                        "enemy_id": 3478
+                    },
+                    {
+                        "enemy_id": 3479
+                    },
+                    {
+                        "enemy_id": 3480
                     }
                 ]
             },
@@ -168,16 +168,7 @@
                 "index": 3,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3469
-                    },
-                    {
-                        "enemy_id": 3470
-                    },
-                    {
-                        "enemy_id": 3468
-                    },
-                    {
-                        "enemy_id": 3471
+                        "enemy_id": 1964
                     },
                     {
                         "enemy_id": 1965
@@ -186,10 +177,19 @@
                         "enemy_id": 1967
                     },
                     {
-                        "enemy_id": 1964
+                        "enemy_id": 1970
                     },
                     {
-                        "enemy_id": 1970
+                        "enemy_id": 3468
+                    },
+                    {
+                        "enemy_id": 3469
+                    },
+                    {
+                        "enemy_id": 3470
+                    },
+                    {
+                        "enemy_id": 3471
                     }
                 ]
             },
@@ -201,28 +201,10 @@
                 "index": 4,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 2015
-                    },
-                    {
-                        "enemy_id": 1975
-                    },
-                    {
-                        "enemy_id": 1976
-                    },
-                    {
                         "enemy_id": 1971
                     },
                     {
-                        "enemy_id": 1979
-                    },
-                    {
-                        "enemy_id": 1981
-                    },
-                    {
-                        "enemy_id": 1983
-                    },
-                    {
-                        "enemy_id": 2014
+                        "enemy_id": 1972
                     },
                     {
                         "enemy_id": 1973
@@ -231,16 +213,34 @@
                         "enemy_id": 1974
                     },
                     {
-                        "enemy_id": 1972
+                        "enemy_id": 1975
+                    },
+                    {
+                        "enemy_id": 1976
+                    },
+                    {
+                        "enemy_id": 1979
                     },
                     {
                         "enemy_id": 1980
                     },
                     {
+                        "enemy_id": 1981
+                    },
+                    {
                         "enemy_id": 1982
                     },
                     {
+                        "enemy_id": 1983
+                    },
+                    {
                         "enemy_id": 1984
+                    },
+                    {
+                        "enemy_id": 2014
+                    },
+                    {
+                        "enemy_id": 2015
                     }
                 ]
             },
@@ -264,28 +264,28 @@
                 "index": 6,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1985
-                    },
-                    {
-                        "enemy_id": 1988
-                    },
-                    {
-                        "enemy_id": 1987
-                    },
-                    {
-                        "enemy_id": 1991
-                    },
-                    {
-                        "enemy_id": 1986
+                        "enemy_id": 1977
                     },
                     {
                         "enemy_id": 1978
                     },
                     {
+                        "enemy_id": 1985
+                    },
+                    {
+                        "enemy_id": 1986
+                    },
+                    {
+                        "enemy_id": 1987
+                    },
+                    {
+                        "enemy_id": 1988
+                    },
+                    {
                         "enemy_id": 1989
                     },
                     {
-                        "enemy_id": 1977
+                        "enemy_id": 1991
                     }
                 ]
             },
@@ -297,40 +297,16 @@
                 "index": 7,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1996
-                    },
-                    {
-                        "enemy_id": 1998
-                    },
-                    {
-                        "enemy_id": 1993
-                    },
-                    {
-                        "enemy_id": 1995
-                    },
-                    {
-                        "enemy_id": 1997
-                    },
-                    {
-                        "enemy_id": 1990
-                    },
-                    {
-                        "enemy_id": 1992
-                    },
-                    {
-                        "enemy_id": 1994
-                    },
-                    {
                         "enemy_id": 1846
                     },
                     {
                         "enemy_id": 1847
                     },
                     {
-                        "enemy_id": 1854
+                        "enemy_id": 1850
                     },
                     {
-                        "enemy_id": 1855
+                        "enemy_id": 1851
                     },
                     {
                         "enemy_id": 1852
@@ -339,10 +315,34 @@
                         "enemy_id": 1853
                     },
                     {
-                        "enemy_id": 1851
+                        "enemy_id": 1854
                     },
                     {
-                        "enemy_id": 1850
+                        "enemy_id": 1855
+                    },
+                    {
+                        "enemy_id": 1990
+                    },
+                    {
+                        "enemy_id": 1992
+                    },
+                    {
+                        "enemy_id": 1993
+                    },
+                    {
+                        "enemy_id": 1994
+                    },
+                    {
+                        "enemy_id": 1995
+                    },
+                    {
+                        "enemy_id": 1996
+                    },
+                    {
+                        "enemy_id": 1997
+                    },
+                    {
+                        "enemy_id": 1998
                     }
                 ]
             },
@@ -354,43 +354,43 @@
                 "index": 8,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 2003
-                    },
-                    {
-                        "enemy_id": 2001
-                    },
-                    {
-                        "enemy_id": 2000
-                    },
-                    {
-                        "enemy_id": 1999
-                    },
-                    {
-                        "enemy_id": 2004
-                    },
-                    {
-                        "enemy_id": 2002
-                    },
-                    {
-                        "enemy_id": 1862
-                    },
-                    {
                         "enemy_id": 1856
-                    },
-                    {
-                        "enemy_id": 1858
                     },
                     {
                         "enemy_id": 1857
                     },
                     {
-                        "enemy_id": 1861
+                        "enemy_id": 1858
+                    },
+                    {
+                        "enemy_id": 1859
                     },
                     {
                         "enemy_id": 1860
                     },
                     {
-                        "enemy_id": 1859
+                        "enemy_id": 1861
+                    },
+                    {
+                        "enemy_id": 1862
+                    },
+                    {
+                        "enemy_id": 1999
+                    },
+                    {
+                        "enemy_id": 2000
+                    },
+                    {
+                        "enemy_id": 2001
+                    },
+                    {
+                        "enemy_id": 2002
+                    },
+                    {
+                        "enemy_id": 2003
+                    },
+                    {
+                        "enemy_id": 2004
                     }
                 ]
             },
@@ -402,10 +402,10 @@
                 "index": 9,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3475
+                        "enemy_id": 167
                     },
                     {
-                        "enemy_id": 167
+                        "enemy_id": 3475
                     },
                     {
                         "enemy_id": 3476
@@ -420,7 +420,7 @@
                 "index": 10,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1866
+                        "enemy_id": 1863
                     },
                     {
                         "enemy_id": 1864
@@ -429,13 +429,13 @@
                         "enemy_id": 1865
                     },
                     {
-                        "enemy_id": 1863
-                    },
-                    {
-                        "enemy_id": 2011
+                        "enemy_id": 1866
                     },
                     {
                         "enemy_id": 2010
+                    },
+                    {
+                        "enemy_id": 2011
                     }
                 ]
             },
@@ -450,25 +450,25 @@
                         "enemy_id": 1868
                     },
                     {
-                        "enemy_id": 1870
-                    },
-                    {
                         "enemy_id": 1869
                     },
                     {
-                        "enemy_id": 1875
-                    },
-                    {
-                        "enemy_id": 1872
+                        "enemy_id": 1870
                     },
                     {
                         "enemy_id": 1871
+                    },
+                    {
+                        "enemy_id": 1872
                     },
                     {
                         "enemy_id": 1873
                     },
                     {
                         "enemy_id": 1874
+                    },
+                    {
+                        "enemy_id": 1875
                     }
                 ]
             },
@@ -492,19 +492,19 @@
                 "index": 13,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1880
-                    },
-                    {
-                        "enemy_id": 1879
-                    },
-                    {
                         "enemy_id": 1876
+                    },
+                    {
+                        "enemy_id": 1877
                     },
                     {
                         "enemy_id": 1878
                     },
                     {
-                        "enemy_id": 1877
+                        "enemy_id": 1879
+                    },
+                    {
+                        "enemy_id": 1880
                     }
                 ]
             },
@@ -516,9 +516,6 @@
                 "index": 14,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1884
-                    },
-                    {
                         "enemy_id": 1881
                     },
                     {
@@ -526,6 +523,9 @@
                     },
                     {
                         "enemy_id": 1883
+                    },
+                    {
+                        "enemy_id": 1884
                     }
                 ]
             },
@@ -537,64 +537,64 @@
                 "index": 15,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 2028
-                    },
-                    {
-                        "enemy_id": 2030
-                    },
-                    {
-                        "enemy_id": 2032
-                    },
-                    {
-                        "enemy_id": 2021
-                    },
-                    {
-                        "enemy_id": 2025
-                    },
-                    {
-                        "enemy_id": 2023
-                    },
-                    {
-                        "enemy_id": 2033
-                    },
-                    {
-                        "enemy_id": 2037
-                    },
-                    {
-                        "enemy_id": 2035
-                    },
-                    {
                         "enemy_id": 1885
                     },
                     {
                         "enemy_id": 1886
                     },
                     {
-                        "enemy_id": 2026
-                    },
-                    {
-                        "enemy_id": 2024
-                    },
-                    {
-                        "enemy_id": 2031
+                        "enemy_id": 2021
                     },
                     {
                         "enemy_id": 2022
                     },
                     {
-                        "enemy_id": 2034
+                        "enemy_id": 2023
                     },
                     {
-                        "enemy_id": 2029
+                        "enemy_id": 2024
+                    },
+                    {
+                        "enemy_id": 2025
+                    },
+                    {
+                        "enemy_id": 2026
                     },
                     {
                         "enemy_id": 2027
                     },
                     {
-                        "enemy_id": 2038
+                        "enemy_id": 2028
+                    },
+                    {
+                        "enemy_id": 2029
+                    },
+                    {
+                        "enemy_id": 2030
+                    },
+                    {
+                        "enemy_id": 2031
+                    },
+                    {
+                        "enemy_id": 2032
+                    },
+                    {
+                        "enemy_id": 2033
+                    },
+                    {
+                        "enemy_id": 2034
+                    },
+                    {
+                        "enemy_id": 2035
                     },
                     {
                         "enemy_id": 2036
+                    },
+                    {
+                        "enemy_id": 2037
+                    },
+                    {
+                        "enemy_id": 2038
                     }
                 ]
             },
@@ -606,34 +606,34 @@
                 "index": 16,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 2182
-                    },
-                    {
-                        "enemy_id": 2042
+                        "enemy_id": 2039
                     },
                     {
                         "enemy_id": 2040
                     },
                     {
-                        "enemy_id": 2181
-                    },
-                    {
-                        "enemy_id": 2184
-                    },
-                    {
                         "enemy_id": 2041
                     },
                     {
-                        "enemy_id": 2179
-                    },
-                    {
-                        "enemy_id": 2039
+                        "enemy_id": 2042
                     },
                     {
                         "enemy_id": 2178
                     },
                     {
+                        "enemy_id": 2179
+                    },
+                    {
                         "enemy_id": 2180
+                    },
+                    {
+                        "enemy_id": 2181
+                    },
+                    {
+                        "enemy_id": 2182
+                    },
+                    {
+                        "enemy_id": 2184
                     }
                 ]
             },
@@ -645,25 +645,25 @@
                 "index": 17,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1893
+                        "enemy_id": 1891
                     },
                     {
                         "enemy_id": 1892
+                    },
+                    {
+                        "enemy_id": 1893
+                    },
+                    {
+                        "enemy_id": 1894
+                    },
+                    {
+                        "enemy_id": 1895
                     },
                     {
                         "enemy_id": 2045
                     },
                     {
                         "enemy_id": 2046
-                    },
-                    {
-                        "enemy_id": 1891
-                    },
-                    {
-                        "enemy_id": 1895
-                    },
-                    {
-                        "enemy_id": 1894
                     }
                 ]
             },
@@ -687,19 +687,19 @@
                 "index": 19,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 3424
-                    },
-                    {
                         "enemy_id": 1896
                     },
                     {
                         "enemy_id": 1897
                     },
                     {
+                        "enemy_id": 1903
+                    },
+                    {
                         "enemy_id": 1904
                     },
                     {
-                        "enemy_id": 1903
+                        "enemy_id": 3424
                     }
                 ]
             },
@@ -711,19 +711,19 @@
                 "index": 20,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1902
+                        "enemy_id": 1898
                     },
                     {
                         "enemy_id": 1899
-                    },
-                    {
-                        "enemy_id": 1898
                     },
                     {
                         "enemy_id": 1900
                     },
                     {
                         "enemy_id": 1901
+                    },
+                    {
+                        "enemy_id": 1902
                     }
                 ]
             },
@@ -750,13 +750,13 @@
                         "enemy_id": 1905
                     },
                     {
-                        "enemy_id": 1908
+                        "enemy_id": 1906
                     },
                     {
                         "enemy_id": 1907
                     },
                     {
-                        "enemy_id": 1906
+                        "enemy_id": 1908
                     }
                 ]
             },
@@ -780,16 +780,16 @@
                 "index": 24,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1931
-                    },
-                    {
                         "enemy_id": 1930
                     },
                     {
-                        "enemy_id": 1933
+                        "enemy_id": 1931
                     },
                     {
                         "enemy_id": 1932
+                    },
+                    {
+                        "enemy_id": 1933
                     },
                     {
                         "enemy_id": 1934
@@ -804,13 +804,13 @@
                 "index": 25,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1937
+                        "enemy_id": 1935
                     },
                     {
                         "enemy_id": 1936
                     },
                     {
-                        "enemy_id": 1935
+                        "enemy_id": 1937
                     },
                     {
                         "enemy_id": 1938
@@ -825,9 +825,6 @@
                 "index": 26,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1943
-                    },
-                    {
                         "enemy_id": 1939
                     },
                     {
@@ -838,6 +835,9 @@
                     },
                     {
                         "enemy_id": 1942
+                    },
+                    {
+                        "enemy_id": 1943
                     }
                 ]
             },
@@ -849,13 +849,13 @@
                 "index": 27,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1946
-                    },
-                    {
                         "enemy_id": 1944
                     },
                     {
                         "enemy_id": 1945
+                    },
+                    {
+                        "enemy_id": 1946
                     }
                 ]
             },
