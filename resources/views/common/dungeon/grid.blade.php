@@ -29,7 +29,7 @@ $links = isset($links) ? $links : collect();
                 <a href="{{ __($link['link']) }}">
                     @endisset
 
-                    <img src="images/dungeons/{{ $dungeon->key }}.jpg" style="width: 100%" alt="{{ __($dungeon->name) }}"/>
+                    <img src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg" style="width: 100%" alt="{{ __($dungeon->name) }}"/>
 
                     @isset($link)
                 </a>

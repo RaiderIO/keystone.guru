@@ -139,8 +139,6 @@ class EchoControls extends MapControl {
     _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        console.log(user);
-
         let styleID = 'style_color_' + user.id;
         // Delete any previous styles
         $('#' + styleID).remove();
