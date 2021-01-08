@@ -17,7 +17,7 @@
                 'drawCallback': function (settings) {
                     refreshTooltips();
 
-                    $('.mark_as_handled_btn').bind('click', function () {
+                    $('.mark_as_handled_btn').unbind('click').bind('click', function () {
                         let $this = $(this);
                         let id = $this.data('id');
                         $.ajax({

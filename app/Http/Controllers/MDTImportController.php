@@ -48,8 +48,6 @@ class MDTImportController extends Controller
             }
 
             $result = [
-                // Siege of Boralus faction
-                'faction'          => $dungeonRoute->faction->name,
                 'dungeon'          => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
                 'affixes'          => $affixes,
                 'pulls'            => $dungeonRoute->killzones->count(),
@@ -59,6 +57,11 @@ class MDTImportController extends Controller
                 'enemy_forces_max' => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
                 'warnings'         => $warningResult
             ];
+
+            // Siege of Boralus faction but hide it otherwise
+            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
+                $result['faction'] = $dungeonRoute->faction->name;
+            }
 
             return $result;
         } catch (Exception $ex) {
