@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.staging/;
             php artisan up;
-            php artisan down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60;
+            php artisan down --message "Upgrading Keystone.guru, we will be back stronger than ever shortly!" --retry 60;
             php artisan environment:updateprepare &&
             php artisan environment:update staging &&
             php artisan report:release discord;

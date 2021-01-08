@@ -106,19 +106,23 @@ class LayoutsApp extends InlineCode {
             success: function (responseData) {
                 let detailsTemplate = Handlebars.templates['import_string_details_template'];
 
+                let details = [];
+                if (responseData.hasOwnProperty('faction')) {
+                    details.push({key: lang.get('messages.mdt_faction'), value: responseData.faction});
+                }
+                details.push({key: lang.get('messages.mdt_dungeon'), value: responseData.dungeon});
+                details.push({key: lang.get('messages.mdt_affixes'), value: responseData.affixes.join('<br>')});
+                details.push({key: lang.get('messages.mdt_pulls'), value: responseData.pulls});
+                details.push({key: lang.get('messages.mdt_drawn_lines'), value: responseData.lines});
+                details.push({key: lang.get('messages.mdt_notes'), value: responseData.notes});
+                details.push({
+                    key: lang.get('messages.mdt_enemy_forces'),
+                    value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
+                });
+
+
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    details: [
-                        {key: lang.get('messages.mdt_faction'), value: responseData.faction},
-                        {key: lang.get('messages.mdt_dungeon'), value: responseData.dungeon},
-                        {key: lang.get('messages.mdt_affixes'), value: responseData.affixes.join('<br>')},
-                        {key: lang.get('messages.mdt_pulls'), value: responseData.pulls},
-                        {key: lang.get('messages.mdt_drawn_lines'), value: responseData.lines},
-                        {key: lang.get('messages.mdt_notes'), value: responseData.notes},
-                        {
-                            key: lang.get('messages.mdt_enemy_forces'),
-                            value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
-                        }
-                    ]
+                    details: details
                 });
 
                 // Build the preview from the template
