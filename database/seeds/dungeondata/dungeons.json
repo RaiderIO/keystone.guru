@@ -1431,11 +1431,11 @@
                 "index": 1,
                 "name": "Plaguefall",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 8,
+                "max_enemy_size": 22,
                 "floorcouplings": [
                     {
-                        "id": 51,
+                        "id": 111,
                         "floor1_id": 81,
                         "floor2_id": 82,
                         "direction": "down"
