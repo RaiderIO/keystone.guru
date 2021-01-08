@@ -479,7 +479,7 @@ class EnemyVisual extends Signalable {
         //     console.warn(`refreshing size`);
         // }
 
-        if (this._$mainVisual.length === 0) {
+        if (this._$mainVisual === null || this._$mainVisual.length === 0) {
             console.warn('Unable to refresh size of visual that no longer exists');
             return;
         }
