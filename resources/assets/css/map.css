@@ -67,7 +67,7 @@ html, body, #map, #app, .wrapper {
     top: 0;
     height: 100vh;
     z-index: 1030;
-    transition: all 0.2s;
+    transition: right 0.2s, left 0.2s;
     background-color: #4E5D6C;
 }
 
@@ -183,6 +183,11 @@ html, body, #map, #app, .wrapper {
     /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
     height: calc(100vh - 106px);
     overflow: auto;
+}
+
+#killzonesidebar.sidebar .sidebar-content.edit {
+    /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
+    height: calc(100vh - 158px);
 }
 
 .sidebar .sidebar-content .card-body {

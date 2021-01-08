@@ -13,7 +13,18 @@
     'edit' => $edit
 ]])
 
-@section('sidebar-content')
+@section('sidebar-sticky')
+    @if($edit)
+        <div class="container">
+            <div class="row mb-2 mt-2">
+                <div class="col">
+                    <div id="killzones_new_pull" class="btn btn-success w-100">
+                        <i class="fas fa-plus"></i> {{__('New pull')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @component('common.maps.sidebar', [
@@ -21,18 +32,10 @@
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',
+    'edit' => $edit,
     /* Draw controls are injected here through drawcontrols.js */
     'customSubHeader' => '<div class="mt-4"><div id="edit_route_enemy_forces_container"></div></div>'
 ])
-    @if($edit)
-        <div class="row mb-2">
-            <div class="col">
-                <div id="killzones_new_pull" class="btn btn-success w-100">
-                    <i class="fas fa-plus"></i> {{__('New pull')}}
-                </div>
-            </div>
-        </div>
-    @endif
     <div id="killzones_loading" class="row">
         <div class="col text-center">
             <h5>{{ __('Loading...') }}</h5>

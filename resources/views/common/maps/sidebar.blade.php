@@ -1,6 +1,7 @@
 <?php
 $isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
+$edit = isset($edit) ? $edit : false;
 ?>
 <div id="{{ $id }}Toggle" class="sidebar-toggle anchor-{{$anchor}} {{ $isMobile ? '' : 'active' }}"
      data-toggle="tooltip">
@@ -24,8 +25,15 @@ $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
             </div>
         @endisset
     </div>
+    @hasSection('sidebar-sticky')
+        @yield('sidebar-sticky')
+    @endif
 
-    <div class="sidebar-content" data-simplebar>
+    <div class="sidebar-content {{ $edit ? 'edit' : '' }}" data-simplebar
+    @hasSection('sidebar-sticky')
+        style="padding: 0 !important"
+    @endif
+    >
         <div class="container">
             {{ $slot }}
         </div>
