@@ -613,14 +613,6 @@
                 ]
             },
             {
-                "floor_id": 0,
-                "color": "",
-                "lat": null,
-                "lng": null,
-                "index": 28,
-                "killzoneenemies": []
-            },
-            {
                 "floor_id": -1,
                 "color": "#0c61bc",
                 "lat": null,
