@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
  * @property string $import_string
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class MDTImport extends Model
 {
@@ -19,7 +21,7 @@ class MDTImport extends Model
     /**
      * Get the dungeon route that this import created.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {

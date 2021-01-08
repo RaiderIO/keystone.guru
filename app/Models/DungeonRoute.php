@@ -952,6 +952,8 @@ class DungeonRoute extends Model
             // External
             $item->ratings()->delete();
             $item->favorites()->delete();
+
+            $item->mdtImport()->delete();
         });
     }
 }
