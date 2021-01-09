@@ -113,7 +113,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can update the dungeon route.
      *
-     * @param User $user
+     * @param User|null $user
      * @param DungeonRoute $dungeonroute
      * @return mixed
      */

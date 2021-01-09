@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DungeonRoute\KillZoneChangedEvent;
-use App\Events\DungeonRoute\KillZoneDeletedEvent;
 use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Requests\KillZone\DeleteAllFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -160,18 +160,20 @@ class APIKillZoneController extends Controller
         // Insert new enemies based on what was sent
         foreach ($request->get('killzones', []) as $killZoneData) {
             try {
-                // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($enemyIds)
-                {
-                    return in_array($item, $enemyIds);
-                });
+                if (isset($killZoneData['enemies'])) {
+                    // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($enemyIds)
+                    {
+                        return in_array($item, $enemyIds);
+                    });
 
-                // Assign kill zone to each passed enemy
-                foreach($killZoneDataEnemies as $killZoneDataEnemy ){
-                    $killZoneEnemies[] = [
-                        'kill_zone_id' => $killZoneData['id'],
-                        'enemy_id'     => $killZoneDataEnemy
-                    ];
+                    // Assign kill zone to each passed enemy
+                    foreach ($killZoneDataEnemies as $killZoneDataEnemy) {
+                        $killZoneEnemies[] = [
+                            'kill_zone_id' => $killZoneData['id'],
+                            'enemy_id'     => $killZoneDataEnemy
+                        ];
+                    }
                 }
             } catch (Exception $ex) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
@@ -221,6 +223,47 @@ class APIKillZoneController extends Controller
 
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DeleteAllFormRequest $request
+     * @param DungeonRoute $dungeonroute
+     * @return array|Application|ResponseFactory|Response
+     * @throws AuthorizationException
+     */
+    function deleteAll(DeleteAllFormRequest $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('edit', $dungeonroute);
+
+        if ($request->get('confirm') === 'yes') {
+            try {
+                $killZones = $dungeonroute->killzones;
+                if ($dungeonroute->killzones()->delete()) {
+                    if (Auth::check()) {
+                        foreach ($killZones as $killZone) {
+                            broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killZone));
+                        }
+                    }
+
+                    // Refresh the killzones relation
+                    $dungeonroute->load('killzones');
+
+                    // Touch the route so that the thumbnail gets updated
+                    $dungeonroute->touch();
+
+                    $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
+                } else {
+                    $result = response('Unable to delete all pulls', Http::INTERNAL_SERVER_ERROR);
+                }
+
+            } catch (\Exception $ex) {
+                $result = response('Not found', Http::NOT_FOUND);
+            }
+        } else {
+            $result = response('You must confirm before deleting all pulls', Http::BAD_REQUEST);
         }
 
         return $result;

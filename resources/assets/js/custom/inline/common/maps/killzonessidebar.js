@@ -506,8 +506,21 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         // Setup new pull button
-
         $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
+        $(this.options.killZonesPullsSettingsSelector).on('shown.bs.collapse', function () {
+            $(self.options.sidebarScrollSelector).addClass('settings-shown');
+        }).on('hidden.bs.collapse', function () {
+            $(self.options.sidebarScrollSelector).removeClass('settings-shown');
+        });
+
+        $(this.options.killZonesPullsSettingsDeleteAllSelector).bind('click', function () {
+            showConfirmYesCancel(lang.get('messages.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
+                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+                killZoneMapObjectGroup.deleteAll();
+            });
+        });
+
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Update the UI based on the new map states

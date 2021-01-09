@@ -186,8 +186,13 @@ html, body, #map, #app, .wrapper {
 }
 
 #killzonesidebar.sidebar .sidebar-content.edit {
-    /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
+    /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     height: calc(100vh - 158px);
+}
+
+#killzonesidebar.sidebar .sidebar-content.edit.settings-shown {
+    /** Bit of a hack, but the 254 is the height of the header now which somehow isn't taken into account */
+    height: calc(100vh - 254px);
 }
 
 .sidebar .sidebar-content .card-body {

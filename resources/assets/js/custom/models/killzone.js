@@ -795,6 +795,14 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Get a latlng object describing the centeroid of the enemies layer.
+     * @returns {object}
+     */
+    getLayerCenteroid() {
+        return getCenteroid(this._getVisibleEntitiesLatLngs());
+    }
+
+    /**
      * The index of this KillZone.
      * @returns {number}
      */
@@ -829,7 +837,7 @@ class KillZone extends MapObject {
         let result = false;
         console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
-            result = this.map.leafletMap.getBounds().contains(getCenteroid(this._getVisibleEntitiesLatLngs()))
+            result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
         }
         return result;
     }

@@ -140,6 +140,7 @@ return [
 
     // Admin
     'object.deleted'                              => 'Objects deleted successfully.',
+    'delete_all_pulls_successful'                 => 'Pulls deleted successfully',
     'route_count_label'                           => '# of routes',
     'roles_label'                                 => 'Roles',
     'registered_label'                            => 'Registered at',
@@ -225,6 +226,7 @@ return [
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',
+    'killzone_sidebar_delete_all_pulls_confirm_label'               => 'Are you sure you want to delete all your pulls? This action can not be undone.',
 
     // General site modals etc
     'min_password_length'                                           => 'Minimum password length is 8',

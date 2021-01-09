@@ -75,6 +75,7 @@ window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 window.autocomplete = require('bootstrap-4-autocomplete');
+window.toggle = require('bootstrap4-toggle');
 
 require('@fortawesome/fontawesome-free');
 
