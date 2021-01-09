@@ -289,19 +289,26 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
         let killZoneEnemyForces = killZone.getEnemyForces();
-        let enemyForcesCumulativePercent = getFormattedPercentage(killZone.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
-        let enemyForcesPercent = getFormattedPercentage(killZone.getEnemyForces(), this.map.getEnemyForcesRequired());
-
-        // let color = isColorDark(killZone.color) ? 'white' : 'black';
-        // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color).css('border-color', color).css('color', color);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
-            .text(`${enemyForcesCumulativePercent}%`);
-
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(
-            `+${enemyForcesPercent}%`
-        );
+
+        if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
+            let enemyForcesCumulativePercent = getFormattedPercentage(killZone.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
+            let enemyForcesPercent = getFormattedPercentage(killZoneEnemyForces, this.map.getEnemyForcesRequired());
+
+            $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
+                .text(`${enemyForcesCumulativePercent}%`);
+            $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(
+                `+${enemyForcesPercent}%`
+            );
+        } else if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES) {
+            $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
+                .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
+
+            $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(
+                `+${killZoneEnemyForces}`
+            );
+        }
+        $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
 
         // Show boss icon or not
         let hasBoss, hasAwakened, hasPrideful, hasInspiring = false;
@@ -489,7 +496,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 this._newPullKillZone = null;
             }
         }
-
     }
 
     /**
@@ -513,12 +519,21 @@ class CommonMapsKillzonessidebar extends InlineCode {
             $(self.options.sidebarScrollSelector).removeClass('settings-shown');
         });
 
+
+        $(this.options.killZonesPullsSettingsNumberStyleSelector).bind('change', function () {
+            getState().setKillZonesNumberStyle($(this).is(':checked') ? KILL_ZONES_NUMBER_STYLE_PERCENTAGE : KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES);
+        });
+
         $(this.options.killZonesPullsSettingsDeleteAllSelector).bind('click', function () {
             showConfirmYesCancel(lang.get('messages.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 killZoneMapObjectGroup.deleteAll();
             });
+        });
+
+        getState().register('numberstyle:changed', this, function () {
+            self._updatePullTexts();
         });
 
 
@@ -688,5 +703,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
 
         this.sidebar.cleanup();
+
+        getState().unregister('numberstyle:changed', this);
     }
 }

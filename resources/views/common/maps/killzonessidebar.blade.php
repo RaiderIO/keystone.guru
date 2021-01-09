@@ -1,6 +1,8 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 /** @var \App\Models\Dungeon $dungeon */
+
+$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -11,6 +13,7 @@
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
     'killZonesPullsSettingsSelector' => '#killzones_pulls_settings_container',
+    'killZonesPullsSettingsNumberStyleSelector' => '#killzones_pulls_settings_number_style',
     'killZonesPullsSettingsDeleteAllSelector' => '#killzones_pulls_settings_delete_all',
     'edit' => $edit
 ]])
@@ -44,7 +47,8 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <input id="killzones_pulls_settings_number_type" type="checkbox" checked
+                            <input id="killzones_pulls_settings_number_style" type="checkbox"
+                                   {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
                                    data-toggle="toggle" data-width="120px" data-height="20px"
                                    data-onstyle="primary" data-offstyle="primary"
                                    data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">

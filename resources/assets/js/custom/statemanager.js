@@ -207,6 +207,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     *
+     * @param numberStyle {string}
+     */
+    setKillZonesNumberStyle(numberStyle) {
+        Cookies.set('kill_zones_number_style', numberStyle);
+
+        this.signal('numberstyle:changed');
+    }
+
+    /**
      * Checks if Echo is enabled for the current session.
      * @returns {boolean}
      */
@@ -414,5 +424,12 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._userData;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getKillZonesNumberStyle() {
+        return Cookies.get('kill_zones_number_style');
     }
 }

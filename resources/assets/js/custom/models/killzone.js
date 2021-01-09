@@ -88,6 +88,7 @@ class KillZone extends MapObject {
         this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
 
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
+        getState().register('numberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
     }
@@ -423,15 +424,35 @@ class KillZone extends MapObject {
      * @private
      */
     _mapZoomLevelChanged(mapZoomLevelChangedEvent) {
-        let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
-        let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        // Don't do any unnecessary redrawings, they are costly
-        if (// Zoomed out
-            (prevZoomLevel === c.map.killzone.percentage_display_zoom && prevZoomLevel > currZoomLevel) ||
-            // Zoomed in
-            (currZoomLevel === c.map.killzone.percentage_display_zoom && currZoomLevel > prevZoomLevel)
-        ) {
+        // Only if we actually have a tooltip to refresh
+        if (this.isVisible()) {
+            console.log('visible!')
+            let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
+            let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
+
+            // Don't do any unnecessary redrawings, they are costly
+            if (// Zoomed out
+                (prevZoomLevel === c.map.killzone.percentage_display_zoom && prevZoomLevel > currZoomLevel) ||
+                // Zoomed in
+                (currZoomLevel === c.map.killzone.percentage_display_zoom && currZoomLevel > prevZoomLevel)
+            ) {
+                this.redrawConnectionsToEnemies();
+            }
+        }
+    }
+
+    /**
+     *
+     * @param numberStyleChangedEvent
+     * @private
+     */
+    _numberStyleChanged(numberStyleChangedEvent) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+
+        // Only if we actually have a tooltip to refresh
+        if (this.isVisible()) {
             this.redrawConnectionsToEnemies();
         }
     }
@@ -442,6 +463,7 @@ class KillZone extends MapObject {
      * @private
      */
     _onKillZoneChanged(killZoneChangedEvent) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         // Refresh percentages of killzone text should the need arise
         if (killZoneChangedEvent.data.killzone.index < this.index &&
             getState().getMapZoomLevel() >= c.map.killzone.percentage_display_zoom) {
@@ -852,8 +874,12 @@ class KillZone extends MapObject {
                 let tooltipText = this.index + '';
 
                 if (getState().getMapZoomLevel() > 2) {
-                    let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
-                    tooltipText += ` - ${enemyForcesCumulativePercent}%`;
+                    if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
+                        let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
+                        tooltipText += ` - ${enemyForcesCumulativePercent}%`;
+                    } else if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES) {
+                        tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`;
+                    }
                 }
 
                 this.enemiesLayer.bindTooltip(tooltipText, {
@@ -940,6 +966,7 @@ class KillZone extends MapObject {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('killzone:changed', this);
         getState().unregister('mapzoomlevel:changed', this);
+        getState().unregister('numberstyle:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
         this.map.unregister('map:refresh', this);

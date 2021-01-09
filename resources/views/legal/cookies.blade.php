@@ -207,6 +207,22 @@
                 Keeps track of whether to display the Routes page in "biglist" or "list" mode upon navigation.
             </td>
         </tr>
+        <tr>
+            <td>
+                hidden_map_object_groups
+            </td>
+            <td>
+                Remembers the what map elements are hidden from view in the map.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                kill_zones_number_style
+            </td>
+            <td>
+                Remembers if you want to display your pulls in percentages or enemy forces.
+            </td>
+        </tr>
 
     </table>
     </p>
