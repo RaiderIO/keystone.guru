@@ -349,6 +349,8 @@ class EnemyVisual extends Signalable {
 
         if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
 
+            this._cleanupCircleMenu();
+
             let template = Handlebars.templates['map_enemy_visual_template'];
 
             let data = {
@@ -474,10 +476,6 @@ class EnemyVisual extends Signalable {
      */
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-
-        // if (adjustParent) {
-        //     console.warn(`refreshing size`);
-        // }
 
         if (this._$mainVisual === null || this._$mainVisual.length === 0) {
             console.warn('Unable to refresh size of visual that no longer exists');
