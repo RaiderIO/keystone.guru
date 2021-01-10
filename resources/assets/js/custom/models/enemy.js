@@ -593,22 +593,6 @@ class Enemy extends MapObject {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
         });
-
-        if (this.isEditable() && this.map.options.edit) {
-            this.onPopupInit();
-        }
-    }
-
-    onPopupInit() {
-        console.assert(this instanceof Enemy, 'this was not an Enemy', this);
-        let self = this;
-
-        self.map.leafletMap.on('contextmenu', function () {
-            if (self.currentPatrolPolyline !== null) {
-                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
-                self.currentPatrolPolyline.disable();
-            }
-        });
     }
 
     isVisibleOnScreen() {
