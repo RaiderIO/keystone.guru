@@ -154,9 +154,6 @@ class APIKillZoneController extends Controller
         $killZoneEnemies = [];
         $enemyIds = Enemy::select('id')->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())->get()->pluck('id')->toArray();
 
-        // Delete existing enemies
-        KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
-
         // Insert new enemies based on what was sent
         foreach ($request->get('killzones', []) as $killZoneData) {
             try {
@@ -180,8 +177,14 @@ class APIKillZoneController extends Controller
             }
         }
 
-        // Save all new enemies at once
-        KillZoneEnemy::insert($killZoneEnemies);
+        // May be empty if the user did not send any enemies
+        if (count($killZoneEnemies) > 0) {
+            // Delete existing enemies
+            KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
+            // Save all new enemies at once
+            KillZoneEnemy::insert($killZoneEnemies);
+        }
+
 
         // Touch the route so that the thumbnail gets updated
         $dungeonroute->touch();
