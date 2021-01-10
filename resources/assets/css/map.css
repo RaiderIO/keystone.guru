@@ -450,6 +450,7 @@ html, body, #map, #app, .wrapper {
 .leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;
     background-color: unset;
+    outline: none !important;
 }
 
 .leaflet-verticalcenter {
