@@ -451,7 +451,7 @@ class EnemyVisual extends Signalable {
      */
     _updateBorder(color, isFaded = false) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        if (this._$mainVisual.length > 0) {
+        if (this._$mainVisual !== null && this._$mainVisual.length > 0) {
             this._$mainVisual.find('.outer').css('border-color', color);
             // Fade out or not depending on what the user wanted
             $(this._$mainVisual.parent()).toggleClass('map_enemy_visual_fade', !isFaded);
