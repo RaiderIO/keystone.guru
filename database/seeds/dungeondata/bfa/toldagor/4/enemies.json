@@ -161,8 +161,16 @@
         "enemy_forces_override_teeming": -1,
         "lat": -128.25,
         "lng": 213.69,
-        "active_auras": [],
-        "enemyactiveauras": [],
+        "active_auras": [
+            258153
+        ],
+        "enemyactiveauras": [
+            {
+                "id": 3,
+                "enemy_id": 1604,
+                "spell_id": 258153
+            }
+        ],
         "npc": {
             "id": 130026
         }
