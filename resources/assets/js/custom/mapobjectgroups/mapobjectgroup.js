@@ -532,11 +532,14 @@ class MapObjectGroup extends Signalable {
 
         let result = null;
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let objectCandidate = this.objects[i];
-            if (objectCandidate.id === id) {
-                result = objectCandidate;
-                break;
+        // Do not return an already saving map object which has id -1 of which multiple can exist
+        if( id > 0 ) {
+            for (let i = 0; i < this.objects.length; i++) {
+                let objectCandidate = this.objects[i];
+                if (objectCandidate.id === id) {
+                    result = objectCandidate;
+                    break;
+                }
             }
         }
 
