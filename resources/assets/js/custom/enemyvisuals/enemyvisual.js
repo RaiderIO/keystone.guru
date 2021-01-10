@@ -72,7 +72,7 @@ class EnemyVisual extends Signalable {
                 event.data.previous.unregister('object:deleted', self);
                 event.data.previous.unregister('object:changed', self);
             }
-            self._updateBorder('white');
+            self._updateBorder('white', false);
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
@@ -446,11 +446,16 @@ class EnemyVisual extends Signalable {
     /**
      * Updates the color of the border for this visual
      * @param color string
+     * @param isFaded {Boolean}
      * @private
      */
-    _updateBorder(color) {
+    _updateBorder(color, isFaded = false) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        $('#map_enemy_visual_' + this.enemy.id).find('.outer').css('border-color', color);
+        if (this._$mainVisual.length > 0) {
+            this._$mainVisual.find('.outer').css('border-color', color);
+            // Fade out or not depending on what the user wanted
+            $(this._$mainVisual.parent()).toggleClass('map_enemy_visual_fade', !isFaded);
+        }
     }
 
     /**
