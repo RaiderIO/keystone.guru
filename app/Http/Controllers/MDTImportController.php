@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers;
 
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Teapot\StatusCode;
 use Throwable;
 
 class MDTImportController extends Controller
@@ -94,7 +95,7 @@ class MDTImportController extends Controller
 
         $sandbox = (bool)$request->get('sandbox', false);
         // @TODO This should be handled differently imho
-        if ($sandbox || $user->canCreateDungeonRoute()) {
+        if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
             $string = $request->get('import_string');
             $importString = new ImportString($seasonService);
 
@@ -119,6 +120,8 @@ class MDTImportController extends Controller
             }
 
             $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
+        } else if ($user === null) {
+            return abort(StatusCode::UNAUTHORIZED, 'You must be logged in to create a route');
         } else {
             $result = view('dungeonroute.limitreached');
         }
