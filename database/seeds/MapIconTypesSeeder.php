@@ -15,7 +15,7 @@ class MapIconTypesSeeder extends Seeder
         $this->_rollback();
         $this->command->info('Adding known Map Icon Types');
 
-        $mapIconData = [
+        $mapIconTypes = [
             'unknown'                   => ['name' => ''],
             'comment'                   => ['name' => 'Comment'],
             'door'                      => ['name' => 'Door', 'admin_only' => true],
@@ -79,25 +79,49 @@ class MapIconTypesSeeder extends Seeder
 
             'spell_mind_soothe' => ['name' => 'Mind Soothe'],
             'spell_combustion'  => ['name' => 'Combustion'],
+
+            'covenant_kyrian'     => ['name' => 'Kyrian', 'width' => 32, 'height' => 32],
+            'covenant_necrolords' => ['name' => 'Necrolords', 'width' => 32, 'height' => 32],
+            'covenant_nightfae'   => ['name' => 'Night Fae', 'width' => 32, 'height' => 32],
+            'covenant_venthyr'    => ['name' => 'Venthyr', 'width' => 32, 'height' => 32],
+
+            'portal_blue'   => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'portal_green'  => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'portal_orange' => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'portal_pink'   => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'portal_red'    => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
-        foreach ($mapIconData as $key => $mapIcon) {
-            $mapIconType = new MapIconType();
-            $mapIconType->key = $key;
-            $mapIconType->name = $mapIcon['name'];
+        foreach ($mapIconTypes as $key => $mapIconType) {
+            $mapIconTypeModel = new MapIconType();
+            $mapIconTypeModel->key = $key;
+            $mapIconTypeModel->name = $mapIconType['name'];
 
             // Just in case it doesn't exist
-            $filePath = resource_path(sprintf('assets/images/mapicon/%s.png', $key));
-            if (file_exists($filePath)) {
-                $imageSize = getimagesize($filePath);
+            if (isset($mapIconType['width']) && isset($mapIconType['height'])) {
+                $imageSize = [$mapIconType['width'], $mapIconType['height']];
             } else {
-                $this->command->warn(sprintf('Unable to find file %s', $filePath));
-                $imageSize = [16, 16];
+                $filePath = resource_path(sprintf('assets/images/mapicon/%s.png', $key));
+                if (file_exists($filePath)) {
+                    $imageSize = getimagesize($filePath);
+                } else {
+                    $this->command->warn(sprintf('Unable to find file %s', $filePath));
+                    $imageSize = [16, 16];
+                }
+
+                // Overrides
+                if (isset($mapIconType['width'])) {
+                    $imageSize[0] = $mapIconType['width'];
+                }
+
+                if (isset($mapIconType['height'])) {
+                    $imageSize[1] = $mapIconType['height'];
+                }
             }
-            $mapIconType->width = $imageSize[0];
-            $mapIconType->height = $imageSize[1];
-            $mapIconType->admin_only = isset($mapIcon['admin_only']) ? $mapIcon['admin_only'] : 0;
-            $mapIconType->save();
+            $mapIconTypeModel->width = $imageSize[0];
+            $mapIconTypeModel->height = $imageSize[1];
+            $mapIconTypeModel->admin_only = isset($mapIconType['admin_only']) ? $mapIconType['admin_only'] : 0;
+            $mapIconTypeModel->save();
         }
     }
 
