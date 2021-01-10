@@ -428,7 +428,6 @@ class KillZone extends MapObject {
 
         // Only if we actually have a tooltip to refresh
         if (this.isVisible()) {
-            console.log('visible!')
             let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
             let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
 
