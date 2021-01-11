@@ -243,6 +243,37 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return result;
     }
 
+    /**
+     * Deletes all killzones in this route
+     * @param callback Callable
+     */
+    deleteAll(callback = null) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/killzone`,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                confirm: 'yes',
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.delete_all_pulls_successful'));
+
+                for (let i = self.objects.length - 1; i >= 0; i--) {
+                    let killZone = self.objects[i];
+                    killZone.localDelete();
+                    killZone.onDeleteSuccess(json);
+                }
+
+                if (callback !== null) {
+                    callback();
+                }
+            }
+        });
+    }
+
     // _fetchSuccess(response) {
     //     // no super call, we're handling this by ourselves
     //     console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);

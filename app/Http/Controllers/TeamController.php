@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Session;
+use Teapot\StatusCode;
 
 class TeamController extends Controller
 {
@@ -172,11 +173,16 @@ class TeamController extends Controller
     {
         /** @var Team $team */
         $team = Team::where('invite_code', $invitecode)->first();
+        $result = null;
 
-        if ($team->isCurrentUserMember()) {
-            $result = view('team.invite', ['team' => $team, 'member' => true]);
+        if ($team !== null) {
+            if ($team->isCurrentUserMember()) {
+                $result = view('team.invite', ['team' => $team, 'member' => true]);
+            } else {
+                $result = view('team.invite', ['team' => $team]);
+            }
         } else {
-            $result = view('team.invite', ['team' => $team]);
+            abort(StatusCode::NOT_FOUND, 'Unable to find a team associated with this invite code');
         }
 
         return $result;

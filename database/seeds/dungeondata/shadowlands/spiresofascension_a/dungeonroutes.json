@@ -1,1 +1,680 @@
-[]
+[
+    {
+        "public_key": "TnXFb2k",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 33,
+        "faction_id": 1,
+        "team_id": -1,
+        "published_state_id": 3,
+        "title": "Sanguine-Quaking-Petko",
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "created_at": "2021-01-08T16:12:40+00:00",
+        "updated_at": "2021-01-08T16:14:14+00:00",
+        "expires_at": null,
+        "playerspecializations": [],
+        "playerraces": [
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            }
+        ],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 51
+            }
+        ],
+        "brushlines": [
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-182.51,\"lng\":162.1},{\"lat\":-181.87,\"lng\":161.6}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-182.28,\"lng\":160.54},{\"lat\":-181.37,\"lng\":161.69},{\"lat\":-181.37,\"lng\":161.69},{\"lat\":-180,\"lng\":162.19},{\"lat\":-180,\"lng\":162.19},{\"lat\":-178.71,\"lng\":162.47},{\"lat\":-178.71,\"lng\":162.47},{\"lat\":-178.35,\"lng\":163.98},{\"lat\":-178.35,\"lng\":163.98},{\"lat\":-178.35,\"lng\":165.62},{\"lat\":-178.35,\"lng\":165.62},{\"lat\":-178.85,\"lng\":167.18},{\"lat\":-178.85,\"lng\":167.18},{\"lat\":-179.08,\"lng\":168.55},{\"lat\":-179.08,\"lng\":168.55},{\"lat\":-179.49,\"lng\":169.97},{\"lat\":-179.49,\"lng\":169.97},{\"lat\":-179.72,\"lng\":171.48},{\"lat\":-179.72,\"lng\":171.48},{\"lat\":-180,\"lng\":173.13},{\"lat\":-180,\"lng\":173.13},{\"lat\":-180,\"lng\":174.41},{\"lat\":-180,\"lng\":174.41},{\"lat\":-178.71,\"lng\":175.42},{\"lat\":-178.71,\"lng\":175.42},{\"lat\":-177.43,\"lng\":176.06},{\"lat\":-177.43,\"lng\":176.06},{\"lat\":-176.15,\"lng\":176.56},{\"lat\":-176.15,\"lng\":176.56},{\"lat\":-174.64,\"lng\":177.48},{\"lat\":-174.64,\"lng\":177.48},{\"lat\":-173.27,\"lng\":177.98},{\"lat\":-173.27,\"lng\":177.98},{\"lat\":-172.12,\"lng\":178.35},{\"lat\":-172.12,\"lng\":178.35},{\"lat\":-170.57,\"lng\":178.85},{\"lat\":-170.57,\"lng\":178.85},{\"lat\":-169.42,\"lng\":179.35},{\"lat\":-169.42,\"lng\":179.35},{\"lat\":-168.14,\"lng\":180.27},{\"lat\":-168.14,\"lng\":180.27},{\"lat\":-166.91,\"lng\":181.55},{\"lat\":-166.91,\"lng\":181.55},{\"lat\":-165.76,\"lng\":182.28},{\"lat\":-165.76,\"lng\":182.28},{\"lat\":-164.48,\"lng\":182.92},{\"lat\":-164.48,\"lng\":182.92},{\"lat\":-163.2,\"lng\":183.43},{\"lat\":-163.2,\"lng\":183.43},{\"lat\":-161.92,\"lng\":183.43},{\"lat\":-161.92,\"lng\":183.43},{\"lat\":-160.68,\"lng\":183.56},{\"lat\":-160.68,\"lng\":183.56},{\"lat\":-159.54,\"lng\":183.56},{\"lat\":-159.54,\"lng\":183.56},{\"lat\":-158.26,\"lng\":183.06},{\"lat\":-158.26,\"lng\":183.06},{\"lat\":-157.34,\"lng\":181.78},{\"lat\":-157.34,\"lng\":181.78},{\"lat\":-156.84,\"lng\":180.41},{\"lat\":-156.84,\"lng\":180.41},{\"lat\":-156.33,\"lng\":178.85},{\"lat\":-156.33,\"lng\":178.85},{\"lat\":-155.69,\"lng\":177.62},{\"lat\":-155.69,\"lng\":177.62},{\"lat\":-154.96,\"lng\":176.2},{\"lat\":-154.96,\"lng\":176.2},{\"lat\":-154.18,\"lng\":175.56}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-153.82,\"lng\":175.19},{\"lat\":-153.04,\"lng\":198.44}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-152.86,\"lng\":197.98},{\"lat\":-152.44,\"lng\":199.81},{\"lat\":-152.44,\"lng\":199.81},{\"lat\":-152.26,\"lng\":201.64},{\"lat\":-152.26,\"lng\":201.64},{\"lat\":-152.67,\"lng\":203.47},{\"lat\":-152.67,\"lng\":203.47},{\"lat\":-153.5,\"lng\":205.53},{\"lat\":-153.5,\"lng\":205.53},{\"lat\":-153.68,\"lng\":207.55},{\"lat\":-153.68,\"lng\":207.55},{\"lat\":-153.68,\"lng\":209.56},{\"lat\":-153.68,\"lng\":209.56},{\"lat\":-153.5,\"lng\":211.62},{\"lat\":-153.5,\"lng\":211.62},{\"lat\":-153.08,\"lng\":213.45},{\"lat\":-153.08,\"lng\":213.45},{\"lat\":-152.26,\"lng\":215.46},{\"lat\":-152.26,\"lng\":215.46},{\"lat\":-150.43,\"lng\":217.11},{\"lat\":-150.43,\"lng\":217.11},{\"lat\":-148.42,\"lng\":217.52},{\"lat\":-148.42,\"lng\":217.52},{\"lat\":-146.36,\"lng\":217.52},{\"lat\":-146.36,\"lng\":217.52},{\"lat\":-144.34,\"lng\":217.71},{\"lat\":-144.34,\"lng\":217.71},{\"lat\":-142.1,\"lng\":218.12},{\"lat\":-142.1,\"lng\":218.12},{\"lat\":-140.04,\"lng\":217.71},{\"lat\":-140.04,\"lng\":217.71},{\"lat\":-140.04,\"lng\":216.7}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-138.44,\"lng\":216.7},{\"lat\":-140.45,\"lng\":216.1},{\"lat\":-140.45,\"lng\":216.1},{\"lat\":-138.62,\"lng\":216.52},{\"lat\":-138.62,\"lng\":216.52},{\"lat\":-139.86,\"lng\":218.53}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-117.02,\"lng\":176.65},{\"lat\":-115.24,\"lng\":176.65},{\"lat\":-115.24,\"lng\":176.65},{\"lat\":-114.32,\"lng\":178.12},{\"lat\":-114.32,\"lng\":178.12},{\"lat\":-114.59,\"lng\":179.77},{\"lat\":-114.59,\"lng\":179.77},{\"lat\":-115.37,\"lng\":181.28},{\"lat\":-115.37,\"lng\":181.28},{\"lat\":-116.1,\"lng\":183.06},{\"lat\":-116.1,\"lng\":183.06},{\"lat\":-116.84,\"lng\":184.85},{\"lat\":-116.84,\"lng\":184.85},{\"lat\":-114.91,\"lng\":183.52},{\"lat\":-114.91,\"lng\":183.52},{\"lat\":-112.81,\"lng\":181.55},{\"lat\":-112.81,\"lng\":181.55},{\"lat\":-110.89,\"lng\":179.77},{\"lat\":-110.89,\"lng\":179.77},{\"lat\":-109.38,\"lng\":179.17},{\"lat\":-109.38,\"lng\":179.17},{\"lat\":-107.73,\"lng\":180.82},{\"lat\":-107.73,\"lng\":180.82},{\"lat\":-107.13,\"lng\":182.6},{\"lat\":-107.13,\"lng\":182.6},{\"lat\":-106.86,\"lng\":183.98},{\"lat\":-106.86,\"lng\":183.98},{\"lat\":-106.86,\"lng\":185.76},{\"lat\":-106.86,\"lng\":185.76},{\"lat\":-106.86,\"lng\":187.55},{\"lat\":-106.86,\"lng\":187.55},{\"lat\":-107.73,\"lng\":189.06},{\"lat\":-107.73,\"lng\":189.06},{\"lat\":-109.1,\"lng\":188.92},{\"lat\":-109.1,\"lng\":188.92},{\"lat\":-109.7,\"lng\":188.46}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-108.19,\"lng\":186.49},{\"lat\":-109.7,\"lng\":187.09},{\"lat\":-109.7,\"lng\":187.09},{\"lat\":-110.11,\"lng\":188.92},{\"lat\":-110.11,\"lng\":188.92},{\"lat\":-109.1,\"lng\":189.93}]"
+                }
+            }
+        ],
+        "paths": [],
+        "killzones": [
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5266
+                    },
+                    {
+                        "enemy_id": 5267
+                    },
+                    {
+                        "enemy_id": 5268
+                    },
+                    {
+                        "enemy_id": 5270
+                    },
+                    {
+                        "enemy_id": 5271
+                    },
+                    {
+                        "enemy_id": 5272
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5269
+                    },
+                    {
+                        "enemy_id": 5273
+                    },
+                    {
+                        "enemy_id": 5274
+                    },
+                    {
+                        "enemy_id": 5275
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5276
+                    },
+                    {
+                        "enemy_id": 5277
+                    },
+                    {
+                        "enemy_id": 5278
+                    },
+                    {
+                        "enemy_id": 5279
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5280
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5281
+                    },
+                    {
+                        "enemy_id": 5282
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5293
+                    },
+                    {
+                        "enemy_id": 5294
+                    },
+                    {
+                        "enemy_id": 5295
+                    },
+                    {
+                        "enemy_id": 5841
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e9e",
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5290
+                    },
+                    {
+                        "enemy_id": 5291
+                    },
+                    {
+                        "enemy_id": 5292
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3effff",
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5283
+                    },
+                    {
+                        "enemy_id": 5284
+                    },
+                    {
+                        "enemy_id": 5285
+                    },
+                    {
+                        "enemy_id": 5287
+                    },
+                    {
+                        "enemy_id": 5288
+                    },
+                    {
+                        "enemy_id": 5289
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff9b3e",
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5286
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e3eff",
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5299
+                    },
+                    {
+                        "enemy_id": 5300
+                    },
+                    {
+                        "enemy_id": 5301
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#a1ff3e",
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5302
+                    },
+                    {
+                        "enemy_id": 5303
+                    },
+                    {
+                        "enemy_id": 5304
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5306
+                    },
+                    {
+                        "enemy_id": 5307
+                    },
+                    {
+                        "enemy_id": 5308
+                    },
+                    {
+                        "enemy_id": 5309
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5310
+                    },
+                    {
+                        "enemy_id": 5311
+                    },
+                    {
+                        "enemy_id": 5312
+                    },
+                    {
+                        "enemy_id": 5313
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5318
+                    },
+                    {
+                        "enemy_id": 5319
+                    },
+                    {
+                        "enemy_id": 5320
+                    },
+                    {
+                        "enemy_id": 5321
+                    },
+                    {
+                        "enemy_id": 5322
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5315
+                    },
+                    {
+                        "enemy_id": 5316
+                    },
+                    {
+                        "enemy_id": 5317
+                    },
+                    {
+                        "enemy_id": 5840
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5323
+                    },
+                    {
+                        "enemy_id": 5324
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5325
+                    },
+                    {
+                        "enemy_id": 5326
+                    },
+                    {
+                        "enemy_id": 5327
+                    },
+                    {
+                        "enemy_id": 5328
+                    },
+                    {
+                        "enemy_id": 5329
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e9e",
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5330
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3effff",
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5336
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff9b3e",
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5360
+                    },
+                    {
+                        "enemy_id": 5361
+                    },
+                    {
+                        "enemy_id": 5362
+                    },
+                    {
+                        "enemy_id": 5363
+                    },
+                    {
+                        "enemy_id": 5364
+                    },
+                    {
+                        "enemy_id": 5365
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e3eff",
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5351
+                    },
+                    {
+                        "enemy_id": 5352
+                    },
+                    {
+                        "enemy_id": 5353
+                    },
+                    {
+                        "enemy_id": 5354
+                    },
+                    {
+                        "enemy_id": 5355
+                    },
+                    {
+                        "enemy_id": 5356
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#a1ff3e",
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5348
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 23,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5369
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 24,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5368
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 25,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 5367
+                    }
+                ]
+            }
+        ],
+        "enemyraidmarkers": [],
+        "pridefulenemies": [],
+        "mapicons": [
+            {
+                "floor_id": 85,
+                "map_icon_type_id": 2,
+                "lat": -83.96,
+                "lng": 250.83,
+                "comment": "Make sure to interrupt Rebelious Fist.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -163.15,
+                "lng": 152.6,
+                "comment": "CC Forsowrn Vanguard 6 and play it after the CC breaks with the Prideful (Focus Prideful).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -176.62,
+                "lng": 189.18,
+                "comment": "Play Prideful with Kyrian Dark-Praetor (Focus Prideful).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -136.76,
+                "lng": 260.07,
+                "comment": "While Forsword Sqaud-Leader is active nearby enemies take 30% reduced damage (Inspiring presence aura). Make sure to focus him first or CC the few ads prior engaging him.\n",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -142.1,
+                "lng": 178.49,
+                "comment": "Skip this pack by shroud or out of combat cc on Forsworn Warden 2. if not, tank pulls away and group skips (Death Skip) and the healer will ressurect afterwards",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -136.4,
+                "lng": 221.58,
+                "comment": "Make sure to use Interrupts and AoE Stuns\/Stops to prevent the incoming damage.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -109.83,
+                "lng": 171.82,
+                "comment": "You can LoS behind the pillars (Optional). This way they will be stacked rather than spread and it will be easier to AoE damage them.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 85,
+                "map_icon_type_id": 2,
+                "lat": -125.04,
+                "lng": 215.36,
+                "comment": "Great place to use Bloodlust.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -227.76,
+                "lng": 228.87,
+                "comment": "If you do have a Kyrian in your group, you can use the Spear of Destiny!",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -195.21,
+                "lng": 161.39,
+                "comment": "If you do have a Kyrian in your group, you can use the Spear of Destiny!",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]

@@ -4,6 +4,39 @@ if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
 if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
     Cookies.set('hidden_map_object_groups', []);
 }
+if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
+    Cookies.set('kill_zones_number_style', 'percentage');
+}
+
+// Map object groups
+const MAP_OBJECT_GROUP_ENEMY = 'enemy';
+const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
+const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
+const MAP_OBJECT_GROUP_PATH = 'path';
+const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
+const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
+const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
+const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
+
+const MAP_OBJECT_GROUP_NAMES = [
+    MAP_OBJECT_GROUP_ENEMY,
+    MAP_OBJECT_GROUP_ENEMY_PATROL,
+    // Depends on MAP_OBJECT_GROUP_ENEMY
+    MAP_OBJECT_GROUP_ENEMY_PACK,
+    MAP_OBJECT_GROUP_PATH,
+    MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
+    MAP_OBJECT_GROUP_BRUSHLINE,
+    MAP_OBJECT_GROUP_MAPICON,
+    // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
+    // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
+    MAP_OBJECT_GROUP_KILLZONE
+];
+
+// Kill zones
+const KILL_ZONES_NUMBER_STYLE_PERCENTAGE = 'percentage';
+const KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+
 
 let c = {
     paidtiers: {

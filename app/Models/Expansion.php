@@ -36,6 +36,16 @@ class Expansion extends IconFileModel
         'updated_at'
     ];
 
+    const EXPANSION_LEGION = 'legion';
+    const EXPANSION_BFA = 'bfa';
+    const EXPANSION_SHADOWLANDS = 'shadowlands';
+
+    const ALL = [
+        'Legion' => self::EXPANSION_LEGION,
+        'Battle for Azeroth' => self::EXPANSION_BFA,
+        'Shadowlands' => self::EXPANSION_SHADOWLANDS,
+    ];
+
     /**
      * @return HasMany
      */

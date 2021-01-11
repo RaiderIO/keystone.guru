@@ -130,8 +130,8 @@ class KillZoneEnemySelection extends EnemySelection {
         // Save all the killzones that were changed
         for (let i = 0; i < this._changedKillZoneIds.length; i++) {
             let killZone = killZoneMapObjectGroup.findMapObjectById(this._changedKillZoneIds[i]);
-            // Only when the killzone was not deleted already
-            if (killZone !== null) {
+            // Only when the killzone was not deleted already and only if the killzone was already created
+            if (killZone !== null && killZone.synced) {
                 killZone.save();
             }
         }
@@ -144,6 +144,17 @@ class KillZoneEnemySelection extends EnemySelection {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('object:deleted', this);
+
+        // If there's any black listed killzones left - unreg from save:success
+        for (let index in this._blackListedKillZoneIds) {
+            if (this._blackListedKillZoneIds.hasOwnProperty(index)) {
+                let killZoneId = this._blackListedKillZoneIds[index];
+                let killZone = killZoneMapObjectGroup.findMapObjectById(killZoneId);
+                if (killZone !== null) {
+                    killZone.unregister('save:success', this);
+                }
+            }
+        }
     }
 
     /**

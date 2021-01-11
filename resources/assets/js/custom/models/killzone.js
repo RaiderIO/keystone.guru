@@ -88,6 +88,7 @@ class KillZone extends MapObject {
         this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
 
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
+        getState().register('numberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
     }
@@ -423,15 +424,34 @@ class KillZone extends MapObject {
      * @private
      */
     _mapZoomLevelChanged(mapZoomLevelChangedEvent) {
-        let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
-        let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        // Don't do any unnecessary redrawings, they are costly
-        if (// Zoomed out
-            (prevZoomLevel === c.map.killzone.percentage_display_zoom && prevZoomLevel > currZoomLevel) ||
-            // Zoomed in
-            (currZoomLevel === c.map.killzone.percentage_display_zoom && currZoomLevel > prevZoomLevel)
-        ) {
+        // Only if we actually have a tooltip to refresh
+        if (this.isVisible()) {
+            let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
+            let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
+
+            // Don't do any unnecessary redrawings, they are costly
+            if (// Zoomed out
+                (prevZoomLevel === c.map.killzone.percentage_display_zoom && prevZoomLevel > currZoomLevel) ||
+                // Zoomed in
+                (currZoomLevel === c.map.killzone.percentage_display_zoom && currZoomLevel > prevZoomLevel)
+            ) {
+                this.redrawConnectionsToEnemies();
+            }
+        }
+    }
+
+    /**
+     *
+     * @param numberStyleChangedEvent
+     * @private
+     */
+    _numberStyleChanged(numberStyleChangedEvent) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+
+        // Only if we actually have a tooltip to refresh
+        if (this.isVisible()) {
             this.redrawConnectionsToEnemies();
         }
     }
@@ -442,6 +462,7 @@ class KillZone extends MapObject {
      * @private
      */
     _onKillZoneChanged(killZoneChangedEvent) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         // Refresh percentages of killzone text should the need arise
         if (killZoneChangedEvent.data.killzone.index < this.index &&
             getState().getMapZoomLevel() >= c.map.killzone.percentage_display_zoom) {
@@ -513,7 +534,7 @@ class KillZone extends MapObject {
                     console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
 
                     // Calculate a rough center of our bounds
-                    let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
+                    let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : getCenteroid(latLngs);
                     let closestFloorSwitchMarker = null;
                     let closestDistance = 999999999999999;
 
@@ -552,20 +573,6 @@ class KillZone extends MapObject {
         }
 
         return latLngs;
-    }
-
-    /**
-     * Get the center LatLng of this killzone's layer
-     * @param arr
-     * @see https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
-     * @return {object}
-     */
-    _getLayerCenteroid(arr) {
-        let reduce = arr.reduce(function (x, y) {
-            return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
-        }, [0, 0]);
-
-        return L.latLng(reduce[0], reduce[1]);
     }
 
     /**
@@ -813,7 +820,7 @@ class KillZone extends MapObject {
      * @returns {object}
      */
     getLayerCenteroid() {
-        return this._getLayerCenteroid(this._getVisibleEntitiesLatLngs());
+        return getCenteroid(this._getVisibleEntitiesLatLngs());
     }
 
     /**
@@ -866,8 +873,12 @@ class KillZone extends MapObject {
                 let tooltipText = this.index + '';
 
                 if (getState().getMapZoomLevel() > 2) {
-                    let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
-                    tooltipText += ` - ${enemyForcesCumulativePercent}%`;
+                    if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
+                        let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
+                        tooltipText += ` - ${enemyForcesCumulativePercent}%`;
+                    } else if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES) {
+                        tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`;
+                    }
                 }
 
                 this.enemiesLayer.bindTooltip(tooltipText, {
@@ -954,6 +965,7 @@ class KillZone extends MapObject {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('killzone:changed', this);
         getState().unregister('mapzoomlevel:changed', this);
+        getState().unregister('numberstyle:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
         this.map.unregister('map:refresh', this);

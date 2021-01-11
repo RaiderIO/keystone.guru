@@ -5,7 +5,6 @@
         "icon_name": "ability_deathknight_boneshield",
         "name": "Bone Shield",
         "schools_mask": 0,
-        "aura": 1,
-        "icon_url": "http:\/\/keystone.test\/images\/spells\/ability_deathknight_boneshield.png"
+        "aura": 1
     }
 ]

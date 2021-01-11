@@ -1,6 +1,8 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 /** @var \App\Models\Dungeon $dungeon */
+
+$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -10,10 +12,61 @@
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
+    'killZonesPullsSettingsSelector' => '#killzones_pulls_settings_container',
+    'killZonesPullsSettingsNumberStyleSelector' => '#killzones_pulls_settings_number_style',
+    'killZonesPullsSettingsDeleteAllSelector' => '#killzones_pulls_settings_delete_all',
     'edit' => $edit
 ]])
 
-@section('sidebar-content')
+@section('sidebar-sticky')
+    @if($edit)
+        <div class="container">
+            <div class="form-group">
+                <div class="row mb-2 mt-2 no-gutters">
+                    <div class="col-10">
+                        <div id="killzones_new_pull" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> {{__('New pull')}}
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-info w-100"
+                                data-toggle="collapse" data-target="#killzones_pulls_settings_container"
+                                aria-expanded="false" aria-controls="killzones_pulls_settings_container">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="killzones_pulls_settings_container" class="collapse">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="font-weight-bold">
+                                {{ __('Number style') }}:
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <input id="killzones_pulls_settings_number_style" type="checkbox"
+                                   {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
+                                   data-toggle="toggle" data-width="120px" data-height="20px"
+                                   data-onstyle="primary" data-offstyle="primary"
+                                   data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                                <i class="fas fa-trash"></i> {{ __('Delete all pulls') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @component('common.maps.sidebar', [
@@ -21,18 +74,10 @@
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',
+    'edit' => $edit,
     /* Draw controls are injected here through drawcontrols.js */
     'customSubHeader' => '<div class="mt-4"><div id="edit_route_enemy_forces_container"></div></div>'
 ])
-    @if($edit)
-        <div class="row mb-2">
-            <div class="col">
-                <div id="killzones_new_pull" class="btn btn-success w-100">
-                    <i class="fas fa-plus"></i> {{__('New pull')}}
-                </div>
-            </div>
-        </div>
-    @endif
     <div id="killzones_loading" class="row">
         <div class="col text-center">
             <h5>{{ __('Loading...') }}</h5>

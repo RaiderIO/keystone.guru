@@ -15,6 +15,7 @@ $sandboxMode = isset($sandboxMode) && $sandboxMode;
 $enemyVisualType = (isset($enemyVisualType) ? $enemyVisualType : isset($_COOKIE['enemy_display_type'])) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
 // Allow echo to be overridden
 $echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
+$zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 
 // Easy switch
 $isProduction = config('app.env') === 'production';
@@ -58,6 +59,7 @@ if ($isAdmin) {
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'noUI' => $noUI,
+    'zoomToContents' => $zoomToContents,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
@@ -107,6 +109,7 @@ if ($isAdmin) {
         </div>
         <ul class="leaflet-draw-actions"></ul>
     </div>
+
 
 
 

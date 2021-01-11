@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Expansion;
 use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -19,15 +20,15 @@ class ExpansionsSeeder extends Seeder
 
         $expansions = [
             'Legion' => new App\Models\Expansion([
-                'shortname' => 'legion',
+                'shortname' => Expansion::EXPANSION_LEGION,
                 'color' => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00')
             ]), 'Battle for Azeroth' => new App\Models\Expansion([
-                'shortname' => 'bfa',
+                'shortname' => Expansion::EXPANSION_BFA,
                 'color' => '#906554',
                 'released_at' => Carbon::make('2018-08-14 00:00:00')
             ]), 'Shadowlands' => new App\Models\Expansion([
-                'shortname' => 'shadowlands',
+                'shortname' => Expansion::EXPANSION_SHADOWLANDS,
                 'color' => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00')
             ])

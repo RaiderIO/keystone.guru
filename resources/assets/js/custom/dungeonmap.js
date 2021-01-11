@@ -610,7 +610,7 @@ class DungeonMap extends Signalable {
 
 
         let dungeonData = getState().getMapContext().getDungeon();
-        this.mapTileLayer = L.tileLayer('/images/tiles/' + dungeonData.expansion.shortname + '/' + dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${getState().getCurrentFloor().index}/{z}/{x}_{y}.png`, {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
@@ -678,6 +678,11 @@ class DungeonMap extends Signalable {
 
         // Add new controls; we're all loaded now and user should now be able to edit their route
         this._addMapControls(this.editableLayers);
+
+        // Used for preview image generation
+        if (this.options.zoomToContents) {
+            this.leafletMap.fitBounds(this.drawnLayers.getBounds());
+        }
 
         refreshTooltips();
 

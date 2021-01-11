@@ -34,6 +34,7 @@
         "bootstrap": "^4.3.1",
         "bootstrap-4-autocomplete": "^1.2.3",
         "bootstrap-select": "^1.13.12",
+        "bootstrap4-toggle": "^3.6.1",
         "bootswatch": "^4.3.1",
         "color-interpolate": "^1.0.4",
         "d3": "3.5.14",

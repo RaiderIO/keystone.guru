@@ -250,11 +250,11 @@ class MapObjectGroup extends Signalable {
 
         mapObject.loadRemoteMapObject(remoteMapObject);
 
-        // If id = -1 we're creating a new Map Object from the map; at this point we should not sync
+        // If id is not set we're creating a new Map Object from the map; at this point we should not sync
         // since the ID still needs to be generated from the server.
         // Sometimes, mapObject.id is 'undefined', for example MDT enemies. This simply means a MapObject is not dealing
         // with IDs, but we still want to fire the Synced event at some point.
-        if (mapObject.id !== -1) {
+        if (mapObject.id > 0) {
             mapObject.setSynced(true);
         }
 
@@ -532,11 +532,14 @@ class MapObjectGroup extends Signalable {
 
         let result = null;
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let objectCandidate = this.objects[i];
-            if (objectCandidate.id === id) {
-                result = objectCandidate;
-                break;
+        // Do not return an already saving map object which has id -1 of which multiple can exist
+        if( id > 0 ) {
+            for (let i = 0; i < this.objects.length; i++) {
+                let objectCandidate = this.objects[i];
+                if (objectCandidate.id === id) {
+                    result = objectCandidate;
+                    break;
+                }
             }
         }
 

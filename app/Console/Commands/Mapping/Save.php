@@ -56,6 +56,9 @@ class Save extends Command
      */
     private function _saveDungeons(string $dungeonDataDir)
     {
+        // Save NPC data in the root of folder
+        $this->info('Saving dungeons');
+
         // Save all dungeons
         $dungeons = Dungeon::without(['expansion'])->with('floors.floorcouplings')->get();
 
@@ -71,6 +74,9 @@ class Save extends Command
      */
     private function _saveNpcs(string $dungeonDataDir)
     {
+        // Save NPC data in the root of folder
+        $this->info('Saving global NPCs');
+
         // Save all NPCs which aren't directly tied to a dungeon
         $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', -1)->get()->values();
         $npcs->makeHidden(['type', 'class']);
@@ -78,8 +84,6 @@ class Save extends Command
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
         }
 
-        // Save NPC data in the root of folder
-        $this->info('Saving global NPCs');
         $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
     }
 
@@ -90,7 +94,12 @@ class Save extends Command
     {
         // Save all spells
         $this->info('Saving Spells');
-        $this->saveDataToJsonFile(Spell::all()->toArray(), $dungeonDataDir, 'spells.json');
+
+        $spells = Spell::all();
+        foreach($spells as $spell){
+            $spell->makeHidden(['icon_url']);
+        }
+        $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
     }
 
     /**

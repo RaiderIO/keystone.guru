@@ -284,6 +284,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/killzone', 'APIKillZoneController@store');
             Route::delete('/killzone/{killzone}', 'APIKillZoneController@delete');
             Route::put('/killzone', 'APIKillZoneController@storeall');
+            Route::delete('/killzone', 'APIKillZoneController@deleteall');
 
             Route::post('/mapicon', 'APIMapIconController@store');
             Route::delete('/mapicon/{mapicon}', 'APIMapIconController@delete');

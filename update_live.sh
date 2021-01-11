@@ -3,7 +3,7 @@
 # https://laravel.com/docs/5.6/configuration#maintenance-mode
 # Go up first in case we were manually down, otherwise the message will not get refreshed
 php artisan up
-php artisan down --message="Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry=60
+php artisan down --message="Upgrading Keystone.guru, we will be back stronger than ever shortly!" --retry=60
 
 # get rid of all local mods first
 git checkout .

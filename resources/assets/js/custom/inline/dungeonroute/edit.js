@@ -72,7 +72,10 @@ class DungeonrouteEdit extends InlineCode {
             success: function (json) {
                 showSuccessNotification(lang.get('messages.settings_saved'));
 
-                getState().getMapContext().setSeasonalIndex(parseInt($('#seasonal_index').val()));
+                let $seasonalIndex = $('#seasonal_index');
+                if ($seasonalIndex.length > 0) {
+                    getState().getMapContext().setSeasonalIndex(parseInt($seasonalIndex.val()));
+                }
                 getState().getMapContext().setTeeming($('#teeming').is(':checked'));
             },
             complete: function () {
