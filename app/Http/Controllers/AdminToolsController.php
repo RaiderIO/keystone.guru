@@ -1,12 +1,14 @@
-<?php
+<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportString;
 use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Service\Cache\CacheService;
@@ -169,6 +171,55 @@ class AdminToolsController extends Controller
             $dungeonRoute->makeVisible(['killzones']);
 
             dd($dungeonRoute);
+        } catch (Exception $ex) {
+
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+            } else {
+                $message = __('Invalid MDT string');
+            }
+            return abort(400, $message);
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+            }
+
+            throw $error;
+        }
+    }
+
+    /**
+     * @return Factory|
+     */
+    public function mdtviewasstring()
+    {
+        return view('admin.tools.mdt.dungeonroute', ['dungeonroute' => true]);
+    }
+
+    /**
+     * @param Request $request
+     * @param SeasonService $seasonService
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function mdtviewasstringsubmit(Request $request, SeasonService $seasonService)
+    {
+        $dungeonRoute = DungeonRoute::where('public_key', $request->get('public_key'))->firstOrFail();
+
+        try {
+            $warnings = new Collection();
+
+            $exportString = (new ExportString($seasonService))
+                ->setDungeonRoute($dungeonRoute)
+                ->getEncodedString($warnings);
+
+            $stringContents = (new ImportString($seasonService))
+                ->setEncodedString($exportString)
+                ->getDecoded();
+
+            dd($exportString, $stringContents);
         } catch (Exception $ex) {
 
             // Different message based on our deployment settings

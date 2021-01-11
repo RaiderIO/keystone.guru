@@ -196,6 +196,12 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 // View string contents as a dungeonroute
                 Route::get('mdt/string/dungeonroute', 'AdminToolsController@mdtviewasdungeonroute')->name('admin.tools.mdt.string.viewasdungeonroute');
                 Route::post('mdt/string/dungeonroute', 'AdminToolsController@mdtviewasdungeonroutesubmit')->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+
+                // View dungeonroute as string
+                Route::get('mdt/dungeonroute/string', 'AdminToolsController@mdtviewasstring')->name('admin.tools.mdt.dungeonroute.viewasstring');
+                Route::post('mdt/dungeonroute/string', 'AdminToolsController@mdtviewasstringsubmit')->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+
                 Route::get('mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', 'AdminToolsController@dropcache')->name('admin.tools.cache.drop');
 
@@ -315,6 +321,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::delete('/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
 
                 Route::post('/publishedState', 'APIDungeonRouteController@publishedState')->name('api.dungeonroute.publishedstate');
+
+                Route::get('/mdtExport', 'APIDungeonRouteController@mdtExport')->name('api.dungeonroute.mdtexport');
 
                 Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
                 Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');

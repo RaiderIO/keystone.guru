@@ -15,6 +15,7 @@ use Mockery\Exception;
  * @property int $id The ID of this Dungeon.
  * @property int $expansion_id The linked expansion to this dungeon.
  * @property int $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int $mdt_id The ID that MDT has given this dungeon.
  * @property string $name The name of the dungeon.
  * @property string $key Shorthand key of the dungeon
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
@@ -241,11 +242,13 @@ class Dungeon extends Model
         return $this->name === 'Tol Dagor';
     }
 
-    public function getTimerUpgradePlusTwoSeconds(){
+    public function getTimerUpgradePlusTwoSeconds()
+    {
         return $this->timer_max_seconds * config('keystoneguru.timer.plustwofactor');
     }
 
-    public function getTimerUpgradePlusThreeSeconds() {
+    public function getTimerUpgradePlusThreeSeconds()
+    {
         return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
     }
 
