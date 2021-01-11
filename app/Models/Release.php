@@ -130,11 +130,20 @@ class Release extends Model
 ////            ]
 ////        ];
 
+        // Quick fix to get the release body to always show up in the #a
+        // https://discord.com/developers/docs/resources/channel#embed-limits limit is 2048 characters
+        $discordBody = $this->discord_body;
+        $truncatedDiscordBody = substr($discordBody, 0, 2000);
+
+        if (strlen($discordBody) !== strlen($truncatedDiscordBody)) {
+            $discordBody = sprintf('%s (%d characters truncated)', $truncatedDiscordBody, strlen($discordBody) - strlen($truncatedDiscordBody));
+        }
+
         return [
             [
                 'color'       => 14641434, // '#DF691A'
                 'title'       => sprintf('Release %s (%s)', $this->version, $this->created_at->format('Y/m/d')),
-                'description' => $this->discord_body,
+                'description' => $discordBody,
                 'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
