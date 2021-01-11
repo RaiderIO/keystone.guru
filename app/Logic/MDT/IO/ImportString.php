@@ -39,7 +39,7 @@ use Lua;
  * @author Wouter
  * @since 05/01/2019
  */
-class ImportString
+class ImportString extends MDTBase
 {
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private $_encodedString;
@@ -54,24 +54,6 @@ class ImportString
     function __construct(SeasonService $seasonService)
     {
         $this->_seasonService = $seasonService;
-    }
-
-    /**
-     * Gets a Lua instance and load all the required files in it.
-     * @return Lua
-     */
-    private function _getLua()
-    {
-        $lua = new Lua();
-
-        // Load libraries (yeah can do this with ->library function as well)
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibDeflate.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
-
-        return $lua;
     }
 
     /**
@@ -213,7 +195,7 @@ class ImportString
         $floors = $dungeonRoute->dungeon->floors;
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
 
-        // Fetch all enemies of this
+        // Fetch all enemies of this dungeon
         $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
 
         // For each pull the user created
@@ -519,17 +501,6 @@ class ImportString
     }
 
     /**
-     * Gets the MDT encoded string based on the currently set DungeonRoute.
-     * @return string
-     */
-    public function getEncodedString()
-    {
-        $lua = $this->_getLua();
-        $encoded = $lua->call("TableToString", [$this->_dungeonRoute, true]);
-        return $encoded;
-    }
-
-    /**
      * Gets an array that represents the currently set MDT string.
      * @return mixed
      */
@@ -631,19 +602,6 @@ class ImportString
     public function setEncodedString($encodedString)
     {
         $this->_encodedString = $encodedString;
-
-        return $this;
-    }
-
-    /**
-     * Sets a dungeon route to be staged for encoding to an encoded string.
-     *
-     * @param $dungeonRoute DungeonRoute
-     * @return $this Returns self to allow for chaining.
-     */
-    public function setDungeonRoute($dungeonRoute)
-    {
-        $this->_dungeonRoute = $dungeonRoute;
 
         return $this;
     }

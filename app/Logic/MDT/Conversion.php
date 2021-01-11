@@ -9,6 +9,8 @@
 namespace App\Logic\MDT;
 
 use App\Models\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Service\Season\SeasonService;
 use Exception;
 
@@ -102,9 +104,6 @@ class Conversion
      */
     public static function convertMDTDungeonID(int $mdtDungeonId): int
     {
-        // May be a double, convert it first
-        $mdtDungeonId = (int)$mdtDungeonId;
-
         if (
             // BFA
             ($mdtDungeonId >= 15 && $mdtDungeonId <= 26) ||
@@ -162,5 +161,34 @@ class Conversion
             12 => 10
         ];
         return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
+    }
+
+    /**
+     * @param SeasonService $seasonService
+     * @param AffixGroup $affixGroup
+     * @return int
+     */
+    public static function convertAffixGroupToWeek(SeasonService $seasonService, AffixGroup $affixGroup): int
+    {
+        // We need to figure out which week it is in the rotation
+        $weekIndex = $affixGroup->id % config('keystoneguru.season_iteration_affix_group_count');
+
+        // KG to MDT
+        $weekMapping = [
+            0  => 3,
+            1  => 4,
+            2  => 5,
+            3  => 6,
+            4  => 7,
+            5  => 8,
+            6  => 9,
+            7  => 10,
+            8  => 11,
+            9  => 12,
+            10 => 1,
+            11 => 2
+        ];
+
+        return $weekMapping[$weekIndex];
     }
 }

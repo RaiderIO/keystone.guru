@@ -1,7 +1,7 @@
 <?php
 $show = isset($show) ? $show : [];
-
-?><!-- Shareable link -->
+?>
+<!-- Shareable link -->
 <div class="form-group">
     <div class="card">
         <div class="card-body">
@@ -30,6 +30,17 @@ $show = isset($show) ? $show : [];
                             <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"
                                     data-toggle="tooltip" title="{{ __('Copy embed code to clipboard') }}">
                                 <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <button id="map_mdt_export" class="btn btn-info w-100" data-toggle="modal" data-target="#mdt_export_modal">
+                                <i class="fas fa-file-export"></i> {{ __('Export MDT string') }}
                             </button>
                         </div>
                     </div>
