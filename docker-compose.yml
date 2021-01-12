@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: keystone.guru
+    container_name: keystone.guru-app
+    depends_on: 
+      - db
+      - nginx
+      - redis
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - keystone.guru
+
+  db:
+    image: mysql:5.7
+    container_name: keystone.guru-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/var/lib/mysql
+    networks:
+      - keystone.guru
+
+  nginx:
+    image: nginx:alpine
+    container_name: keystone.guru-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - keystone.guru
+
+  redis:
+    image: "redis:alpine"
+    container_name: keystone.guru-redis
+    ports:
+     - "6379:6379"
+    volumes:
+     - ./docker-compose/redis-data:/var/lib/redis
+    networks:
+      - keystone.guru
+
+networks:
+  keystone.guru:
+    driver: bridge
