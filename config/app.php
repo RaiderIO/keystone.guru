@@ -186,13 +186,14 @@ return [
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Folklore\Image\ImageServiceProvider::class,
-        PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
+        \App\Providers\TrackerServiceProvider::class,
+//        PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
 
-        /*
+        /**
          * Keystone.guru Service Providers...
          */
         App\Providers\KeystoneGuruServiceProvider::class,
