@@ -51,6 +51,13 @@ class Npc extends Model
     {
         return in_array($this->id, [161244, 161243, 161124, 161241]);
     }
+    /**
+     * @return bool
+     */
+    public function isPrideful()
+    {
+        return $this->id === 173729;
+    }
 
     /**
      * Gets all derived enemies from this Npc.

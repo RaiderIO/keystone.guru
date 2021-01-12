@@ -39,7 +39,7 @@ use Lua;
  * @author Wouter
  * @since 05/01/2019
  */
-class ImportString
+class ImportString extends MDTBase
 {
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private $_encodedString;
@@ -54,24 +54,6 @@ class ImportString
     function __construct(SeasonService $seasonService)
     {
         $this->_seasonService = $seasonService;
-    }
-
-    /**
-     * Gets a Lua instance and load all the required files in it.
-     * @return Lua
-     */
-    private function _getLua()
-    {
-        $lua = new Lua();
-
-        // Load libraries (yeah can do this with ->library function as well)
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibDeflate.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
-
-        return $lua;
     }
 
     /**
@@ -213,7 +195,7 @@ class ImportString
         $floors = $dungeonRoute->dungeon->floors;
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
 
-        // Fetch all enemies of this
+        // Fetch all enemies of this dungeon
         $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
 
         // For each pull the user created
@@ -427,8 +409,8 @@ class ImportString
                      *
                      * Line
                      *
-                     * 1 = size
-                     * 2 = linefactor (weight?)
+                     * 1 = size (weight?)
+                     * 2 = linefactor
                      * 3 = sublevel
                      * 4 = enabled/visible?
                      * 5 = color
@@ -450,10 +432,12 @@ class ImportString
                         if (isset($object['l'])) {
                             $line = $object['l'];
 
-                            $brushline = new Brushline();
+                            $isFreeDrawn = isset($details['7']) && $details['7'];
+                            /** @var Brushline|Path $lineOrPath */
+                            $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
                             // Assign the proper ID
-                            $brushline->floor_id = $floor->id;
-                            $brushline->polyline_id = -1;
+                            $lineOrPath->floor_id = $floor->id;
+                            $lineOrPath->polyline_id = -1;
 
                             $polyline = new Polyline();
 
@@ -471,16 +455,20 @@ class ImportString
 
                             if ($save) {
                                 // Only assign when saving
-                                $brushline->dungeon_route_id = $dungeonRoute->id;
-                                $brushline->save();
+                                $lineOrPath->dungeon_route_id = $dungeonRoute->id;
+                                $lineOrPath->save();
 
-                                $polyline->model_id = $brushline->id;
-                                $polyline->model_class = get_class($brushline);
+                                $polyline->model_id = $lineOrPath->id;
+                                $polyline->model_class = get_class($lineOrPath);
                                 $polyline->save();
                             } else {
                                 // Otherwise inject
-                                $brushline->polyline = $polyline;
-                                $dungeonRoute->brushlines->push($brushline);
+                                $lineOrPath->polyline = $polyline;
+                                if( $isFreeDrawn ) {
+                                    $dungeonRoute->brushlines->push($lineOrPath);
+                                } else {
+                                    $dungeonRoute->paths->push($lineOrPath);
+                                }
                             }
                         }
                         // Map comment (n = note)
@@ -516,17 +504,6 @@ class ImportString
                 }
             }
         }
-    }
-
-    /**
-     * Gets the MDT encoded string based on the currently set DungeonRoute.
-     * @return string
-     */
-    public function getEncodedString()
-    {
-        $lua = $this->_getLua();
-        $encoded = $lua->call("TableToString", [$this->_dungeonRoute, true]);
-        return $encoded;
     }
 
     /**
@@ -631,19 +608,6 @@ class ImportString
     public function setEncodedString($encodedString)
     {
         $this->_encodedString = $encodedString;
-
-        return $this;
-    }
-
-    /**
-     * Sets a dungeon route to be staged for encoding to an encoded string.
-     *
-     * @param $dungeonRoute DungeonRoute
-     * @return $this Returns self to allow for chaining.
-     */
-    public function setDungeonRoute($dungeonRoute)
-    {
-        $this->_dungeonRoute = $dungeonRoute;
 
         return $this;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers;
 
@@ -20,6 +20,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
+use App\Logic\MDT\IO\ExportString;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -31,8 +32,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
+use Throwable;
 
 class APIDungeonRouteController extends Controller
 {
@@ -448,5 +451,35 @@ class APIDungeonRouteController extends Controller
 
 
         return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param SeasonService $seasonService
+     * @return array|void
+     * @throws Throwable
+     */
+    function mdtExport(Request $request, DungeonRoute $dungeonroute, SeasonService $seasonService)
+    {
+        $exportString = new ExportString($seasonService);
+
+//        try {
+            // @TODO improve exception handling
+            $warnings = new Collection();
+            $dungeonRoute = $exportString->setDungeonRoute($dungeonroute)
+                ->getEncodedString($warnings);
+
+
+            return ['mdt_string' => $dungeonRoute];
+//        } catch (Exception $ex) {
+//            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+//        } catch (Throwable $error) {
+//            if ($error->getMessage() === "Class 'Lua' not found") {
+//                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+//            }
+//
+//            throw $error;
+//        }
     }
 }

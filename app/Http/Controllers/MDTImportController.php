@@ -52,6 +52,7 @@ class MDTImportController extends Controller
                 'dungeon'          => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
                 'affixes'          => $affixes,
                 'pulls'            => $dungeonRoute->killzones->count(),
+                'paths'            => $dungeonRoute->paths->count(),
                 'lines'            => $dungeonRoute->brushlines->count(),
                 'notes'            => $dungeonRoute->mapicons->count(),
                 'enemy_forces'     => $dungeonRoute->getEnemyForces(),

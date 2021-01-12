@@ -8,7 +8,10 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
  * @property $id int
@@ -20,8 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property DungeonRoute $dungeonroute
  * @property Polyline $polyline
+ * @property Floor $floor
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Brushline extends Model
 {
@@ -31,7 +35,7 @@ class Brushline extends Model
     /**
      * Get the dungeon route that this brushline is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {
@@ -39,30 +43,30 @@ class Brushline extends Model
     }
 
     /**
-     * Get the floor that this polyline is drawn on.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    function floor()
-    {
-        return $this->belongsTo('App\Models\Floor');
-    }
-
-    /**
      * Get the dungeon route that this brushline is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     * @return hasOne
      */
     function polyline()
     {
         return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
     }
 
+    /**
+     * Get the floor that this polyline is drawn on.
+     *
+     * @return BelongsTo
+     */
+    function floor()
+    {
+        return $this->belongsTo('App\Models\Floor');
+    }
+
     public static function boot()
     {
         parent::boot();
 
-        // Delete Path properly if it gets deleted
+        // Delete Brushline properly if it gets deleted
         static::deleting(function ($item) {
             /** @var $item Brushline */
             if ($item->polyline !== null) {
