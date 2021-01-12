@@ -11,7 +11,9 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Models\Brushline;
 use App\Models\DungeonRoute;
+use App\Models\Path;
 use App\Service\Season\SeasonService;
 use Illuminate\Support\Collection;
 
@@ -64,16 +66,19 @@ class ExportString extends MDTBase
             $mapIconIndex++;
         }
 
-        $lineIndex = 1;
-        foreach($this->_dungeonRoute->brushlines as $brushline){
+        $lines = $this->_dungeonRoute->brushlines->merge($this->_dungeonRoute->paths);
 
-            $line = [
+        $lineIndex = 1;
+        foreach($lines as $line){
+            /** @var Path|Brushline $line */
+
+            $mdtLine = [
                 'd' => [
-                    1 => $brushline->polyline->weight,
+                    1 => $line->polyline->weight,
                     2 => 1,
-                    3 => $brushline->floor->index,
+                    3 => $line->floor->index,
                     4 => true,
-                    5 => strpos($brushline->polyline->color, '#') === 0 ? substr($brushline->polyline->color, 1) : $brushline->polyline->color,
+                    5 => strpos($line->polyline->color, '#') === 0 ? substr($line->polyline->color, 1) : $line->polyline->color,
                     6 => -8,
                 ],
                 't' => [
@@ -82,16 +87,20 @@ class ExportString extends MDTBase
                 'l' => []
             ];
 
+            if( $line instanceof Brushline ){
+                $mdtLine['d'][7] = true;
+            }
+
             $vertexIndex = 1;
-            $vertices = json_decode($brushline->polyline->vertices_json, true);
+            $vertices = json_decode($line->polyline->vertices_json, true);
             foreach($vertices as $latLng){
                 $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
                 // Post increment
-                $line['l'][$vertexIndex++] = $mdtCoordinates['x'];
-                $line['l'][$vertexIndex++] = $mdtCoordinates['y'];
+                $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
+                $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
             }
 
-            $result[$lineIndex] = $line;
+            $result[$lineIndex] = $mdtLine;
             $lineIndex++;
         }
 
