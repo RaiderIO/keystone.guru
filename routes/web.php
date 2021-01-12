@@ -201,6 +201,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::get('mdt/dungeonroute/string', 'AdminToolsController@mdtviewasstring')->name('admin.tools.mdt.dungeonroute.viewasstring');
                 Route::post('mdt/dungeonroute/string', 'AdminToolsController@mdtviewasstringsubmit')->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
 
+                // Exception thrower
+                Route::get('exception', 'AdminToolsController@exceptionselect')->name('admin.tools.exception.select');
+                Route::post('exception', 'AdminToolsController@exceptionselectsubmit')->name('admin.tools.exception.select.submit');
 
                 Route::get('mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', 'AdminToolsController@dropcache')->name('admin.tools.cache.drop');

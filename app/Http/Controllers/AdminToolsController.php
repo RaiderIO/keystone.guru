@@ -21,6 +21,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Session;
@@ -407,5 +408,25 @@ class AdminToolsController extends Controller
         Artisan::call('mapping:save');
 
         return view('admin.tools.datadump.viewexporteddungeondata');
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function exceptionselect(Request $request)
+    {
+        return view('admin.tools.exception.select');
+    }
+
+    /**
+     * @param Request $request
+     * @throws TokenMismatchException
+     */
+    public function exceptionselectsubmit(Request $request)
+    {
+        switch ($request->get('exception')) {
+            case 'TokenMismatchException':
+                throw new TokenMismatchException('Exception thrown in admin panel');
+        }
     }
 }
