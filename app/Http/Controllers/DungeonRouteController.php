@@ -100,13 +100,17 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param int $floorIndex
+     * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
-    public function viewfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
+    public function viewfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
         $this->authorize('view', $dungeonroute);
+
+        if( !is_numeric($floorIndex) ) {
+            $floorIndex = '1';
+        }
 
         $currentReport = null;
         if (Auth::check()) {
@@ -138,11 +142,15 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param int $floorindex
+     * @param string $floorindex
      * @return Factory|View
      */
-    public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
+    public function preview(Request $request, DungeonRoute $dungeonroute, string $floorindex)
     {
+        if( !is_numeric($floorindex) ) {
+            $floorindex = '1';
+        }
+
         /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
         return view('dungeonroute.preview', [
@@ -228,13 +236,17 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param int $floorIndex
+     * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
-    public function editfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
+    public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
         $this->authorize('edit', $dungeonroute);
+
+        if( !is_numeric($floorIndex) ) {
+            $floorIndex = '1';
+        }
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
@@ -262,13 +274,17 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param int|null $floorIndex
+     * @param string $floorIndex
      * @return Application|Factory|View
      * @throws AuthorizationException
      */
-    public function embed(Request $request, DungeonRoute $dungeonroute, ?int $floorIndex = 1)
+    public function embed(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
     {
         $this->authorize('embed', $dungeonroute);
+
+        if( !is_numeric($floorIndex) ) {
+            $floorIndex = '1';
+        }
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();

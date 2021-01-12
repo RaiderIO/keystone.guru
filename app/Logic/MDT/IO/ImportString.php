@@ -409,8 +409,8 @@ class ImportString extends MDTBase
                      *
                      * Line
                      *
-                     * 1 = size
-                     * 2 = linefactor (weight?)
+                     * 1 = size (weight?)
+                     * 2 = linefactor
                      * 3 = sublevel
                      * 4 = enabled/visible?
                      * 5 = color
@@ -432,10 +432,12 @@ class ImportString extends MDTBase
                         if (isset($object['l'])) {
                             $line = $object['l'];
 
-                            $brushline = new Brushline();
+                            $isFreeDrawn = isset($details['7']) && $details['7'];
+                            /** @var Brushline|Path $lineOrPath */
+                            $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
                             // Assign the proper ID
-                            $brushline->floor_id = $floor->id;
-                            $brushline->polyline_id = -1;
+                            $lineOrPath->floor_id = $floor->id;
+                            $lineOrPath->polyline_id = -1;
 
                             $polyline = new Polyline();
 
@@ -453,16 +455,20 @@ class ImportString extends MDTBase
 
                             if ($save) {
                                 // Only assign when saving
-                                $brushline->dungeon_route_id = $dungeonRoute->id;
-                                $brushline->save();
+                                $lineOrPath->dungeon_route_id = $dungeonRoute->id;
+                                $lineOrPath->save();
 
-                                $polyline->model_id = $brushline->id;
-                                $polyline->model_class = get_class($brushline);
+                                $polyline->model_id = $lineOrPath->id;
+                                $polyline->model_class = get_class($lineOrPath);
                                 $polyline->save();
                             } else {
                                 // Otherwise inject
-                                $brushline->polyline = $polyline;
-                                $dungeonRoute->brushlines->push($brushline);
+                                $lineOrPath->polyline = $polyline;
+                                if( $isFreeDrawn ) {
+                                    $dungeonRoute->brushlines->push($lineOrPath);
+                                } else {
+                                    $dungeonRoute->paths->push($lineOrPath);
+                                }
                             }
                         }
                         // Map comment (n = note)

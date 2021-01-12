@@ -240,6 +240,7 @@ return [
     'mdt_dungeon'                                                   => 'Dungeon',
     'mdt_affixes'                                                   => 'Affixes',
     'mdt_pulls'                                                     => 'Pulls',
+    'mdt_paths'                                                     => 'Paths',
     'mdt_drawn_lines'                                               => 'Drawn lines',
     'mdt_notes'                                                     => 'Notes',
     'mdt_enemy_forces'                                              => 'Enemy forces',
