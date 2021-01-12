@@ -27,10 +27,10 @@ class ExportString extends MDTBase
     private $_encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
-    private $_dungeonRoute;
+    private DungeonRoute $_dungeonRoute;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private $_seasonService;
+    private SeasonService $_seasonService;
 
 
     function __construct(SeasonService $seasonService)
@@ -45,6 +45,56 @@ class ExportString extends MDTBase
     private function _extractObjects(Collection $warnings): array
     {
         $result = [];
+
+        // Lua is 1 based, not 0 based
+        $mapIconIndex = 1;
+        foreach ($this->_dungeonRoute->mapicons as $mapIcon) {
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
+
+            $result[$mapIconIndex] = [
+                'n' => true,
+                'd' => [
+                    1 => $mdtCoordinates['x'],
+                    2 => $mdtCoordinates['y'],
+                    3 => $mapIcon->floor->index,
+                    4 => true,
+                    5 => $mapIcon->comment
+                ]
+            ];
+            $mapIconIndex++;
+        }
+
+        $lineIndex = 1;
+        foreach($this->_dungeonRoute->brushlines as $brushline){
+
+            $line = [
+                'd' => [
+                    1 => $brushline->polyline->weight,
+                    2 => 1,
+                    3 => $brushline->floor->index,
+                    4 => true,
+                    5 => strpos($brushline->polyline->color, '#') === 0 ? substr($brushline->polyline->color, 1) : $brushline->polyline->color,
+                    6 => -8,
+                ],
+                't' => [
+                    1 => 0
+                ],
+                'l' => []
+            ];
+
+            $vertexIndex = 1;
+            $vertices = json_decode($brushline->polyline->vertices_json, true);
+            foreach($vertices as $latLng){
+                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
+                // Post increment
+                $line['l'][$vertexIndex++] = $mdtCoordinates['x'];
+                $line['l'][$vertexIndex++] = $mdtCoordinates['y'];
+            }
+
+            $result[$lineIndex] = $line;
+            $lineIndex++;
+        }
+
 
         return $result;
     }
@@ -61,12 +111,19 @@ class ExportString extends MDTBase
         $mdtEnemies = (new MDTDungeon($this->_dungeonRoute->dungeon->name))
             ->getClonesAsEnemies($this->_dungeonRoute->dungeon->floors);
 
-        // LUA is 1 index based, not 0
+        // Lua is 1 based, not 0 based
         $pullIndex = 1;
         foreach ($this->_dungeonRoute->killzones as $killZone) {
             $pull = [];
 
+            // Lua is 1 based, not 0 based
+            $enemyIndex = 1;
             foreach ($killZone->enemies as $enemy) {
+                // MDT does not handle prideful NPCs
+                if ($enemy->npc->isPrideful()) {
+                    continue;
+                }
+
                 // Find the MDT enemy - we need to know the mdt_npc_index
                 $mdtNpcIndex = -1;
                 foreach ($mdtEnemies as $mdtEnemyCandidate) {
@@ -76,13 +133,23 @@ class ExportString extends MDTBase
                     }
                 }
 
+                // If we couldn't find the enemy in MDT..
+                if ($mdtNpcIndex === -1) {
+                    $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                        sprintf(__('Unable to find MDT equivalent for Keystone.guru enemy with NPC %s (enemy_id: %s, npc_id: %s).'), $enemy->npc->name, $enemy->id, $enemy->npc_id),
+                        ['details' => __('This indicates that your route kills an enemy of which its NPC is known to MDT, 
+                        but Keystone.guru hasn\'t coupled that enemy to an MDT equivalent yet (or it does not exist in MDT).')]
+                    ));
+                }
+
                 // Create an array if it didn't exist yet
                 if (!isset($pull[$mdtNpcIndex])) {
                     $pull[$mdtNpcIndex] = [];
                 }
 
                 // For this enemy, kill this clone
-                $pull[$mdtNpcIndex][] = $enemy->mdt_id;
+                $pull[$mdtNpcIndex][$enemyIndex] = $enemy->mdt_id;
+                $enemyIndex++;
             }
 
             $pull['color'] = strpos($killZone->color, '#') === 0 ? substr($killZone->color, 1) : $killZone->color;

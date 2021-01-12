@@ -409,8 +409,8 @@ class ImportString extends MDTBase
                      *
                      * Line
                      *
-                     * 1 = size
-                     * 2 = linefactor (weight?)
+                     * 1 = size (weight?)
+                     * 2 = linefactor
                      * 3 = sublevel
                      * 4 = enabled/visible?
                      * 5 = color
