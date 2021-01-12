@@ -35,6 +35,7 @@ class DungeonController extends Controller
         // May not be set when editing
 //        $dungeon->expansion_id = $request->get('expansion_id');
         $dungeon->zone_id = $request->get('zone_id');
+        $dungeon->mdt_id = $request->get('mdt_id');
         $dungeon->name = $request->get('name');
         $dungeon->key = $request->get('key');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');

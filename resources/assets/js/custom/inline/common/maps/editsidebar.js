@@ -26,6 +26,9 @@ class CommonMapsEditsidebar extends InlineCode {
         $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
             copyToClipboard($('#map_embedable_link').val());
         });
+        $('#map_mdt_export').bind('click', function () {
+            self._fetchMdtExportString();
+        });
 
         // Setup line weight
         let $weight = $('#edit_route_freedraw_options_weight');
@@ -209,6 +212,25 @@ class CommonMapsEditsidebar extends InlineCode {
             complete: function () {
                 $('#save_draw_settings').show();
                 $('#save_draw_settings_saving').hide();
+            }
+        });
+    }
+
+    _fetchMdtExportString() {
+        $.ajax({
+            type: 'GET',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
+            dataType: 'json',
+            beforeSend: function () {
+                $('#mdt_export_loader_container').show();
+                $('#mdt_export_result_container').hide();
+            },
+            success: function (json) {
+                $('#mdt_export_result').val(json.mdt_string);
+            },
+            complete: function () {
+                $('#mdt_export_loader_container').hide();
+                $('#mdt_export_result_container').show();
             }
         });
     }

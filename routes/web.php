@@ -325,6 +325,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
                 Route::post('/publishedState', 'APIDungeonRouteController@publishedState')->name('api.dungeonroute.publishedstate');
 
+                Route::get('/mdtExport', 'APIDungeonRouteController@mdtExport')->name('api.dungeonroute.mdtexport');
+
                 Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
                 Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
             });

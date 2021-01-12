@@ -48,6 +48,12 @@
             @include('common.forms.form-error', ['key' => 'zone_id'])
         </div>
 
+        <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
+            {!! Form::label('mdt_id', __('MDT ID')) !!}
+            {!! Form::number('mdt_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'mdt_id'])
+        </div>
+
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
             {!! Form::label('name', __('Dungeon name')) !!}
             {!! Form::text('name', null, ['class' => 'form-control']) !!}
