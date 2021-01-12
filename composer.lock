@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af85a2d92273053da1d4f96fa8bc85ac",
+    "content-hash": "ed3270f356a34e8bd072ea6e890d4d73",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -4703,12 +4703,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/tracker.git",
-                "reference": "df8d831e3baa7c4fa4e37c623063caf328c08076"
+                "reference": "5f541bbeab841651a18ea10d4cbcae0e2b73dbed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/df8d831e3baa7c4fa4e37c623063caf328c08076",
-                "reference": "df8d831e3baa7c4fa4e37c623063caf328c08076",
+                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/5f541bbeab841651a18ea10d4cbcae0e2b73dbed",
+                "reference": "5f541bbeab841651a18ea10d4cbcae0e2b73dbed",
                 "shasum": ""
             },
             "require": {
@@ -4774,7 +4774,7 @@
             "support": {
                 "source": "https://github.com/Wotuu/tracker/tree/wotuu-bugfix"
             },
-            "time": "2020-05-27T10:58:58+00:00"
+            "time": "2021-01-12T22:59:47+00:00"
         },
         {
             "name": "predis/predis",

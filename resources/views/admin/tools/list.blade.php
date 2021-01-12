@@ -22,6 +22,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.cache.drop') }}">{{ __('Drop dungeon caches') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.exception.select') }}">{{ __('Throw an exception') }}</a>
+    </div>
     <h3>{{ __('Actions') }}</h3>
     <div class="form-group">
         <a class="btn btn-primary" href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('Export dungeon data') }}</a>
