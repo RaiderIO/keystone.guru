@@ -7,7 +7,7 @@ class MdtStringWarnings {
      * Renders the passed warnings to a target div element
      * @param $targetElement
      */
-    render($targetElement){
+    render($targetElement) {
         let warningsTemplate = Handlebars.templates['import_string_warnings_template'];
 
         let warningsData = $.extend({}, getHandlebarsDefaultVariables(), {
@@ -27,5 +27,7 @@ class MdtStringWarnings {
 
         // Assign the template data to the div
         $targetElement.html(warningsTemplate(warningsData));
+
+        refreshTooltips();
     }
 }

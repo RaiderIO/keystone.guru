@@ -67,7 +67,7 @@ $edit = isset($edit) ? $edit : false;
                 </div>
             </div>
             <div class="form-group">
-                <div class="mdt_string_warnings">
+                <div id="mdt_export_result_warnings">
 
                 </div>
             </div>
