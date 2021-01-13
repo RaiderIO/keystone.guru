@@ -21,6 +21,10 @@ class SidebarNavigation extends Sidebar {
         $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
             copyToClipboard($('#map_embedable_link').val());
         });
+        $('.copy_mdt_string_to_clipboard').bind('click', function () {
+            let $exportResult = $('#mdt_export_result');
+            copyToClipboard($exportResult.val(), $exportResult);
+        });
         $('#map_mdt_export').bind('click', function () {
             self._fetchMdtExportString();
         });
@@ -133,7 +137,7 @@ class SidebarNavigation extends Sidebar {
                 // Inject the warnings, if there are any
                 if (json.warnings.length > 0) {
                     (new MdtStringWarnings(json.warnings))
-                        .render($('#mdt_export_loader_container').find('.mdt_string_warnings'));
+                        .render($('#mdt_export_result_warnings'));
                 }
 
             },

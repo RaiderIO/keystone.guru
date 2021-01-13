@@ -886,9 +886,9 @@ class DungeonRoute extends Model
                 ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $this->clone_of]) . '">' . $this->clone_of . '</a>'
             );
         } else if ($this->demo) {
-            if( $this->dungeon->expansion->name === Expansion::EXPANSION_BFA ) {
+            if( $this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA ) {
                 $subTitle = sprintf(__('Used with Dratnos\' permission'));
-            } else if ( $this->dungeon->expansion->name === Expansion::EXPANSION_SHADOWLANDS ) {
+            } else if ( $this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS ) {
                 $subTitle = sprintf(__('Used with Petko\'s permission'));
             } else {
                 // You made this? I made this.jpg
