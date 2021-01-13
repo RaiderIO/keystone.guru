@@ -30,7 +30,8 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'dungeon' => $dungeon,
     'header' => __('Toolbox'),
     'anchor' => 'left',
-    'id' => 'editsidebar'
+    'id' => 'editsidebar',
+    'show' => $show,
 ])
     @isset($show['sharing'])
         @include('common.maps.share', ['model' => $model, 'show' => $show])
@@ -273,30 +274,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             </div>
         </div>
     @endcomponent
-@endisset
-
-@isset($show['sharing'])
-    <!-- Modal mdt export -->
-    @component('common.general.modal', ['id' => 'mdt_export_modal'])
-        <div class='col-lg-12'>
-            <h3>
-                {{ __('MDT Export') }}
-            </h3>
-            <div class="form-group">
-                <div id="mdt_export_loader_container">
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="mdt_export_result_container" style="display: none;">
-                    <textarea id="mdt_export_result" class="w-100"  style="height: 400px" readonly></textarea>
-                </div>
-            </div>
-        </div>
-    @endcomponent
-    <!-- END mdt export -->
 @endisset
 
 @isset($show['route-settings'])

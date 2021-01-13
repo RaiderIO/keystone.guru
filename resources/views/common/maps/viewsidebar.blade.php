@@ -1,5 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+$show = isset($show) ? $show : [];
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->floors->count() !== 1;
 ?>
 
@@ -19,8 +20,9 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
     'header' => $model->title,
     'subHeader' => $model->getSubHeaderHtml(),
     'anchor' => 'left',
-    'id' => 'viewsidebar'])
-
+    'id' => 'viewsidebar',
+    'show' => $show,
+])
     @include('common.maps.share', ['model' => $model])
 
     <!-- Details -->

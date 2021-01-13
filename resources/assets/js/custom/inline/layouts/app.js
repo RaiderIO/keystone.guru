@@ -76,7 +76,6 @@ class LayoutsApp extends InlineCode {
 
         let $loader = $root.find('.import_mdt_string_loader');
         let $details = $root.find('.import_mdt_string_details');
-        let $warnings = $root.find('.import_mdt_string_warnings');
         let $importString = $root.find('.import_string');
         let $submitBtn = $root.find('input[type="submit"]');
 
@@ -131,25 +130,8 @@ class LayoutsApp extends InlineCode {
 
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
-                    let warningsTemplate = Handlebars.templates['import_string_warnings_template'];
-
-                    let warningsData = $.extend({}, getHandlebarsDefaultVariables(), {
-                        warnings: []
-                    });
-
-                    // construct the handlebars data
-                    for (let i = 0; i < responseData.warnings.length; i++) {
-                        let warning = responseData.warnings[i];
-
-                        warningsData.warnings.push({
-                            category: warning.category,
-                            message: warning.message,
-                            details: warning.data.details
-                        });
-                    }
-
-                    // Assign the template data to the div
-                    $warnings.html(warningsTemplate(warningsData));
+                    (new MdtStringWarnings(responseData.warnings))
+                        .render($root.find('.mdt_string_warnings'));
                 }
 
                 // Tooltips may be added above
