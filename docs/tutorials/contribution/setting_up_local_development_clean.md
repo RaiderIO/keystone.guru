@@ -4,6 +4,8 @@ This tutorial is for developers who would like to contribute to Keystone.guru an
 This is a step-by-step guide of starting from scratch and installing a working local development environment. Once I figure everything out myself,
 I will provide a fully working Vagrant box which you can just start up and everything will work (bar a few things which I will explain).
 
+Another way is to run it throught docker-compose. If you prefer this solution, you can go and read [the docker setup](#run-it-with-docker)
+
 PLEASE FOLLOW THE STEPS CLOSELY. IF THERE'S ANY ERROR PLEASE CONTACT ME. I'M PRETTY SURE I FORGOT THINGS OR CAN OTHERWISE HELP YOU GET SETUP.
 
 ## Installing VirtualBox
@@ -118,6 +120,14 @@ Open up `C:\Windows\system32\drivers\etc\hosts` file in an elevated notepad. Add
 
 ## Start your Vagrant box
 In an elevated command prompt (run as administrator) `cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. Then run `vagrant ssh` to enter the VM. If you get any errors at this point, hit me up.
+
+## Run it with docker
+
+To run it properly, you need to make the copy of `.env.example` and rename it `.env` and fill it. 
+
+Inside a docker-compose, you can only access other system with their name. i.e. `DB_HOST=db` and not `localhost`. If you check the `docker-compose.yml` file, you can see that there is multiple system with their own name representing their "address"
+
+Then you can start the whole system with `docker-compose up -d`. This will spawn all the containers required to run it properly and continue the normal setup in this documentation.
 
 ## Once you're in
 Run this bash to install PhpMyAdmin (skip if you use MySQLWorkbench or anything else to manage your database)
