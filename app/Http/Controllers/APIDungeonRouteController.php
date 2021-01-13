@@ -21,6 +21,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
+use App\Logic\MDT\IO\ImportWarning;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -464,22 +465,27 @@ class APIDungeonRouteController extends Controller
     {
         $exportString = new ExportString($seasonService);
 
-//        try {
+        try {
             // @TODO improve exception handling
             $warnings = new Collection();
             $dungeonRoute = $exportString->setDungeonRoute($dungeonroute)
                 ->getEncodedString($warnings);
 
+            $warningResult = [];
+            foreach ($warnings as $warning) {
+                /** @var $warning ImportWarning */
+                $warningResult[] = $warning->toArray();
+            }
 
-            return ['mdt_string' => $dungeonRoute];
-//        } catch (Exception $ex) {
-//            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
-//        } catch (Throwable $error) {
-//            if ($error->getMessage() === "Class 'Lua' not found") {
-//                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
-//            }
-//
-//            throw $error;
-//        }
+            return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
+        } catch (Exception $ex) {
+            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+            }
+
+            throw $error;
+        }
     }
 }
