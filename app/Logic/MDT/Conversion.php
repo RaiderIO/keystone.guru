@@ -10,7 +10,6 @@ namespace App\Logic\MDT;
 
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\Expansion;
 use App\Service\Season\SeasonService;
 use Exception;
 
@@ -104,12 +103,9 @@ class Conversion
      */
     public static function convertMDTDungeonID(int $mdtDungeonId): int
     {
-        if (
-            // BFA
-            ($mdtDungeonId >= 15 && $mdtDungeonId <= 26) ||
-            // Shadowlands
-            ($mdtDungeonId >= 29 && $mdtDungeonId <= 36)) {
-            return $mdtDungeonId - 1;
+        $dungeon = Dungeon::where('mdt_id', $mdtDungeonId)->first();
+        if ($dungeon instanceof Dungeon) {
+            return $dungeon->id;
         } else {
             throw new Exception('Unsupported dungeon found.');
         }

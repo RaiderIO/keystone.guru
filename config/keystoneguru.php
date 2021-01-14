@@ -27,6 +27,9 @@ return [
         ],
         'static_data' => [
             'ttl' => '1 day'
+        ],
+        'mdt' => [
+            'ttl' => '1 day'
         ]
     ],
 
