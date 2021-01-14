@@ -463,6 +463,8 @@ class APIDungeonRouteController extends Controller
      */
     function mdtExport(Request $request, DungeonRoute $dungeonroute, SeasonService $seasonService)
     {
+        $this->authorize('view', $dungeonroute);
+
         $exportString = new ExportString($seasonService);
 
         try {

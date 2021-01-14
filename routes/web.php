@@ -308,6 +308,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             // Clone a route from the 'my routes' section
             Route::post('/clone/team/{team}', 'APIDungeonRouteController@cloneToTeam');
+
+            Route::get('/mdtExport', 'APIDungeonRouteController@mdtExport')->name('api.dungeonroute.mdtexport');
         });
 
         // Must be logged in to perform these actions
@@ -324,8 +326,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::delete('/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
 
                 Route::post('/publishedState', 'APIDungeonRouteController@publishedState')->name('api.dungeonroute.publishedstate');
-
-                Route::get('/mdtExport', 'APIDungeonRouteController@mdtExport')->name('api.dungeonroute.mdtexport');
 
                 Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
                 Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
