@@ -72,6 +72,9 @@ if (count($affixes) == 0) {
                 <div id="embed_copy_mdt_string" class="btn btn-primary float-right" data-toggle="tooltip" title="{{ __('Copy MDT string') }}">
                     <i class="fas fa-file-export"></i>
                 </div>
+                <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" style="display: none;">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                </div>
             </div>
         </div>
     </header>

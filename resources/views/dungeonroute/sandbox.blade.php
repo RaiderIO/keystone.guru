@@ -27,7 +27,11 @@
             'show' => [
                 'virtual-tour' => true,
                 'sandbox' => true,
-                'draw-settings' => true
+                'draw-settings' => true,
+                'sharing' => true,
+                'shareable-link' => false,
+                'embedable-link' => false,
+                'export-mdt-string' => true,
             ],
             'floorId' => $floor->id,
             'dungeon' => $dungeon,
