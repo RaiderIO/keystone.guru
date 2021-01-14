@@ -264,31 +264,35 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
 /**
  * Shows a success notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showSuccessNotification(text) {
-    _showNotification({type: 'success', text: '<i class="fas fa-check-circle"></i> ' + text});
+function showSuccessNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'success', text: '<i class="fas fa-check-circle"></i> ' + text}, opts));
 }
 
 /**
  * Shows an info notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showInfoNotification(text) {
-    _showNotification({type: 'info', text: '<i class="fas fa-info-circle"></i> ' + text});
+function showInfoNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'info', text: '<i class="fas fa-info-circle"></i> ' + text}, opts));
 }
 
 /**
  * Shows a warning notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showWarningNotification(text) {
-    _showNotification({type: 'warning', text: '<i class="fas fa-exclamation-triangle"></i> ' + text});
+function showWarningNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'warning', text: '<i class="fas fa-exclamation-triangle"></i> ' + text}, opts));
 }
 
 /**
  * Shows an error notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showErrorNotification(text) {
-    _showNotification({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text});
+function showErrorNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text}, opts));
 }

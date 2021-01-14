@@ -252,8 +252,9 @@ function getFormattedPercentage(value, max) {
  *
  * @param value
  * @param $input
+ * @param timeoutMS
  */
-function copyToClipboard(value, $input = null) {
+function copyToClipboard(value, $input = null, timeoutMS = null) {
     // https://codepen.io/shaikmaqsood/pen/XmydxJ
     let $temp = null;
     if( $input === null ) {
@@ -269,7 +270,11 @@ function copyToClipboard(value, $input = null) {
         $temp.remove();
     }
 
-    showInfoNotification(lang.get('messages.copied_to_clipboard'));
+    let opts = {};
+    if( timeoutMS !== null ) {
+        opts.timeout = timeoutMS;
+    }
+    showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
 }
 
 /**

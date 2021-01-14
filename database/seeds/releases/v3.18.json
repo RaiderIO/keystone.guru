@@ -1,0 +1,45 @@
+{
+    "id": 83,
+    "release_changelog_id": 89,
+    "version": "v3.18",
+    "silent": 0,
+    "created_at": "2021-01-14T13:24:53+00:00",
+    "updated_at": "2021-01-14T13:24:53+00:00",
+    "changelog": {
+        "id": 89,
+        "release_id": 83,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 89,
+                "release_changelog_category_id": 1,
+                "ticket_id": 607,
+                "change": "Discord release announcer now always works even if the changelog exceeds 2048 characters.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 89,
+                "release_changelog_category_id": 6,
+                "ticket_id": 610,
+                "change": "Paths defined in your string (arrows) are now imported as paths instead of as free-drawn lines.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            },
+            {
+                "release_changelog_id": 89,
+                "release_changelog_category_id": 8,
+                "ticket_id": 99,
+                "change": "You can now export routes to an MDT string from view, edit, sandbox and embed pages.",
+                "category": {
+                    "id": 8,
+                    "category": "MDT exporter changes"
+                }
+            }
+        ]
+    }
+}
