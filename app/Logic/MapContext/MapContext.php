@@ -76,7 +76,7 @@ abstract class MapContext
                 'mapIcons'                  => $dungeon->mapicons,
                 'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers
             ]);
-        });
+        }, config('keystoneguru.cache.dungeonData.ttl'));
 
         $static = $cacheService->getOtherwiseSet('static_data', function ()
         {
@@ -89,7 +89,7 @@ abstract class MapContext
                 'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
                 'publishStates'                     => PublishedState::all(),
             ];
-        });
+        }, config('keystoneguru.cache.static_data.ttl'));
 
         $npcMinHealth = $this->_floor->dungeon->getNpcsMinHealth();
         $npcMaxHealth = $this->_floor->dungeon->getNpcsMaxHealth();
