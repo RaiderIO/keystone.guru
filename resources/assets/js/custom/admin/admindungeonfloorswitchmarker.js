@@ -17,28 +17,25 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
      * @inheritDoc
      */
     onLayerInit() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not a AdminDungeonFloorSwitchMarker', this);
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not an AdminDungeonFloorSwitchMarker', this);
         super.onLayerInit();
 
         this.layer.off('click');
     }
 
     /**
-     * @inheritDoc
+     * Return the text that is displayed on the label of this Map Icon.
+     * @returns {string}
      */
-    setSynced(value) {
-        super.setSynced(value);
-        console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
+    getDisplayText() {
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not an AdminDungeonFloorSwitchMarker', this);
 
-        // If we've fully loaded this marker
-        if (this.layer !== null) {
-            let targetFloor = this.map.getFloorById(this.target_floor_id);
+        let targetFloor = this.map.getFloorById(this.target_floor_id);
 
-            if (targetFloor !== false) {
-                this.layer.bindTooltip(targetFloor.name, {
-                    direction: 'top'
-                });
-            }
+        if (targetFloor !== false) {
+            return `Target: ${targetFloor.name}`;
+        } else {
+            return `Unknown target`;
         }
     }
 }
