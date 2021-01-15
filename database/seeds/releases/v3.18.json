@@ -3,8 +3,8 @@
     "release_changelog_id": 89,
     "version": "v3.18",
     "silent": 0,
-    "created_at": "2021-01-15T22:24:53+00:00",
-    "updated_at": "2021-01-15T22:24:53+00:00",
+    "created_at": "2021-01-14T13:24:53+00:00",
+    "updated_at": "2021-01-14T13:24:53+00:00",
     "changelog": {
         "id": 89,
         "release_id": 83,
@@ -15,6 +15,26 @@
                 "release_changelog_category_id": 1,
                 "ticket_id": 607,
                 "change": "Discord release announcer now always works even if the changelog exceeds 2048 characters.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 89,
+                "release_changelog_category_id": 1,
+                "ticket_id": 578,
+                "change": "All traces of BFA in various images across various platforms (Github, Patreon etc.) have been eradicated and replaced with Shadowlands images.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 89,
+                "release_changelog_category_id": 1,
+                "ticket_id": 490,
+                "change": "Keystone.guru has a new logo!",
                 "category": {
                     "id": 1,
                     "category": "General changes"
