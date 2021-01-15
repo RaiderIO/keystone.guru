@@ -106,4 +106,15 @@ class Stopwatch
             self::dump($key);
         }
     }
+
+    /**
+     * @return array
+     */
+    public static function getAll() : array {
+        $result = [];
+        foreach (self::$timers as $key => $value) {
+            $result[$key] = self::getElapsedString($key);
+        }
+        return $result;
+    }
 }

@@ -11,8 +11,10 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\Utils\Stopwatch;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Path;
 use App\Service\Season\SeasonService;
 use Illuminate\Support\Collection;
@@ -69,7 +71,7 @@ class ExportString extends MDTBase
         $lines = $this->_dungeonRoute->brushlines->merge($this->_dungeonRoute->paths);
 
         $lineIndex = 1;
-        foreach($lines as $line){
+        foreach ($lines as $line) {
             /** @var Path|Brushline $line */
 
             $mdtLine = [
@@ -87,13 +89,13 @@ class ExportString extends MDTBase
                 'l' => []
             ];
 
-            if( $line instanceof Brushline ){
+            if ($line instanceof Brushline) {
                 $mdtLine['d'][7] = true;
             }
 
             $vertexIndex = 1;
             $vertices = json_decode($line->polyline->vertices_json, true);
-            foreach($vertices as $latLng){
+            foreach ($vertices as $latLng) {
                 $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
                 // Post increment
                 $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
@@ -103,7 +105,6 @@ class ExportString extends MDTBase
             $result[$lineIndex] = $mdtLine;
             $lineIndex++;
         }
-
 
         return $result;
     }
@@ -122,7 +123,9 @@ class ExportString extends MDTBase
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
-        foreach ($this->_dungeonRoute->killzones as $killZone) {
+        /** @var Collection|Enemy[] $killZones */
+        $killZones = $this->_dungeonRoute->killzones()->with(['enemies'])->get();
+        foreach ($killZones as $killZone) {
             $pull = [];
 
             // Lua is 1 based, not 0 based
@@ -130,6 +133,7 @@ class ExportString extends MDTBase
             foreach ($killZone->enemies as $enemy) {
                 // MDT does not handle prideful NPCs
                 if ($enemy->npc->isPrideful()) {
+                    Stopwatch::pause('pridefulCheck');
                     continue;
                 }
 
@@ -166,7 +170,6 @@ class ExportString extends MDTBase
             $result[$pullIndex] = $pull;
             $pullIndex++;
         }
-
         return $result;
     }
 

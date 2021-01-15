@@ -22,6 +22,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportWarning;
+use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -478,6 +479,8 @@ class APIDungeonRouteController extends Controller
                 /** @var $warning ImportWarning */
                 $warningResult[] = $warning->toArray();
             }
+
+            Stopwatch::dumpAll();
 
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {

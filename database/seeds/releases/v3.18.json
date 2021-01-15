@@ -32,6 +32,16 @@
             },
             {
                 "release_changelog_id": 89,
+                "release_changelog_category_id": 6,
+                "ticket_id": 618,
+                "change": "Importer now runs a lot quicker (up to 3x faster).",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            },
+            {
+                "release_changelog_id": 89,
                 "release_changelog_category_id": 8,
                 "ticket_id": 99,
                 "change": "You can now export routes to an MDT string from view, edit, sandbox and embed pages.",
