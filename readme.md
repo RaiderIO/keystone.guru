@@ -1,12 +1,14 @@
+![alt text](https://keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
+
 # About Keystone.guru
-Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Battle for Azeroth™.
+Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Shadowlands™.
 This repository contains the source code of (most parts of) the website. It is built with [Laravel](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySql](https://www.mysql.com/).
 It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer for thumbnail generation, REDIS for cache, Laravel Echo Server for real-time communication and much, much more.
 
 The website is free to use, now and forever. You may support the creation of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
 
 # Features
-* Full interactive Leaflet map of all Battle for Azeroth™ dungeons
+* Full interactive Leaflet map of all Shadowlands™ dungeons
 * All known enemies and patrols inside dungeons (updated to 8.3)
 * Enemy forces of all different NPCs in both normal and Teeming weeks
 * Easily import your Mythic Dungeon Tools strings and convert them to a Keystone.guru route
