@@ -363,10 +363,11 @@ class EnemyVisual extends Signalable {
                 (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
             // Set a default color which may be overridden by any visuals
-            let border = `${getState().getMapZoomLevel()}px solid white`;
+            let borderThickness = Math.max(2, getState().getMapZoomLevel());
+            let border = `${borderThickness}px solid white`;
             if (this.enemy.getKillZone() instanceof KillZone) {
                 // Either no border or a solid border in the color of the killzone
-                border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
+                border = `${borderThickness}px solid ${this.enemy.getKillZone().color}`;
             } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
                 // If not selected in a killzone, fade the enemy
                 data.root_classes = 'map_enemy_visual_fade';
