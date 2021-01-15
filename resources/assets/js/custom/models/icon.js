@@ -92,7 +92,7 @@ class Icon extends MapObject {
      * @inheritDoc
      */
     _getAttributes(force) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         if (this._cachedAttributes !== null && !force) {
             return this._cachedAttributes;
@@ -162,7 +162,7 @@ class Icon extends MapObject {
     }
 
     _onObjectChanged() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         // Recreate the tooltip
         this.bindTooltip();
@@ -174,10 +174,10 @@ class Icon extends MapObject {
      * @private
      */
     _refreshVisual() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         // Init once or only when visible (as in, only update icons on the same floor)
-        if (this.isVisible() || this.layer.getIcon() === LeafletIconUnknown) {
+        if (this.isVisible() || (this.layer !== null && this.layer.getIcon() === LeafletIconUnknown)) {
             this.layer.setIcon(
                 getLeafletIcon(this.map_icon_type,
                     this.map.getMapState() instanceof EditMapState && this.isEditable(),
@@ -193,10 +193,23 @@ class Icon extends MapObject {
 
     /**
      * Sets the map icon type ID and refreshes the layer for it.
+     * @param mapIconType {MapIconType}
+     */
+    setMapIconType(mapIconType) {
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
+        this.map_icon_type_id = mapIconType.id;
+
+        // Set the icon and refresh the visual
+        this.map_icon_type = mapIconType;
+        this._refreshVisual();
+    }
+
+    /**
+     * Sets the map icon type ID and refreshes the layer for it.
      * @param mapIconTypeId
      */
     setMapIconTypeId(mapIconTypeId) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
         this.map_icon_type_id = mapIconTypeId;
 
         // Set the icon and refresh the visual
@@ -208,7 +221,7 @@ class Icon extends MapObject {
      * @returns {MapIconType}
      */
     getMapIconType() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not a Icon', this);
         console.assert(this.map_icon_type instanceof MapIconType, 'mapIconType is not a MapIconType', this.map_icon_type);
         return this.map_icon_type;
     }
@@ -218,7 +231,7 @@ class Icon extends MapObject {
      * @returns {string}
      */
     getDisplayText() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         return this.comment.length > 0 ? this.comment : this.map_icon_type.name;
     }
@@ -227,7 +240,7 @@ class Icon extends MapObject {
      * @inheritDoc
      */
     isEditable() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
         return this.map_icon_type.isEditable();
     }
@@ -243,7 +256,7 @@ class Icon extends MapObject {
      * @inheritDoc
      */
     bindTooltip() {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         this.unbindTooltip();
 
@@ -267,12 +280,12 @@ class Icon extends MapObject {
         }
     }
 
-    getTooltipOptions(){
+    getTooltipOptions() {
         return {};
     }
 
     toString() {
-        return `Map icon (${this.comment.substring(0, 25)})`;
+        return `Icon (${this.comment.substring(0, 25)})`;
     }
 
     cleanup() {

@@ -188,8 +188,6 @@ class StateManager extends Signalable {
             let previousZoomLevel = this._mapZoomLevel;
             this._mapZoomLevel = zoom;
 
-            console.log(this._mapZoomLevel);
-
             // Let everyone know it's changed
             this.signal('mapzoomlevel:changed', {
                 mapZoomLevel: this._mapZoomLevel,

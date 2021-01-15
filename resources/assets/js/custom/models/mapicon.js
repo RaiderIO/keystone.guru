@@ -113,6 +113,23 @@ class MapIcon extends Icon {
         };
     }
 
+    /**
+     * @inheritDoc
+     */
+    isEditable() {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        // Admin may edit everything, but not useful when editing a dungeonroute
+        return super.isEditable() && this.linked_awakened_obelisk_id === null &&
+            getState().isMapAdmin() === this.is_admin;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    isDeletable() {
+        return this.isEditable();
+    }
+
     toString() {
         return `Map icon (${this.comment.substring(0, 25)})`;
     }

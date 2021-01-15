@@ -46,7 +46,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
     }
 });
 
-class DungeonFloorSwitchMarker extends MapObject {
+class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
         super(map, layer, {name: 'dungeonfloorswitchmarker'});
@@ -74,13 +74,18 @@ class DungeonFloorSwitchMarker extends MapObject {
             return this._cachedAttributes;
         }
 
-        return this._cachedAttributes = super._getAttributes(force).concat([
-            new Attribute({
-                name: 'floor_id',
-                type: 'int',
-                edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
-            }),
+        // Bit of an hack to hide properties that should not be editable by the user - we set them manually based on other fields
+        let superAttributes = super._getAttributes(force);
+        for (let i = 0; i < superAttributes.length; i++) {
+            let attribute = superAttributes[i];
+            if (attribute.options.name === 'comment') {
+                attribute.options.edit = false;
+            } else if (attribute.options.name === 'map_icon_type_id') {
+                attribute.options.edit = false;
+            }
+        }
+
+        return this._cachedAttributes = superAttributes.concat([
             new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
@@ -107,54 +112,36 @@ class DungeonFloorSwitchMarker extends MapObject {
                 default: -1
             }),
             new Attribute({
-                name: 'lat',
-                type: 'float',
-                edit: false,
-                getter: function () {
-                    return self.layer.getLatLng().lat;
-                }
+                name: 'direction',
+                type: 'select',
+                edit: false, // Not directly changeable by user, should be done in the dungeon edit page
+                values: function () {
+                    return [
+                        {id: 'down', name: 'Down'},
+                        {id: 'left', name: 'Left'},
+                        {id: 'right', name: 'Right'},
+                        {id: 'up', name: 'Up'},
+                    ];
+                },
+                setter: function (value) {
+                    let mapping = {
+                        'down': 'Door Down',
+                        'left': 'Door Left',
+                        'right': 'Door Right',
+                        'up': 'Door Up',
+                    };
+
+                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByName(mapping[value]));
+
+                    self.setMapIconType(
+                        getState().getMapContext().getMapIconTypeByName(mapping[value])
+                    );
+
+                    self.direction = value;
+                },
+                default: 'down'
             }),
-            new Attribute({
-                name: 'lng',
-                type: 'float',
-                edit: false,
-                getter: function () {
-                    return self.layer.getLatLng().lng;
-                }
-            })
         ]);
-    }
-
-    /**
-     * @inheritDoc
-     **/
-    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
-        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
-
-        switch (remoteMapObject.direction) {
-            case 'up':
-                this.layer = new LeafletDungeonFloorSwitchMarkerUp();
-                break;
-            case 'down':
-                this.layer = new LeafletDungeonFloorSwitchMarkerDown();
-                break;
-            case 'left':
-                this.layer = new LeafletDungeonFloorSwitchMarkerLeft();
-                break;
-            case 'right':
-                this.layer = new LeafletDungeonFloorSwitchMarkerRight();
-                break;
-            default:
-                // layer = new LeafletDungeonFloorSwitchMarker();
-                break;
-        }
-
-        if (this.layer !== null) {
-            this.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-            let mapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            mapObjectGroup.setLayerToMapObject(this.layer, this);
-        }
     }
 
     /**
@@ -172,25 +159,26 @@ class DungeonFloorSwitchMarker extends MapObject {
                 getState().setFloorId(self.target_floor_id);
             }
         });
-
-        // Show a permanent tooltip for the pack's name
-        // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
     }
 
-    setSynced(value) {
-        super.setSynced(value);
+    /**
+     * Return the text that is displayed on the label of this Map Icon.
+     * @returns {string}
+     */
+    getDisplayText() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
-        // If we've fully loaded this marker
-        if (value && this.layer !== null) {
-            let targetFloor = this.map.getFloorById(this.target_floor_id);
+        let targetFloor = this.map.getFloorById(this.target_floor_id);
 
-            if (targetFloor !== false) {
-                this.layer.bindTooltip(`Go to ${targetFloor.name}`, {
-                    direction: 'top'
-                });
-            }
+        if (targetFloor !== false) {
+            return `Go to ${targetFloor.name}`;
+        } else {
+            return `Unknown`;
         }
+    }
+
+    toString() {
+        return `Floor switcher (${this.comment.substring(0, 25)})`;
     }
 
     cleanup() {
