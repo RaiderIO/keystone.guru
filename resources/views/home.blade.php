@@ -79,7 +79,7 @@
                         </li>
                         <li>
                             <a href="#">{{ __('Perfect your plan') }}</a>
-                            <p>{{ __('Select which enemies to kill and where, add comments for those tricky parts and refine your route to nail the 100% of enemy forces.') }}</p>
+                            <p>{{ __('Select which enemies to kill and where, add comments for those tricky parts and refine your route to nail 100% enemy forces.') }}</p>
                         </li>
                     </ul>
                 </div>
@@ -165,10 +165,10 @@
                 </div>
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
                     <div class="service text-center">
-                        <div class="icon"><i class="fa fa-star"></i></div>
+                        <div class="icon"><i class="fa fa-sync"></i></div>
                         <div class="text">
-                            <h3>{{ __('Rating and Favorites') }}</h3>
-                            <p>{{ __('Saw a route that had some great features or you enjoyed running with your group? Rate it for others to discover and favorite it for easy finding for later on through your Profile page!') }}</p>
+                            <h3>{{ __('Live Synchronization') }}</h3>
+                            <p>{{ __('Leverage the Teams feature to create routes with your team members, together, in real-time.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
             </div>
             <div class="row">
                 <div class="col-12 text-center section-heading probootstrap-animate small">
-                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'),
+                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for private routes and more.'),
                     '<a href="https://www.patreon.com/keystoneguru" target="_blank"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
                 </div>
             </div>
