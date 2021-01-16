@@ -765,8 +765,12 @@ class KillZone extends MapObject {
 
         // Only if we can actually make an offset
         if (latLngs.length > 1 && p.length > 1) {
-            let offset = new Offset();
-            p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
+            try {
+                p = (new Offset()).data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
+            } catch (error){
+                // May be thrown if 'vertices overlap'
+                console.warn(`Vertices overlap!`, p);
+            }
 
             let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
 

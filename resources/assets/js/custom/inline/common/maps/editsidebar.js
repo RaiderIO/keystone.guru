@@ -19,14 +19,6 @@ class CommonMapsEditsidebar extends InlineCode {
 
         let self = this;
 
-        // Copy to clipboard functionality
-        $('#map_shareable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_shareable_link').val());
-        });
-        $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_embedable_link').val());
-        });
-
         // Setup line weight
         let $weight = $('#edit_route_freedraw_options_weight');
         $weight.bind('change', function (changeEvent) {

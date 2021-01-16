@@ -143,6 +143,16 @@ html, body, #map, #app, .wrapper {
     border-bottom: 1px black solid;
 }
 
+#embed_copy_mdt_string {
+    text-shadow: none;
+}
+
+/** Shadow looks strange on the FA icons in embed */
+#embed_copy_mdt_string_loader,
+#embed_copy_mdt_string {
+    text-shadow: none;
+}
+
 .sidebar .sidebar-header {
     background: #2B3E50;
     height: 106px;

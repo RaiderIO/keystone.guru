@@ -24,6 +24,7 @@ use App\Models\MapIconType;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
 use App\User;
 use Exception;
@@ -31,7 +32,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Lua;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
@@ -39,7 +39,7 @@ use Lua;
  * @author Wouter
  * @since 05/01/2019
  */
-class ImportString
+class ImportString extends MDTBase
 {
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private $_encodedString;
@@ -54,24 +54,6 @@ class ImportString
     function __construct(SeasonService $seasonService)
     {
         $this->_seasonService = $seasonService;
-    }
-
-    /**
-     * Gets a Lua instance and load all the required files in it.
-     * @return Lua
-     */
-    private function _getLua()
-    {
-        $lua = new Lua();
-
-        // Load libraries (yeah can do this with ->library function as well)
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibDeflate.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
-        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
-
-        return $lua;
     }
 
     /**
@@ -211,10 +193,16 @@ class ImportString
     private function _parseValuePulls($warnings, $decoded, $dungeonRoute, $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
+        /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+        // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
+        $enemiesByNpcId = $enemies->groupBy('npc_id');
 
-        // Fetch all enemies of this
+
+        // Fetch all enemies of this dungeon
         $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
+        // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
+        $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 
         // For each pull the user created
         $newPullIndex = 1;
@@ -265,8 +253,8 @@ class ImportString
                             // Find the matching enemy of the clones
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
-                            foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                            foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
+                                if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
                                     // Found it
                                     $mdtEnemy = $mdtEnemyCandidate;
 
@@ -291,8 +279,8 @@ class ImportString
                             // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
                             /** @var Enemy $enemy */
                             $enemy = null;
-                            foreach ($enemies as $enemyCandidate) {
-                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                            foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
+                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
                                     $enemy = $enemyCandidate;
                                     break;
                                 }
@@ -314,6 +302,8 @@ class ImportString
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 $kzEnemy = new KillZoneEnemy();
+                                // Cache for the hasFinalBoss check below - it's slow otherwise
+                                $kzEnemy->enemy = $enemy;
                                 $kzEnemy->enemy_id = $enemy->id;
                                 $kzEnemy->kill_zone_id = $killZone->id;
 
@@ -427,8 +417,8 @@ class ImportString
                      *
                      * Line
                      *
-                     * 1 = size
-                     * 2 = linefactor (weight?)
+                     * 1 = size (weight?)
+                     * 2 = linefactor
                      * 3 = sublevel
                      * 4 = enabled/visible?
                      * 5 = color
@@ -450,10 +440,12 @@ class ImportString
                         if (isset($object['l'])) {
                             $line = $object['l'];
 
-                            $brushline = new Brushline();
+                            $isFreeDrawn = isset($details['7']) && $details['7'];
+                            /** @var Brushline|Path $lineOrPath */
+                            $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
                             // Assign the proper ID
-                            $brushline->floor_id = $floor->id;
-                            $brushline->polyline_id = -1;
+                            $lineOrPath->floor_id = $floor->id;
+                            $lineOrPath->polyline_id = -1;
 
                             $polyline = new Polyline();
 
@@ -471,16 +463,20 @@ class ImportString
 
                             if ($save) {
                                 // Only assign when saving
-                                $brushline->dungeon_route_id = $dungeonRoute->id;
-                                $brushline->save();
+                                $lineOrPath->dungeon_route_id = $dungeonRoute->id;
+                                $lineOrPath->save();
 
-                                $polyline->model_id = $brushline->id;
-                                $polyline->model_class = get_class($brushline);
+                                $polyline->model_id = $lineOrPath->id;
+                                $polyline->model_class = get_class($lineOrPath);
                                 $polyline->save();
                             } else {
                                 // Otherwise inject
-                                $brushline->polyline = $polyline;
-                                $dungeonRoute->brushlines->push($brushline);
+                                $lineOrPath->polyline = $polyline;
+                                if ($isFreeDrawn) {
+                                    $dungeonRoute->brushlines->push($lineOrPath);
+                                } else {
+                                    $dungeonRoute->paths->push($lineOrPath);
+                                }
                             }
                         }
                         // Map comment (n = note)
@@ -519,17 +515,6 @@ class ImportString
     }
 
     /**
-     * Gets the MDT encoded string based on the currently set DungeonRoute.
-     * @return string
-     */
-    public function getEncodedString()
-    {
-        $lua = $this->_getLua();
-        $encoded = $lua->call("TableToString", [$this->_dungeonRoute, true]);
-        return $encoded;
-    }
-
-    /**
      * Gets an array that represents the currently set MDT string.
      * @return mixed
      */
@@ -548,7 +533,7 @@ class ImportString
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws Exception
      */
-    public function getDungeonRoute($warnings, $sandbox = false, $save = false)
+    public function getDungeonRoute(Collection $warnings, $sandbox = false, $save = false)
     {
         $lua = $this->_getLua();
         // Import it to a table
@@ -564,11 +549,11 @@ class ImportString
             $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
             // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
             $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
+            $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
             $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
-            $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
             // Must expire if we're trying
             if ($sandbox) {
                 $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
@@ -631,19 +616,6 @@ class ImportString
     public function setEncodedString($encodedString)
     {
         $this->_encodedString = $encodedString;
-
-        return $this;
-    }
-
-    /**
-     * Sets a dungeon route to be staged for encoding to an encoded string.
-     *
-     * @param $dungeonRoute DungeonRoute
-     * @return $this Returns self to allow for chaining.
-     */
-    public function setDungeonRoute($dungeonRoute)
-    {
-        $this->_dungeonRoute = $dungeonRoute;
 
         return $this;
     }

@@ -1,5 +1,11 @@
 <?php
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+
 return [
 
     /*
@@ -44,6 +50,7 @@ return [
         'api/*',
         'ajax/*', // Don't care for tracking ajax
         'images/*', // Nor images
+        'broadcasting/*', // Nor echo related errors
     ],
 
     /*
@@ -230,6 +237,18 @@ return [
      * Log errors and exceptions?
      */
     'log_exceptions' => true,
+
+    /*
+     * Ignore these exceptions/errors
+     */
+    'ignore_exceptions' => [
+        AuthenticationException::class,
+        AuthorizationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        ModelNotFoundException::class,
+        TokenMismatchException::class,
+        ValidationException::class,
+    ],
 
     /*
      * A cookie may be created on your visitor device, so you can have information

@@ -41,6 +41,10 @@ class DungeonRoutePolicy
             return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
         }
 
+        if($dungeonroute->isSandbox()){
+            return $this->deny('Sandbox routes cannot be embedded.');
+        }
+
         return true;
     }
 
@@ -107,7 +111,7 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
     {
-        return $dungeonroute->published || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->mayUserView($user) || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**

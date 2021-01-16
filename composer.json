@@ -52,7 +52,7 @@
     "patreon/patreon": "^0.3.1",
     "phlak/semver": "^3.2",
     "php-http/guzzle6-adapter": "^2.0",
-    "pragmarx/tracker": "dev-wotuu-bugfix#df8d831e3baa7c4fa4e37c623063caf328c08076",
+    "pragmarx/tracker": "dev-wotuu-bugfix#5f541bbeab841651a18ea10d4cbcae0e2b73dbed",
     "predis/predis": "^1.1",
     "santigarcor/laratrust": "^6.0",
     "shrikeh/teapot": "^2.3",

@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="form-group">
-    <div class="import_mdt_string_warnings">
+    <div class="mdt_string_warnings">
 
     </div>
 </div>

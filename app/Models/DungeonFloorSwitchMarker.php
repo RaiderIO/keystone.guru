@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DungeonFloorSwitchMarker extends Model
 {
     protected $appends = ['direction'];
-    protected $hidden = ['floor', 'targetfloor'];
+    protected $hidden = ['floor', 'targetfloor', 'laravel_through_key'];
 
     public $timestamps = false;
 

@@ -14,10 +14,16 @@
         <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('View MDT String as DungeonRoute') }}</a>
     </div>
     <div class="form-group">
+        <a href="{{ route('admin.tools.mdt.dungeonroute.viewasstring') }}">{{ __('View DungeonRoute as MDT String') }}</a>
+    </div>
+    <div class="form-group">
         <a href="{{ route('admin.tools.mdt.diff') }}">{{ __('View MDT Diff') }}</a>
     </div>
     <div class="form-group">
         <a href="{{ route('admin.tools.cache.drop') }}">{{ __('Drop dungeon caches') }}</a>
+    </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.exception.select') }}">{{ __('Throw an exception') }}</a>
     </div>
     <h3>{{ __('Actions') }}</h3>
     <div class="form-group">

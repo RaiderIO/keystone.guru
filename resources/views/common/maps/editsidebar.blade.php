@@ -9,7 +9,7 @@ if (isset($model)) {
 }
 
 if (\Illuminate\Support\Facades\Auth::check()) {
-    $tags = \App\Models\Tags\TagModel::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function(\App\Models\Tags\TagModel $tagModel){
+    $tags = \App\Models\Tags\TagModel::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function (\App\Models\Tags\TagModel $tagModel) {
         return $tagModel->tag;
     });
 } else {
@@ -30,7 +30,8 @@ if (\Illuminate\Support\Facades\Auth::check()) {
     'dungeon' => $dungeon,
     'header' => __('Toolbox'),
     'anchor' => 'left',
-    'id' => 'editsidebar'
+    'id' => 'editsidebar',
+    'show' => $show,
 ])
     @isset($show['sharing'])
         @include('common.maps.share', ['model' => $model, 'show' => $show])
@@ -278,11 +279,11 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 @isset($show['route-settings'])
     @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
 
-        <div class='col-lg-12'>
+        <div class="col-lg-12">
             <h3>
                 {{ __('General') }}
             </h3>
-            <div class='form-group'>
+            <div class="form-group">
                 <label for="dungeon_route_title">
                     {{ __('Title') }} <span class="form-required">*</span>
                     <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
@@ -291,21 +292,21 @@ if (\Illuminate\Support\Facades\Auth::check()) {
                 </label>
                 {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
 
-{{--                <label for="teeming">--}}
-{{--                    {{ __('Teeming') }}--}}
-{{--                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
-{{--                                            __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')--}}
-{{--                                             }}"></i>--}}
-{{--                </label>--}}
-{{--                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
+                {{--                <label for="teeming">--}}
+                {{--                    {{ __('Teeming') }}--}}
+                {{--                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
+                {{--                                            __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')--}}
+                {{--                                             }}"></i>--}}
+                {{--                </label>--}}
+                {{--                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
             </div>
             @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
-            <h3 class='mt-1'>
+            <h3 class="mt-1">
                 {{ __('Affixes') }} <span class="form-required">*</span>
             </h3>
 
-            <div class='container mt-1'>
+            <div class="container mt-1">
                 @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
             </div>
 
@@ -320,19 +321,19 @@ if (\Illuminate\Support\Facades\Auth::check()) {
                 <h3>
                     {{ __('Admin') }}
                 </h3>
-                <div class='form-group'>
+                <div class="form-group">
                     {!! Form::label('demo', __('Demo route')) !!}
                     {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
                 </div>
             @endif
 
-            <div class='form-group'>
-                <div id='save_route_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
-                    <i class='fas fa-save'></i> {{ __('Save settings') }}
+            <div class="form-group">
+                <div id="save_route_settings" class="offset-lg-5 col-lg-2 btn btn-success">
+                    <i class="fas fa-save"></i> {{ __('Save settings') }}
                 </div>
-                <div id='save_route_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
-                     style='display: none;'>
-                    <i class='fas fa-circle-notch fa-spin'></i>
+                <div id="save_route_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
+                     style="display: none;">
+                    <i class="fas fa-circle-notch fa-spin"></i>
                 </div>
             </div>
         </div>

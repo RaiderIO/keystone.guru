@@ -76,7 +76,6 @@ class LayoutsApp extends InlineCode {
 
         let $loader = $root.find('.import_mdt_string_loader');
         let $details = $root.find('.import_mdt_string_details');
-        let $warnings = $root.find('.import_mdt_string_warnings');
         let $importString = $root.find('.import_string');
         let $submitBtn = $root.find('input[type="submit"]');
 
@@ -113,6 +112,7 @@ class LayoutsApp extends InlineCode {
                 details.push({key: lang.get('messages.mdt_dungeon'), value: responseData.dungeon});
                 details.push({key: lang.get('messages.mdt_affixes'), value: responseData.affixes.join('<br>')});
                 details.push({key: lang.get('messages.mdt_pulls'), value: responseData.pulls});
+                details.push({key: lang.get('messages.mdt_paths'), value: responseData.paths});
                 details.push({key: lang.get('messages.mdt_drawn_lines'), value: responseData.lines});
                 details.push({key: lang.get('messages.mdt_notes'), value: responseData.notes});
                 details.push({
@@ -130,25 +130,8 @@ class LayoutsApp extends InlineCode {
 
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
-                    let warningsTemplate = Handlebars.templates['import_string_warnings_template'];
-
-                    let warningsData = $.extend({}, getHandlebarsDefaultVariables(), {
-                        warnings: []
-                    });
-
-                    // construct the handlebars data
-                    for (let i = 0; i < responseData.warnings.length; i++) {
-                        let warning = responseData.warnings[i];
-
-                        warningsData.warnings.push({
-                            category: warning.category,
-                            message: warning.message,
-                            details: warning.data.details
-                        });
-                    }
-
-                    // Assign the template data to the div
-                    $warnings.html(warningsTemplate(warningsData));
+                    (new MdtStringWarnings(responseData.warnings))
+                        .render($root.find('.mdt_string_warnings'));
                 }
 
                 // Tooltips may be added above
@@ -281,31 +264,35 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
 /**
  * Shows a success notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showSuccessNotification(text) {
-    _showNotification({type: 'success', text: '<i class="fas fa-check-circle"></i> ' + text});
+function showSuccessNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'success', text: '<i class="fas fa-check-circle"></i> ' + text}, opts));
 }
 
 /**
  * Shows an info notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showInfoNotification(text) {
-    _showNotification({type: 'info', text: '<i class="fas fa-info-circle"></i> ' + text});
+function showInfoNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'info', text: '<i class="fas fa-info-circle"></i> ' + text}, opts));
 }
 
 /**
  * Shows a warning notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showWarningNotification(text) {
-    _showNotification({type: 'warning', text: '<i class="fas fa-exclamation-triangle"></i> ' + text});
+function showWarningNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'warning', text: '<i class="fas fa-exclamation-triangle"></i> ' + text}, opts));
 }
 
 /**
  * Shows an error notification message.
  * @param text The text to display.
+ * @param opts
  */
-function showErrorNotification(text) {
-    _showNotification({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text});
+function showErrorNotification(text, opts = {}) {
+    _showNotification($.extend({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text}, opts));
 }

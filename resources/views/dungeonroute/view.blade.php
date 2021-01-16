@@ -24,7 +24,10 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'dungeon' => $dungeon,
             'model' => $model,
             'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
-            'floorId' => $floor->id
+            'floorId' => $floor->id,
+            'show' => [
+                'sharing' => true,
+            ]
         ])
 
         @include('common.maps.map', [

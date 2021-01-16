@@ -192,7 +192,7 @@ return [
         SocialiteProviders\Manager\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
 
-        /*
+        /**
          * Keystone.guru Service Providers...
          */
         App\Providers\KeystoneGuruServiceProvider::class,

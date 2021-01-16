@@ -132,6 +132,7 @@ let scripts = [
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',
     'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',
     'resources/assets/js/custom/models/mapicontype.js',

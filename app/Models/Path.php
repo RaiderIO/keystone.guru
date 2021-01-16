@@ -13,10 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property $dungeon_route_id int
  * @property $floor_id int
  * @property $polyline_id int
+ * @property $updated_at string
+ * @property $created_at string
  *
  * @property DungeonRoute $dungeonroute
- *
  * @property Polyline $polyline
+ * @property Floor $floor
  *
  * @mixin Eloquent
  */
@@ -45,6 +47,16 @@ class Path extends Model
     function polyline()
     {
         return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
+     * Get the floor that this polyline is drawn on.
+     *
+     * @return BelongsTo
+     */
+    function floor()
+    {
+        return $this->belongsTo('App\Models\Floor');
     }
 
     public static function boot()

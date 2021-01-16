@@ -64,7 +64,7 @@ class MapContextDungeon extends MapContext
             {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values();
-        });
+        }, config('keystoneguru.cache.npcs.ttl'));
 
         return array_merge(parent::toArray(), [
             // First should be unspecified
