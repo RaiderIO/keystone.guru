@@ -14,11 +14,11 @@ return [
     'reddit_subreddit' => 'KeystoneGuru',
 
     'timer' => [
-        'plustwofactor' => 0.8,
+        'plustwofactor'   => 0.8,
         'plusthreefactor' => 0.6,
     ],
 
-    'cache'                             => [
+    'cache' => [
         'npcs'        => [
             'ttl' => '1 hour'
         ],
@@ -28,12 +28,12 @@ return [
         'static_data' => [
             'ttl' => '1 day'
         ],
-        'mdt' => [
+        'mdt'         => [
             'ttl' => '1 day'
         ]
     ],
 
-    'echo' => [
+    'echo'                              => [
         'randomsuffixes' => [
             // Basilisks
             'Stonegazer',
@@ -81,12 +81,12 @@ return [
     /**
      * The minimum size for enemies for floors if none was set
      */
-    'min_enemy_size_default' => 12,
+    'min_enemy_size_default'            => 12,
 
     /**
      * The maximum size for enemies for floors if none was set
      */
-    'max_enemy_size_default' => 26,
+    'max_enemy_size_default'            => 26,
 
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
@@ -106,44 +106,52 @@ return [
      */
     'aggressiveness'                    => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
 
-    'aggressiveness_pretty'              => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
+    'aggressiveness_pretty'               => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
 
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
-    'dungeonroute_difficulty'            => ['Casual', 'Dedicated', 'Hardcore'],
+    'dungeonroute_difficulty'             => ['Casual', 'Dedicated', 'Hardcore'],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit' => 999,
+    'registered_user_dungeonroute_limit'  => 999,
 
 
     /**
      * How many affix groups are in an iteration of a season.
      */
-    'season_iteration_affix_group_count' => 12,
+    'season_iteration_affix_group_count'  => 12,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins'           => 30,
+    'view_time_threshold_mins'            => 30,
 
     /**
      * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
-    'thumbnail_refresh_min'              => 30,
+    'thumbnail_refresh_min'               => 30,
 
     /**
      * The amount of hours it takes before a dungeon route that is created through the 'sandbox' functionality expires and
      * is deleted from the server.
      */
-    'sandbox_dungeon_route_expires_hours'    => 24,
+    'sandbox_dungeon_route_expires_hours' => 24,
 
     /**
      * @var array List of current roles for a user in a team.
      */
-    'team_roles'                         => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4]
+    'team_roles'                          => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4],
+
+    /**
+     * @var array Prideful enemy variables
+     */
+    'prideful' => [
+        'npc_id' => 173729,
+        'count' => 5
+    ]
 ];

@@ -408,38 +408,45 @@ class DungeonRoute extends Model
      */
     public function getEnemyForces(): int
     {
-        $result = DB::select('
-            select dungeon_routes.id,
-               CAST(IFNULL(
-                       IF(dungeon_routes.teeming = 1,
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override_teeming >= 0,
-                                          enemies.enemy_forces_override_teeming,
-                                          IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
-                                      )
-                              ),
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override >= 0,
-                                          enemies.enemy_forces_override,
-                                          npcs.enemy_forces
-                                      )
-                              )
-                           ), 0
-                   ) AS SIGNED)                  as enemy_forces,
-               count(distinct dungeon_routes.id) as aggregate
-        from `dungeon_routes`
-                 left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
-                 left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
-                 left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
-                 left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
-                 left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
-            where `dungeon_routes`.id = :id
-        group by `dungeon_routes`.id
-        ', ['id' => $this->id]);
+        $result = 0;
 
-        return $result[0]->enemy_forces;
+        // May not exist in case of MDT import
+        if ($this->exists) {
+            $result = DB::select('
+                select dungeon_routes.id,
+                   CAST(IFNULL(
+                           IF(dungeon_routes.teeming = 1,
+                              SUM(
+                                      IF(
+                                              enemies.enemy_forces_override_teeming >= 0,
+                                              enemies.enemy_forces_override_teeming,
+                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                          )
+                                  ),
+                              SUM(
+                                      IF(
+                                              enemies.enemy_forces_override >= 0,
+                                              enemies.enemy_forces_override,
+                                              npcs.enemy_forces
+                                          )
+                                  )
+                               ), 0
+                       ) AS SIGNED)                  as enemy_forces,
+                   count(distinct dungeon_routes.id) as aggregate
+            from `dungeon_routes`
+                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                     left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                     left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
+                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                where `dungeon_routes`.id = :id
+            group by `dungeon_routes`.id
+            ', ['id' => $this->id]);
+
+            $result = $result[0]->enemy_forces;
+        }
+
+        return $result;
     }
 
     /**
@@ -875,9 +882,9 @@ class DungeonRoute extends Model
                 ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $this->clone_of]) . '">' . $this->clone_of . '</a>'
             );
         } else if ($this->demo) {
-            if( $this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA ) {
+            if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
                 $subTitle = sprintf(__('Used with Dratnos\' permission'));
-            } else if ( $this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS ) {
+            } else if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
                 $subTitle = sprintf(__('Used with Petko\'s permission'));
             } else {
                 // You made this? I made this.jpg

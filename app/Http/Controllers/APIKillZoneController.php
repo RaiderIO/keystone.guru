@@ -196,7 +196,7 @@ class APIKillZoneController extends Controller
         // Touch the route so that the thumbnail gets updated
         $dungeonroute->touch();
 
-        return ['enemy_forces' => $dungeonroute->getEnemyForces()];
+        return ['enemy_forces' => $dungeonroute->enemy_forces];
     }
 
     /**
