@@ -302,8 +302,6 @@ class ImportString extends MDTBase
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 $kzEnemy = new KillZoneEnemy();
-                                // Cache for the hasFinalBoss check below - it's slow otherwise
-                                $kzEnemy->enemy = $enemy;
                                 $kzEnemy->enemy_id = $enemy->id;
                                 $kzEnemy->kill_zone_id = $killZone->id;
 
@@ -311,6 +309,10 @@ class ImportString extends MDTBase
                                 if ($save) {
                                     $kzEnemy->save();
                                 }
+
+                                // Cache for the hasFinalBoss check below - it's slow otherwise, don't set it above here since
+                                // save will trip over it
+                                $kzEnemy->enemy = $enemy;
 
                                 // Save enemies to the killzones regardless
                                 $killZone->killzoneenemies->push($kzEnemy);
