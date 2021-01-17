@@ -19,10 +19,10 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CompressesImages;
 
     /** @var DungeonRoute $model */
-    public $model;
+    public DungeonRoute $model;
 
     /** @var int $floorIndex */
-    private $floorIndex;
+    private int $floorIndex;
 
     /**
      * Create a new job instance.
@@ -31,7 +31,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * @param int $floorIndex
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonRoute, $floorIndex)
+    public function __construct(DungeonRoute $dungeonRoute, int $floorIndex)
     {
         $this->queue = sprintf('%s-%s-thumbnail', env('APP_TYPE'), env('APP_ENV'));
         $this->model = $dungeonRoute;

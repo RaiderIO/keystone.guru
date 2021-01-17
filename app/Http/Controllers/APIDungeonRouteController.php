@@ -61,30 +61,7 @@ class APIDungeonRouteController extends Controller
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required,
-             CAST(IFNULL(
-                 IF(dungeon_routes.teeming = 1,
-                      SUM(
-                          IF(
-                              enemies.enemy_forces_override_teeming >= 0,
-                              enemies.enemy_forces_override_teeming,
-                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
-                          )
-                      ),
-                      SUM(
-                          IF(
-                              enemies.enemy_forces_override >= 0,
-                              enemies.enemy_forces_override,
-                              npcs.enemy_forces
-                          )
-                      )
-                ),  0
-            ) AS SIGNED ) as enemy_forces')
-            // Select enemy forces
-            ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
-            ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
-            ->leftJoin('enemies', 'enemies.id', '=', 'kill_zone_enemies.enemy_id')
-            ->leftJoin('npcs', 'npcs.id', '=', 'enemies.npc_id')
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
             ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -112,7 +89,8 @@ class APIDungeonRouteController extends Controller
             // Clear group by
             $routes = $routes
                 // Having because we're using the result of SELECT
-                ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
+                ->havingRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
                 // Add more group by clauses, required for the above having query
                 ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
         }

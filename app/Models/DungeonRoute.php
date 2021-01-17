@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\DB;
  * @property $title string
  * @property $difficulty string
  * @property $seasonal_index int
+ * @property $enemy_forces int
  * @property $teeming boolean
  * @property $demo boolean
  *
@@ -407,50 +408,38 @@ class DungeonRoute extends Model
      */
     public function getEnemyForces(): int
     {
-        // Build an ID => amount array of NPCs we've killed in this route
-        /** @var Collection|Npc[] $npcs */
-        $npcs = Npc::whereIn('dungeon_id', [$this->dungeon_id, -1])->select(['id', 'enemy_forces', 'enemy_forces_teeming'])->get();
+        $result = DB::select('
+            select dungeon_routes.id,
+               CAST(IFNULL(
+                       IF(dungeon_routes.teeming = 1,
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override_teeming >= 0,
+                                          enemies.enemy_forces_override_teeming,
+                                          IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                      )
+                              ),
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override >= 0,
+                                          enemies.enemy_forces_override,
+                                          npcs.enemy_forces
+                                      )
+                              )
+                           ), 0
+                   ) AS SIGNED)                  as enemy_forces,
+               count(distinct dungeon_routes.id) as aggregate
+        from `dungeon_routes`
+                 left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                 left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                 left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                 left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
+                 left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+            where `dungeon_routes`.id = :id
+        group by `dungeon_routes`.id
+        ', ['id' => $this->id]);
 
-        // Find all Npcs that we've killed
-        $result = 0;
-        foreach ($this->killzones as $killzone) {
-            $resultByPull[$killzone->id] = [];
-            foreach ($killzone->enemies as $enemy) {
-                // Prevent adding teeming enemies that we shouldn't
-                if (!$this->teeming && $enemy->teeming === 'visible') {
-                    continue;
-                }
-
-                /** @var Enemy $enemy */
-                if ($this->teeming) {
-                    if ($enemy->enemy_forces_override_teeming >= 0) {
-                        $result += $enemy->enemy_forces_override_teeming;
-                    } else {
-                        /** @var Npc $npc */
-                        $npc = $npcs->where('id', $enemy->npc_id)->first();
-
-                        // May be null if an enemy was removed?
-                        if ($npc !== null) {
-                            // If teeming set, use that value, otherwise use the default
-                            $result += ($npc->enemy_forces_teeming >= 0 ? $npc->enemy_forces_teeming : $npc->enemy_forces);
-                        }
-                    }
-                } // No teeming, check if override is set
-                else if ($enemy->enemy_forces_override >= 0) {
-                    $result += $enemy->enemy_forces_override;
-                } else {
-                    /** @var Npc $npc */
-                    $npc = $npcs->where('id', $enemy->npc_id)->first();
-
-                    // May be null if an enemy was removed?
-                    if ($npc !== null) {
-                        $result += $npc->enemy_forces;
-                    }
-                }
-            }
-        }
-
-        return $result;
+        return $result[0]->enemy_forces;
     }
 
     /**

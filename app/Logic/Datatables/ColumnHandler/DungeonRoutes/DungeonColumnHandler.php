@@ -34,8 +34,10 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         if ($columnData['orderable'] === 'true') {
             // Order on this column?
             if (!is_null($order)) {
+                // Always order based on expansion - the most recent expansion should always come on top
+                $builder->orderby('dungeons.expansion_id', 'DESC')
                 // Order either asc or desc, nothing else
-                $builder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                    ->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }
