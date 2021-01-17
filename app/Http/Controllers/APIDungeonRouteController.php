@@ -458,11 +458,9 @@ class APIDungeonRouteController extends Controller
                 $warningResult[] = $warning->toArray();
             }
 
-            Stopwatch::dumpAll();
-
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
-            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            return abort(400, sprintf(__('An error occurred generating your MDT string: %s'), $ex->getMessage()));
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
