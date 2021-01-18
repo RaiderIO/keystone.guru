@@ -336,6 +336,7 @@ class KillZone extends MapObject {
      */
     _enemySelected(enemySelectedEvent) {
         let enemy = enemySelectedEvent.data.enemy;
+        let ignorePackBuddies = enemySelectedEvent.data.ignorePackBuddies;
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
@@ -352,7 +353,7 @@ class KillZone extends MapObject {
             let previousKillZone = enemy.getKillZone();
 
             // If the enemy was part of a pack..
-            if (enemy.enemy_pack_id > 0) {
+            if (enemy.enemy_pack_id > 0 && !ignorePackBuddies) {
                 let packBuddies = enemy.getPackBuddies();
                 packBuddies.push(enemy);
                 for (let i = 0; i < packBuddies.length; i++) {
