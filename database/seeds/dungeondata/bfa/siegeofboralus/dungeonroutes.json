@@ -10,6 +10,7 @@
         "title": "4.12 SIEGE by Dratnos",
         "difficulty": "Casual",
         "seasonal_index": 1,
+        "enemy_forces": 384,
         "teeming": 0,
         "demo": 1,
         "pull_gradient": "",
