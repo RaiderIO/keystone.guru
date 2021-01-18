@@ -373,12 +373,25 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        if (this.options.edit && KillZoneEnemySelection.isEnemySelectable(enemyClickedEvent.context)) {
+        let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+        let enemy = enemyClickedEvent.context;
+
+        if (this.options.edit && KillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
+            let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
             // If part of a pack, select the pack instead of creating a new one
-            let existingKillZone = enemyClickedEvent.context.getKillZone();
-            if (existingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
+            let existingKillZone = enemy.getKillZone();
+
+            // When ctrl is pressed, we need to add it to a new pull. When you have another pull, enemy:selected is fired
+            // instead of enemy:clicked and the event is handled that way instead
+            if (this.mapState === null && ctrlKeyPressed && this.options.edit) {
+                // Add it to a new pull
+                let newKillZone = killZoneMapObjectGroup.createNewPull([enemy.id]);
+
+                this.setMapState(new KillZoneEnemySelection(this, newKillZone, this.getMapState()));
+            } else if (existingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
                 // Only when we're not doing anything right now
                 if (this.options.edit) {
                     this.setMapState(new KillZoneEnemySelection(this, existingKillZone));
@@ -389,13 +402,12 @@ class DungeonMap extends Signalable {
             // Shift click creates a new pack always
             else if (this.mapState === null || (this.mapState instanceof KillZoneEnemySelection && shiftKeyPressed)) {
                 // Create a new pack instead
-                let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 // Add ourselves to this new pull
                 let enemyIds = [];
                 // Add all buddies in this pack to the list of ids (if any)
-                let packBuddies = enemyClickedEvent.context.getPackBuddies();
-                packBuddies.push(enemyClickedEvent.context);
+                let packBuddies = enemy.getPackBuddies();
+                packBuddies.push(enemy);
 
                 for (let index in packBuddies) {
                     if (packBuddies.hasOwnProperty(index)) {

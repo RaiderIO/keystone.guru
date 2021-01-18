@@ -14,7 +14,7 @@ class AddEnemyForcesColumnToDungeonRoutesTable extends Migration
     public function up()
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->integer('enemy_forces')->after('seasonal_index');
+            $table->integer('enemy_forces')->after('seasonal_index')->default(0);
         });
 
         // Set the enemy forces for all dungeon routes by calculating them

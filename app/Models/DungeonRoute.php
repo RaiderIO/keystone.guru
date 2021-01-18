@@ -108,6 +108,8 @@ class DungeonRoute extends Model
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at',
                          'published_state_id', 'published_state'];
 
+    protected $fillable = ['enemy_forces'];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string

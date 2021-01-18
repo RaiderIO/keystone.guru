@@ -46,12 +46,15 @@ class EnemySelection extends MapObjectMapState {
             // Check if we should set this enemy to be selectable or not
             enemy.setSelectable(this._filter(this.sourceMapObject, enemy));
 
-            enemy.register('enemy:selected', this, function (data) {
-                let enemy = data.context;
+            enemy.register('enemy:selected', this, function (enemySelectedEvent) {
+                let enemy = enemySelectedEvent.context;
                 console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
                 console.assert(self instanceof EnemySelection, 'this is not an EnemySelectionMapState', self);
 
-                self.signal('enemyselection:enemyselected', {enemy: enemy});
+                self.signal('enemyselection:enemyselected', {
+                    enemy: enemy,
+                    ignorePackBuddies: enemySelectedEvent.data.clickEvent.originalEvent.ctrlKey
+                });
             });
         }
 
