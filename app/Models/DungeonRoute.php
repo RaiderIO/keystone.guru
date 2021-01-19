@@ -892,6 +892,8 @@ class DungeonRoute extends Model
                 // You made this? I made this.jpg
                 $subTitle = '';
             }
+        } else if( $this->isSandbox() ){
+            $subTitle = __('Sandbox route');
         } else {
             $subTitle = sprintf(__('By %s'), $this->author->name);
         }
