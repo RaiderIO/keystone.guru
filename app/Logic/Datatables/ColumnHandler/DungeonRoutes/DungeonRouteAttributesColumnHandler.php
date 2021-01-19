@@ -30,42 +30,46 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
             $builder->groupBy('dungeon_routes.id');
         }
 
-        // If filtering
-        if (!empty($routeattributes)) {
-            $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
-            $routeAttributeIds = explode(',', $routeattributes);
+        // If filtering OR ordering add the join
+        if (!empty($routeattributes) || $order !== null) {
+            $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
 
-            // Compute the attribute IDs that the user does NOT want
-            $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
+            // If filtering
+            if (!empty($routeattributes)) {
+                $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
+                $routeAttributeIds = explode(',', $routeattributes);
 
-            $filterFn = function ($query) use (&$invalidAttributeIds, &$routeAttributeIds)
-            {
-                /** @var $query Builder */
-                $query->whereIn('dungeon_route_attributes.route_attribute_id', $invalidAttributeIds);
-            };
+                // Compute the attribute IDs that the user does NOT want
+                $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
 
-            // If we should account for dungeon routes having no attributes
-            if (in_array(-1, $routeAttributeIds)) {
-                // Wrap this in a where so both these statements get brackets around them
-                $builder->where(function ($query) use (&$filterFn)
+                $filterFn = function ($query) use (&$invalidAttributeIds, &$routeAttributeIds)
                 {
                     /** @var $query Builder */
-                    // May not have attributes at all
-                    $query->whereHas('routeattributes', null, '=', 0);
-                    $query->orWhereHas('routeattributes', $filterFn, '=', 0);
-                });
-            } else {
-                // Must have attributes
-                $builder->whereHas('routeattributes');
-                // But may not have some specific attributes
-                $builder->whereHas('routeattributes', $filterFn, '=', 0);
+                    $query->whereIn('dungeon_route_attributes.route_attribute_id', $invalidAttributeIds);
+                };
+
+                // If we should account for dungeon routes having no attributes
+                if (in_array(-1, $routeAttributeIds)) {
+                    // Wrap this in a where so both these statements get brackets around them
+                    $builder->where(function ($query) use (&$filterFn)
+                    {
+                        /** @var $query Builder */
+                        // May not have attributes at all
+                        $query->whereHas('routeattributes', null, '=', 0);
+                        $query->orWhereHas('routeattributes', $filterFn, '=', 0);
+                    });
+                } else {
+                    // Must have attributes
+                    $builder->whereHas('routeattributes');
+                    // But may not have some specific attributes
+                    $builder->whereHas('routeattributes', $filterFn, '=', 0);
+                }
             }
 
-        }
-
-        // If ordering
-        if ($order !== null) {
-            $builder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
+            // If ordering
+            if ($order !== null) {
+                $builder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
+            }
         }
     }
 }

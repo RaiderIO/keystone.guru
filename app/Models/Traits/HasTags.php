@@ -37,9 +37,14 @@ trait HasTags
 
     public function getAvailableTags()
     {
+    }
 
-
-//        return Tag::select('tag.*')
-//            ->join('')
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasTag(string $name): bool
+    {
+        return in_array($name, $this->tags->pluck(['name'])->toArray());
     }
 }
