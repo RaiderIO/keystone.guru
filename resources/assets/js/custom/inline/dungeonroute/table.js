@@ -227,7 +227,11 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('messages.title_label'),
                 'data': 'title',
                 'name': 'title',
+                'className': 'test',
                 'render': function (data, type, row, meta) {
+                    let result = '';
+
+
                     let published = '';
                     switch (row.published) {
                         case 'unpublished':
@@ -243,7 +247,35 @@ class DungeonrouteTable extends InlineCode {
                             published = `<i class="fas fa-link text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world_with_link')}"></i>`
                             break;
                     }
-                    return `${published} ${row.title}`;
+
+                    result = `${published} ${row.title}`;
+
+                    if (row.tags.length > 0) {
+                        let template = Handlebars.templates['dungeonroute_table_title_template'];
+
+                        let tags = [];
+                        for(let index in row.tags){
+                            if( row.tags.hasOwnProperty(index) ) {
+                                let tag = row.tags[index];
+
+                                let template = Handlebars.templates['tag_render_template'];
+
+                                let data = $.extend({}, {
+                                    edit: false
+                                }, tag);
+
+                                tags.push(template(data));
+                            }
+                        }
+
+                        // Build the status bar from the template
+                        result = template({
+                            title: result,
+                            tags: tags.join()
+                        });
+                    }
+
+                    return result;
                 }
             },
             dungeon: {

@@ -58,7 +58,7 @@ class APIDungeonRouteController extends Controller
      */
     function list(Request $request)
     {
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'tags'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
