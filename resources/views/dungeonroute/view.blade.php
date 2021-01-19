@@ -27,6 +27,9 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'floorId' => $floor->id,
             'show' => [
                 'sharing' => true,
+                'shareable-link' => !$model->isSandbox(),
+                'embedable-link' => !$model->isSandbox(),
+                'export-mdt-string' => true,
             ]
         ])
 
