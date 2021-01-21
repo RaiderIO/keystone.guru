@@ -7,6 +7,7 @@ use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
+use App\Models\Tags\Tag;
 use App\Models\Team;
 use App\Models\UserReport;
 use Eloquent;
@@ -40,6 +41,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property UserReport[]|Collection $reports
  * @property Team[]|Collection $teams
  * @property Role[]|Collection $roles
+ * @property Tag[]|Collection $tags
  *
  * @mixin Eloquent
  */
@@ -72,7 +74,10 @@ class User extends Authenticatable
     ];
 
 
-    public function getIsAdminAttribute()
+    /**
+     * @return bool
+     */
+    public function getIsAdminAttribute(): bool
     {
         return $this->hasRole('admin');
     }
@@ -116,6 +121,14 @@ class User extends Authenticatable
     function teams()
     {
         return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function tags()
+    {
+        return $this->hasMany('App\Models\Tags\Tag');
     }
 
     /**
@@ -225,7 +238,7 @@ class User extends Authenticatable
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
             ],
-            'reports' => [
+            'reports'       => [
                 'delete_count' => ($this->reports()->where('status', 0)->count())
             ]
         ]);

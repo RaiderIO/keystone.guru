@@ -2,14 +2,19 @@
 
 namespace App\Models\Tags;
 
+use App\Models\Traits\HasGenericModelRelation;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property int $user_id
+ * @property int $model_id
+ * @property string $model_class
  * @property string $name
+ * @property string|null $color
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -17,17 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Tag extends Model
 {
-    protected $fillable = ['name'];
+    use HasGenericModelRelation;
 
-    protected $visible = ['name'];
-
-    /**
-     * Gets all derived enemies from this Npc.
-     *
-     * @return HasMany
-     */
-    function models()
-    {
-        return $this->hasMany('App\Models\Tags\TagModel');
-    }
+    protected $visible = ['id', 'name', 'color'];
 }

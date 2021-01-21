@@ -41,7 +41,6 @@ use Throwable;
 
 class APIDungeonRouteController extends Controller
 {
-
     use PublicKeyDungeonRoute;
     use ListsEnemies;
     use ListsEnemyPacks;

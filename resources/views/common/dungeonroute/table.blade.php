@@ -15,6 +15,8 @@ $team = isset($team) ? $team : null;
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
+
+$tagModels = optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->tags() : [];
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
@@ -83,6 +85,15 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         {!! Form::select('dungeon_id', $requirements, 0,
             ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1', 'data-count-selected-text' => __('{0} requirements')]) !!}
+    </div>
+    <div class="col-lg pl-1 pr-1">
+        {!! Form::label('tags[]', __('Tags')) !!}
+        {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
+            ['id' => 'affixes',
+            'class' => 'form-control affixselect selectpicker',
+            'multiple' => 'multiple',
+            'data-selected-text-format' => 'count > 1',
+            'data-count-selected-text' => __('{0} affixes selected')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
         <div class="mb-2">
