@@ -20,6 +20,7 @@ class RebuildTagsTables extends Migration
         {
             $table->id();
             $table->integer('user_id');
+            $table->integer('tag_category_id');
             $table->integer('model_id');
             $table->string('model_class');
             $table->string('name');

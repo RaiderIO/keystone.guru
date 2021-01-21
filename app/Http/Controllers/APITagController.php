@@ -72,6 +72,7 @@ class APITagController
             $tag = new Tag();
             // Technically we can fetch the user_id by going through the model but that's just too much work and slow
             $tag->user_id = Auth::id();
+            $tag->tag_category_id = $tagCategory->id;
             $tag->model_id = $model->id;
             $tag->model_class = $tagCategory->model_class;
             $tag->name = $tagName;
@@ -97,7 +98,7 @@ class APITagController
      * @return array|ResponseFactory|Response
      * @throws Exception
      */
-    function delete(Request $request, Tag $tag)
+    public function delete(Request $request, Tag $tag)
     {
         if ($tag->delete()) {
             $result = response()->noContent();

@@ -6,6 +6,7 @@ $menuItems = [
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
+    ['icon' => 'fa-tag', 'text' => __('Tag manager'), 'target' => '#tagmanager'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -17,6 +18,11 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#repo
 
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
+
+$tagCategoryNameMapping = [
+    1 => __('Route'),
+    2 => __('Temp')
+];
 ?>
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle,
@@ -124,7 +130,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             {!! Form::close() !!}
         </div>
 
-        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="patreon-tab">
+        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
             <h4>
                 {{ __('Account') }}
             </h4>
@@ -202,6 +208,51 @@ $deleteConsequences = $user->getDeleteConsequences();
             {!! Form::hidden('_method', 'delete') !!}
             {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
             {!! Form::close() !!}
+        </div>
+
+        <div class="tab-pane fade" id="tagmanager" role="tabpanel" aria-labelledby="tag-manager-tab">
+            <h4>
+                {{ __('Tag manager') }}
+            </h4>
+            @foreach($user->tags()->groupBy('name')->get()->groupBy(['tag_category_id']) as $categoryId => $tags)
+                <div class="form-group">
+                    <h5>
+                        {{ $tagCategoryNameMapping[$categoryId] }}
+                    </h5>
+                    <div class="row">
+                        <div class="col-3 font-weight-bold">
+                            {{ __('Name') }}
+                        </div>
+                        <div class="col-3 font-weight-bold">
+                            {{ __('Color') }}
+                        </div>
+                        <div class="col-4 font-weight-bold">
+                            {{ __('Usage') }}
+                        </div>
+                        <div class="col-2 font-weight-bold">
+                            {{ __('Actions') }}
+                        </div>
+                    </div>
+                    @foreach($tags as $tag)
+                        <div class="row">
+                            <div class="col-3">
+                                {!! Form::text('tag_name', $tag->name, ['id' => sprintf('tag_name_%d', $tag->id), 'class' => 'form-control']) !!}
+                            </div>
+                            <div class="col-3">
+                                {!! Form::color('tag_color', $tag->color ?? '#DF691A', ['id' => sprintf('tag_color_%d', $tag->id), 'class' => 'form-control']) !!}
+                            </div>
+                            <div class="col-4">
+                                {{ __('Usage') }}
+                            </div>
+                            <div class="col-2">
+                                <div class="btn btn-primary tag_save" data-id="{{ $tag->id }}">
+                                    <i class="fas fa-save"></i> {{ __('Save') }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
