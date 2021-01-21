@@ -16,6 +16,12 @@ class TagCategory extends Model
 {
     public $timestamps = false;
 
+    const DUNGEON_ROUTE = 'dungeon_route';
+
+    const ALL = [
+        self::DUNGEON_ROUTE
+    ];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string

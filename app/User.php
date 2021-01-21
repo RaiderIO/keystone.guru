@@ -85,7 +85,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function dungeonroutes()
+    public function dungeonroutes()
     {
         return $this->hasMany('App\Models\DungeonRoute', 'author_id');
     }
@@ -93,7 +93,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function reports()
+    public function reports()
     {
         return $this->hasMany('App\Models\UserReport');
     }
@@ -101,7 +101,7 @@ class User extends Authenticatable
     /**
      * @return HasOne
      */
-    function patreondata()
+    public function patreondata()
     {
         return $this->hasOne('App\Models\PatreonData');
     }
@@ -109,7 +109,7 @@ class User extends Authenticatable
     /**
      * @return BelongsTo
      */
-    function gameserverregion()
+    public function gameserverregion()
     {
         // Don't know why it won't work without the foreign key specified..
         return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
@@ -118,7 +118,7 @@ class User extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    function teams()
+    public function teams()
     {
         return $this->belongsToMany('App\Models\Team', 'team_users');
     }
@@ -126,7 +126,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function tags()
+    public function tags()
     {
         return $this->hasMany('App\Models\Tags\Tag');
     }
