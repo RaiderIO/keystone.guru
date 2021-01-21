@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
-use App\Models\Tags\TagModel;
+use App\Models\Tags\Tag;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -71,19 +71,19 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $affixes
  * @property Collection $ratings
  *
- * @property Collection|Brushline[] $brushlines
- * @property Collection|Path[] $paths
- * @property Collection|KillZone[] $killzones
- * @property Collection|PridefulEnemy[] $pridefulenemies
+ * @property Collection|Brushline[]                   $brushlines
+ * @property Collection|Path[]                        $paths
+ * @property Collection|KillZone[]                    $killzones
+ * @property Collection|PridefulEnemy[]               $pridefulenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
- * @property Collection|MapIcon[] $mapicons
- * @property Collection|PageView[] $pageviews
+ * @property Collection|MapIcon[]                     $mapicons
+ * @property Collection|PageView[]                    $pageviews
  *
- * @property Collection|TagModel[] $tagmodels
+ * @property Collection|Tag[]                         $tags
  *
- * @property Collection $routeattributes
- * @property Collection $routeattributesraw
+ * @property Collection                               $routeattributes
+ * @property Collection                               $routeattributesraw
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()

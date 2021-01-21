@@ -1,12 +1,12 @@
 <?php
-/** @var \App\Models\Tags\TagModel[]|\Illuminate\Support\Collection $tagmodels */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $tags */
 $edit = isset($edit) ? $edit : false;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/sidebartags', 'options' => [
-    'tags' => $tagmodels,
+    'tags' => $tags,
     'edit' => $edit,
 ]])
-<div id="no_tags" class="row" style="display: {{ $tagmodels->isEmpty() ? 'block' : 'none' }}">
+<div id="no_tags" class="row" style="display: {{ $tags->isEmpty() ? 'block' : 'none' }}">
     <div class="col">
         {{ __('No tags assigned') }}
     </div>

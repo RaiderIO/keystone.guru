@@ -9,7 +9,7 @@ if (isset($model)) {
 }
 
 if (\Illuminate\Support\Facades\Auth::check()) {
-    $tags = \App\Models\Tags\TagModel::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function (\App\Models\Tags\TagModel $tagModel) {
+    $tags = \App\Models\Tags\Tag::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function (\App\Models\Tags\Tag $tagModel) {
         return $tagModel->tag;
     });
 } else {
@@ -43,7 +43,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ __('Tags') }}</h5>
-                    @include('common.maps.sidebartags', ['tagmodels' => $model->tagmodels, 'edit' => true])
+                    @include('common.maps.sidebartags', ['tags' => $model->tags, 'edit' => true])
                 </div>
             </div>
         </div>

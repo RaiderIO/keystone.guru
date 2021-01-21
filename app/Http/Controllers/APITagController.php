@@ -6,7 +6,6 @@ use App\Http\Requests\TagFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Models\Tags\TagModel;
 use App\Models\Traits\HasTags;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -38,7 +37,7 @@ class APITagController
      */
     public function list(Request $request, TagCategory $category)
     {
-        return TagModel::where($category->category)->where('user_id', Auth::id())->get();
+        return Tag::where($category->category)->where('user_id', Auth::id())->get();
     }
 
     /**
@@ -69,21 +68,18 @@ class APITagController
         $model = $query->firstOrFail();
 
         if (!$model->hasTag($tagName)) {
-            /** @var Tag $tag */
-            $tag = Tag::where('name', $tagName)->firstOrCreate(['name' => $tagName]);
-
-            // Couple the tag to the model
-            $tagModel = new TagModel();
-            $tagModel->user_id = Auth::id();
-            $tagModel->tag_id = $tag->id;
-            $tagModel->model_id = $modelId;
-            $tagModel->model_class = $tagCategory->model_class;
+            // Save the tag we're trying to add
+            $tag = new Tag();
+            // Technically we can fetch the user_id by going through the model but that's just too much work and slow
+            $tag->user_id = Auth::id();
+            $tag->model_id = $model->id;
+            $tag->model_class = $tagCategory->model_class;
+            $tag->name = $tagName;
             $color = $request->get('color');
-            $tagModel->color = empty($color) ? null : $color;
+            $tag->color = empty($color) ? null : $color;
 
-            if ($tagModel->save()) {
-                $tagModel->load(['tag']);
-                $result = $tagModel;
+            if ($tag->save()) {
+                $result = $tag;
             } else {
                 $result = response('Unable to save Tag', Http::INTERNAL_SERVER_ERROR);
             }
@@ -96,14 +92,14 @@ class APITagController
 
     /**
      * @param Request $request
-     * @param TagModel $tagmodel
+     * @param Tag     $tag
      *
      * @return array|ResponseFactory|Response
      * @throws Exception
      */
-    function delete(Request $request, TagModel $tagmodel)
+    function delete(Request $request, Tag $tag)
     {
-        if ($tagmodel->delete()) {
+        if ($tag->delete()) {
             $result = response()->noContent();
         } else {
             $result = response('Unable to delete Tag', Http::INTERNAL_SERVER_ERROR);

@@ -48,6 +48,56 @@ class CommonMapsSidebartags extends InlineCode {
 
     /**
      *
+     * @param name string
+     * @private
+     */
+    _createTag(name) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/tag`,
+            dataType: 'json',
+            data: {
+                category: 'dungeon_route',
+                model_id: getState().getMapContext().getPublicKey(),
+                name: name,
+                color: '',
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.tag_create_success'));
+
+                self._renderTag(json);
+                self.refreshTagListeners();
+            }
+        });
+    }
+
+    /**
+     *
+     * @param id Number
+     * @private
+     */
+    _deleteTag(id) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/tag/${id}`,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+            },
+            success: function () {
+                showSuccessNotification(lang.get('messages.tag_delete_success'));
+
+                self._removeRenderedTagById(id);
+            }
+        });
+    }
+
+    /**
+     *
      */
     activate() {
         super.activate();
@@ -76,23 +126,8 @@ class CommonMapsSidebartags extends InlineCode {
 
             // Enter
             if (keyEvent.keyCode === 13) {
-                $.ajax({
-                    type: 'POST',
-                    url: `/ajax/tag`,
-                    dataType: 'json',
-                    data: {
-                        category: 'dungeon_route',
-                        model_id: getState().getMapContext().getPublicKey(),
-                        name: $this.val(),
-                        color: '',
-                    },
-                    success: function (json) {
-                        showSuccessNotification(lang.get('messages.tag_create_success'));
-
-                        $this.val('');
-                        self._renderTag(json);
-                    }
-                });
+                self._createTag($this.val());
+                $this.val('');
             }
         }).autocomplete({
             source: sourceTags,
@@ -112,21 +147,7 @@ class CommonMapsSidebartags extends InlineCode {
         let $tags = $('.tag');
         $tags.unbind('click');
         $tags.bind('click', function (e) {
-            let $this = $(this);
-
-            $.ajax({
-                type: 'POST',
-                url: `/ajax/tag/${$this.data('id')}`,
-                dataType: 'json',
-                data: {
-                    _method: 'DELETE',
-                },
-                success: function () {
-                    showSuccessNotification(lang.get('messages.tag_delete_success'));
-
-                    self._removeRenderedTagById($this.data('id'));
-                }
-            });
+            self._deleteTag($(this).data('id'))
         });
     }
 }

@@ -250,7 +250,7 @@ class DungeonrouteTable extends InlineCode {
 
                     result = `${published} ${row.title}`;
 
-                    if (row.tags.length > 0) {
+                    if (row.hasOwnProperty('tags') && row.tags.length > 0) {
                         let template = Handlebars.templates['dungeonroute_table_title_template'];
 
                         let tags = [];
@@ -271,7 +271,7 @@ class DungeonrouteTable extends InlineCode {
                         // Build the status bar from the template
                         result = template({
                             title: result,
-                            tags: tags.join()
+                            tags: tags.join('')
                         });
                     }
 
