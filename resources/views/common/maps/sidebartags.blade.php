@@ -1,10 +1,12 @@
 <?php
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $tags */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
 $edit = isset($edit) ? $edit : false;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/sidebartags', 'options' => [
-    'tags' => $tags,
-    'edit' => $edit,
+    'tags'             => $tags,
+    'autocompletetags' => $autocompletetags,
+    'edit'             => $edit,
 ]])
 <div id="no_tags" class="row" style="display: {{ $tags->isEmpty() ? 'block' : 'none' }}">
     <div class="col">

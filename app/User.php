@@ -124,7 +124,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasMany
+     * @return HasMany|Tag
      */
     public function tags()
     {
@@ -136,7 +136,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isOAuth()
+    public function isOAuth(): bool
     {
         return empty($this->password);
     }
@@ -147,7 +147,7 @@ class User extends Authenticatable
      * @param $name
      * @return bool
      */
-    function hasPaidTier($name)
+    function hasPaidTier($name): bool
     {
         // True for all admins
         $result = $this->hasRole('admin');
@@ -170,7 +170,7 @@ class User extends Authenticatable
      *
      * @return Collection
      */
-    function getPaidTiers()
+    function getPaidTiers(): Collection
     {
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
@@ -187,7 +187,7 @@ class User extends Authenticatable
     /**
      * Checks if this user can create a dungeon route or not (based on free account limits)
      */
-    function canCreateDungeonRoute()
+    function canCreateDungeonRoute(): bool
     {
         return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
             $this->hasPaidTier(PaidTier::UNLIMITED_DUNGEONROUTES);
@@ -197,11 +197,11 @@ class User extends Authenticatable
      * Get the amount of routes a user may still create.
      *
      * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     * @return mixed
+     * @return int
      */
-    function getRemainingRouteCount()
+    function getRemainingRouteCount(): int
     {
-        return max(0,
+        return (int)max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
@@ -220,7 +220,7 @@ class User extends Authenticatable
     /**
      * Gets a list of consequences that will happen when this user tries to delete their account.
      */
-    public function getDeleteConsequences()
+    public function getDeleteConsequences(): array
     {
         $teams = ['teams' => []];
         foreach ($this->teams as $team) {

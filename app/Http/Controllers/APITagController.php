@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TagFormRequest;
+use App\Http\Requests\Tag\APITagFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -41,11 +41,11 @@ class APITagController
     }
 
     /**
-     * @param TagFormRequest $request
+     * @param APITagFormRequest $request
      *
      * @return Application|ResponseFactory|Response
      */
-    public function store(TagFormRequest $request)
+    public function store(APITagFormRequest $request)
     {
         /** @var TagCategory $tagCategory */
         $tagCategory = TagCategory::where('name', $request->get('category', null))->firstOrFail();
