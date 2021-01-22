@@ -9,11 +9,11 @@ if (isset($model)) {
 }
 
 if (\Illuminate\Support\Facades\Auth::check()) {
-    $tags = \App\Models\Tags\Tag::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function (\App\Models\Tags\Tag $tagModel) {
-        return $tagModel->tag;
-    });
+    $tags             = Auth::user()->tags;
+    $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE))->get();
 } else {
-    $tags = collect();
+    $tags             = collect();
+    $autocompleteTags = collect();
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
@@ -43,7 +43,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ __('Tags') }}</h5>
-                    @include('common.maps.sidebartags', ['tags' => $model->tags, 'edit' => true])
+                    @include('common.maps.sidebartags', ['tags' => $model->tags, 'autocompletetags' => $autocompleteTags, 'edit' => true])
                 </div>
             </div>
         </div>

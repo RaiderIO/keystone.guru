@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
+use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Service\EchoServerHttpApiService;
 use App\User;
 use Exception;
 use Faker\Provider\Color;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -162,6 +166,38 @@ class ProfileController extends Controller
             }
         } else {
             $error = ['passwords_incorrect' => __('Current password is incorrect')];
+        }
+
+        return view('profile.edit')->withErrors($error);
+    }
+
+    /**
+     * @param TagFormRequest $request
+     * @return Application|Factory|View
+     */
+    public function createtag(TagFormRequest $request)
+    {
+        $error = [];
+        // Bit strange - but required with multiple forms existing on the profile page
+        $name = $request->get('tag_name_new');
+
+        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE)->id;
+
+        if (!Tag::where('user_id', Auth::id())->where('tag_category_id', $tagCategoryId)->where('name', $name)->exists()) {
+            // Save the tag we're trying to add
+            $tag = new Tag();
+            // Technically we can fetch the user_id by going through the model but that's just too much work and slow
+            $tag->user_id = Auth::id();
+            $tag->tag_category_id = $tagCategoryId;
+            $tag->model_id = null;
+            $tag->model_class = null;
+            $tag->name = $name;
+            $tag->color = null;
+
+            $tag->save();
+            Session::flash('status', __('Tag created successfully'));
+        } else {
+            $error = ['tag_name_new' => __('This tag already exists')];
         }
 
         return view('profile.edit')->withErrors($error);

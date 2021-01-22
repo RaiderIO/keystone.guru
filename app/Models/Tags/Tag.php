@@ -5,6 +5,7 @@ namespace App\Models\Tags;
 use App\Models\Traits\HasGenericModelRelation;
 use Carbon\Carbon;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -21,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @property TagCategory $tagcategory
  *
+ * @method Builder unique(TagCategory $tagCategory)
+ *
  * @mixin Eloquent
  */
 class Tag extends Model
@@ -35,5 +38,19 @@ class Tag extends Model
     public function tagcategory()
     {
         return $this->hasOne('App\Models\Tags\TagCategory', 'tag_category_id');
+    }
+
+    /**
+     * @param Builder $query
+     * @param TagCategory|null $category
+     * @return Builder
+     */
+    public function scopeUnique(Builder $query, ?TagCategory $category = null)
+    {
+        if ($category instanceof TagCategory) {
+            $query = $query->where('tag_category_id', $category->id);
+        }
+
+        return $query->groupBy('name');
     }
 }

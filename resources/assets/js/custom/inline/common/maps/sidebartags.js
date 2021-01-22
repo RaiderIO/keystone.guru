@@ -102,8 +102,6 @@ class CommonMapsSidebartags extends InlineCode {
     activate() {
         super.activate();
 
-        let self = this;
-
         // Restore tags
         for (let index in this.options.tags) {
             if (this.options.tags.hasOwnProperty(index)) {
@@ -112,30 +110,6 @@ class CommonMapsSidebartags extends InlineCode {
         }
 
         this.refreshTagListeners();
-
-
-        // New tags text field
-        let sourceTags = {};
-        for (let i = 0; i < this.options.tags.length; i++) {
-            let tagName = this.options.tags[i].name;
-            sourceTags[`${tagName}`] = i;
-        }
-
-        $('#new_tag_input').on('keyup', function (keyEvent) {
-            let $this = $(this);
-
-            // Enter
-            if (keyEvent.keyCode === 13) {
-                self._createTag($this.val());
-                $this.val('');
-            }
-        }).autocomplete({
-            source: sourceTags,
-            highlightClass: 'text-danger',
-            onSelectItem: function (item, element) {
-                console.log('onselectitem');
-            },
-        });
     }
 
     /**
@@ -149,5 +123,33 @@ class CommonMapsSidebartags extends InlineCode {
         $tags.bind('click', function (e) {
             self._deleteTag($(this).data('id'))
         });
+
+        // New tags text field
+        let sourceTags = {};
+        for (let i = 0; i < this.options.autocompletetags.length; i++) {
+            let tagName = this.options.autocompletetags[i].name;
+            sourceTags[`${tagName}`] = i;
+        }
+
+        console.log(sourceTags);
+
+        $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
+            let $this = $(this);
+
+            // Enter
+            if (keyEvent.keyCode === 13) {
+                self._createTag($this.val());
+                $this.val('');
+            }
+        }).autocomplete({
+            source: sourceTags,
+            highlightClass: 'text-danger',
+            treshold: 2,
+            onSelectItem: function (item, element) {
+                console.log('onselectitem');
+            },
+        });
+
+        console.log('init!');
     }
 }

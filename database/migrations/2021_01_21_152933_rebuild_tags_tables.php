@@ -21,8 +21,8 @@ class RebuildTagsTables extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('tag_category_id');
-            $table->integer('model_id');
-            $table->string('model_class');
+            $table->integer('model_id')->nullable(true);
+            $table->string('model_class')->nullable(true);
             $table->string('name');
             $table->string('color')->nullable(true);
             $table->timestamps();

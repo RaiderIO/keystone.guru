@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tag;
 
-use App\Models\Tags\TagCategory;
-use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class TagFormRequest extends FormRequest
 {
@@ -16,7 +13,7 @@ class TagFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->hasRole('user') || Auth::user()->hasRole('admin');
+        return true;
     }
 
     /**
@@ -27,10 +24,8 @@ class TagFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => [Rule::in(TagCategory::all()->pluck(['name']))],
-            'model_id' => 'required|string',
-            'name'     => 'required|string',
-            'color'    => 'nullable|string',
+            // Bit strange - but required with multiple forms existing on the profile page
+            'tag_name_new' => ['required'],
         ];
     }
 }

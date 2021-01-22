@@ -234,7 +234,7 @@ $tagCategoryNameMapping = [
                         </div>
                     </div>
                     @foreach($tags as $tag)
-                        <div class="row">
+                        <div class="row mt-1">
                             <div class="col-3">
                                 {!! Form::text('tag_name', $tag->name, ['id' => sprintf('tag_name_%d', $tag->id), 'class' => 'form-control']) !!}
                             </div>
@@ -253,6 +253,14 @@ $tagCategoryNameMapping = [
                     @endforeach
                 </div>
             @endforeach
+            {{ Form::model($user, ['route' => 'profile.tag.create', 'method' => 'post']) }}
+            <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
+                {!! Form::label('tag_name_new', __('Create tag')) !!}
+                {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
+                @include('common.forms.form-error', ['key' => 'tag_name_new'])
+            </div>
+            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::close() !!}
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">

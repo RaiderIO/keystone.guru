@@ -30,4 +30,13 @@ class TagCategory extends Model
     {
         return 'category';
     }
+
+    /**
+     * @param string $name
+     * @return TagCategory
+     */
+    public static function fromName(string $name): TagCategory
+    {
+        return TagCategory::where('name', $name)->firstOrFail();
+    }
 }

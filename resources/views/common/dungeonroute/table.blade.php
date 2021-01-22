@@ -16,7 +16,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
 
-$tags = optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->tags() : [];
+$tags = (optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->tags() : collect())
+            ->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE))->get();
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
@@ -92,6 +93,8 @@ $tags = optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->tag
             ['id' => 'tags',
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
+            // Change the original text
+            'title' => $tags->isEmpty() ? __('No tags available') : false,
             'data-selected-text-format' => 'count > 1',
             'data-count-selected-text' => __('{0} tags selected')]) !!}
     </div>
