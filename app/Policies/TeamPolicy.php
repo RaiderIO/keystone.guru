@@ -13,8 +13,8 @@ class TeamPolicy
     /**
      * Determine whether the user can edit a team.
      *
-     * @param \App\User $user
-     * @param \App\Models\Team $team
+     * @param User $user
+     * @param Team $team
      * @return bool
      */
     public function edit(User $user, Team $team)

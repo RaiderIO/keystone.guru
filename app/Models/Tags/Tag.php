@@ -2,12 +2,14 @@
 
 namespace App\Models\Tags;
 
+use App\Models\DungeonRoute;
 use App\Models\Traits\HasGenericModelRelation;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -33,11 +35,11 @@ class Tag extends Model
     protected $visible = ['id', 'name', 'color'];
 
     /**
-     * @return HasOne
+     * @return BelongsTo
      */
     public function tagcategory()
     {
-        return $this->hasOne('App\Models\Tags\TagCategory', 'tag_category_id');
+        return $this->belongsTo('App\Models\Tags\TagCategory', 'tag_category_id');
     }
 
     /**
@@ -52,5 +54,25 @@ class Tag extends Model
         }
 
         return $query->groupBy('name');
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getUsage(): Collection
+    {
+        $result = new Collection();
+        switch ($this->tagcategory->name) {
+            case TagCategory::DUNGEON_ROUTE:
+                // Find all routes that match the name of this tag
+                $result = DungeonRoute::join('tags', 'tags.model_id', '=', 'dungeon_routes.id')
+                    ->where('tags.model_class', $this->model_class)
+                    ->where('tags.user_id', $this->user_id)
+                    ->where('tags.name', $this->name)
+                    ->get();
+                break;
+        }
+
+        return $result;
     }
 }

@@ -326,6 +326,14 @@ class Team extends IconFileModel
     }
 
     /**
+     * @return Collection
+     */
+    public function getAvailableTags(): Collection
+    {
+        return collect();
+    }
+
+    /**
      * @return string Generates a random invite code.
      */
     public static function generateRandomInviteCode()

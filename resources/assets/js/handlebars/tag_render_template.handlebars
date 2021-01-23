@@ -1,5 +1,10 @@
 <span
     class="tag badge badge-pill mr-1
+     {{#if dark}}
+        text-white
+    {{else}}
+        text-dark
+     {{/if}}
      {{#ifCond color '==' null}}
         badge-primary
      {{/ifCond}}

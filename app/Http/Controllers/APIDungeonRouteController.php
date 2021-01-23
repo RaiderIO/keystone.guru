@@ -22,11 +22,11 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportWarning;
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\PublishedState;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -87,11 +87,23 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                // Having because we're using the result of SELECT
-                ->havingRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
                 // Add more group by clauses, required for the above having query
                 ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
+        }
+
+        $tags = $request->get('tags', []);
+
+        // Must have these tags
+        if (!empty($tags)) {
+            // Clear group by
+            $routes = $routes
+                ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
+                ->where('tags.tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE)->id)
+                ->whereIn('tags.name', $tags)
+                // https://stackoverflow.com/a/3267635/771270; this enables AND behaviour for multiple tags
+                ->havingRaw(sprintf('COUNT(DISTINCT tags.name) >= %d', count($tags)));
         }
 
         // Check if we're filtering based on team or not

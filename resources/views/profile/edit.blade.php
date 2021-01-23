@@ -30,6 +30,10 @@ $tagCategoryNameMapping = [
     'model' => $user
 ])
 
+@include('common.general.inline', ['path' => 'profile/edit', 'options' => [
+    'test' => 'test'
+]])
+
 @section('scripts')
     @parent
 
@@ -38,13 +42,6 @@ $tagCategoryNameMapping = [
             // Code for base app
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
-
-            let $classColors = $('.profile_class_color');
-            $classColors.bind('click', function () {
-                $('#echo_color').val($(this).data('color'));
-            });
-
-            $('#profile_user_reports_table').DataTable({});
         });
     </script>
 @endsection
@@ -126,7 +123,7 @@ $tagCategoryNameMapping = [
                 @endfor
             </div>
 
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::submit(__('Save'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>
 
@@ -214,39 +211,44 @@ $tagCategoryNameMapping = [
             <h4>
                 {{ __('Tag manager') }}
             </h4>
-            @foreach($user->tags()->groupBy('name')->get()->groupBy(['tag_category_id']) as $categoryId => $tags)
+            @foreach($user->tags()->groupByRaw('tag_category_id, name')->get()->groupBy(['tag_category_id']) as $categoryId => $tags)
                 <div class="form-group">
                     <h5>
                         {{ $tagCategoryNameMapping[$categoryId] }}
                     </h5>
                     <div class="row">
-                        <div class="col-3 font-weight-bold">
+                        <div class="col-6 col-lg-3 font-weight-bold">
                             {{ __('Name') }}
                         </div>
-                        <div class="col-3 font-weight-bold">
+                        <div class="col-4 col-lg-3 font-weight-bold">
                             {{ __('Color') }}
                         </div>
-                        <div class="col-4 font-weight-bold">
+                        <div class="col-lg-4 d-none d-lg-block font-weight-bold">
                             {{ __('Usage') }}
                         </div>
-                        <div class="col-2 font-weight-bold">
+                        <div class="col-2 col-lg-2 font-weight-bold">
                             {{ __('Actions') }}
                         </div>
                     </div>
                     @foreach($tags as $tag)
-                        <div class="row mt-1">
-                            <div class="col-3">
+                        <div id="tag_row_{{ $tag->id }}" class="row mt-1">
+                            <div class="col-6 col-lg-3">
                                 {!! Form::text('tag_name', $tag->name, ['id' => sprintf('tag_name_%d', $tag->id), 'class' => 'form-control']) !!}
                             </div>
-                            <div class="col-3">
+                            <div class="col-4 col-lg-3 ">
                                 {!! Form::color('tag_color', $tag->color ?? '#DF691A', ['id' => sprintf('tag_color_%d', $tag->id), 'class' => 'form-control']) !!}
                             </div>
-                            <div class="col-4">
-                                {{ __('Usage') }}
+                            <div class="col-lg-3 d-none d-lg-block">
+                                {{ sprintf('%s %s(s)', $tag->getUsage()->count(), strtolower($tagCategoryNameMapping[$categoryId])) }}
                             </div>
-                            <div class="col-2">
+                            <div class="col-2 col-lg-3">
                                 <div class="btn btn-primary tag_save" data-id="{{ $tag->id }}">
-                                    <i class="fas fa-save"></i> {{ __('Save') }}
+                                    <i class="fas fa-save"></i>
+                                    <span class="d-none d-xl-inline"> {{ __('Save') }} </span>
+                                </div>
+                                <div class="btn btn-danger tag_delete" data-id="{{ $tag->id }}">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="d-none d-xl-inline"> {{ __('Delete all') }} </span>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +261,7 @@ $tagCategoryNameMapping = [
                 {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
                 @include('common.forms.form-error', ['key' => 'tag_name_new'])
             </div>
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::submit(__('Create new tag'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>
 

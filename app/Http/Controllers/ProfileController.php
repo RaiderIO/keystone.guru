@@ -172,6 +172,8 @@ class ProfileController extends Controller
     }
 
     /**
+     * Creates a tag from the tag manager
+     *
      * @param TagFormRequest $request
      * @return Application|Factory|View
      */

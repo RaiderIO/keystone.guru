@@ -7,7 +7,7 @@ use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class APITagFormRequest extends FormRequest
+class APITagUpdateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,8 @@ class APITagFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => [Rule::in(TagCategory::all()->pluck(['name']))],
-            'model_id' => 'required|string',
             'name'     => 'required|string',
+            'color'    => 'required|string',
         ];
     }
 }

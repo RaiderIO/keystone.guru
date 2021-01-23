@@ -27,7 +27,8 @@ class CommonMapsSidebartags extends InlineCode {
         let template = Handlebars.templates['tag_render_template'];
 
         let data = $.extend({}, {
-            edit: true
+            edit: true,
+            dark: tag.color === null ? null : isColorDark(tag.color)
         }, tag);
 
         $('#tags_container').append(template(data));
@@ -62,13 +63,12 @@ class CommonMapsSidebartags extends InlineCode {
                 category: 'dungeon_route',
                 model_id: getState().getMapContext().getPublicKey(),
                 name: name,
-                color: '',
             },
             success: function (json) {
                 showSuccessNotification(lang.get('messages.tag_create_success'));
 
                 self._renderTag(json);
-                self.refreshTagListeners();
+                self._refreshTagListeners();
             }
         });
     }
@@ -109,13 +109,15 @@ class CommonMapsSidebartags extends InlineCode {
             }
         }
 
-        this.refreshTagListeners();
+        this._refreshTagListeners();
     }
 
     /**
      * Unbinds and re-binds the listeners for each tag
+     *
+     * @private
      */
-    refreshTagListeners() {
+    _refreshTagListeners() {
         let self = this;
 
         let $tags = $('.tag');
@@ -130,8 +132,6 @@ class CommonMapsSidebartags extends InlineCode {
             let tagName = this.options.autocompletetags[i].name;
             sourceTags[`${tagName}`] = i;
         }
-
-        console.log(sourceTags);
 
         $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
             let $this = $(this);
@@ -149,7 +149,5 @@ class CommonMapsSidebartags extends InlineCode {
                 console.log('onselectitem');
             },
         });
-
-        console.log('init!');
     }
 }

@@ -28,7 +28,7 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 
 @component('common.maps.sidebar', [
     'dungeon' => $dungeon,
-    'header' => __('Toolbox'),
+    'header' => $model->title,
     'anchor' => 'left',
     'id' => 'editsidebar',
     'show' => $show,

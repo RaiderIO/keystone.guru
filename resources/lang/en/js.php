@@ -161,6 +161,10 @@ return [
     'category_label'                                            => 'Category',
     'message_label'                                             => 'Message',
 
+    // Profile edit
+    'save_tag_success'                                          => 'Tag updated successfully',
+    'delete_tag_success'                                        => 'Tag deleted successfully',
+
     // Dungeonroute edit
     'settings_saved'                                            => 'Settings saved successfully',
     'pull_gradient_settings_saved'                              => 'Pull gradient settings saved successfully',

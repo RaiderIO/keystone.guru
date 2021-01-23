@@ -238,6 +238,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('/{category}', 'APITagController@list')->name('api.tag.list');
             Route::post('/', 'APITagController@store')->name('api.tag.create');
             Route::delete('/{tag}', 'APITagController@delete')->name('api.tag.delete');
+            // Profile
+            Route::put('/{tag}/all', 'APITagController@updateAll')->name('api.tag.updateall');
+            Route::delete('/{tag}/all', 'APITagController@deleteAll')->name('api.tag.deleteall');
         });
     });
 
