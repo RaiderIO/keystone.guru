@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @property string $model_class
  *
+ * @property Model $model
+ *
  * @mixin Model
  */
 trait HasGenericModelRelation

@@ -28,7 +28,11 @@ class RebuildTagsTables extends Migration
             $table->timestamps();
 
             $table->index('user_id');
+            $table->index('tag_category_id');
+            $table->index('model_id');
+            $table->index('name');
             $table->index(['model_id', 'model_class']);
+            $table->index(['name', 'user_id', 'tag_category_id']);
         });
     }
 

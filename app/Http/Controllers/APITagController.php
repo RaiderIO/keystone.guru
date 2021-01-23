@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\APITagFormRequest;
+use App\Http\Requests\Tag\APITagUpdateFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\HasTags;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
-class APITagController
+class APITagController extends Controller
 {
     /**
      * @param Request $request
@@ -37,18 +39,19 @@ class APITagController
      */
     public function list(Request $request, TagCategory $category)
     {
-        return Tag::where($category->category)->where('user_id', Auth::id())->get();
+        return Tag::where('tag_category_id', $category->id)->where('user_id', Auth::id())->get();
     }
 
     /**
      * @param APITagFormRequest $request
      *
      * @return Application|ResponseFactory|Response
+     * @throws AuthorizationException
      */
     public function store(APITagFormRequest $request)
     {
         /** @var TagCategory $tagCategory */
-        $tagCategory = TagCategory::where('name', $request->get('category', null))->firstOrFail();
+        $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
 
         $modelId = $request->get('model_id');
         $tagName = $request->get('name');
@@ -67,7 +70,13 @@ class APITagController
         /** @var HasTags|Model $model */
         $model = $query->firstOrFail();
 
+        $this->authorize('create-tag', [$tagCategory, $model]);
+
         if (!$model->hasTag($tagName)) {
+            // Get the first tag that has the same name, under the same user, with the same category
+            /** @var Tag $similarTag */
+            $similarTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->where('tag_category_id', $tagCategory->id)->first();
+
             // Save the tag we're trying to add
             $tag = new Tag();
             // Technically we can fetch the user_id by going through the model but that's just too much work and slow
@@ -76,8 +85,8 @@ class APITagController
             $tag->model_id = $model->id;
             $tag->model_class = $tagCategory->model_class;
             $tag->name = $tagName;
-            $color = $request->get('color');
-            $tag->color = empty($color) ? null : $color;
+            // Will be null if no similar tag is found which is fine
+            $tag->color = optional($similarTag)->color;
 
             if ($tag->save()) {
                 $result = $tag;
@@ -92,8 +101,47 @@ class APITagController
     }
 
     /**
+     * @param APITagUpdateFormRequest $request
+     * @param Tag $tag
+     * @return Response
+     * @throws AuthorizationException
+     */
+    public function updateAll(APITagUpdateFormRequest $request, Tag $tag)
+    {
+        $this->authorize('edit', $tag);
+
+        // Update all tags with the same name to the new name and color
+        Tag::where('name', $tag->name)
+            ->where('tag_category_id', $tag->tag_category_id)
+            ->where('user_id', Auth::id())
+            ->update(['name' => $request->get('name'), 'color' => $request->get('color')]);
+
+        return response()->noContent();
+    }
+
+    /**
      * @param Request $request
-     * @param Tag     $tag
+     * @param Tag $tag
+     * @return Response
+     * @throws AuthorizationException
+     * @throws Exception
+     */
+    public function deleteAll(Request $request, Tag $tag)
+    {
+        $this->authorize('delete', $tag);
+
+        // Update all tags with the same name to the new name and color
+        Tag::where('name', $tag->name)
+            ->where('tag_category_id', $tag->tag_category_id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return response()->noContent();
+    }
+
+    /**
+     * @param Request $request
+     * @param Tag $tag
      *
      * @return array|ResponseFactory|Response
      * @throws Exception

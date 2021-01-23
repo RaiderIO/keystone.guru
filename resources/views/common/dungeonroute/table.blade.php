@@ -17,7 +17,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     $_COOKIE['routes_viewmode'] : 'biglist';
 
 $tags = (optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->tags() : collect())
-            ->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE))->get();
+    ->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE))->get();
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
@@ -79,25 +79,31 @@ $tags = (optional($team)->getAvailableTags() ?? Auth::check() ? Auth::user()->ta
         {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
         <?php
         $requirements = ['enough_enemy_forces' => __('Enough enemy forces')];
-        if(Auth::check()){
+        if (Auth::check()) {
             $requirements['favorite'] = __('Favorite');
         }
         ?>
-        {!! Form::select('dungeon_id', $requirements, 0,
-            ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple',
-            'data-selected-text-format' => 'count > 1', 'data-count-selected-text' => __('{0} requirements')]) !!}
-    </div>
-    <div class="col-lg pl-1 pr-1">
-        {!! Form::label('tags[]', __('Tags')) !!}
-        {!! Form::select('tags[]', $tags->pluck('name', 'id'), null,
-            ['id' => 'tags',
+        {!! Form::select('dungeon_id', $requirements, 0, [
+            'id' => 'dungeonroute_requirements_select',
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
-            // Change the original text
-            'title' => $tags->isEmpty() ? __('No tags available') : false,
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('{0} tags selected')]) !!}
+            'data-count-selected-text' => __('{0} requirements')
+        ]) !!}
     </div>
+    @if($view === 'profile')
+        <div class="col-lg pl-1 pr-1">
+            {!! Form::label('dungeonroute_tags_select[]', __('Tags')) !!}
+            {!! Form::select('dungeonroute_tags_select[]', $tags->pluck('name', 'name'), null,
+                ['id' => 'dungeonroute_tags_select',
+                'class' => 'form-control selectpicker',
+                'multiple' => 'multiple',
+                // Change the original text
+                'title' => $tags->isEmpty() ? __('No tags available') : false,
+                'data-selected-text-format' => 'count > 1',
+                'data-count-selected-text' => __('{0} tags selected')]) !!}
+        </div>
+    @endif
     <div class="col-lg pl-1 pr-1">
         <div class="mb-2">
             &nbsp;

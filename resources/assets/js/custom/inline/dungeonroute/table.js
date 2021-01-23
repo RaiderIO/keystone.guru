@@ -123,6 +123,7 @@ class DungeonrouteTable extends InlineCode {
                 'url': '/ajax/routes',
                 'data': function (d) {
                     d.requirements = $('#dungeonroute_requirements_select').val();
+                    d.tags = $('#dungeonroute_tags_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -261,7 +262,8 @@ class DungeonrouteTable extends InlineCode {
                                 let template = Handlebars.templates['tag_render_template'];
 
                                 let data = $.extend({}, {
-                                    edit: false
+                                    edit: false,
+                                    dark: tag.color === null ? null : isColorDark(tag.color)
                                 }, tag);
 
                                 tags.push(template(data));
