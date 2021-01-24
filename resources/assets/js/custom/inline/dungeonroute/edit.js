@@ -34,6 +34,10 @@ class DungeonrouteEdit extends InlineCode {
             .refreshTooltips();
     }
 
+    /**
+     *
+     * @private
+     */
     _saveRouteSettings() {
         $.ajax({
             type: 'POST',

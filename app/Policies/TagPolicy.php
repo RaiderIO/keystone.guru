@@ -26,7 +26,8 @@ class TagPolicy
         $result = false;
 
         switch ($tagCategory->name) {
-            case TagCategory::DUNGEON_ROUTE:
+            case TagCategory::DUNGEON_ROUTE_PERSONAL:
+            case TagCategory::DUNGEON_ROUTE_TEAM:
                 /** @var DungeonRoute $model */
                 $result = $model->mayUserEdit($user);
                 break;
@@ -48,7 +49,8 @@ class TagPolicy
 
         if ($tag->model_id !== null) {
             switch ($tag->tagcategory->name) {
-                case TagCategory::DUNGEON_ROUTE:
+                case TagCategory::DUNGEON_ROUTE_PERSONAL:
+                case TagCategory::DUNGEON_ROUTE_TEAM:
                     /** @var DungeonRoute $dungeonRoute */
                     $dungeonRoute = $tag->model;
 

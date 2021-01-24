@@ -180,23 +180,16 @@ class ProfileController extends Controller
     public function createtag(TagFormRequest $request)
     {
         $error = [];
-        // Bit strange - but required with multiple forms existing on the profile page
-        $name = $request->get('tag_name_new');
 
-        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE)->id;
+        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL)->id;
 
-        if (!Tag::where('user_id', Auth::id())->where('tag_category_id', $tagCategoryId)->where('name', $name)->exists()) {
-            // Save the tag we're trying to add
-            $tag = new Tag();
-            // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-            $tag->user_id = Auth::id();
-            $tag->tag_category_id = $tagCategoryId;
-            $tag->model_id = null;
-            $tag->model_class = null;
-            $tag->name = $name;
-            $tag->color = null;
+        if (!Tag::where('name', $request->get('tag_name_new'))
+            ->where('user_id', Auth::id())
+            ->where('tag_category_id', $tagCategoryId)
+            ->exists()) {
 
-            $tag->save();
+            Tag::saveFromRequest($request, $tagCategoryId);
+
             Session::flash('status', __('Tag created successfully'));
         } else {
             $error = ['tag_name_new' => __('This tag already exists')];

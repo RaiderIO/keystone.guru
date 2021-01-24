@@ -8,6 +8,7 @@ use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\UserReport;
 use Eloquent;
@@ -124,11 +125,18 @@ class User extends Authenticatable
     }
 
     /**
+     * @param TagCategory|null $category
      * @return HasMany|Tag
      */
-    public function tags()
+    public function tags(?TagCategory $category = null): HasMany
     {
-        return $this->hasMany('App\Models\Tags\Tag');
+        $result = $this->hasMany('\App\Models\Tags\Tag');
+
+        if ($category !== null) {
+            $result->where('tag_category_id', $category->id);
+        }
+
+        return $result;
     }
 
     /**

@@ -224,23 +224,30 @@ function refreshSelectPickers() {
 
 function _showNotification(opts) {
     new Noty($.extend({
-        theme: 'bootstrap-v4',
+        theme: 'keystoneguru',
         timeout: 4000
     }, opts)).show();
 }
 
 function _showConfirm(opts) {
     let n = new Noty($.extend({
-        theme: 'bootstrap-v4',
+        theme: 'keystoneguru',
         layout: 'center',
         modal: true
     }, opts));
     n.show();
 }
 
+/**
+ *
+ * @param text
+ * @param yesCallback
+ * @param noCallback
+ * @param opts
+ */
 function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
     _showConfirm($.extend({
-            type: 'info',
+            type: 'confirm',
             text: text,
             buttons: [
                 Noty.button(lang.get('messages.yes_label'), 'btn btn-success mr-1', function (n) {
@@ -256,6 +263,28 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
                     }
                     n.close();
                 })
+            ]
+        }, opts)
+    );
+}
+
+/**
+ *
+ * @param text
+ * @param doneCallback
+ * @param opts
+ */
+function showConfirmDone(text, doneCallback = null, opts = {}) {
+    _showConfirm($.extend({
+            type: 'confirm',
+            text: text,
+            buttons: [
+                Noty.button(lang.get('messages.done_label'), 'btn btn-success mr-1', function (n) {
+                    if (typeof doneCallback === 'function') {
+                        doneCallback();
+                    }
+                    n.close();
+                }, {id: 'done-button', 'data-status': 'ok'}),
             ]
         }, opts)
     );

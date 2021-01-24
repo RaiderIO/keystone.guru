@@ -6,7 +6,7 @@ $menuItems = [
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
-    ['icon' => 'fa-tag', 'text' => __('Tag manager'), 'target' => '#tagmanager'],
+    ['icon' => 'fa-tag', 'text' => __('Personal tags'), 'target' => '#tags'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -18,11 +18,6 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#repo
 
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
-
-$tagCategoryNameMapping = [
-    1 => __('Route'),
-    2 => __('Temp')
-];
 ?>
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle,
@@ -207,62 +202,16 @@ $tagCategoryNameMapping = [
             {!! Form::close() !!}
         </div>
 
-        <div class="tab-pane fade" id="tagmanager" role="tabpanel" aria-labelledby="tag-manager-tab">
+        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="personal-tags-tab">
             <h4>
-                {{ __('Tag manager') }}
+                {{ __('Personal tags') }}
             </h4>
-            @foreach($user->tags()->groupByRaw('tag_category_id, name')->get()->groupBy(['tag_category_id']) as $categoryId => $tags)
-                <div class="form-group">
-                    <h5>
-                        {{ $tagCategoryNameMapping[$categoryId] }}
-                    </h5>
-                    <div class="row">
-                        <div class="col-6 col-lg-3 font-weight-bold">
-                            {{ __('Name') }}
-                        </div>
-                        <div class="col-4 col-lg-3 font-weight-bold">
-                            {{ __('Color') }}
-                        </div>
-                        <div class="col-lg-4 d-none d-lg-block font-weight-bold">
-                            {{ __('Usage') }}
-                        </div>
-                        <div class="col-2 col-lg-2 font-weight-bold">
-                            {{ __('Actions') }}
-                        </div>
-                    </div>
-                    @foreach($tags as $tag)
-                        <div id="tag_row_{{ $tag->id }}" class="row mt-1">
-                            <div class="col-6 col-lg-3">
-                                {!! Form::text('tag_name', $tag->name, ['id' => sprintf('tag_name_%d', $tag->id), 'class' => 'form-control']) !!}
-                            </div>
-                            <div class="col-4 col-lg-3 ">
-                                {!! Form::color('tag_color', $tag->color ?? '#DF691A', ['id' => sprintf('tag_color_%d', $tag->id), 'class' => 'form-control']) !!}
-                            </div>
-                            <div class="col-lg-3 d-none d-lg-block">
-                                {{ sprintf('%s %s(s)', $tag->getUsage()->count(), strtolower($tagCategoryNameMapping[$categoryId])) }}
-                            </div>
-                            <div class="col-2 col-lg-3">
-                                <div class="btn btn-primary tag_save" data-id="{{ $tag->id }}">
-                                    <i class="fas fa-save"></i>
-                                    <span class="d-none d-xl-inline"> {{ __('Save') }} </span>
-                                </div>
-                                <div class="btn btn-danger tag_delete" data-id="{{ $tag->id }}">
-                                    <i class="fas fa-trash"></i>
-                                    <span class="d-none d-xl-inline"> {{ __('Delete all') }} </span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endforeach
-            {{ Form::model($user, ['route' => 'profile.tag.create', 'method' => 'post']) }}
-            <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
-                {!! Form::label('tag_name_new', __('Create tag')) !!}
-                {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'tag_name_new'])
-            </div>
-            {!! Form::submit(__('Create new tag'), ['class' => 'btn btn-info']) !!}
-            {!! Form::close() !!}
+            <p>
+                {{ __('You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
+                        you can manage a separate set of tags for just that team.') }}
+            </p>
+
+            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">

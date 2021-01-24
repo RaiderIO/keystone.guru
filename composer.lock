@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed3270f356a34e8bd072ea6e890d4d73",
+    "content-hash": "4ae56920f773d16a3cd9c97297a3ac01",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -197,6 +197,72 @@
                 "source": "https://github.com/barryvdh/ReflectionDocBlock/tree/v2.0.6"
             },
             "time": "2018-12-13T10:34:14+00:00"
+        },
+        {
+            "name": "beyondcode/laravel-server-timing",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beyondcode/laravel-server-timing.git",
+                "reference": "4dd840d1926794d6c95a33b9a089d4e2ed5ad271"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beyondcode/laravel-server-timing/zipball/4dd840d1926794d6c95a33b9a089d4e2ed5ad271",
+                "reference": "4dd840d1926794d6c95a33b9a089d4e2ed5ad271",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.8.*|^6.0|^7.0|^8.0",
+                "php": "^7.2",
+                "symfony/stopwatch": "^4.0|^5.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.6|^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BeyondCode\\ServerTiming\\ServerTimingServiceProvider"
+                    ],
+                    "aliases": {
+                        "Stopwatch": "BeyondCode\\ServerTiming\\Facades\\ServerTiming"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BeyondCode\\ServerTiming\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "marcel@beyondco.de",
+                    "homepage": "https://beyondcode.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add Server-Timing header information from within your Laravel apps.",
+            "homepage": "https://github.com/beyondcode/laravel-server-timing",
+            "keywords": [
+                "beyondcode",
+                "laravel-server-timing"
+            ],
+            "support": {
+                "issues": "https://github.com/beyondcode/laravel-server-timing/issues",
+                "source": "https://github.com/beyondcode/laravel-server-timing/tree/1.2.0"
+            },
+            "time": "2020-09-18T05:34:54+00:00"
         },
         {
             "name": "brick/math",
@@ -8245,6 +8311,68 @@
                 }
             ],
             "time": "2020-09-07T11:33:47+00:00"
+        },
+        {
+            "name": "symfony/stopwatch",
+            "version": "v5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/stopwatch.git",
+                "reference": "2b105c0354f39a63038a1d8bf776ee92852813af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/2b105c0354f39a63038a1d8bf776ee92852813af",
+                "reference": "2b105c0354f39a63038a1d8bf776ee92852813af",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/service-contracts": "^1.0|^2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Stopwatch\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Stopwatch Component",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/stopwatch/tree/v5.2.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-11-01T16:14:45+00:00"
         },
         {
             "name": "symfony/string",

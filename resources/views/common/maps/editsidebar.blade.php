@@ -7,14 +7,6 @@ $show = isset($show) ? $show : [];
 if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
-
-if (\Illuminate\Support\Facades\Auth::check()) {
-    $tags             = Auth::user()->tags;
-    $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE))->get();
-} else {
-    $tags             = collect();
-    $autocompleteTags = collect();
-}
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -35,18 +27,6 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 ])
     @isset($show['sharing'])
         @include('common.maps.share', ['model' => $model, 'show' => $show])
-    @endisset
-
-    <!-- Tags -->
-    @if(isset($show['tags']) && $show['tags'])
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ __('Tags') }}</h5>
-                    @include('common.maps.sidebartags', ['tags' => $model->tags, 'autocompletetags' => $autocompleteTags, 'edit' => true])
-                </div>
-            </div>
-        </div>
     @endisset
 
     <!-- Visibility -->

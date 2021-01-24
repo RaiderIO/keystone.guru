@@ -60,7 +60,7 @@ class APITagController extends Controller
         /** @var Builder $query */
         /** @noinspection PhpUndefinedMethodInspection */
         $query = $tagCategory->model_class::query();
-        if ($tagCategory->name === 'dungeon_route') {
+        if (in_array($tagCategory->name, [TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM])) {
             /** @var DungeonRoute $dungeonRoute */
             $query = $query->where('public_key', $modelId);
         } else {
@@ -70,9 +70,11 @@ class APITagController extends Controller
         /** @var HasTags|Model $model */
         $model = $query->firstOrFail();
 
+        // Now that we know the category and created an instance of the model, check if we may actually do this
         $this->authorize('create-tag', [$tagCategory, $model]);
 
-        if (!$model->hasTag($tagName)) {
+        //
+        if (!$model->hasTag($tagCategory, $tagName)) {
             // Get the first tag that has the same name, under the same user, with the same category
             /** @var Tag $similarTag */
             $similarTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->where('tag_category_id', $tagCategory->id)->first();
