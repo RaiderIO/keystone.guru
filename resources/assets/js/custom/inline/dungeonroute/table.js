@@ -656,7 +656,9 @@ class DungeonrouteTable extends InlineCode {
      */
     _refreshNoTags() {
         // Show the no tags message or not
-        $('#no_tags').toggle($('.tag').length === 0);
+        let hasTags = $('.tag').length !== 0;
+        $('#no_tags').toggle(!hasTags);
+        $('#tags_container_display').toggle(hasTags);
     }
 
     /**

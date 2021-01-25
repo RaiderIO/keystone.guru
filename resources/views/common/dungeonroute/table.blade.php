@@ -15,11 +15,18 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
 
-$searchTags = (optional($team)->getAvailableTags() ?? (Auth::check() ? Auth::user()->tags : collect()))
-            ->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL));
-
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
+
+if ($team !== null) {
+    $searchTags = $team->getAvailableTags();
+} elseif (Auth::check()) {
+    $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
+    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory);
+} else {
+    $searchTags = collect();
+}
+
 $autocompleteTags = collect();
 
 if ($team === null) {

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\User;
 use Eloquent;
 use Exception;
@@ -330,7 +332,9 @@ class Team extends IconFileModel
      */
     public function getAvailableTags(): Collection
     {
-        return collect();
+        return Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
+            ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
+            ->get();
     }
 
     /**
