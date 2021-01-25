@@ -19,7 +19,11 @@ class TagCategorySeeder extends Seeder
 
         $tagCategories = [
             new App\Models\Tags\TagCategory([
-                'name'    => TagCategory::DUNGEON_ROUTE,
+                'name'    => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_class' => DungeonRoute::class,
+            ]),
+            new App\Models\Tags\TagCategory([
+                'name'    => TagCategory::DUNGEON_ROUTE_TEAM,
                 'model_class' => DungeonRoute::class,
             ]),
         ];

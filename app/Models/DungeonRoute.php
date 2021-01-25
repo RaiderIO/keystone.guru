@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -71,19 +72,19 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $affixes
  * @property Collection $ratings
  *
- * @property Collection|Brushline[]                   $brushlines
- * @property Collection|Path[]                        $paths
- * @property Collection|KillZone[]                    $killzones
- * @property Collection|PridefulEnemy[]               $pridefulenemies
+ * @property Collection|Brushline[] $brushlines
+ * @property Collection|Path[] $paths
+ * @property Collection|KillZone[] $killzones
+ * @property Collection|PridefulEnemy[] $pridefulenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
- * @property Collection|MapIcon[]                     $mapicons
- * @property Collection|PageView[]                    $pageviews
+ * @property Collection|MapIcon[] $mapicons
+ * @property Collection|PageView[] $pageviews
  *
- * @property Collection|Tag[]                         $tags
+ * @property Collection|Tag[] $tags
  *
- * @property Collection                               $routeattributes
- * @property Collection                               $routeattributesraw
+ * @property Collection $routeattributes
+ * @property Collection $routeattributesraw
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -318,6 +319,22 @@ class DungeonRoute extends Model
     function team()
     {
         return $this->belongsTo('App\Models\Team');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function tagsteam()
+    {
+        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM));
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function tagspersonal()
+    {
+        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL));
     }
 
     /**
@@ -892,7 +909,7 @@ class DungeonRoute extends Model
                 // You made this? I made this.jpg
                 $subTitle = '';
             }
-        } else if( $this->isSandbox() ){
+        } else if ($this->isSandbox()) {
             $subTitle = __('Sandbox route');
         } else {
             $subTitle = sprintf(__('By %s'), $this->author->name);
@@ -940,6 +957,7 @@ class DungeonRoute extends Model
             $item->playerclasses()->delete();
             $item->playerraces()->delete();
             $item->playerspecializations()->delete();
+            $item->tags()->delete();
 
             // Mapping related items
             $item->enemyraidmarkers()->delete();

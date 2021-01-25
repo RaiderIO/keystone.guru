@@ -6,6 +6,9 @@ class DungeonrouteTable extends InlineCode {
         this._dt = null;
 
         this._tableView = null;
+        this._routeData = [];
+        // The route's public key we're trying to add a tag for - bit of a hack but it works
+        this._addTagPublicKey = '';
 
         // Init the code
         this.setViewMode(this.options.viewMode);
@@ -139,6 +142,8 @@ class DungeonrouteTable extends InlineCode {
                         });
                     });
                 }
+
+                self._routeData = settings.json.data;
             },
             'lengthMenu': [25],
             'bLengthChange': false,
@@ -162,9 +167,9 @@ class DungeonrouteTable extends InlineCode {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
             });
 
-            let $deleteBtns = $('.dungeonroute-delete');
-            $deleteBtns.unbind('click');
-            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
+            let $addTagBtns = $('.dungeonroute-add-tag');
+            $addTagBtns.unbind('click');
+            $addTagBtns.bind('click', self._promptAddTagClicked.bind(self));
 
             let $cloneBtns = $('.dungeonroute-clone');
             $cloneBtns.unbind('click');
@@ -173,6 +178,10 @@ class DungeonrouteTable extends InlineCode {
             let $cloneToTeamBtns = $('.dungeonroute-clone-to-team');
             $cloneToTeamBtns.unbind('click');
             $cloneToTeamBtns.bind('click', self._promptCloneToTeamClicked.bind(self));
+
+            let $deleteBtns = $('.dungeonroute-delete');
+            $deleteBtns.unbind('click');
+            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
 
             let $addToThisTeam = $('.dungeonroute-add-to-this-team');
             $addToThisTeam.unbind('click');
@@ -251,13 +260,16 @@ class DungeonrouteTable extends InlineCode {
 
                     result = `${published} ${row.title}`;
 
-                    if (row.hasOwnProperty('tags') && row.tags.length > 0) {
+                    if ((row.hasOwnProperty('tagspersonal') && row.tagspersonal.length > 0) ||
+                        (row.hasOwnProperty('tagsteam') && row.tagsteam.length > 0)) {
                         let template = Handlebars.templates['dungeonroute_table_title_template'];
 
+                        let rowTags = row.hasOwnProperty('tagspersonal') ? row.tagspersonal : row.tagsteam;
+
                         let tags = [];
-                        for(let index in row.tags){
-                            if( row.tags.hasOwnProperty(index) ) {
-                                let tag = row.tags[index];
+                        for (let index in rowTags) {
+                            if (rowTags.hasOwnProperty(index)) {
+                                let tag = rowTags[index];
 
                                 let template = Handlebars.templates['tag_render_template'];
 
@@ -387,10 +399,10 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let result = null;
                     if (row.has_team) {
-                        let template = Handlebars.templates['team_dungeonroute_table_remove_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     } else {
-                        let template = Handlebars.templates['team_dungeonroute_table_add_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
@@ -500,18 +512,6 @@ class DungeonrouteTable extends InlineCode {
         let publicKey = $(clickEvent.target).data('publickey');
         let template = Handlebars.templates['dungeonroute_table_profile_clone_to_team_template'];
 
-        // Exclude a team if we need to (cannot clone to this team really)
-        // let excludeTeam = this.getTableView().getTeamName();
-        // let teams = [];
-        // for (let index in this.options.teams) {
-        //     if (this.options.teams.hasOwnProperty(index)) {
-        //         let team = this.options.teams[index];
-        //         if (team.name !== excludeTeam) {
-        //             teams.push(team);
-        //         }
-        //     }
-        // }
-
         showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this.options.teams
@@ -584,5 +584,195 @@ class DungeonrouteTable extends InlineCode {
         } else {
             console.error('Unable to add to team, team ID not set!');
         }
+    }
+
+    /**
+     *
+     * @param publicKey
+     * @returns {null}
+     * @private
+     */
+    _getRouteDataByPublicKey(publicKey) {
+        let result = null;
+
+        for (let index in this._routeData) {
+            if (this._routeData.hasOwnProperty(index)) {
+                let routeData = this._routeData[index];
+                if (routeData.public_key === publicKey) {
+                    result = routeData;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Adds a new tag to a route
+     * @param clickEvent
+     * @private
+     */
+    _promptAddTagClicked(clickEvent) {
+        let publicKey = $(clickEvent.target).data('publickey');
+        let template = Handlebars.templates['dungeonroute_table_profile_add_tag_template'];
+
+        this._addTagPublicKey = publicKey;
+
+        showConfirmDone(template($.extend({}, getHandlebarsDefaultVariables(), {
+            publicKey: publicKey,
+            teams: this.options.teams
+        })), function () {
+            // Refresh the table
+            $('#dungeonroute_filter').trigger('click');
+        }, {closeWith: ['button']});
+
+
+        // Restore tags
+        let routeData = this._getRouteDataByPublicKey(publicKey);
+        if (routeData !== null) {
+
+            let tags = routeData.hasOwnProperty('tagspersonal') ? routeData.tagspersonal : routeData.tagsteam;
+            for (let index in tags) {
+                if (tags.hasOwnProperty(index)) {
+                    this._renderTag(tags[index]);
+                }
+            }
+
+            // Hidden by default
+            if (tags.length === 0) {
+                $('#no_tags').show();
+            }
+        }
+
+        this._refreshTagListeners();
+
+        refreshSelectPickers();
+    }
+
+    /**
+     * Shows or hides the 'no tags' div
+     * @private
+     */
+    _refreshNoTags() {
+        // Show the no tags message or not
+        $('#no_tags').toggle($('.tag').length === 0);
+    }
+
+    /**
+     * Renders a tag on the screen
+     * @param tag {Object}
+     * @private
+     */
+    _renderTag(tag) {
+        let template = Handlebars.templates['tag_render_template'];
+
+        let data = $.extend({}, {
+            edit: true,
+            dark: tag.color === null ? null : isColorDark(tag.color)
+        }, tag);
+
+        $('#tags_container').append(template(data));
+
+        this._refreshNoTags();
+    }
+
+    /**
+     * Removes a tag from the front end by
+     * @param id
+     * @private
+     */
+    _removeRenderedTagById(id) {
+        $(`.tag[data-id='${id}']`).fadeOut();
+
+        this._refreshNoTags();
+    }
+
+    /**
+     *
+     * @param name string
+     * @private
+     */
+    _createTag(name) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/tag`,
+            dataType: 'json',
+            data: {
+                category: this.options.teamName === '' ? 'dungeon_route_personal' : 'dungeon_route_team',
+                model_id: this._addTagPublicKey,
+                name: name,
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.tag_create_success'));
+
+                self._renderTag(json);
+                self._refreshTagListeners();
+            }
+        });
+    }
+
+    /**
+     *
+     * @param id Number
+     * @private
+     */
+    _deleteTag(id) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/tag/${id}`,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+            },
+            success: function () {
+                showSuccessNotification(lang.get('messages.tag_delete_success'));
+
+                self._removeRenderedTagById(id);
+            }
+        });
+    }
+
+    /**
+     * Unbinds and re-binds the listeners for each tag
+     *
+     * @private
+     */
+    _refreshTagListeners() {
+        let self = this;
+
+        let $tags = $('.tag');
+        $tags.unbind('click');
+        $tags.bind('click', function (e) {
+            self._deleteTag($(this).data('id'))
+        });
+
+        // New tags text field
+        let sourceTags = {};
+        for (let i = 0; i < this.options.autocompletetags.length; i++) {
+            let tagName = this.options.autocompletetags[i].name;
+            sourceTags[`${tagName}`] = i;
+        }
+
+        $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
+            let $this = $(this);
+
+            // Enter
+            if (keyEvent.keyCode === 13) {
+                self._createTag($this.val());
+                $this.val('');
+            }
+        }).autocomplete({
+            source: sourceTags,
+            highlightClass: 'text-danger',
+            treshold: 2,
+            onSelectItem: function (item, element) {
+                console.log('onselectitem');
+            },
+        });
     }
 }

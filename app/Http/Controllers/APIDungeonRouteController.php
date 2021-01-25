@@ -57,7 +57,16 @@ class APIDungeonRouteController extends Controller
      */
     function list(Request $request)
     {
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'tags'])
+        // Check if we're filtering based on team or not
+        $teamName = $request->get('team_name', false);
+        // Check if we should load the team's tags or the personal tags
+        $tagCategoryName = $teamName ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
+        $tagCategory = TagCategory::fromName($tagCategoryName);
+
+        // Which relationship should be load?
+        $tagsRelationshipName = $teamName ? 'tagsteam' : 'tagspersonal';
+
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
@@ -76,8 +85,6 @@ class APIDungeonRouteController extends Controller
         $user = Auth::user();
         $mine = false;
 
-        // If we're with a team and if we want to get all routes that may be assigned to the team
-        $available = false;
         // If we're viewing a team's route this will be filled
         $team = null;
 
@@ -88,26 +95,21 @@ class APIDungeonRouteController extends Controller
             // Clear group by
             $routes = $routes
                 ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
-                // Add more group by clauses, required for the above having query
-                ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
         }
 
         $tags = $request->get('tags', []);
 
         // Must have these tags
         if (!empty($tags)) {
-            // Clear group by
+
             $routes = $routes
                 ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
-                ->where('tags.tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE)->id)
+                ->where('tags.tag_category_id', $tagCategory->id)
                 ->whereIn('tags.name', $tags)
                 // https://stackoverflow.com/a/3267635/771270; this enables AND behaviour for multiple tags
                 ->havingRaw(sprintf('COUNT(DISTINCT tags.name) >= %d', count($tags)));
         }
-
-        // Check if we're filtering based on team or not
-        $teamName = $teamName = $request->get('team_name', false);
 
         // If logged in
         if ($user !== null) {

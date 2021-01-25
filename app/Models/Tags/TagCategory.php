@@ -16,10 +16,12 @@ class TagCategory extends Model
 {
     public $timestamps = false;
 
-    const DUNGEON_ROUTE = 'dungeon_route';
+    const DUNGEON_ROUTE_PERSONAL = 'dungeon_route_personal';
+    const DUNGEON_ROUTE_TEAM = 'dungeon_route_team';
 
     const ALL = [
-        self::DUNGEON_ROUTE
+        self::DUNGEON_ROUTE_PERSONAL,
+        self::DUNGEON_ROUTE_TEAM
     ];
 
     /**

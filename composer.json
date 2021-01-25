@@ -36,6 +36,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "barryvdh/laravel-ide-helper": "^2.4",
+    "beyondcode/laravel-server-timing": "^1.2",
     "folklore/image": "0.3.*",
     "geoip2/geoip2": "~2.0",
     "graham-campbell/github": "^9.3",

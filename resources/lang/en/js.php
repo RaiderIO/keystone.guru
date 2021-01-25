@@ -70,10 +70,15 @@ return [
 
     'publish_label'          => 'Publish',
     'unpublish_label'        => 'Unpublish',
+    'add_tag_label'          => 'Add tag',
     'clone_label'            => 'Clone',
     'clone_to_profile_label' => 'Clone to my profile',
     'clone_to_team_label'    => 'Clone to Team',
     'delete_label'           => 'Delete',
+
+    'placeholder_new_tag_label' => 'new tag',
+    'no_tags_assigned_label'    => 'No tags assigned',
+    'current_tags_label' => 'Current tags',
 
     'selected_label' => 'selected',
 
@@ -373,6 +378,7 @@ return [
     'yes_label'                        => 'Yes',
     'no_label'                         => 'No',
     'cancel_label'                     => 'Cancel',
+    'done_label'                       => 'Done',
 
     // Teams
     'remove_member_confirm_label'      => 'Are you sure you want remove this user from the team?',
