@@ -1,12 +1,12 @@
 <h3>{{add_tag_label}}</h3>
-<div class="form-group">
-    <div id="no_tags" class="row" style="display: none">
+<div id="no_tags" class="form-group" style="display: none">
+    <div class="row">
         <div class="col">
             {{ no_tags_assigned_label }}
         </div>
     </div>
 </div>
-<div class="form-group">
+<div id="tags_container_display" class="form-group" style="display: none">
     <div class="row">
         <div class="col">
             {{current_tags_label}}:
@@ -21,15 +21,8 @@
 <div class="row mt-1">
     <div class="col">
         <div class="input-group">
-            <label>
-                <input id="new_tag_input" type="text" class="form-control"
-                       placeholder="{{ placeholder_new_tag_label }}"/>
-            </label>
-            <div class="input-group-append">
-                <div id="new_tag_color">
-
-                </div>
-            </div>
+            <input id="new_tag_input" type="text" class="form-control w-100"
+                   placeholder="{{ placeholder_new_tag_label }}"/>
         </div>
     </div>
 </div>
