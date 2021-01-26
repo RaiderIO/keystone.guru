@@ -8,7 +8,7 @@
     "changelog": {
         "id": 90,
         "release_id": 84,
-        "description": null,
+        "description": "Due to enemy forces being recalculated for every route and the result stored in the database, applying this patch may take a few minutes longer than usual.",
         "changes": [
             {
                 "release_changelog_id": 90,
@@ -38,6 +38,16 @@
                 "category": {
                     "id": 3,
                     "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Spires of Ascension: removed a Forsworn Annihilator from the second island when going right - this enemy is no longer there.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
                 }
             },
             {
