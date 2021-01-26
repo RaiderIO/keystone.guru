@@ -15,7 +15,7 @@ class DungeonRouteTableTagsHandler {
         $addTagBtns.bind('click', this._promptAddTagClicked.bind(this));
     }
 
-        /**
+    /**
      * Adds a new tag to a route
      * @param clickEvent
      * @private
@@ -24,11 +24,11 @@ class DungeonRouteTableTagsHandler {
         console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
 
         let publicKey = $(clickEvent.target).data('publickey');
-        let template = Handlebars.templates['dungeonroute_table_profile_add_tag_template'];
+        let template = Handlebars.templates['dungeonroute_table_add_tag_template'];
 
         this._addTagPublicKey = publicKey;
 
-        showConfirmDone(template($.extend({}, getHandlebarsDefaultVariables(), {
+        showConfirmFinished(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this._dungeonrouteTable.options.teams
         })), function () {
@@ -108,9 +108,10 @@ class DungeonRouteTableTagsHandler {
     /**
      *
      * @param name string
+     * @param callback null|function
      * @private
      */
-    _createTag(name) {
+    _createTag(name, callback = null) {
         console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
         let self = this;
 
@@ -128,6 +129,10 @@ class DungeonRouteTableTagsHandler {
 
                 self._renderTag(json);
                 self._refreshTagListeners();
+
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }
         });
     }
@@ -166,8 +171,7 @@ class DungeonRouteTableTagsHandler {
         let self = this;
 
         let $tags = $('.tag');
-        $tags.unbind('click');
-        $tags.bind('click', function (e) {
+        $tags.unbind('click').bind('click', function (e) {
             self._deleteTag($(this).data('id'))
         });
 
@@ -182,9 +186,10 @@ class DungeonRouteTableTagsHandler {
             let $this = $(this);
 
             // Enter
-            if (keyEvent.keyCode === 13) {
-                self._createTag($this.val());
-                $this.val('');
+            if (keyEvent.keyCode === 13 && $this.val() !== null && $this.val().length > 0) {
+                self._createTag($this.val(), function () {
+                    $this.val('');
+                });
             }
         }).autocomplete({
             source: sourceTags,
@@ -194,8 +199,21 @@ class DungeonRouteTableTagsHandler {
             // In case they fix it
             threshold: 2,
             onSelectItem: function (item, element) {
-                console.log('onselectitem');
+                // Refocus the input so people can quickly press enter
+                $('#new_tag_input').focus();
             },
+        });
+
+        // Save button should work
+        $('#new_tag_submit').unbind('click').bind('click', function () {
+            let $newTagInput = $('#new_tag_input');
+            let value = $newTagInput.val();
+
+            if (value !== null && value.length > 0) {
+                self._createTag(value, function () {
+                    $newTagInput.val('');
+                });
+            }
         });
     }
 }

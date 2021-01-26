@@ -274,17 +274,17 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
  * @param doneCallback
  * @param opts
  */
-function showConfirmDone(text, doneCallback = null, opts = {}) {
+function showConfirmFinished(text, doneCallback = null, opts = {}) {
     _showConfirm($.extend({
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.done_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('messages.finished_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof doneCallback === 'function') {
                         doneCallback();
                     }
                     n.close();
-                }, {id: 'done-button', 'data-status': 'ok'}),
+                }, {'data-status': 'ok'}),
             ]
         }, opts)
     );

@@ -77,6 +77,7 @@
 }
 
 #noty_layout__center {
-  transform: translate(calc(-50.08%), calc(-50.08%)) translateZ(0) scale(1, 1) perspective(1px) !important;
+  /* Don't ask, this works reducing the blurring in Chrome */
+  transform: translate(calc(-50.%), calc(-50.%)) translateZ(0) scale(1, 1) perspective(1px) !important;
   will-change: unset;
 }
