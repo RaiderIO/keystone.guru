@@ -1,0 +1,75 @@
+{
+    "id": 84,
+    "release_changelog_id": 90,
+    "version": "v3.19",
+    "silent": 0,
+    "created_at": "2021-01-26T16:03:31+00:00",
+    "updated_at": "2021-01-26T16:03:31+00:00",
+    "changelog": {
+        "id": 90,
+        "release_id": 84,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 1,
+                "ticket_id": 613,
+                "change": "Enemy forces are no longer calculated on the fly but whenever changes are made to your route. This speeds up various pages and processes, such as the \/routes page.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 2,
+                "ticket_id": 393,
+                "change": "You can now create custom personal tags and team tags for your routes. You can organize your routes the way you want by attaching tags and then search on the tags that are attached to your routes. Separately, teams can tag the routes that are part of them while personal tags will not be visible and vice versa!",
+                "category": {
+                    "id": 2,
+                    "category": "Route changes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 3,
+                "ticket_id": 577,
+                "change": "Ctrl + clicking an enemy inside a pack while editing a pull will add just that enemy to your pull.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 5,
+                "ticket_id": 621,
+                "change": "Sharing a link to the view page of a sandbox route will no longer cause a 500 error. Though this behaviour is not advertised, I do believe it should work so you can quickly mock a route and share it with others.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 5,
+                "ticket_id": 625,
+                "change": "Hotfixed a few days ago - exporting MDT strings would sometimes cause a 400 Bad Request error.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 90,
+                "release_changelog_category_id": 6,
+                "ticket_id": 601,
+                "change": "Prideful enemies are now imported from MDT strings.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}
