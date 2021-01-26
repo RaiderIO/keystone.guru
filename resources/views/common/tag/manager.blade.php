@@ -10,6 +10,8 @@ $tagCategoryNameMapping = [
 $tagCategory = \App\Models\Tags\TagCategory::fromName($category);
 $tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['tag_category_id']);
 ?>
+@include('common.general.inline', ['path' => 'common/tag/tagmanager'])
+
 @foreach($tags as $categoryId => $categoryTags)
     <div class="form-group">
         <h5>

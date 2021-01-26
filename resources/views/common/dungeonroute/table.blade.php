@@ -22,7 +22,7 @@ if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } elseif (Auth::check()) {
     $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
-    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory);
+    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
 } else {
     $searchTags = collect();
 }
