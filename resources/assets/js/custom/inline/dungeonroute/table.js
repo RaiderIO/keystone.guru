@@ -7,8 +7,10 @@ class DungeonrouteTable extends InlineCode {
 
         this._tableView = null;
         this._routeData = [];
-        // The route's public key we're trying to add a tag for - bit of a hack but it works
-        this._addTagPublicKey = '';
+        // Handles the displaying of tags inside the table
+        this._tagsHandler = new DungeonRouteTableTagsHandler(this);
+        // Handles the
+        this._teamsHandler = new DungeonRouteTableTeam(this);
 
         // Init the code
         this.setViewMode(this.options.viewMode);
@@ -157,6 +159,10 @@ class DungeonrouteTable extends InlineCode {
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {
             refreshTooltips();
+
+            self._tagsHandler.activate();
+            self._teamsHandler.activate();
+
             let $publishBtns = $('.dungeonroute-publish');
             $publishBtns.unbind('click');
             $publishBtns.bind('click', self._publishDungeonRouteClicked);
@@ -166,10 +172,6 @@ class DungeonrouteTable extends InlineCode {
             $publishedStateBtns.bind('click', function (clickEvent) {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
             });
-
-            let $addTagBtns = $('.dungeonroute-add-tag');
-            $addTagBtns.unbind('click');
-            $addTagBtns.bind('click', self._promptAddTagClicked.bind(self));
 
             let $cloneBtns = $('.dungeonroute-clone');
             $cloneBtns.unbind('click');
@@ -182,14 +184,6 @@ class DungeonrouteTable extends InlineCode {
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click');
             $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
-
-            let $addToThisTeam = $('.dungeonroute-add-to-this-team');
-            $addToThisTeam.unbind('click');
-            $addToThisTeam.bind('click', self._addToThisTeam.bind(self));
-
-            let $removeFromThisTeam = $('.dungeonroute-remove-from-this-team');
-            $removeFromThisTeam.unbind('click');
-            $removeFromThisTeam.bind('click', self._removeFromThisTeam.bind(self));
 
             $('.owl-carousel').owlCarousel({
                 // True to enable overlayed buttons (custom styled, wasted time :( )
@@ -534,65 +528,11 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Adds the route to the currently assigned team.
-     * @param clickEvent
-     * @private
-     */
-    _addToThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
-
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_add_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
-                }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
-        }
-    }
-
-    /**
-     * Removes a route from the currently assigned team.
-     * @param clickEvent
-     * @private
-     */
-    _removeFromThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
-
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                data: {
-                    _method: 'DELETE'
-                },
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_remove_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
-                }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
-        }
-    }
-
-    /**
      *
      * @param publicKey
      * @returns {null}
-     * @private
      */
-    _getRouteDataByPublicKey(publicKey) {
+    getRouteDataByPublicKey(publicKey) {
         let result = null;
 
         for (let index in this._routeData) {
@@ -606,175 +546,5 @@ class DungeonrouteTable extends InlineCode {
         }
 
         return result;
-    }
-
-    /**
-     * Adds a new tag to a route
-     * @param clickEvent
-     * @private
-     */
-    _promptAddTagClicked(clickEvent) {
-        let publicKey = $(clickEvent.target).data('publickey');
-        let template = Handlebars.templates['dungeonroute_table_profile_add_tag_template'];
-
-        this._addTagPublicKey = publicKey;
-
-        showConfirmDone(template($.extend({}, getHandlebarsDefaultVariables(), {
-            publicKey: publicKey,
-            teams: this.options.teams
-        })), function () {
-            // Refresh the table
-            $('#dungeonroute_filter').trigger('click');
-        }, {closeWith: ['button']});
-
-
-        // Restore tags
-        let routeData = this._getRouteDataByPublicKey(publicKey);
-        if (routeData !== null) {
-
-            let tags = routeData.hasOwnProperty('tagspersonal') ? routeData.tagspersonal : routeData.tagsteam;
-            for (let index in tags) {
-                if (tags.hasOwnProperty(index)) {
-                    this._renderTag(tags[index]);
-                }
-            }
-
-            // Hidden by default
-            if (tags.length === 0) {
-                $('#no_tags').show();
-            }
-        }
-
-        this._refreshTagListeners();
-
-        refreshSelectPickers();
-    }
-
-    /**
-     * Shows or hides the 'no tags' div
-     * @private
-     */
-    _refreshNoTags() {
-        // Show the no tags message or not
-        let hasTags = $('.tag').length !== 0;
-        $('#no_tags').toggle(!hasTags);
-        $('#tags_container_display').toggle(hasTags);
-    }
-
-    /**
-     * Renders a tag on the screen
-     * @param tag {Object}
-     * @private
-     */
-    _renderTag(tag) {
-        let template = Handlebars.templates['tag_render_template'];
-
-        let data = $.extend({}, {
-            edit: true,
-            dark: tag.color === null ? null : isColorDark(tag.color)
-        }, tag);
-
-        $('#tags_container').append(template(data));
-
-        this._refreshNoTags();
-    }
-
-    /**
-     * Removes a tag from the front end by
-     * @param id
-     * @private
-     */
-    _removeRenderedTagById(id) {
-        $(`.tag[data-id='${id}']`).fadeOut();
-
-        this._refreshNoTags();
-    }
-
-    /**
-     *
-     * @param name string
-     * @private
-     */
-    _createTag(name) {
-        let self = this;
-
-        $.ajax({
-            type: 'POST',
-            url: `/ajax/tag`,
-            dataType: 'json',
-            data: {
-                category: this.options.teamName === '' ? 'dungeon_route_personal' : 'dungeon_route_team',
-                model_id: this._addTagPublicKey,
-                name: name,
-            },
-            success: function (json) {
-                showSuccessNotification(lang.get('messages.tag_create_success'));
-
-                self._renderTag(json);
-                self._refreshTagListeners();
-            }
-        });
-    }
-
-    /**
-     *
-     * @param id Number
-     * @private
-     */
-    _deleteTag(id) {
-        let self = this;
-
-        $.ajax({
-            type: 'POST',
-            url: `/ajax/tag/${id}`,
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-            },
-            success: function () {
-                showSuccessNotification(lang.get('messages.tag_delete_success'));
-
-                self._removeRenderedTagById(id);
-            }
-        });
-    }
-
-    /**
-     * Unbinds and re-binds the listeners for each tag
-     *
-     * @private
-     */
-    _refreshTagListeners() {
-        let self = this;
-
-        let $tags = $('.tag');
-        $tags.unbind('click');
-        $tags.bind('click', function (e) {
-            self._deleteTag($(this).data('id'))
-        });
-
-        // New tags text field
-        let sourceTags = {};
-        for (let i = 0; i < this.options.autocompletetags.length; i++) {
-            let tagName = this.options.autocompletetags[i].name;
-            sourceTags[`${tagName}`] = i;
-        }
-
-        $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
-            let $this = $(this);
-
-            // Enter
-            if (keyEvent.keyCode === 13) {
-                self._createTag($this.val());
-                $this.val('');
-            }
-        }).autocomplete({
-            source: sourceTags,
-            highlightClass: 'text-danger',
-            treshold: 2,
-            onSelectItem: function (item, element) {
-                console.log('onselectitem');
-            },
-        });
     }
 }
