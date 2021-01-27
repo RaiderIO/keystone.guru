@@ -8,11 +8,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tag\TagFormRequest;
 use App\Http\Requests\TeamFormRequest;
 use App\Models\File;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -208,5 +212,32 @@ class TeamController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Creates a tag from the tag manager
+     *
+     * @param TagFormRequest $request
+     * @return Application|Factory|View
+     */
+    public function createtag(TagFormRequest $request)
+    {
+        $error = [];
+
+        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id;
+
+        if (!Tag::where('name', $request->get('tag_name_new'))
+            ->where('user_id', Auth::id())
+            ->where('tag_category_id', $tagCategoryId)
+            ->exists()) {
+
+            Tag::saveFromRequest($request, $tagCategoryId);
+
+            Session::flash('status', __('Tag created successfully'));
+        } else {
+            $error = ['tag_name_new' => __('This tag already exists')];
+        }
+
+        return view('team.edit')->withErrors($error);
     }
 }

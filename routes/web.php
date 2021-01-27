@@ -100,11 +100,13 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::delete('profile/delete', 'ProfileController@delete')->name('profile.delete');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
+        Route::post('profile/tag', 'ProfileController@createtag')->name('profile.tag.create');
 
         Route::get('teams', 'TeamController@list')->name('team.list');
         Route::get('team/new', 'TeamController@new')->name('team.new');
         Route::get('team/{team}', 'TeamController@edit')->name('team.edit');
         Route::delete('team/{team}', 'TeamController@delete')->name('team.delete');
+        Route::post('team/tag', 'TeamController@createtag')->name('team.tag.create');
 
         Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
         Route::patch('team/{team}', 'TeamController@update')->name('team.update');
@@ -236,7 +238,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('/', 'APITagController@all')->name('api.tag.all');
             Route::get('/{category}', 'APITagController@list')->name('api.tag.list');
             Route::post('/', 'APITagController@store')->name('api.tag.create');
-            Route::delete('/{tagmodel}', 'APITagController@delete')->name('api.tag.delete');
+            Route::delete('/{tag}', 'APITagController@delete')->name('api.tag.delete');
+            // Profile
+            Route::put('/{tag}/all', 'APITagController@updateAll')->name('api.tag.updateall');
+            Route::delete('/{tag}/all', 'APITagController@deleteAll')->name('api.tag.deleteall');
         });
     });
 

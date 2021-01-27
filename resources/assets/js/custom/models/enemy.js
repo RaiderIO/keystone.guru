@@ -546,22 +546,26 @@ class Enemy extends MapObject {
     /**
      * Sets the kill zone for this enemy.
      * @param killZone object
+     * @param ignorePackBuddies bool
      */
-    setKillZone(killZone) {
+    setKillZone(killZone, ignorePackBuddies = false) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         let oldKillZone = this.kill_zone;
         this.kill_zone = killZone;
 
         if (this.kill_zone instanceof KillZone) {
-            this.signal('killzone:attached', {previous: oldKillZone});
+            this.signal('killzone:attached', {previous: oldKillZone, ignorePackBuddies: ignorePackBuddies});
         }
 
         // We should notify it that we have detached from it
         if (oldKillZone !== null && (this.kill_zone === null || oldKillZone.id !== this.kill_zone.id)) {
-            this.signal('killzone:detached', {previous: oldKillZone});
+            this.signal('killzone:detached', {previous: oldKillZone, ignorePackBuddies: ignorePackBuddies});
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     shouldBeVisible() {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map

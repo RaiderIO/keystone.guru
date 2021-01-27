@@ -10,6 +10,7 @@
         "title": "Sanguine-Quaking-Petko",
         "difficulty": "Casual",
         "seasonal_index": 0,
+        "enemy_forces": 284,
         "teeming": 0,
         "demo": 1,
         "pull_gradient": "",

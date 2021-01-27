@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tag;
 
 use App\Models\Tags\TagCategory;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class TagFormRequest extends FormRequest
+class APITagUpdateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,8 @@ class TagFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => [Rule::in(TagCategory::all()->pluck(['name']))],
-            'model_id' => 'required|string',
             'name'     => 'required|string',
-            'color'    => 'nullable|string',
+            'color'    => 'required|string',
         ];
     }
 }

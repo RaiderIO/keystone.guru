@@ -59,7 +59,7 @@ class ProfileTableView extends TableView {
 
         this._columns = {
             list: [
-                {name: 'title', width: '15%'},
+                {name: 'title', width: '15%', className: 'pt-0 pb-0'},
                 {name: 'dungeon', width: '15%'},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},

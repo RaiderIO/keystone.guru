@@ -64,10 +64,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         Log::channel('scheduler')->debug('Starting scheduler');
-        $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
-        $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
+        $schedule->call(new FindOutdatedThumbnails())->everyFiveMinutes();
+        $schedule->call(new DeleteExpiredDungeonRoutes())->hourly();
         if (env('APP_TYPE') === 'mapping') {
-            $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
+            $schedule->call(new SynchronizeMapping())->everyFiveMinutes();
         }
         Log::channel('scheduler')->debug('Finished scheduler');
     }

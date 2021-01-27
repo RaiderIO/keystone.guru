@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\User;
 use Eloquent;
 use Exception;
@@ -99,6 +101,9 @@ class Team extends IconFileModel
         $result = false;
         // Set already
         if ($dungeonRoute->team_id > 0) {
+            // Delete all existing team tags from this route
+            $dungeonRoute->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM))->delete();
+
             $dungeonRoute->team_id = -1;
             $dungeonRoute->save();
             $result = true;
@@ -326,6 +331,16 @@ class Team extends IconFileModel
     }
 
     /**
+     * @return Collection
+     */
+    public function getAvailableTags(): Collection
+    {
+        return Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
+            ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
+            ->get();
+    }
+
+    /**
      * @return string Generates a random invite code.
      */
     public static function generateRandomInviteCode()
@@ -356,6 +371,9 @@ class Team extends IconFileModel
                 $item->iconfile->delete();
             }
 
+            // Delete all tags team tags belonging to our routes
+            Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
+                ->whereIn('model_id', $item->dungeonroutes->pluck('id')->toArray())->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $item->id)->delete();
             // Unassign all routes from this team

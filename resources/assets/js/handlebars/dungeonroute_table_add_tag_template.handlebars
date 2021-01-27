@@ -1,0 +1,38 @@
+<h3>{{add_remove_tag_label}}</h3>
+<div id="no_tags" class="form-group" style="display: none">
+    <div class="row">
+        <div class="col">
+            {{ no_tags_assigned_label }}
+        </div>
+    </div>
+</div>
+<div id="tags_container_display" class="form-group" style="display: none">
+    <div class="row">
+        <div class="col">
+            {{current_tags_label}}:
+        </div>
+    </div>
+    <div class="row">
+        <div id="tags_container" class="col">
+
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col">
+        <div class="input-group">
+            <input id="new_tag_input" type="text" class="form-control w-100"
+                   placeholder="{{ placeholder_new_tag_label }}"/>
+            <div class="input-group-append">
+                <button id="new_tag_submit" class="btn btn-success">
+                    <i class="fa fa-save"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <span>{{add_tag_with_enter_label}}</span>
+    </div>
+</div>

@@ -70,10 +70,16 @@ return [
 
     'publish_label'          => 'Publish',
     'unpublish_label'        => 'Unpublish',
+    'add_remove_tag_label'   => 'Add/remove tags',
     'clone_label'            => 'Clone',
     'clone_to_profile_label' => 'Clone to my profile',
     'clone_to_team_label'    => 'Clone to Team',
     'delete_label'           => 'Delete',
+
+    'placeholder_new_tag_label' => 'new tag',
+    'no_tags_assigned_label'    => 'No tags assigned',
+    'current_tags_label'        => 'Current tags',
+    'add_tag_with_enter_label'  => 'Tip: press Enter to create a tag',
 
     'selected_label' => 'selected',
 
@@ -160,6 +166,10 @@ return [
     'warnings_label'                                            => 'Warnings',
     'category_label'                                            => 'Category',
     'message_label'                                             => 'Message',
+
+    // Profile edit
+    'save_tag_success'                                          => 'Tag updated successfully',
+    'delete_tag_success'                                        => 'Tag deleted successfully',
 
     // Dungeonroute edit
     'settings_saved'                                            => 'Settings saved successfully',
@@ -369,6 +379,7 @@ return [
     'yes_label'                        => 'Yes',
     'no_label'                         => 'No',
     'cancel_label'                     => 'Cancel',
+    'finished_label'                   => 'Finished',
 
     // Teams
     'remove_member_confirm_label'      => 'Are you sure you want remove this user from the team?',

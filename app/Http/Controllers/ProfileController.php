@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
+use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Service\EchoServerHttpApiService;
 use App\User;
 use Exception;
 use Faker\Provider\Color;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -162,6 +166,33 @@ class ProfileController extends Controller
             }
         } else {
             $error = ['passwords_incorrect' => __('Current password is incorrect')];
+        }
+
+        return view('profile.edit')->withErrors($error);
+    }
+
+    /**
+     * Creates a tag from the tag manager
+     *
+     * @param TagFormRequest $request
+     * @return Application|Factory|View
+     */
+    public function createtag(TagFormRequest $request)
+    {
+        $error = [];
+
+        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL)->id;
+
+        if (!Tag::where('name', $request->get('tag_name_new'))
+            ->where('user_id', Auth::id())
+            ->where('tag_category_id', $tagCategoryId)
+            ->exists()) {
+
+            Tag::saveFromRequest($request, $tagCategoryId);
+
+            Session::flash('status', __('Tag created successfully'));
+        } else {
+            $error = ['tag_name_new' => __('This tag already exists')];
         }
 
         return view('profile.edit')->withErrors($error);

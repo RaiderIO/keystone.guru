@@ -11,6 +11,7 @@ $menuItems = [
 ];
 // May only edit details when member is a moderator
 if ($userIsModerator) {
+    $menuItems[] = ['icon' => 'fa-tag', 'text' => __('Team tags'), 'target' => '#tags'];
     $menuItems[] = ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details'];
 }
 
@@ -202,6 +203,18 @@ foreach ($model->teamusers as $teamuser) {
                     </thead>
                 </table>
             </div>
+        </div>
+
+        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="team-tags-tab">
+            <h4>
+                {{ __('Team tags') }}
+            </h4>
+            <p>
+                {{ __('You can manage tags for the team\'s routes here. Everyone that is a member of this team may view the tags attached to the routes.
+                        The personal tags that may or may not have been attached by the route owner will not be visible.') }}
+            </p>
+
+            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_TEAM])
         </div>
 
         @if($userIsModerator)

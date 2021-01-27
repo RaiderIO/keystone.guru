@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
-use App\Models\Tags\TagModel;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -34,6 +35,7 @@ use Illuminate\Support\Facades\DB;
  * @property $title string
  * @property $difficulty string
  * @property $seasonal_index int
+ * @property $enemy_forces int
  * @property $teeming boolean
  * @property $demo boolean
  *
@@ -79,7 +81,7 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|PageView[] $pageviews
  *
- * @property Collection|TagModel[] $tagmodels
+ * @property Collection|Tag[] $tags
  *
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
@@ -106,6 +108,8 @@ class DungeonRoute extends Model
                          'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at',
                          'published_state_id', 'published_state'];
+
+    protected $fillable = ['enemy_forces'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -318,6 +322,22 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function tagsteam()
+    {
+        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM));
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function tagspersonal()
+    {
+        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL));
+    }
+
+    /**
      * Scope a query to only include dungeon routes that are set in sandbox mode.
      *
      * @param Builder $query
@@ -407,47 +427,42 @@ class DungeonRoute extends Model
      */
     public function getEnemyForces(): int
     {
-        // Build an ID => amount array of NPCs we've killed in this route
-        /** @var Collection|Npc[] $npcs */
-        $npcs = Npc::whereIn('dungeon_id', [$this->dungeon_id, -1])->select(['id', 'enemy_forces', 'enemy_forces_teeming'])->get();
-
-        // Find all Npcs that we've killed
         $result = 0;
-        foreach ($this->killzones as $killzone) {
-            $resultByPull[$killzone->id] = [];
-            foreach ($killzone->enemies as $enemy) {
-                // Prevent adding teeming enemies that we shouldn't
-                if (!$this->teeming && $enemy->teeming === 'visible') {
-                    continue;
-                }
 
-                /** @var Enemy $enemy */
-                if ($this->teeming) {
-                    if ($enemy->enemy_forces_override_teeming >= 0) {
-                        $result += $enemy->enemy_forces_override_teeming;
-                    } else {
-                        /** @var Npc $npc */
-                        $npc = $npcs->where('id', $enemy->npc_id)->first();
+        // May not exist in case of MDT import
+        if ($this->exists) {
+            $result = DB::select('
+                select dungeon_routes.id,
+                   CAST(IFNULL(
+                           IF(dungeon_routes.teeming = 1,
+                              SUM(
+                                      IF(
+                                              enemies.enemy_forces_override_teeming >= 0,
+                                              enemies.enemy_forces_override_teeming,
+                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                          )
+                                  ),
+                              SUM(
+                                      IF(
+                                              enemies.enemy_forces_override >= 0,
+                                              enemies.enemy_forces_override,
+                                              npcs.enemy_forces
+                                          )
+                                  )
+                               ), 0
+                       ) AS SIGNED)                  as enemy_forces,
+                   count(distinct dungeon_routes.id) as aggregate
+            from `dungeon_routes`
+                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                     left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                     left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
+                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                where `dungeon_routes`.id = :id
+            group by `dungeon_routes`.id
+            ', ['id' => $this->id]);
 
-                        // May be null if an enemy was removed?
-                        if ($npc !== null) {
-                            // If teeming set, use that value, otherwise use the default
-                            $result += ($npc->enemy_forces_teeming >= 0 ? $npc->enemy_forces_teeming : $npc->enemy_forces);
-                        }
-                    }
-                } // No teeming, check if override is set
-                else if ($enemy->enemy_forces_override >= 0) {
-                    $result += $enemy->enemy_forces_override;
-                } else {
-                    /** @var Npc $npc */
-                    $npc = $npcs->where('id', $enemy->npc_id)->first();
-
-                    // May be null if an enemy was removed?
-                    if ($npc !== null) {
-                        $result += $npc->enemy_forces;
-                    }
-                }
-            }
+            $result = $result[0]->enemy_forces;
         }
 
         return $result;
@@ -886,14 +901,16 @@ class DungeonRoute extends Model
                 ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $this->clone_of]) . '">' . $this->clone_of . '</a>'
             );
         } else if ($this->demo) {
-            if( $this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA ) {
+            if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
                 $subTitle = sprintf(__('Used with Dratnos\' permission'));
-            } else if ( $this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS ) {
+            } else if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
                 $subTitle = sprintf(__('Used with Petko\'s permission'));
             } else {
                 // You made this? I made this.jpg
                 $subTitle = '';
             }
+        } else if ($this->isSandbox()) {
+            $subTitle = __('Sandbox route');
         } else {
             $subTitle = sprintf(__('By %s'), $this->author->name);
         }
@@ -940,6 +957,7 @@ class DungeonRoute extends Model
             $item->playerclasses()->delete();
             $item->playerraces()->delete();
             $item->playerspecializations()->delete();
+            $item->tags()->delete();
 
             // Mapping related items
             $item->enemyraidmarkers()->delete();

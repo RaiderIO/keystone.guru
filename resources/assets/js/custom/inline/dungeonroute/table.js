@@ -6,6 +6,11 @@ class DungeonrouteTable extends InlineCode {
         this._dt = null;
 
         this._tableView = null;
+        this._routeData = [];
+        // Handles the displaying of tags inside the table
+        this._tagsHandler = new DungeonRouteTableTagsHandler(this);
+        // Handles the
+        this._teamsHandler = new DungeonRouteTableTeam(this);
 
         // Init the code
         this.setViewMode(this.options.viewMode);
@@ -123,6 +128,7 @@ class DungeonrouteTable extends InlineCode {
                 'url': '/ajax/routes',
                 'data': function (d) {
                     d.requirements = $('#dungeonroute_requirements_select').val();
+                    d.tags = $('#dungeonroute_tags_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -138,6 +144,8 @@ class DungeonrouteTable extends InlineCode {
                         });
                     });
                 }
+
+                self._routeData = settings.json.data;
             },
             'lengthMenu': [25],
             'bLengthChange': false,
@@ -151,6 +159,10 @@ class DungeonrouteTable extends InlineCode {
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {
             refreshTooltips();
+
+            self._tagsHandler.activate();
+            self._teamsHandler.activate();
+
             let $publishBtns = $('.dungeonroute-publish');
             $publishBtns.unbind('click');
             $publishBtns.bind('click', self._publishDungeonRouteClicked);
@@ -161,10 +173,6 @@ class DungeonrouteTable extends InlineCode {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
             });
 
-            let $deleteBtns = $('.dungeonroute-delete');
-            $deleteBtns.unbind('click');
-            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
-
             let $cloneBtns = $('.dungeonroute-clone');
             $cloneBtns.unbind('click');
             $cloneBtns.bind('click', self._cloneDungeonRouteClicked);
@@ -173,13 +181,9 @@ class DungeonrouteTable extends InlineCode {
             $cloneToTeamBtns.unbind('click');
             $cloneToTeamBtns.bind('click', self._promptCloneToTeamClicked.bind(self));
 
-            let $addToThisTeam = $('.dungeonroute-add-to-this-team');
-            $addToThisTeam.unbind('click');
-            $addToThisTeam.bind('click', self._addToThisTeam.bind(self));
-
-            let $removeFromThisTeam = $('.dungeonroute-remove-from-this-team');
-            $removeFromThisTeam.unbind('click');
-            $removeFromThisTeam.bind('click', self._removeFromThisTeam.bind(self));
+            let $deleteBtns = $('.dungeonroute-delete');
+            $deleteBtns.unbind('click');
+            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
 
             $('.owl-carousel').owlCarousel({
                 // True to enable overlayed buttons (custom styled, wasted time :( )
@@ -227,7 +231,11 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('messages.title_label'),
                 'data': 'title',
                 'name': 'title',
+                'className': 'test',
                 'render': function (data, type, row, meta) {
+                    let result = '';
+
+
                     let published = '';
                     switch (row.published) {
                         case 'unpublished':
@@ -243,7 +251,39 @@ class DungeonrouteTable extends InlineCode {
                             published = `<i class="fas fa-link text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world_with_link')}"></i>`
                             break;
                     }
-                    return `${published} ${row.title}`;
+
+                    result = `${published} ${row.title}`;
+
+                    if ((row.hasOwnProperty('tagspersonal') && row.tagspersonal.length > 0) ||
+                        (row.hasOwnProperty('tagsteam') && row.tagsteam.length > 0)) {
+                        let template = Handlebars.templates['dungeonroute_table_title_template'];
+
+                        let rowTags = row.hasOwnProperty('tagspersonal') ? row.tagspersonal : row.tagsteam;
+
+                        let tags = [];
+                        for (let index in rowTags) {
+                            if (rowTags.hasOwnProperty(index)) {
+                                let tag = rowTags[index];
+
+                                let template = Handlebars.templates['tag_render_template'];
+
+                                let data = $.extend({}, {
+                                    edit: false,
+                                    dark: tag.color === null ? null : isColorDark(tag.color)
+                                }, tag);
+
+                                tags.push(template(data));
+                            }
+                        }
+
+                        // Build the status bar from the template
+                        result = template({
+                            title: result,
+                            tags: tags.join('')
+                        });
+                    }
+
+                    return result;
                 }
             },
             dungeon: {
@@ -353,10 +393,10 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let result = null;
                     if (row.has_team) {
-                        let template = Handlebars.templates['team_dungeonroute_table_remove_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     } else {
-                        let template = Handlebars.templates['team_dungeonroute_table_add_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
@@ -466,18 +506,6 @@ class DungeonrouteTable extends InlineCode {
         let publicKey = $(clickEvent.target).data('publickey');
         let template = Handlebars.templates['dungeonroute_table_profile_clone_to_team_template'];
 
-        // Exclude a team if we need to (cannot clone to this team really)
-        // let excludeTeam = this.getTableView().getTeamName();
-        // let teams = [];
-        // for (let index in this.options.teams) {
-        //     if (this.options.teams.hasOwnProperty(index)) {
-        //         let team = this.options.teams[index];
-        //         if (team.name !== excludeTeam) {
-        //             teams.push(team);
-        //         }
-        //     }
-        // }
-
         showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this.options.teams
@@ -500,55 +528,23 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Adds the route to the currently assigned team.
-     * @param clickEvent
-     * @private
+     *
+     * @param publicKey
+     * @returns {null}
      */
-    _addToThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
+    getRouteDataByPublicKey(publicKey) {
+        let result = null;
 
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_add_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
+        for (let index in this._routeData) {
+            if (this._routeData.hasOwnProperty(index)) {
+                let routeData = this._routeData[index];
+                if (routeData.public_key === publicKey) {
+                    result = routeData;
+                    break;
                 }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
+            }
         }
-    }
 
-    /**
-     * Removes a route from the currently assigned team.
-     * @param clickEvent
-     * @private
-     */
-    _removeFromThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
-
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                data: {
-                    _method: 'DELETE'
-                },
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_remove_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
-                }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
-        }
+        return result;
     }
 }

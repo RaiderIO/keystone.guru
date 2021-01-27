@@ -22,11 +22,11 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportWarning;
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\PublishedState;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -41,7 +41,6 @@ use Throwable;
 
 class APIDungeonRouteController extends Controller
 {
-
     use PublicKeyDungeonRoute;
     use ListsEnemies;
     use ListsEnemyPacks;
@@ -58,33 +57,19 @@ class APIDungeonRouteController extends Controller
      */
     function list(Request $request)
     {
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
+        // Check if we're filtering based on team or not
+        $teamName = $request->get('team_name', false);
+        // Check if we should load the team's tags or the personal tags
+        $tagCategoryName = $teamName ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
+        $tagCategory = TagCategory::fromName($tagCategoryName);
+
+        // Which relationship should be load?
+        $tagsRelationshipName = $teamName ? 'tagsteam' : 'tagspersonal';
+
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required,
-             CAST(IFNULL(
-                 IF(dungeon_routes.teeming = 1,
-                      SUM(
-                          IF(
-                              enemies.enemy_forces_override_teeming >= 0,
-                              enemies.enemy_forces_override_teeming,
-                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
-                          )
-                      ),
-                      SUM(
-                          IF(
-                              enemies.enemy_forces_override >= 0,
-                              enemies.enemy_forces_override,
-                              npcs.enemy_forces
-                          )
-                      )
-                ),  0
-            ) AS SIGNED ) as enemy_forces')
-            // Select enemy forces
-            ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
-            ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
-            ->leftJoin('enemies', 'enemies.id', '=', 'kill_zone_enemies.enemy_id')
-            ->leftJoin('npcs', 'npcs.id', '=', 'enemies.npc_id')
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
             ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -100,8 +85,6 @@ class APIDungeonRouteController extends Controller
         $user = Auth::user();
         $mine = false;
 
-        // If we're with a team and if we want to get all routes that may be assigned to the team
-        $available = false;
         // If we're viewing a team's route this will be filled
         $team = null;
 
@@ -111,14 +94,22 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                // Having because we're using the result of SELECT
-                ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
-                // Add more group by clauses, required for the above having query
-                ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
         }
 
-        // Check if we're filtering based on team or not
-        $teamName = $teamName = $request->get('team_name', false);
+        $tags = $request->get('tags', []);
+
+        // Must have these tags
+        if (!empty($tags)) {
+
+            $routes = $routes
+                ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
+                ->where('tags.tag_category_id', $tagCategory->id)
+                ->whereIn('tags.name', $tags)
+                // https://stackoverflow.com/a/3267635/771270; this enables AND behaviour for multiple tags
+                ->havingRaw(sprintf('COUNT(DISTINCT tags.name) >= %d', count($tags)));
+        }
 
         // If logged in
         if ($user !== null) {
@@ -480,11 +471,9 @@ class APIDungeonRouteController extends Controller
                 $warningResult[] = $warning->toArray();
             }
 
-            Stopwatch::dumpAll();
-
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
-            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            return abort(400, sprintf(__('An error occurred generating your MDT string: %s'), $ex->getMessage()));
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');

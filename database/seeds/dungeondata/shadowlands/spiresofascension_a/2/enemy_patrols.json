@@ -128,7 +128,7 @@
             "color": "#6dfaff",
             "color_animated": null,
             "weight": 3,
-            "vertices_json": "[{\"lat\":-176.1875,\"lng\":199.5},{\"lat\":-198.40625,\"lng\":206.28125}]"
+            "vertices_json": "[{\"lat\":-176.125,\"lng\":199.4375},{\"lat\":-198.40625,\"lng\":206.28125}]"
         }
     },
     {

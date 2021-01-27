@@ -24,6 +24,7 @@ use App\Models\MapIconType;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\PridefulEnemy;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
 use App\User;
@@ -190,19 +191,24 @@ class ImportString extends MDTBase
      * @param $save boolean
      * @throws Exception
      */
-    private function _parseValuePulls($warnings, $decoded, $dungeonRoute, $save)
+    private function _parseValuePulls(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save): void
     {
         $floors = $dungeonRoute->dungeon->floors;
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+        // Keep a list of prideful enemies to assign
+        $pridefulEnemies = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
+        $pridefulEnemyCount = config('keystoneguru.prideful.count');
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $enemiesByNpcId = $enemies->groupBy('npc_id');
-
 
         // Fetch all enemies of this dungeon
         $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
+
+        // Required for calculating when to add prideful enemies
+        $enemyForcesRequired = $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required;
 
         // For each pull the user created
         $newPullIndex = 1;
@@ -222,6 +228,10 @@ class ImportString extends MDTBase
             $totalEnemiesSelected = 0;
             // The amount of enemies that we actually matched with
             $totalEnemiesMatched = 0;
+            // Keeps track of the amount of prideful enemies to add, a pull can in theory require us to add multiple
+            // But mostly since we add them in the center in the pack, we need to know all coordinates of the pack enemies
+            // first before we can place the prideful enemies
+            $totalPridefulEnemiesToAdd = 0;
 
             try {
                 $seasonalIndexSkip = false;
@@ -302,8 +312,6 @@ class ImportString extends MDTBase
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 $kzEnemy = new KillZoneEnemy();
-                                // Cache for the hasFinalBoss check below - it's slow otherwise
-                                $kzEnemy->enemy = $enemy;
                                 $kzEnemy->enemy_id = $enemy->id;
                                 $kzEnemy->kill_zone_id = $killZone->id;
 
@@ -311,6 +319,27 @@ class ImportString extends MDTBase
                                 if ($save) {
                                     $kzEnemy->save();
                                 }
+
+                                // Cache for the hasFinalBoss check below - it's slow otherwise, don't set it above here since
+                                // save will trip over it
+                                $kzEnemy->enemy = $enemy;
+
+                                // Keep track of our enemy forces
+                                $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+
+                                // No point doing this if we're not saving
+                                if ($save) {
+                                    // Do not add more than 5 regardless of circumstance
+                                    if ($dungeonRoute->pridefulenemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
+                                        // If we should add a prideful enemy in this pull ..
+                                        $currentPercentage = ($dungeonRoute->enemy_forces / $enemyForcesRequired) * 100;
+                                        // Add one so that we start adding at 20%
+                                        if ($currentPercentage >= ($dungeonRoute->pridefulenemies->count() + $totalPridefulEnemiesToAdd + 1) * (100 / $pridefulEnemyCount)) {
+                                            $totalPridefulEnemiesToAdd++;
+                                        }
+                                    }
+                                }
+
 
                                 // Save enemies to the killzones regardless
                                 $killZone->killzoneenemies->push($kzEnemy);
@@ -326,6 +355,35 @@ class ImportString extends MDTBase
                         // Make sure there is a pound sign in front of the value at all times, but never double up should
                         // MDT decide to suddenly place it here
                         $killZone->color = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
+                    }
+                }
+
+                // No point doing this if we're not saving
+                if ($save) {
+                    for ($i = 0; $i < $totalPridefulEnemiesToAdd; $i++) {
+                        $pridefulEnemy = new PridefulEnemy();
+                        // Get the prideful enemy appropriate for this pull
+                        $pridefulEnemy->enemy_id = $pridefulEnemies->slice($dungeonRoute->pridefulenemies->count(), 1)->first()->id;
+                        // We kind of assume the prideful enemy should be on the same floor as the enemies
+                        $pridefulEnemy->floor_id = $killZone->enemies->first()->floor_id;
+
+                        // Location of the enemy
+                        $pridefulEnemy->lat = $killZone->enemies->avg('lat');
+                        $pridefulEnemy->lng = $killZone->enemies->avg('lng');
+
+                        $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
+                        // Save it so we have an ID that we can use later on
+                        $pridefulEnemy->save();
+
+                        $dungeonRoute->pridefulenemies->push($pridefulEnemy);
+
+                        // Couple the prideful enemy to this pull
+                        $kzEnemy = new KillZoneEnemy();
+                        $kzEnemy->enemy_id = $pridefulEnemy->enemy_id;
+                        $kzEnemy->kill_zone_id = $killZone->id;
+
+                        // Couple the KillZoneEnemy to its KillZone
+                        $kzEnemy->save();
                     }
                 }
 

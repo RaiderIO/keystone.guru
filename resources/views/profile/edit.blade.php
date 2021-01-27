@@ -6,6 +6,7 @@ $menuItems = [
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
+    ['icon' => 'fa-tag', 'text' => __('Personal tags'), 'target' => '#tags'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -24,6 +25,10 @@ $deleteConsequences = $user->getDeleteConsequences();
     'model' => $user
 ])
 
+@include('common.general.inline', ['path' => 'profile/edit', 'options' => [
+    'test' => 'test'
+]])
+
 @section('scripts')
     @parent
 
@@ -32,13 +37,6 @@ $deleteConsequences = $user->getDeleteConsequences();
             // Code for base app
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
-
-            let $classColors = $('.profile_class_color');
-            $classColors.bind('click', function () {
-                $('#echo_color').val($(this).data('color'));
-            });
-
-            $('#profile_user_reports_table').DataTable({});
         });
     </script>
 @endsection
@@ -120,11 +118,11 @@ $deleteConsequences = $user->getDeleteConsequences();
                 @endfor
             </div>
 
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::submit(__('Save'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>
 
-        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="patreon-tab">
+        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
             <h4>
                 {{ __('Account') }}
             </h4>
@@ -202,6 +200,18 @@ $deleteConsequences = $user->getDeleteConsequences();
             {!! Form::hidden('_method', 'delete') !!}
             {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
             {!! Form::close() !!}
+        </div>
+
+        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="personal-tags-tab">
+            <h4>
+                {{ __('Personal tags') }}
+            </h4>
+            <p>
+                {{ __('You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
+                        you can manage a separate set of tags for just that team.') }}
+            </p>
+
+            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">

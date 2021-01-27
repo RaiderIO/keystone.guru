@@ -56,7 +56,7 @@ class Npc extends Model
      */
     public function isPrideful()
     {
-        return $this->id === 173729;
+        return $this->id === config('keystoneguru.prideful.npc_id');
     }
 
     /**

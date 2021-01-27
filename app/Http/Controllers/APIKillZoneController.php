@@ -77,6 +77,11 @@ class APIKillZoneController extends Controller
             // Refresh the enemies that may or may not have been set
             $killZone->load(['killzoneenemies']);
 
+            // Update the enemy forces
+            $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
+            // Touch the route so that the thumbnail gets updated
+            $dungeonroute->touch();
+
             if (Auth::check()) {
                 // Something's updated; broadcast it
                 broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $killZone));
@@ -186,10 +191,12 @@ class APIKillZoneController extends Controller
         }
 
 
+        // Update the enemy forces
+        $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
         // Touch the route so that the thumbnail gets updated
         $dungeonroute->touch();
 
-        return ['enemy_forces' => $dungeonroute->getEnemyForces()];
+        return ['enemy_forces' => $dungeonroute->enemy_forces];
     }
 
     /**
@@ -216,10 +223,12 @@ class APIKillZoneController extends Controller
                 // Refresh the killzones relation
                 $dungeonroute->load('killzones');
 
+                // Update the enemy forces
+                $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
 
-                $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
+                $result = ['enemy_forces' => $dungeonroute->enemy_forces];
             } else {
                 $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
@@ -254,10 +263,12 @@ class APIKillZoneController extends Controller
                     // Refresh the killzones relation
                     $dungeonroute->load('killzones');
 
+                    // Update the enemy forces
+                    $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
                     // Touch the route so that the thumbnail gets updated
                     $dungeonroute->touch();
 
-                    $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
+                    $result = ['enemy_forces' => $dungeonroute->enemy_forces];
                 } else {
                     $result = response('Unable to delete all pulls', Http::INTERNAL_SERVER_ERROR);
                 }

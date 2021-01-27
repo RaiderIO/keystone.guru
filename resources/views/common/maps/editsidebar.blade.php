@@ -7,14 +7,6 @@ $show = isset($show) ? $show : [];
 if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
-
-if (\Illuminate\Support\Facades\Auth::check()) {
-    $tags = \App\Models\Tags\TagModel::where('user_id', \Illuminate\Support\Facades\Auth::id())->get()->map(function (\App\Models\Tags\TagModel $tagModel) {
-        return $tagModel->tag;
-    });
-} else {
-    $tags = collect();
-}
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -28,25 +20,13 @@ if (\Illuminate\Support\Facades\Auth::check()) {
 
 @component('common.maps.sidebar', [
     'dungeon' => $dungeon,
-    'header' => __('Toolbox'),
+    'header' => $model->title,
     'anchor' => 'left',
     'id' => 'editsidebar',
     'show' => $show,
 ])
     @isset($show['sharing'])
         @include('common.maps.share', ['model' => $model, 'show' => $show])
-    @endisset
-
-    <!-- Tags -->
-    @if(isset($show['tags']) && $show['tags'])
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ __('Tags') }}</h5>
-                    @include('common.maps.sidebartags', ['tagmodels' => $model->tagmodels, 'edit' => true])
-                </div>
-            </div>
-        </div>
     @endisset
 
     <!-- Visibility -->

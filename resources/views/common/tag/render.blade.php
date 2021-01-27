@@ -1,14 +1,14 @@
 <?php
-/** @var \App\Models\Tags\TagModel[]|\Illuminate\Support\Collection $tagmodels */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $tags */
 $edit = isset($edit) ? $edit : false;
 ?>
-@foreach($tagmodels as $tagModel)
+@foreach($tags as $tag)
     <span
-        class="tag badge badge-pill {{ is_null($tagModel->color) ? 'badge-primary' : '' }} {{ $edit ? 'edit' : '' }}"
-        data-id="{{ $tagModel->id }}"
+        class="tag badge badge-pill {{ is_null($tag->color) ? 'badge-primary' : '' }} {{ $edit ? 'edit' : '' }}"
+        data-id="{{ $tag->id }}"
         style="{{ is_null($tagModel->color) ? '' : 'background-color: ' . $tagModel->color }}"
     >
-        {{ $tagModel->tag->name }}
+        {{ $tag->name }}
         @if($edit)
             x
         @endif

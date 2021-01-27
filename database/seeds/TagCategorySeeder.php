@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DungeonRoute;
+use App\Models\Tags\TagCategory;
 use Illuminate\Database\Seeder;
 
 class TagCategorySeeder extends Seeder
@@ -18,7 +19,11 @@ class TagCategorySeeder extends Seeder
 
         $tagCategories = [
             new App\Models\Tags\TagCategory([
-                'name'    => 'dungeon_route',
+                'name'    => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_class' => DungeonRoute::class,
+            ]),
+            new App\Models\Tags\TagCategory([
+                'name'    => TagCategory::DUNGEON_ROUTE_TEAM,
                 'model_class' => DungeonRoute::class,
             ]),
         ];

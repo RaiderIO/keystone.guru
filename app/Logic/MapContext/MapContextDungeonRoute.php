@@ -52,7 +52,7 @@ class MapContextDungeonRoute extends MapContext
             'pullGradient'            => $this->_context->pull_gradient,
             'pullGradientApplyAlways' => $this->_context->pull_gradient_apply_always,
             'faction'                 => strtolower($this->_context->faction->name),
-            'enemyForces'             => $this->_context->getEnemyForces(),
+            'enemyForces'             => $this->_context->enemy_forces,
 
             // Relations
             'killZones'               => $this->_context->killzones()->orderBy('index')->get(),

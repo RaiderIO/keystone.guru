@@ -55,7 +55,7 @@ class MDTImportController extends Controller
                 'paths'            => $dungeonRoute->paths->count(),
                 'lines'            => $dungeonRoute->brushlines->count(),
                 'notes'            => $dungeonRoute->mapicons->count(),
-                'enemy_forces'     => $dungeonRoute->getEnemyForces(),
+                'enemy_forces'     => $dungeonRoute->enemy_forces,
                 'enemy_forces_max' => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
                 'warnings'         => $warningResult
             ];
@@ -111,7 +111,12 @@ class MDTImportController extends Controller
                 $mdtImport->import_string = $string;
                 $mdtImport->save();
             } catch (Exception $ex) {
-                return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+                // Makes it easier to debug
+                if (env('APP_DEBUG')) {
+                    throw $ex;
+                } else {
+                    return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+                }
             } catch (Throwable $error) {
                 if ($error->getMessage() === "Class 'Lua' not found") {
                     return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');

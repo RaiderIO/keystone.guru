@@ -7,6 +7,8 @@ use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\UserReport;
 use Eloquent;
@@ -40,6 +42,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property UserReport[]|Collection $reports
  * @property Team[]|Collection $teams
  * @property Role[]|Collection $roles
+ * @property Tag[]|Collection $tags
  *
  * @mixin Eloquent
  */
@@ -72,7 +75,10 @@ class User extends Authenticatable
     ];
 
 
-    public function getIsAdminAttribute()
+    /**
+     * @return bool
+     */
+    public function getIsAdminAttribute(): bool
     {
         return $this->hasRole('admin');
     }
@@ -80,7 +86,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function dungeonroutes()
+    public function dungeonroutes()
     {
         return $this->hasMany('App\Models\DungeonRoute', 'author_id');
     }
@@ -88,7 +94,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function reports()
+    public function reports()
     {
         return $this->hasMany('App\Models\UserReport');
     }
@@ -96,7 +102,7 @@ class User extends Authenticatable
     /**
      * @return HasOne
      */
-    function patreondata()
+    public function patreondata()
     {
         return $this->hasOne('App\Models\PatreonData');
     }
@@ -104,7 +110,7 @@ class User extends Authenticatable
     /**
      * @return BelongsTo
      */
-    function gameserverregion()
+    public function gameserverregion()
     {
         // Don't know why it won't work without the foreign key specified..
         return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
@@ -113,9 +119,24 @@ class User extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    function teams()
+    public function teams()
     {
         return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
+     * @param TagCategory|null $category
+     * @return HasMany|Tag
+     */
+    public function tags(?TagCategory $category = null): HasMany
+    {
+        $result = $this->hasMany('\App\Models\Tags\Tag');
+
+        if ($category !== null) {
+            $result->where('tag_category_id', $category->id);
+        }
+
+        return $result;
     }
 
     /**
@@ -123,7 +144,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isOAuth()
+    public function isOAuth(): bool
     {
         return empty($this->password);
     }
@@ -134,7 +155,7 @@ class User extends Authenticatable
      * @param $name
      * @return bool
      */
-    function hasPaidTier($name)
+    function hasPaidTier($name): bool
     {
         // True for all admins
         $result = $this->hasRole('admin');
@@ -157,7 +178,7 @@ class User extends Authenticatable
      *
      * @return Collection
      */
-    function getPaidTiers()
+    function getPaidTiers(): Collection
     {
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
@@ -174,7 +195,7 @@ class User extends Authenticatable
     /**
      * Checks if this user can create a dungeon route or not (based on free account limits)
      */
-    function canCreateDungeonRoute()
+    function canCreateDungeonRoute(): bool
     {
         return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
             $this->hasPaidTier(PaidTier::UNLIMITED_DUNGEONROUTES);
@@ -184,11 +205,11 @@ class User extends Authenticatable
      * Get the amount of routes a user may still create.
      *
      * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     * @return mixed
+     * @return int
      */
-    function getRemainingRouteCount()
+    function getRemainingRouteCount(): int
     {
-        return max(0,
+        return (int)max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
@@ -207,7 +228,7 @@ class User extends Authenticatable
     /**
      * Gets a list of consequences that will happen when this user tries to delete their account.
      */
-    public function getDeleteConsequences()
+    public function getDeleteConsequences(): array
     {
         $teams = ['teams' => []];
         foreach ($this->teams as $team) {
@@ -225,7 +246,7 @@ class User extends Authenticatable
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
             ],
-            'reports' => [
+            'reports'       => [
                 'delete_count' => ($this->reports()->where('status', 0)->count())
             ]
         ]);

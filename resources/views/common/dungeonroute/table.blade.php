@@ -7,14 +7,33 @@
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
-?>
 
-<?php
+/** @var App\Models\Team|null $team */
 $team = isset($team) ? $team : null;
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
+
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
+
+if ($team !== null) {
+    $searchTags = $team->getAvailableTags();
+} elseif (Auth::check()) {
+    $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
+    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
+} else {
+    $searchTags = collect();
+}
+
+$autocompleteTags = collect();
+
+if ($team === null) {
+    $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL))->get();
+} else {
+    $autocompleteTags = $team->getAvailableTags();
+}
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
@@ -24,8 +43,9 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             'teams' => Auth::check() ? \App\User::findOrFail(Auth::id())->teams()->whereHas('teamusers', function($teamuser){
                 /** @var $teamuser \App\Models\TeamUser  */
                 $teamuser->isModerator(Auth::id());
-            })->get() : []
-            ]
+            })->get() : [],
+            'autocompletetags' => $autocompleteTags,
+        ]
 ])
 
 @section('scripts')
@@ -76,14 +96,31 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
         <?php
         $requirements = ['enough_enemy_forces' => __('Enough enemy forces')];
-        if(Auth::check()){
+        if (Auth::check()) {
             $requirements['favorite'] = __('Favorite');
         }
         ?>
-        {!! Form::select('dungeon_id', $requirements, 0,
-            ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple',
-            'data-selected-text-format' => 'count > 1', 'data-count-selected-text' => __('{0} requirements')]) !!}
+        {!! Form::select('dungeon_id', $requirements, 0, [
+            'id' => 'dungeonroute_requirements_select',
+            'class' => 'form-control selectpicker',
+            'multiple' => 'multiple',
+            'data-selected-text-format' => 'count > 1',
+            'data-count-selected-text' => __('{0} requirements')
+        ]) !!}
     </div>
+    @if($view === 'profile' || $view === 'team')
+        <div class="col-lg pl-1 pr-1">
+            {!! Form::label('dungeonroute_tags_select[]', __('Tags')) !!}
+            {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,
+                ['id' => 'dungeonroute_tags_select',
+                'class' => 'form-control selectpicker',
+                'multiple' => 'multiple',
+                // Change the original text
+                'title' => $searchTags->isEmpty() ? __('No tags available') : false,
+                'data-selected-text-format' => 'count > 1',
+                'data-count-selected-text' => __('{0} tags selected')]) !!}
+        </div>
+    @endif
     <div class="col-lg pl-1 pr-1">
         <div class="mb-2">
             &nbsp;
