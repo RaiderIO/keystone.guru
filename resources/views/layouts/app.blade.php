@@ -77,7 +77,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     @endif
 
     @if($showAds)
-        @include('common.thirdparty.adsense')
+        @include('common.thirdparty.ads')
     @endif
     @if($analytics)
         @include('common.thirdparty.analytics')
