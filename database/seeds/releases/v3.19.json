@@ -8,7 +8,7 @@
     "changelog": {
         "id": 90,
         "release_id": 84,
-        "description": "Due to enemy forces being recalculated for every route and the result stored in the database, applying this patch may take a few minutes longer than usual.",
+        "description": null,
         "changes": [
             {
                 "release_changelog_id": 90,
