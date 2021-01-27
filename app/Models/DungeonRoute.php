@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -96,6 +97,7 @@ class DungeonRoute extends Model
     use SerializesDates;
     use Reportable;
     use HasTags;
+    use GeneratesPublicKey;
 
     /**
      * The accessors to append to the model's array form.
@@ -916,23 +918,6 @@ class DungeonRoute extends Model
         }
 
         return $subTitle;
-    }
-
-    /**
-     * @return string Generates a random public key that is displayed to the user in the URL.
-     */
-    public static function generateRandomPublicKey()
-    {
-        do {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $charactersLength = strlen($characters);
-            $newKey = '';
-            for ($i = 0; $i < 7; $i++) {
-                $newKey .= $characters[rand(0, $charactersLength - 1)];
-            }
-        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
-
-        return $newKey;
     }
 
     public static function boot()
