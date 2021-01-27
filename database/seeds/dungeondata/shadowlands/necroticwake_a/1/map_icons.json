@@ -24,7 +24,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 42,
+        "map_icon_type_id": 56,
         "lat": -155.25,
         "lng": 86.5,
         "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
@@ -123,7 +123,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 42,
+        "map_icon_type_id": 56,
         "lat": -65,
         "lng": 233,
         "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
@@ -193,6 +193,17 @@
         "lat": -125.5625,
         "lng": 148.625,
         "comment": "Discarded Shield",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 56,
+        "lat": -179.625,
+        "lng": 237.5,
+        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
