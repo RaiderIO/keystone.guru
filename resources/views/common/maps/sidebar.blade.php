@@ -1,11 +1,14 @@
 <?php
+/** @var string $anchor */
+
 $isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
 $edit = isset($edit) ? $edit : false;
+$oppositeAnchor = $anchor === 'left' ? 'right' : 'left';
 ?>
 <div id="{{ $id }}Toggle" class="sidebar-toggle anchor-{{$anchor}} {{ $isMobile ? '' : 'active' }}"
      data-toggle="tooltip">
-    <i class="fas fa-arrow-{{ $isMobile ? 'right' : 'left' }}"></i>
+    <i class="fas fa-arrow-{{ $isMobile ? $oppositeAnchor : $anchor }}"></i>
 </div>
 
 <!-- Sidebar -->
@@ -21,7 +24,7 @@ $edit = isset($edit) ? $edit : false;
                 @endisset
             </div>
             <div >
-                <a class="sidebar-background" href="{{ route('home') }}"><i class="fas fa-arrow-{{ $anchor }}"></i> {{ __('Back to Keystone.guru') }}</a>
+                <a class="sidebar-background" href="{{ route('home') }}"><i class="fas fa-arrow-{{ $isMobile ? $oppositeAnchor : $anchor }}"></i> {{ __('Back to Keystone.guru') }}</a>
             </div>
         @endisset
     </div>
