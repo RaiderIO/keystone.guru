@@ -26,26 +26,43 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <!-- Top header ad unit -->
     <div id="nitropay-header-unit"></div>
 
-    <script type="text/javascript">
-        window['nitroAds'].createAd('nitropay-header-unit', {
-            "refreshLimit": 10,
-            "refreshTime": 90,
-            "renderVisibleOnly": true,
-            "refreshVisibleOnly": true,
-            "demo": {{$demo}},
-            "sizes": [
-                [
-                    "970",
-                    "90"
-                ]
-            ],
-            "report": {
-                "enabled": true,
-                "wording": "Report Ad",
-                "position": "top-right"
-            }
-        });
-    </script>
+    @if( (new \Jenssegers\Agent\Agent())->isMobile() )
+        <script type="text/javascript">
+            window['nitroAds'].createAd('nitropay-header-unit', {
+                "refreshLimit": 10,
+                "refreshTime": 90,
+                "format": "anchor",
+                "anchor": "top",
+                "demo": {{$demo}},
+                "report": {
+                    "enabled": true,
+                    "wording": "Report Ad",
+                    "position": "bottom-right"
+                }
+            });
+        </script>
+    @else
+        <script type="text/javascript">
+            window['nitroAds'].createAd('nitropay-header-unit', {
+                "refreshLimit": 10,
+                "refreshTime": 90,
+                "renderVisibleOnly": true,
+                "refreshVisibleOnly": true,
+                "demo": {{$demo}},
+                "sizes": [
+                    [
+                        "970",
+                        "90"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "wording": "Report Ad",
+                    "position": "bottom-right"
+                }
+            });
+        </script>
+    @endif
 @elseif( $type === 'footer' )
     <!-- Footer ad unit -->
     <div id="nitropay-footer-unit"></div>
