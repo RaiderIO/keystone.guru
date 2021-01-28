@@ -35,7 +35,9 @@ class Sidebar {
             refreshTooltips();
         });
 
-        this._showSidebar();
+        if( !isMobile() ) {
+            this._showSidebar();
+        }
     }
 
     /**
