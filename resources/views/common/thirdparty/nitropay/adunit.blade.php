@@ -50,26 +50,45 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <!-- Footer ad unit -->
     <div id="nitropay-footer-unit"></div>
 
-    <script type="text/javascript">
-        window['nitroAds'].createAd('nitropay-footer-unit', {
-            "refreshLimit": 10,
-            "refreshTime": 90,
-            "renderVisibleOnly": true,
-            "refreshVisibleOnly": true,
-            "demo": {{$demo}},
-            "sizes": [
-                [
-                    "970",
-                    "250"
-                ]
-            ],
-            "report": {
-                "enabled": true,
-                "wording": "Report Ad",
-                "position": "top-right"
-            }
-        });
-    </script>
+    @if( (new \Jenssegers\Agent\Agent())->isMobile() )
+        <script type="text/javascript">
+            window['nitroAds'].createAd('nitropay-footer-unit', {
+                "refreshLimit": 10,
+                "refreshTime": 90,
+                "demo": {{$demo}},
+                "format": "anchor",
+                "anchor": "bottom",
+                "report": {
+                    "enabled": true,
+                    "wording": "Report Ad",
+                    "position": "top-right"
+                },
+                "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
+            });
+        </script>
+    @else
+        <script type="text/javascript">
+            window['nitroAds'].createAd('nitropay-footer-unit', {
+                "refreshLimit": 10,
+                "refreshTime": 90,
+                "renderVisibleOnly": true,
+                "refreshVisibleOnly": true,
+                "demo": {{$demo}},
+                "sizes": [
+                    [
+                        "970",
+                        "250"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "wording": "Report Ad",
+                    "position": "top-right"
+                },
+                "mediaQuery": "(min-width: 1025px), (min-width: 768px) and (max-width: 1024px)"
+            });
+        </script>
+    @endif
 @elseif( $type === 'map' )
     <!-- Map ad unit desktop -->
     <div id="nitropay-map-unit"></div>
