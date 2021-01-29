@@ -1,6 +1,7 @@
 <?php
-$type = isset($type) ? $type : 'responsive';
-$demo = config('app.env') !== 'production' ? 'true' : 'false';
+$type             = isset($type) ? $type : 'responsive';
+$reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : null;
+$demo             = config('app.env') !== 'production' ? 'true' : 'false';
 ?>
 
 @if( $type === 'responsive' || $type === 'responsive_small' )
@@ -11,33 +12,31 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <script type="text/javascript">
         window['nitroAds'].createAd('nitropay-responsive-unit-{{ $random }}', {
             "refreshLimit": 10,
-            "refreshTime": 90,
+            "refreshTime": 30,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "demo": {{$demo}},
             "report": {
                 "enabled": true,
                 "wording": "Report Ad",
-                "position": "top-right"
+                "position": "{{ $reportAdPosition ?? 'top-right' }}"
             }
         });
     </script>
 @elseif( $type === 'header' )
     <!-- Top header ad unit -->
-    <div id="nitropay-header-unit"></div>
-
     @if( (new \Jenssegers\Agent\Agent())->isMobile() )
         <script type="text/javascript">
             window['nitroAds'].createAd('nitropay-header-unit', {
                 "refreshLimit": 10,
-                "refreshTime": 90,
+                "refreshTime": 30,
                 "format": "anchor",
                 "anchor": "top",
                 "demo": {{$demo}},
                 "report": {
                     "enabled": true,
                     "wording": "Report Ad",
-                    "position": "bottom-right"
+                    "position": "{{ $reportAdPosition ?? 'bottom-right' }}"
                 }
             });
         </script>
@@ -45,7 +44,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
         <script type="text/javascript">
             window['nitroAds'].createAd('nitropay-header-unit', {
                 "refreshLimit": 10,
-                "refreshTime": 90,
+                "refreshTime": 30,
                 "renderVisibleOnly": true,
                 "refreshVisibleOnly": true,
                 "demo": {{$demo}},
@@ -58,7 +57,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
                 "report": {
                     "enabled": true,
                     "wording": "Report Ad",
-                    "position": "bottom-right"
+                    "position": "{{ $reportAdPosition ?? 'bottom-right' }}"
                 }
             });
         </script>
@@ -71,14 +70,14 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
         <script type="text/javascript">
             window['nitroAds'].createAd('nitropay-footer-unit', {
                 "refreshLimit": 10,
-                "refreshTime": 90,
+                "refreshTime": 30,
                 "demo": {{$demo}},
                 "format": "anchor",
                 "anchor": "bottom",
                 "report": {
                     "enabled": true,
                     "wording": "Report Ad",
-                    "position": "top-right"
+                    "position": "{{ $reportAdPosition ?? 'top-right' }}"
                 },
                 "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
             });
@@ -87,7 +86,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
         <script type="text/javascript">
             window['nitroAds'].createAd('nitropay-footer-unit', {
                 "refreshLimit": 10,
-                "refreshTime": 90,
+                "refreshTime": 30,
                 "renderVisibleOnly": true,
                 "refreshVisibleOnly": true,
                 "demo": {{$demo}},
@@ -100,7 +99,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
                 "report": {
                     "enabled": true,
                     "wording": "Report Ad",
-                    "position": "top-right"
+                    "position": "{{ $reportAdPosition ?? 'top-right' }}"
                 },
                 "mediaQuery": "(min-width: 1025px), (min-width: 768px) and (max-width: 1024px)"
             });
@@ -113,7 +112,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <script type="text/javascript">
         window['nitroAds'].createAd('nitropay-map-unit', {
             "refreshLimit": 10,
-            "refreshTime": 90,
+            "refreshTime": 30,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "demo": {{$demo}},
@@ -126,7 +125,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
             "report": {
                 "enabled": true,
                 "wording": "Report Ad",
-                "position": "bottom-right"
+                "position": "{{ $reportAdPosition ?? 'bottom-right' }}"
             },
             "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
         });
@@ -138,7 +137,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <script type="text/javascript">
         window['nitroAds'].createAd('nitropay-map-small-unit', {
             "refreshLimit": 10,
-            "refreshTime": 90,
+            "refreshTime": 30,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "demo": {{$demo}},
@@ -151,7 +150,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
             "report": {
                 "enabled": true,
                 "wording": "Report Ad",
-                "position": "bottom-right"
+                "position": "{{ $reportAdPosition ?? 'bottom-right' }}"
             },
             "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
         });
@@ -163,7 +162,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
     <script type="text/javascript">
         window['nitroAds'].createAd('nitropay-map-small-horizontal-unit', {
             "refreshLimit": 10,
-            "refreshTime": 90,
+            "refreshTime": 30,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "demo": {{$demo}},
@@ -176,7 +175,7 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
             "report": {
                 "enabled": true,
                 "wording": "Report Ad",
-                "position": "bottom-right"
+                "position": "{{ $reportAdPosition ?? 'bottom-right' }}"
             }
         });
     </script>

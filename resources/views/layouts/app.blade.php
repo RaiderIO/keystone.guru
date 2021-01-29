@@ -311,7 +311,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
         @if( $showAds )
             <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['type' => 'header'])
+                @include('common.thirdparty.adunit', ['type' => 'header', 'reportAdPosition' => 'top-right'])
             </div>
         @endif
 
