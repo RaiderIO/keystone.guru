@@ -282,11 +282,12 @@ html, body, #map, #app, .wrapper {
     background-color: inherit;
 }
 
-.map_top_header .container,
+.map_top_header_background,
 .route_manipulation_tools {
     background-color: rgba(78, 93, 108, 0.75);
-    /*box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);*/
+}
 
+.route_manipulation_tools {
     margin: auto;
 }
 

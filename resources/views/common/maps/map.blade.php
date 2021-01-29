@@ -130,14 +130,14 @@ if ($isAdmin) {
 </div>
 
 @if(($showAds && !$isMobile || !$edit))
-<header class="fixed-top map_top_header">
+<header class="fixed-top">
 @if($showAds && !$isMobile)
-    <div class="container p-0" style="width: 970px">
-        @include('common.thirdparty.adunit', ['type' => 'header'])
+    <div class="container p-0 map_top_header_background" style="width: 970px">
+        @include('common.thirdparty.adunit', ['type' => 'header', 'class' => 'map_top_header_background'])
     </div>
 @endif
 @if(!$edit)
-    <div class="container p-0" style="width: 100px">
+    <div class="container p-0 map_top_header_background" style="width: 100px">
         <!-- Echo controls injected here through echocontrols.js -->
         <span id="route_echo_container" class="text-center"></span>
     </div>
