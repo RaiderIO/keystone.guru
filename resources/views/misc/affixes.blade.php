@@ -15,17 +15,6 @@ if ($timezone === null) {
 @section('header-title', sprintf(__('Weekly affixes in %s'), $region->name))
 
 @section('content')
-    <div class="container">
-        @if(!isAlertDismissed('shadowlands-affixes-alert'))
-            <div class="alert alert-warning alert-dismissible">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="shadowlands-affixes-alert">
-                    <i class="fas fa-times"></i>
-                </a>
-                <i class="fas fa-exclamation-triangle"></i>
-                {{ __('The Shadowlands affixes are preliminary and not final. As soon as an affix schedule is known, this page will be updated.') }}
-            </div>
-        @endif
-    </div>
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>
@@ -130,7 +119,7 @@ if ($timezone === null) {
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {{ __('Last updated at 2020/Dec/04.') }}
+            {{ __('Last updated at 2021/Jan/29.') }}
             {{ __('For more information about affixes and M+, please visit') }}
             <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>

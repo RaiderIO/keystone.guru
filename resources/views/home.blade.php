@@ -27,10 +27,10 @@
                            data-toggle="modal" data-target="#sandbox_modal">
                             <i class="fas fa-play"></i> {{ __('Sandbox') }}
                         </a>
-{{--                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"--}}
-{{--                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">--}}
-{{--                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}--}}
-{{--                        </a>--}}
+                        {{--                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"--}}
+                        {{--                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">--}}
+                        {{--                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}--}}
+                        {{--                        </a>--}}
 
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
@@ -61,10 +61,10 @@
                             <a href="#">{{ __('All Shadowlands dungeons supported') }}</a>
                             <p>{{ __('All current Shadowlands dungeons are supported and ready to go. In the future, any new dungeons will also be added.') }}</p>
                         </li>
-{{--                        <li>--}}
-{{--                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>--}}
-{{--                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>--}}
-{{--                        </li>--}}
+                        {{--                        <li>--}}
+                        {{--                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>--}}
+                        {{--                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>--}}
+                        {{--                        </li>--}}
                         <li>
                             <a href="#">{{ __('Prideful affix supported') }}</a>
                             <p>{{ __('Prideful enemies may be placed freely in your route and included in your pulls.') }}</p>
@@ -94,9 +94,9 @@
                                     <li>
                                         <img src="images/home/2.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
-{{--                                    <li>--}}
-{{--                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">--}}
-{{--                                    </li>--}}
+                                    {{--                                    <li>--}}
+                                    {{--                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">--}}
+                                    {{--                                    </li>--}}
                                     <li>
                                         <img src="images/home/4.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
@@ -159,7 +159,7 @@
                         <div class="icon"><i class="fa fa-search"></i></div>
                         <div class="text">
                             <h3>{{ __('Route Search') }}</h3>
-                            <p>{{ __('Struggle with a dungeon with specific affixes? Search for an existing route made by others, just like your routes can be found by others*.') }}</p>
+                            <p>{{ __('Struggle with a dungeon with specific affixes? Search for existing routes made by others and discover new ways of doing the same dungeons.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -206,9 +206,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 text-center section-heading probootstrap-animate small">
-                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for private routes and more.'),
-                    '<a href="https://www.patreon.com/keystoneguru" target="_blank"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
+                <div class="col-md-4 text-center section-heading probootstrap-animate small">
+                </div>
+                <div class="col-md-4 text-center section-heading probootstrap-animate small">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fab fa-patreon"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Support me through Patreon') }}</h3>
+                            <p>{!! sprintf(__('If you want to support the website and receive perks available only to Patrons, head over to %s to receive benefits such as the removal of all ads, private routes and more!'),
+                                    '<a href="https://www.patreon.com/keystoneguru" target="_blank"><i class="fab fa-patreon"></i> Patreon</a>') !!} </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
