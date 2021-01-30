@@ -132,8 +132,8 @@ if ($isAdmin) {
 @if(($showAds && !$isMobile || !$edit))
 <header class="fixed-top">
 @if($showAds && !$isMobile)
-    <div class="container p-0 map_top_header_background" style="width: 970px">
-        @include('common.thirdparty.adunit', ['type' => 'header', 'class' => 'map_top_header_background'])
+    <div class="container p-0 map_top_header_background" style="width: 728px">
+        @include('common.thirdparty.adunit', ['type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
     </div>
 @endif
 @if(!$edit)

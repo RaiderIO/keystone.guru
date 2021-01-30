@@ -199,8 +199,8 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                         <a class="dropdown-item"
                                            href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
                                         @if( env('TRACKER_ENABLED'))
-                                        <a class="dropdown-item"
-                                           href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
+                                            <a class="dropdown-item"
+                                               href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
                                         @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
@@ -401,6 +401,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                     World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
                     Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
                     Blizzard Entertainment.
+                    <span data-ccpa-link="1"></span>
                 </div>
             </div>
         </div>
@@ -432,16 +433,16 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
 @guest
     <!-- Modal login -->
-@component('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
-    @include('common.forms.login', array_merge(['modal' => true], $loginParams))
-@endcomponent
-<!-- END modal login -->
+    @component('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
+        @include('common.forms.login', array_merge(['modal' => true], $loginParams))
+    @endcomponent
+    <!-- END modal login -->
 
-<!-- Modal register -->
-@component('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
-    @include('common.forms.register', array_merge(['modal' => true], $registerParams))
-@endcomponent
-<!-- END modal register -->
+    <!-- Modal register -->
+    @component('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
+        @include('common.forms.register', array_merge(['modal' => true], $registerParams))
+    @endcomponent
+    <!-- END modal register -->
 @endguest
 
 <!-- Scripts -->
@@ -451,7 +452,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 <script src="{{ asset('js/lib-' . $version . '.js') . $devCacheBuster }}"></script>
 @yield('scripts')
 <script type="application/javascript">
-    $(function(){
+    $(function () {
         // Do this once and not a bunch of times for all different elements
         refreshSelectPickers();
         // All layers have been fetched and everything rebuilt, refresh tooltips for all elements

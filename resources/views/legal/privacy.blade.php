@@ -192,7 +192,8 @@
     <p>If you have any questions about this Privacy Policy, please contact us:</p>
     <ul>
         <li>By email: privacy@keystone.guru</li>
-
     </ul>
+
+    <span data-ccpa-link="1"></span>
 
 @endsection

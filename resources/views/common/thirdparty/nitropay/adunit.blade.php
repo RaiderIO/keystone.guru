@@ -3,13 +3,9 @@ $type = isset($type) ? $type : 'responsive';
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
-    'responsive'          => 'top-right',
-    'responsive_small'    => 'top-right',
-    'header'              => 'bottom-right',
-    'footer'              => 'top-right',
-    'map'                 => 'bottom-right',
-    'mapsmall'            => 'bottom-right',
-    'mapsmall_horizontal' => 'bottom-right',
+    'responsive' => 'top-right',
+    'header' => 'bottom-right',
+    'footer' => 'top-right',
 ];
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
@@ -44,7 +40,7 @@ $random = rand(0, 1000000);
     @include('common.thirdparty.nitropay.adcontrols', ['random' => $random])
 @endif
 
-@if( $type === 'responsive' || $type === 'responsive_small' )
+@if( $type === 'responsive' )
     <!-- Responsive ad unit -->
         <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
 
@@ -52,7 +48,7 @@ $random = rand(0, 1000000);
             window['nitroAds'].createAd('nitropay-{{ $random }}', {
                 "refreshLimit": 10,
                 "refreshTime": 30,
-                
+
                 "refreshVisibleOnly": true,
                 "demo": {{$demo}},
                 "report": {
@@ -85,12 +81,12 @@ $random = rand(0, 1000000);
                 window['nitroAds'].createAd('nitropay-{{ $random }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
-                    
+
                     "refreshVisibleOnly": true,
                     "demo": {{$demo}},
                     "sizes": [
                         [
-                            "970",
+                            "{{ isset($map) && $map ? '728' : '970'}}",
                             "90"
                         ]
                     ],
@@ -127,7 +123,7 @@ $random = rand(0, 1000000);
                 window['nitroAds'].createAd('nitropay-{{ $random }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
-                    
+
                     "refreshVisibleOnly": true,
                     "demo": {{$demo}},
                     "sizes": [
@@ -145,80 +141,6 @@ $random = rand(0, 1000000);
                 });
             </script>
         @endif
-    @elseif( $type === 'map' )
-    <!-- Map ad unit desktop -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
-
-        <script type="text/javascript">
-            window['nitroAds'].createAd('nitropay-{{ $random }}', {
-                "refreshLimit": 10,
-                "refreshTime": 30,
-                
-                "refreshVisibleOnly": true,
-                "demo": {{$demo}},
-                "sizes": [
-                    [
-                        "160",
-                        "600"
-                    ]
-                ],
-                "report": {
-                    "enabled": true,
-                    "wording": "Report Ad",
-                    "position": "{{ $reportAdPosition }}"
-                },
-                "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
-            });
-        </script>
-    @elseif( $type === 'mapsmall' )
-    <!-- Map desktop vertical banner -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
-
-        <script type="text/javascript">
-            window['nitroAds'].createAd('nitropay-{{ $random }}', {
-                "refreshLimit": 10,
-                "refreshTime": 30,
-                
-                "refreshVisibleOnly": true,
-                "demo": {{$demo}},
-                "sizes": [
-                    [
-                        "300",
-                        "250"
-                    ]
-                ],
-                "report": {
-                    "enabled": true,
-                    "wording": "Report Ad",
-                    "position": "{{ $reportAdPosition }}"
-                },
-                "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
-            });
-        </script>
-    @elseif( $type === 'mapsmall_horizontal' )
-    <!-- Map footer mobile -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
-
-        <script type="text/javascript">
-            window['nitroAds'].createAd('nitropay-{{ $random }}', {
-                "refreshLimit": 10,
-                "refreshTime": 30,
-                
-                "refreshVisibleOnly": true,
-                "demo": {{$demo}},
-                "sizes": [
-                    [
-                        "320",
-                        "50"
-                    ]
-                ],
-                "report": {
-                    "enabled": true,
-                    "wording": "Report Ad",
-                    "position": "{{ $reportAdPosition }}"
-                }
-            });
-        </script>
     @endif
 </div>
 
