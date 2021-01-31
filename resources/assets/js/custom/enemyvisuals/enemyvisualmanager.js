@@ -116,7 +116,7 @@ class EnemyVisualManager extends Signalable {
             let currTime = (new Date()).getTime();
 
             // Once every 50 ms, calculation is expensive
-            if (currTime - this._lastMouseMoveDistanceCheckTime > 50) {
+            if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                     let enemy = enemyMapObjectGroup.objects[i];
