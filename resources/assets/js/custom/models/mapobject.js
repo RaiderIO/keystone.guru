@@ -760,6 +760,16 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Unbinds and binds the tooltip again.
+     */
+    rebindTooltip() {
+        if (this.layer !== null) {
+            this.unbindTooltip();
+        }
+        this.bindTooltip();
+    }
+
+    /**
      * Sets the synced state of the map object. Will adjust the colors of the layer if colors are set.
      * @param value bool True to set the status to synced, false to unsynced.
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
