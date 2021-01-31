@@ -42,6 +42,7 @@ if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FR
 $analytics = isset($analytics) ? $analytics : $isProduction;
 // Current Git version
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
+$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
 $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
 $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;
@@ -308,7 +309,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
         @yield('global-message')
 
-        @if( $showAds )
+        @if( $showAds && !$isMobile)
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'header', 'reportAdPosition' => 'top-right'])
             </div>

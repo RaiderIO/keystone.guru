@@ -10,33 +10,44 @@ $defaultReportAdPosition = [
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
 $random = rand(0, 1000000);
+
+$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
+
+// If we're on mobile, anchor ads do not have a report button so don't render it
+$hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
 ?>
 <script type="text/javascript">
+    /** Tracks which nitropay ads are anchors, if an anchor is found, don't perform the below code since you can't report those ads */
+    var nitropayIsAnchor = {};
+
     if (window.nitroAds && window.nitroAds.loaded) {
         // nitroAds was already loaded
     } else {
         // wait for loaded event
         document.addEventListener('nitroAds.loaded', event => {
-            // Show the remove ads button
-            document.getElementById('nitropay-{{ $random }}-remove-ads').setAttribute('style', '');
+            let adId = '{{ $random }}';
+            if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+                // Show the remove ads button
+                document.getElementById('nitropay-{{ $random }}-remove-ads').setAttribute('style', '');
 
-            // Move the report ad button to a more convenient place
-            let reportLink = document.getElementById('nitropay-{{ $random }}').getElementsByClassName('report-link')[0];
-            reportLink.setAttribute('style', '');
-            reportLink.setAttribute('class', 'report-link nitropay');
+                // Move the report ad button to a more convenient place
+                let reportLink = document.getElementById('nitropay-{{ $random }}').getElementsByClassName('report-link')[0];
+                reportLink.setAttribute('style', '');
+                reportLink.setAttribute('class', 'report-link nitropay');
 
-            let aReportLink = reportLink.children[0];
-            aReportLink.style['color'] = 'unset';
-            aReportLink.style['margin-top'] = '0';
+                let aReportLink = reportLink.children[0];
+                aReportLink.style['color'] = 'unset';
+                aReportLink.style['margin-top'] = '0';
 
-            let target = document.getElementById('nitropay-{{ $random }}-report-ad');
-            target.appendChild(reportLink);
+                let target = document.getElementById('nitropay-{{ $random }}-report-ad');
+                target.appendChild(reportLink);
+            }
         });
     }
 </script>
 
 <div>
-@if(strpos($reportAdPosition, 'top') !== false)
+@if($hasAdControls && strpos($reportAdPosition, 'top') !== false)
     @include('common.thirdparty.nitropay.adcontrols', ['random' => $random])
 @endif
 
@@ -61,7 +72,7 @@ $random = rand(0, 1000000);
 @elseif( $type === 'header' )
     <!-- Top header ad unit -->
         <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
-        @if( (new \Jenssegers\Agent\Agent())->isMobile() )
+        @if( $isMobile )
             <script type="text/javascript">
                 window['nitroAds'].createAd('nitropay-{{ $random }}', {
                     "refreshLimit": 10,
@@ -75,6 +86,7 @@ $random = rand(0, 1000000);
                         "position": "{{ $reportAdPosition }}"
                     }
                 });
+                nitropayIsAnchor['{{ $random }}'] = true;
             </script>
         @else
             <script type="text/javascript">
@@ -102,7 +114,7 @@ $random = rand(0, 1000000);
     <!-- Footer ad unit -->
         <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
 
-        @if( (new \Jenssegers\Agent\Agent())->isMobile() )
+        @if( $isMobile )
             <script type="text/javascript">
                 window['nitroAds'].createAd('nitropay-{{ $random }}', {
                     "refreshLimit": 10,
@@ -117,6 +129,7 @@ $random = rand(0, 1000000);
                     },
                     "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
                 });
+                nitropayIsAnchor['{{ $random }}'] = true;
             </script>
         @else
             <script type="text/javascript">
@@ -144,6 +157,6 @@ $random = rand(0, 1000000);
     @endif
 </div>
 
-@if(strpos($reportAdPosition, 'bottom') !== false)
+@if($hasAdControls && strpos($reportAdPosition, 'bottom') !== false)
     @include('common.thirdparty.nitropay.adcontrols', ['random' => $random])
 @endif
