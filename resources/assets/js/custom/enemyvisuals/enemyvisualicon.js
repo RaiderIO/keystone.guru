@@ -24,6 +24,29 @@ class EnemyVisualIcon extends Signalable {
     }
 
     /**
+     * Return true if the visual should be forced rebuilt always.
+     * @returns {boolean}
+     */
+    shouldAlwaysRebuild() {
+        return false;
+    }
+
+    /**
+     * Checks if this visual should be refreshed if the number style changed.
+     * @returns {boolean}
+     */
+    shouldRefreshOnNumberStyleChanged() {
+        return false;
+    }
+
+    /**
+     * Called whenever the size of this visual should be refreshed
+     */
+    refreshSize() {
+
+    }
+
+    /**
      *
      * @param name
      */

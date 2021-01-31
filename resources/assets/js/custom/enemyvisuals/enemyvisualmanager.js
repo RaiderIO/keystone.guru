@@ -37,6 +37,7 @@ class EnemyVisualManager extends Signalable {
         });
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
+        getState().register('numberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
@@ -61,22 +62,43 @@ class EnemyVisualManager extends Signalable {
     _onZoomLevelChanged(zoomLevelChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let currentZoomLevel = getState().getMapZoomLevel();
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
             let enemy = enemyMapObjectGroup.objects[i];
 
             // Only refresh what we can see
-            if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
-                // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
-                // reworking to support a full refresh of the visual
-                if (enemy.visual.isHighlighted()) {
-                    window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
-                } else {
-                    window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+            if (enemy.id > 0) {
+                let shouldAlwaysRebuild = enemy.visual.shouldAlwaysRebuild();
+                if (shouldAlwaysRebuild || enemy.isVisibleOnScreen()) {
+                    // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
+                    // reworking to support a full refresh of the visual
+                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted()) {
+                        window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+                    } else {
+                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+                    }
+                    // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
+                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = zoomLevelChangedEvent.data.mapZoomLevel;
                 }
-                // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
-                this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+            }
+        }
+    }
+
+    /**
+     * Called when the number style was changed.
+     * @param numberStyleChangedEvent
+     * @private
+     */
+    _onNumberStyleChanged(numberStyleChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            // Only refresh what we can see
+            if (enemy.id > 0 && enemy.isVisible() && enemy.visual.mainVisual.shouldRefreshOnNumberStyleChanged()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
             }
         }
     }
@@ -94,7 +116,7 @@ class EnemyVisualManager extends Signalable {
             let currTime = (new Date()).getTime();
 
             // Once every 50 ms, calculation is expensive
-            if (currTime - this._lastMouseMoveDistanceCheckTime > 50) {
+            if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                     let enemy = enemyMapObjectGroup.objects[i];
