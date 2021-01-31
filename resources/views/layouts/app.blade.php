@@ -38,7 +38,6 @@ if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FR
     // No ads
     $showAds = false;
 }
-$showAds = true;
 // Analytics or not, default = $isProduction
 $analytics = isset($analytics) ? $analytics : $isProduction;
 // Current Git version
