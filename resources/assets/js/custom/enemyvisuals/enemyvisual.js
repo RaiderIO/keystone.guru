@@ -104,7 +104,7 @@ class EnemyVisual extends Signalable {
             for (let i = 0; i < visuals.length; i++) {
                 visuals[i]._managedBy = this.enemy.id;
                 visuals[i]._highlighted = true;
-                visuals[i].setVisualType('enemy_forces');
+                visuals[i].setVisualType('enemy_forces', true);
             }
 
             getState().setFocusedEnemy(this.enemy);
@@ -136,7 +136,7 @@ class EnemyVisual extends Signalable {
                     // Return management state to their own enemy
                     visual._managedBy = visual.enemy.id;
                     visual._highlighted = false;
-                    visual.setVisualType(getState().getEnemyDisplayType());
+                    visual.setVisualType(getState().getEnemyDisplayType(), true);
                 }
 
                 getState().setFocusedEnemy(null);
@@ -460,6 +460,14 @@ class EnemyVisual extends Signalable {
     }
 
     /**
+     * True if the visual should always be rebuilt on changes, false to allow for some caching.
+     * @returns {boolean|*}
+     */
+    shouldAlwaysRebuild() {
+        return this.mainVisual !== null && this.mainVisual.shouldAlwaysRebuild();
+    }
+
+    /**
      * True if the visual was highlighted by the user, false if it was not
      * @returns {boolean}
      */
@@ -532,6 +540,8 @@ class EnemyVisual extends Signalable {
             // this._$mainVisualParent.css('margin-left', `${parentMargin}px`).css('margin-top', `${parentMargin}px`)
             //     .css('width', `${outerWidth}px`).css('height', `${outerHeight}px`);
         }
+
+        this.mainVisual.refreshSize();
 
         // Hide/show modifiers based on zoom level
         this._refreshModifierVisibility(outerWidth, outerHeight, margin);
