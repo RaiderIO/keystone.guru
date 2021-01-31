@@ -23,7 +23,7 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
         <div class="container">
             <div class="form-group">
                 <div class="row mb-2 mt-2 no-gutters">
-                    <div class="col-10">
+                    <div class="col-10 pr-2">
                         <div id="killzones_new_pull" class="btn btn-success w-100">
                             <i class="fas fa-plus"></i> {{__('New pull')}}
                         </div>
