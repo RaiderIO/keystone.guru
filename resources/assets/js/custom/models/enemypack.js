@@ -1,16 +1,17 @@
 // $(function () {
-    L.Draw.EnemyPack = L.Draw.Polygon.extend({
-        statics: {
-            TYPE: 'enemypack'
-        },
-        options: {},
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.EnemyPack.TYPE;
+L.Draw.EnemyPack = L.Draw.Polygon.extend({
+    statics: {
+        TYPE: 'enemypack'
+    },
+    options: {},
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.EnemyPack.TYPE;
 
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
 // });
 
 class EnemyPack extends MapObject {
@@ -21,6 +22,8 @@ class EnemyPack extends MapObject {
 
         this.color = null;
         this.rawEnemies = [];
+
+        getState().register('numberstyle:changed', this, this.rebindTooltip.bind(this));
     }
 
     /**
@@ -100,7 +103,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if( enemy !== null ) {
+            if (enemy !== null) {
                 // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
                 enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
             } else {
@@ -149,6 +152,7 @@ class EnemyPack extends MapObject {
 
         let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
         enemyPackMapObjectGroup.setLayerToMapObject(result, this);
+        this.rebindTooltip();
     }
 
     /**
@@ -176,6 +180,41 @@ class EnemyPack extends MapObject {
     // this.decorator.addTo(this.map.leafletMap);
     // }
 
+    bindTooltip() {
+        super.bindTooltip();
+
+        if (this.layer !== null) {
+            let displayText = getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES ?
+                `+${this.getEnemyForces()}` : `+${getFormattedPercentage(this.getEnemyForces(), this.map.getEnemyForcesRequired())}%`;
+
+            this.layer.bindTooltip(displayText, {
+                sticky: true,
+                direction: 'top'
+            });
+        }
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+    getEnemyForces() {
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.rawEnemies.length; i++) {
+            let rawEnemy = this.rawEnemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
+            result += enemy.getEnemyForces();
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getVertices() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
@@ -197,5 +236,6 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         super.cleanup();
+        getState().unregister('numberstyle:changed', this);
     }
 }
