@@ -27,7 +27,7 @@ class EnemyVisualManager extends Signalable {
             if (addedEnemy.id > 0 && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
                 self._enemyVisibilityMap[addedEnemy.id] = {
                     wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
-                    lastRefreshedZoomLevel: getState().getMapZoomLevel()
+                    lastRefreshedZoomLevel: parseInt(getState().getMapZoomLevel())
                 };
                 self._enemyMouseMoveDistanceData[addedEnemy.id] = {
                     lastCheckTime: 0,
@@ -78,7 +78,7 @@ class EnemyVisualManager extends Signalable {
                         window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
                     }
                     // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
-                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = zoomLevelChangedEvent.data.mapZoomLevel;
+                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = parseInt(zoomLevelChangedEvent.data.mapZoomLevel);
                 }
             }
         }
@@ -163,7 +163,7 @@ class EnemyVisualManager extends Signalable {
     _onLeafletMapMove(mouseMoveEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let currentZoomLevel = getState().getMapZoomLevel();
+        let currentZoomLevel = parseInt(getState().getMapZoomLevel());
 
         let currTime = (new Date()).getTime();
         // Once every 100 ms, calculation is expensive

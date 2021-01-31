@@ -429,8 +429,8 @@ class KillZone extends MapObject {
 
         // Only if we actually have a tooltip to refresh
         if (this.isVisible()) {
-            let currZoomLevel = mapZoomLevelChangedEvent.data.mapZoomLevel;
-            let prevZoomLevel = mapZoomLevelChangedEvent.data.previousMapZoomLevel;
+            let currZoomLevel = parseInt(mapZoomLevelChangedEvent.data.mapZoomLevel);
+            let prevZoomLevel = parseInt(mapZoomLevelChangedEvent.data.previousMapZoomLevel);
 
             // Don't do any unnecessary redrawings, they are costly
             if (// Zoomed out
@@ -877,7 +877,7 @@ class KillZone extends MapObject {
             if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
                 let tooltipText = this.index + '';
 
-                if (getState().getMapZoomLevel() > 2) {
+                if (getState().getMapZoomLevel() > c.map.killzone.percentage_display_zoom) {
                     if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
                         let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;

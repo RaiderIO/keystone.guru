@@ -78,7 +78,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         }
 
         // Inverse zoom
-        width += (5 - getState().getMapZoomLevel());
+        width += (c.map.settings.maxZoom - getState().getMapZoomLevel());
 
         return width;
     }

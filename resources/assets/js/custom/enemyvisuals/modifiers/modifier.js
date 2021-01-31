@@ -79,7 +79,7 @@ class EnemyVisualModifier extends EnemyVisualIcon {
     }
 
     /**
-     * @param currentZoomLevel {int}
+     * @param currentZoomLevel {float}
      * @param width {float}
      * @param height {float}
      * @param margin {float}
