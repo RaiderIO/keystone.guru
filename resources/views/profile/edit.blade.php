@@ -13,7 +13,7 @@ $menuItems = [
 if (!$isOAuth) {
     $menuItems[] = ['icon' => 'fa-key', 'text' => __('Change password'), 'target' => '#change-password'];
 }
-//$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('Privacy'), 'target' => '#privacy'];
+$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('Privacy'), 'target' => '#privacy'];
 $menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#reports'];
 
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
@@ -281,22 +281,22 @@ $deleteConsequences = $user->getDeleteConsequences();
             </div>
         @endif
 
-{{--        <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">--}}
-{{--            <h4>--}}
-{{--                {{ __('Privacy') }}--}}
-{{--            </h4>--}}
-{{--            {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}--}}
-{{--            <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">--}}
-{{--                {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}--}}
-{{--                {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}--}}
-{{--            </div>--}}
+        <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
+            <h4>
+                {{ __('Privacy') }}
+            </h4>
+            {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}
+            <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
+                {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}
+                {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
+            </div>
 {{--            <div class="form-group{{ $errors->has('adsense_no_personalized_ads') ? ' has-error' : '' }}">--}}
 {{--                {!! Form::label('adsense_no_personalized_ads', __('Google Adsense no personalized ads')) !!}--}}
 {{--                {!! Form::checkbox('adsense_no_personalized_ads', 1, $user->adsense_no_personalized_ads, ['class' => 'form-control left_checkbox']) !!}--}}
 {{--            </div>--}}
-{{--            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}--}}
-{{--            {!! Form::close() !!}--}}
-{{--        </div>--}}
+            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::close() !!}
+        </div>
 
         <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
             <h4>
