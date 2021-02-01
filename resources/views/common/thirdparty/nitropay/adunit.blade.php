@@ -17,21 +17,16 @@ $isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
 ?>
 <script type="text/javascript">
-    /** Tracks which nitropay ads are anchors, if an anchor is found, don't perform the below code since you can't report those ads */
-    var nitropayIsAnchor = {};
+    nitropayAdLoadedEvents[{{ $random }}] = event => {
+        let adId = '{{ $random }}';
+        if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+            // Move the report ad button to a more convenient place
+            let reportLink = document.getElementById('nitropay-{{ $random }}').getElementsByClassName('report-link')[0];
 
-    if (window.nitroAds && window.nitroAds.loaded) {
-        // nitroAds was already loaded
-    } else {
-        // wait for loaded event
-        document.addEventListener('nitroAds.loaded', event => {
-            let adId = '{{ $random }}';
-            if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+            if (typeof reportLink !== 'undefined') {
                 // Show the remove ads button
                 document.getElementById('nitropay-{{ $random }}-remove-ads').setAttribute('style', '');
 
-                // Move the report ad button to a more convenient place
-                let reportLink = document.getElementById('nitropay-{{ $random }}').getElementsByClassName('report-link')[0];
                 reportLink.setAttribute('style', '');
                 reportLink.setAttribute('class', 'report-link nitropay');
 
@@ -41,8 +36,18 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
 
                 let target = document.getElementById('nitropay-{{ $random }}-report-ad');
                 target.appendChild(reportLink);
+            } else {
+                console.log('Ad {{ $random }} not found - retrying in 1 sec');
+                setTimeout(nitropayAdLoadedEvents[adId], 1000, event);
             }
-        });
+        }
+    };
+
+    if (window.nitroAds && window.nitroAds.loaded) {
+        // nitroAds was already loaded
+    } else {
+        // wait for loaded event
+        document.addEventListener('nitroAds.loaded', nitropayAdLoadedEvents['{{ $random }}']);
     }
 </script>
 
