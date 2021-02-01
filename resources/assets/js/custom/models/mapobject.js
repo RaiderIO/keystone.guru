@@ -738,7 +738,7 @@ class MapObject extends Signalable {
      */
     isVisibleOnScreen() {
         let result = false;
-        if (this.isVisible() && this.layer !== null) {
+        if (this.layer !== null && this.isVisible()) {
             result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;
@@ -757,6 +757,16 @@ class MapObject extends Signalable {
      */
     bindTooltip() {
 
+    }
+
+    /**
+     * Unbinds and binds the tooltip again.
+     */
+    rebindTooltip() {
+        if (this.layer !== null) {
+            this.unbindTooltip();
+        }
+        this.bindTooltip();
     }
 
     /**

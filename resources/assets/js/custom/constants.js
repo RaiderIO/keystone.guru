@@ -45,6 +45,11 @@ let c = {
         animated_polylines: 'animated-polylines'
     },
     map: {
+        settings: {
+            minZoom: 1,
+            maxZoom: 5,
+            zoomSnap: 0.2
+        },
         admin: {
             mapobject: {
                 colors: {

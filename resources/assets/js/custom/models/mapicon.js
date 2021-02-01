@@ -133,12 +133,4 @@ class MapIcon extends Icon {
     toString() {
         return `Map icon (${this.comment.substring(0, 25)})`;
     }
-
-    cleanup() {
-        super.cleanup();
-
-        getState().unregister('mapzoomlevel:changed', this);
-        this.map.unregister('map:mapstatechanged', this);
-        this.unregister('object:changed', this);
-    }
 }

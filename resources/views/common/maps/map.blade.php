@@ -22,7 +22,7 @@ $isProduction = config('app.env') === 'production';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction) {
+if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction || $embed) {
     $showAds = false;
 }
 // No UI on the map
@@ -33,6 +33,7 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
+$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
@@ -118,21 +119,29 @@ if ($isAdmin) {
 
 
 
+
+
     </script>
 @endsection
 
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-@if(!$edit)
-    <header class="fixed-top route_echo_top_header">
-        <div class="container">
-            <!-- Echo controls injected here through echocontrols.js -->
-            <span id="route_echo_container" class="text-center">
 
-        </span>
-        </div>
-    </header>
+@if(($showAds && !$isMobile || !$edit))
+<header class="fixed-top">
+@if($showAds && !$isMobile)
+    <div class="container p-0 map_top_header_background" style="width: 728px">
+        @include('common.thirdparty.adunit', ['type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
+    </div>
+@endif
+@if(!$edit)
+    <div class="container p-0 map_top_header_background" style="width: 100px">
+        <!-- Echo controls injected here through echocontrols.js -->
+        <span id="route_echo_container" class="text-center"></span>
+    </div>
+@endif
+</header>
 @endif
 
 @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
@@ -174,15 +183,6 @@ if ($isAdmin) {
     </footer>
 @endif
 
-@if($showAds)
-    @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
-    @if($isMobile)
-        <div id="map_ad_horizontal">
-            @include('common.thirdparty.adunit', ['type' => 'mapsmall_horizontal'])
-        </div>
-    @else
-        <div id="map_ad_vertical">
-            @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
-        </div>
-    @endif
+@if($showAds && $isMobile)
+    @include('common.thirdparty.adunit', ['type' => 'header'])
 @endif

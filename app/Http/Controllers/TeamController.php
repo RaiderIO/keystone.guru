@@ -17,9 +17,13 @@ use App\Models\Team;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Session;
@@ -29,21 +33,25 @@ class TeamController extends Controller
 {
     /**
      * @param TeamFormRequest $request
-     * @param Team $team
+     * @param string $team
      * @return mixed
      * @throws Exception
      */
-    public function store($request, Team $team = null)
+    public function store(TeamFormRequest $request, string $team = null)
     {
         $new = $team === null;
+
         if ($new) {
             $team = new Team();
             $team->name = $request->get('name');
+            $team->public_key = Team::generateRandomPublicKey();
+        } else {
+            $team = Team::where('public_key', $team)->firstOrFail();
         }
 
         /** @var Team $team */
         $team->description = $request->get('description');
-        $team->invite_code = Team::generateRandomInviteCode();
+        $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
         $logo = $request->file('logo');
@@ -91,15 +99,20 @@ class TeamController extends Controller
 
     /**
      * @param Request $request
-     * @param Team $team
-     * @return Factory|View
+     * @param string $team
+     * @return Application|ResponseFactory|RedirectResponse|Response
      * @throws AuthorizationException
      */
-    public function edit(Request $request, Team $team)
+    public function edit(Request $request, string $team)
     {
-        $this->authorize('edit', $team);
+        $teamModel = $this->_getModel($team);
+        if (!($teamModel instanceof Team)) {
+            return $teamModel;
+        }
 
-        return view('team.edit', ['model' => $team]);
+        $this->authorize('edit', $teamModel);
+
+        return view('team.edit', ['model' => $teamModel]);
     }
 
     /**
@@ -123,16 +136,21 @@ class TeamController extends Controller
 
     /**
      * @param TeamFormRequest $request
-     * @param Team $team
-     * @return Factory|View
+     * @param string $team
+     * @return Team|Factory|Builder|Model|RedirectResponse|View|object
      * @throws Exception
      */
-    public function update(TeamFormRequest $request, Team $team)
+    public function update(TeamFormRequest $request, string $team)
     {
-        $this->authorize('edit', $team);
+        $teamModel = $this->_getModel($team);
+        if (!($teamModel instanceof Team)) {
+            return $teamModel;
+        }
+
+        $this->authorize('edit', $teamModel);
 
         // Store it and show the edit page again
-        $team = $this->store($request, $team);
+        $teamModel = $this->store($request, $team);
 
         // Message to the user
         Session::flash('status', __('Team updated'));
@@ -239,5 +257,26 @@ class TeamController extends Controller
         }
 
         return view('team.edit')->withErrors($error);
+    }
+
+    /**
+     * @param string $team
+     * @return Team|Builder|Model|RedirectResponse|object
+     */
+    private function _getModel(string $team)
+    {
+        $teamModel = Team::where('name', $team)->first();
+
+        if ($teamModel !== null) {
+            return redirect()->route('team.edit', ['team' => $teamModel->public_key]);
+        }
+
+        $teamModel = Team::where('public_key', $team)->first();
+
+        if ($teamModel === null) {
+            abort(StatusCode::NOT_FOUND);
+        }
+
+        return $teamModel;
     }
 }

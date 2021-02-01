@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Traits\GeneratesPublicKey;
 use App\User;
 use Eloquent;
 use Exception;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * @property $id int
+ * @property $public_key string
  * @property $icon_file_id int
  * @property $name string
  * @property $description string
@@ -29,9 +31,15 @@ class Team extends IconFileModel
 {
     protected $visible = ['name', 'description'];
 
+    use GeneratesPublicKey;
+
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
     public function getRouteKeyName()
     {
-        return 'name';
+        return 'public_key';
     }
 
     /**
@@ -63,7 +71,7 @@ class Team extends IconFileModel
      * @param $user User
      * @return boolean
      */
-    public function canAddRemoveRoute(User $user)
+    public function canAddRemoveRoute(User $user): bool
     {
         $userRole = $this->getUserRole($user);
         $roles = config('keystoneguru.team_roles');
@@ -77,7 +85,7 @@ class Team extends IconFileModel
      * @param DungeonRoute $dungeonRoute The route to add.
      * @return boolean True if successful, false if not (already assigned, for example).
      */
-    public function addRoute(DungeonRoute $dungeonRoute)
+    public function addRoute(DungeonRoute $dungeonRoute): bool
     {
         $result = false;
         // Not set
@@ -96,7 +104,7 @@ class Team extends IconFileModel
      * @param DungeonRoute $dungeonRoute The route to remove.
      * @return boolean True if successful, false if not (already removed, for example).
      */
-    public function removeRoute(DungeonRoute $dungeonRoute)
+    public function removeRoute(DungeonRoute $dungeonRoute): bool
     {
         $result = false;
         // Set already
@@ -117,7 +125,7 @@ class Team extends IconFileModel
      * @param $user User
      * @return string|boolean
      */
-    public function getUserRole($user)
+    public function getUserRole(User $user)
     {
         /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();
@@ -130,7 +138,7 @@ class Team extends IconFileModel
      * @param $targetUser User The user that is targeted for a role change.
      * @return array
      */
-    public function getAssignableRoles($user, $targetUser)
+    public function getAssignableRoles(User $user, User $targetUser)
     {
         $userRole = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
@@ -168,7 +176,7 @@ class Team extends IconFileModel
      * @param $role string
      * @return boolean
      */
-    public function canChangeRole($user, $targetUser, $role)
+    public function canChangeRole($user, $targetUser, $role): bool
     {
         $result = false;
         $roles = config('keystoneguru.team_roles');
@@ -197,7 +205,7 @@ class Team extends IconFileModel
      * @param $user User The user of which the role should be changed.
      * @param $role string The new role of the user.
      */
-    public function changeRole($user, $role)
+    public function changeRole(User $user, string $role): void
     {
         $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();
         $roles = config('keystoneguru.team_roles');
@@ -212,7 +220,7 @@ class Team extends IconFileModel
     /**
      * @return bool Checks if the current user is a member of this team.
      */
-    public function isCurrentUserMember()
+    public function isCurrentUserMember(): bool
     {
         return $this->isUserMember(Auth::user());
     }
@@ -222,7 +230,7 @@ class Team extends IconFileModel
      * @param $user  User
      * @return bool True if the user is, false if not.
      */
-    public function isUserCollaborator($user)
+    public function isUserCollaborator($user): bool
     {
         $userRole = $this->getUserRole($user);
         return $userRole !== false && $userRole !== 'member';
@@ -234,7 +242,7 @@ class Team extends IconFileModel
      * @param $user User
      * @return bool
      */
-    public function isUserModerator($user)
+    public function isUserModerator(User $user): bool
     {
         $userRole = $this->getUserRole($user);
         return $userRole === 'moderator' || $userRole === 'admin';
@@ -245,7 +253,7 @@ class Team extends IconFileModel
      * @param $user User
      * @return bool
      */
-    public function isUserMember($user)
+    public function isUserMember(USer $user): bool
     {
         return $user !== null ? $this->members()->where('user_id', $user->id)->count() === 1 : false;
     }
@@ -256,7 +264,7 @@ class Team extends IconFileModel
      * @param User $targetUser The user that's to be removed.
      * @return boolean
      */
-    public function canRemoveMember(User $user, User $targetUser)
+    public function canRemoveMember(User $user, User $targetUser): bool
     {
         $userRole = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
@@ -275,7 +283,7 @@ class Team extends IconFileModel
      * @param User $member The user to remove.
      * @return boolean True if successful, false if not (already removed, for example).
      */
-    public function removeMember(User $member)
+    public function removeMember(User $member): bool
     {
         $result = false;
         // Only if the user could be found..
@@ -297,7 +305,7 @@ class Team extends IconFileModel
      * @param $user User
      * @param $role string
      */
-    public function addMember($user, $role)
+    public function addMember(User $user, string $role): void
     {
         // Prevent duplicate member listings
         if (!$this->isUserMember($user)) {
@@ -315,7 +323,7 @@ class Team extends IconFileModel
      * @return User|null Null returned if there was no change in owner.
      * @var $user User
      */
-    public function getNewAdminUponAdminAccountDeletion(User $user)
+    public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
         if ($this->getUserRole($user) !== 'admin') {
             return null;
@@ -338,23 +346,6 @@ class Team extends IconFileModel
         return Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
             ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
             ->get();
-    }
-
-    /**
-     * @return string Generates a random invite code.
-     */
-    public static function generateRandomInviteCode()
-    {
-        do {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $charactersLength = strlen($characters);
-            $newKey = '';
-            for ($i = 0; $i < 12; $i++) {
-                $newKey .= $characters[rand(0, $charactersLength - 1)];
-            }
-        } while (Team::all()->where('public_key', $newKey)->count() > 0);
-
-        return $newKey;
     }
 
     public static function boot()

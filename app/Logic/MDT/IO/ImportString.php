@@ -660,6 +660,11 @@ class ImportString extends MDTBase
 
             // For each object the user created
             $this->_parseObjects($warnings, $decoded, $dungeonRoute, $save);
+
+            // Re-calculate the enemy forces
+            if ($save) {
+                $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+            }
         }
 
         return $dungeonRoute;

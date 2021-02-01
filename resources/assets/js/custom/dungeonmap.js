@@ -135,18 +135,16 @@ class DungeonMap extends Signalable {
         this.mapTileLayer = null;
 
         // Create the map object
-        this.leafletMap = L.map(mapid, {
+        this.leafletMap = L.map(mapid, $.extend({
             center: [0, 0],
-            minZoom: 1,
-            maxZoom: 5,
             // We use a custom draw control, so don't use this
             // drawControl: true,
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
             crs: L.CRS.Simple,
             // Context menu when right clicking stuff
             contextmenu: true,
-            zoomControl: false
-        });
+            zoomControl: false,
+        }, c.map.settings));
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar

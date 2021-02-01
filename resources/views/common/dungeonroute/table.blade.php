@@ -29,10 +29,14 @@ if ($team !== null) {
 
 $autocompleteTags = collect();
 
-if ($team === null) {
-    $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL))->get();
+if( Auth::check() ) {
+    if ($team === null) {
+        $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL))->get();
+    } else {
+        $autocompleteTags = $team->getAvailableTags();
+    }
 } else {
-    $autocompleteTags = $team->getAvailableTags();
+    $autocompletetags = collect();
 }
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',

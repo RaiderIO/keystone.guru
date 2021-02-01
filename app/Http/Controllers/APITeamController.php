@@ -141,7 +141,7 @@ class APITeamController extends Controller
     {
         $this->authorize('refresh-invite-link', $team);
 
-        $team->invite_code = Team::generateRandomInviteCode();
+        $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         $team->save();
 
         return ['new_invite_link' => route('team.invite', ['invitecode' => $team->invite_code])];
