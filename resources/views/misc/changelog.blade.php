@@ -17,5 +17,5 @@ $isAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
         @include('common.release.release', ['release' => $release])
     @endforeach
 
-    {{ $releases->links() }}
+    {{ $releases->onEachSide(2)->links() }}
 @endsection
