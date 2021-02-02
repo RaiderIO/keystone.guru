@@ -34,7 +34,7 @@ $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Show ads if not set
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction) {
+if ($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) {
     // No ads
     $showAds = false;
 }
@@ -311,7 +311,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
         @if( $showAds && !$isMobile)
             <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['type' => 'header', 'reportAdPosition' => 'top-right'])
+                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
             </div>
         @endif
 
@@ -350,7 +350,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 
         @if( $showAds )
             <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['type' => 'footer'])
+                @include('common.thirdparty.adunit', ['id' => 'site_bottom_header', 'type' => 'footer'])
             </div>
         @endif
 

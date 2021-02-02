@@ -4,34 +4,33 @@ $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
     'responsive' => 'top-right',
-    'header' => 'bottom-right',
-    'footer' => 'top-right',
+    'header'     => 'bottom-right',
+    'footer'     => 'top-right',
 ];
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
-$random = rand(0, 1000000);
 
 $isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
 // If we're on mobile, anchor ads do not have a report button so don't render it
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
+$id            = 'nitropay-' . (isset($id) ? $id : 'adunit-' . rand(0, 1000000));
+
+if ($isMobile) {
+    $id .= '_mobile';
+}
 ?>
 <script type="text/javascript">
-    /** Tracks which nitropay ads are anchors, if an anchor is found, don't perform the below code since you can't report those ads */
-    var nitropayIsAnchor = {};
+    nitropayAdLoadedEvents['{{ $id }}'] = event => {
+        let adId = '{{ $id }}';
+        if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+            // Move the report ad button to a more convenient place
+            let reportLink = document.getElementById(adId).getElementsByClassName('report-link')[0];
 
-    if (window.nitroAds && window.nitroAds.loaded) {
-        // nitroAds was already loaded
-    } else {
-        // wait for loaded event
-        document.addEventListener('nitroAds.loaded', event => {
-            let adId = '{{ $random }}';
-            if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+            if (typeof reportLink !== 'undefined') {
                 // Show the remove ads button
-                document.getElementById('nitropay-{{ $random }}-remove-ads').setAttribute('style', '');
+                document.getElementById(`${adId}-remove-ads`).setAttribute('style', '');
 
-                // Move the report ad button to a more convenient place
-                let reportLink = document.getElementById('nitropay-{{ $random }}').getElementsByClassName('report-link')[0];
                 reportLink.setAttribute('style', '');
                 reportLink.setAttribute('class', 'report-link nitropay');
 
@@ -39,24 +38,34 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
                 aReportLink.style['color'] = 'unset';
                 aReportLink.style['margin-top'] = '0';
 
-                let target = document.getElementById('nitropay-{{ $random }}-report-ad');
+                let target = document.getElementById(`${adId}-report-ad`);
                 target.appendChild(reportLink);
+            } else {
+                console.log(`Ad ${adId} not found - retrying in 1 sec`);
+                setTimeout(nitropayAdLoadedEvents[adId], 1000, event);
             }
-        });
+        }
+    };
+
+    if (window.nitroAds && window.nitroAds.loaded) {
+        // nitroAds was already loaded
+    } else {
+        // wait for loaded event
+        document.addEventListener('nitroAds.loaded', nitropayAdLoadedEvents['{{ $id }}']);
     }
 </script>
 
 <div>
 @if($hasAdControls && strpos($reportAdPosition, 'top') !== false)
-    @include('common.thirdparty.nitropay.adcontrols', ['random' => $random])
+    @include('common.thirdparty.nitropay.adcontrols', ['id' => $id])
 @endif
 
 @if( $type === 'responsive' )
     <!-- Responsive ad unit -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
+        <div id="{{ $id }}" class="ad_block_me"></div>
 
         <script type="text/javascript">
-            window['nitroAds'].createAd('nitropay-{{ $random }}', {
+            window['nitroAds'].createAd('{{ $id }}', {
                 "refreshLimit": 10,
                 "refreshTime": 30,
 
@@ -71,10 +80,10 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
         </script>
 @elseif( $type === 'header' )
     <!-- Top header ad unit -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
+        <div id="{{ $id }}" class="ad_block_me"></div>
         @if( $isMobile )
             <script type="text/javascript">
-                window['nitroAds'].createAd('nitropay-{{ $random }}', {
+                window['nitroAds'].createAd('{{ $id }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
                     "format": "anchor",
@@ -86,11 +95,11 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
                         "position": "{{ $reportAdPosition }}"
                     }
                 });
-                nitropayIsAnchor['{{ $random }}'] = true;
+                nitropayIsAnchor['{{ $id }}'] = true;
             </script>
         @else
             <script type="text/javascript">
-                window['nitroAds'].createAd('nitropay-{{ $random }}', {
+                window['nitroAds'].createAd('{{ $id }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
 
@@ -105,18 +114,18 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
                     "report": {
                         "enabled": true,
                         "wording": "Report Ad",
-                        "position": "{{ $reportAdPosition }}"
+                        "position": "{{ $id }}"
                     }
                 });
             </script>
         @endif
     @elseif( $type === 'footer' )
     <!-- Footer ad unit -->
-        <div id="nitropay-{{ $random }}" class="ad_block_me"></div>
+        <div id="{{ $id }}" class="ad_block_me"></div>
 
         @if( $isMobile )
             <script type="text/javascript">
-                window['nitroAds'].createAd('nitropay-{{ $random }}', {
+                window['nitroAds'].createAd('{{ $id }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
                     "demo": {{$demo}},
@@ -129,11 +138,11 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
                     },
                     "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
                 });
-                nitropayIsAnchor['{{ $random }}'] = true;
+                nitropayIsAnchor['{{ $id }}'] = true;
             </script>
         @else
             <script type="text/javascript">
-                window['nitroAds'].createAd('nitropay-{{ $random }}', {
+                window['nitroAds'].createAd('{{ $id }}', {
                     "refreshLimit": 10,
                     "refreshTime": 30,
 
@@ -158,5 +167,5 @@ $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
 </div>
 
 @if($hasAdControls && strpos($reportAdPosition, 'bottom') !== false)
-    @include('common.thirdparty.nitropay.adcontrols', ['random' => $random])
+    @include('common.thirdparty.nitropay.adcontrols', ['id' => $id])
 @endif

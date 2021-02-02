@@ -17,12 +17,10 @@ $enemyVisualType = (isset($enemyVisualType) ? $enemyVisualType : isset($_COOKIE[
 $echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
 $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 
-// Easy switch
-$isProduction = config('app.env') === 'production';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction || $embed) {
+if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || $embed) {
     $showAds = false;
 }
 // No UI on the map
@@ -132,7 +130,7 @@ if ($isAdmin) {
 <header class="fixed-top">
 @if($showAds && !$isMobile)
     <div class="container p-0 map_top_header_background" style="width: 728px">
-        @include('common.thirdparty.adunit', ['type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
+        @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
     </div>
 @endif
 @if(!$edit)
@@ -184,5 +182,5 @@ if ($isAdmin) {
 @endif
 
 @if($showAds && $isMobile)
-    @include('common.thirdparty.adunit', ['type' => 'header'])
+    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
 @endif
