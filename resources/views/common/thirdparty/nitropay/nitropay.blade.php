@@ -1,7 +1,7 @@
 <script type="text/javascript">
     /** Tracks which nitropay ads are anchors, if an anchor is found, don't perform the below code since you can't report those ads */
     var nitropayIsAnchor = {};
-    var nitropayAdLoadedEvents = {};
+    var nitropayAdRenderedEvents = {};
 
     window["nitroAds"] = window["nitroAds"] || {
         createAd: function () {
