@@ -117,6 +117,8 @@ if ($timezone === null) {
         </li>
     </ul>
 
+    @php(\App\Logic\Utils\Stopwatch::dumpAll())
+
     <div class="mt-4 col-12 text-center">
         <p>
             {{ __('Last updated at 2021/Feb/02.') }}

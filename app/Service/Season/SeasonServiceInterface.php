@@ -3,19 +3,23 @@
 
 namespace App\Service\Season;
 
+use App\Models\Season;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+
 interface SeasonServiceInterface
 {
-    function getSeasons();
+    function getSeasons(): Collection;
 
-    function getFirstSeason();
+    function getFirstSeason(): Season;
 
-    function getSeasonAt($date);
+    function getSeasonAt(Carbon $date);
 
-    function getCurrentSeason();
+    function getCurrentSeason(): ?Season;
 
-    function getIterationsAt($date);
+    function getIterationsAt(Carbon $date): int;
 
-    function getAffixGroupIndexAt($date);
+    function getAffixGroupIndexAt(Carbon $date): int;
 
-    function getDisplayedAffixGroups($iterationOffset);
+    function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

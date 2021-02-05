@@ -4,7 +4,9 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CharacterRaceClassCoupling;
+use App\Models\Faction;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 class CharacterInfoSeeder extends Seeder
@@ -18,39 +20,39 @@ class CharacterInfoSeeder extends Seeder
 
         $this->command->info('Adding known races');
 
-        $alliance_id = \App\Models\Faction::all()->where('name', '=', 'Alliance')->first()->id;
-        $horde_id = \App\Models\Faction::all()->where('name', '=', 'Horde')->first()->id;
+        $alliance_id = Faction::where('name', '=', 'Alliance')->first()->id;
+        $horde_id = Faction::where('name', '=', 'Horde')->first()->id;
 
         if ($alliance_id === 0 || $horde_id === 0) {
             throw new Exception('Unable to find factions');
         }
 
         // Do the name as key => value so we can easily fetch it later on
-        $races = ['Human' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Dwarf' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Night Elf' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Gnome' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Worgen' => new CharacterRace(['faction_id' => $alliance_id]),
-            'PandarenAlliance' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Void Elf' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Lightforged Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Dark Iron Dwarf' => new CharacterRace(['faction_id' => $alliance_id]),
+        $races = ['Human'               => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Dwarf'               => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Night Elf'           => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Gnome'               => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Draenei'             => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Worgen'              => new CharacterRace(['faction_id' => $alliance_id]),
+                  'PandarenAlliance'    => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Void Elf'            => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Lightforged Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Dark Iron Dwarf'     => new CharacterRace(['faction_id' => $alliance_id]),
 
 
-            'Orc' => new CharacterRace(['faction_id' => $horde_id]),
-            'Undead' => new CharacterRace(['faction_id' => $horde_id]),
-            'Tauren' => new CharacterRace(['faction_id' => $horde_id]),
-            'Troll' => new CharacterRace(['faction_id' => $horde_id]),
-            'Blood Elf' => new CharacterRace(['faction_id' => $horde_id]),
-            'Goblin' => new CharacterRace(['faction_id' => $horde_id]),
-            'PandarenHorde' => new CharacterRace(['faction_id' => $horde_id]),
-            'Nightborne' => new CharacterRace(['faction_id' => $horde_id]),
-            'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
-            'Mag\'har Orc' => new CharacterRace(['faction_id' => $horde_id]),
+                  'Orc'                 => new CharacterRace(['faction_id' => $horde_id]),
+                  'Undead'              => new CharacterRace(['faction_id' => $horde_id]),
+                  'Tauren'              => new CharacterRace(['faction_id' => $horde_id]),
+                  'Troll'               => new CharacterRace(['faction_id' => $horde_id]),
+                  'Blood Elf'           => new CharacterRace(['faction_id' => $horde_id]),
+                  'Goblin'              => new CharacterRace(['faction_id' => $horde_id]),
+                  'PandarenHorde'       => new CharacterRace(['faction_id' => $horde_id]),
+                  'Nightborne'          => new CharacterRace(['faction_id' => $horde_id]),
+                  'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
+                  'Mag\'har Orc'        => new CharacterRace(['faction_id' => $horde_id]),
 
-            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
+                  'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
+                  'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
         ];
 
         foreach ($races as $name => $race) {
@@ -58,31 +60,31 @@ class CharacterInfoSeeder extends Seeder
             // Pesky Pandaren
             $race->name = str_replace('Alliance', '', $race->name);
             $race->name = str_replace('Horde', '', $race->name);
-            /** @var $race \Illuminate\Database\Eloquent\Model */
+            /** @var $race Model */
             $race->save();
         }
 
         $this->command->info('Adding known classes');
 
         // Do NOT change the order of this array!
-        $classes = ['Warrior' => new CharacterClass(['color' => '#C79C6E']),
-            'Hunter' => new CharacterClass(['color' => '#ABD473']),
-            'Death Knight' => new CharacterClass(['color' => '#C41F3B']),
-            'Mage' => new CharacterClass(['color' => '#69CCF0']),
-            'Priest' => new CharacterClass(['color' => '#FFFFFF']),
-            'Monk' => new CharacterClass(['color' => '#00FF96']),
-            'Rogue' => new CharacterClass(['color' => '#FFF569']),
-            'Warlock' => new CharacterClass(['color' => '#9482C9']),
-            'Shaman' => new CharacterClass(['color' => '#0070DE']),
-            'Paladin' => new CharacterClass(['color' => '#F58CBA']),
-            'Druid' => new CharacterClass(['color' => '#FF7D0A']),
-            'Demon Hunter' => new CharacterClass(['color' => '#A330C9'])];
+        $classes = ['Warrior'      => new CharacterClass(['color' => '#C79C6E']),
+                    'Hunter'       => new CharacterClass(['color' => '#ABD473']),
+                    'Death Knight' => new CharacterClass(['color' => '#C41F3B']),
+                    'Mage'         => new CharacterClass(['color' => '#69CCF0']),
+                    'Priest'       => new CharacterClass(['color' => '#FFFFFF']),
+                    'Monk'         => new CharacterClass(['color' => '#00FF96']),
+                    'Rogue'        => new CharacterClass(['color' => '#FFF569']),
+                    'Warlock'      => new CharacterClass(['color' => '#9482C9']),
+                    'Shaman'       => new CharacterClass(['color' => '#0070DE']),
+                    'Paladin'      => new CharacterClass(['color' => '#F58CBA']),
+                    'Druid'        => new CharacterClass(['color' => '#FF7D0A']),
+                    'Demon Hunter' => new CharacterClass(['color' => '#A330C9'])];
 
         foreach ($classes as $name => $class) {
             $class->name = $name;
             // Temp file
             $class->icon_file_id = -1;
-            /** @var $race \Illuminate\Database\Eloquent\Model */
+            /** @var $race Model */
             $class->save();
 
             $iconName = strtolower(str_replace(' ', '', $class->name));
