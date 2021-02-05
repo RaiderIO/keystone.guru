@@ -4,6 +4,7 @@ use App\Models\DungeonRoute;
 use App\Models\Expansion;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 class DungeonDataSeeder extends Seeder
 {
@@ -230,14 +231,13 @@ class DungeonDataSeeder extends Seeder
         $this->command->warn('Truncating all relevant data...');
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        $demoRoutes = DungeonRoute::all()->where('demo', true);
+        /** @var DungeonRoute[]|Collection $demoRoutes */
+        $demoRoutes = DungeonRoute::where('demo', true)->get();
 
         // Delete each found route that was a demo (controlled by me only)
         // This will remove all killzones, brushlines, paths etc related to the route.
         foreach ($demoRoutes as $demoRoute) {
-            /** @var $demoRoute DungeonRoute */
             try {
-                /** @var $demoRoute Model */
                 $demoRoute->delete();
             } catch (Exception $ex) {
                 $this->command->error(sprintf('%s: Exception deleting demo dungeonroute', $ex->getMessage()));
