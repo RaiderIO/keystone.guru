@@ -57,6 +57,10 @@ html, body, #map, #app, .wrapper {
     background-color: #2B3E50;
 }
 
+.modal {
+    z-index: 100010;
+}
+
 .modal-lg {
     max-width: 80%;
 }
