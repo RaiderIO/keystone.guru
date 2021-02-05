@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\DungeonRoute;
+use App\Models\UserReport;
+use App\Service\Cache\CacheService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use Jenssegers\Agent\Agent;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
@@ -36,10 +41,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
+     * @param CacheService $cacheService
      * @return void
      */
-    public function boot()
+    public function boot(CacheService $cacheService)
     {
-        //
+        view()->share('isMobile', (new Agent())->isMobile());
+        view()->share('demoRoutes', DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get());
+
+        // Can use the Auth() global here!
+        view()->composer('*', function ($view)
+        {
+            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
+        });
     }
 }

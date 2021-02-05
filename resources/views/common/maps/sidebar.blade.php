@@ -1,7 +1,6 @@
 <?php
 /** @var string $anchor */
 
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
 $edit = isset($edit) ? $edit : false;
 $oppositeAnchor = $anchor === 'left' ? 'right' : 'left';

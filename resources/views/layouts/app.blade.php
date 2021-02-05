@@ -1,8 +1,6 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-$numUserReports = \App\Models\UserReport::where('status', 0)->count();
 /** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
-$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
 $dungeons = \App\Models\Dungeon::all();
 
 $user = \Illuminate\Support\Facades\Auth::user();
@@ -42,7 +40,6 @@ if ($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FRE
 $analytics = isset($analytics) ? $analytics : $isProduction;
 // Current Git version
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
 $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
 $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;

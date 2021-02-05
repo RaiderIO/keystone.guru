@@ -12,8 +12,6 @@ $defaultReportAdPosition = [
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
 
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
-
 // If we're on mobile, anchor ads do not have a report button so don't render it
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
 

@@ -37,6 +37,8 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
  *
+ * @property boolean $is_admin
+ *
  * @property DungeonRoute[]|Collection $dungeonroutes
  * @property UserReport[]|Collection $reports
  * @property Team[]|Collection $teams

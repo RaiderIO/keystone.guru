@@ -1,7 +1,5 @@
 <?php
-// @TODO This should be handled differently - defined both here and in app.blade.php
 /** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
-$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
 ?>
 
 @include('common.dungeon.grid', [
