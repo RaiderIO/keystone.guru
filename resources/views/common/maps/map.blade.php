@@ -31,7 +31,6 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
