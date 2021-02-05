@@ -88,7 +88,7 @@ class KillZone extends MapObject {
         this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
 
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
-        getState().register('numberstyle:changed', this, this._numberStyleChanged.bind(this));
+        getState().register('killzonesnumberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
     }
@@ -878,10 +878,10 @@ class KillZone extends MapObject {
                 let tooltipText = this.index + '';
 
                 if (getState().getMapZoomLevel() > c.map.killzone.percentage_display_zoom) {
-                    if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
+                    if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
                         let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;
-                    } else if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES) {
+                    } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
                         tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`;
                     }
                 }
@@ -970,7 +970,7 @@ class KillZone extends MapObject {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('killzone:changed', this);
         getState().unregister('mapzoomlevel:changed', this);
-        getState().unregister('numberstyle:changed', this);
+        getState().unregister('killzonesnumberstyle:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
         this.map.unregister('map:refresh', this);

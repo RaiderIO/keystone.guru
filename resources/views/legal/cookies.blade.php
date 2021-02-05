@@ -223,6 +223,14 @@
                 Remembers if you want to display your pulls in percentages or enemy forces.
             </td>
         </tr>
+        <tr>
+            <td>
+                map_number_style
+            </td>
+            <td>
+                Remembers if you want to display enemies on the map in percentages or enemy forces.
+            </td>
+        </tr>
 
     </table>
     </p>

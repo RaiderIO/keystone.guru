@@ -291,7 +291,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneEnemyForces = killZone.getEnemyForces();
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
 
-        if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_PERCENTAGE) {
+        if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
             let enemyForcesCumulativePercent = getFormattedPercentage(killZone.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
             let enemyForcesPercent = getFormattedPercentage(killZoneEnemyForces, this.map.getEnemyForcesRequired());
 
@@ -300,7 +300,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(
                 `+${enemyForcesPercent}%`
             );
-        } else if (getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES) {
+        } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
                 .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
 
@@ -520,8 +520,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
 
 
+        $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
+            getState().setMapNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);
+        });
+
         $(this.options.killZonesPullsSettingsNumberStyleSelector).bind('change', function () {
-            getState().setKillZonesNumberStyle($(this).is(':checked') ? KILL_ZONES_NUMBER_STYLE_PERCENTAGE : KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES);
+            getState().setKillZonesNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);
         });
 
         $(this.options.killZonesPullsSettingsDeleteAllSelector).bind('click', function () {
@@ -532,7 +536,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             });
         });
 
-        getState().register('numberstyle:changed', this, function () {
+        getState().register('killzonesnumberstyle:changed', this, function () {
             self._updatePullTexts();
         });
 
@@ -704,6 +708,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         this.sidebar.cleanup();
 
-        getState().unregister('numberstyle:changed', this);
+        getState().unregister('killzonesnumberstyle:changed', this);
     }
 }

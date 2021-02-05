@@ -23,7 +23,7 @@ class EnemyPack extends MapObject {
         this.color = null;
         this.rawEnemies = [];
 
-        getState().register('numberstyle:changed', this, this.rebindTooltip.bind(this));
+        getState().register('killzonesnumberstyle:changed', this, this.rebindTooltip.bind(this));
     }
 
     /**
@@ -184,8 +184,7 @@ class EnemyPack extends MapObject {
         super.bindTooltip();
 
         if (this.layer !== null) {
-            let displayText = getState().getKillZonesNumberStyle() === KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES ?
-                `+${this.getEnemyForces()}` : `+${getFormattedPercentage(this.getEnemyForces(), this.map.getEnemyForcesRequired())}%`;
+            let displayText = `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.getEnemyForcesRequired())}%`;
 
             this.layer.bindTooltip(displayText, {
                 sticky: true,
@@ -236,6 +235,6 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         super.cleanup();
-        getState().unregister('numberstyle:changed', this);
+        getState().unregister('killzonesnumberstyle:changed', this);
     }
 }

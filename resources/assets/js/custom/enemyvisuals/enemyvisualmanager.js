@@ -37,7 +37,7 @@ class EnemyVisualManager extends Signalable {
         });
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
-        getState().register('numberstyle:changed', this, this._onNumberStyleChanged.bind(this));
+        getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
