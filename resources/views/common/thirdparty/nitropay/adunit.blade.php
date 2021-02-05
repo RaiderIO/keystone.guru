@@ -22,8 +22,15 @@ if ($isMobile) {
 }
 ?>
 <script type="text/javascript">
-    nitropayAdRenderedEvents['{{ $id }}'] = event => {
+    nitropayAdRenderedEvents['{{ $id }}'] = (event, count = 0) => {
         let adId = '{{ $id }}';
+
+        // Fail safe just in case
+        if( count > 5 ) {
+            // console.log(`Broke out of too much checking for ${adId}`);
+            return;
+        }
+
         if (!nitropayIsAnchor.hasOwnProperty(adId) || !nitropayIsAnchor[adId]) {
             // Move the report ad button to a more convenient place
             let reportLink = document.getElementById(adId).getElementsByClassName('report-link')[0];
@@ -40,11 +47,12 @@ if ($isMobile) {
                 aReportLink.style['margin-top'] = '0';
 
                 let target = document.getElementById(`${adId}-report-ad`);
+                // Clear any previously set report links
                 target.innerHTML = '';
                 target.appendChild(reportLink);
             } else {
-                console.log(`Ad ${adId} not found - retrying in 100ms`);
-                setTimeout(nitropayAdRenderedEvents[adId], 100, event);
+                // console.log(`Ad ${adId} not found - retrying in 200ms`);
+                setTimeout(nitropayAdRenderedEvents[adId], 200, event, ++count);
             }
         }
     };
