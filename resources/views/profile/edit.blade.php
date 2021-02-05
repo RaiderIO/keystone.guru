@@ -290,10 +290,6 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}
                 {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
             </div>
-{{--            <div class="form-group{{ $errors->has('adsense_no_personalized_ads') ? ' has-error' : '' }}">--}}
-{{--                {!! Form::label('adsense_no_personalized_ads', __('Google Adsense no personalized ads')) !!}--}}
-{{--                {!! Form::checkbox('adsense_no_personalized_ads', 1, $user->adsense_no_personalized_ads, ['class' => 'form-control left_checkbox']) !!}--}}
-{{--            </div>--}}
             {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>

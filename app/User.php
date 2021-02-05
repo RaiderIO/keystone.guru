@@ -33,7 +33,6 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property boolean $legal_agreed
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
- * @property boolean $adsense_no_personalized_ads
  * @property boolean $changed_username
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
