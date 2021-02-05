@@ -262,6 +262,8 @@ class RowElementKillZone extends RowElement {
         super.refresh();
         console.assert(this instanceof RowElementKillZone, 'this is not a RowElementKillZone', this);
 
+        this.updateText();
+
         // Fill the enemy list
         let npcs = [];
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -420,8 +422,8 @@ class RowElementKillZone extends RowElement {
         console.assert(this instanceof RowElementKillZone, 'this is not a RowElementKillZone', this);
 
         // Deselect if we were selected and shouldn't be
+        let classes = 'selected bg-success';
         if (this._selected && !selected) {
-            let classes = 'selected bg-success';
             $(`#map_killzonessidebar_killzone_${this.killZone.id} .selected`).removeClass(classes);
         }
 
@@ -449,6 +451,10 @@ class RowElementKillZone extends RowElement {
         return this.killZone;
     }
 
+    /**
+     *
+     * @param callback
+     */
     remove(callback) {
         super.remove();
 
@@ -470,7 +476,7 @@ class RowElementKillZone extends RowElement {
         });
 
         // Unset it, ish
-        this._colorPickers[self.killZone.id] = null;
+        this.colorPicker = null;
         $('#killzones_no_pulls').hide();
     }
 }

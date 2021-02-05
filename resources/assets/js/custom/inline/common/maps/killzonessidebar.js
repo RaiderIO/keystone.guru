@@ -69,7 +69,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-        let self = this;
 
         let rowElementKillZone = new RowElementKillZone(this, killZone);
 
