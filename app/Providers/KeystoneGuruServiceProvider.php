@@ -2,12 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\PaidTier;
+use App\Models\Release;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
+use Tremby\LaravelGitVersion\GitVersionHelper;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
@@ -46,13 +51,44 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      */
     public function boot(CacheService $cacheService)
     {
+        // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
+        $globalViewVariables = $cacheService->remember('global_view_variables', function ()
+        {
+            $demoRoutes = DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
+            return [
+                'isProduction'      => config('app.env') === 'production',
+                'demoRoutes'        => $demoRoutes,
+                'demoRouteDungeons' => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
+                'latestReleaseId'   => Release::max('id')
+            ];
+        }, config('keystoneguru.cache.global_view_variables.ttl'));
+
+        // All views
         view()->share('isMobile', (new Agent())->isMobile());
-        view()->share('demoRoutes', DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get());
+        view()->share('isProduction', $globalViewVariables['isProduction']);
+        view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
+
 
         // Can use the Auth() global here!
-        view()->composer('*', function ($view)
+        view()->composer('*', function (View $view)
         {
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
+            // Not logged in or not having paid for free ads will cause ads to come up
+            $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+        });
+
+        // Main view
+        view()->composer('layouts.app', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('version', GitVersionHelper::getVersion());
+            $view->with('nameAndVersion', GitVersionHelper::getNameAndVersion());
+            $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
+        });
+
+        // Dungeon grid view
+        view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
         });
     }
 }

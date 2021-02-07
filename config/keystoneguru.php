@@ -19,18 +19,24 @@ return [
     ],
 
     'cache' => [
-        'npcs'        => [
+        'npcs'                   => [
             'ttl' => '1 hour'
         ],
-        'dungeonData' => [
+        'dungeonData'            => [
             'ttl' => '1 hour'
         ],
-        'static_data' => [
+        'static_data'            => [
             'ttl' => '1 day'
         ],
-        'mdt'         => [
+        'mdt'                    => [
             'ttl' => '1 day'
-        ]
+        ],
+        'displayed_affix_groups' => [
+            'ttl' => '15 minutes'
+        ],
+        'global_view_variables' => [
+            'ttl' => '1 day'
+        ],
     ],
 
     'echo'                              => [
@@ -150,8 +156,8 @@ return [
     /**
      * @var array Prideful enemy variables
      */
-    'prideful' => [
+    'prideful'                            => [
         'npc_id' => 173729,
-        'count' => 5
+        'count'  => 5
     ]
 ];

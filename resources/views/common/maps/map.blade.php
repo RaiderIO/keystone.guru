@@ -1,13 +1,13 @@
 <?php
 /** @var \App\User $user */
 /** @var \App\Logic\MapContext\MapContext $mapContext */
-$user = Auth::user();
-$isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
+
+$user = Auth::user();
+$isAdmin = isset($admin) && $admin;
 $embed = isset($embed) && $embed;
 $edit = isset($edit) && $edit;
-
 $mapClasses = isset($mapClasses) ? $mapClasses : '';
 
 // Set the key to 'sandbox' if sandbox mode is enabled
@@ -19,8 +19,8 @@ $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
-// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || $embed) {
+// If this is an embedded route, do not show ads
+if ($embed) {
     $showAds = false;
 }
 // No UI on the map
