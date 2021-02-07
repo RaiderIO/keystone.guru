@@ -250,6 +250,11 @@ html, body, #map, #app, .wrapper {
     content: "\f078";
 }
 
+#killzonesidebar .map_killzonessidebar_floor_switch h6 {
+    font-size: 1.1em;
+}
+
+#killzonesidebar .map_killzonessidebar_floor_switch,
 #killzonesidebar .map_killzonessidebar_killzone .selectable {
     cursor: pointer;
 }

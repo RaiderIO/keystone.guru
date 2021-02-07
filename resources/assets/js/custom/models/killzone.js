@@ -948,18 +948,21 @@ class KillZone extends MapObject {
         super.localDelete();
     }
 
-    onSaveSuccess(json) {
+    /**
+     * @inheritDoc
+     */
+    onSaveSuccess(json, massSave = false) {
         super.onSaveSuccess(json);
 
         this.redrawConnectionsToEnemies();
 
-        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: massSave});
     }
 
     onDeleteSuccess(json) {
         super.onDeleteSuccess(json);
 
-        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: false});
     }
 
     cleanup() {
