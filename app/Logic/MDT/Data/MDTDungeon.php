@@ -75,7 +75,7 @@ class MDTDungeon
         $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
             // Fetch the cache or set it if it didn't exist
-            $result = $this->_cacheService->getOtherwiseSet(sprintf('mdt_npcs_%s', $this->_dungeonName), function ()
+            $result = $this->_cacheService->remember(sprintf('mdt_npcs_%s', $this->_dungeonName), function ()
             {
                 $result = new Collection();
                 $mdtHome = base_path('vendor/nnoggie/mythicdungeontools/');
@@ -136,7 +136,7 @@ class MDTDungeon
      */
     public function getClonesAsEnemies($floors)
     {
-        return $this->_cacheService->getOtherwiseSet(sprintf('mdt_enemies_%s', $this->_dungeonName), function () use ($floors)
+        return $this->_cacheService->remember(sprintf('mdt_enemies_%s', $this->_dungeonName), function () use ($floors)
         {
             $enemies = new Collection();
 

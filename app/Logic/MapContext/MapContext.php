@@ -62,7 +62,7 @@ abstract class MapContext
         $cacheService = App::make(CacheService::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->getOtherwiseSet(sprintf('dungeon_%s', $this->_floor->dungeon->id), function ()
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->_floor->dungeon->id), function ()
         {
             $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
 
@@ -78,7 +78,7 @@ abstract class MapContext
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $cacheService->getOtherwiseSet('static_data', function ()
+        $static = $cacheService->remember('static_data', function ()
         {
             return [
                 'mapIconTypes'                      => MapIconType::all(),

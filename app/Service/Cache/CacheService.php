@@ -28,7 +28,7 @@ class CacheService implements CacheServiceInterface
      * @return mixed
      * @throws InvalidArgumentException
      */
-    public function getOtherwiseSet(string $key, $closure, $ttl = null)
+    public function remember(string $key, $closure, $ttl = null)
     {
         $result = null;
 
