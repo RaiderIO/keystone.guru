@@ -11,11 +11,11 @@ class RowElement extends Signalable {
 
     /**
      *
-     * @return Object
+     * @return {Object}
      * @protected
      */
     _getTemplateData() {
-        return [];
+        return {};
     }
 
     /**
@@ -34,7 +34,7 @@ class RowElement extends Signalable {
 
     /**
      *
-     * @param $targetContainer
+     * @param $targetContainer {jQuery}
      */
     render($targetContainer) {
         // Build the handlebars template
@@ -44,6 +44,19 @@ class RowElement extends Signalable {
 
         // Render the element into the sidebar
         $targetContainer.append(template(data));
+    }
+
+    /**
+     *
+     * @param $beforeElement
+     */
+    renderBefore($beforeElement) {
+        // Build the handlebars template
+        let template = Handlebars.templates[this.handlebarsTemplate];
+
+        let data = $.extend({}, getHandlebarsDefaultVariables(), this._getTemplateData());
+
+        $(template(data)).insertBefore($beforeElement);
     }
 
     remove() {

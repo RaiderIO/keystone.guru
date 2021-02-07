@@ -64,16 +64,18 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     /**
      * Adds a killzone to the sidebar.
-     * @param killZone
+     * @param killZone {KillZone}
      * @private
      */
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
+        if (this.rowElements.length === 0) {
+            this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
+        }
+
         let rowElementKillZone = new RowElementKillZone(this, killZone);
-
         rowElementKillZone.render($(this.options.killZonesContainerSelector));
-
         this.rowElements.push(rowElementKillZone);
 
         $('#killzones_no_pulls').hide();
@@ -81,11 +83,91 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
         rowElementKillZone.refresh();
 
+        // Only do this when there is actually a previous killzone
+        if (killZone.index > 1) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
+
+            // If there's a difference in floors then we should display a floor switch row
+            let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
+            if (floorDifference.length > 0) {
+                this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+            }
+        }
+
         // A new pull was created; make sure it's selected by default
         if (this._newPullKillZone !== null && this._newPullKillZone.id > 0) {
             rowElementKillZone.select(true);
 
             this._newPullKillZone = null;
+        }
+    }
+
+    /**
+     *
+     * @param killZone {KillZone}
+     * @param targetFloor {Object}
+     * @param start {Boolean}
+     * @private
+     */
+    _addFloorSwitch(killZone, targetFloor, start = false) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        let $killZoneElement = $(`#map_killzonessidebar_killzone_${killZone.id}`);
+        let rowElementFloorSwitch = new RowElementFloorSwitch(this, killZone, targetFloor, start);
+        // If it's the first element to be added..
+        if (start && $killZoneElement.length === 0) {
+            rowElementFloorSwitch.render($(this.options.killZonesContainerSelector));
+        } else if ($killZoneElement.length !== 0) {
+            rowElementFloorSwitch.renderBefore($killZoneElement);
+        } else {
+            console.error(`Unable to render floor switch - KillZone element was not found`);
+        }
+
+        this.rowElements.push(rowElementFloorSwitch);
+    }
+
+    /**
+     *
+     * @private
+     */
+    _rebuildFloorSwitches() {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        let toRemove = [];
+
+        for (let i = 0; i < this.rowElements.length; i++) {
+            if (this.rowElements[i] instanceof RowElementFloorSwitch) {
+                toRemove.push(i);
+            }
+        }
+
+        // Reverse the loop, we're removing multiple indices. If we start with smallest first,
+        // we're going to remove the wrong indexes after the first one. Not good. Reverse preserves the proper order.
+        for (let i = toRemove.length - 1; i >= 0; i--) {
+            this.rowElements.splice(toRemove[i], 1);
+        }
+
+        // Remove all from the sidebar
+        $('.map_killzonessidebar_floor_switch').remove();
+
+        // Re-add them
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        /** @type KillZone */
+        let previousKillZone = null;
+        let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
+        for (let i = 0; i < sortedObjects.length; i++) {
+            let killZone = sortedObjects[i];
+            if (i === 0) {
+                this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
+            } else {
+                let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
+                if (floorDifference.length > 0) {
+                    this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+                }
+            }
+
+            previousKillZone = killZone;
         }
     }
 
@@ -175,7 +257,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
-                self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
+                // Don't perform this when mass-saving - that is handled already and causes a big slowdown
+                if (!killZoneChangedEvent.data.hasOwnProperty('mass_save') || !killZoneChangedEvent.data.mass_save) {
+                    self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
+                }
             });
         }
     }
@@ -217,7 +302,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (this._dragHasSwitchedOrder) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
-            let $killZonesContainerChildren = $('#killzones_container').children();
+            let $killZonesContainerChildren = $('#killzones_container').children('.map_killzonessidebar_killzone');
             let count = 1;
             for (let index in $killZonesContainerChildren) {
                 if ($killZonesContainerChildren.hasOwnProperty(index)) {
@@ -237,17 +322,16 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
 
             // Update after all indices are set, otherwise cumulative enemy forces will not be correct
-            for (let index in killZoneMapObjectGroup.objects) {
-                if (killZoneMapObjectGroup.objects.hasOwnProperty(index)) {
-                    let killZone = killZoneMapObjectGroup.objects[index];
+            this._updatePullTexts();
 
-                    this._updatePullText(killZone);
-                }
-            }
+            // As killzones are switched around, the floor switch indicators should be updated
+            this._rebuildFloorSwitches();
 
+            // If the gradient should be retained, do it
             if (getState().getMapContext().getPullGradientApplyAlways()) {
                 killZoneMapObjectGroup.applyPullGradient();
             }
+
             killZoneMapObjectGroup.massSave(['index', 'color']);
         }
         this._dragHasSwitchedOrder = false;

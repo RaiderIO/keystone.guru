@@ -1,0 +1,19 @@
+<div id="map_killzonessidebar_floor_switch_{{id}}" class="form-group map_killzonessidebar_floor_switch"
+     data-id="{{target_floor_id}}">
+    <div class="card">
+        <div class="card-body">
+            <div class="row no-gutters">
+                <div style="width: 50px;">
+                    <img class="mx-auto d-block"
+                        {{#if start}}
+                         src="/images/mapicon/dungeon_start.png"
+                        {{else}}
+                         src="/images/mapicon/door_right.png"
+                        {{/if}}
+                    />
+                </div>
+                <h6 class="pl-2 m-0">{{name}}</h6>
+            </div>
+        </div>
+    </div>
+</div>

@@ -87,6 +87,31 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Finds a KillZone in this map object group by its index.
+     *
+     * @param index {Number}
+     * @returns {KillZone}
+     */
+    findKillZoneByIndex(index) {
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+
+        let result = null;
+
+        // Do not return an already saving map object which has id -1 of which multiple can exist
+        if( index > 0 ) {
+            for (let i = 0; i < this.objects.length; i++) {
+                let objectCandidate = this.objects[i];
+                if (objectCandidate.index === index) {
+                    result = objectCandidate;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Creates a whole new pull.
      * @param enemyIds array Any enemies that must be in the pull from the start
      * @returns {KillZone}
@@ -184,8 +209,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             },
             success: function (json) {
                 for (let i = 0; i < killZones.length; i++) {
-                    killZones[i].setSynced(true);
-                    killZones[i].onSaveSuccess(json);
+                    killZones[i].setSynced(true, true);
+                    killZones[i].onSaveSuccess(json, true);
                 }
             },
             complete: function () {
