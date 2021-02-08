@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.mapping/;
             php artisan up;
-            php artisan down --message "Upgrading Keystone.guru, we will be back stronger than ever shortly!" --retry 60;
+            php artisan down --render="errors::503" --retry 60;
             php artisan mapping:save &&
             php artisan mapping:commit &&
             php artisan mapping:merge &&

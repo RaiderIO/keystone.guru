@@ -13,9 +13,11 @@ use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
+use Psr\SimpleCache\InvalidArgumentException;
 use Tremby\LaravelGitVersion\GitVersionHelper;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
@@ -52,9 +54,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      *
      * @param CacheService $cacheService
      * @return void
+     * @throws InvalidArgumentException
      */
     public function boot(CacheService $cacheService)
     {
+        // https://laravel.com/docs/8.x/upgrade#pagination
+        Paginator::useBootstrap();
+
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
         $globalViewVariables = $cacheService->remember('global_view_variables', function ()
         {

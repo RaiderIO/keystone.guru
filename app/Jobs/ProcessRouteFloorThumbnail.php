@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\DungeonRoute;
 use App\Models\Floor;
-use Folklore\Image\Facades\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 use Symfony\Component\Process\Process;
 
 class ProcessRouteFloorThumbnail implements ShouldQueue
@@ -109,10 +109,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 
                     // Rescale it
                     Log::channel('scheduler')->info('Scaling image..');
-                    Image::make($tmpFile, [
-                        'width' => 192,
-                        'height' => 128
-                    ])->save($target);
+                    Image::make($tmpFile)->resize(192, 128)->save();
 
                     Log::channel('scheduler')->info('Removing previous image..');
                     // Image now exists in target location; compress it and move it to the target location
