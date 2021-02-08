@@ -41,7 +41,7 @@ class Save extends Command
      */
     public function handle()
     {
-        $dungeonDataDir = database_path('/seeds/dungeondata/');
+        $dungeonDataDir = database_path('/seeders/dungeondata/');
 
         $this->_saveDungeons($dungeonDataDir);
         $this->_saveNpcs($dungeonDataDir);

@@ -31,8 +31,7 @@ class Save extends Command
      */
     public function handle()
     {
-
-        $rootDirPath = database_path('/seeds/releases/');
+        $rootDirPath = database_path('/seeders/releases/');
 
         foreach (Release::all() as $release) {
             $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);

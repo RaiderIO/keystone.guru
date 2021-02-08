@@ -34,7 +34,7 @@ class Commit extends Command
         $this->shell([
             sprintf('cd %s; ' .
                 // Commit current changes
-                'git add database/seeds/dungeondata/* && ' .
+                'git add database/seeders/dungeondata/* && ' .
                 'git commit -m "Automated commit for mapping updates"; ' .
                 // Merge development into mapping
                 'git checkout . && ' .
