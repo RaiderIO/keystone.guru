@@ -1,4 +1,5 @@
 <?php
+    /** @var $categories \App\Models\ReleaseChangelogCategory[]|\Illuminate\Support\Collection $categories */
 /** @var $release \App\Models\Release */
 $showHeader = isset($showHeader) ? $showHeader : true;
 ?>
@@ -43,7 +44,7 @@ $showHeader = isset($showHeader) ? $showHeader : true;
 @foreach ($release->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
     <p>
         <?php /** @var $change \App\Models\ReleaseChangelogChange */?>
-        {{ \App\Models\ReleaseChangelogCategory::findOrFail($categoryId)->category }}:
+        {{ $categories->where('id', $categoryId)->first()->category }}:
     </p>
     <ul>
         @foreach ($groupedChange as $category => $change)

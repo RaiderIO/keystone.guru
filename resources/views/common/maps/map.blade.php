@@ -20,7 +20,8 @@ $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If this is an embedded route, do not show ads
-if ($embed) {
+if ($embed)
+{
     $showAds = false;
 }
 // No UI on the map
@@ -34,7 +35,8 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
-if ($isAdmin) {
+if ($isAdmin)
+{
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
@@ -89,36 +91,28 @@ if ($isAdmin) {
         });
     </script>
 
-    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
+    @if($dungeon->isSiegeOfBoralus())
+        <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
                 @php($i = 0)
-        @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-            <a class="map_faction_display_control map_controls_custom" href="#"
-               data-faction="{{ strtolower($faction->name) }}"
+            @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->name) }}"
                        title="{{ $faction->name }}">
                         <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ $faction->name }}"/>
                         @php($i++)
-            </a>
+                </a>
 @endforeach
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
         </div>
-        <ul class="leaflet-draw-actions"></ul>
-    </div>
 
-
-
-
-
-
-
-
-
-
-
-    </script>
+        </script>
+    @endif
 @endsection
 
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
@@ -126,19 +120,19 @@ if ($isAdmin) {
 </div>
 
 @if(($showAds && !$isMobile || !$edit))
-<header class="fixed-top">
-@if($showAds && !$isMobile)
-    <div class="container p-0 map_top_header_background" style="width: 728px">
-        @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
-    </div>
-@endif
-@if(!$edit)
-    <div class="container p-0 map_top_header_background" style="width: 100px">
-        <!-- Echo controls injected here through echocontrols.js -->
-        <span id="route_echo_container" class="text-center"></span>
-    </div>
-@endif
-</header>
+    <header class="fixed-top">
+        @if($showAds && !$isMobile)
+            <div class="container p-0 map_top_header_background" style="width: 728px">
+                @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
+            </div>
+        @endif
+        @if(!$edit)
+            <div class="container p-0 map_top_header_background" style="width: 100px">
+                <!-- Echo controls injected here through echocontrols.js -->
+                <span id="route_echo_container" class="text-center"></span>
+            </div>
+        @endif
+    </header>
 @endif
 
 @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])

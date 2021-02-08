@@ -1,10 +1,10 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+/** @var $specializations \Illuminate\Support\Collection|\App\Models\CharacterClassSpecialization[] */
+/** @var $classes \Illuminate\Support\Collection|\App\Models\CharacterClass[] */
+/** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
+
 $factions = isset($factions) ? $factions : \App\Models\Faction::all();
-$specializations = \App\Models\CharacterClassSpecialization::all();
-$classes = \App\Models\CharacterClass::with('specializations')->get();
-// @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-$racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
@@ -13,7 +13,6 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
     'specializations' => $specializations,
     'classDetails' => $classes,
     'races' =>  $racesClasses,
-
 ]])
 
 @section('head')
