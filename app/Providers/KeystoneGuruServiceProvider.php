@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PaidTier;
 use App\Models\Release;
+use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use Illuminate\Contracts\View\View;
@@ -56,10 +60,21 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $demoRoutes = DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
             return [
-                'isProduction'      => config('app.env') === 'production',
-                'demoRoutes'        => $demoRoutes,
-                'demoRouteDungeons' => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
-                'latestReleaseId'   => Release::max('id')
+                'isProduction'                  => config('app.env') === 'production',
+                'demoRoutes'                    => $demoRoutes,
+                'demoRouteDungeons'             => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
+                'latestReleaseId'               => Release::max('id'),
+                'appVersion'                    => GitVersionHelper::getVersion(),
+                'appVersionAndName'             => GitVersionHelper::getNameAndVersion(),
+
+                // Changelog
+                'releaseChangelogCategories'    => ReleaseChangelogCategory::all(),
+
+                // Map
+                'characterClassSpecializations' => CharacterClassSpecialization::all(),
+                'characterClasses'              => CharacterClass::with('specializations')->get(),
+                // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
+                'characterRacesClasses'         => CharacterRace::with(['classes:character_classes.id'])->get(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -72,16 +87,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Can use the Auth() global here!
         view()->composer('*', function (View $view)
         {
+            $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             // Not logged in or not having paid for free ads will cause ads to come up
             $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
         });
 
         // Main view
-        view()->composer('layouts.app', function (View $view) use ($globalViewVariables)
+        view()->composer(['layouts.app', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables)
         {
-            $view->with('version', GitVersionHelper::getVersion());
-            $view->with('nameAndVersion', GitVersionHelper::getNameAndVersion());
+            $view->with('version', $globalViewVariables['appVersion']);
+            $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
         });
 
@@ -89,6 +105,20 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables)
         {
             $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
+        });
+
+        // Displaying a release
+        view()->composer('common.release.release', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('categories', $globalViewVariables['releaseChangelogCategories']);
+        });
+
+        // Displaying a release
+        view()->composer('common.group.composition', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('specializations', $globalViewVariables['characterClassSpecializations']);
+            $view->with('classes', $globalViewVariables['characterClasses']);
+            $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
         });
     }
 }
