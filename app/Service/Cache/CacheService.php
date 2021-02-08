@@ -40,13 +40,13 @@ class CacheService implements CacheServiceInterface
             // Get the result by calling the closure
             $result = $closure();
             // Only write it to cache when we're not in debug mode
-//            if (!env('APP_DEBUG')) {
+            if (!env('APP_DEBUG')) {
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
                 // If not overridden, get the TTL from config, if it's set anyways
                 $this->set($key, $result, $ttl ?? $this->_getTtl($key));
-//            }
+            }
         }
 
         return $result;
