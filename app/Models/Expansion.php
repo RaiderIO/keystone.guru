@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasIconFile;
 use Carbon\Carbon;
 use Eloquent;
 use Exception;
@@ -24,8 +25,10 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Expansion extends IconFileModel
+class Expansion extends CacheModel
 {
+    use HasIconFile;
+
     public $fillable = ['icon_file_id', 'name', 'shortname', 'color', 'released_at'];
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];

@@ -49,15 +49,15 @@ class Update extends Command
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
 
-        // Give dump-autoload time to execute
-        sleep(3);
-
         $this->call('horizon:publish');
 
         $this->call('migrate', [
             '--database' => 'migrate',
             '--force'    => true
         ]);
+
+        // Drop all caches for all models while we re-seed
+        $this->call('modelCache:clear');
 
         $this->call('db:seed', [
             '--database' => 'migrate',

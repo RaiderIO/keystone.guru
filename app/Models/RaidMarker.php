@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 
 /**
  * @property int $id
  * @property string $name
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class RaidMarker extends Model
+class RaidMarker extends CacheModel
 {
     public $timestamps = false;
 
@@ -19,7 +19,8 @@ class RaidMarker extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

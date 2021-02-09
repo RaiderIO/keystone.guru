@@ -30,7 +30,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Floor extends Model
+class Floor extends CacheModel
 {
     public $timestamps = false;
     

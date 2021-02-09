@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Traits\HasLinkedAwakenedObelisk;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -17,11 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $permanent_tooltip
  * @property int $seasonal_index
  *
- * @property \App\Models\Floor $floor
- * @property \App\Models\DungeonRoute $dungeonroute
- * @property \App\Models\MapIconType $mapicontype
+ * @property Floor $floor
+ * @property DungeonRoute $dungeonroute
+ * @property MapIconType $mapicontype
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class MapIcon extends Model
 {
@@ -34,7 +36,7 @@ class MapIcon extends Model
     protected $with = ['mapicontype'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
@@ -42,7 +44,7 @@ class MapIcon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {
@@ -50,7 +52,7 @@ class MapIcon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function mapicontype()
     {

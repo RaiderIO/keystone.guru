@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends Model
+class EnemyPatrol extends CacheModel
 {
     public $visible = ['id', 'floor_id', 'teeming', 'faction', 'polyline'];
     public $with = ['polyline'];

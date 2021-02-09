@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class EnemyActiveAura extends Model
+class EnemyActiveAura extends CacheModel
 {
     public $visible = ['id', 'enemy_id', 'spell_id'];
     public $timestamps = false;

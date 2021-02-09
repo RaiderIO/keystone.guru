@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class RouteAttribute extends Model
 {
@@ -24,7 +24,8 @@ class RouteAttribute extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

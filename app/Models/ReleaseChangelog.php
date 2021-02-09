@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -18,7 +17,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class ReleaseChangelog extends Model
+class ReleaseChangelog extends CacheModel
 {
     protected $fillable = ['id', 'release_id', 'description'];
     protected $with = ['changes'];

@@ -27,7 +27,7 @@ use Throwable;
  *
  * @mixin Eloquent
  */
-class Release extends Model
+class Release extends CacheModel
 {
     use SerializesDates;
 

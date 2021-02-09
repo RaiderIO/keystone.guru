@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 /**
  * @property $id int The ID of this Affix.
  * @property $season_id int
  * @property $seasonal_index int
  *
- * @property \Illuminate\Database\Eloquent\Collection $affixes
+ * @property Collection $affixes
  * @property Season $season
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class AffixGroup extends Model
+class AffixGroup extends CacheModel
 {
     public $timestamps = false;
     public $with = ['affixes'];
@@ -22,7 +25,7 @@ class AffixGroup extends Model
     protected $appends = ['text'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function season()
     {
@@ -30,7 +33,7 @@ class AffixGroup extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return BelongsToMany
      */
     public function affixes()
     {

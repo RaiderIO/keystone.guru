@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 
 /**
  * @property $id int
  * @property $name string
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class PaidTier extends Model
+class PaidTier extends CacheModel
 {
     public const AD_FREE = 'ad-free';
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Eloquent
  */
-class Spell extends Model
+class Spell extends CacheModel
 {
     const SCHOOL_PHYSICAL = 1;
     const SCHOOL_HOLY = 2;

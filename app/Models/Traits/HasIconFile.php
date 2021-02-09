@@ -1,22 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wouter
- * Date: 24/07/2018
- * Time: 22:33
- */
 
-namespace App\Models;
+namespace App\Models\Traits;
 
+use App\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property File $iconfile
+ *
+ * @mixin Model
  */
-class IconFileModel extends Model
+trait HasIconFile
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     function iconfile()
     {

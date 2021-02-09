@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
  * @property string $type
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class NpcType extends Model
+class NpcType extends CacheModel
 {
     const ABERRATION = 1;
     const BEAST = 2;
@@ -49,7 +50,7 @@ class NpcType extends Model
     /**
      * Gets all derived NPCs from this type.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function npcs()
     {
