@@ -92,7 +92,7 @@ class File extends Model
     public function getURL()
     {
         // @TODO May need to do something with $this->disk here?
-        return $this->path;
+        return url($this->path);
     }
 
     /**
