@@ -43,7 +43,7 @@ if( Auth::check() ) {
         'options' =>  [
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
-            'teamName' => $team ? $team->name : '',
+            'teamPublicKey' => $team ? $team->public_key : '',
             'teams' => Auth::check() ? \App\User::findOrFail(Auth::id())->teams()->whereHas('teamusers', function($teamuser){
                 /** @var $teamuser \App\Models\TeamUser  */
                 $teamuser->isModerator(Auth::id());

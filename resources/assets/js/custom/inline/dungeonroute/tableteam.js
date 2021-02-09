@@ -24,13 +24,13 @@ class DungeonRouteTableTeam {
     _addToThisTeam(clickEvent) {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
-        let teamName = this._dungeonrouteTable.getTableView().getTeamName();
-        if (teamName !== '') {
+        let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
+        if (teamPublicKey !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: `/ajax/team/${teamName}/route/${key}`,
+                url: `/ajax/team/${teamPublicKey}/route/${key}`,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.team_add_route_successful'));
@@ -51,13 +51,13 @@ class DungeonRouteTableTeam {
     _removeFromThisTeam(clickEvent) {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
-        let teamName = this._dungeonrouteTable.getTableView().getTeamName();
-        if (teamName !== '') {
+        let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
+        if (teamPublicKey !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: `/ajax/team/${teamName}/route/${key}`,
+                url: `/ajax/team/${teamPublicKey}/route/${key}`,
                 data: {
                     _method: 'DELETE'
                 },

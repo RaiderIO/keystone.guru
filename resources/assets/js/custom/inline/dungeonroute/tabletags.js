@@ -120,7 +120,7 @@ class DungeonRouteTableTagsHandler {
             url: `/ajax/tag`,
             dataType: 'json',
             data: {
-                category: this._dungeonrouteTable.options.teamName === '' ? 'dungeon_route_personal' : 'dungeon_route_team',
+                category: this._dungeonrouteTable.options.teamPublicKey === '' ? 'dungeon_route_personal' : 'dungeon_route_team',
                 model_id: this._addTagPublicKey,
                 name: name,
             },

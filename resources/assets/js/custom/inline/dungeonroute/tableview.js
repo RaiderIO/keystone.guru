@@ -90,7 +90,7 @@ class TeamTableView extends TableView {
     constructor() {
         super();
 
-        this._teamName = '';
+        this._teamPublicKey = '';
         this._addMode = false;
         this._isUserModerator = false;
     }
@@ -99,8 +99,8 @@ class TeamTableView extends TableView {
      * Set the team ID (for filtering purposes)
      * @param value
      */
-    setTeamName(value) {
-        this._teamName = value;
+    setTeamPublicKey(value) {
+        this._teamPublicKey = value;
     }
 
     /**
@@ -119,16 +119,16 @@ class TeamTableView extends TableView {
      * Gets the Id of the team that was set for this view.
      * @returns {*}
      */
-    getTeamName() {
-        return this._teamName;
+    getTeamPublicKey() {
+        return this._teamPublicKey;
     }
 
     /**
      * Get the parameters when sending the AJAX request
-     * @returns {{team_name: *}}
+     * @returns {{team_public_key: *}}
      */
     getAjaxParameters() {
-        let params = {team_name: this._teamName};
+        let params = {team_public_key: this._teamPublicKey};
         if (this._addMode) {
             params.available = 1;
         }

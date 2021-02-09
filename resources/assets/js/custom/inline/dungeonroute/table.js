@@ -16,8 +16,8 @@ class DungeonrouteTable extends InlineCode {
         this.setViewMode(this.options.viewMode);
         let tableView = this.setTableView(this.options.tableView);
         // Make sure the TeamID is set if we need it
-        if (typeof tableView.setTeamName === 'function') {
-            tableView.setTeamName(this.options.teamName);
+        if (typeof tableView.setTeamPublicKey === 'function') {
+            tableView.setTeamPublicKey(this.options.teamPublicKey);
         }
     }
 
