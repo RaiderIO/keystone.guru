@@ -288,7 +288,7 @@ class APIDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonroute->clone(true);
+            $newRoute = $dungeonroute->cloneRoute(false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);

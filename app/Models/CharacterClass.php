@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasIconFile;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+
 /**
  * @property string $name
- * @property \Illuminate\Support\Collection $specializations
+ * @property Collection $specializations
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class CharacterClass extends IconFileModel
+class CharacterClass extends CacheModel
 {
+    use HasIconFile;
+
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
@@ -29,7 +37,7 @@ class CharacterClass extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function specializations()
     {
@@ -37,7 +45,7 @@ class CharacterClass extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function races()
     {
@@ -45,7 +53,7 @@ class CharacterClass extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function dungeonrouteplayerclasses()
     {
@@ -53,7 +61,7 @@ class CharacterClass extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function dungeonrouteplayerraces()
     {

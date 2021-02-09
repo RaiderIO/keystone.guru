@@ -12,6 +12,7 @@
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
+            'dungeon' => $model->dungeon,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,

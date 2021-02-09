@@ -2,24 +2,29 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $name
  * @property int $faction_id
- * @property \App\Models\Faction $faction
- * @property \Illuminate\Support\Collection $classes
- * @property \Illuminate\Support\Collection $specializations
+ * @property Faction $faction
+ * @property Collection $classes
+ * @property Collection $specializations
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class CharacterRace extends Model
+class CharacterRace extends CacheModel
 {
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function classes()
     {
@@ -27,7 +32,7 @@ class CharacterRace extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function specializations()
     {
@@ -35,7 +40,7 @@ class CharacterRace extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function faction()
     {
@@ -43,7 +48,7 @@ class CharacterRace extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function dungeonrouteplayerrace()
     {

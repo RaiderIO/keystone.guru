@@ -6,7 +6,6 @@ use App\Service\Season\SeasonService;
 use Eloquent;
 use Exception;
 use Illuminate\Config\Repository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -23,7 +22,7 @@ use Illuminate\Support\Facades\Log;
  *
  * @mixin Eloquent
  */
-class Season extends Model
+class Season extends CacheModel
 {
     public $with = ['affixgroups'];
     public $timestamps = false;

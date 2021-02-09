@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property int $id
  * @property int $release_changelog_id
@@ -16,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class ReleaseChangelogChange extends Model
+class ReleaseChangelogChange extends CacheModel
 {
     protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];

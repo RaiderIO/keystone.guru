@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property int $id
  * @property int $npc_id
@@ -14,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class NpcBolsteringWhitelist extends Model
+class NpcBolsteringWhitelist extends CacheModel
 {
     public $timestamps = false;
 

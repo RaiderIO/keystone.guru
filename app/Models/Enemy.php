@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Enemy extends Model
+class Enemy extends CacheModel
 {
     use Reportable;
 

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class DungeonFloorSwitchMarker extends Model
+class DungeonFloorSwitchMarker extends CacheModel
 {
     protected $appends = ['direction'];
     protected $hidden = ['floor', 'targetfloor', 'laravel_through_key'];

@@ -31,7 +31,7 @@ class PageView extends Model
     {
         // If the previous page view was created at least view_time_threshold_mins minutes ago.
         return Carbon::createFromTimeString($this->created_at)
-            ->subMinute(config('keystoneguru.view_time_threshold_mins'))
+            ->subMinutes(config('keystoneguru.view_time_threshold_mins'))
             ->isPast();
     }
 

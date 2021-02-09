@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -11,11 +13,11 @@ use Illuminate\Support\Facades\Auth;
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_hours_offset
  *
- * @property \Illuminate\Support\Collection $users
+ * @property Collection $users
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class GameServerRegion extends Model
+class GameServerRegion extends CacheModel
 {
     protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
@@ -23,7 +25,7 @@ class GameServerRegion extends Model
     private static $cachedDefaultRegion = null;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function users()
     {

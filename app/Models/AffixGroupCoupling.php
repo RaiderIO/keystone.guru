@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property $id int The ID of this Affix.
  * @property $affix_id int
@@ -11,9 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class AffixGroupCoupling extends Model
+class AffixGroupCoupling extends CacheModel
 {
-
     public $timestamps = false;
     
     /**
