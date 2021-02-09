@@ -23,7 +23,7 @@
 
 @if(isset($model) && isset($model->iconfile))
     <div class="form-group">
-        {{__('Current logo:')}} <img src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+        {{__('Current logo:')}} <img src="{{ url('storage/' . $model->iconfile->path) }}"
                                      alt="{{ __('Team logo') }}" style="max-width: 48px"/>
     </div>
 @endif

@@ -44,6 +44,7 @@ foreach ($model->teamusers as $teamuser) {
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'data' => $data,
     'teamName' => $model->name,
+    'teamPublicKey' => $model->public_key,
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,

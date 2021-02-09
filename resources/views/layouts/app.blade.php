@@ -261,7 +261,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 <option
                                     data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                     @if($hasIcon)
-                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->path) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
                                     {{ $model->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
