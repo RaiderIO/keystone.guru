@@ -254,10 +254,10 @@ class Team extends Model
 
     /**
      * Checks if a user is a member of this team or not.
-     * @param $user User
+     * @param $user User|null
      * @return bool
      */
-    public function isUserMember(USer $user): bool
+    public function isUserMember(?User $user): bool
     {
         return $user !== null ? $this->members()->where('user_id', $user->id)->count() === 1 : false;
     }

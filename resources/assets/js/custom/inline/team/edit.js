@@ -301,10 +301,9 @@ class TeamEdit extends InlineCode {
     refreshInviteLink() {
         $.ajax({
             type: 'GET',
-            url: `/ajax/team/${self.options.teamPublicKey}/refreshlink`,
+            url: `/ajax/team/${this.options.teamPublicKey}/refreshlink`,
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 $('#team_members_invite_link').val(response.new_invite_link);
 
                 showInfoNotification(lang.get('messages.invite_link_refreshed'));

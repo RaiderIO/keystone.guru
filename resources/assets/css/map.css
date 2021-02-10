@@ -76,6 +76,11 @@ html, body, #map, #app, .wrapper {
     background-color: #4E5D6C;
 }
 
+/** Tooltips should show above the sidebar */
+.tooltip {
+    z-index: 100070 !important;
+}
+
 .sidebar.anchor-left {
     left: -300px;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
