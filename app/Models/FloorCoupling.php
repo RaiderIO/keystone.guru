@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Eloquent
  */
-class FloorCoupling extends Model
+class FloorCoupling extends CacheModel
 {
     //
     public $timestamps = false;

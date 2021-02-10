@@ -210,10 +210,20 @@ class StateManager extends Signalable {
      *
      * @param numberStyle {string}
      */
+    setMapNumberStyle(numberStyle) {
+        Cookies.set('map_number_style', numberStyle);
+
+        this.signal('mapnumberstyle:changed');
+    }
+
+    /**
+     *
+     * @param numberStyle {string}
+     */
     setKillZonesNumberStyle(numberStyle) {
         Cookies.set('kill_zones_number_style', numberStyle);
 
-        this.signal('numberstyle:changed');
+        this.signal('killzonesnumberstyle:changed');
     }
 
     /**
@@ -424,6 +434,13 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._userData;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getMapNumberStyle() {
+        return Cookies.get('map_number_style');
     }
 
     /**

@@ -1,4 +1,6 @@
 <?php
+/** @var string $id */
+$id   = 'nitropay-' . $id;
 $type = isset($type) ? $type : 'responsive';
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
@@ -10,20 +12,24 @@ $defaultReportAdPosition = [
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
 
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
-
 // If we're on mobile, anchor ads do not have a report button so don't render it
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
-$id            = 'nitropay-' . (isset($id) ? $id : 'adunit-' . rand(0, 1000000));
 
 if ($isMobile) {
     $id .= '_mobile';
 }
 ?>
 <script type="text/javascript">
-    nitropayAdLoadedEvents['{{ $id }}'] = event => {
+    nitropayAdRenderedEvents['{{ $id }}'] = (event, count = 0) => {
         let adId = '{{ $id }}';
-        if (!nitropayIsAnchor.hasOwnProperty(adId) || (!nitropayIsAnchor[adId])) {
+
+        // Fail safe just in case
+        if( count > 5 ) {
+            // console.log(`Broke out of too much checking for ${adId}`);
+            return;
+        }
+
+        if (!nitropayIsAnchor.hasOwnProperty(adId) || !nitropayIsAnchor[adId]) {
             // Move the report ad button to a more convenient place
             let reportLink = document.getElementById(adId).getElementsByClassName('report-link')[0];
 
@@ -39,10 +45,12 @@ if ($isMobile) {
                 aReportLink.style['margin-top'] = '0';
 
                 let target = document.getElementById(`${adId}-report-ad`);
+                // Clear any previously set report links
+                target.innerHTML = '';
                 target.appendChild(reportLink);
             } else {
-                console.log(`Ad ${adId} not found - retrying in 1 sec`);
-                setTimeout(nitropayAdLoadedEvents[adId], 1000, event);
+                // console.log(`Ad ${adId} not found - retrying in 200ms`);
+                setTimeout(nitropayAdRenderedEvents[adId], 200, event, ++count);
             }
         }
     };
@@ -51,7 +59,7 @@ if ($isMobile) {
         // nitroAds was already loaded
     } else {
         // wait for loaded event
-        document.addEventListener('nitroAds.loaded', nitropayAdLoadedEvents['{{ $id }}']);
+        document.addEventListener('nitroAds.rendered', nitropayAdRenderedEvents['{{ $id }}']);
     }
 </script>
 

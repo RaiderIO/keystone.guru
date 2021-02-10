@@ -2,7 +2,7 @@
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion', 'floors']);
+$dungeon = $model->dungeon->load(['expansion', 'floors']);
 ?>
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',

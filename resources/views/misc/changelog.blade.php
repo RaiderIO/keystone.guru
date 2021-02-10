@@ -1,7 +1,7 @@
 <?php
 /** @var $releases Illuminate\Pagination\LengthAwarePaginator|\App\Models\Release[] */
 /** @var $categories \Illuminate\Support\Collection|\App\Models\ReleaseChangelogCategory[] */
-$isAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
+/** @var $isUserAdmin boolean */
 ?>
 @extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
 
@@ -9,7 +9,7 @@ $isAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
 @include('common.general.inline', ['path' => 'release/view', 'options' => array_merge(
     ['max_release' => $releases->first()->id],
      // Only add the releases when we're an admin, otherwise empty it
-     $isAdmin ? ['releases' => $releases->all()] : []
+     $isUserAdmin ? ['releases' => $releases->all()] : []
 )])
 
 @section('content')

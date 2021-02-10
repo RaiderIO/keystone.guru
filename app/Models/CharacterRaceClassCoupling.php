@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $character_race_id
  * @property int $character_class_id
- * @property \Illuminate\Support\Collection $specializations
+ * @property Collection $specializations
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class CharacterRaceClassCoupling extends Model
+class CharacterRaceClassCoupling extends CacheModel
 {
     public $timestamps = false;
 
@@ -21,7 +22,8 @@ class CharacterRaceClassCoupling extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

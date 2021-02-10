@@ -2,7 +2,7 @@
 /** @var $expansionService \App\Service\Expansion\ExpansionService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
-$dungeons = isset($dungeons) ? $dungeons : $expansion->dungeons()->active()->get();
+$dungeons = isset($dungeons) ? $dungeons : [];
 $expansion = $expansionService->getCurrentExpansion();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);

@@ -2,21 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasIconFile;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+
 /**
  * @property string $name
  *
- * @property \Illuminate\Support\Collection $races
- * @property \Illuminate\Support\Collection $dungeonroutes
+ * @property Collection $races
+ * @property Collection $dungeonroutes
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class Faction extends IconFileModel
+class Faction extends CacheModel
 {
+    use HasIconFile;
+
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function races()
     {
@@ -24,7 +31,7 @@ class Faction extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function dungeonroutes()
     {
@@ -36,7 +43,8 @@ class Faction extends IconFileModel
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

@@ -1,9 +1,11 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-$numUserReports = \App\Models\UserReport::where('status', 0)->count();
 /** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
-$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
-$dungeons = \App\Models\Dungeon::all();
+/** @var $isProduction string */
+/** @var $isMobile boolean */
+/** @var $version string */
+/** @var $nameAndVersion string */
+/** @var $hasNewChangelog boolean */
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -28,23 +30,12 @@ if (isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] 
     // Don't bother the user with it anymore
     $cookieConsent = false;
 }
-// Easy switch
-$isProduction = config('app.env') === 'production';
 $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Show ads if not set
 $showAds = isset($showAds) ? $showAds : true;
-// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if ($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) {
-    // No ads
-    $showAds = false;
-}
 // Analytics or not, default = $isProduction
 $analytics = isset($analytics) ? $analytics : $isProduction;
-// Current Git version
-$version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
-$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 
-$newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
 $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
@@ -132,7 +123,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">
                                 {{ __('Changelog') }}
-                                @if($newChangelog)
+                                @if($hasNewChangelog)
                                     <sup class="text-success">{{ __('NEW') }}</sup>
                                 @endif
                             </a>
@@ -270,7 +261,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 <option
                                     data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                     @if($hasIcon)
-                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->path) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
                                     {{ $model->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
@@ -394,7 +385,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                 <div class="col-md-6">
                     <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
                     <a class="nav-item nav-link" href="/">
-                        ©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }}
+                        ©{{ date('Y') }} {{ $nameAndVersion }}
                     </a>
                 </div>
                 <div class="col-md-6">

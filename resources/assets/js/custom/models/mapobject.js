@@ -771,10 +771,11 @@ class MapObject extends Signalable {
 
     /**
      * Sets the synced state of the map object. Will adjust the colors of the layer if colors are set.
-     * @param value bool True to set the status to synced, false to unsynced.
+     * @param value {Boolean} True to set the status to synced, false to unsynced.
+     * @param massSave {Boolean} True if the source of this change was a mass save action.
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
      */
-    setSynced(value) {
+    setSynced(value, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         // If we're synced, trigger the synced event
@@ -783,7 +784,7 @@ class MapObject extends Signalable {
             this.bindTooltip();
             this._assignPopup();
 
-            this.signal('object:changed');
+            this.signal('object:changed', {mass_save: massSave});
         }
 
         this.synced = value;
@@ -805,8 +806,9 @@ class MapObject extends Signalable {
     /**
      * Called when this map object was saved successfully.
      * @param json {object} The JSON response (if any).
+     * @param massSave (Boolean) True if the source of saving came from a mass-save action
      */
-    onSaveSuccess(json) {
+    onSaveSuccess(json, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
     }

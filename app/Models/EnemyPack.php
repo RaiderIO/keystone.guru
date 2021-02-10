@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends Model
+class EnemyPack extends CacheModel
 {
     public $timestamps = false;
 

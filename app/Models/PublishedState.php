@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\User;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -14,7 +13,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class PublishedState extends Model
+class PublishedState extends CacheModel
 {
     public const UNPUBLISHED = 'unpublished';
     public const TEAM = 'team';

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 
 /**
  * @property int $id
@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $height
  * @property boolean $admin_only
  *
- * @property \App\Models\MapIcon $mapicons
+ * @property MapIcon $mapicons
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class MapIconType extends Model
+class MapIconType extends CacheModel
 {
     public $timestamps = false;
 

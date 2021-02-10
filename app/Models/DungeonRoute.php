@@ -699,10 +699,10 @@ class DungeonRoute extends Model
     /**
      *  Clones this route into another route, adding all of our killzones, drawables etc etc to it.
      *
-     * @param bool $published
+     * @param bool $unpublished
      * @return DungeonRoute The newly cloned route.
      */
-    public function clone(bool $published = false)
+    public function cloneRoute(bool $unpublished = true)
     {
         // Must save the new route first
         $dungeonroute = new DungeonRoute();
@@ -711,7 +711,9 @@ class DungeonRoute extends Model
         $dungeonroute->author_id = Auth::id();
         $dungeonroute->dungeon_id = $this->dungeon_id;
         $dungeonroute->faction_id = $this->faction_id;
-        $dungeonroute->published_state_id = $this->published_state_id;
+        $dungeonroute->published_state_id = $unpublished ?
+            PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id :
+            $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
         // $dungeonroute->team_id = $this->team_id;
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
@@ -727,6 +729,7 @@ class DungeonRoute extends Model
             $this->paths,
             $this->brushlines,
             $this->killzones,
+            $this->pridefulenemies,
             $this->enemyraidmarkers,
             $this->mapicons,
             $this->routeattributesraw
@@ -740,7 +743,7 @@ class DungeonRoute extends Model
      * @param $dungeonroute DungeonRoute The RECEIVER of the relations of THIS dungeon route.
      * @param $relations array The relations that you want to clone.
      */
-    public function cloneRelationsInto($dungeonroute, $relations)
+    public function cloneRelationsInto(DungeonRoute $dungeonroute, $relations)
     {
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {

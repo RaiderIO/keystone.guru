@@ -44,6 +44,7 @@ foreach ($model->teamusers as $teamuser) {
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'data' => $data,
     'teamName' => $model->name,
+    'teamPublicKey' => $model->public_key,
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
@@ -80,7 +81,7 @@ foreach ($model->teamusers as $teamuser) {
                                     <div class="row">
                                         <div class="col" style="max-width: 128px">
                                             <img class="card-img-top d-block"
-                                                 src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                                 src="{{ url('storage/' . $model->iconfile->path) }}"
                                                  alt="{{ __('No image') }}"
                                                  style="max-width: 128px; max-height: 128px;">
                                         </div>

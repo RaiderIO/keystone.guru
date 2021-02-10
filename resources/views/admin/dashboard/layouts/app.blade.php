@@ -1,5 +1,5 @@
 <?php
-$version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
+/** @var $version string */
 ?><!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>

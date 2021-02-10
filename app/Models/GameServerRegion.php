@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,17 +13,19 @@ use Illuminate\Support\Facades\Auth;
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_hours_offset
  *
- * @property \Illuminate\Support\Collection $users
+ * @property Collection $users
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class GameServerRegion extends Model
+class GameServerRegion extends CacheModel
 {
     protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
 
+    private static $cachedDefaultRegion = null;
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function users()
     {
@@ -33,16 +35,18 @@ class GameServerRegion extends Model
     /**
      * @return GameServerRegion Gets the default region.
      */
-    public static function getUserOrDefaultRegion()
+    public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        $region = null;
-        if (Auth::check()) {
-            $region = Auth::user()->gameserverregion;
+        if (self::$cachedDefaultRegion === null) {
+            if (Auth::check()) {
+                self::$cachedDefaultRegion = Auth::user()->gameserverregion;
+            }
+
+            if (self::$cachedDefaultRegion === null) {
+                self::$cachedDefaultRegion = GameServerRegion::where('short', 'us')->first();
+            }
         }
-        if ($region === null) {
-            $region = GameServerRegion::all()->where('short', 'us')->first();
-        }
-        return $region;
+        return self::$cachedDefaultRegion;
     }
 
     public static function boot()
@@ -50,7 +54,8 @@ class GameServerRegion extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

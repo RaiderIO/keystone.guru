@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\hasMany;
@@ -36,7 +35,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Npc extends Model
+class Npc extends CacheModel
 {
     public $incrementing = false;
     public $timestamps = false;
@@ -51,6 +50,7 @@ class Npc extends Model
     {
         return in_array($this->id, [161244, 161243, 161124, 161241]);
     }
+
     /**
      * @return bool
      */
@@ -122,10 +122,10 @@ class Npc extends Model
     /**
      * @return HasMany
      */
-    function npcspells(){
+    function npcspells()
+    {
         return $this->hasMany('App\Models\NpcSpell');
     }
-
 
 
     public static function boot()
@@ -133,7 +133,8 @@ class Npc extends Model
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(function ($item)
+        {
             /** @var $item Npc */
 
             $item->npcbolsteringwhitelists()->delete();

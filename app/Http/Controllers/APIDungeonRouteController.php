@@ -58,13 +58,13 @@ class APIDungeonRouteController extends Controller
     function list(Request $request)
     {
         // Check if we're filtering based on team or not
-        $teamName = $request->get('team_name', false);
+        $teamPublicKey = $request->get('team_public_key', false);
         // Check if we should load the team's tags or the personal tags
-        $tagCategoryName = $teamName ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
+        $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
         $tagCategory = TagCategory::fromName($tagCategoryName);
 
         // Which relationship should be load?
-        $tagsRelationshipName = $teamName ? 'tagsteam' : 'tagspersonal';
+        $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
@@ -130,10 +130,10 @@ class APIDungeonRouteController extends Controller
             }
 
             // Handle team if set
-            if ($teamName) {
+            if ($teamPublicKey) {
                 // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
-                $team = Team::where('name', $teamName)->firstOrFail();
+                $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
                 if (!$team->members->contains($user->id)) {
                     abort(403, 'Unauthorized');
                 }
@@ -160,7 +160,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Only show routes that are visible to the world, unless we're viewing our own routes
-        if (!$mine && !$teamName) {
+        if (!$mine && !$teamPublicKey) {
             $routes = $routes->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
         }
 
@@ -288,7 +288,7 @@ class APIDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonroute->clone(true);
+            $newRoute = $dungeonroute->cloneRoute(false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);

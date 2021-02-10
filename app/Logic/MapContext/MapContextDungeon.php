@@ -58,7 +58,7 @@ class MapContextDungeon extends MapContext
         $cacheService = App::make(CacheService::class);
 
         // Get or set the NPCs
-        $npcs = $cacheService->getOtherwiseSet(sprintf('npcs_%s', $this->_context->id), function ()
+        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->_context->id), function ()
         {
             return Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
             {

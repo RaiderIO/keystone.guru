@@ -27,7 +27,7 @@ use Throwable;
  *
  * @mixin Eloquent
  */
-class Release extends Model
+class Release extends CacheModel
 {
     use SerializesDates;
 
@@ -70,15 +70,32 @@ class Release extends Model
      */
     public function getDiscordBodyAttribute()
     {
-        return trim(view('app.release.discord', [
-            'model'        => $this,
-            'mention'      => $this->isMajorUpgrade(),
+        $body = trim(view('app.release.discord', [
+            'model'   => $this,
+            'mention' => $this->isMajorUpgrade(),
+        ])->render());
+        $bodyLength = strlen($body);
+
+        $footer = trim(view('app.release.discord_footer', [
             'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl'   => route('misc.affixes'),
             'sandboxUrl'   => route('dungeonroute.sandbox'),
             'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
+        $footerLength = strlen($footer);
+
+        // 2000 is the limit, but give it some additional padding just in case
+        $truncatedBody = substr($body, 0, 1990 - $footerLength);
+        $truncatedBodyLength = strlen($truncatedBody);
+
+        if ($bodyLength !== $truncatedBodyLength) {
+            $result = sprintf('%s (%d characters truncated) \n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
+        } else {
+            $result = $truncatedBody . $footer;
+        }
+
+        return $result;
     }
 
     /**

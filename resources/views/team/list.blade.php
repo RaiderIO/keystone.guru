@@ -26,7 +26,7 @@ setcookie('viewed_teams', true);
             <tr data-teamid="{{ $team->name }}">
                 <td class="clickable">
                     @isset($team->iconfile)
-                        <img class="mr-1" src="{{ url('storage/' . $team->iconfile->getUrl()) }}"
+                        <img class="mr-1" src="{{ url('storage/' . $team->iconfile->path) }}"
                              style="max-width: 48px"/>
                     @endisset
                     {{ $team->name }}

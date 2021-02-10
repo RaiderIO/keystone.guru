@@ -4,6 +4,9 @@ if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
 if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
     Cookies.set('hidden_map_object_groups', []);
 }
+if (typeof Cookies.get('map_number_style') === 'undefined') {
+    Cookies.set('map_number_style', 'enemy_forces');
+}
 if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
     Cookies.set('kill_zones_number_style', 'percentage');
 }
@@ -34,8 +37,8 @@ const MAP_OBJECT_GROUP_NAMES = [
 ];
 
 // Kill zones
-const KILL_ZONES_NUMBER_STYLE_PERCENTAGE = 'percentage';
-const KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+const NUMBER_STYLE_PERCENTAGE = 'percentage';
+const NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
 
 let c = {
     paidtiers: {

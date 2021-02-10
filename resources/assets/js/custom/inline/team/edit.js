@@ -66,7 +66,7 @@ class TeamEdit extends InlineCode {
         $('select.role_selection').bind('change', function (e) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + self.options.teamName + '/changerole',
+                url: `/ajax/team/${self.options.teamPublicKey}/changerole`,
                 dataType: 'json',
                 data: {
                     username: $(this).data('username'),
@@ -128,7 +128,7 @@ class TeamEdit extends InlineCode {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/team/${self.options.teamName}/member/${userId}`,
+            url: `/ajax/team/${self.options.teamPublicKey}/member/${userId}`,
             data: {
                 _method: 'DELETE'
             },
@@ -301,7 +301,7 @@ class TeamEdit extends InlineCode {
     refreshInviteLink() {
         $.ajax({
             type: 'GET',
-            url: '/ajax/team/' + this.options.teamName + '/refreshlink',
+            url: `/ajax/team/${self.options.teamPublicKey}/refreshlink`,
             dataType: 'json',
             success: function (response) {
                 console.log(response);

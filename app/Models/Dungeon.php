@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -40,7 +39,7 @@ use Mockery\Exception;
  *
  * @mixin Eloquent
  */
-class Dungeon extends Model
+class Dungeon extends CacheModel
 {
     /**
      * The accessors to append to the model's array form.

@@ -33,7 +33,7 @@
 
     @isset($model)
     <div class="form-group">
-        {{__('Current image:')}} <img src="{{ Image::url($model->iconfile->getUrl(), 32, 32) }}"/>
+        {{__('Current image:')}} <img src="{{ $model->iconfile->getUrl() }}" style="width: 32px; height: 32px;"/>
     </div>
     @endisset
 

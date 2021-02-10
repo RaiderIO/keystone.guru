@@ -11,60 +11,67 @@
 |
 */
 
+use App\Http\Controllers\Auth\BattleNetLoginController;
+use App\Http\Controllers\Auth\DiscordLoginController;
+use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\DungeonRouteController;
+use App\Http\Controllers\ReleaseController;
+use App\Http\Controllers\SiteController;
+
 Auth::routes();
 
 Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 {
 
     // Catch for hard-coded /home route in RedirectsUsers.php
-    Route::get('home', 'SiteController@home');
+    Route::get('home', [SiteController::class, 'home']);
 
-    Route::get('credits', 'SiteController@credits')->name('misc.credits');
+    Route::get('credits', [SiteController::class, 'credits'])->name('misc.credits');
 
-    Route::get('about', 'SiteController@about')->name('misc.about');
+    Route::get('about', [SiteController::class, 'about'])->name('misc.about');
 
-    Route::get('privacy', 'SiteController@privacy')->name('legal.privacy');
+    Route::get('privacy', [SiteController::class, 'privacy'])->name('legal.privacy');
 
-    Route::get('terms', 'SiteController@terms')->name('legal.terms');
+    Route::get('terms', [SiteController::class, 'terms'])->name('legal.terms');
 
-    Route::get('cookies', 'SiteController@cookies')->name('legal.cookies');
+    Route::get('cookies', [SiteController::class, 'cookies'])->name('legal.cookies');
 
-    Route::get('/', 'SiteController@index')->name('home');
+    Route::get('/', [SiteController::class, 'index'])->name('home');
 
-    Route::get('changelog', 'SiteController@changelog')->name('misc.changelog');
-    Route::get('release/{release}', 'ReleaseController@view')->name('release.view');
+    Route::get('changelog', [SiteController::class, 'changelog'])->name('misc.changelog');
+    Route::get('release/{release}', [ReleaseController::class, 'view'])->name('release.view');
 
-    Route::get('mapping', 'SiteController@mapping')->name('misc.mapping');
+    Route::get('mapping', [SiteController::class, 'mapping'])->name('misc.mapping');
 
-    Route::get('affixes', 'SiteController@affixes')->name('misc.affixes');
+    Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');
 
-    Route::get('demo', 'SiteController@demo')->name('misc.demo');
+    Route::get('demo', [SiteController::class, 'demo'])->name('misc.demo');
 
-    Route::get('timetest', 'SiteController@timetest')->name('misc.timetest');
+    Route::get('timetest', [SiteController::class, 'timetest'])->name('misc.timetest');
 
-    Route::get('embed/{dungeonroute}', 'SiteController@embed')->name('misc.embed');
+    Route::get('embed/{dungeonroute}', [SiteController::class, 'embed'])->name('misc.embed');
 
-    Route::get('status', 'SiteController@status')->name('misc.status');
+    Route::get('status', [SiteController::class, 'status'])->name('misc.status');
 
-    Route::get('login/google', 'Auth\GoogleLoginController@redirectToProvider')->name('login.google');
-    Route::get('login/google/callback', 'Auth\GoogleLoginController@handleProviderCallback')->name('login.google.callback');
+    Route::get('login/google', [GoogleLoginController::class, 'redirectToProvider'])->name('login.google');
+    Route::get('login/google/callback', [GoogleLoginController::class, 'handleProviderCallback'])->name('login.google.callback');
 
-    Route::get('login/battlenet', 'Auth\BattleNetLoginController@redirectToProvider')->name('login.battlenet');
-    Route::get('login/battlenet/callback', 'Auth\BattleNetLoginController@handleProviderCallback')->name('login.battlenet.callback');
+    Route::get('login/battlenet', [BattleNetLoginController::class, 'redirectToProvider'])->name('login.battlenet');
+    Route::get('login/battlenet/callback', [BattleNetLoginController::class, 'handleProviderCallback'])->name('login.battlenet.callback');
 
-    Route::get('login/discord', 'Auth\DiscordLoginController@redirectToProvider')->name('login.discord');
-    Route::get('login/discord/callback', 'Auth\DiscordLoginController@handleProviderCallback')->name('login.discord.callback');
+    Route::get('login/discord', [DiscordLoginController::class, 'redirectToProvider'])->name('login.discord');
+    Route::get('login/discord/callback', [DiscordLoginController::class, 'handleProviderCallback'])->name('login.discord.callback');
 
-    Route::get('sandbox', 'DungeonRouteController@sandbox')->name('dungeonroute.sandbox');
-    Route::post('sandbox', 'DungeonRouteController@sandbox')->name('dungeonroute.sandbox.post');
+    Route::get('sandbox', [DungeonRouteController::class, 'sandbox'])->name('dungeonroute.sandbox');
+    Route::post('sandbox', [DungeonRouteController::class, 'sandbox'])->name('dungeonroute.sandbox.post');
 
     // Edit your own dungeon routes
-    Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-    Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
+    Route::get('{dungeonroute}/edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
+    Route::get('{dungeonroute}/edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
     // Submit a patch for your own dungeon route
-    Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
+    Route::patch('{dungeonroute}/edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
     // Claiming a route that was made by /sandbox functionality
-    Route::get('{dungeonroute}/claim', 'DungeonRouteController@claim')->name('dungeonroute.claim');
+    Route::get('{dungeonroute}/claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
 
     Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
 
@@ -77,7 +84,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
-    Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
+    Route::get('routes', [DungeonRouteController::class, 'list'])->name('dungeonroutes');
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
@@ -85,15 +92,15 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
     {
         // Must be logged in to create a new dungeon route
-        Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
-        Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+        Route::get('new', [DungeonRouteController::class, 'new'])->name('dungeonroute.new');
+        Route::post('new', [DungeonRouteController::class, 'savenew'])->name('dungeonroute.savenew');
 
         // Legacy redirects
-        Route::get('edit/{dungeonroute}', 'DungeonRouteController@editLegacy');
-        Route::patch('edit/{dungeonroute}', 'DungeonRouteController@updateLegacy');
+        Route::get('edit/{dungeonroute}', [DungeonRouteController::class, 'editLegacy']);
+        Route::patch('edit/{dungeonroute}', [DungeonRouteController::class, 'updateLegacy']);
 
         // Clone a route
-        Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')->name('dungeonroute.clone');
+        Route::get('{dungeonroute}/clone', [DungeonRouteController::class, 'clone'])->name('dungeonroute.clone');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
@@ -355,12 +362,12 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     });
 
     // View any dungeon route (catch all)
-    Route::get('{dungeonroute}', 'DungeonRouteController@view')->name('dungeonroute.view');
-    Route::get('{dungeonroute}/embed/', 'DungeonRouteController@embed')->name('dungeonroute.embed');
-    Route::get('{dungeonroute}/embed/{floorindex}', 'DungeonRouteController@embed')->name('dungeonroute.embed.floor');
-    Route::get('{dungeonroute}/{floor}', 'DungeonRouteController@viewfloor')->name('dungeonroute.view.floor');
+    Route::get('{dungeonroute}', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
+    Route::get('{dungeonroute}/embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
+    Route::get('{dungeonroute}/embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+    Route::get('{dungeonroute}/{floor}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
     // Preview of a route for image capturing library
-    Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')->name('dungeonroute.preview');
+    Route::get('{dungeonroute}/preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
 });
 
 Auth::routes();
