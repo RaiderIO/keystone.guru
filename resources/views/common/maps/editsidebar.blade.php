@@ -136,20 +136,20 @@ if (isset($model)) {
                     @if (Auth::guest())
                         <div id="map_login_and_continue" class="form-group">
                             <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
-                                <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
+                                <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
                             </button>
                         </div>
                         <div id="map_register_and_continue" class="form-group">
                             <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
                                     data-target="#register_modal">
-                                <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
+                                <i class="fas fa-user-plus"></i> {{ __('Register') }}
                             </button>
                         </div>
                     @else
                         <div id="map_save_and_continue" class="form-group">
                             <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $model->public_key]) }}"
                                class="btn btn-primary mt-1 w-100" role="button">
-                                <i class="fas fa-save"></i> {{ __('Save and continue') }}
+                                <i class="fas fa-save"></i> {{ __('Save to profile') }}
                             </a>
                         </div>
                     @endif
