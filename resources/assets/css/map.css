@@ -57,6 +57,7 @@ html, body, #map, #app, .wrapper {
     background-color: #2B3E50;
 }
 
+.modal-backdrop,
 .modal {
     z-index: 100010;
 }
@@ -74,6 +75,11 @@ html, body, #map, #app, .wrapper {
     z-index: 99999;
     transition: right 0.2s, left 0.2s;
     background-color: #4E5D6C;
+}
+
+/** Tooltips should show above the sidebar */
+.tooltip {
+    z-index: 100070 !important;
 }
 
 .sidebar.anchor-left {
