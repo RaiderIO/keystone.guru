@@ -53,13 +53,12 @@ html, body, #map, #app, .wrapper {
     white-space: normal;
 }
 
-.leaflet-container {
-    background-color: #2B3E50;
+.modal-backdrop {
+    z-index: 100010;
 }
 
-.modal-backdrop,
 .modal {
-    z-index: 100010;
+    z-index: 100011;
 }
 
 .modal-lg {
@@ -74,7 +73,6 @@ html, body, #map, #app, .wrapper {
     /* Above NitroPay ads */
     z-index: 99999;
     transition: right 0.2s, left 0.2s;
-    background-color: #4E5D6C;
 }
 
 /** Tooltips should show above the sidebar */
@@ -85,7 +83,6 @@ html, body, #map, #app, .wrapper {
 .sidebar.anchor-left {
     left: -300px;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-right: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-left.active {
@@ -116,9 +113,6 @@ html, body, #map, #app, .wrapper {
     top: 106px;
     cursor: pointer;
     z-index: 100000;
-
-    background: #4E5D6C;
-    color: #DF691A;
 }
 
 .sidebar-toggle.anchor-left {
@@ -137,11 +131,6 @@ html, body, #map, #app, .wrapper {
 
 .sidebar-toggle.anchor-right.active {
     right: 300px;
-}
-
-.sidebar-toggle:hover {
-    background: #DF691A;
-    color: #FFF;
 }
 
 .embed,
@@ -165,7 +154,6 @@ html, body, #map, #app, .wrapper {
 }
 
 .sidebar .sidebar-header {
-    background: #2B3E50;
     height: 106px;
 }
 
@@ -188,7 +176,6 @@ html, body, #map, #app, .wrapper {
 .sidebar .sidebar-header-subtitle {
     padding-left: 10px;
     min-height: 25px;
-    color: #C1C1C1;
 }
 
 .sidebar .sidebar-header-pulls-spacer {
@@ -384,30 +371,9 @@ html, body, #map, #app, .wrapper {
     cursor: default;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
-.route_manipulation_tools .draw_icon .col:hover {
-    background: #DF691A;
-    color: rgb(235, 235, 235) !important;
-}
-
 .floating_panel,
 .sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown.bootstrap-select {
-    background-color: #4E5D6C;
-}
-
-#edit_route_freedraw_options_color,
-.dropdown.bootstrap-select .btn {
-    background-color: #4E5D6C;
-    color: #FFF;
-    border: 1px solid #2B3E5066;
-}
-
-#edit_route_draw_container a {
-    color: #FFF;
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions {
@@ -425,8 +391,6 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions a {
-    background: inherit;
-    color: #DF691A;
     font-size: 14px;
 }
 
@@ -497,10 +461,6 @@ html, body, #map, #app, .wrapper {
 
 .leaflet-horizontalcenter .leaflet-control {
     margin-right: 10px;
-}
-
-#map .dropdown-menu.show li {
-    background-color: #2B3E50;
 }
 
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */

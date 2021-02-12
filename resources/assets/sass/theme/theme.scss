@@ -1,3 +1,17 @@
+// https://bcodes.io/blog/post/theming-css-variables-in-scss
+
+@import 'variables';
+@import 'mixins';
+
+:root.superhero {
+  @include spread-map($theme-map-superhero);
+}
+
+:root.darkly {
+  @include spread-map($theme-map-darkly);
+}
+
+
 .bootstrap-select .btn {
   background-color: white;
   border: 1px solid #ced4da;
@@ -5,11 +19,11 @@
 }
 
 .bg-dark {
-  background-color: $darker-color !important;
+  background-color: var($--theme-darker) !important;
 }
 
 .border-dark {
-  border-color: $darker-color !important;
+  border-color: var($--theme-darker) !important;
 }
 
 .dropdown .dropdown-menu {
@@ -18,11 +32,11 @@
 
 .dropdown .dropdown-header {
   font-weight: bold;
-  color: $primary-color !important;
+  color: var($--theme-primary) !important;
 }
 
 .dropdown-item.selected {
-  background-color: $dark-color !important;
+  background-color: var($--theme-dark) !important;
 }
 
 #map .dropdown-item:hover, .dropdown-item:focus {
@@ -31,7 +45,7 @@
 
 .form-control:disabled, .form-control[readonly] {
   color: rgb(235, 235, 235);
-  background-color: #4E5D6C;
+  background-color: var($--theme-dark);
   opacity: 1;
 }
 
@@ -49,18 +63,113 @@
 }
 
 .probootstrap-showcase-nav ul li > a {
-  color: $primary-color !important;
+  color: var($--theme-primary) !important;
 }
 
 .service .icon i {
-  color: $primary-color !important;
+  color: var($--theme-primary) !important;
 }
 
 /** INTRO.JS */
 .introjs-button {
-  color: $dark-color !important;
+  color: var($--theme-dark) !important;
 }
 
 .form-required {
-  color: $primary-color !important;
+  color: var($--theme-primary) !important;
+}
+
+.leaflet-container {
+    background-color: var($--theme-darker);
+}
+
+.sidebar {
+    background-color: var($--theme-dark);
+}
+
+.sidebar.anchor-left {
+    border-right: var($--theme-darker) solid 1px;
+}
+
+.sidebar-toggle {
+  background: var($--theme-dark);
+  color: var($--theme-primary);
+}
+
+.sidebar-toggle:hover {
+    background: var($--theme-primary);
+    color: var($--theme-light);
+}
+
+.sidebar .sidebar-header {
+  background: var($--theme-darker);
+}
+
+.embed .embed-header-subtitle,
+.sidebar .sidebar-header-subtitle {
+    color: var($--theme-light);
+}
+
+.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
+.route_manipulation_tools .draw_icon .col:hover {
+    background: var($--theme-primary);
+    color: var($--theme-light) !important;
+}
+
+.dropdown.bootstrap-select {
+    background-color: var($--theme-dark);
+}
+
+#edit_route_freedraw_options_color,
+.dropdown.bootstrap-select .btn {
+    background-color: var($--theme-dark);
+    color: var($--theme-light);
+    border: 1px solid var($--theme-darker);
+}
+
+#edit_route_draw_container a {
+    color: var($--theme-light);
+}
+
+#edit_route_draw_actions_container .leaflet-draw-actions a {
+    background: inherit;
+    color: var($--theme-primary);
+}
+
+#map .dropdown-menu.show li {
+    background-color: var($--theme-darker);
+}
+
+.popupCustom .leaflet-popup-tip,
+.popupCustom .leaflet-popup-content-wrapper {
+    background: var($--theme-dark);
+    color: var($--theme-light);
+}
+
+.popupCustom .leaflet-popup-close-button {
+    color: var($--theme-primary) !important;
+}
+
+/* DATATABLES */
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: var($--theme-light) !important;
+    border: none;
+    background: none;
+    background-color: var($--theme-primary);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
+    color: var($--theme-light) !important;
+    border: none;
+    background: none;
+    background-color: var($--theme-primary-hover);
+}
+
+table.dataTable tbody tr {
+    background-color: var($--theme-darker);
+}
+
+table.dataTable tbody tr.selected {
+    background-color: var($--theme-darker);
 }

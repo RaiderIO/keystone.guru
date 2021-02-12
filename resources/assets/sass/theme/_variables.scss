@@ -1,0 +1,23 @@
+$--theme-primary: --theme-primary;
+$--theme-primary-hover: --theme-primary-hover;
+$--theme-light: --theme-light;
+$--theme-dark: --theme-dark;
+$--theme-darker: --theme-darker;
+
+// Superhero
+$theme-map-superhero: (
+    $--theme-primary: #df691a,
+    $--theme-primary-hover: #b15315,
+    $--theme-light: #abb6c2,
+    $--theme-dark: #4e5d6c,
+    $--theme-darker: #2B3E50,
+);
+
+// Darkly
+$theme-map-darkly: (
+    $--theme-primary: #375a7f,
+    $--theme-primary-hover: #4e7fb3,
+    $--theme-light: #adb5bd,
+    $--theme-dark: #303030,
+    $--theme-darker: #202020,
+);

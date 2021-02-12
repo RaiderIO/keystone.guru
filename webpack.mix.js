@@ -222,9 +222,10 @@ if (mix.inProduction()) {
 mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.version() + '.js')
     // Build a dashboard version for the admin
     .scripts(dashboardScripts, 'public/js/dashboard-' + gitRevisionPlugin.version() + '.js')
+    .sass('resources/assets/sass/theme/darkly/darkly.scss', 'public/css/theme-darkly-' + gitRevisionPlugin.version() + '.css')
+    .sass('resources/assets/sass/theme/superhero/superhero.scss', 'public/css/theme-superhero-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/theme/superhero.scss', 'public/css/theme-superhero-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/theme/darkly.scss', 'public/css/theme-darkly-' + gitRevisionPlugin.version() + '.css')
+    .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
     // Lib processing
     .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
     .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
