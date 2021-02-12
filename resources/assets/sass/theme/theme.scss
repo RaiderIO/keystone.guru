@@ -1,0 +1,66 @@
+.bootstrap-select .btn {
+  background-color: white;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.bg-dark {
+  background-color: $darker-color !important;
+}
+
+.border-dark {
+  border-color: $darker-color !important;
+}
+
+.dropdown .dropdown-menu {
+  background-color: #58697A;
+}
+
+.dropdown .dropdown-header {
+  font-weight: bold;
+  color: $primary-color !important;
+}
+
+.dropdown-item.selected {
+  background-color: $dark-color !important;
+}
+
+#map .dropdown-item:hover, .dropdown-item:focus {
+  color: black;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  color: rgb(235, 235, 235);
+  background-color: #4E5D6C;
+  opacity: 1;
+}
+
+.patreon-color {
+  background-color: rgb(250, 118, 100);
+}
+
+/* On home page */
+.probootstrap-showcase-nav ul li.active {
+  background-color: #8d9dad !important;
+}
+
+.probootstrap-showcase-nav ul li.active a {
+  color: rgb(235, 235, 235) !important;
+}
+
+.probootstrap-showcase-nav ul li > a {
+  color: $primary-color !important;
+}
+
+.service .icon i {
+  color: $primary-color !important;
+}
+
+/** INTRO.JS */
+.introjs-button {
+  color: $dark-color !important;
+}
+
+.form-required {
+  color: $primary-color !important;
+}
