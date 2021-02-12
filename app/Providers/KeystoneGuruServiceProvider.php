@@ -89,10 +89,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
-
         // Can use the Auth() global here!
         view()->composer('*', function (View $view)
         {
+            $view->with('theme', Auth::check() ? Auth::getUser()->theme : 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             // Not logged in or not having paid for free ads will cause ads to come up

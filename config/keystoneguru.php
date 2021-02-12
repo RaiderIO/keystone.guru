@@ -2,9 +2,14 @@
 
 
 return [
+    'themes' => [
+        'superhero' => 'Classic',
+        'darkly' => 'Dark',
+    ],
+
     'super_admins' => [
         'Admin',
-        'gallypsa'
+        'gallypsa',
     ],
 
     'github_username' => 'Wotuu',
@@ -20,22 +25,22 @@ return [
 
     'cache' => [
         'npcs'                   => [
-            'ttl' => '1 hour'
+            'ttl' => '1 hour',
         ],
         'dungeonData'            => [
-            'ttl' => '1 hour'
+            'ttl' => '1 hour',
         ],
         'static_data'            => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
         'mdt'                    => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
         'displayed_affix_groups' => [
-            'ttl' => '15 minutes'
+            'ttl' => '15 minutes',
         ],
         'global_view_variables' => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
     ],
 

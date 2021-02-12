@@ -51,6 +51,7 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
+        $user->theme = $request->get('theme');
         $user->echo_color = $request->get('echo_color', Color::hexColor());
         $user->echo_anonymous = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');

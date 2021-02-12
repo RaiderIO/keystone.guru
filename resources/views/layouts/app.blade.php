@@ -6,6 +6,7 @@
 /** @var $version string */
 /** @var $nameAndVersion string */
 /** @var $hasNewChangelog boolean */
+/** @var $theme string */
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -37,8 +38,6 @@ $showAds = isset($showAds) ? $showAds : true;
 $analytics = isset($analytics) ? $analytics : $isProduction;
 
 $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;
-
-$theme = 'darkly';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="{{$theme}}">
 <head>
@@ -55,7 +54,6 @@ $theme = 'darkly';
     <link href="{{ asset('css/theme-' . $theme . '-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/app-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/theme-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
@@ -83,7 +81,7 @@ $theme = 'darkly';
 <body>
 <div id="app">
     @if($header)
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <nav class="navbar navbar-expand-lg navbar-dark {{ $theme === 'superhero' ? 'bg-secondary' : 'bg-primary' }}">
             <div class="container">
                 <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"

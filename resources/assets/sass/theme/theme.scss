@@ -11,6 +11,9 @@
   @include spread-map($theme-map-darkly);
 }
 
+body {
+  font-family: Raleway, sans-serif !important;
+}
 
 .bootstrap-select .btn {
   background-color: white;
@@ -80,15 +83,15 @@
 }
 
 .leaflet-container {
-    background-color: var($--theme-darker);
+  background-color: var($--theme-darker);
 }
 
 .sidebar {
-    background-color: var($--theme-dark);
+  background-color: var($--theme-dark);
 }
 
 .sidebar.anchor-left {
-    border-right: var($--theme-darker) solid 1px;
+  border-right: var($--theme-darker) solid 1px;
 }
 
 .sidebar-toggle {
@@ -97,8 +100,8 @@
 }
 
 .sidebar-toggle:hover {
-    background: var($--theme-primary);
-    color: var($--theme-light);
+  background: var($--theme-primary);
+  color: var($--theme-light);
 }
 
 .sidebar .sidebar-header {
@@ -107,69 +110,69 @@
 
 .embed .embed-header-subtitle,
 .sidebar .sidebar-header-subtitle {
-    color: var($--theme-light);
+  color: var($--theme-light);
 }
 
 .route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
 .route_manipulation_tools .draw_icon .col:hover {
-    background: var($--theme-primary);
-    color: var($--theme-light) !important;
+  background: var($--theme-primary);
+  color: var($--theme-light) !important;
 }
 
 .dropdown.bootstrap-select {
-    background-color: var($--theme-dark);
+  background-color: var($--theme-dark);
 }
 
 #edit_route_freedraw_options_color,
 .dropdown.bootstrap-select .btn {
-    background-color: var($--theme-dark);
-    color: var($--theme-light);
-    border: 1px solid var($--theme-darker);
+  background-color: var($--theme-dark);
+  color: var($--theme-text-contrast);
+  border: 1px solid var($--theme-darker);
 }
 
 #edit_route_draw_container a {
-    color: var($--theme-light);
+  color: var($--theme-light);
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions a {
-    background: inherit;
-    color: var($--theme-primary);
+  background: inherit;
+  color: var($--theme-primary);
 }
 
 #map .dropdown-menu.show li {
-    background-color: var($--theme-darker);
+  background-color: var($--theme-darker);
 }
 
 .popupCustom .leaflet-popup-tip,
 .popupCustom .leaflet-popup-content-wrapper {
-    background: var($--theme-dark);
-    color: var($--theme-light);
+  background: var($--theme-dark);
+  color: var($--theme-light);
 }
 
 .popupCustom .leaflet-popup-close-button {
-    color: var($--theme-primary) !important;
+  color: var($--theme-primary) !important;
 }
 
 /* DATATABLES */
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    color: var($--theme-light) !important;
-    border: none;
-    background: none;
-    background-color: var($--theme-primary);
+  color: var($--theme-light) !important;
+  border: none;
+  background: none;
+  background-color: var($--theme-primary);
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
-    color: var($--theme-light) !important;
-    border: none;
-    background: none;
-    background-color: var($--theme-primary-hover);
+  color: var($--theme-light) !important;
+  border: none;
+  background: none;
+  background-color: var($--theme-primary-hover);
 }
 
 table.dataTable tbody tr {
-    background-color: var($--theme-darker);
+  background-color: var($--theme-dark);
 }
 
 table.dataTable tbody tr.selected {
-    background-color: var($--theme-darker);
+  background-color: var($--theme-darker);
 }
