@@ -50,6 +50,7 @@ window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
+window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
@@ -76,6 +77,8 @@ window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 window.autocomplete = require('bootstrap-4-autocomplete');
 window.toggle = require('bootstrap4-toggle');
+window.jarallax = require('jarallax/dist/jarallax.min');
+window.swipe = require('jquery-touchswipe');
 
 require('@fortawesome/fontawesome-free');
 

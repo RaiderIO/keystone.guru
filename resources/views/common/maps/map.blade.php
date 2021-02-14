@@ -26,6 +26,7 @@ if ($embed)
 }
 // No UI on the map
 $noUI = isset($noUI) && $noUI;
+$gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
@@ -59,6 +60,7 @@ if ($isAdmin)
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'noUI' => $noUI,
+    'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,

@@ -134,6 +134,8 @@ class DungeonMap extends Signalable {
 
         this.mapTileLayer = null;
 
+        L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling.GestureHandling);
+
         // Create the map object
         this.leafletMap = L.map(mapid, $.extend({
             center: [0, 0],
@@ -144,6 +146,7 @@ class DungeonMap extends Signalable {
             // Context menu when right clicking stuff
             contextmenu: true,
             zoomControl: false,
+            gestureHandling: this.options.gestureHandling
         }, c.map.settings));
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();

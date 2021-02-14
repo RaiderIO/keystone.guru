@@ -409,29 +409,6 @@ html, body, #map, #app, .wrapper {
 #map-controls {
     height: 700px;
 }
-
-.map-scroll:before {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    content: '';
-    background: #00000061;
-    z-index: 999;
-}
-
-.map-scroll:after {
-    content: 'Use ctrl + scroll to zoom the map';
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    z-index: 999;
-    font-size: 34px;
-    color: #eaeaea;
-    text-align: center;
-}
-
 /* Remove square background and border around enemies, but leave editing drag squares alone */
 .leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;

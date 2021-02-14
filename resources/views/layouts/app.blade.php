@@ -1,6 +1,6 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-/** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
+/** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
 /** @var $isProduction string */
 /** @var $isMobile boolean */
 /** @var $version string */
@@ -38,6 +38,7 @@ $showAds = isset($showAds) ? $showAds : true;
 $analytics = isset($analytics) ? $analytics : $isProduction;
 
 $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;
+$rootClass = isset($rootClass) ? $rootClass : '';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="{{$theme}}">
 <head>
@@ -56,12 +57,17 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/theme-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset('css/home-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
     @include('common.general.inlinemanager')
     @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
     @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
+
+    @if($header)
+        @include('common.general.inline', ['path' => 'common/general/navbarshrink'])
+    @endif
 
     @isset($menuItems)
         @include('common.general.inline', ['path' => 'common/general/menuitemsanchor'])
@@ -81,12 +87,18 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 <body>
 <div id="app">
     @if($header)
-        <nav class="navbar navbar-expand-lg navbar-dark {{ $theme === 'superhero' ? 'bg-secondary' : 'bg-primary' }}">
+        <div class="navbar-top-fixed-spacer"></div>
+        <nav
+            class="navbar fixed-top navbar-expand-lg navbar-dark {{ $theme === 'superhero' ? 'bg-secondary' : 'bg-primary' }}"
+            data-toggle="navbar-shrink">
             <div class="container">
-                <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}">
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -249,7 +261,13 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     @endif
 
     @if($custom)
-        @yield('content')
+        @empty($rootClass)
+            @yield('content')
+        @else
+            <div class="{{$rootClass}}">
+                @yield('content')
+            </div>
+        @endisset
 
     @elseif(isset($menuItems))
         <div class="container container_wide mt-3">
@@ -348,57 +366,153 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
             </div>
         @endif
 
-        <div class="container text-center">
-            <hr/>
-            <div class="row">
-                <div class="col-md-3">
-                    <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
+
+        <div class="home">
+            <section class="footer1 cid-soU7JptK9v" once="footers" id="footer1-m">
+
+
+                <div class="container">
+                    <div class="row mbr-white">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
+                                <strong>About</strong></h5>
+                            <ul class="list mbr-fonts-style display-4">
+                                <li class="mbr-text item-wrap">
+                                    <a href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
+                                </li>
+                                <li class="mbr-text item-wrap">
+                                    <a href="{{ route('misc.about') }}">{{ __('About') }}</a>
+                                </li>
+                                <li class="mbr-text item-wrap"><br></li>
+                                <li class="mbr-text item-wrap"><br></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
+                                <strong>External</strong></h5>
+                            <ul class="list mbr-fonts-style display-4">
+
+                                <li class="mbr-text item-wrap">
+                                    <a href="https://www.patreon.com/keystoneguru" target="_blank">
+                                        <i class="fab fa-patreon"></i> {{ __('Patreon') }}
+                                    </a>
+                                </li>
+                                <li class="mbr-text item-wrap">
+                                    <a href="https://discord.gg/2KtWrqw" target="_blank">
+                                        <i class="fab fa-discord"></i> {{ __('Discord') }}
+                                    </a>
+                                </li>
+                                <li class="mbr-text item-wrap">
+                                    <a href="https://github.com/Wotuu/keystone.guru" target="_blank">
+                                        <i class="fab fa-github"></i> {{ __('Github') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
+                                <strong>Legal</strong></h5>
+                            <ul class="list mbr-fonts-style display-4">
+                                <li class="mbr-text item-wrap">
+                                    <a href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+                                </li>
+                                <li class="mbr-text item-wrap">
+                                    <a href="{{ route('legal.privacy') }}">{{ __('Privacy Policy') }}</a>
+                                </li>
+                                <li class="mbr-text item-wrap">
+                                    <a href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">Trademark</h5>
+                            <p class="mbr-text mbr-fonts-style mb-4 display-4">
+                                World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered
+                                trademarks
+                                of Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not
+                                affiliated with Blizzard Entertainment.</p>
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-7">
+                                <strong>Social</strong>
+                            </h5>
+                            <div class="social-row display-7">
+                                <div class="soc-item">
+                                    <a href="https://www.youtube.com/channel/UCtjlNmuS2kVQhNvPdW5D2Jg" target="_blank">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                </div>
+                                <div class="soc-item">
+                                    <a href="https://twitter.com/keystoneguru" target="_blank">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                </div>
+                                <div class="soc-item">
+                                    <a href="https://reddit.com/r/KeystoneGuru" target="_blank">
+                                        <i class="fab fa-reddit"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <p class="mbr-text mb-0 mbr-fonts-style copyright align-center display-7">
+                                ©{{ date('Y') }} {{ $nameAndVersion }} - All Rights Reserved
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <a class="nav-link" href="https://www.patreon.com/keystoneguru" target="_blank">
-                        <i class="fab fa-patreon"></i> {{ __('Patreon') }}
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a class="nav-link" href="https://discord.gg/2KtWrqw" target="_blank">
-                        <i class="fab fa-discord"></i> {{ __('Discord') }}
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a class="nav-link" href="https://github.com/Wotuu/keystone.guru" target="_blank">
-                        <i class="fab fa-github"></i> {{ __('Github') }}
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
-                </div>
-                <div class="col-md-3">
-                    <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
-                </div>
-                <div class="col-md-3">
-                    <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-                </div>
-                <div class="col-md-3">
-                    <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
-                </div>
-            </div>
-            <div class="row text-center small">
-                <div class="col-md-6">
-                    <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                    <a class="nav-item nav-link" href="/">
-                        ©{{ date('Y') }} {{ $nameAndVersion }}
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
-                    Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
-                    Blizzard Entertainment.
-                    <span data-ccpa-link="1"></span>
-                </div>
-            </div>
+            </section>
         </div>
+
+        {{--        <div class="container text-center">--}}
+        {{--            <hr/>--}}
+        {{--            <div class="row">--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-link" href="https://www.patreon.com/keystoneguru" target="_blank">--}}
+        {{--                        <i class="fab fa-patreon"></i> {{ __('Patreon') }}--}}
+        {{--                    </a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-link" href="https://discord.gg/2KtWrqw" target="_blank">--}}
+        {{--                        <i class="fab fa-discord"></i> {{ __('Discord') }}--}}
+        {{--                    </a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-link" href="https://github.com/Wotuu/keystone.guru" target="_blank">--}}
+        {{--                        <i class="fab fa-github"></i> {{ __('Github') }}--}}
+        {{--                    </a>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--            <div class="row">--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                    <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-3">--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--            <div class="row text-center small">--}}
+        {{--                <div class="col-md-6">--}}
+        {{--                    <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>--}}
+        {{--                    <a class="nav-item nav-link" href="/">--}}
+        {{--                        ©{{ date('Y') }} {{ $nameAndVersion }}--}}
+        {{--                    </a>--}}
+        {{--                </div>--}}
+        {{--                <div class="col-md-6">--}}
+        {{--                    World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of--}}
+        {{--                    Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with--}}
+        {{--                    Blizzard Entertainment.--}}
+        {{--                    <span data-ccpa-link="1"></span>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
     @endif
 </div>
 

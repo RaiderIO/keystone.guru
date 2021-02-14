@@ -131,7 +131,7 @@ body {
 }
 
 #edit_route_draw_container a {
-  color: var($--theme-light);
+  color: var($--theme-text-contrast);
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions a {
@@ -175,4 +175,39 @@ table.dataTable tbody tr {
 
 table.dataTable tbody tr.selected {
   background-color: var($--theme-darker);
+}
+
+/* HOME PAGE */
+.mbr-overlay {
+  background-color: var($--theme-dark);
+}
+
+.cid-s48MCQYojq .mbr-text,
+.cid-s48MCQYojq .mbr-section-btn {
+  color: var($--theme-light);
+}
+
+.home .cid-soU8PSECoL {
+  background-color: var($--theme-dark) !important;;
+}
+
+.home .cid-soU8QlAKKP {
+  background-color: var($--theme-dark) !important;
+}
+
+.home .cid-soU6QnGh9A {
+  background-color: var($--theme-dark) !important;
+}
+
+.home .cid-soU5dLgjOI {
+  background-color: var($--theme-dark) !important;
+}
+
+/* Footer - do not show any special background */
+.home .cid-soU7JptK9v {
+  background-color: unset !important;
+}
+
+.navbar-top-fixed-spacer {
+  height: var($--theme-header-height);
 }

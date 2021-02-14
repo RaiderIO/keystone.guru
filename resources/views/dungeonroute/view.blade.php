@@ -37,7 +37,9 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => false,
-            'floorId' => $floor->id
+            'floorId' => $floor->id,
+            'noUI' => (bool)$model->demo,
+            'gestureHandling' => (bool)$model->demo,
         ])
 
         @include('common.maps.killzonessidebar', [
