@@ -1,5 +1,8 @@
 <?php
 /** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
+/** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
+/** @var $userCount int */
+
 ?>
 @extends('layouts.app', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
 
@@ -84,7 +87,8 @@
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>Create your own</strong></h3>
+                            <strong>Create your own</strong>
+                        </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
                             Use Mobirise website building software to create multiple sites for commercial and
                             non-profit projects. Click on the image in this block to replace it. You can add a
@@ -157,12 +161,28 @@
         <div>
             <div class="mbr-section-head mb-4">
                 <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                    <strong>Demo Routes</strong></h3>
-
+                    <strong>Demo Routes</strong>
+                </h3>
+            </div>
+            <div class="align-center container mb-4">
+                <div class="row justify-content-center">
+                    <div class="col">
+                        @include('common.dungeon.select', [
+                            'id'       => 'demo_dungeon_id',
+                            'label'    => false,
+                            'dungeons' => $demoRouteDungeons,
+                            'showAll'  => false,
+                            'required' => false
+                        ])
+                    </div>
+                </div>
             </div>
             <div class="demo-map">
-                <iframe frameborder="0" style="border:0"
-                        src="{{ route('dungeonroute.view', ['dungeonroute' => $demoRoutes->first()]) }}"
+                <iframe frameborder="0"
+                        loading="lazy"
+                        class="lazyload"
+                        style="border:0"
+                        data-src="{{ route('dungeonroute.view', ['dungeonroute' => $demoRoutes->first()]) }}"
                         allowfullscreen=""></iframe>
             </div>
         </div>
@@ -180,9 +200,10 @@
                             <h4 class="card-title mbr-fonts-style align-center mb-4 display-1">
                                 <strong>Start planning today</strong></h4>
                             <p class="mbr-text mbr-fonts-style mb-4 display-7">
-                                2500+ beautiful website blocks, templates and themes help you start easily.</p>
+                                {{ __(sprintf('Join %d+ other users and plan your M+ routes online!', (int)($userCount / 1000) * 1000)) }}
+                            </p>
                             <div class="mbr-section-btn mt-3">
-                                <a class="btn btn-primary display-4" href="https://mobiri.se">Register</a>
+                                <div class="btn btn-primary display-4">{{ __('Create route') }}</div>
                             </div>
                         </div>
                     </div>

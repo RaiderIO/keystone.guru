@@ -5,6 +5,8 @@ class CommonGeneralNavbarshrink extends InlineCode {
     activate() {
         super.activate();
 
+        this.fixedSpacerDefaultHeight = $('.navbar-top-fixed-spacer').css('height');
+
         let self = this;
 
         $('[data-toggle="navbar-shrink"]').each(function () {
@@ -29,14 +31,12 @@ class CommonGeneralNavbarshrink extends InlineCode {
         let spacer = $('.navbar-top-fixed-spacer');
         let top = spacer.offset().top;
 
-
         if (scrollElement.scrollTop() > top) {
             shrinkElement.addClass('navbar-shrink');
+            spacer.height(parseInt(shrinkElement.outerHeight()));
         } else {
             shrinkElement.removeClass('navbar-shrink');
+            spacer.height(parseInt(this.fixedSpacerDefaultHeight));
         }
-
-        let height = shrinkElement.outerHeight();
-        spacer.height(height);
     }
 }

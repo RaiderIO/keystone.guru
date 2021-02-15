@@ -79,6 +79,7 @@ window.autocomplete = require('bootstrap-4-autocomplete');
 window.toggle = require('bootstrap4-toggle');
 window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');
+window.lazysizes = require('lazysizes');
 
 require('@fortawesome/fontawesome-free');
 

@@ -256,6 +256,7 @@ if (images) {
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+    mix.copy('resources/assets/images/logo', 'public/images/logo', false);
     mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
     mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);

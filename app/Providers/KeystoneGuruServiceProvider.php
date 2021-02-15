@@ -7,11 +7,13 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Expansion;
 use App\Models\PaidTier;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
+use App\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -66,21 +68,30 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $demoRoutes = DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
             return [
-                'isProduction'                  => config('app.env') === 'production',
-                'demoRoutes'                    => $demoRoutes,
-                'demoRouteDungeons'             => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
-                'latestReleaseId'               => Release::max('id'),
-                'appVersion'                    => GitVersionHelper::getVersion(),
-                'appVersionAndName'             => GitVersionHelper::getNameAndVersion(),
+                'isProduction'                    => config('app.env') === 'production',
+                'demoRoutes'                      => $demoRoutes,
+                'demoRouteDungeons'               => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
+                'latestReleaseId'                 => Release::max('id'),
+                'appVersion'                      => GitVersionHelper::getVersion(),
+                'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
+
+                // Home
+                'userCount'                       => User::count(),
 
                 // Changelog
-                'releaseChangelogCategories'    => ReleaseChangelogCategory::all(),
+                'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
 
                 // Map
-                'characterClassSpecializations' => CharacterClassSpecialization::all(),
-                'characterClasses'              => CharacterClass::with('specializations')->get(),
+                'characterClassSpecializations'   => CharacterClassSpecialization::all(),
+                'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'         => CharacterRace::with(['classes:character_classes.id'])->get(),
+                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
+
+                // Misc
+                'expansions'                      => Expansion::all(),
+                'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
+                'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
+                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->get()->first(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -88,6 +99,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->share('isMobile', (new Agent())->isMobile());
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
+        view()->share('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
 
         // Can use the Auth() global here!
         view()->composer('*', function (View $view)
@@ -97,6 +109,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             // Not logged in or not having paid for free ads will cause ads to come up
             $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+        });
+
+        // Home page
+        view()->composer('home', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('userCount', $globalViewVariables['userCount']);
         });
 
         // Main view
@@ -125,6 +143,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('specializations', $globalViewVariables['characterClassSpecializations']);
             $view->with('classes', $globalViewVariables['characterClasses']);
             $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
+        });
+
+        // Dungeon selector
+        view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('allExpansions', $globalViewVariables['expansions']);
+            $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
+            $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
+            $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
         });
     }
 }

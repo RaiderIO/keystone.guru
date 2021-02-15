@@ -5,7 +5,8 @@
 
 $affixes = $model->affixes->pluck('text', 'id');
 $selectedAffixes = $model->affixes->pluck('id');
-if (count($affixes) == 0) {
+if (count($affixes) == 0)
+{
     $affixes = [-1 => 'Any'];
     $selectedAffixes = -1;
 }
@@ -20,18 +21,20 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 @endsection
 @section('content')
     <div class="wrapper">
-        @include('common.maps.viewsidebar', [
-            'dungeon' => $dungeon,
-            'model' => $model,
-            'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
-            'floorId' => $floor->id,
-            'show' => [
-                'sharing' => true,
-                'shareable-link' => !$model->isSandbox(),
-                'embedable-link' => !$model->isSandbox(),
-                'export-mdt-string' => true,
-            ]
-        ])
+        @if(!$model->demo)
+            @include('common.maps.viewsidebar', [
+                'dungeon' => $dungeon,
+                'model' => $model,
+                'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
+                'floorId' => $floor->id,
+                'show' => [
+                    'sharing' => true,
+                    'shareable-link' => !$model->isSandbox(),
+                    'embedable-link' => !$model->isSandbox(),
+                    'export-mdt-string' => true,
+                ]
+            ])
+        @endif
 
         @include('common.maps.map', [
             'dungeon' => $dungeon,
@@ -42,9 +45,11 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'gestureHandling' => (bool)$model->demo,
         ])
 
-        @include('common.maps.killzonessidebar', [
-            'edit' => false
-        ])
+        @if(!$model->demo)
+            @include('common.maps.killzonessidebar', [
+                'edit' => false
+            ])
+        @endif
     </div>
 @endsection
 

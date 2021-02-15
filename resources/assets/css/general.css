@@ -63,16 +63,16 @@
     padding-top: 0.2em !important;
     padding-bottom: 0.2em !important;
 
-    -webkit-transition: padding 0.2s linear;
-    -moz-transition: padding 0.2s linear;
-    -o-transition: padding 0.2s linear;
-    transition: padding 0.2s linear;
+    -webkit-transition: padding 0.2s ease;
+    -moz-transition: padding 0.2s ease;
+    -o-transition: padding 0.2s ease;
+    transition: padding 0.2s ease;
 }
 
 /* This takes up the space that the fixed-top navbar leaves because it floats */
 .navbar-top-fixed-spacer {
-    -webkit-transition: height 0.2s linear;
-    -moz-transition: height 0.2s linear;
-    -o-transition: height 0.2s linear;
-    transition: height 0.2s linear;
+    -webkit-transition: height 0.2s ease;
+    -moz-transition: height 0.2s ease;
+    -o-transition: height 0.2s ease;
+    transition: height 0.2s ease;
 }
