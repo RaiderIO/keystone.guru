@@ -177,6 +177,10 @@ table.dataTable tbody tr.selected {
   background-color: var($--theme-darker);
 }
 
+.navbar-top-fixed-spacer {
+  height: var($--theme-header-height);
+}
+
 /* HOME PAGE */
 .home {
   .mbr-overlay {
@@ -214,7 +218,14 @@ table.dataTable tbody tr.selected {
     background-color: unset !important;
   }
 
-  .navbar-top-fixed-spacer {
-    height: var($--theme-header-height);
+  .gradient-top {
+    background: var($--theme-darker);
+    background: linear-gradient(0deg, var($--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .gradient-bottom {
+    background: var($--theme-darker);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, var($--theme-darker) 100%);
+    //background: linear-gradient(0deg, rgba(255, 0, 0, 1) 0%, rgba(0, 255, 0, 1) 100%);
   }
 }

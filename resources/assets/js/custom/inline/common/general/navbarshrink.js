@@ -5,7 +5,9 @@ class CommonGeneralNavbarshrink extends InlineCode {
     activate() {
         super.activate();
 
-        this.fixedSpacerDefaultHeight = $('.navbar-top-fixed-spacer').css('height');
+        this.fixedSpacerDefaultHeight = $('.fixed-top').css('height');
+
+        console.log(this.fixedSpacerDefaultHeight);
 
         let self = this;
 

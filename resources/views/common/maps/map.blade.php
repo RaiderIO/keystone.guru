@@ -20,7 +20,7 @@ $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If this is an embedded route, do not show ads
-if ($embed)
+if ($embed || $dungeonroute->demo === 1)
 {
     $showAds = false;
 }
@@ -120,8 +120,7 @@ if ($isAdmin)
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-
-@if(($showAds && !$isMobile || !$edit))
+@if((($showAds && !$isMobile) || !$edit))
     <header class="fixed-top">
         @if($showAds && !$isMobile)
             <div class="container p-0 map_top_header_background" style="width: 728px">

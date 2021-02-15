@@ -1,14 +1,13 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title, 'cookieConsent' => $model->demo === 1 ? false : null ])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
 
 $affixes = $model->affixes->pluck('text', 'id');
 $selectedAffixes = $model->affixes->pluck('id');
-if (count($affixes) == 0)
-{
+if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
-    $selectedAffixes = -1;
+    $selectedAffixes = -1;w
 }
 $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 ?>

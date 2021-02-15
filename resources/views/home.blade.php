@@ -43,6 +43,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="gradient-top">&nbsp;</div>
+    </section>
+
+    <!-- Fade into solid -->
+    <section>
+        <div class="row">
+            <div class="col">
+                <div class="gradient-top">&nbsp;</div>
+            </div>
+        </div>
     </section>
 
     <section class="image1 cid-soU8PSECoL" id="image1-n">
@@ -54,7 +65,8 @@
                     <div class="image-wrapper">
                         <img src="{{ url('images/home/1.jpg') }}" alt="Mobirise">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
-                            Discover new routes</p>
+                            Discover new routes
+                        </p>
                     </div>
                 </div>
                 <div class="col-12 col-lg">
@@ -62,10 +74,11 @@
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
                             <strong>Discover new routes</strong></h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            Use Mobirise website building software to create multiple sites for commercial and
-                            non-profit projects. Click on the image in this block to replace it. You can add a
-                            description below your image, or on the side. If you want to hide some of the text fields,
-                            open the Block parameters, and uncheck relevant options.</p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel tincidunt sem.
+                            Suspendisse tempus enim non velit aliquet, sed lobortis justo pulvinar. Vestibulum ante
+                            ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis suscipit
+                            molestie lectus, vel cursus ligula porta id. Duis eu ultricies neque.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -81,7 +94,8 @@
                     <div class="image-wrapper">
                         <img src="{{ url('images/home/2.jpg') }}" alt="Mobirise">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
-                            Create your own</p>
+                            Create your own
+                        </p>
                     </div>
                 </div>
                 <div class="col-12 col-lg">
@@ -90,10 +104,11 @@
                             <strong>Create your own</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            Use Mobirise website building software to create multiple sites for commercial and
-                            non-profit projects. Click on the image in this block to replace it. You can add a
-                            description below your image, or on the side. If you want to hide some of the text fields,
-                            open the Block parameters, and uncheck relevant options.</p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel tincidunt sem.
+                            Suspendisse tempus enim non velit aliquet, sed lobortis justo pulvinar. Vestibulum ante
+                            ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis suscipit
+                            molestie lectus, vel cursus ligula porta id. Duis eu ultricies neque.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -188,6 +203,15 @@
         </div>
     </section>
 
+    <!-- Fade into solid -->
+    <section class="gradient-bottom-container">
+        <div class="row">
+            <div class="col">
+                <div class="gradient-bottom">&nbsp;</div>
+            </div>
+        </div>
+    </section>
+
     <section class="info3 cid-soU9jtw47v mbr-parallax-background" id="info3-p">
 
         <div class="mbr-overlay"></div>
@@ -208,6 +232,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fade into solid -->
+    <section>
+        <div class="row">
+            <div class="col">
+                <div class="gradient-top">&nbsp;</div>
             </div>
         </div>
     </section>

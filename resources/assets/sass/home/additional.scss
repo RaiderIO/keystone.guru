@@ -847,4 +847,20 @@
       left: -1rem;
     }
   }
+
+  .gradient-top {
+    height: 30px;
+    margin-top: -30px;
+  }
+
+  .gradient-bottom {
+    height: 30px;
+  }
+
+  /* Don't ask, it works this way */
+  .gradient-bottom-container {
+    z-index: 1;
+    position: relative;
+    margin-bottom: -30px;
+  }
 }
