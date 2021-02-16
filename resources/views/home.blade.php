@@ -43,17 +43,11 @@
                 </div>
             </div>
         </div>
-
-        <div class="gradient-top">&nbsp;</div>
     </section>
 
     <!-- Fade into solid -->
     <section>
-        <div class="row">
-            <div class="col">
-                <div class="gradient-top">&nbsp;</div>
-            </div>
-        </div>
+        <div class="gradient-top">&nbsp;</div>
     </section>
 
     <section class="image1 cid-soU8PSECoL" id="image1-n">
@@ -205,11 +199,7 @@
 
     <!-- Fade into solid -->
     <section class="gradient-bottom-container">
-        <div class="row">
-            <div class="col">
-                <div class="gradient-bottom">&nbsp;</div>
-            </div>
-        </div>
+        <div class="gradient-bottom">&nbsp;</div>
     </section>
 
     <section class="info3 cid-soU9jtw47v mbr-parallax-background" id="info3-p">
@@ -238,10 +228,6 @@
 
     <!-- Fade into solid -->
     <section>
-        <div class="row">
-            <div class="col">
-                <div class="gradient-top">&nbsp;</div>
-            </div>
-        </div>
+        <div class="gradient-top">&nbsp;</div>
     </section>
 @endsection

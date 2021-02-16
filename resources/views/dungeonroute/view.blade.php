@@ -7,7 +7,7 @@ $affixes = $model->affixes->pluck('text', 'id');
 $selectedAffixes = $model->affixes->pluck('id');
 if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
-    $selectedAffixes = -1;w
+    $selectedAffixes = -1;
 }
 $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 ?>
