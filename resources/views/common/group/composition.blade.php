@@ -100,7 +100,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 @endsection
 
 <div class="row">
-    <div class="col-xl-2 offset-xl-5">
+    <div class="col-xl-4 offset-xl-4">
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}

@@ -551,9 +551,10 @@ class DungeonRoute extends Model
      *
      * @param Request $request
      * @param SeasonService $seasonService
+     * @param bool $sandBox
      * @return bool
      */
-    public function saveFromRequest(Request $request, SeasonService $seasonService): bool
+    public function saveFromRequest(Request $request, SeasonService $seasonService, bool $sandBox = false): bool
     {
         $result = false;
 
@@ -566,7 +567,6 @@ class DungeonRoute extends Model
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
-        $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
@@ -575,9 +575,16 @@ class DungeonRoute extends Model
         $this->pull_gradient = $request->get('pull_gradient', '');
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
+        // Sandbox routes have some fixed properties
+        if ($sandBox) {
+            $this->title = sprintf('%s Sandbox', $this->dungeon->name);
+            $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+        } else {
+            $this->title = $request->get('dungeon_route_title', $this->title);
+        }
+
         if (Auth::check()) {
-            $user = User::findOrFail(Auth::id());
-            if ($user->hasRole('admin')) {
+            if (User::findOrFail(Auth::id())->hasRole('admin')) {
                 $this->demo = intval($request->get('demo', 0)) > 0;
             }
         }

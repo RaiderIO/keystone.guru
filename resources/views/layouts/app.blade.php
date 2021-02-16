@@ -107,21 +107,6 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="demo_dropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('Demo') }}
-                            </a>
-
-                            <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
-                                @foreach($demoRoutes as $route)
-                                    <a class="dropdown-item test-dropdown-menu"
-                                       href="{{ route('dungeonroute.view', ['dungeonroute' => $route->public_key]) }}">
-                                        {{ $route->dungeon->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
@@ -146,27 +131,13 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item mr-lg-2">
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle col-lg-auto" type="button"
-                                        data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    {{__('Sandbox')}}
-                                </button>
-                                <div class="dropdown-menu text-center text-lg-left"
-                                     aria-labelledby="newRouteDropdownMenuButton">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#sandbox_modal">
-                                        <i class="fas fa-play"></i> {{__('New route')}}
-                                    </a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal"
-                                       data-target="#sandbox_mdt_import_modal">
-                                        <i class="fas fa-file-import"></i> {{__('Import from MDT')}}
-                                    </a>
-                                </div>
-                            </div>
+                            <a class="btn {{ $theme === 'superhero' ? 'btn-primary' : 'bg-success' }}" href="#" data-toggle="modal" data-target="#create_route_modal">
+                                <i class="fas fa-plus"></i> {{__('Create route')}}
+                            </a>
                         </li>
                         @if (Auth::guest())
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">
+                                <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
                                     {{__('Login')}}
                                 </a>
                             </li>
@@ -176,25 +147,6 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                                 </a>
                             </li>
                         @else
-                            <li class="nav-item mr-lg-2 mt-1 mt-lg-0">
-                                <div class="dropdown">
-                                    <button class="btn btn-success dropdown-toggle col-lg-auto" type="button"
-                                            id="newRouteDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="fas fa-plus"></i> {{__('Create route')}}
-                                    </button>
-                                    <div class="dropdown-menu text-center text-lg-left"
-                                         aria-labelledby="newRouteDropdownMenuButton">
-                                        <a class="dropdown-item" href="{{ route('dungeonroute.new') }}">
-                                            <i class="fas fa-play"></i> {{ __('New route') }}
-                                        </a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                           data-target="#mdt_import_modal">
-                                            <i class="fas fa-file-import"></i> {{__('Import from MDT')}}
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -455,64 +407,13 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                         </div>
                         <div class="col-12 mt-4">
                             <p class="mbr-text mb-0 mbr-fonts-style copyright align-center display-7">
-                                ©{{ date('Y') }} {{ $nameAndVersion }} - All Rights Reserved
+                                ©{{ date('Y') }} {{ $nameAndVersion }} - {{ __('All Rights Reserved') }}
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-
-        {{--        <div class="container text-center">--}}
-        {{--            <hr/>--}}
-        {{--            <div class="row">--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-link" href="https://www.patreon.com/keystoneguru" target="_blank">--}}
-        {{--                        <i class="fab fa-patreon"></i> {{ __('Patreon') }}--}}
-        {{--                    </a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-link" href="https://discord.gg/2KtWrqw" target="_blank">--}}
-        {{--                        <i class="fab fa-discord"></i> {{ __('Discord') }}--}}
-        {{--                    </a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-link" href="https://github.com/Wotuu/keystone.guru" target="_blank">--}}
-        {{--                        <i class="fab fa-github"></i> {{ __('Github') }}--}}
-        {{--                    </a>--}}
-        {{--                </div>--}}
-        {{--            </div>--}}
-        {{--            <div class="row">--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                    <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-3">--}}
-        {{--                </div>--}}
-        {{--            </div>--}}
-        {{--            <div class="row text-center small">--}}
-        {{--                <div class="col-md-6">--}}
-        {{--                    <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>--}}
-        {{--                    <a class="nav-item nav-link" href="/">--}}
-        {{--                        ©{{ date('Y') }} {{ $nameAndVersion }}--}}
-        {{--                    </a>--}}
-        {{--                </div>--}}
-        {{--                <div class="col-md-6">--}}
-        {{--                    World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of--}}
-        {{--                    Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with--}}
-        {{--                    Blizzard Entertainment.--}}
-        {{--                    <span data-ccpa-link="1"></span>--}}
-        {{--                </div>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
     @endif
 </div>
 
@@ -525,8 +426,8 @@ $rootClass = isset($rootClass) ? $rootClass : '';
 @endauth
 
 <!-- Modal sandbox -->
-@component('common.general.modal', ['id' => 'sandbox_modal'])
-    @include('common.forms.sandbox')
+@component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
+    @include('common.forms.createroute')
 @endcomponent
 <!-- END modal sandbox -->
 

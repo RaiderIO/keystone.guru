@@ -62,8 +62,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('login/discord', [DiscordLoginController::class, 'redirectToProvider'])->name('login.discord');
     Route::get('login/discord/callback', [DiscordLoginController::class, 'handleProviderCallback'])->name('login.discord.callback');
 
-    Route::get('sandbox', [DungeonRouteController::class, 'sandbox'])->name('dungeonroute.sandbox');
-    Route::post('sandbox', [DungeonRouteController::class, 'sandbox'])->name('dungeonroute.sandbox.post');
+    Route::get('new', [DungeonRouteController::class, 'new'])->name('dungeonroute.new');
+    Route::post('new', [DungeonRouteController::class, 'savenew'])->name('dungeonroute.savenew');
 
     // Edit your own dungeon routes
     Route::get('{dungeonroute}/edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
@@ -89,10 +89,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
     {
-        // Must be logged in to create a new dungeon route
-        Route::get('new', [DungeonRouteController::class, 'new'])->name('dungeonroute.new');
-        Route::post('new', [DungeonRouteController::class, 'savenew'])->name('dungeonroute.savenew');
-
         // Legacy redirects
         Route::get('edit/{dungeonroute}', [DungeonRouteController::class, 'editLegacy']);
         Route::patch('edit/{dungeonroute}', [DungeonRouteController::class, 'updateLegacy']);

@@ -6,7 +6,7 @@ on:
     branches: redesign
 
 jobs:
-  deploy-staging:
+  deploy-redesign:
 
     runs-on: ubuntu-latest
 
