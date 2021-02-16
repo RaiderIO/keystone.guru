@@ -42,6 +42,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'floorId' => $floor->id,
             'noUI' => (bool)$model->demo,
             'gestureHandling' => (bool)$model->demo,
+            'showAttribution' => !(bool)$model->demo,
         ])
 
         @if(!$model->demo)

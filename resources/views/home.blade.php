@@ -1,12 +1,19 @@
 <?php
 /** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
 /** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
+/** @var $demoRouteMapping array */
 /** @var $userCount int */
 
+$dungeonSelectId = 'demo_dungeon_id';
+$demoRoutesIFrameId = 'demo_routes_iframe';
 ?>
 @extends('layouts.app', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
 
-@section('header-title', __('Welcome to keystone.guru!'))
+@include('common.general.inline', ['path' => 'home/home', 'options' => [
+    'dungeon_select_id' => '#' . $dungeonSelectId,
+    'demo_routes_iframe_id' => '#' . $demoRoutesIFrameId,
+    'demo_route_mapping' => $demoRouteMapping
+]])
 
 @section('content')
     @include('common.general.messages', ['center' => true])
@@ -177,7 +184,7 @@
                 <div class="row justify-content-center">
                     <div class="col">
                         @include('common.dungeon.select', [
-                            'id'       => 'demo_dungeon_id',
+                            'id'       => $dungeonSelectId,
                             'label'    => false,
                             'dungeons' => $demoRouteDungeons,
                             'showAll'  => false,
@@ -187,7 +194,8 @@
                 </div>
             </div>
             <div class="demo-map">
-                <iframe frameborder="0"
+                <iframe id="{{ $demoRoutesIFrameId }}"
+                        frameborder="0"
                         loading="lazy"
                         class="lazyload"
                         style="border:0"

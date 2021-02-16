@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\PaidTier;
+use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
@@ -66,11 +67,21 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
         $globalViewVariables = $cacheService->remember('global_view_variables', function ()
         {
-            $demoRoutes = DungeonRoute::where('demo', true)->where('published_state_id', 3)->orderBy('dungeon_id')->get();
+            $demoRoutes = DungeonRoute::where('demo', true)
+                ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
+                ->orderBy('dungeon_id')->get();
+
+            $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
+
             return [
                 'isProduction'                    => config('app.env') === 'production',
                 'demoRoutes'                      => $demoRoutes,
-                'demoRouteDungeons'               => Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get(),
+                'demoRouteDungeons'               => $demoRouteDungeons,
+                'demoRouteMapping'                => $demoRouteDungeons
+                    ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes)
+                    {
+                        return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
+                    }),
                 'latestReleaseId'                 => Release::max('id'),
                 'appVersion'                      => GitVersionHelper::getVersion(),
                 'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
@@ -99,7 +110,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->share('isMobile', (new Agent())->isMobile());
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
-        view()->share('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
 
         // Can use the Auth() global here!
         view()->composer('*', function (View $view)
@@ -115,6 +125,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('home', function (View $view) use ($globalViewVariables)
         {
             $view->with('userCount', $globalViewVariables['userCount']);
+            $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
+            $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
         });
 
         // Main view

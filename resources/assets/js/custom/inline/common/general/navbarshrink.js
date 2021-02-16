@@ -7,8 +7,6 @@ class CommonGeneralNavbarshrink extends InlineCode {
 
         this.fixedSpacerDefaultHeight = $('.fixed-top').css('height');
 
-        console.log(this.fixedSpacerDefaultHeight);
-
         let self = this;
 
         $('[data-toggle="navbar-shrink"]').each(function () {
