@@ -27,7 +27,8 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'dungeon_route_title' => 'required|string|min:3|max:80',
+            'dungeon_route_title' => 'nullable|string|min:3|max:80',
+            'dungeon_route_sandbox' => 'nullable|int',
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],

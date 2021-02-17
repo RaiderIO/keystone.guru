@@ -7,6 +7,7 @@ $teeming = old('teeming') ?? $currentAffixGroup->isTeeming();
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 ?>
 
+
 @isset($model)
     {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
 @else
@@ -20,7 +21,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
     @auth
         <div class="form-group">
             <label for="dungeon_route_title">
-                {{ __('Title') }}<span class="form-required">*</span>
+                {{ __('Title') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
                  }}"></i>
@@ -33,7 +34,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                 {{ __('Temporary route') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __(
-                    sprintf('A temporary route will not show up in your profile and will be deleted automatically after %d hours',
+                    sprintf('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
                     config('keystoneguru.sandbox_dungeon_route_expires_hours'))
                 )
                  }}"></i>
@@ -53,7 +54,8 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                         </h5>
                     </div>
 
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                         data-parent="#accordion">
                         <div class="card-body">
 
                             <h3>

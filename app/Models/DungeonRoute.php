@@ -551,10 +551,9 @@ class DungeonRoute extends Model
      *
      * @param Request $request
      * @param SeasonService $seasonService
-     * @param bool $sandBox
      * @return bool
      */
-    public function saveFromRequest(Request $request, SeasonService $seasonService, bool $sandBox = false): bool
+    public function saveFromRequest(Request $request, SeasonService $seasonService): bool
     {
         $result = false;
 
@@ -576,11 +575,14 @@ class DungeonRoute extends Model
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
         // Sandbox routes have some fixed properties
-        if ($sandBox) {
+        if (!Auth::check() || $request->get('dungeon_route_sandbox', false)) {
             $this->title = sprintf('%s Sandbox', $this->dungeon->name);
             $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
         } else {
+            // Fetch the title if the user set anything
             $this->title = $request->get('dungeon_route_title', $this->title);
+            // Otherwise just set the dungeon name instead
+            $this->title = empty($this->title) ? $this->dungeon->name : $this->title;
         }
 
         if (Auth::check()) {

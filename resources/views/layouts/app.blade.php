@@ -427,18 +427,9 @@ $rootClass = isset($rootClass) ? $rootClass : '';
 
 <!-- Modal sandbox -->
 @component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
-    @include('common.forms.createroute')
+    @include('common.modal.createroute')
 @endcomponent
 <!-- END modal sandbox -->
-
-<!-- Modal MDT import -->
-@component('common.general.modal', ['id' => 'mdt_import_modal'])
-    @include('common.modal.mdtimport')
-@endcomponent
-@component('common.general.modal', ['id' => 'sandbox_mdt_import_modal'])
-    @include('common.modal.mdtimport')
-@endcomponent
-<!-- END modal MDT import -->
 
 @guest
     <!-- Modal login -->
