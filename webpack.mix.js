@@ -4,10 +4,13 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 let gitRevisionPlugin = null; // Init in the config below
 
-mix.webpackConfig({
+mix.options({
+    // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
+    processCssUrls: false
+}).webpackConfig({
     watchOptions: {
-        ignored: ['node_modules', 'vendor'],
-        poll: 2000 // Check for changes every second
+        ignored: ['node_modules', 'vendor', 'storage'],
+        poll: 2000 // Check for changes every two seconds
     },
     // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
     resolve: {
