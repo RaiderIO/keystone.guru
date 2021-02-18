@@ -52,7 +52,7 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
                                 {{ $affix->name }}
                                 @if($last)
                                     @isset($affixGroup->seasonal_index)
-                                        {{ __(sprintf('(%s)', $affixGroup->getSeasonalIndexAsLetter())) }}
+                                        {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
                                     @endisset
                                 @endif
                             </div>

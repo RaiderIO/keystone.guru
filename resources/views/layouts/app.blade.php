@@ -138,7 +138,7 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                         @if (Auth::guest())
                             <li class="nav-item">
                                 <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
-                                    {{__('Login')}}
+                                    <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
                                 </a>
                             </li>
                             <li class="nav-item">

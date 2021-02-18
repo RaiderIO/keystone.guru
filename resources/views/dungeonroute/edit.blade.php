@@ -12,7 +12,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
     'custom' => true,
     'footer' => false,
     'header' => false,
-    'title' => __(sprintf('Edit %s', $model->title)),
+    'title' => sprintf(__('Edit %s'), $model->title),
 ])
 
 @include('common.general.inline', [

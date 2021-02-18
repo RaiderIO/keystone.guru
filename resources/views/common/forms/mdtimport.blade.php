@@ -4,18 +4,30 @@
     {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea', 'data-simplebar' => '']) }}
     {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
 </div>
-<div class="form-group">
-    <label for="mdt_import_sandbox">
-        {{ __('Temporary route') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __(
-                    sprintf('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours'))
+@guest
+    <div class="form-group">
+        <div class="text-info">
+            <i class="fas fa-info-circle"></i> {{ sprintf(
+                    __('As an unregistered user, all imported routes will be temporary routes which expire after %s hours.'),
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                    )
+                }}
+        </div>
+    </div>
+@else
+    <div class="form-group">
+        <label for="mdt_import_sandbox">
+            {{ __('Temporary route') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                sprintf(
+                    __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
-    </label>
-    {!! Form::checkbox('mdt_import_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
-</div>
+        </label>
+        {!! Form::checkbox('mdt_import_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
+    </div>
+@endguest
 <div class="form-group">
     <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
         <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>

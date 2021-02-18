@@ -18,7 +18,11 @@
     </div>
 
     <div class="form-group">
+        @guest
+        {!! Form::label('enemy_report_contact_ok', __('Contact me by e-mail if required for further investigation (add your e-mail address in the report body)')) !!}
+        @else
         {!! Form::label('enemy_report_contact_ok', __('Contact me by e-mail if required for further investigation')) !!}
+        @endauth
         {!! Form::checkbox('enemy_report_contact_ok', 1, false, ['class' => 'form-control left_checkbox']) !!}
     </div>
 

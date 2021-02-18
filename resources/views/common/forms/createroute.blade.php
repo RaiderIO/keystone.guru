@@ -18,7 +18,17 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
     @endif
 
-    @auth
+    @guest
+        <div class="form-group">
+            <div class="text-info">
+                <i class="fas fa-info-circle"></i> {{ sprintf(
+                    __('As an unregistered user, all created routes will be temporary routes which expire after %s hours.'),
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                    )
+                }}
+            </div>
+        </div>
+    @else
         <div class="form-group">
             <label for="dungeon_route_title">
                 {{ __('Title') }}
@@ -33,9 +43,9 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
             <label for="dungeon_route_sandbox">
                 {{ __('Temporary route') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __(
-                    sprintf('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours'))
+                sprintf(
+                    __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
             </label>
@@ -85,7 +95,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                 </div>
             </div>
         </div>
-    @endauth
+    @endguest
 
     <div class="col-lg-12">
         <div class="form-group">

@@ -543,7 +543,7 @@ class DungeonRoute extends Model
      */
     public function isSandbox(): bool
     {
-        return $this->author_id === -1 && $this->expires_at !== null;
+        return $this->expires_at !== null;
     }
 
     /**
@@ -560,12 +560,15 @@ class DungeonRoute extends Model
         // Overwrite the author_id if it's not been set yet
         $new = !isset($this->id);
         if ($new) {
-            $this->author_id = \Auth::user()->id;
+            $this->author_id = Auth::id() ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
+        // If it was empty just set Unspecified instead
+        $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);

@@ -31,7 +31,10 @@ $errors = isset($errors) ? $errors : collect();
             </h3>
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}*</label>
+                <label for="{{ $modalClass }}register_name" class="control-label">
+                    {{ __('Username') }} <span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{__('Your username may be visible if you choose to publish any routes you make.')}}"></i>
+                </label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_name" type="text" class="form-control" name="name"
@@ -40,7 +43,10 @@ $errors = isset($errors) ? $errors : collect();
             </div>
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_email" class="control-label">{{ __('E-mail address') }}*</label>
+                <label for="{{ $modalClass }}register_email" class="control-label">
+                    {{ __('E-mail address') }} <span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{__('Your e-mail address will be required upon login. Your e-mail address will not be validated - but it will be used if you ever forget your password to e-mail you a password reset link.')}}"></i>
+                </label>
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_email" type="email" class="form-control" name="email"
                            value="{{ old('email') }}" required>
@@ -60,7 +66,9 @@ $errors = isset($errors) ? $errors : collect();
             </div>
 
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_password" class="control-label">{{ __('Password') }}*</label>
+                <label for="{{ $modalClass }}register_password" class="control-label">
+                    {{ __('Password') }} <span class="form-required">*</span>
+                </label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_password" type="password" class="form-control" name="password"
@@ -70,7 +78,9 @@ $errors = isset($errors) ? $errors : collect();
 
             <div class="form-group">
                 <label for="{{ $modalClass }}register_password-confirm"
-                       class="control-label">{{ __('Confirm password') }}*</label>
+                       class="control-label">
+                    {{ __('Confirm password') }} <span class="form-required">*</span>
+                </label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_password-confirm" type="password" class="form-control"
@@ -80,7 +90,7 @@ $errors = isset($errors) ? $errors : collect();
 
             <div class="form-group">
                 <label for="{{ $modalClass }}legal_agreed" class="control-label">
-                    {!! sprintf(__('I agree with the %s, %s and the %s.'),
+                    {!! sprintf(__('I have read and agree with the %s, %s and the %s.'),
                      '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
                      '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
                      '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')
@@ -104,7 +114,7 @@ $errors = isset($errors) ? $errors : collect();
             {{ __('Register through OAuth2') }}
         </h3>
         <p>
-            {!! sprintf(__('By registering through OAuth2, you agree with the %s, %s and the %s.'),
+            {!! sprintf(__('By registering through OAuth2, you declare that you have read and agree with the %s, %s and the %s.'),
              '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
              '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
              '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')

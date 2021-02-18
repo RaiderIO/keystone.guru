@@ -141,7 +141,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                     </h5>
                     <ul>
                         <li>
-                            {{ __(sprintf('Your %s route(s) will be deleted.', $deleteConsequences['dungeonroutes']['delete_count'])) }}
+                            {{ sprintf(__('Your %s route(s) will be deleted.'), $deleteConsequences['dungeonroutes']['delete_count']) }}
                         </li>
                     </ul>
                 </div>

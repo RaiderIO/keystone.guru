@@ -5,6 +5,7 @@ $--theme-dark: --theme-dark;
 $--theme-darker: --theme-darker;
 $--theme-text-contrast: --theme-text-contrast;
 $--theme-header-height: --theme-header-height;
+$--theme-form-required: --theme-form-required;
 
 // Superhero
 $theme-map-superhero: (
@@ -14,7 +15,8 @@ $theme-map-superhero: (
     $--theme-dark: #4e5d6c,
     $--theme-darker: #2B3E50,
     $--theme-text-contrast: #ebebeb,
-    $--theme-header-height: 62px
+    $--theme-header-height: 62px,
+    $--theme-form-required: var($--theme-primary)
 );
 
 // Darkly
@@ -25,5 +27,6 @@ $theme-map-darkly: (
     $--theme-dark: #303030,
     $--theme-darker: #202020,
     $--theme-text-contrast: #ebebeb,
-    $--theme-header-height: 86px
+    $--theme-header-height: 86px,
+    $--theme-form-required: #c40000
 );

@@ -8,8 +8,7 @@ $showDrawSettings = $show['draw-settings'] ?? true;
 $showRouteSettings = $show['route-settings'] ?? true;
 $showSandbox = $show['sandbox'] ?? true;
 // May not be set in the case of a sandbox version
-if (isset($model))
-{
+if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
@@ -139,16 +138,28 @@ if (isset($model))
 
                 @if($showSandbox)
                     @guest
-                        <div id="map_login_and_continue" class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
-                                <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
-                            </button>
+                        <div class="form-group">
+                            <div id="map_login_and_continue">
+                                <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                        data-target="#login_modal">
+                                    <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
+                                </button>
+                            </div>
+                            <div id="map_register_and_continue">
+                                <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                        data-target="#register_modal">
+                                    <i class="fas fa-user-plus"></i> {{ __('Register') }}
+                                </button>
+                            </div>
                         </div>
-                        <div id="map_register_and_continue" class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
-                                    data-target="#register_modal">
-                                <i class="fas fa-user-plus"></i> {{ __('Register') }}
-                            </button>
+                        <div class="form-group">
+                            <span class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ sprintf(__('This temporary route will expire on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d @ H:i')) }}
+                            </span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                            __('A temporary route will exist for up to 24 hours before it is automatically removed. If you login or register, you can save the route to your profile if you wish to keep it. It will then no longer be scheduled for removal.')
+                             }}"></i>
                         </div>
                     @else
                         <div id="map_save_and_continue" class="form-group">
@@ -156,6 +167,15 @@ if (isset($model))
                                class="btn btn-primary mt-1 w-100" role="button">
                                 <i class="fas fa-save"></i> {{ __('Save to profile') }}
                             </a>
+                        </div>
+                        <div class="form-group">
+                            <span class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ sprintf(__('This temporary route will expire on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d @ H:i')) }}
+                            </span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                            __('A temporary route will exist for up to 24 hours before it is automatically removed. You can save the route to your profile if you wish to keep it, it will then no longer be scheduled for removal.')
+                             }}"></i>
                         </div>
                     @endguest
                 @endif

@@ -85,10 +85,10 @@ if ($timezone === null) {
                             {{ $affix->name }}
                             @if($lastColumn)
                                 @if($affixGroup->season->presets > 0 )
-                                    {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
+                                    {{ sprintf(__('preset %s'), $affixGroup->season->getPresetAt($startDate)) }}
                                 @endif
                                 @isset($affixGroup->seasonal_index)
-                                    {{ __(sprintf('(%s)', $affixGroup->getSeasonalIndexAsLetter())) }}
+                                    {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
                                 @endisset
                             @endif
                         </div>
