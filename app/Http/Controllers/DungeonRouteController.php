@@ -242,12 +242,6 @@ class DungeonRouteController extends Controller
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
-        } else if ($dungeonroute->isSandbox()) {
-            return view('dungeonroute.sandbox', [
-                'model'      => $dungeonroute,
-                'floor'      => $floor,
-                'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
-            ]);
         } else {
             return view('dungeonroute.edit', [
                 'headerTitle' => __('Edit route'),

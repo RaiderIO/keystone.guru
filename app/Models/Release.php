@@ -80,7 +80,7 @@ class Release extends CacheModel
             'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl'   => route('misc.affixes'),
-            'sandboxUrl'   => route('dungeonroute.sandbox'),
+            'newRouteUrl'  => route('dungeonroute.new'),
             'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
         $footerLength = strlen($footer);
@@ -90,9 +90,9 @@ class Release extends CacheModel
         $truncatedBodyLength = strlen($truncatedBody);
 
         if ($bodyLength !== $truncatedBodyLength) {
-            $result = sprintf('%s (%d characters truncated) \n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
+            $result = sprintf('%s (%d characters truncated) \n\n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
         } else {
-            $result = $truncatedBody . $footer;
+            $result = sprintf('%s\n\n%s', $truncatedBody, $footer);
         }
 
         return $result;

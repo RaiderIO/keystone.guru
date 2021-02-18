@@ -33,8 +33,7 @@
     </div>
 </div>
 <div class="form-group">
-    {!! Form::hidden('sandbox', 0, ['class' => 'hidden_sandbox']) !!}
-    {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+    {!! Form::submit(__('Import route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
     <div class="col-md">
 
     </div>

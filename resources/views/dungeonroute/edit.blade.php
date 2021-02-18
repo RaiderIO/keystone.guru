@@ -1,9 +1,20 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
 $dungeon = $model->dungeon->load(['expansion', 'floors']);
+
+$sandbox = $model->isSandbox();
+//    $dungeon->load(['expansion']);
+$floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
+
 ?>
+@extends('layouts.app', [
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => __(sprintf('Edit %s', $model->title)),
+])
+
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
     'dependencies' => ['common/maps/map']
@@ -14,11 +25,18 @@ $dungeon = $model->dungeon->load(['expansion', 'floors']);
         @include('common.maps.editsidebar', [
             'dungeon' => $dungeon,
             'floorId' => $floor->id,
+            'floorSelection' => $floorSelection,
             'show' => [
-                'sharing' => true,
+                'virtual-tour' => $sandbox,
+                'sandbox' => $sandbox,
                 'draw-settings' => true,
-                'route-settings' => true,
-                'route-publish' => true,
+                'sharing' => true,
+                'shareable-link' => !$sandbox,
+                'embedable-link' => !$sandbox,
+                'export-mdt-string' => true,
+
+                'route-settings' => !$sandbox,
+                'route-publish' => !$sandbox,
             ]
         ])
 
@@ -26,7 +44,7 @@ $dungeon = $model->dungeon->load(['expansion', 'floors']);
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => true,
-            'test' => 'test',
+            'sandboxMode' => $sandbox,
             'floorId' => $floor->id
         ])
 

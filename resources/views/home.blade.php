@@ -177,7 +177,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
         <div>
             <div class="mbr-section-head mb-4">
                 <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                    <strong>Demo Routes</strong>
+                    <strong>{{ __('Live demo') }}</strong>
                 </h3>
             </div>
             <div class="align-center container mb-4">
@@ -220,12 +220,15 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="card-wrapper">
                         <div class="card-box align-center">
                             <h4 class="card-title mbr-fonts-style align-center mb-4 display-1">
-                                <strong>Start planning today</strong></h4>
+                                <strong>{{ __('Start planning today') }}</strong>
+                            </h4>
                             <p class="mbr-text mbr-fonts-style mb-4 display-7">
                                 {{ __(sprintf('Join %d+ other users and plan your M+ routes online!', (int)($userCount / 1000) * 1000)) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
-                                <div class="btn btn-primary display-4">{{ __('Create route') }}</div>
+                                <a class="display-4 btn {{ $theme === 'superhero' ? 'btn-primary' : 'bg-success' }}" href="#" data-toggle="modal" data-target="#create_route_modal">
+                                    <i class="fas fa-plus"></i>&nbsp;{{__('Create route')}}
+                                </a>
                             </div>
                         </div>
                     </div>

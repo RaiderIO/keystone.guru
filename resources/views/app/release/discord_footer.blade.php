@@ -1,3 +1,1 @@
-
-
-[Home]({{$homeUrl}}) - [Changelog]({{$changelogUrl}}) - [Affixes]({{$affixesUrl}}) - [Patreon]({{$patreonUrl}}) - [Get started]({{$sandboxUrl}})
+[Home]({{$homeUrl}}) - [Changelog]({{$changelogUrl}}) - [Affixes]({{$affixesUrl}}) - [Patreon]({{$patreonUrl}}) - [Get started]({{$newRouteUrl}})

@@ -1,8 +1,9 @@
 <?php
 $show                = isset($show) ? $show : [];
-$showSharableLink    = isset($show['shareable-link']) ? $show['shareable-link'] : true;
-$showEmbedableLink   = isset($show['embedable-link']) ? $show['embedable-link'] : true;
-$showExportMdtString = isset($show['export-mdt-string']) ? $show['export-mdt-string'] : true;
+$showSharableLink    = $show['shareable-link'] ?? true;
+$showEmbedableLink   = $show['embedable-link'] ?? true;
+$showExportMdtString = $show['export-mdt-string'] ?? true;
+$showRoutePublish    = $show['route-publish'] ?? true;
 ?>
 <!-- Shareable link -->
 <div class="form-group">
@@ -56,7 +57,7 @@ $showExportMdtString = isset($show['export-mdt-string']) ? $show['export-mdt-str
                     </div>
                 </div>
             @endif
-            @isset($show['route-publish'])
+            @if($showRoutePublish)
             <!-- Published state -->
                 <div class="form-group mb-0">
                     <div class="row">
@@ -68,7 +69,7 @@ $showExportMdtString = isset($show['export-mdt-string']) ? $show['export-mdt-str
                         </div>
                     </div>
                 </div>
-            @endisset
+            @endif
         </div>
     </div>
 </div>

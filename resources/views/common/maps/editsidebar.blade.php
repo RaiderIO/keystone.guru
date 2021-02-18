@@ -3,8 +3,13 @@
 /** @var \App\Models\Dungeon $dungeon */
 
 $show = isset($show) ? $show : [];
+$showVirtualTour = $show['virtual-tour'] ?? false;
+$showDrawSettings = $show['draw-settings'] ?? true;
+$showRouteSettings = $show['route-settings'] ?? true;
+$showSandbox = $show['sandbox'] ?? true;
 // May not be set in the case of a sandbox version
-if (isset($model)) {
+if (isset($model))
+{
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
@@ -92,7 +97,7 @@ if (isset($model)) {
             <div class="card-body">
                 <h5 class="card-title">{{ __('Actions') }}</h5>
 
-                @isset($show['virtual-tour'])
+                @if($showVirtualTour)
                     <div class="form-group">
                         <!-- Virtual tour -->
                         <div class="row">
@@ -103,9 +108,9 @@ if (isset($model)) {
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
 
-                @isset($show['draw-settings'])
+                @if($showDrawSettings)
                     <div class="form-group">
                         <!-- Route settings -->
                         <div class="row">
@@ -116,9 +121,9 @@ if (isset($model)) {
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
 
-                @isset($show['route-settings'])
+                @if($showRouteSettings)
                     <div class="form-group">
                         <!-- Route settings -->
                         <div class="row">
@@ -130,10 +135,10 @@ if (isset($model)) {
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
 
-                @isset($show['sandbox'])
-                    @if (Auth::guest())
+                @if($showSandbox)
+                    @guest
                         <div id="map_login_and_continue" class="form-group">
                             <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
                                 <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
@@ -152,8 +157,8 @@ if (isset($model)) {
                                 <i class="fas fa-save"></i> {{ __('Save to profile') }}
                             </a>
                         </div>
-                    @endif
-                @endisset
+                    @endguest
+                @endif
             </div>
         </div>
     </div>
@@ -182,7 +187,7 @@ if (isset($model)) {
     </div>
 @endcomponent
 
-@isset($show['draw-settings'])
+@if($showDrawSettings)
     @component('common.general.modal', ['id' => 'draw_settings_modal'])
         <div class="draw_settings_tools">
             <?php // Weight ?>
@@ -254,9 +259,9 @@ if (isset($model)) {
             </div>
         </div>
     @endcomponent
-@endisset
+@endif
 
-@isset($show['route-settings'])
+@if($showRouteSettings)
     @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
 
         <div class="col-lg-12">
@@ -318,4 +323,4 @@ if (isset($model)) {
             </div>
         </div>
     @endcomponent
-@endisset
+@endif
