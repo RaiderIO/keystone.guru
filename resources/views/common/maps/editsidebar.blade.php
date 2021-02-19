@@ -209,138 +209,43 @@ if (isset($model)) {
 
 @if($showDrawSettings)
     @component('common.general.modal', ['id' => 'draw_settings_modal'])
-        <div class="draw_settings_tools">
-            <?php // Weight ?>
-            <div class="form-group">
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col font-weight-bold">
-                        {{ __('Default line weight') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col line_weight_selection">
-                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                        {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
-                            isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
-                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col font-weight-bold">
-                        {{ __('Pull gradient') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row mt-3">
-                    <div id="edit_route_freedraw_options_gradient" class="col-10">
-
-                    </div>
-                    <div class="col-2">
-                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-success"
-                                data-toggle="tooltip" title="{{ __('Apply to current pulls') }}">
-                            {{ __('Apply') }}
-                        </button>
-                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls_saving"
-                                class="btn btn-success disabled"
-                                style="display: none">
-                            <i class='fas fa-circle-notch fa-spin'></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row no-gutters view_dungeonroute_details_row">
-                    <div class="col-2 pr-2">
-                        {!! Form::checkbox('pull_gradient_apply_always', 1,
-                            isset($model) ? $model->pull_gradient_apply_always : false,
-                            ['id' => 'pull_gradient_apply_always', 'class' => 'form-control left_checkbox'])
-                            !!}
-
-                    </div>
-                    <div class="col-10">
-                        <label for="pull_gradient_apply_always">
-                            {{ __('Always apply when I change pulls') }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group mb-0">
-                <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">
-                    <i class="fas fa-save"></i> {{ __('Save') }}
-                </button>
-                <button id="save_draw_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
-                        style="display: none;">
-                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('Save') }}
-                </button>
-            </div>
-        </div>
     @endcomponent
 @endif
 
 @if($showRouteSettings)
-    @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
+    @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
+                   aria-controls="edit_route" aria-selected="true">
+                    {{ __('Route settings') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
+                   aria-controls="edit_route_map_settings" aria-selected="false">
+                    {{ __('Map settings') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="edit_route_pull_settings_tab" data-toggle="tab" href="#pull-settings" role="tab"
+                   aria-controls="edit_route_pull_settings" aria-selected="false">
+                    {{ __('Pull settings') }}
+                </a>
+            </li>
+        </ul>
 
-        <div class="col-lg-12">
-            <h3>
-                {{ __('General') }}
-            </h3>
-            <div class="form-group">
-                <label for="dungeon_route_title">
-                    {{ __('Title') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                                        __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
-                                         }}"></i>
-                </label>
-                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
-
-                {{--                <label for="teeming">--}}
-                {{--                    {{ __('Teeming') }}--}}
-                {{--                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
-                {{--                                            __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')--}}
-                {{--                                             }}"></i>--}}
-                {{--                </label>--}}
-                {{--                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
+        <div class="tab-content">
+            <div id="edit" class="tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="edit_route_tab">
+                @include('common.forms.createroute', ['model' => $model, 'modal' => '#route_settings_modal'])
             </div>
-            @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
-
-            <h3 class="mt-1">
-                {{ __('Affixes') }} <span class="form-required">*</span>
-            </h3>
-
-            <div class="container mt-1">
-                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
+            <div id="map-settings" class="tab-pane fade mt-3" role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
+                @include('common.forms.mapsettings', ['model' => $model])
             </div>
-
-            <h3>
-                {{ __('Group composition') }}
-            </h3>
-
-            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
-            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
-
-            @if(Auth::user()->hasRole('admin'))
-                <h3>
-                    {{ __('Admin') }}
-                </h3>
-                <div class="form-group">
-                    {!! Form::label('demo', __('Demo route')) !!}
-                    {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
-
-            <div class="form-group">
-                <div id="save_route_settings" class="offset-lg-5 col-lg-2 btn btn-success">
-                    <i class="fas fa-save"></i> {{ __('Save settings') }}
-                </div>
-                <div id="save_route_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
-                     style="display: none;">
-                    <i class="fas fa-circle-notch fa-spin"></i>
-                </div>
+            <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel" aria-labelledby="edit_route_pull_settings_tab">
+                pull settings
             </div>
         </div>
+
     @endcomponent
 @endif

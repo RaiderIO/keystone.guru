@@ -45,7 +45,7 @@ class DungeonrouteEdit extends InlineCode {
             dataType: 'json',
             data: {
                 dungeon_route_title: $('#dungeon_route_title').val(),
-                teeming: $('#teeming').is(':checked') ? 1 : 0,
+                // teeming: $('#teeming').is(':checked') ? 1 : 0,
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
                 seasonal_index: $('#seasonal_index').val(),

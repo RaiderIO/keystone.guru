@@ -425,11 +425,13 @@ $rootClass = isset($rootClass) ? $rootClass : '';
     @endif
 @endauth
 
-<!-- Modal sandbox -->
-@component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
-    @include('common.modal.createroute')
-@endcomponent
-<!-- END modal sandbox -->
+@if($header)
+    <!-- Modal sandbox -->
+    @component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
+        @include('common.modal.createroute')
+    @endcomponent
+    <!-- END modal sandbox -->
+@endif
 
 @guest
     <!-- Modal login -->

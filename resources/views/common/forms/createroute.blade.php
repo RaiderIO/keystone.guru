@@ -5,12 +5,13 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 $teeming = old('teeming') ?? $currentAffixGroup->isTeeming();
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
+
+// Make sure $model exists
+$model = $model ?? null;
 ?>
 
 
-@isset($model)
-    {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
-@else
+@if(!isset($model))
     {{ Form::open(['route' => 'dungeonroute.savenew']) }}
 @endisset
 <div class="container">
@@ -36,21 +37,23 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                 __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
                  }}"></i>
             </label>
-            {!! Form::text('dungeon_route_title', '', ['class' => 'form-control']) !!}
+            {!! Form::text('dungeon_route_title', optional($model)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
         </div>
 
-        <div class="form-group">
-            <label for="dungeon_route_sandbox">
-                {{ __('Temporary route') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        @if( !isset($model) )
+            <div class="form-group">
+                <label for="dungeon_route_sandbox">
+                    {{ __('Temporary route') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 sprintf(
                     __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
-            </label>
-            {!! Form::checkbox('dungeon_route_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
-        </div>
+                </label>
+                {!! Form::checkbox('dungeon_route_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
 
         <div class="form-group">
             <div id="accordion">
@@ -72,14 +75,14 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
                                 {{ __('Affixes') }} <span class="form-required">*</span>
                             </h3>
 
-                            @include('common.group.affixes', ['teemingselector' => '#teeming', 'defaultSelected' => $defaultSelectedAffixes])
+                            @include('common.group.affixes', ['dungeonroute' => $model ?? null, 'teemingselector' => '#teeming', 'defaultSelected' => $defaultSelectedAffixes])
 
                             @include('common.dungeonroute.attributes')
 
                             <h3>
                                 {{ __('Group composition') }}
                             </h3>
-                            @include('common.group.composition')
+                            @include('common.group.composition', ['dungeonroute' => $model ?? null, 'modal' => $modal ?? null])
 
                             @if(Auth::check() && Auth::user()->hasRole('admin'))
                                 <h3>
@@ -97,11 +100,25 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         </div>
     @endguest
 
-    <div class="col-lg-12">
-        <div class="form-group">
-            {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
+    @if(!isset($model))
+        <div class="col-lg-12">
+            <div class="form-group">
+                {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
+            </div>
         </div>
-    </div>
+    @endif
 </div>
 
-{!! Form::close() !!}
+@if(!isset($model))
+    {!! Form::close() !!}
+@else
+    <div class="form-group">
+        <div id="save_route_settings" class="offset-xl-5 col-xl-2 btn btn-success">
+            <i class="fas fa-save"></i> {{ __('Save settings') }}
+        </div>
+        <div id="save_route_settings_saving" class="offset-xl-5 col-xl-2 btn btn-success disabled"
+             style="display: none;">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </div>
+    </div>
+@endif

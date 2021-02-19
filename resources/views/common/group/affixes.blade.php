@@ -18,16 +18,9 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
     ]])
 
 <div class="form-group">
-    {!! Form::label('affixes[]', __('Select affixes')) !!}
     {!! Form::select('affixes[]', $affixGroups->pluck('id', 'id'),
         !isset($dungeonroute) ? $defaultSelected : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
-    {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
-    {{--data-selected-text-format="count > 2">--}}
-    {{--@foreach($affixGroups as $group)--}}
-    {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
-    {{--@endforeach--}}
-    {{--</select>--}}
 
     <div id="affixes_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
@@ -35,9 +28,10 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
                 class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
                 {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
                 data-id="{{ $affixGroup->id }}">
-                @php( $count = 0 )
-                @foreach($affixGroup->affixes as $affix)
-                    <?php
+                <?php
+                    /** @var \App\Models\AffixGroup $affixGroup */
+                    $count = 0;
+                    foreach($affixGroup->affixes as $affix){
                     $last = count($affixGroup->affixes) - 1 === $count;
                     $number = $last ? '2' : '3'
                     ?>
@@ -58,8 +52,8 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
                             </div>
                         </div>
                     </div>
-                    @php( $count++ )
-                @endforeach
+                    <?php $count++;
+                } ?>
                 <span class="col col-md-1 text-right pl-0">
                     <span class="check" style="display: none;">
                         <i class="fas fa-check"></i>

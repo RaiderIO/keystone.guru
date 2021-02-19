@@ -100,7 +100,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 @endsection
 
 <div class="row">
-    <div class="col-xl-4 offset-xl-4">
+    <div class="col-md-4 offset-md-4">
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
@@ -108,7 +108,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
         </div>
     </div>
     @isset($dungeonroute)
-        <div class="offset-lg-4 col-lg-1">
+        <div class="col-md-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
                     <i class="fas fa-undo"></i> {{ __('Undo') }}
