@@ -35,7 +35,7 @@ class CommonMapsMap extends InlineCode {
         }
 
         if (this.options.sandbox) {
-            $('#start_virtual_tour').bind('click', function () {
+            $('#start_tutorial').bind('click', function () {
                 introjs().start();
             });
 

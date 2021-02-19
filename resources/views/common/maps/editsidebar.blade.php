@@ -101,8 +101,8 @@ if (isset($model)) {
                         <!-- Virtual tour -->
                         <div class="row">
                             <div class="col">
-                                <button id="start_virtual_tour" class="btn btn-info col">
-                                    <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                                <button id="start_tutorial" class="btn btn-info col">
+                                    <i class="fas fa-info-circle"></i> {{ __('Start tutorial') }}
                                 </button>
                             </div>
                         </div>
