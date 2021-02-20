@@ -1,5 +1,26 @@
-<div class="pull_settings_tools">
-    <?php // Weight ?>
+<?php
+$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
+?>
+<div class="pull_settings_tools container">
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                {{ __('Pull number style') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('This controls how the pulls sidebar displays numbers.')
+                     }}"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="killzones_pulls_settings_number_style" type="checkbox"
+                       {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
+                       data-toggle="toggle" data-width="150px" data-height="20px"
+                       data-onstyle="primary" data-offstyle="primary"
+                       data-on="{{ __('Percentage') }}" data-off="{{ __('Enemy forces') }}">
+            </div>
+        </div>
+    </div>
+
     <div class="form-group">
         <div class="row view_dungeonroute_details_row mt-2">
             <div class="col">
@@ -31,7 +52,8 @@
         <div class="row no-gutters view_dungeonroute_details_row">
             <div class="col pr-2">
                 <label for="pull_gradient_apply_always">
-                    {{ __('Always apply when I change pulls') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    {{ __('Always apply when I change pulls') }} <i class="fas fa-info-circle" data-toggle="tooltip"
+                                                                    title="{{
                     __('Enabling this setting will update your pull\'s colors as you edit your pulls based on the pull gradient configured above. This setting is unique per route.')
                      }}"></i>
                 </label>

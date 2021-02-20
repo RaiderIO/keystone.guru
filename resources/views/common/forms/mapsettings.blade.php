@@ -1,5 +1,26 @@
-<div class="draw_settings_tools">
+<?php
+$mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_number_style'] : 'percentage') === 'percentage';
+?>
+<div class="draw_settings_tools container">
     <?php // Weight ?>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                    {{ __('Enemy number style') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.')
+                     }}"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="killzones_pulls_settings_map_number_style" type="checkbox"
+                       {{ $mapNumberStyleChecked ? 'checked' : '' }}
+                       data-toggle="toggle" data-width="150px" data-height="20px"
+                       data-onstyle="primary" data-offstyle="primary"
+                       data-on="{{ __('Percentage') }}" data-off="{{ __('Enemy forces') }}">
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <div class="row view_dungeonroute_details_row">
             <div class="col">

@@ -2,8 +2,6 @@
 /** @var \App\Models\DungeonRoute $model */
 /** @var \App\Models\Dungeon $dungeon */
 
-$mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_number_style'] : 'percentage') === 'percentage';
-$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
 $showRouteSettings = $show['route-settings'] ?? false;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
@@ -46,38 +44,6 @@ $showRouteSettings = $show['route-settings'] ?? false;
             </div>
 
             <div id="killzones_pulls_settings_container" class="collapse">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="font-weight-bold">
-                                {{ __('Enemy style') }}:
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <input id="killzones_pulls_settings_map_number_style" type="checkbox"
-                                   {{ $mapNumberStyleChecked ? 'checked' : '' }}
-                                   data-toggle="toggle" data-width="120px" data-height="20px"
-                                   data-onstyle="primary" data-offstyle="primary"
-                                   data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="font-weight-bold">
-                                {{ __('Pull style') }}:
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <input id="killzones_pulls_settings_number_style" type="checkbox"
-                                   {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
-                                   data-toggle="toggle" data-width="120px" data-height="20px"
-                                   data-onstyle="primary" data-offstyle="primary"
-                                   data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">
-                        </div>
-                    </div>
-                </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
