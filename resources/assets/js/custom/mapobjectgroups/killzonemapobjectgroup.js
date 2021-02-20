@@ -126,7 +126,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let killZone = this._loadMapObject({
             id: -1,
-            color: c.map.killzone.polygonOptions.color(),
+            color: c.map.killzone.polygonOptions.color(this.objects.length > 0 ? this.objects[this.objects.length - 1].color : null),
             floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
             killzoneenemies: killZoneEnemies,
             lat: null,
@@ -288,8 +288,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
                 for (let i = self.objects.length - 1; i >= 0; i--) {
                     let killZone = self.objects[i];
-                    killZone.localDelete();
-                    killZone.onDeleteSuccess(json);
+                    killZone.localDelete(true);
+                    killZone.onDeleteSuccess(json, true);
                 }
 
                 if (callback !== null) {

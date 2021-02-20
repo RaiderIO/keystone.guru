@@ -211,7 +211,17 @@ let c = {
                 weight: 1
             },
             polygonOptions: {
-                color: randomColor, //Cookies.get('polyline_default_color'),
+                color: function (previousPullColor = null) {
+                    let isPreviousColorDark = previousPullColor === null ? false : isColorDark(previousPullColor);
+                    let color = null;
+
+                    // Generate colors until a color
+                    do {
+                        color = randomColor();
+                    } while (isColorDark(color) === isPreviousColorDark);
+
+                    return color;
+                }, //Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1,

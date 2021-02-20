@@ -393,6 +393,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 killZoneMapObjectGroup.deleteAll();
+                self._rebuildFloorSwitches();
             });
         });
 
@@ -424,9 +425,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
+            let isMassDelete = killZoneDeletedEvent.data.hasOwnProperty('mass_delete') && killZoneDeletedEvent.data.mass_delete;
+
             let killZone = killZoneDeletedEvent.data.object;
             // Add the killzone to our list
             self._removeKillZone(killZone);
+
+            // If the killzone switched floors, we gotta rebuild the floor switches.
+            if( !isMassDelete ){
+                self._rebuildFloorSwitches();
+            }
+
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
         });

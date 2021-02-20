@@ -24,21 +24,21 @@ $showRouteSettings = $show['route-settings'] ?? false;
         <div class="container">
             <div class="form-group">
                 <div class="row mb-2 mt-2 no-gutters">
-                    <div class="col-10 pr-2">
-                        <div id="killzones_new_pull" class="btn btn-success w-100">
-                            <i class="fas fa-plus"></i> {{__('New pull')}}
-                        </div>
-                    </div>
                     <div class="col-2">
                         <button class="btn btn-info w-100" data-toggle="modal"
                                 data-target="#route_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
-                        {{--                        <button class="btn btn-info w-100"--}}
-                        {{--                                data-toggle="collapse" data-target="#killzones_pulls_settings_container"--}}
-                        {{--                                aria-expanded="false" aria-controls="killzones_pulls_settings_container">--}}
-                        {{--                            <i class="fas fa-cog"></i>--}}
-                        {{--                        </button>--}}
+                    </div>
+                    <div class="col-8 pl-2 pr-2">
+                        <div id="killzones_new_pull" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> {{__('New pull')}}
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -46,11 +46,6 @@ $showRouteSettings = $show['route-settings'] ?? false;
             <div id="killzones_pulls_settings_container" class="collapse">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col">
-                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
-                                <i class="fas fa-trash"></i> {{ __('Delete all pulls') }}
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>

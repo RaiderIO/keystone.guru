@@ -41,7 +41,7 @@ class KillZone extends MapObject {
         this.id = 0;
         this.floor_id = 0;
         this.label = 'KillZone';
-        this.color = c.map.killzone.polygonOptions.color();
+        this.color = '#000'; // This is just a default that should never be used anywhere
         this.index = 0;
         // May be changed based on the amount of enemies in our pull (see redrawConnectionsToEnemies())
         this.indexLabelDirection = 'center';
@@ -941,11 +941,11 @@ class KillZone extends MapObject {
         });
     }
 
-    localDelete() {
+    localDelete(massDelete = false) {
         // Detach from all enemies upon deletion
         this._detachFromEnemies();
 
-        super.localDelete();
+        super.localDelete(massDelete);
     }
 
     /**
@@ -959,10 +959,13 @@ class KillZone extends MapObject {
         this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: massSave});
     }
 
-    onDeleteSuccess(json) {
+    /**
+     * @inheritDoc
+     **/
+    onDeleteSuccess(json, massDelete = false) {
         super.onDeleteSuccess(json);
 
-        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: false});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_delete: massDelete});
     }
 
     cleanup() {

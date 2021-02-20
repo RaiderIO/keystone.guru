@@ -145,13 +145,13 @@ class Polyline extends MapObject {
     /**
      * @inheritDoc
      */
-    localDelete() {
+    localDelete(massDelete = false) {
         console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this._setAnimatedLayerVisibility(false);
         this.layerAnimated = null;
 
-        super.localDelete();
+        super.localDelete(massDelete);
     }
 
     /**
