@@ -7,6 +7,7 @@
 /** @var $nameAndVersion string */
 /** @var $hasNewChangelog boolean */
 /** @var $theme string */
+/** @var $menuModelEdit \Illuminate\Database\Eloquent\Model */
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -236,7 +237,7 @@ $rootClass = isset($rootClass) ? $rootClass : '';
                                     @if($hasIcon)
                                     data-content="<img src='{{ url('storage/' . $menuModel->iconfile->path) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
-                                    {{ $model->getKey() === $menuModel->getKey() ? 'selected' : '' }}
+                                    {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
                             @endforeach
                         </select>

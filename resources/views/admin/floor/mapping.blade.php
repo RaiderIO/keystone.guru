@@ -26,8 +26,6 @@
         @include('common.maps.admineditsidebar', [
             'show' => [
                 'sharing' => true,
-                'draw-settings' => true,
-                'route-settings' => true,
                 'route-publish' => true
             ]
         ])

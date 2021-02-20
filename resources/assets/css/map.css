@@ -260,8 +260,13 @@ html, body, #map, #app, .wrapper {
     flex: 1 1 auto;
 }
 
-.draw_settings_tools .pickr {
+.pull_settings_tools .pickr {
     height: 100%;
+}
+
+/** Should render above modals */
+.pcr-app {
+    z-index: 100100;
 }
 
 #killzonesidebar .map_killzonessidebar_killzone .selected .text-success {

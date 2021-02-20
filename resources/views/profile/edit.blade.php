@@ -22,7 +22,7 @@ $deleteConsequences = $user->getDeleteConsequences();
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
-    'model' => $user
+    'menuModelEdit' => $user
 ])
 
 @include('common.general.inline', ['path' => 'profile/edit', 'options' => [

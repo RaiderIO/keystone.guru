@@ -4,8 +4,6 @@
 
 $show = isset($show) ? $show : [];
 $showVirtualTour = $show['virtual-tour'] ?? false;
-$showDrawSettings = $show['draw-settings'] ?? true;
-$showRouteSettings = $show['route-settings'] ?? true;
 $showSandbox = $show['sandbox'] ?? true;
 // May not be set in the case of a sandbox version
 if (isset($model)) {
@@ -91,6 +89,7 @@ if (isset($model)) {
     </div>
 
     <!-- Actions -->
+    @if( $showVirtualTour || $showSandbox)
     <div class="form-group route_actions">
         <div class="card">
             <div class="card-body">
@@ -103,33 +102,6 @@ if (isset($model)) {
                             <div class="col">
                                 <button id="start_tutorial" class="btn btn-info col">
                                     <i class="fas fa-info-circle"></i> {{ __('Start tutorial') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                @if($showDrawSettings)
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div id="map_draw_settings_btn_container" class="col">
-                                <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
-                                    <i class='fas fa-palette'></i> {{ __('Draw settings') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                @if($showRouteSettings)
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div class="col">
-                                <button class="btn btn-info col" data-toggle="modal"
-                                        data-target="#route_settings_modal">
-                                    <i class='fas fa-cog'></i> {{ __('Route settings') }}
                                 </button>
                             </div>
                         </div>
@@ -182,6 +154,7 @@ if (isset($model)) {
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Mouseover enemy information -->
     <div id="enemy_info_container" class="form-group" style="display: none">
@@ -206,46 +179,3 @@ if (isset($model)) {
         </div>
     </div>
 @endcomponent
-
-@if($showDrawSettings)
-    @component('common.general.modal', ['id' => 'draw_settings_modal'])
-    @endcomponent
-@endif
-
-@if($showRouteSettings)
-    @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
-                   aria-controls="edit_route" aria-selected="true">
-                    {{ __('Route settings') }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
-                   aria-controls="edit_route_map_settings" aria-selected="false">
-                    {{ __('Map settings') }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="edit_route_pull_settings_tab" data-toggle="tab" href="#pull-settings" role="tab"
-                   aria-controls="edit_route_pull_settings" aria-selected="false">
-                    {{ __('Pull settings') }}
-                </a>
-            </li>
-        </ul>
-
-        <div class="tab-content">
-            <div id="edit" class="tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="edit_route_tab">
-                @include('common.forms.createroute', ['model' => $model, 'modal' => '#route_settings_modal'])
-            </div>
-            <div id="map-settings" class="tab-pane fade mt-3" role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
-                @include('common.forms.mapsettings', ['model' => $model])
-            </div>
-            <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel" aria-labelledby="edit_route_pull_settings_tab">
-                pull settings
-            </div>
-        </div>
-
-    @endcomponent
-@endif

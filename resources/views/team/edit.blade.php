@@ -34,7 +34,7 @@ foreach ($model->teamusers as $teamuser) {
     'menuModels' => $user->teams,
     'menuModelsRoute' => 'team.edit',
     'menuModelsRouteParameterName' => 'team',
-    'model' => $model])
+    'menuModelEdit' => $model])
 @section('header-title', $title)
 @section('header-addition')
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">

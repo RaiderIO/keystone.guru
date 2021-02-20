@@ -89,7 +89,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
 
             // If there's a difference in floors then we should display a floor switch row
-            if( previousKillZone !== null ) {
+            if (previousKillZone !== null) {
                 let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
                 if (floorDifference.length > 0) {
                     this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
@@ -196,7 +196,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            if (killZone.getIndex() >= minIndex) {
+            // Do not update pull texts for killzones that do not have
+            if (killZone.id > 0 && killZone.getIndex() >= minIndex) {
                 self._updatePullText(killZone);
             }
         });
@@ -260,7 +261,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
                 // Don't perform this when mass-saving - that is handled already and causes a big slowdown
-                if (!killZoneChangedEvent.data.hasOwnProperty('mass_save') || !killZoneChangedEvent.data.mass_save) {
+                let isMassSave = killZoneChangedEvent.data.hasOwnProperty('mass_save') && killZoneChangedEvent.data.mass_save;
+
+                if (!isMassSave || (killZoneChangedEvent.name === 'object:changed')) {
                     self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
                 }
             });

@@ -29,13 +29,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
             'show' => [
                 'virtual-tour' => $sandbox,
                 'sandbox' => $sandbox,
-                'draw-settings' => true,
                 'sharing' => true,
                 'shareable-link' => !$sandbox,
                 'embedable-link' => !$sandbox,
                 'export-mdt-string' => true,
 
-                'route-settings' => !$sandbox,
                 'route-publish' => !$sandbox,
             ]
         ])
@@ -49,7 +47,10 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
         ])
 
         @include('common.maps.killzonessidebar', [
-            'edit' => true
+            'edit' => true,
+            'show' => [
+                'route-settings' => !$sandbox,
+            ],
         ])
     </div>
 @endsection

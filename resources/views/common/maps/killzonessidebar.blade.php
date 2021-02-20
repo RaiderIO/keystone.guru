@@ -4,6 +4,7 @@
 
 $mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_number_style'] : 'percentage') === 'percentage';
 $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
+$showRouteSettings = $show['route-settings'] ?? false;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -31,11 +32,15 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
                         </div>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-info w-100"
-                                data-toggle="collapse" data-target="#killzones_pulls_settings_container"
-                                aria-expanded="false" aria-controls="killzones_pulls_settings_container">
-                            <i class="fas fa-cog"></i>
+                        <button class="btn btn-info w-100" data-toggle="modal"
+                                data-target="#route_settings_modal">
+                            <i class='fas fa-cog'></i>
                         </button>
+                        {{--                        <button class="btn btn-info w-100"--}}
+                        {{--                                data-toggle="collapse" data-target="#killzones_pulls_settings_container"--}}
+                        {{--                                aria-expanded="false" aria-controls="killzones_pulls_settings_container">--}}
+                        {{--                            <i class="fas fa-cog"></i>--}}
+                        {{--                        </button>--}}
                     </div>
                 </div>
             </div>
@@ -112,4 +117,48 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
     </div>
     <div id="killzones_container">
     </div>
+@endcomponent
+
+
+
+@component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
+    <ul class="nav nav-tabs" role="tablist">
+        @if($showRouteSettings)
+            <li class="nav-item">
+                <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
+                   aria-controls="edit_route" aria-selected="true">
+                    {{ __('Route') }}
+                </a>
+            </li>
+        @endif
+        <li class="nav-item">
+            <a class="nav-link {{ $showRouteSettings ? '' : 'active' }}"
+               id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
+               aria-controls="edit_route_map_settings" aria-selected="false">
+                {{ __('Map settings') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="edit_route_pull_settings_tab" data-toggle="tab" href="#pull-settings" role="tab"
+               aria-controls="edit_route_pull_settings" aria-selected="false">
+                {{ __('Pull settings') }}
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        @if($showRouteSettings)
+            <div id="edit" class="tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="edit_route_tab">
+                @include('common.forms.createroute', ['model' => $model])
+            </div>
+        @endif
+        <div id="map-settings" class="tab-pane fade {{ $showRouteSettings ? '' : 'show active' }} mt-3" role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
+            @include('common.forms.mapsettings', ['model' => $model])
+        </div>
+        <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel"
+             aria-labelledby="edit_route_pull_settings_tab">
+            @include('common.forms.pullsettings', ['model' => $model])
+        </div>
+    </div>
+
 @endcomponent

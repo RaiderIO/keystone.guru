@@ -12,10 +12,10 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
-    'teemingSelector' => $teemingselector,
-    'affixGroups' => $affixGroups,
-    'modal' => isset($modal) ? $modal : false
-    ]])
+    'teemingSelector'  => $teemingSelector,
+    'affixGroups'      => $affixGroups,
+    'modal'            => isset($modal) ? $modal : false
+]])
 
 <div class="form-group">
     {!! Form::select('affixes[]', $affixGroups->pluck('id', 'id'),
@@ -29,30 +29,30 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
                 {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
                 data-id="{{ $affixGroup->id }}">
                 <?php
-                    /** @var \App\Models\AffixGroup $affixGroup */
-                    $count = 0;
-                    foreach($affixGroup->affixes as $affix){
-                    $last = count($affixGroup->affixes) - 1 === $count;
-                    $number = $last ? '2' : '3'
-                    ?>
-                    <div class="col col-md-{{ $number }} affix_row">
-                        <div class="row no-gutters">
-                            <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
-                                 data-toggle="tooltip"
-                                 title="{{ $affix->description }}"
-                                 style="height: 24px;">
-                            </div>
-                            <div class="col d-md-block d-none pl-1">
-                                {{ $affix->name }}
-                                @if($last)
-                                    @isset($affixGroup->seasonal_index)
-                                        {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
-                                    @endisset
-                                @endif
-                            </div>
+                /** @var \App\Models\AffixGroup $affixGroup */
+                $count = 0;
+                foreach($affixGroup->affixes as $affix){
+                $last = count($affixGroup->affixes) - 1 === $count;
+                $number = $last ? '2' : '3'
+                ?>
+                <div class="col col-md-{{ $number }} affix_row">
+                    <div class="row no-gutters">
+                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
+                             data-toggle="tooltip"
+                             title="{{ $affix->description }}"
+                             style="height: 24px;">
+                        </div>
+                        <div class="col d-md-block d-none pl-1">
+                            {{ $affix->name }}
+                            @if($last)
+                                @isset($affixGroup->seasonal_index)
+                                    {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
+                                @endisset
+                            @endif
                         </div>
                     </div>
-                    <?php $count++;
+                </div>
+                <?php $count++;
                 } ?>
                 <span class="col col-md-1 text-right pl-0">
                     <span class="check" style="display: none;">

@@ -281,8 +281,9 @@ class StateManager extends Signalable {
     getPullGradientHandlers() {
         let result = [];
 
-        if (typeof this._pullGradient !== 'undefined' && this._pullGradient.length > 0) {
-            let handlers = this._pullGradient.split(',');
+        let pullGradient = this.getMapContext().getPullGradient();
+        if (typeof pullGradient !== 'undefined' && pullGradient.length > 0) {
+            let handlers = pullGradient.split(',');
             for (let index in handlers) {
                 if (handlers.hasOwnProperty(index)) {
                     let handler = handlers[index];

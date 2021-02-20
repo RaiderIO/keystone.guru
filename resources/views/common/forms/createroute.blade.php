@@ -10,7 +10,6 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 $model = $model ?? null;
 ?>
 
-
 @if(!isset($model))
     {{ Form::open(['route' => 'dungeonroute.savenew']) }}
 @endisset
@@ -60,29 +59,37 @@ $model = $model ?? null;
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h5 class="mb-0">
-                            <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                               aria-expanded="false" aria-controls="collapseOne">
+                            <a href="#" class="btn btn-link" data-toggle="collapse"
+                               data-target="#createRouteAdvancedCollapse"
+                               aria-expanded="false" aria-controls="createRouteAdvancedCollapse">
                                 {{ __('Advanced options') }}
                             </a>
                         </h5>
                     </div>
 
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                    <div id="createRouteAdvancedCollapse" class="collapse" aria-labelledby="headingOne"
                          data-parent="#accordion">
                         <div class="card-body">
-
                             <h3>
                                 {{ __('Affixes') }} <span class="form-required">*</span>
                             </h3>
 
-                            @include('common.group.affixes', ['dungeonroute' => $model ?? null, 'teemingselector' => '#teeming', 'defaultSelected' => $defaultSelectedAffixes])
+                            @include('common.group.affixes', [
+                                'dungeonroute'     => $model ?? null,
+                                'teemingSelector'  => '#teeming',
+                                'collapseSelector' => '#createRouteAdvancedCollapse',
+                                'defaultSelected'  => $defaultSelectedAffixes
+                                ])
 
                             @include('common.dungeonroute.attributes')
 
                             <h3>
                                 {{ __('Group composition') }}
                             </h3>
-                            @include('common.group.composition', ['dungeonroute' => $model ?? null, 'modal' => $modal ?? null])
+                            @include('common.group.composition', [
+                                'collapseSelector' => '#createRouteAdvancedCollapse',
+                                'dungeonroute'     => $model ?? null,
+                                ])
 
                             @if(Auth::check() && Auth::user()->hasRole('admin'))
                                 <h3>
