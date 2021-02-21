@@ -1,14 +1,17 @@
 <?php
-$mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_number_style'] : 'percentage') === 'percentage';
+$mapNumberStyleChecked = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
+$mapUnkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
+$mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 ?>
 <div class="draw_settings_tools container">
-    <?php // Weight ?>
     <div class="form-group">
         <div class="row">
             <div class="col">
+                <label for="killzones_pulls_settings_map_number_style">
                     {{ __('Enemy number style') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                     __('This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.')
                      }}"></i>
+                </label>
             </div>
         </div>
         <div class="row">
@@ -21,12 +24,57 @@ $mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_nu
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_unkilled_enemy_opacity">
+                    {{ __('Unkilled enemy opacity') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.')
+                     }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_unkilled_enemy_opacity" class="form-control-range" type="range" min="0" max="100" value="{{ $mapUnkilledEnemyOpacity }}">
+            </div>
+            <div class="col-auto value">
+                {{ $mapUnkilledEnemyOpacity }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_unkilled_important_enemy_opacity">
+                    {{ __('Unkilled important enemy opacity') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('Important enemies are those that are either Prideful, marked as Inspiring or are marked as unskippable.
+                    These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.')
+                     }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_unkilled_important_enemy_opacity" class="form-control-range" type="range" min="0" max="100" value="{{ $mapUnkilledImportantEnemyOpacity }}">
+            </div>
+            <div class="col-auto value">
+                {{ $mapUnkilledImportantEnemyOpacity }}
+            </div>
+        </div>
+    </div>
+
+
     <div class="form-group">
         <div class="row view_dungeonroute_details_row">
             <div class="col">
+                <label for="edit_route_freedraw_options_weight">
                 {{ __('Default line weight') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                     __('This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.')
                      }}"></i>
+                </label>
             </div>
         </div>
         <div class="row view_dungeonroute_details_row">

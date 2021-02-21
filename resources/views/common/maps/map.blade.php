@@ -12,7 +12,11 @@ $mapClasses = isset($mapClasses) ? $mapClasses : '';
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode = isset($sandboxMode) && $sandboxMode;
-$enemyVisualType = (isset($enemyVisualType) ? $enemyVisualType : isset($_COOKIE['enemy_display_type'])) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
+$enemyVisualType = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$unkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
+$unkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
+
+
 // Allow echo to be overridden
 $echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
 $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
@@ -20,8 +24,7 @@ $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If this is an embedded route, do not show ads
-if ($embed || $dungeonroute->demo === 1)
-{
+if ($embed || $dungeonroute->demo === 1) {
     $showAds = false;
 }
 // No UI on the map
@@ -36,8 +39,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
-if ($isAdmin)
-{
+if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
@@ -59,6 +61,8 @@ if ($isAdmin)
     'edit' => $edit,
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
+    'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
+    'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
     'noUI' => $noUI,
     'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,
@@ -97,21 +101,25 @@ if ($isAdmin)
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @php($i = 0)
-            @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->name) }}"
+            <?php
+            $i = 0;
+            foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction) {
+            ?>
+            <a class="map_faction_display_control map_controls_custom" href="#"
+               data-faction="{{ strtolower($faction->name) }}"
                        title="{{ $faction->name }}">
                         <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ $faction->name }}"/>
-                        @php($i++)
                 </a>
-@endforeach
+                <?php
+            $i++;
+            } ?>
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
+
 
         </script>
     @endif

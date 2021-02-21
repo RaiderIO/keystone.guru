@@ -122,6 +122,8 @@ class StateManager extends Signalable {
         this._map = map;
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
+        this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
+        this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary
@@ -163,6 +165,31 @@ class StateManager extends Signalable {
         // Let everyone know it's changed
         this.signal('enemydisplaytype:changed', {enemyDisplayType: this._enemyDisplayType});
     }
+
+    /**
+     * Sets the opacity at which unkilled enemies should be rendered.
+     * @param unkilledEnemyOpacity int
+     */
+    setUnkilledEnemyOpacity(unkilledEnemyOpacity) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_unkilled_enemy_opacity', unkilledEnemyOpacity);
+
+        // Let everyone know it's changed
+        this.signal('unkilledenemyopacity:changed', {opacity: unkilledEnemyOpacity});
+    }
+
+    /**
+     * Sets the opacity at which unkilled important enemies should be rendered.
+     * @param unkilledImportantEnemyOpacity int
+     */
+    setUnkilledImportantEnemyOpacity(unkilledImportantEnemyOpacity) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_unkilled_important_enemy_opacity', unkilledImportantEnemyOpacity);
+
+        // Let everyone know it's changed
+        this.signal('unkilledimportantenemyopacity:changed', {opacity: unkilledImportantEnemyOpacity});
+    }
+
 
     /**
      * Sets the floor ID.
@@ -310,6 +337,24 @@ class StateManager extends Signalable {
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this._enemyDisplayType;
+    }
+
+    /**
+     * Get the opacity at which unkilled enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_enemy_opacity');
+    }
+
+    /**
+     * Get the opacity at which unkilled important enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledImportantEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_important_enemy_opacity');
     }
 
     /**

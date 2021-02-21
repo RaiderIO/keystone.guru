@@ -578,16 +578,6 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
-.map_enemy_visual_fade {
-    opacity: 50%;
-}
-
-.map_enemy_visual_fade.prideful,
-.map_enemy_visual_fade.inspiring,
-.map_enemy_visual_fade.unskippable {
-    opacity: 80%;
-}
-
 .enemy_icon_npc_mdt {
     background-color: hotpink;
 }

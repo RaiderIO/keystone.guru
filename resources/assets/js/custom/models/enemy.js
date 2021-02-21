@@ -666,6 +666,15 @@ class Enemy extends MapObject {
     }
 
     /**
+     *
+     * @returns {boolean}
+     */
+    isImportant() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc();
+    }
+
+    /**
      * Get the Awakened NPC that is linked to this enemy (if any).
      * @returns {Enemy|null}
      */

@@ -27,7 +27,7 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'dungeon_route_title' => 'string|min:3|max:80',
+            'dungeon_route_title' => 'nullable|string|max:80',
             'dungeon_route_sandbox' => 'int',
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],

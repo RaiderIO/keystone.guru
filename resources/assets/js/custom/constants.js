@@ -10,6 +10,16 @@ if (typeof Cookies.get('map_number_style') === 'undefined') {
 if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
     Cookies.set('kill_zones_number_style', 'percentage');
 }
+if (typeof Cookies.get('map_unkilled_enemy_opacity') === 'undefined') {
+    Cookies.set('map_unkilled_enemy_opacity', '50');
+}
+if (typeof Cookies.get('map_unkilled_important_enemy_opacity') === 'undefined') {
+    Cookies.set('map_unkilled_important_enemy_opacity', '80');
+}
+if (typeof Cookies.get('enemy_display_type') === 'undefined') {
+    Cookies.set('enemy_display_type', 'enemy_portrait');
+}
+
 
 // Map object groups
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';

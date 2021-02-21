@@ -373,16 +373,12 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
-            if (this.enemy.unskippable) {
-                data.root_classes += ' unskippable';
-            }
+            if (this.enemy.isImportant()) {
+                data.root_classes += ' important';
 
-            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
-                data.root_classes += ' prideful';
-            }
-
-            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
-                data.root_classes += ' inspiring';
+                data.root_style = `opacity: ${getState().getUnkilledImportantEnemyOpacity()}%`;
+            } else {
+                data.root_style = `opacity: ${getState().getUnkilledEnemyOpacity()}%`;
             }
 
             data.outer_border = border;
