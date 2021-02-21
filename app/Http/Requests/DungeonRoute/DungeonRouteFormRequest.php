@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\DungeonRoute;
 
 use App\Rules\SiegeOfBoralusFactionRule;
 use Illuminate\Foundation\Http\FormRequest;

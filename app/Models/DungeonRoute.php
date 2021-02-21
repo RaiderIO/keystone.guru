@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -547,6 +548,41 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return bool
+     */
+    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): bool
+    {
+        $this->author_id = Auth::id() ?? -1;
+        $this->public_key = DungeonRoute::generateRandomPublicKey();
+
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+
+        $this->faction_id = 1;
+        $this->difficulty = 1;
+        $this->seasonal_index = 0;
+        $this->teeming = 0;
+
+        $this->pull_gradient = '';
+        $this->pull_gradient_apply_always = 0;
+
+        $this->title = sprintf('%s Sandbox', $this->dungeon->name);
+        $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+
+        $saveResult = $this->save();
+        if ($saveResult) {
+            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
+            $drAffixGroup = new DungeonRouteAffixGroup();
+            $drAffixGroup->affix_group_id = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+            $drAffixGroup->dungeon_route_id = $this->id;
+            $drAffixGroup->save();
+        }
+
+        return $saveResult;
+    }
+
+    /**
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
@@ -578,26 +614,19 @@ class DungeonRoute extends Model
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
         // Sandbox routes have some fixed properties
-        if (!Auth::check() || $request->get('dungeon_route_sandbox', false)) {
-            $this->title = sprintf('%s Sandbox', $this->dungeon->name);
-            $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
-        } else {
-            // Fetch the title if the user set anything
-            $this->title = $request->get('dungeon_route_title', $this->title);
-            // Otherwise just set the dungeon name instead
-            $this->title = empty($this->title) ? $this->dungeon->name : $this->title;
+        // Fetch the title if the user set anything
+        $this->title = $request->get('dungeon_route_title', $this->title);
+        if (empty($this->title)) {
+            $this->title = $this->dungeon->name;
         }
 
-        if (Auth::check()) {
-            if (User::findOrFail(Auth::id())->hasRole('admin')) {
-                $this->demo = intval($request->get('demo', 0)) > 0;
-            }
+        if (User::findOrFail(Auth::id())->hasRole('admin')) {
+            $this->demo = intval($request->get('demo', 0)) > 0;
         }
 
 
         // Update or insert it
         if ($this->save()) {
-
             $newAttributes = $request->get('attributes', array());
             if (!empty($newAttributes)) {
                 // Remove old attributes

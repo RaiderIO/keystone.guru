@@ -18,94 +18,67 @@ $model = $model ?? null;
         @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
     @endif
 
-    @guest
-        <div class="form-group">
-            <div class="text-info">
-                <i class="fas fa-info-circle"></i> {{ sprintf(
-                    __('As an unregistered user, all created routes will be temporary routes which expire after %s hours.'),
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
-                    )
-                }}
-            </div>
-        </div>
-    @else
-        <div class="form-group">
-            <label for="dungeon_route_title">
-                {{ __('Title') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
-                 }}"></i>
-            </label>
-            {!! Form::text('dungeon_route_title', optional($model)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
-        </div>
+    <div class="form-group">
+        <label for="dungeon_route_title">
+            {{ __('Title') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
+             }}"></i>
+        </label>
+        {!! Form::text('dungeon_route_title', optional($model)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+    </div>
 
-        @if( !isset($model) )
-            <div class="form-group">
-                <label for="dungeon_route_sandbox">
-                    {{ __('Temporary route') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                sprintf(
-                    __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
-                )
-                 }}"></i>
-                </label>
-                {!! Form::checkbox('dungeon_route_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
-            </div>
-        @endif
+    <div class="form-group">
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <a href="#" class="btn btn-link" data-toggle="collapse"
+                           data-target="#createRouteAdvancedCollapse"
+                           aria-expanded="false" aria-controls="createRouteAdvancedCollapse">
+                            {{ __('Advanced options') }}
+                        </a>
+                    </h5>
+                </div>
 
-        <div class="form-group">
-            <div id="accordion">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <a href="#" class="btn btn-link" data-toggle="collapse"
-                               data-target="#createRouteAdvancedCollapse"
-                               aria-expanded="false" aria-controls="createRouteAdvancedCollapse">
-                                {{ __('Advanced options') }}
-                            </a>
-                        </h5>
-                    </div>
+                <div id="createRouteAdvancedCollapse" class="collapse" aria-labelledby="headingOne"
+                     data-parent="#accordion">
+                    <div class="card-body">
+                        <h3>
+                            {{ __('Affixes') }} <span class="form-required">*</span>
+                        </h3>
 
-                    <div id="createRouteAdvancedCollapse" class="collapse" aria-labelledby="headingOne"
-                         data-parent="#accordion">
-                        <div class="card-body">
+                        @include('common.group.affixes', [
+                            'dungeonroute'     => $model ?? null,
+                            'teemingSelector'  => '#teeming',
+                            'collapseSelector' => '#createRouteAdvancedCollapse',
+                            'defaultSelected'  => $defaultSelectedAffixes
+                            ])
+
+                        @include('common.dungeonroute.attributes')
+
+                        <h3>
+                            {{ __('Group composition') }}
+                        </h3>
+                        @include('common.group.composition', [
+                            'collapseSelector' => '#createRouteAdvancedCollapse',
+                            'dungeonroute'     => $model ?? null,
+                            ])
+
+                        @if(Auth::check() && Auth::user()->hasRole('admin'))
                             <h3>
-                                {{ __('Affixes') }} <span class="form-required">*</span>
+                                {{ __('Admin') }}
                             </h3>
-
-                            @include('common.group.affixes', [
-                                'dungeonroute'     => $model ?? null,
-                                'teemingSelector'  => '#teeming',
-                                'collapseSelector' => '#createRouteAdvancedCollapse',
-                                'defaultSelected'  => $defaultSelectedAffixes
-                                ])
-
-                            @include('common.dungeonroute.attributes')
-
-                            <h3>
-                                {{ __('Group composition') }}
-                            </h3>
-                            @include('common.group.composition', [
-                                'collapseSelector' => '#createRouteAdvancedCollapse',
-                                'dungeonroute'     => $model ?? null,
-                                ])
-
-                            @if(Auth::check() && Auth::user()->hasRole('admin'))
-                                <h3>
-                                    {{ __('Admin') }}
-                                </h3>
-                                <div class="form-group">
-                                    {!! Form::label('demo', __('Demo route')) !!}
-                                    {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
-                                </div>
-                            @endif
-                        </div>
+                            <div class="form-group">
+                                {!! Form::label('demo', __('Demo route')) !!}
+                                {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-    @endguest
+    </div>
 
     @if(!isset($model))
         <div class="col-lg-12">

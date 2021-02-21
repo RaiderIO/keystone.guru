@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
@@ -17,7 +18,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Session;
@@ -71,6 +71,16 @@ class DungeonRouteController extends Controller
     public function new()
     {
         return view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New route')]);
+    }
+
+    /**
+     * Show a page for creating a new dungeon route.
+     *
+     * @return Factory|View
+     */
+    public function newtemporary()
+    {
+        return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New temporary route')]);
     }
 
     /**
@@ -162,6 +172,23 @@ class DungeonRouteController extends Controller
 
         // May fail
         if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
+            abort(500, __('Unable to save route'));
+        }
+
+        return $dungeonroute;
+    }
+
+    /**
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return mixed
+     */
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
+    {
+        $dungeonroute = new DungeonRoute();
+
+        // May fail
+        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService)) {
             abort(500, __('Unable to save route'));
         }
 
@@ -311,6 +338,23 @@ class DungeonRouteController extends Controller
     {
         // Store it and show the edit page
         $dungeonroute = $this->store($request, $seasonService);
+
+        // Message to the user
+        Session::flash('status', __('Route created'));
+
+        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
+    }
+
+    /**
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
+    {
+        // Store it and show the edit page
+        $dungeonroute = $this->storetemporary($request, $seasonService);
 
         // Message to the user
         Session::flash('status', __('Route created'));

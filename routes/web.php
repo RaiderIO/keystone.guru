@@ -65,6 +65,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('new', [DungeonRouteController::class, 'new'])->name('dungeonroute.new');
     Route::post('new', [DungeonRouteController::class, 'savenew'])->name('dungeonroute.savenew');
 
+    Route::get('new/temporary', [DungeonRouteController::class, 'newtemporary'])->name('dungeonroute.temporary.new');
+    Route::post('new/temporary', [DungeonRouteController::class, 'savenewtemporary'])->name('dungeonroute.temporary.savenew');
+
     // Edit your own dungeon routes
     Route::get('{dungeonroute}/edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
     Route::get('{dungeonroute}/edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
