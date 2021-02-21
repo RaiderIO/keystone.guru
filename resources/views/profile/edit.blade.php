@@ -3,10 +3,8 @@
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
-    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
-    ['icon' => 'fa-tag', 'text' => __('Personal tags'), 'target' => '#tags'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -43,16 +41,7 @@ $deleteConsequences = $user->getDeleteConsequences();
 
 @section('content')
     <div class="tab-content">
-
-        <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-            <h3>{{ __('My routes') }}</h3>
-
-            @include('common.general.messages')
-
-            @include('common.dungeonroute.table', ['view' => 'profile'])
-        </div>
-
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch']) }}
             <h4>
                 {{ $menuTitle }}
@@ -205,18 +194,6 @@ $deleteConsequences = $user->getDeleteConsequences();
             {!! Form::hidden('_method', 'delete') !!}
             {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
             {!! Form::close() !!}
-        </div>
-
-        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="personal-tags-tab">
-            <h4>
-                {{ __('Personal tags') }}
-            </h4>
-            <p>
-                {{ __('You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
-                        you can manage a separate set of tags for just that team.') }}
-            </p>
-
-            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">

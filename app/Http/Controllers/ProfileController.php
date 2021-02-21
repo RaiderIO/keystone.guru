@@ -23,9 +23,31 @@ use Session;
 
 class ProfileController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
     public function edit(Request $request)
     {
         return view('profile.edit');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function routes(Request $request)
+    {
+        return view('profile.routes');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function tags(Request $request)
+    {
+        return view('profile.tags');
     }
 
     /**

@@ -102,6 +102,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('{dungeonroute}/claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+        Route::get('profile/routes', 'ProfileController@routes')->name('profile.routes');
+        Route::get('profile/tags', 'ProfileController@tags')->name('profile.tags');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::delete('profile/delete', 'ProfileController@delete')->name('profile.delete');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');

@@ -134,6 +134,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
+        });
+
+        view()->composer('layouts.header', function (View $view) use ($globalViewVariables)
+        {
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
         });
 

@@ -56,7 +56,7 @@ $tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['t
         @endforeach
     </div>
 @endforeach
-{{ Form::model($user, ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
+{{ Form::model(Auth::user(), ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
     {!! Form::label('tag_name_new', __('Create tag')) !!}
     {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
