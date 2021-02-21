@@ -432,9 +432,8 @@ class EnemyVisual extends Signalable {
             // $(`#map_enemy_visual_${data.id}`).mouseout(this._mouseOut.bind(this));
 
             // When the visual exists, bind a click method to it (to increase performance)
-            let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
-            $enemyIcon.unbind('contextmenu');
-            $enemyIcon.bind('contextmenu', this._visualRightClicked.bind(this));
+            let $enemyIcon = $(`#map_enemy_visual_${this.enemy.id}`).find('.enemy_icon');
+            $enemyIcon.unbind('contextmenu').bind('contextmenu', this._visualRightClicked.bind(this));
 
             this.signal('enemyvisual:builtvisual', {});
         }
@@ -498,15 +497,20 @@ class EnemyVisual extends Signalable {
         let height = size.iconSize[1];
 
         let margin = c.map.enemy.calculateMargin(width);
-        let marginStr = `${margin}px`;
+        let marginStr = '', innerSizeStr = '';
+        if( getState().hasEnemyAggressivenessBorder() ){
+            marginStr = `${margin}px`;
+            innerSizeStr = `calc(100% - ${(margin * 2)}px)`;
+        } else {
+            marginStr = `0px`;
+            innerSizeStr = `100%`;
+        }
 
         let outerWidth = (width + (margin * 2));
         let outerHeight = (height + (margin * 2));
 
         let outerWidthStr = `${outerWidth}px`;
         let outerHeightStr = `${outerHeight}px`;
-
-        let innerSizeStr = `calc(100% - ${(margin * 2)}px)`;
 
         // Compensate for a 2px border on the inner, 2x border on the outer
         this._$mainVisual[0].style.width = outerWidthStr;

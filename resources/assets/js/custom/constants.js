@@ -16,6 +16,9 @@ if (typeof Cookies.get('map_unkilled_enemy_opacity') === 'undefined') {
 if (typeof Cookies.get('map_unkilled_important_enemy_opacity') === 'undefined') {
     Cookies.set('map_unkilled_important_enemy_opacity', '80');
 }
+if (typeof Cookies.get('map_enemy_aggressiveness_border') === 'undefined') {
+    Cookies.set('map_enemy_aggressiveness_border', 0);
+}
 if (typeof Cookies.get('enemy_display_type') === 'undefined') {
     Cookies.set('enemy_display_type', 'enemy_portrait');
 }

@@ -124,6 +124,7 @@ class StateManager extends Signalable {
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
         this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
+        this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
         this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary
@@ -190,6 +191,17 @@ class StateManager extends Signalable {
         this.signal('unkilledimportantenemyopacity:changed', {opacity: unkilledImportantEnemyOpacity});
     }
 
+    /**
+     * Sets whether enemies should feature an aggressiveness border or not.
+     * @param visible {Boolean}
+     */
+    setEnemyAggressivenessBorder(visible) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_enemy_aggressiveness_border', visible ? 1 : 0);
+
+        // Let everyone know it's changed
+        this.signal('enemyaggressivenessborder:changed', {visible: visible});
+    }
 
     /**
      * Sets the floor ID.
@@ -355,6 +367,15 @@ class StateManager extends Signalable {
     getUnkilledImportantEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return Cookies.get('map_unkilled_important_enemy_opacity');
+    }
+
+    /**
+     * Get whether enemies should feature an aggressiveness border or not.
+     * @returns {boolean}
+     */
+    hasEnemyAggressivenessBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
     }
 
     /**

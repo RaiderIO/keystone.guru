@@ -15,7 +15,7 @@ $sandboxMode = isset($sandboxMode) && $sandboxMode;
 $enemyVisualType = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
 $unkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
-
+$defaultEnemyAggressivenessBorder = (int) ($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 
 // Allow echo to be overridden
 $echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
@@ -63,6 +63,7 @@ if ($isAdmin) {
     'defaultEnemyVisualType' => $enemyVisualType,
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
     'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
+    'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'noUI' => $noUI,
     'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,

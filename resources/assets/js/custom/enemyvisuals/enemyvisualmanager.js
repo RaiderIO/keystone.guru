@@ -39,6 +39,7 @@ class EnemyVisualManager extends Signalable {
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));
+        getState().register('enemyaggressivenessborder:changed', this, this._onEnemyAggressivenessBorderChanged.bind(this));
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
@@ -57,7 +58,7 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the map's zoom level was changed.
-     * @param zoomLevelChangedEvent
+     * @param zoomLevelChangedEvent {Object}
      * @private
      */
     _onZoomLevelChanged(zoomLevelChangedEvent) {
@@ -87,7 +88,7 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the number style was changed.
-     * @param numberStyleChangedEvent
+     * @param numberStyleChangedEvent {Object}
      * @private
      */
     _onNumberStyleChanged(numberStyleChangedEvent) {
@@ -106,16 +107,16 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the user has changed one of the enemy opacity changed sliders
-     * @param unkilledEnemyOpacityChanged
+     * @param unkilledEnemyOpacityChangedEvent {Object}
      * @private
      */
-    _onUnkilledEnemyOpacityChanged(unkilledEnemyOpacityChanged) {
+    _onUnkilledEnemyOpacityChanged(unkilledEnemyOpacityChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let opacity = unkilledEnemyOpacityChanged.data.opacity;
+        let opacity = unkilledEnemyOpacityChangedEvent.data.opacity;
         let selector = '.map_enemy_visual_fade'
 
-        if( unkilledEnemyOpacityChanged.name === 'unkilledimportantenemyopacity:changed'){
+        if (unkilledEnemyOpacityChangedEvent.name === 'unkilledimportantenemyopacity:changed') {
             selector += '.important';
         } else {
             // Otherwise it will also select all important enemies
@@ -123,6 +124,25 @@ class EnemyVisualManager extends Signalable {
         }
 
         $(selector).css('opacity', `${opacity}%`);
+    }
+
+
+    /**
+     * Called when the user has decided to add aggressiveness sliders
+     * @param enemyAggressivenessBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyAggressivenessBorderChanged(enemyAggressivenessBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            if (enemy.id > 0 && enemy.isVisible()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
     }
 
     /**

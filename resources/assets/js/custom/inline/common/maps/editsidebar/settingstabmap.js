@@ -7,7 +7,7 @@ class SettingsTabMap extends SettingsTab {
 
     activate() {
         // Setup line weight
-        $('#edit_route_freedraw_options_weight').bind('change', function (changeEvent) {
+        $('#edit_route_freedraw_options_weight').bind('change', function () {
             let weight = $('#edit_route_freedraw_options_weight :selected').val();
 
             c.map.polyline.defaultWeight = weight;
@@ -16,7 +16,7 @@ class SettingsTabMap extends SettingsTab {
 
             getState().getDungeonMap().refreshPather();
         })// -1 for value to index conversion
-        .val(c.map.polyline.defaultWeight);
+            .val(c.map.polyline.defaultWeight);
 
 
         // Unkilled enemy opacity
@@ -27,6 +27,11 @@ class SettingsTabMap extends SettingsTab {
         // Unkilled important enemy opacity
         $('#map_settings_unkilled_important_enemy_opacity').bind('change', function () {
             getState().setUnkilledImportantEnemyOpacity(parseInt($(this).val()));
+        });
+
+        // Enemy aggressiveness border
+        $('#map_settings_enemy_aggressiveness_border').bind('change', function () {
+            getState().setEnemyAggressivenessBorder($(this).is(':checked'));
         });
     }
 }

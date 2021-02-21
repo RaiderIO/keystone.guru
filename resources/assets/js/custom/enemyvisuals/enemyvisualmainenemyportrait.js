@@ -16,18 +16,12 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
 
         let data = super._getTemplateData();
 
-        let size = this.enemyvisual.mainVisual.getSize();
-        let width = size.iconSize[0];
-
-        let margin = c.map.enemy.calculateMargin(width);
-        width -= margin;
-
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_portrait text-white text-center';
 
         let npcId = this.enemyvisual.enemy.npc === null ? 'unknown' : this.enemyvisual.enemy.npc.id;
         // #040C1F is the same blue as the background color of portraits
-        data.main_visual_html = `<div style="width:100%; height: 100%; background-image: url('/images/enemyportraits/${npcId}.png'); background-size: contain; background-color: #040C1F; border-radius: ${width}px;">&nbsp;</div>`;
+        data.main_visual_html = `<div style="width:100%; height: 100%; background-image: url('/images/enemyportraits/${npcId}.png'); background-size: contain; background-color: #040C1F; border-radius: 100%;">&nbsp;</div>`;
 
         return data;
     }

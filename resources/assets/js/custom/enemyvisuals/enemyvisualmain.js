@@ -20,7 +20,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         // Handle Teeming display
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            mainVisualOuterClasses.push(npc.aggressiveness);
+            if( getState().hasEnemyAggressivenessBorder()){
+                mainVisualOuterClasses.push(npc.aggressiveness);
+            }
 
             mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
         }

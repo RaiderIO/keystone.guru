@@ -127,7 +127,7 @@ if (isset($model)) {
                         <div class="form-group">
                             <span class="text-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                {{ sprintf(__('This temporary route will expire on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d @ H:i')) }}
+                                {{ sprintf(__('This temporary route expires on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d at H:i')) }}
                             </span>
                             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                             __('A temporary route will exist for up to 24 hours before it is automatically removed. If you login or register, you can save the route to your profile if you wish to keep it. It will then no longer be scheduled for removal.')
@@ -143,7 +143,7 @@ if (isset($model)) {
                         <div class="form-group">
                             <span class="text-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                {{ sprintf(__('This temporary route will expire on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d @ H:i')) }}
+                                {{ sprintf(__('This temporary route expires on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d at H:i')) }}
                             </span>
                             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                             __('A temporary route will exist for up to 24 hours before it is automatically removed. You can save the route to your profile if you wish to keep it, it will then no longer be scheduled for removal.')
