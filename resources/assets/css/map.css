@@ -92,7 +92,6 @@ html, body, #map, #app, .wrapper {
 .sidebar.anchor-right {
     right: -300px;
     box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-left: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-right.active {
@@ -221,14 +220,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .sidebar .sidebar-panel {
-    /*padding: 10px;*/
-    /*border: #2B3E50 solid 1px;*/
     margin: 4px;
-}
-
-#killzonesidebar .map_killzonessidebar_killzone {
-    /*background-color: #2B3E50;*/
-    /*padding: 6px;*/
 }
 
 #killzonesidebar .map_killzonessidebar_killzone_fill_space {
@@ -524,6 +516,10 @@ html, body, #map, #app, .wrapper {
     border-radius: 100px;
 }
 
+/** Odd case where the background would otherwise be white and it'd show through the border */
+.enemy_icon.enemy_portrait.dangerous {
+    background-color: black;
+}
 
 /*
  * Enemy classes
@@ -548,14 +544,6 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemyclassifications/boss.png') !important;
 }
 
-.enemy_icon.melee,
-.enemy_icon.caster,
-.enemy_icon.ranged,
-.enemy_icon.healer,
-.enemy_icon.enemy_forces {
-    background-color: #2B3E50;
-}
-
 .enemy_icon.mdt {
     background-color: hotpink;
 }
@@ -576,6 +564,10 @@ html, body, #map, #app, .wrapper {
     border: black 2px solid;
     border-radius: 100px;
     background-blend-mode: luminosity;
+}
+
+.enemy_icon_npc_enemy_portrait {
+    background-color: black;
 }
 
 .enemy_icon_npc_mdt {

@@ -146,7 +146,7 @@ let c = {
                 // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size
-                return Math.floor(result);
+                return Math.ceil(result);
             }
         },
         adminenemy: {
@@ -225,7 +225,7 @@ let c = {
             },
             polygonOptions: {
                 color: function (previousPullColor = null) {
-                    let isPreviousColorDark = previousPullColor === null ? false : isColorDark(previousPullColor);
+                    let isPreviousColorDark = typeof previousPullColor === 'undefined' || previousPullColor === null ? false : isColorDark(previousPullColor);
                     let color = null;
 
                     // Generate colors until a color

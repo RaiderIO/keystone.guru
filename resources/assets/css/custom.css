@@ -172,10 +172,6 @@
     max-height: 32px;
 }
 
-.class_icon {
-    background-color: #2B3E50;
-}
-
 .default_table {
     width: 100%;
 }
@@ -301,17 +297,12 @@
     padding-bottom: 5px;
 }
 
-#affixes_list_custom .affix_list_row_selected {
-    background-color: #2B3E50;
-}
-
 #affixes_list_custom .affix_list_row_disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
 #affixes_list_custom .affix_list_row:hover {
-    background-color: #2B3E50;
     cursor: pointer;
 }
 
@@ -360,7 +351,6 @@
 .affixes_overview_table .current_week {
     border-top: rgb(235, 235, 235) 3px solid !important;
     border-bottom: rgb(235, 235, 235) 3px solid !important;
-    background-color: #2B3E50;
 }
 
 .affixes_overview_table .current_week.first_column {
@@ -380,7 +370,6 @@
 #team_members_table .dropdown.bootstrap-select .btn {
     background-color: #4E5D6C;
     color: #FFF;
-    border: 1px solid #2B3E5066;
 }
 
 #team_members_table .dropdown.bootstrap-select {

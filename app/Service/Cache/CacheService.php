@@ -40,7 +40,7 @@ class CacheService implements CacheServiceInterface
             // Get the result by calling the closure
             $result = $closure();
             // Only write it to cache when we're not in debug mode
-            if (!env('APP_DEBUG')) {
+            if (!env('APP_DEBUG') && env('APP_TYPE') !== 'mapping') {
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }

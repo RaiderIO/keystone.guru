@@ -72,7 +72,7 @@ class EnemyVisual extends Signalable {
                 event.data.previous.unregister('object:deleted', self);
                 event.data.previous.unregister('object:changed', self);
             }
-            self._updateBorder('white', false);
+            self.buildVisual();
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
@@ -364,8 +364,9 @@ class EnemyVisual extends Signalable {
 
             // Set a default color which may be overridden by any visuals
             let borderThickness = Math.max(2, getState().getMapZoomLevel());
-            let border = `${borderThickness}px solid white`;
-            if (this.enemy.getKillZone() instanceof KillZone) {
+            let border = `1px solid black`;
+            let hasKillZone = this.enemy.getKillZone() instanceof KillZone;
+            if (hasKillZone) {
                 // Either no border or a solid border in the color of the killzone
                 border = `${borderThickness}px solid ${this.enemy.getKillZone().color}`;
             } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
@@ -373,7 +374,9 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
-            if (this.enemy.isImportant()) {
+            if (this.isHighlighted() || hasKillZone) {
+                data.root_style = `opacity: 100%`;
+            } else if (this.enemy.isImportant()) {
                 data.root_classes += ' important';
 
                 data.root_style = `opacity: ${getState().getUnkilledImportantEnemyOpacity()}%`;
@@ -450,7 +453,17 @@ class EnemyVisual extends Signalable {
         if (this._$mainVisual !== null && this._$mainVisual.length > 0) {
             this._$mainVisual.find('.outer').css('border-color', color);
             // Fade out or not depending on what the user wanted
-            $(this._$mainVisual.parent()).toggleClass('map_enemy_visual_fade', !isFaded);
+            let $parent = $(this._$mainVisual.parent()).toggleClass('map_enemy_visual_fade', !isFaded);
+
+            if (isFaded) {
+                if (this.enemy.isImportant()) {
+                    $parent.css('opacity', `${getState().getUnkilledImportantEnemyOpacity()}%`);
+                } else {
+                    $parent.css('opacity', `${getState().getUnkilledEnemyOpacity()}%`);
+                }
+            } else {
+                $parent.css('opacity', `100%`);
+            }
         }
     }
 
@@ -498,7 +511,7 @@ class EnemyVisual extends Signalable {
 
         let margin = c.map.enemy.calculateMargin(width);
         let marginStr = '', innerSizeStr = '';
-        if( getState().hasEnemyAggressivenessBorder() ){
+        if (getState().hasEnemyAggressivenessBorder()) {
             marginStr = `${margin}px`;
             innerSizeStr = `calc(100% - ${(margin * 2)}px)`;
         } else {
@@ -518,7 +531,11 @@ class EnemyVisual extends Signalable {
 
         this._$mainVisualOuter[0].style.width = outerWidthStr;
         this._$mainVisualOuter[0].style.height = outerHeightStr;
-        this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
+        if (this.enemy.getKillZone() instanceof KillZone) {
+            this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
+        } else {
+            this._$mainVisualOuter[0].style.borderWidth = `1px`;
+        }
 
         this._$mainVisualInner[0].style.width = innerSizeStr;
         this._$mainVisualInner[0].style.height = innerSizeStr;

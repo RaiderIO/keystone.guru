@@ -56,6 +56,26 @@ body {
   background-color: rgb(250, 118, 100);
 }
 
+.class_icon {
+  background-color: var($--theme-darker);
+}
+
+#affixes_list_custom .affix_list_row_selected {
+  background-color: var($--theme-darker);
+}
+
+#affixes_list_custom .affix_list_row:hover {
+  background-color: var($--theme-darker);
+}
+
+.affixes_overview_table .current_week {
+  background-color: var($--theme-darker);
+}
+
+#team_members_table .dropdown.bootstrap-select .btn {
+    border: 1px solid var($--theme-darker);
+}
+
 /* On home page */
 .probootstrap-showcase-nav ul li.active {
   background-color: #8d9dad !important;
@@ -82,6 +102,8 @@ body {
   color: var($--theme-form-required) !important;
 }
 
+
+/** Map */
 .leaflet-container {
   background-color: var($--theme-darker);
 }
@@ -92,6 +114,10 @@ body {
 
 .sidebar.anchor-left {
   border-right: var($--theme-darker) solid 1px;
+}
+
+.sidebar.anchor-right {
+  border-left: var($--theme-darker) solid 1px;
 }
 
 .sidebar-toggle {
@@ -117,6 +143,14 @@ body {
 .route_manipulation_tools .draw_icon .col:hover {
   background: var($--theme-primary);
   color: var($--theme-light) !important;
+}
+
+.enemy_icon.melee,
+.enemy_icon.caster,
+.enemy_icon.ranged,
+.enemy_icon.healer,
+.enemy_icon.enemy_forces {
+  background-color: var($--theme-darker);
 }
 
 .dropdown.bootstrap-select {
