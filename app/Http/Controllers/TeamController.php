@@ -112,7 +112,7 @@ class TeamController extends Controller
 
         $this->authorize('edit', $teamModel);
 
-        return view('team.edit', ['model' => $teamModel]);
+        return view('team.edit', ['team' => $teamModel]);
     }
 
     /**

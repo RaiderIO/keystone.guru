@@ -157,7 +157,6 @@ html, body, #map, #app, .wrapper {
 }
 
 .sidebar-background {
-    background-color: #0c0c0caa;
     border-radius: 5px;
     padding: 3px;
 }
@@ -288,11 +287,6 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools {
     margin: auto;
-}
-
-.route_echo {
-    -ms-flex: 0 0 100px;
-    flex: 0 0 100px;
 }
 
 #echo_connected_container {

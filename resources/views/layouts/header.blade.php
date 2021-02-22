@@ -4,11 +4,12 @@
 ?>
 <div class="navbar-top-fixed-spacer"></div>
 <nav
-    class="navbar fixed-top navbar-expand-lg navbar-dark {{ $theme === 'superhero' ? 'bg-secondary' : 'bg-primary' }}"
+    class="navbar fixed-top navbar-expand-lg navbar-dark bg-header"
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}">
+            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}"
+                 height="44px;" width="200px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent"
@@ -36,7 +37,7 @@
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item mr-lg-2">
-                    <a class="btn {{ $theme === 'superhero' ? 'btn-primary' : 'bg-success' }}" href="#"
+                    <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('Create route')}}
                     </a>
@@ -114,6 +115,13 @@
                         </div>
                     </li>
                 @endif
+                <li>
+                    <input id="dark_mode" type="checkbox"
+                           {{ $theme === 'darkly' ? 'checked' : '' }}
+                           data-toggle="toggle" data-width="150px" data-height="38px"
+                           data-onstyle="dark" data-offstyle="light"
+                           data-on="{{ __('Dark') }}" data-off="{{ __('Light') }}">
+                </li>
             </ul>
         </div>
     </div>

@@ -1,9 +1,9 @@
 <?php
-/** @var \App\Models\Team $model */
-$title = sprintf(__('Team %s'), $model->name);
+/** @var \App\Models\Team $team */
+$title = sprintf(__('Team %s'), $team->name);
 /** @var \App\User $user */
 $user = Auth::user();
-$userIsModerator = $model->isUserModerator($user);
+$userIsModerator = $team->isUserModerator($user);
 $menuItems = [
     ['icon' => 'far fa-list-alt', 'text' => __('Overview'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
@@ -16,7 +16,7 @@ if ($userIsModerator) {
 }
 
 $data = [];
-foreach ($model->teamusers as $teamuser) {
+foreach ($team->teamusers as $teamuser) {
     /** @var $teamuser \App\Models\TeamUser */
     $data[] = [
         'user_id' => $teamuser->user->id,
@@ -24,17 +24,20 @@ foreach ($model->teamusers as $teamuser) {
         'join_date' => $teamuser->created_at->toDateTimeString(),
         'role' => $teamuser->role,
         // Any and all roles that the user may assign to other users
-        'assignable_roles' => $model->getAssignableRoles($user, $teamuser->user)
+        'assignable_roles' => $team->getAssignableRoles($user, $teamuser->user)
     ];
 }
 ?>
-@extends('layouts.app', ['title' => $title,
-    'menuTitle' => __('Teams'), 'menuItems' => $menuItems,
+@extends('layouts.app', [
+    'title' => $title,
+    'menuTitle' => __('Teams'),
+    'menuItems' => $menuItems,
     // The models to display as an option in the menu, plus the route to take when selecting them
     'menuModels' => $user->teams,
     'menuModelsRoute' => 'team.edit',
     'menuModelsRouteParameterName' => 'team',
-    'menuModelEdit' => $model])
+    'menuModelEdit' => $team
+])
 @section('header-title', $title)
 @section('header-addition')
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
@@ -43,12 +46,12 @@ foreach ($model->teamusers as $teamuser) {
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'data' => $data,
-    'teamName' => $model->name,
-    'teamPublicKey' => $model->public_key,
+    'teamName' => $team->name,
+    'teamPublicKey' => $team->public_key,
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
-    'currentUserRole' => $model->getUserRole($user),
+    'currentUserRole' => $team->getUserRole($user),
 ]])
 
 @section('scripts')
@@ -66,7 +69,7 @@ foreach ($model->teamusers as $teamuser) {
         <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
             <div class="form-group">
                 <h4>
-                    {{ sprintf(__('Team %s'), $model->name) }}
+                    {{ sprintf(__('Team %s'), $team->name) }}
                 </h4>
                 @include('common.general.messages')
 
@@ -74,19 +77,19 @@ foreach ($model->teamusers as $teamuser) {
                     <div class="col-lg mt-2">
                         <div class="card text-center">
                             <div class="card-header">
-                                {{ $model->name }}
+                                {{ $team->name }}
                             </div>
-                            @isset($model->iconfile)
+                            @isset($team->iconfile)
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col" style="max-width: 128px">
                                             <img class="card-img-top d-block"
-                                                 src="{{ url('storage/' . $model->iconfile->path) }}"
+                                                 src="{{ url('storage/' . $team->iconfile->path) }}"
                                                  alt="{{ __('No image') }}"
                                                  style="max-width: 128px; max-height: 128px;">
                                         </div>
                                         <div class="col text-left pl-0">
-                                            {{ $model->description }}
+                                            {{ $team->description }}
                                         </div>
                                         <div class="col">
                                         </div>
@@ -94,8 +97,8 @@ foreach ($model->teamusers as $teamuser) {
                                 </div>
                             @else
                                 <div class="card-body">
-                                    @isset($model->description)
-                                        {{ $model->description }}
+                                    @isset($team->description)
+                                        {{ $team->description }}
                                     @else
                                         <h1>&nbsp;</h1>
                                     @endisset
@@ -110,7 +113,7 @@ foreach ($model->teamusers as $teamuser) {
                                 {{ __('Routes') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $model->dungeonroutes->count() }}</h1>
+                                <h1>{{ $team->dungeonroutes->count() }}</h1>
                             </div>
                         </div>
                     </div>
@@ -121,7 +124,7 @@ foreach ($model->teamusers as $teamuser) {
                                 {{ __('Members') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $model->members->count() }}</h1>
+                                <h1>{{ $team->members->count() }}</h1>
                             </div>
                         </div>
                     </div>
@@ -149,7 +152,7 @@ foreach ($model->teamusers as $teamuser) {
                     </div>
                 </div>
 
-                @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
+                @include('common.dungeonroute.table', ['view' => 'team', 'team' => $team])
             </div>
         </div>
 
@@ -178,14 +181,14 @@ foreach ($model->teamusers as $teamuser) {
                 <div class="row">
                     <div class="col-xl-5">
                         <div class="input-group-append">
-                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
+                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]),
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
                                 <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
                                         data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
-                                @if($model->isUserModerator(\App\User::findOrFail(Auth::id())))
+                                @if($team->isUserModerator(\App\User::findOrFail(Auth::id())))
                                     <button id="team_invite_link_refresh" class="btn btn-info"
                                             data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
                                         <i class="fa fa-sync"></i>
@@ -226,7 +229,7 @@ foreach ($model->teamusers as $teamuser) {
                         {{ __('Team details') }}
                     </h4>
 
-                    @include('team.details', ['model' => $model])
+                    @include('team.details', ['model' => $team])
                 </div>
             </div>
         @endif

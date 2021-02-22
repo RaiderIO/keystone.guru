@@ -3,6 +3,7 @@
 /** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $demoRouteMapping array */
 /** @var $userCount int */
+/** @var $theme string */
 
 $dungeonSelectId = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
@@ -226,7 +227,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 {{ sprintf(__('Join %d+ other users and plan your M+ routes online!'), (int)($userCount / 1000) * 1000) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
-                                <a class="display-4 btn {{ $theme === 'superhero' ? 'btn-primary' : 'bg-success' }}" href="#" data-toggle="modal" data-target="#create_route_modal">
+                                <a class="display-4 btn btn-accent" href="#" data-toggle="modal" data-target="#create_route_modal">
                                     <i class="fas fa-plus"></i>&nbsp;{{__('Create route')}}
                                 </a>
                             </div>

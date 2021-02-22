@@ -39,7 +39,7 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 
 $rootClass = isset($rootClass) ? $rootClass : '';
 ?><!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" class="{{$theme}}">
+<html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,7 +51,6 @@ $rootClass = isset($rootClass) ? $rootClass : '';
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/theme-' . $theme . '-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/app-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
@@ -303,11 +302,11 @@ $rootClass = isset($rootClass) ? $rootClass : '';
 @endauth
 
 @if($header)
-    <!-- Modal sandbox -->
+    <!-- Modal create route -->
     @component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
         @include('common.modal.createroute')
     @endcomponent
-    <!-- END modal sandbox -->
+    <!-- END modal create route -->
 @endif
 
 @guest

@@ -18,152 +18,15 @@
     background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
 }
 
-/** BOOTSTRAP **/
-.cursor-pointer {
-    cursor: pointer !important;
-}
-
-@media (max-width: 576px) and (orientation: landscape) {
-    .hide-on-landscape {
-        display: none;
-    }
-}
-
-@media (max-width: 576px) and (orientation: portrait) {
-    .hide-on-portrait {
-        display: none;
-    }
-}
-
-@media (min-width: 576px) and (orientation: landscape) {
-    .hide-on-landscape-sm {
-        display: none;
-    }
-}
-
-@media (min-width: 576px) and (orientation: portrait) {
-    .hide-on-portrait-sm {
-        display: none;
-    }
-}
-
-@media (min-width: 768px) and (orientation: landscape) {
-    .hide-on-landscape-md {
-        display: none;
-    }
-}
-
-@media (min-width: 768px) and (orientation: portrait) {
-    .hide-on-portrait-md {
-        display: none;
-    }
-}
-
-@media (min-width: 992px) and (orientation: landscape) {
-    .hide-on-landscape-lg {
-        display: none;
-    }
-}
-
-@media (min-width: 992px) and (orientation: portrait) {
-    .hide-on-portrait-lg {
-        display: none;
-    }
-}
-
-@media (min-width: 1200px) and (orientation: landscape) {
-    .hide-on-landscape-xl {
-        display: none;
-    }
-}
-
-@media (min-width: 1200px) and (orientation: portrait) {
-    .hide-on-portrait-xl {
-        display: none;
-    }
-}
-
-@media (min-width: 1440px) {
-    .container_wide {
-        max-width: 1400px;
-    }
-}
-
-@media (min-width: 1800px) {
-    .container_wide {
-        max-width: 1750px;
-    }
-}
-
-@media (min-width: 1440px) {
-    .menu_sidebar {
-        -ms-flex: 0 0 230px;
-        flex: 0 0 230px;
-    }
-}
-
-@media (max-width: 690px) {
-    .my-sidebar {
-        display: none;
-    }
-}
-
-.left_checkbox {
-    width: 40px;
-}
-
-.navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
-    background-color: #20895e;
-}
-
-.navbar-default .navbar-nav > li > a.btn-success {
-    color: #FFF;
-}
-
-.navbar-default .navbar-nav > li > a.btn-success:hover {
-    background-color: #20895E;
-}
-
-.panel-heading {
-    font-size: 28px;
-}
-
-.panel-heading-wide {
-    text-align: center;
-}
-
-.alert.alert-danger ul {
-    margin-bottom: 0;
-}
-
-/* Override this so that long race names fit in their group selection boxes */
-.dropdown-item {
-    padding: 0.25em 0.9em;
-}
-
-/* Fixed messages always on top */
-.fixed-bottom {
-    z-index: 1000;
-}
-
-/* Floating top header should be top, but not too top */
-.fixed-top {
-    z-index: 800 !important;
-}
-
-.alert_fixed_footer {
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
 }
 
 .select_icon {
-    width: 24px;
-    border-radius: 12px;
-    max-height: 24px;
+    width: 24px !important;
+    border-radius: 12px !important;
+    max-height: 24px !important;
 }
 
 .display_icon {

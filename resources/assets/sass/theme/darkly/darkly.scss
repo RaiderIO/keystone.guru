@@ -1,6 +1,20 @@
 // Bootstrap theme (bootstrap should be between these)
-@import "~bootswatch/dist/darkly/variables";
-@import "~bootstrap/scss/bootstrap";
-@import "~bootswatch/dist/darkly/bootswatch";
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+.darkly {
+  @import "~bootswatch/dist/darkly/variables";
+  @import "~bootstrap/scss/bootstrap";
+  @import "~bootswatch/dist/darkly/bootswatch";
+  // Fonts
+  @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+  .form-control {
+    border: 1px solid #222;
+  }
+
+  .cid-s48MCQYojq {
+    background-image: url('/images/home/darkly_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    background-image: url('/images/home/darkly_footer.jpg');
+  }
+}

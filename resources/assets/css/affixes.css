@@ -12,7 +12,7 @@
 .affix_icon_prideful, .affix_icon_quaking, .affix_icon_raging, .affix_icon_reaping, .affix_icon_relentless,
 .affix_icon_sanguine, .affix_icon_skittish, .affix_icon_spiteful, .affix_icon_storming, .affix_icon_teeming,
 .affix_icon_tyrannical, .affix_icon_volcanic
-{ max-width: 100%; background-size: 100%; background-image: url('/images/affixes/affixes.png'); }
+{ max-width: 100% !important; background-size: 100% !important; background-image: url('/images/affixes/affixes.png'); }
 
 .affix_icon_awakened { background-position: 0 0; }
 .affix_icon_beguiling { background-position: 0 4.76190%; }

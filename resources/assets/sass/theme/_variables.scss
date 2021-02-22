@@ -4,8 +4,11 @@ $--theme-light: --theme-light;
 $--theme-dark: --theme-dark;
 $--theme-darker: --theme-darker;
 $--theme-text-contrast: --theme-text-contrast;
-$--theme-header-height: --theme-header-height;
 $--theme-form-required: --theme-form-required;
+/* Used for things like the header */
+$--theme-header: --theme-header;
+$--theme-header-height: --theme-header-height;
+$--theme-btn-accent: --theme-btn-accent;
 
 // Superhero
 $theme-map-superhero: (
@@ -15,8 +18,10 @@ $theme-map-superhero: (
     $--theme-dark: #4e5d6c,
     $--theme-darker: #2B3E50,
     $--theme-text-contrast: #ebebeb,
-    $--theme-header-height: 62px,
-    $--theme-form-required: var($--theme-primary)
+    $--theme-header-height: 86px,
+    $--theme-form-required: var($--theme-primary),
+    $--theme-header: var($--theme-dark),
+    $--theme-btn-accent: var($--theme-primary)
 );
 
 // Darkly
@@ -28,5 +33,8 @@ $theme-map-darkly: (
     $--theme-darker: #202020,
     $--theme-text-contrast: #ebebeb,
     $--theme-header-height: 86px,
-    $--theme-form-required: #c40000
+    $--theme-form-required: #c40000,
+    $--theme-header: var($--theme-primary),
+    /* The same as success button */
+    $--theme-btn-accent: #00bc8c
 );
