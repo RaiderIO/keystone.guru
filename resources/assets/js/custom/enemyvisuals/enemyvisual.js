@@ -89,7 +89,7 @@ class EnemyVisual extends Signalable {
      */
     _mouseOver() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        if (this._managedBy === this.enemy.id) {
+        if (this._managedBy === this.enemy.id && !this.isHighlighted()) {
             let visuals = [this];
 
             // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
@@ -217,113 +217,125 @@ class EnemyVisual extends Signalable {
      */
     _visualRightClicked() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
-        let self = this;
-
         // Some exclusions as to when the menu should not pop up
-        if (self.map.options.edit &&
-            self.map.getMapState() === null &&
-            !(self.enemy instanceof AdminEnemy)) {
+        if (this.map.options.edit &&
+            this.map.getMapState() === null &&
+            !(this.enemy instanceof AdminEnemy)) {
 
-            if (self._circleMenu === null) {
-                let template = Handlebars.templates['map_enemy_raid_marker_template'];
-                let id = self.enemy.id;
-
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    id: id
-                });
-
-                let $container = $('#map_enemy_visual_' + id);
-                $container.append(template(data));
-
-                let $circleMenu = $('#map_enemy_raid_marker_radial_' + id);
-
-                let $enemyDiv = $container.find('.enemy_icon');
-
-                let size = self.mainVisual.getSize().iconSize[0];
-                let margin = c.map.enemy.calculateMargin(size);
-
-                // Force the circle menu to appear in the center of the enemy visual
-                $circleMenu.css('position', 'absolute');
-                // Compensate of the 24x24 square
-                $circleMenu.css('left', ((size / 2) + margin - 12) + 'px');
-                $circleMenu.css('top', ((size / 2) + margin - 12) + 'px');
-
-                // Init circle menu and open it
-                self._circleMenu = $circleMenu.circleMenu({
-                    direction: 'full',
-                    step_in: 5,
-                    step_out: 0,
-                    trigger: 'click',
-                    transition_function: 'linear',
-                    // Radius
-                    circle_radius: size + margin,
-                    // Positioning
-                    item_diameter: 24,
-                    speed: 300,
-                    init: function () {
-                        refreshTooltips();
-                    },
-                    open: function () {
-                        self.enemy.unbindTooltip();
-                        self.signal('circlemenu:open');
-
-                        self.map.setMapState(new RaidMarkerSelectMapState(self.map, self.enemy));
-                    },
-                    close: function () {
-                        // Unassigned when opened
-                        self.enemy.bindTooltip();
-
-                        // Delete ourselves again
-                        self._cleanupCircleMenu();
-                    },
-                    select: function (evt, index) {
-                        // Unassigned when opened
-                        self.enemy.bindTooltip();
-
-                        // Assign the selected raid marker
-                        self.enemy.assignRaidMarker($(index).data('name'));
-
-                        // Delete ourselves again
-                        self._cleanupCircleMenu();
-                    }
-                });
-
-                // Force open the menu
-                self._circleMenu.circleMenu('open');
-
-                // Unbind this function so we don't get repeat clicks
-                $enemyDiv.unbind('click');
-                // Give the user a way to close the menu by clicking the enemy again
-                $enemyDiv.bind('click', function () {
-                    self._circleMenu.circleMenu('close', false);
-                    // Prevent multiple clicks triggering the close
-                    $enemyDiv.unbind('click');
-                });
+            if (this._circleMenu === null) {
+                this._initCircleMenu();
             }
         }
     }
 
     /**
-     * Cleans up the circle menu, removing it from the object completely.
+     * @param fadeIn {boolean}
      * @private
      */
-    _cleanupCircleMenu() {
+    _initCircleMenu(fadeIn = true) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        let self = this;
+
+        let template = Handlebars.templates['map_enemy_raid_marker_template'];
+        let id = self.enemy.id;
+
+        let data = $.extend({}, getHandlebarsDefaultVariables(), {
+            id: id
+        });
+
+        let $container = $(`#map_enemy_visual_${id}`);
+        $container.append(template(data));
+
+        let $circleMenu = $(`#map_enemy_raid_marker_radial_${id}`);
+
+        let $enemyDiv = $container.find('.enemy_icon');
+
+        let size = self.mainVisual.getSize().iconSize[0];
+        let margin = c.map.enemy.calculateMargin(size);
+
+        // Force the circle menu to appear in the center of the enemy visual
+        $circleMenu.css('position', 'absolute');
+        // Compensate of the 24x24 square
+        $circleMenu.css('left', ((size / 2) + margin - 12) + 'px');
+        $circleMenu.css('top', ((size / 2) + margin - 12) + 'px');
+
+        // Init circle menu and open it
+        self._circleMenu = $circleMenu.circleMenu({
+            direction: 'full',
+            step_in: 5,
+            step_out: 0,
+            trigger: 'click',
+            transition_function: 'linear',
+            // Radius
+            circle_radius: size + margin,
+            // Positioning
+            item_diameter: 24,
+            speed: fadeIn ? 300 : 0,
+            init: function () {
+                refreshTooltips();
+            },
+            open: function () {
+                self.enemy.unbindTooltip();
+                self.signal('circlemenu:open');
+
+                self.map.setMapState(new RaidMarkerSelectMapState(self.map, self.enemy));
+            },
+            close: function () {
+                // Unassigned when opened
+                self.enemy.bindTooltip();
+
+                // Delete ourselves again
+                self._cleanupCircleMenu();
+            },
+            select: function (evt, index) {
+                // Unassigned when opened
+                self.enemy.bindTooltip();
+
+                // Assign the selected raid marker
+                self.enemy.assignRaidMarker($(index).data('name'));
+
+                // Delete ourselves again
+                self._cleanupCircleMenu();
+            }
+        });
+
+        // Force open the menu
+        self._circleMenu.circleMenu('open');
+
+        // Unbind this function so we don't get repeat clicks
+        $enemyDiv.unbind('click');
+        // Give the user a way to close the menu by clicking the enemy again
+        $enemyDiv.bind('click', function () {
+            self._circleMenu.circleMenu('close', false);
+            // Prevent multiple clicks triggering the close
+            $enemyDiv.unbind('click');
+        });
+    }
+
+    /**
+     * Cleans up the circle menu, removing it from the object completely.
+     * @param fadeOut {boolean}
+     * @return true if the menu was cleaned up, false if it was not
+     * @private
+     */
+    _cleanupCircleMenu(fadeOut = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
 
         let self = this;
         let id = self.enemy.id;
-        let $enemyDiv = $('#map_enemy_visual_' + id).find('.enemy_icon');
+        let $enemyDiv = $(`#map_enemy_visual_${id}`).find('.enemy_icon');
 
         // Clear any stray tooltips
         refreshTooltips();
 
+        let shouldCleanUp = self._circleMenu !== null;
+
         // Delay it by 500 ms so the animations have a chance to complete
-        $('#map_enemy_raid_marker_radial_' + id).delay(500).queue(function () {
+        let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
+        let cleanupFn = function () {
             $(this).remove().dequeue();
             self._circleMenu = null;
-
-            // Slight hack to restore the state we were in prior to selecting the icon (otherwise we may get stuck in mouse over state)
-            self._mouseOut();
 
             // Re-bind this function
             $enemyDiv.unbind('contextmenu');
@@ -332,7 +344,15 @@ class EnemyVisual extends Signalable {
             // Only stop the map state at this point
             self.map.setMapState(null);
             self.signal('circlemenu:close');
-        });
+        };
+
+        if (fadeOut) {
+            $radial.delay(500).queue(cleanupFn);
+        } else {
+            cleanupFn.call($radial[0]);
+        }
+
+        return shouldCleanUp;
     }
 
     /**
@@ -349,7 +369,7 @@ class EnemyVisual extends Signalable {
 
         if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
 
-            this._cleanupCircleMenu();
+            let hadCircleMenu = this._cleanupCircleMenu(false);
 
             let template = Handlebars.templates['map_enemy_visual_template'];
 
@@ -437,6 +457,11 @@ class EnemyVisual extends Signalable {
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $(`#map_enemy_visual_${this.enemy.id}`).find('.enemy_icon');
             $enemyIcon.unbind('contextmenu').bind('contextmenu', this._visualRightClicked.bind(this));
+
+            // Restore circle menu
+            if (hadCircleMenu) {
+                this._initCircleMenu(false);
+            }
 
             this.signal('enemyvisual:builtvisual', {});
         }
