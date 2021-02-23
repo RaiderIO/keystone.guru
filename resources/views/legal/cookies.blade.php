@@ -231,6 +231,38 @@
                 Remembers if you want to display enemies on the map in percentages or enemy forces.
             </td>
         </tr>
+        <tr>
+            <td>
+                map_unkilled_enemy_opacity
+            </td>
+            <td>
+                Remembers the opacity of unkilled enemies.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_unkilled_important_enemy_opacity
+            </td>
+            <td>
+                Remembers the opacity of unkilled important enemies.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_enemy_aggressiveness_border
+            </td>
+            <td>
+                Remembers if you want to show an aggressiveness border around enemies on the map view or not.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                theme
+            </td>
+            <td>
+                Remembers the theme you wish to have the website in.
+            </td>
+        </tr>
 
     </table>
     </p>

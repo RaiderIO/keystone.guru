@@ -1,4 +1,4 @@
-.home {
+.theme .home {
 
 
   .display-1 {
@@ -120,9 +120,9 @@
   }
 
   .form-control {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    font-weight: 400;
+    font-size: 1.1rem !important;
+    line-height: 1.5 !important;;
+    font-weight: 400 !important;;
   }
 
   .form-control > .mbr-iconfont {

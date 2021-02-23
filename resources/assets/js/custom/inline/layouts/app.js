@@ -41,6 +41,22 @@ class LayoutsApp extends InlineCode {
                 window.location.href = optionSelected.data('url');
             });
         }
+
+        // Theme switch button
+        $('.theme_switch_btn').bind('click', function () {
+            let theme = $(this).data('theme');
+            $('html').removeClass('superhero darkly').addClass(theme);
+            // Regenerate parallax effects (switches images around)
+            $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
+
+            Cookies.set('theme', theme);
+
+            // Refresh the deme route
+            let elem = document.getElementById('demo_routes_iframe');
+            if (elem !== null) {
+                elem.contentWindow.location.reload();
+            }
+        });
     }
 
     /**
