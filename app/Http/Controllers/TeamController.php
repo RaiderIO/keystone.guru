@@ -33,11 +33,11 @@ class TeamController extends Controller
 {
     /**
      * @param TeamFormRequest $request
-     * @param string $team
+     * @param Team|null $team
      * @return mixed
      * @throws Exception
      */
-    public function store(TeamFormRequest $request, string $team = null)
+    public function store(TeamFormRequest $request, Team $team = null)
     {
         $new = $team === null;
 
@@ -45,11 +45,8 @@ class TeamController extends Controller
             $team = new Team();
             $team->name = $request->get('name');
             $team->public_key = Team::generateRandomPublicKey();
-        } else {
-            $team = Team::where('public_key', $team)->firstOrFail();
         }
 
-        /** @var Team $team */
         $team->description = $request->get('description');
         $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
@@ -99,20 +96,15 @@ class TeamController extends Controller
 
     /**
      * @param Request $request
-     * @param string $team
+     * @param Team $team
      * @return Application|ResponseFactory|RedirectResponse|Response
      * @throws AuthorizationException
      */
-    public function edit(Request $request, string $team)
+    public function edit(Request $request, Team $team)
     {
-        $teamModel = $this->_getModel($team);
-        if (!($teamModel instanceof Team)) {
-            return $teamModel;
-        }
+        $this->authorize('edit', $team);
 
-        $this->authorize('edit', $teamModel);
-
-        return view('team.edit', ['team' => $teamModel]);
+        return view('team.edit', ['team' => $team]);
     }
 
     /**
@@ -136,18 +128,13 @@ class TeamController extends Controller
 
     /**
      * @param TeamFormRequest $request
-     * @param string $team
+     * @param Team $team
      * @return Team|Factory|Builder|Model|RedirectResponse|View|object
      * @throws Exception
      */
-    public function update(TeamFormRequest $request, string $team)
+    public function update(TeamFormRequest $request, Team $team)
     {
-        $teamModel = $this->_getModel($team);
-        if (!($teamModel instanceof Team)) {
-            return $teamModel;
-        }
-
-        $this->authorize('edit', $teamModel);
+        $this->authorize('edit', $team);
 
         // Store it and show the edit page again
         $teamModel = $this->store($request, $team);
@@ -257,26 +244,5 @@ class TeamController extends Controller
         }
 
         return view('team.edit')->withErrors($error);
-    }
-
-    /**
-     * @param string $team
-     * @return Team|Builder|Model|RedirectResponse|object
-     */
-    private function _getModel(string $team)
-    {
-        $teamModel = Team::where('name', $team)->first();
-
-        if ($teamModel !== null) {
-            return redirect()->route('team.edit', ['team' => $teamModel->public_key]);
-        }
-
-        $teamModel = Team::where('public_key', $team)->first();
-
-        if ($teamModel === null) {
-            abort(StatusCode::NOT_FOUND);
-        }
-
-        return $teamModel;
     }
 }
