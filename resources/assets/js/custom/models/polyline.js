@@ -13,7 +13,7 @@ class Polyline extends MapObject {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState) {
                 // Show it again when the edit/delete map state was restored
-                self._setAnimatedLayerVisibility(true);
+                self._setAnimatedLayerVisibility(self.shouldBeVisible());
             }
             // Don't do else; we may transition from edit to delete map state
             if (mapStateChangedEvent.data.newMapState instanceof EditMapState ||

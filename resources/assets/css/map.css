@@ -375,6 +375,7 @@ html, body, #map, #app, .wrapper {
     top: unset !important;
     position: unset !important;
     left: unset !important;
+    margin: 0 !important;
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions li {
@@ -451,9 +452,9 @@ html, body, #map, #app, .wrapper {
     border-color: red !important;
 }
 
-.map_icon.leaflet-edit-marker-selected {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
+.map_icon.leaflet-edit-marker-selected.leaflet-marker-icon {
+    border: unset;
+    background-color: unset;
 }
 
 .mdt_enemy_icon.leaflet-edit-marker-selected {

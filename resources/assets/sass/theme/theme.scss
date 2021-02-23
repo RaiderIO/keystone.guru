@@ -413,7 +413,7 @@ body {
 
   #edit_route_draw_actions_container .leaflet-draw-actions a {
     background: inherit;
-    color: var($--theme-primary);
+    color: var($--theme-text-contrast);
   }
 
   #map .dropdown-menu.show li {

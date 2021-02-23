@@ -52,7 +52,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
             iconSize: [width, height],
             tooltipAnchor: [0, -(height / 2)],
             popupAnchor: [0, -(height / 2)],
-            className: 'map_icon_' + mapIconType.key
+            className: 'map_icon map_icon_' + mapIconType.key
         });
     }
     return icon;
