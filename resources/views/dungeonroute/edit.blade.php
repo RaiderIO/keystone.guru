@@ -8,12 +8,7 @@ $sandbox = $model->isSandbox();
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 
 ?>
-@extends('layouts.app', [
-    'custom' => true,
-    'footer' => false,
-    'header' => false,
-    'title' => sprintf(__('Edit %s'), $model->title),
-])
+@extends('layouts.map', ['title' => sprintf(__('Edit %s'), $model->title)])
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',

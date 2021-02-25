@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
