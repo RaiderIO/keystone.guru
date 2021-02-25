@@ -4,7 +4,7 @@
 /* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
 $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => $headerTitle])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => $headerTitle])
 @section('header-title')
     {{ $headerTitle }}
 @endsection

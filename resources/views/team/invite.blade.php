@@ -3,7 +3,7 @@ $title = isset($team) ? sprintf(__('Invitation to join team %s'), $team->name) :
 // Checks if you're already a member or not
 $member = isset($member) ? $member : false;
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => $title])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => $title])
 @section('header-title', $title)
 
 @section('content')

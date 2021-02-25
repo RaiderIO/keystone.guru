@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => true, 'title' => __('My routes')])
+@extends('layouts.sitepage', ['wide' => true, 'title' => __('My routes')])
 
 @section('header-title')
     {{ __('My routes') }}

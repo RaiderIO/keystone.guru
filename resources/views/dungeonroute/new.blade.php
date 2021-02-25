@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => false, 'title' => __('Create route')])
+@extends('layouts.sitepage', ['wide' => false, 'title' => __('Create route')])
 @section('header-title', $headerTitle)
 
 @section('content')

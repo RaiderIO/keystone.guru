@@ -28,7 +28,7 @@ foreach ($team->teamusers as $teamuser) {
     ];
 }
 ?>
-@extends('layouts.app', [
+@extends('layouts.sitepage', [
     'title' => $title,
     'menuTitle' => __('Teams'),
     'menuItems' => $menuItems,
@@ -229,7 +229,7 @@ foreach ($team->teamusers as $teamuser) {
                         {{ __('Team details') }}
                     </h4>
 
-                    @include('team.details', ['model' => $team])
+                    @include('common.team.details', ['model' => $team])
                 </div>
             </div>
         @endif

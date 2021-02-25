@@ -1,7 +1,7 @@
 <?php
 setcookie('viewed_teams', true);
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => __('My teams')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('My teams')])
 
 @section('header-title', __('My teams'))
 @section('header-addition')
@@ -23,7 +23,7 @@ setcookie('viewed_teams', true);
 
         <tbody>
         @foreach ($models->all() as $team)
-            <tr data-teamid="{{ $team->name }}">
+            <tr data-teamid="{{ $team->public_key }}">
                 <td class="clickable">
                     @isset($team->iconfile)
                         <img class="mr-1" src="{{ url('storage/' . $team->iconfile->path) }}"

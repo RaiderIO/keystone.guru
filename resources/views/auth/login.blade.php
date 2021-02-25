@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Login'), 'showAds' => false])
+@extends('layouts.sitepage', ['title' => __('Login'), 'showAds' => false])
 
 @section('header-title', 'Login')
 @section('content')

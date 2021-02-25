@@ -3,7 +3,7 @@
 /** @var $categories \Illuminate\Support\Collection|\App\Models\ReleaseChangelogCategory[] */
 /** @var $isUserAdmin boolean */
 ?>
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Changelog')])
 
 @section('header-title', __('Changelog'))
 @include('common.general.inline', ['path' => 'release/view', 'options' => array_merge(

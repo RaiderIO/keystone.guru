@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('My tags')])
+@extends('layouts.sitepage', ['title' => __('My tags')])
 
 @section('header-title')
     {{ __('My tags') }}

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Affixes')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Affixes')])
 <?php
 /** @var \App\Service\Season\SeasonService $seasonService */
 /** @var $offset */

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Mapping')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Mapping')])
 
 @section('header-title', __('Mapping progress'))
 

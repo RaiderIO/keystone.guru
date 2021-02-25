@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Edit expansion')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit expansion')])
 @section('header-title', __('View expansion'))
 @section('header-addition')
     <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white float-right" role="button">

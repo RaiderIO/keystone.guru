@@ -17,7 +17,7 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#repo
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
-@extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
+@extends('layouts.sitepage', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
     'menuModelEdit' => $user

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Edit Npc')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit Npc')])
 @section('header-title')
     {{ $headerTitle }}
 @endsection

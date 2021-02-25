@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Reset password')])
+@extends('layouts.sitepage', ['title' => __('Reset password')])
 
 @section('header-title', 'Reset password')
 @section('content')

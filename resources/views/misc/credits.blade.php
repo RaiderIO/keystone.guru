@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Credits')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Credits')])
 
 @section('header-title', __('Credits'))
 

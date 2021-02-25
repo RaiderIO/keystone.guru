@@ -8,7 +8,7 @@
 $dungeonSelectId = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
 ?>
-@extends('layouts.app', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
+@extends('layouts.sitepage', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
 
 @include('common.general.inline', ['path' => 'home/home', 'options' => [
     'dungeon_select_id' => '#' . $dungeonSelectId,

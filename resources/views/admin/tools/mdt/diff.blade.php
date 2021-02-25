@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('MDT Diff')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('MDT Diff')])
 
 @section('header-title', __('MDT Diff'))
 

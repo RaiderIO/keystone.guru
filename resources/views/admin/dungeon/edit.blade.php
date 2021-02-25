@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Edit dungeon')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit dungeon')])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
