@@ -171,14 +171,6 @@ if ($isAdmin) {
 
                     </div>
                 </div>
-                @if($echo)
-                    <div class="col route_echo mt-2 mb-2">
-                        <!-- Echo controls injected here through echocontrols.js -->
-                        <span id="route_echo_container" class="text-center">
-
-                    </span>
-                    </div>
-                @endif
             </div>
         </div>
     </footer>

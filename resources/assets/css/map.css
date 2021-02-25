@@ -9,6 +9,13 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
+/** HEADER */
+#map_header {
+    position: fixed;
+    width: 100%;
+    z-index: 99998;
+}
+
 /** Embed map needs space for the top header */
 .wrapper.embed_wrapper {
     height: calc(100vh - 96px);
@@ -295,14 +302,6 @@ html, body, #map, #app, .wrapper {
 }
 
 @media screen and (min-width: 1100px) {
-    .route_echo_status {
-        width: 400px;
-    }
-
-    #route_echo_container {
-        width: 400px;
-    }
-
     .route_manipulation_tools {
         width: 1000px;
     }

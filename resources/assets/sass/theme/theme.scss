@@ -25,6 +25,12 @@ body {
     color: #495057;
   }
 
+  .nav-item-divider {
+    background-color: var($--theme-text-contrast);
+    width: 1px;
+    margin: 0 0.5em;
+  }
+
   /* Weird offset because of theme */
   .bootstrap-select.form-control {
     padding: 0;
@@ -243,6 +249,10 @@ body {
     z-index: 800 !important;
   }
 
+  .popover {
+    z-index: 100000 !important;
+  }
+
   .alert_fixed_footer {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
   }
@@ -344,11 +354,6 @@ body {
 
   .sidebar-background {
     background-color: #0c0c0caa;
-  }
-
-  .route_echo {
-    -ms-flex: 0 0 100px;
-    flex: 0 0 100px;
   }
 
   .sidebar {

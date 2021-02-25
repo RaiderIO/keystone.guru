@@ -17,6 +17,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 
 @section('content')
     <div class="wrapper">
+        @include('common.maps.header', [
+            'title' => $model->title,
+            'echo' => !$sandbox
+        ])
+
         @include('common.maps.editsidebar', [
             'dungeon' => $dungeon,
             'floorId' => $floor->id,

@@ -1,11 +1,12 @@
-<div id="echo_connected_container"
-     data-toggle="popover"
-     data-html="true"
-     {{#if edit}}
-     data-placement="top"
-     {{else}}
-     data-placement="bottom"
-     {{/if}}
-     title="{{connected_users_label}}">
-    <i class="fa fa-users"></i> <span id="echo_connected_users_count"></span>
-</div>
+{{#each users}}
+    <li class="nav-item echo_user_{{id}} user_color_{{id}}"
+        {{#if self}}
+        data-toggle="tooltip" title="{{member_self_title_label}}"
+        {{/if}}
+    >
+        {{#if self}}
+            <i class="fas fa-portrait"></i>
+        {{/if}}
+        {{name}}
+    </li>
+{{/each}}

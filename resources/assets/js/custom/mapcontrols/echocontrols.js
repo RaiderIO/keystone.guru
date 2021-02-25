@@ -19,13 +19,9 @@ class EchoControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_controls_route_echo_template'];
-
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    edit: self.map.options.edit
-                });
-
-                return $(template(data))[0];
+                return jQuery('<span>', {
+                    text: '.Connecting...'
+                })[0];
             }
         };
     }
@@ -111,8 +107,8 @@ class EchoControls extends MapControl {
             users: getState().getEcho().getUsers()
         }));
 
-        $('#echo_connected_container').data('content', result).popover();
-        $('#echo_connected_users_count').text(getState().getEcho().getUsers().length);
+        $('#route_echo_container').html(result);
+        // $('#echo_connected_users_count').text(getState().getEcho().getUsers().length);
 
         // Update the color
         this._applyUserColor(user);

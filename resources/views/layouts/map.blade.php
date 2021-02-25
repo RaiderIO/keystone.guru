@@ -14,8 +14,6 @@ $title = isset($title) ? $title : null;
 
 @section('app-content')
 
-    @include('common.maps.header')
-
     @yield('content')
 
 @endsection
