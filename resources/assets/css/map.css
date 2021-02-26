@@ -285,6 +285,16 @@ html, body, #map, #app, .wrapper {
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
     background-color: inherit;
+    width: 36px;
+    height: 36px;
+}
+
+
+.theme #edit_route_echo_members_container .list-group-item .nav-link,
+.theme #edit_route_echo_members_container .list-group-item .nav-link img {
+    padding: 0 !important;
+    width: 30px;
+    height: 30px;
 }
 
 .theme .echo_user {
@@ -404,6 +414,7 @@ html, body, #map, #app, .wrapper {
 #map-controls {
     height: 700px;
 }
+
 /* Remove square background and border around enemies, but leave editing drag squares alone */
 .leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;

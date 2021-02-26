@@ -109,14 +109,10 @@ class File extends Model
      */
     public static function saveFileToDB($uploadedFile, $model, $dir = 'upload')
     {
-        $disk = 'public';
+        $disk = env('APP_ENV') === 'local' ? 'public_uploads' : 'public';
 
         // Ensure the path exists
-        if( env('app_env') === 'local' ) {
-            $storageDir = public_path($dir);
-        } else {
-            $storageDir = Storage::disk('public')->getAdapter()->getPathPrefix() . '/' . $dir;
-        }
+        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix() . '/' . $dir;
         if (!is_dir($storageDir)) {
             mkdir($storageDir, 755, true);
         }

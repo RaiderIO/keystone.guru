@@ -31,7 +31,7 @@ $echo = isset($echo) ? $echo : false;
 
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-info">
+                    <button class="btn btn-info h-100">
                         <i class="fas fa-share"></i> {{ __('Share') }}
                     </button>
                 </li>

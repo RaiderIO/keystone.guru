@@ -1,13 +1,14 @@
 <ul id="edit_route_echo_members_container" class="list-group list-group-horizontal">
     {{#each users}}
-    <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}"
-        data-toggle="tooltip" title="{{name}}"
-    >
-        {{#ifCond avatar_url '==' null}}
-            {{initials}}
-        {{else}}
-            <img src="{{avatar_url}}" alt="{{initials}}" style="max-width: 26px; max-height: 26px"/>
-        {{/ifCond}}
-    </li>
+        <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}"
+            data-toggle="tooltip" title="{{name}}">
+            <a class="nav-link text-center" href="/user/{{id}}" target="_blank">
+                {{#ifCond avatar_url '==' null}}
+                    {{initials}}
+                {{else}}
+                    <img src="{{avatar_url}}" alt="{{initials}}"/>
+                {{/ifCond}}
+            </a>
+        </li>
     {{/each}}
 </ul>
