@@ -2,32 +2,6 @@
     max-width: 600px;
 }
 
-@media (min-width: 900px) {
-    .login-modal-dialog {
-        max-width: 900px;
-    }
-
-    .register-modal-dialog {
-        max-width: 900px;
-    }
-
-    .register-modal-dialog .border-left.border-white {
-        border: hidden;
-    }
-}
-
-/** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
-@media (max-width: 900px) {
-    .login-modal-dialog .border-left.border-white {
-        border: none !important;
-    }
-
-    .register-modal-dialog .border-left.border-white {
-        border: none !important;
-    }
-}
-
-
 /** .rounded class doesn't work, unfortunately */
 #import_string_loader {
     border-radius: .25rem !important

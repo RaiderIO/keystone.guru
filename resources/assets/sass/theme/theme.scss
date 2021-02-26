@@ -133,6 +133,39 @@ body {
     }
   }
 
+  @media (min-width: 900px) {
+    .login-modal-dialog {
+      max-width: 900px;
+    }
+
+    .register-modal-dialog {
+      max-width: 900px;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+      border: hidden;
+    }
+  }
+
+  /** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
+  @media (max-width: 900px) {
+    .login-modal-dialog .border-left.border-white {
+      border: none !important;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+      border: none !important;
+    }
+  }
+
+  /* normal container */
+  @media (min-width: 1440px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+
+  /* wide container */
   @media (min-width: 1440px) {
     .container_wide {
       max-width: 1400px;

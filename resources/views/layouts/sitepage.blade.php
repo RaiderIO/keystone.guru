@@ -60,7 +60,7 @@ $title = isset($title) ? $title : null;
                                 <option
                                     data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                     @if($hasIcon)
-                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->path) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                    data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
                                     {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>

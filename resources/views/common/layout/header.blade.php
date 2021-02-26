@@ -44,12 +44,13 @@ $navs = [
                 @endforeach
             </ul>
             <ul class="navbar-nav">
-                <li class="nav-item mr-lg-2">
+                <li class="nav-item">
                     <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('Create route')}}
                     </a>
                 </li>
+                <li class="nav-item nav-item-divider"></li>
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')
             </ul>

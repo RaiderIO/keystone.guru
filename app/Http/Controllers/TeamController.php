@@ -51,23 +51,15 @@ class TeamController extends Controller
         $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
-        $logo = $request->file('logo');
-
         // Update or insert it
         if ($team->save()) {
+            $logo = $request->file('logo');
+
             // Save was successful, now do any file handling that may be necessary
             if ($logo !== null) {
+                // Save was successful, now do any file handling that may be necessary
                 try {
-                    // Delete the icon should it exist already
-                    if ($team->iconfile !== null) {
-                        $team->iconfile->delete();
-                    }
-
-                    $icon = File::saveFileToDB($logo, $team, 'uploads');
-
-                    // Update the expansion to reflect the new file ID
-                    $team->icon_file_id = $icon->id;
-                    $team->save();
+                    $team->saveUploadedFile($logo);
                 } catch (Exception $ex) {
                     if ($new) {
                         // Roll back the saving of the expansion since something went wrong with the file.

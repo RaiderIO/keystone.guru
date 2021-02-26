@@ -92,7 +92,11 @@ class File extends Model
     public function getURL()
     {
         // @TODO May need to do something with $this->disk here?
-        return url($this->path);
+        if (env('APP_ENV') === 'local') {
+            return url($this->path);
+        } else {
+            return url('storage/' . $this->path);
+        }
     }
 
     /**
@@ -108,7 +112,11 @@ class File extends Model
         $disk = 'public';
 
         // Ensure the path exists
-        $storageDir = Storage::disk('public')->getAdapter()->getPathPrefix() . '/' . $dir;
+        if( env('app_env') === 'local' ) {
+            $storageDir = public_path($dir);
+        } else {
+            $storageDir = Storage::disk('public')->getAdapter()->getPathPrefix() . '/' . $dir;
+        }
         if (!is_dir($storageDir)) {
             mkdir($storageDir, 755, true);
         }

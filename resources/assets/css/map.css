@@ -287,6 +287,10 @@ html, body, #map, #app, .wrapper {
     background-color: inherit;
 }
 
+.theme .echo_user {
+    border-radius: 30px !important;
+}
+
 .map_top_header_background,
 .route_manipulation_tools {
     background-color: rgba(78, 93, 108, 0.75);

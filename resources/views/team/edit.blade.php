@@ -84,7 +84,7 @@ foreach ($team->teamusers as $teamuser) {
                                     <div class="row">
                                         <div class="col" style="max-width: 128px">
                                             <img class="card-img-top d-block"
-                                                 src="{{ url('storage/' . $team->iconfile->path) }}"
+                                                 src="{{ $team->iconfile->getURL() }}"
                                                  alt="{{ __('No image') }}"
                                                  style="max-width: 128px; max-height: 128px;">
                                         </div>

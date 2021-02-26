@@ -16,7 +16,12 @@
 ////});
 
 // https://laravel.com/docs/5.8/broadcasting#presence-channels
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?\App\User $user, \App\Models\DungeonRoute $dungeonroute)
+use App\Models\Dungeon;
+use App\Models\DungeonRoute;
+use App\User;
+use Faker\Provider\Color;
+
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?User $user, DungeonRoute $dungeonroute)
 {
     $result = false;
 
@@ -28,15 +33,19 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
             ($dungeonroute->team === null || ($dungeonroute->team !== null && !$dungeonroute->team->isUserMember($user)))) {
 
             $result = [
-                'id'    => random_int(158402, 99999999),
-                'name'  => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()),
-                'color' => \Faker\Provider\Color::hexColor()
+                'id'        => random_int(158402, 99999999),
+                'name'      => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()),
+                'color'     => Color::hexColor(),
+                'anonymous' => true,
             ];
         } else {
             $result = [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'color' => $user->echo_color
+                'id'         => $user->id,
+                'name'       => $user->name,
+                'initials'   => $user->initials,
+                'color'      => $user->echo_color,
+                'avatar_url' => optional($user->iconfile)->getURL(),
+                'anonymous'  => false,
             ];
         }
     }
@@ -44,7 +53,7 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
     return $result;
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (\App\User $user, \App\Models\Dungeon $dungeon)
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (User $user, Dungeon $dungeon)
 {
     $result = false;
     if ($user->hasRole('admin')) {

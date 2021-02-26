@@ -1,5 +1,5 @@
 <?php
-  $user = Auth::user();
+$user = Auth::user();
 ?>
 @guest
     <li class="nav-item">
@@ -16,7 +16,13 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-user"></i> {{ $user->name }}
+            @isset($user->iconfile)
+                <img src="{{ $user->iconfile->getURL() }}" alt="{{ __('Avatar') }}"
+                     style="max-width: 26px; max-height: 26px"/>
+            @else
+                <i class="fas fa-user"></i>
+            @endisset
+            {{ $user->name }}
         </a>
         <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole('admin'))

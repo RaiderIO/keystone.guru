@@ -42,10 +42,22 @@ $deleteConsequences = $user->getDeleteConsequences();
 @section('content')
     <div class="tab-content">
         <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch']) }}
+            {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch', 'files' => true]) }}
             <h4>
                 {{ $menuTitle }}
             </h4>
+
+            <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
+                {!! Form::label('avatar', __('Avatar')) !!}
+                {!! Form::file('avatar', ['class' => 'form-control']) !!}
+            </div>
+
+            @if(isset($user->iconfile))
+                <div class="form-group">
+                    {{__('Avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
+                                                 alt="{{ __('User avatar') }}" style="max-width: 48px"/>
+                </div>
+            @endif
 
             @if($isOAuth && !$user->changed_username)
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
