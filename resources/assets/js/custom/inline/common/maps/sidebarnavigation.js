@@ -16,17 +16,16 @@ class SidebarNavigation extends Sidebar {
 
         // Copy to clipboard functionality
         $('#map_shareable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_shareable_link').val());
+            let $shareableLink = $('#map_shareable_link');
+            copyToClipboard($shareableLink.val(), $shareableLink);
         });
         $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_embedable_link').val());
+            let $embedableLink = $('#map_embedable_link');
+            copyToClipboard($embedableLink.val(), $embedableLink);
         });
         $('.copy_mdt_string_to_clipboard').bind('click', function () {
             let $exportResult = $('#mdt_export_result');
             copyToClipboard($exportResult.val(), $exportResult);
-        });
-        $('#map_mdt_export').bind('click', function () {
-            self._fetchMdtExportString();
         });
 
         // Register for external changes so that we update our dropdown
@@ -116,36 +115,6 @@ class SidebarNavigation extends Sidebar {
         // Trigger the change event now to initialize the map object groups
         $mapObjectGroupVisibilitySelect.bind('change', this._mapObjectGroupVisibilityChanged);
         this._mapObjectGroupVisibilityChanged();
-    }
-
-    /**
-     *
-     * @private
-     */
-    _fetchMdtExportString() {
-        $.ajax({
-            type: 'GET',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
-            dataType: 'json',
-            beforeSend: function () {
-                $('.mdt_export_loader_container').show();
-                $('.mdt_export_result_container').hide();
-            },
-            success: function (json) {
-                $('#mdt_export_result').val(json.mdt_string);
-
-                // Inject the warnings, if there are any
-                if (json.warnings.length > 0) {
-                    (new MdtStringWarnings(json.warnings))
-                        .render($('#mdt_export_result_warnings'));
-                }
-
-            },
-            complete: function () {
-                $('.mdt_export_loader_container').hide();
-                $('.mdt_export_result_container').show();
-            }
-        });
     }
 
     /**

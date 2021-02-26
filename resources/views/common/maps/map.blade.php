@@ -3,6 +3,7 @@
 /** @var \App\Logic\MapContext\MapContext $mapContext */
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
+/** @var array $show */
 
 $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
@@ -146,11 +147,15 @@ if ($isAdmin) {
 @endif
 
 @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-    @include('common.userreport.dungeonroute')
+    @include('common.modal.userreport.dungeonroute')
 @endcomponent
 
 @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-    @include('common.userreport.enemy')
+    @include('common.modal.userreport.enemy')
+@endcomponent
+
+@component('common.general.modal', ['id' => 'share_modal'])
+    @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
 @endcomponent
 
 @if($edit && !$noUI)

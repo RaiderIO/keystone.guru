@@ -243,6 +243,18 @@ body {
     width: 40px;
   }
 
+  .modal-backdrop {
+    z-index: 100010;
+  }
+
+  .modal {
+    z-index: 100011;
+  }
+
+  .modal-lg {
+    max-width: 80%;
+  }
+
   .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
     background-color: #20895e;
   }

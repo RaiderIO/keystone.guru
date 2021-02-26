@@ -27,10 +27,6 @@ if (isset($model)) {
     'id' => 'editsidebar',
     'show' => $show,
 ])
-    @isset($show['sharing'])
-        @include('common.maps.share', ['model' => $model, 'show' => $show])
-    @endisset
-
     <!-- Visibility -->
     <div class="form-group visibility_tools">
         <div class="card">

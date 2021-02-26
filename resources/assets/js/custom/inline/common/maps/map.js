@@ -20,6 +20,8 @@ class CommonMapsMap extends InlineCode {
         super.activate();
 
         this.initDungeonMap();
+
+        $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this))
     }
 
     /**
@@ -88,5 +90,35 @@ class CommonMapsMap extends InlineCode {
 
         // Refresh the map; draw the layers on it
         this._dungeonMap.refreshLeafletMap();
+    }
+
+    /**
+     *
+     * @private
+     */
+    _fetchMdtExportString() {
+        $.ajax({
+            type: 'GET',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
+            dataType: 'json',
+            beforeSend: function () {
+                $('.mdt_export_loader_container').show();
+                $('.mdt_export_result_container').hide();
+            },
+            success: function (json) {
+                $('#mdt_export_result').val(json.mdt_string);
+
+                // Inject the warnings, if there are any
+                if (json.warnings.length > 0) {
+                    (new MdtStringWarnings(json.warnings))
+                        .render($('#mdt_export_result_warnings'));
+                }
+
+            },
+            complete: function () {
+                $('.mdt_export_loader_container').hide();
+                $('.mdt_export_result_container').show();
+            }
+        });
     }
 }

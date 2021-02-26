@@ -23,8 +23,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
     'id' => 'viewsidebar',
     'show' => $show,
 ])
-    @include('common.maps.share', ['model' => $model, 'show' => $show])
-
     <!-- Details -->
     <div class="form-group">
         <div class="card">

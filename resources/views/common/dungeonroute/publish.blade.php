@@ -1,7 +1,7 @@
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute $dungeonroute */
 $publishStates = \App\Models\PublishedState::all()->pluck('name');
-$publishStatesAvailable = \App\Models\PublishedState::getAvailablePublishedStates($model, Auth::user());
+$publishStatesAvailable = \App\Models\PublishedState::getAvailablePublishedStates($dungeonroute, Auth::user());
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/publish', 'options' => [

@@ -60,18 +60,6 @@ html, body, #map, #app, .wrapper {
     white-space: normal;
 }
 
-.modal-backdrop {
-    z-index: 100010;
-}
-
-.modal {
-    z-index: 100011;
-}
-
-.modal-lg {
-    max-width: 80%;
-}
-
 .sidebar {
     width: 300px;
     position: fixed;
