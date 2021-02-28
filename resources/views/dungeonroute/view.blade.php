@@ -42,6 +42,14 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
             'noUI' => (bool)$model->demo,
             'gestureHandling' => (bool)$model->demo,
             'showAttribution' => !(bool)$model->demo,
+            'show' => [
+                'share' => [
+                    'link' => !$model->isSandbox(),
+                    'embed' => !$model->isSandbox(),
+                    'mdt-export' => true,
+                    'publish' => false,
+                ]
+            ]
         ])
 
         @if(!$model->demo)

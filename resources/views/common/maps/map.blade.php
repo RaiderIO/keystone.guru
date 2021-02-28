@@ -124,21 +124,30 @@ if ($isAdmin) {
 
 
 
+
         </script>
     @endif
 @endsection
 
 @include('common.maps.controls.header', [
     'title' => $model->title,
-    'echo' => !$sandbox
+    'echo' => !$sandboxMode
 ])
 
-@if($edit && !$noUI)
-    @include('common.maps.controls.draw', [
-        'isAdmin' => $isAdmin,
-        'floors' => $dungeon->floors,
-        'selectedFloorId' => $floorId,
-    ])
+@if(!$noUI)
+    @if($edit)
+        @include('common.maps.controls.draw', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+        ])
+    @else
+        @include('common.maps.controls.view', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+        ])
+    @endif
 @endif
 
 

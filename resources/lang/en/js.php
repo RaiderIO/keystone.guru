@@ -48,12 +48,12 @@ return [
     // Map object translations
     'header_floor_selection_label'                   => 'Floors',
 
-    'header_map_object_group_label'                   => 'Map elements',
+    'header_map_object_group_label'                   => 'Show/hide',
     'enemy_map_object_group_label'                    => 'Enemies',
     'enemypatrol_map_object_group_label'              => 'Patrols',
     'enemypack_map_object_group_label'                => 'Packs',
     'path_map_object_group_label'                     => 'Paths',
-    'dungeonfloorswitchmarker_map_object_group_label' => 'Floor switch',
+    'dungeonfloorswitchmarker_map_object_group_label' => 'Floor switches',
     'brushline_map_object_group_label'                => 'Drawn lines',
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
