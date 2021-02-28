@@ -73,36 +73,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
     <div class="form-group visibility_tools">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Visibility') }}</h5>
-                <div class="row">
-                    <div class="col">
-                        <div class="leaflet-draw-section">
-                            <div id="map_enemy_visuals" class="form-group">
-                                <div class="font-weight-bold">{{ __('Enemy display type') }}:</div>
-                                <div id="map_enemy_visuals_container">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col font-weight-bold">
-                        {{ __('Map elements') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col">
-                        {!! Form::select('map_map_object_group_visibility', [], 0,
-                            ['id' => 'map_map_object_group_visibility',
-                            'class' => 'form-control selectpicker',
-                            'multiple' => 'multiple',
-                            'data-selected-text-format' => 'count > 1',
-                            'data-count-selected-text' => __('{0} visible')]) !!}
-                    </div>
-                </div>
-
                 @if($floorSelection)
                     <div class="row view_dungeonroute_details_row mt-3">
                         <div class="col font-weight-bold">

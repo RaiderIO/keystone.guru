@@ -289,13 +289,14 @@ html, body, #map, #app, .wrapper {
     border-radius: 30px !important;
 }
 
-.map_top_header_background,
-.route_manipulation_tools {
+.map_top_header_background {
     background-color: rgba(78, 93, 108, 0.75);
 }
 
 .route_manipulation_tools {
-    margin: auto;
+    position: fixed;
+    z-index: 99998;
+    left: 50px;
 }
 
 #echo_connected_container {
@@ -303,11 +304,6 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-@media screen and (min-width: 1100px) {
-    .route_manipulation_tools {
-        width: 1000px;
-    }
-}
 
 .echo_connected {
     color: green;
@@ -340,10 +336,6 @@ html, body, #map, #app, .wrapper {
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
-}
-
-.route_manipulation_tools .draw_icon .col {
-    background: #5bc0de;
 }
 
 .route_manipulation_tools .draw_element {

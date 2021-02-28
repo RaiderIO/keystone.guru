@@ -20,7 +20,7 @@ class AdminDungeonMap extends DungeonMap {
         }
 
         result.push(new AdminDrawControls(this, editableLayers));
-        result.push(new EnemyVisualControls(this));
+        // result.push(new EnemyVisualControls(this));
         result.push(new AdminPanelControls(this));
 
         if (getState().isEchoEnabled()) {

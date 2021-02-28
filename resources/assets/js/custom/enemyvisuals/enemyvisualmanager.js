@@ -40,6 +40,9 @@ class EnemyVisualManager extends Signalable {
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));
         getState().register('enemyaggressivenessborder:changed', this, this._onEnemyAggressivenessBorderChanged.bind(this));
+
+        getState().register('enemydisplaytype:changed', this, this._onEnemyDisplayTypeChanged.bind(this));
+
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
@@ -141,6 +144,25 @@ class EnemyVisualManager extends Signalable {
 
             if (enemy.id > 0 && enemy.isVisible()) {
                 window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called whenever the user has decided to change the enemy display type
+     * @param enemyDisplayTypeChangedEvent
+     * @private
+     */
+    _onEnemyDisplayTypeChanged(enemyDisplayTypeChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+            console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', this);
+            if (enemy.visual !== null) {
+                enemy.visual.setVisualType(enemyDisplayTypeChangedEvent.data.enemyDisplayType);
             }
         }
     }

@@ -281,6 +281,7 @@ body {
 
   /* Override this so that long race names fit in their group selection boxes */
   .dropdown-item {
+    cursor: pointer;
     padding: 0.25em 0.9em;
   }
 
@@ -459,6 +460,23 @@ body {
 
   #edit_route_draw_container a {
     color: var($--theme-text-contrast);
+  }
+
+  #edit_route_draw_container a:hover {
+    text-decoration: none;
+  }
+
+  #edit_route_draw_container .btn {
+    border: none;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+  }
+
+  #edit_route_draw_map_actions_container .btn {
+    border-radius: 0;
   }
 
   #edit_route_draw_actions_container .leaflet-draw-actions a {

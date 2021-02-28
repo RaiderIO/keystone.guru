@@ -16,7 +16,7 @@ $sandboxMode = isset($sandboxMode) && $sandboxMode;
 $enemyVisualType = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
 $unkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
-$defaultEnemyAggressivenessBorder = (int) ($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
+$defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 
 // Allow echo to be overridden
 $echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
@@ -123,9 +123,24 @@ if ($isAdmin) {
         </div>
 
 
+
         </script>
     @endif
 @endsection
+
+@include('common.maps.controls.header', [
+    'title' => $model->title,
+    'echo' => !$sandbox
+])
+
+@if($edit && !$noUI)
+    @include('common.maps.controls.draw', [
+        'isAdmin' => $isAdmin,
+        'floors' => $dungeon->floors,
+        'selectedFloorId' => $floorId,
+    ])
+@endif
+
 
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
@@ -145,6 +160,11 @@ if ($isAdmin) {
         @endif
     </header>
 @endif
+@if($showAds && $isMobile)
+    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
+@endif
+
+
 
 @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
     @include('common.modal.userreport.dungeonroute')
@@ -157,30 +177,3 @@ if ($isAdmin) {
 @component('common.general.modal', ['id' => 'share_modal'])
     @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
 @endcomponent
-
-@if($edit && !$noUI)
-    <footer class="fixed-bottom route_manipulation_tools">
-        <div class="container">
-            <!-- Draw actions are injected here through drawcontrols.js -->
-            <div class="row m-auto text-center">
-                <div id="edit_route_draw_actions_container" class="col">
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <!-- Draw controls are injected here through drawcontrols.js -->
-                    <div id="edit_route_draw_container" class="row">
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-@endif
-
-@if($showAds && $isMobile)
-    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
-@endif

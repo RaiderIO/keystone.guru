@@ -4,9 +4,6 @@
 $dungeon = $model->dungeon->load(['expansion', 'floors']);
 
 $sandbox = $model->isSandbox();
-//    $dungeon->load(['expansion']);
-$floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
-
 ?>
 @extends('layouts.map', ['title' => sprintf(__('Edit %s'), $model->title)])
 
@@ -17,27 +14,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 
 @section('content')
     <div class="wrapper">
-        @include('common.maps.header', [
-            'title' => $model->title,
-            'echo' => !$sandbox
-        ])
-
-        @include('common.maps.editsidebar', [
-            'dungeon' => $dungeon,
-            'floorId' => $floor->id,
-            'floorSelection' => $floorSelection,
-            'show' => [
-                'virtual-tour' => $sandbox,
-                'sandbox' => $sandbox,
-                'sharing' => true,
-                'shareable-link' => !$sandbox,
-                'embedable-link' => !$sandbox,
-                'export-mdt-string' => true,
-
-                'route-publish' => !$sandbox,
-            ]
-        ])
-
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,

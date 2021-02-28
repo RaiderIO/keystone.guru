@@ -39,12 +39,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="font-weight-bold">{{ __('MDT enemy mapping') }}:</div>
-                            <input type="checkbox" class="form-control left_checkbox" value="1"
-                                   id="map_enemy_visuals_map_mdt_clones_to_enemies"
-                                   name="map_enemy_visuals_map_mdt_clones_to_enemies"/>
-                        </div>
                     </div>
                 </div>
 
