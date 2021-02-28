@@ -127,20 +127,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
                         @endguest
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col font-weight-bold">
-                        {{ __('Favorite') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col">
-                        @guest
-                            {{ __('Login to favorite this route') }}
-                        @else
-                            {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
-                        @endguest
-                    </div>
-                </div>
                 @auth
                     @if($model->mayUserEdit(Auth::user()))
                         <div class="row view_dungeonroute_details_row mt-2">

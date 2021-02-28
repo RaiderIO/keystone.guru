@@ -15,7 +15,6 @@
 
         </div>
 
-        <!-- Floor switch -->
         <div id="edit_route_draw_map_actions_container">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 

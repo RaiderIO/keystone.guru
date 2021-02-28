@@ -3,6 +3,9 @@ class CommonMapsMap extends InlineCode {
     constructor(options) {
         super(options);
         this._dungeonMap = null;
+
+        this.settingsTabMap = new SettingsTabMap(options);
+        this.settingsTabPull = new SettingsTabPull(options);
     }
 
     /**
@@ -19,13 +22,18 @@ class CommonMapsMap extends InlineCode {
     activate() {
         super.activate();
 
-        this._initDungeonMap();
+        this.settingsTabMap.activate();
+        this.settingsTabPull.activate();
 
-        $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
+        this._initDungeonMap();
 
         this._setupFloorSelection();
         this._setupMapObjectGroupVisibility();
         this._setupEnemyVisualTypes();
+        this._setupFavorite();
+
+        // Sharing
+        $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
 
         // MDT clones button
         $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', function () {
@@ -195,6 +203,41 @@ class CommonMapsMap extends InlineCode {
         });
     }
 
+    /**
+     *
+     * @private
+     */
+    _setupFavorite() {
+        let self = this;
+        $('#favorite').bind('change', function (el) {
+            self._favorite($('#favorite').is(':checked'));
+        });
+
+        $('.favorite_star').bind('mouseenter', function () {
+            $(this).toggleClass('favorited');
+        }).bind('mouseout', function () {
+            $(this).toggleClass('favorited');
+        }).bind('click', function () {
+            // If it was not favorited, it is now
+            let $favorite = $('#favorite');
+            let favorited = parseInt($favorite.val()) === 0;
+
+            self._favorite(favorited);
+
+            $('.favorite_star').removeClass('favorited').hide();
+            let $favorited;
+            if (favorited) {
+                $favorited = $('#route_favorited').addClass('favorited');
+            } else {
+                $favorited = $('#route_not_favorited').removeClass('favorited');
+            }
+
+            $favorited.show();
+
+            $favorite.val(favorited ? '1' : '0');
+        });
+    }
+
 
     /**
      *
@@ -258,6 +301,21 @@ class CommonMapsMap extends InlineCode {
             complete: function () {
                 $('.mdt_export_loader_container').hide();
                 $('.mdt_export_result_container').show();
+            }
+        });
+    }
+
+    /**
+     * Favorites the current dungeon route, or not.
+     * @param value bool
+     */
+    _favorite(value) {
+        $.ajax({
+            type: !value ? 'DELETE' : 'POST',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/favorite`,
+            dataType: 'json',
+            success: function (json) {
+
             }
         });
     }

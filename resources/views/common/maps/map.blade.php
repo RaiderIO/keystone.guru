@@ -131,7 +131,8 @@ if ($isAdmin) {
 
 @include('common.maps.controls.header', [
     'title' => $model->title,
-    'echo' => !$sandboxMode
+    'echo' => !$sandboxMode,
+    'dungeonroute' => $dungeonroute,
 ])
 
 @if(!$noUI)
@@ -154,23 +155,17 @@ if ($isAdmin) {
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-@if((($showAds && !$isMobile) || !$edit))
-    <header class="fixed-top">
+@if((($showAds && !$isMobile)))
+    <footer class="fixed-bottom">
         @if($showAds && !$isMobile)
-            <div class="container p-0 map_top_header_background" style="width: 728px">
-                @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
+            <div class="container p-0" style="width: 728px">
+                @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
             </div>
         @endif
-        @if(!$edit)
-            <div class="container p-0 map_top_header_background" style="width: 100px">
-                <!-- Echo controls injected here through echocontrols.js -->
-                <span id="route_echo_container" class="text-center"></span>
-            </div>
-        @endif
-    </header>
+    </footer>
 @endif
 @if($showAds && $isMobile)
-    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
+    @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
 @endif
 
 

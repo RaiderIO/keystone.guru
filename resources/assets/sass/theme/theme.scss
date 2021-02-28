@@ -394,6 +394,10 @@ body {
 
 
   /** Map */
+  .favorited {
+    color: #ffd048;
+  }
+
   .leaflet-container {
     background-color: var($--theme-darker);
   }
@@ -466,6 +470,13 @@ body {
     text-decoration: none;
   }
 
+  #view_route_actions_container a,
+  #edit_route_draw_container .row {
+    width: 100%;
+    height: 50px;
+  }
+
+  #view_route_actions_container .btn,
   #edit_route_draw_container .btn {
     border: none;
     border-radius: 0;
@@ -475,6 +486,7 @@ body {
     font-size: 1.3rem;
   }
 
+  #view_route_map_actions_container .btn,
   #edit_route_draw_map_actions_container .btn {
     border-radius: 0;
   }

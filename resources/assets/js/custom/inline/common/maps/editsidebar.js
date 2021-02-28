@@ -3,8 +3,6 @@ class CommonMapsEditsidebar extends InlineCode {
         super(options);
 
         this.sidebar = new SidebarNavigation(options);
-        this.settingsTabMap = new SettingsTabMap(options);
-        this.settingsTabPull = new SettingsTabPull(options);
 
         this._grapick = null;
 
@@ -18,8 +16,6 @@ class CommonMapsEditsidebar extends InlineCode {
         super.activate();
 
         this.sidebar.activate();
-        this.settingsTabMap.activate();
-        this.settingsTabPull.activate();
 
         $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
     }

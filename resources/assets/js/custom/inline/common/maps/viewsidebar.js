@@ -34,9 +34,6 @@ class CommonMapsViewsidebar extends InlineCode {
                 self._rate(value);
             }
         });
-        $('#favorite').bind('change', function (el) {
-            self._favorite($('#favorite').is(':checked'));
-        });
 
         $('#userreport_dungeonroute_modal_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
 
@@ -61,23 +58,6 @@ class CommonMapsViewsidebar extends InlineCode {
             success: function (json) {
                 // Update the new average rating
                 $('#rating').barrating('set', Math.round(json.new_avg_rating));
-            }
-        });
-    }
-
-    /**
-     * Favorites the current dungeon route, or not.
-     * @param value bool
-     */
-    _favorite(value) {
-        let self = this;
-
-        $.ajax({
-            type: !value ? 'DELETE' : 'POST',
-            url: '/ajax/' + self.options.dungeonroute.public_key + '/favorite',
-            dataType: 'json',
-            success: function (json) {
-
             }
         });
     }
