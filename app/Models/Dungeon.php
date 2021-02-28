@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -16,6 +16,7 @@ use Mockery\Exception;
  * @property int $zone_id The ID of the location that WoW has given this dungeon.
  * @property int $mdt_id The ID that MDT has given this dungeon.
  * @property string $name The name of the dungeon.
+ * @property string $slug The url friendly slug of the dungeon.
  * @property string $key Shorthand key of the dungeon
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
  * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
@@ -51,6 +52,15 @@ class Dungeon extends CacheModel
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
     public $timestamps = false;
+
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     /**
      * @return int The amount of floors this dungeon has.

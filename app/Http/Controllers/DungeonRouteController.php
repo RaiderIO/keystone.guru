@@ -363,13 +363,20 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory|
+     * @return Factory
      */
-    public function list()
+    public function discover()
     {
-        return view('dungeonroute.list', ['models' => DungeonRoute::all()]);
+        return view('dungeonroute.discover.discover');
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @return Factory
+     */
+    public function discoverdungeon(Dungeon $dungeon)
+    {
+        return view('dungeonroute.discover.discoverdungeon', ['dungeon' => $dungeon]);
     }
 
     /**

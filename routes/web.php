@@ -85,7 +85,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
-    Route::get('routes', [DungeonRouteController::class, 'list'])->name('dungeonroutes');
+    Route::get('routes', [DungeonRouteController::class, 'discover'])->name('dungeonroutes');
+    Route::get('routes/{dungeon}', [DungeonRouteController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');

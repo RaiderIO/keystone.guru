@@ -81,7 +81,11 @@ class Update extends Command
         ]);
 
         $this->call('optimize:clear');
-        $this->call('route:cache');
+        if ($environment === 'live') {
+            $this->call('route:cache');
+        } else {
+            $this->call('route:clear');
+        }
         $this->call('config:clear');
         $this->call('queue:restart');
         $this->call('keystoneguru:startsupervisor');

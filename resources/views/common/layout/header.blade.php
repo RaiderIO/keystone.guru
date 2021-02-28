@@ -34,7 +34,7 @@ $navs = [
             <ul class="navbar-nav mr-auto">
                 @foreach($navs as $route => $opts)
                     <li class="nav-item">
-                        <a class="nav-link  {{ Request::url() === $route ? 'active' : '' }}" href="{{ $route }}">
+                        <a class="nav-link  {{ strpos(Request::url(), $route) === 0 ? 'active' : '' }}" href="{{ $route }}">
                             {{ $opts['text'] }}
                             @if(isset($opts['new']) && $opts['new'])
                                 <sup class="text-success">{{ __('NEW') }}</sup>

@@ -12,12 +12,14 @@ class PolylineMapObjectGroup extends MapObjectGroup {
     _restorePoints(remoteMapObject) {
         // Create the polyline first
         let polyline = remoteMapObject.polyline;
-        let vertices = JSON.parse(polyline.vertices_json);
-
         let points = [];
-        for (let j = 0; j < vertices.length; j++) {
-            let vertex = vertices[j];
-            points.push([vertex.lat, vertex.lng]);
+        if (polyline !== null && typeof polyline.vertices_json !== 'undefined') {
+            let vertices = JSON.parse(polyline.vertices_json);
+
+            for (let j = 0; j < vertices.length; j++) {
+                let vertex = vertices[j];
+                points.push([vertex.lat, vertex.lng]);
+            }
         }
 
         return points;

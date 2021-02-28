@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Session;
 
@@ -37,6 +38,7 @@ class DungeonController extends Controller
         $dungeon->zone_id = $request->get('zone_id');
         $dungeon->mdt_id = $request->get('mdt_id');
         $dungeon->name = $request->get('name');
+        $dungeon->slug = Str::slug($dungeon->name);
         $dungeon->key = $request->get('key');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
