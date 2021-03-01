@@ -33,5 +33,10 @@ class SettingsTabMap extends SettingsTab {
         $('#map_settings_enemy_aggressiveness_border').bind('change', function () {
             getState().setEnemyAggressivenessBorder($(this).is(':checked'));
         });
+
+        // Enemy dangerous border
+        $('#map_settings_enemy_dangerous_border').bind('change', function () {
+            getState().setEnemyDangerousBorder($(this).is(':checked'));
+        });
     }
 }

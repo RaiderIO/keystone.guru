@@ -40,6 +40,8 @@ class EnemyVisualManager extends Signalable {
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));
         getState().register('enemyaggressivenessborder:changed', this, this._onEnemyAggressivenessBorderChanged.bind(this));
+        getState().register('enemydangerousborder:changed', this, this._onEnemyDangerousBorderChanged.bind(this));
+
 
         getState().register('enemydisplaytype:changed', this, this._onEnemyDisplayTypeChanged.bind(this));
 
@@ -129,9 +131,8 @@ class EnemyVisualManager extends Signalable {
         $(selector).css('opacity', `${opacity}%`);
     }
 
-
     /**
-     * Called when the user has decided to add aggressiveness sliders
+     * Called when the user has decided to add/remove aggressiveness borders
      * @param enemyAggressivenessBorderChangedEvent {Object}
      * @private
      */
@@ -143,6 +144,24 @@ class EnemyVisualManager extends Signalable {
             let enemy = enemyMapObjectGroup.objects[i];
 
             if (enemy.id > 0 && enemy.isVisible()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called when the user has decided to add/remove dangerous borders
+     * @param enemyDangerousBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyDangerousBorderChanged(enemyDangerousBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            if (enemy.id > 0 && enemy.isVisible() && enemy.npc !== null && enemy.npc.dangerous) {
                 window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
             }
         }

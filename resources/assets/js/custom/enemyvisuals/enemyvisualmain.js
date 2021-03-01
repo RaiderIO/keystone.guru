@@ -24,7 +24,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
 
-            mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
+            if( getState().hasEnemyDangerousBorder() && npc.dangerous) {
+                mainVisualInnerClasses.push('dangerous');
+            }
         }
 
         // Any additional classes to add for when the enemy is selectable

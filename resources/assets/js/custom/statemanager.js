@@ -204,6 +204,18 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets whether enemies should feature a dangerous border or not.
+     * @param visible {Boolean}
+     */
+    setEnemyDangerousBorder(visible) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_enemy_dangerous_border', visible ? 1 : 0);
+
+        // Let everyone know it's changed
+        this.signal('enemydangerousborder:changed', {visible: visible});
+    }
+
+    /**
      * Sets the floor ID.
      * @param floorId int
      */
@@ -376,6 +388,15 @@ class StateManager extends Signalable {
     hasEnemyAggressivenessBorder() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
+    }
+
+    /**
+     * Get whether enemies should feature a dangerous border or not.
+     * @returns {boolean}
+     */
+    hasEnemyDangerousBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_dangerous_border')) === 1;
     }
 
     /**

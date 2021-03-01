@@ -257,6 +257,14 @@
         </tr>
         <tr>
             <td>
+                map_enemy_dangerous_border
+            </td>
+            <td>
+                Remembers if you want to show a dangerous border around enemies on the map view or not.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 theme
             </td>
             <td>
