@@ -44,6 +44,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');
 
         // Model helpers
+        $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');

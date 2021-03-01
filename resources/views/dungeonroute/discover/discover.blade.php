@@ -1,3 +1,5 @@
+@inject('discoverService', 'App\Service\DungeonRoute\DiscoverService')
+@inject('seasonService', 'App\Service\Season\SeasonService')
 @extends('layouts.sitepage', ['title' => __('Routes')])
 
 @section('header-title')
@@ -5,6 +7,8 @@
 @endsection
 <?php
 /**
+ * @var $discoverService \App\Service\DungeonRoute\DiscoverService
+ * @var $seasonService \App\Service\Season\SeasonService
  * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
  */
 ?>
@@ -21,4 +25,12 @@
     <h2>
         {{ __('Popular routes (most views of last 7 days?)') }}
     </h2>
+
+    <?php
+    DB::enableQueryLog();
+
+    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
+
+    dump(DB::getQueryLog())
+    ?>
 @endsection
