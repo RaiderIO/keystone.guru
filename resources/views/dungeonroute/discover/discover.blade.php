@@ -26,11 +26,13 @@
         {{ __('Popular routes (most views of last 7 days?)') }}
     </h2>
 
-    <?php
-    DB::enableQueryLog();
+    @include('common.dungeonroute.cardlist', ['dungeonroutes' => \App\Models\DungeonRoute::all()])
 
-    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
-
-    dump(DB::getQueryLog())
-    ?>
+<!--    --><?php
+//    DB::enableQueryLog();
+//
+//    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
+//
+//    dump(DB::getQueryLog())
+//    ?>
 @endsection
