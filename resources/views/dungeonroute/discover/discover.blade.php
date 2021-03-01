@@ -1,4 +1,4 @@
-@inject('discoverService', 'App\Service\DungeonRoute\DiscoverService')
+@inject('discoverService', 'App\Service\DungeonRoute\DiscoverServiceInterface')
 @inject('seasonService', 'App\Service\Season\SeasonService')
 @extends('layouts.sitepage', ['title' => __('Routes')])
 
@@ -12,27 +12,69 @@
  * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
  */
 ?>
+@include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
+        'options' =>  [
+        ]
+])
+
 @section('content')
-    <h2>
-        {{ __('Discover by dungeon') }}
-    </h2>
-    @include('common.dungeon.grid', [
-        'dungeons' => $dungeons,
-        'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-            return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug])];
-        })
-    ])
-    <h2>
-        {{ __('Popular routes (most views of last 7 days?)') }}
-    </h2>
+    <div class="discover">
+        <h2>
+            {{ __('Discover by dungeon') }}
+        </h2>
+        @include('common.dungeon.grid', [
+            'dungeons' => $dungeons,
+            'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug])];
+            })
+        ])
 
-    @include('common.dungeonroute.cardlist', ['dungeonroutes' => \App\Models\DungeonRoute::all()])
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Popular routes') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => $discoverService->popular()])
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Popular routes by current affix') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', [
+                    'cols' => 2,
+                    'dungeonroutes' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup())
+                ])
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Popular routes by next week\'s affix') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', [
+                    'cols' => 2,
+                    'dungeonroutes' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getAffixGroupAtTime(now()->addDays(7)))
+                ])
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Newly uploaded routes') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => $discoverService->new()])
+            </div>
+        </div>
 
-<!--    --><?php
-//    DB::enableQueryLog();
-//
-//    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
-//
-//    dump(DB::getQueryLog())
-//    ?>
+        <!--    --><?php
+        //    DB::enableQueryLog();
+        //
+        //    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
+        //
+        //    dump(DB::getQueryLog())
+        //    ?>
+
+    </div>
 @endsection

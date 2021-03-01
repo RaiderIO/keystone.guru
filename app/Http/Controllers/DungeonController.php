@@ -61,7 +61,7 @@ class DungeonController extends Controller
     public function new()
     {
         return view('admin.dungeon.edit', [
-            'expansions' => Expansion::all()->pluck('name', 'id'),
+            'expansions'  => Expansion::all()->pluck('name', 'id'),
             'headerTitle' => __('New dungeon')
         ]);
     }
@@ -74,8 +74,8 @@ class DungeonController extends Controller
     public function edit(Request $request, Dungeon $dungeon)
     {
         return view('admin.dungeon.edit', [
-            'expansions' => Expansion::all()->pluck('name', 'id'),
-            'model' => $dungeon,
+            'expansions'  => Expansion::all()->pluck('name', 'id'),
+            'dungeon'     => $dungeon,
             'headerTitle' => __('Edit dungeon')
         ]);
     }

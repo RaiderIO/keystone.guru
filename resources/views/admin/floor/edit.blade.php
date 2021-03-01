@@ -1,8 +1,8 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-/* @var $model \App\Models\Floor */
+/* @var $floor \App\Models\Floor */
 /* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
-$connectedFloorCandidates = $model->dungeon->floors->except($model->id);
+$connectedFloorCandidates = $floor->dungeon->floors->except($floor->id);
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => $headerTitle])
 @section('header-title')
@@ -20,10 +20,10 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
 ?>
 
 @section('content')
-    @isset($model)
-        {{ Form::model($model, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->id, 'floor' => $model->id], 'method' => 'patch']) }}
+    @isset($floor)
+        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->slug, 'floor' => $floor->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $model->dungeon->id]]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $floor->dungeon->slug]]) }}
     @endisset
 
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
@@ -57,7 +57,7 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)')
                  }}"></i>
-        {!! Form::checkbox('default', 1, isset($model) ? $model->default : 1, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('default', 1, isset($floor) ? $floor->default : 1, ['class' => 'form-control left_checkbox']) !!}
         @include('common.forms.form-error', ['key' => 'default'])
     </div>
 
@@ -82,7 +82,7 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
         <?php
         foreach($connectedFloorCandidates as $connectedFloorCandidate){
         /** @var \App\Models\FloorCoupling $floorCoupling */
-        $floorCoupling = $floorCouplings->where('floor1_id', $model->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
         ?>
         <div class="row mb-3">
             <div class="col-2">

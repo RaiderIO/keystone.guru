@@ -99,6 +99,13 @@
     padding-right: 15px !important;
 }
 
+/* Container is required for the page load to have a proper width */
+.discover .owl-carousel-container,
+.discover .owl-carousel {
+    width: 192px;
+    height: 128px;
+}
+
 .routes_table .owl-carousel {
     width: 192px;
     height: 128px;

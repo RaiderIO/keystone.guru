@@ -4,9 +4,6 @@ class DungeonrouteEdit extends InlineCode {
      */
     activate() {
         super.activate();
-
-        let self = this;
-
         // Save settings in the modal
         $('#save_route_settings').bind('click', this._saveRouteSettings);
 

@@ -34,6 +34,16 @@ class ProfileController extends Controller
 
     /**
      * @param Request $request
+     * @param User $user
+     * @return Application|Factory|View
+     */
+    public function view(Request $request, User $user)
+    {
+        return view('profile.view', ['user' => $user]);
+    }
+
+    /**
+     * @param Request $request
      * @return Application|Factory|View
      */
     public function routes(Request $request)
@@ -96,7 +106,7 @@ class ProfileController extends Controller
 
                 // Handle changing of avatar if the user did so
                 $avatar = $request->file('avatar');
-                if( $avatar !== null ) {
+                if ($avatar !== null) {
                     $user->saveUploadedFile($avatar);
                 }
 
@@ -156,16 +166,6 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profile.edit');
-    }
-
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return Application|Factory|View
-     */
-    public function view(Request $request, User $user)
-    {
-        return view('profile.view');
     }
 
     /**

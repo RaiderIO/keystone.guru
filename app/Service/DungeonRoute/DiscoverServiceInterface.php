@@ -41,6 +41,30 @@ interface DiscoverServiceInterface
      */
     function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
 
+    /**
+     * @return Collection
+     */
+    function new(): Collection;
+
+    /**
+     * @param AffixGroup $affixGroup
+     * @return Collection
+     */
+    function newByAffixGroup(AffixGroup $affixGroup): Collection;
+
+    /**
+     * @param Dungeon $dungeon
+     * @return Collection
+     */
+    function newByDungeon(Dungeon $dungeon): Collection;
+
+    /**
+     * @param Dungeon $dungeon
+     * @param AffixGroup $affixGroup
+     * @return Collection
+     */
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+
     /*
     |--------------------------------------------------------------------------
     | Users

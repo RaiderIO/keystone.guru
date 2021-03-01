@@ -103,7 +103,7 @@ class FloorController extends Controller
             return view('admin.floor.edit', [
                 'headerTitle'    => sprintf(__('%s - Edit floor'), $dungeon->name),
                 'dungeon'        => $dungeon,
-                'model'          => $floor,
+                'floor'          => $floor,
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
             ]);
         } else {
@@ -123,7 +123,7 @@ class FloorController extends Controller
         $dungeon = $floor->dungeon->load('floors');
 
         return view('admin.floor.mapping', [
-            'model'       => $floor,
+            'floor'       => $floor,
             'headerTitle' => __('Edit floor'),
             'mapContext'  => (new MapContextDungeon($dungeon, $floor))->toArray(),
         ]);

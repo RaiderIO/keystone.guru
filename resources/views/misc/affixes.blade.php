@@ -14,6 +14,12 @@ if ($timezone === null) {
 ?>
 @section('header-title', sprintf(__('Weekly affixes in %s'), $region->name))
 
+@include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
+        'options' =>  [
+        ]
+])
+
+
 @section('content')
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
@@ -67,7 +73,7 @@ if ($timezone === null) {
             <?php
             $affixIndex = 0;
             foreach($affixGroup->affixes as $affix) {
-                $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
+            $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
             $class = $currentWeekClass;
             $class .= $lastColumn ? 'last_column ' : '';
             $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
@@ -117,13 +123,31 @@ if ($timezone === null) {
         </li>
     </ul>
 
-    @php(\App\Logic\Utils\Stopwatch::dumpAll())
-
-    <div class="mt-4 col-12 text-center">
+    <div class="mt-4 text-center">
         <p>
             {{ __('Last updated at 2021/Feb/02.') }}
             {{ __('For more information about affixes and M+, please visit') }}
             <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>
+    </div>
+
+    <div class="discover">
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Popular routes for this week') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => \App\Models\DungeonRoute::limit(10)->get()])
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-xl">
+                <h2>
+                    {{ __('Popular routes for next week') }}
+                </h2>
+                @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => \App\Models\DungeonRoute::limit(10)->get()])
+            </div>
+        </div>
     </div>
 @endsection

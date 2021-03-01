@@ -84,6 +84,39 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
+    function new(): Collection
+    {
+        // TODO: Implement new() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    {
+        // TODO: Implement newByAffixGroup() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByDungeon(Dungeon $dungeon): Collection
+    {
+        // TODO: Implement newByDungeon() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    {
+        // TODO: Implement newByDungeonAndAffixGroup() method.
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.

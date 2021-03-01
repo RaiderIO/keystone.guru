@@ -82,7 +82,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
     Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 
-    Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
+    Route::get('profile/{user}', 'ProfileController@view')->name('profile.view');
 
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', [DungeonRouteController::class, 'discover'])->name('dungeonroutes');

@@ -3,19 +3,12 @@
 
 $cols = isset($cols) ? $cols : 1;
 $i = 0;
-foreach ($dungeonroutes as $dungeonroute) {
-    $newRow = $i % $cols === 0;
-?>
-@if($newRow )
-    <div class="row">
-        @endif
-        <div class="col">
-            @include('common.dungeonroute.card', ['dungeonroute' => $dungeonroute])
-        </div>
-        @if($newRow )
+for ($i = 0; $i < (int)ceil($dungeonroutes->count() / $cols); $i++) { ?>
+<div class="row">
+    <?php for ($j = 0; $j < $cols; $j++) { ?>
+    <div class="col">
+        @include('common.dungeonroute.card', ['dungeonroute' => $dungeonroutes->get(($i * $cols) + $j)])
     </div>
-@endif
-<?php
-    $i++;
-}
-?>
+    <?php } ?>
+</div>
+<?php } ?>
