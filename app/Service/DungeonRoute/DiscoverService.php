@@ -7,10 +7,9 @@ use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class DiscoverService implements DiscoverServiceInterface
 {
@@ -23,7 +22,8 @@ class DiscoverService implements DiscoverServiceInterface
      */
     private function popularBuilder() : Builder
     {
-        return DB::table('dungeon_routes')
+        return DungeonRoute::query()
+            ->with('author')
             ->selectRaw('dungeon_routes.*, COUNT(page_views.id) as views')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('page_views', function (JoinClause $join)
@@ -38,6 +38,19 @@ class DiscoverService implements DiscoverServiceInterface
             ->whereDate('page_views.created_at', '>', now()->subDays(self::POPULAR_DAYS))
             ->groupBy('dungeon_routes.id')
             ->orderBy('views', 'desc');
+    }
+
+    /**
+     * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder
+     */
+    private function newBuilder(): Builder
+    {
+        return DungeonRoute::query()
+            ->whereNull('dungeon_routes.expires_at')
+            ->limit(10)
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -86,7 +99,7 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function new(): Collection
     {
-        // TODO: Implement new() method.
+        return $this->newBuilder()->get();
     }
 
     /**
