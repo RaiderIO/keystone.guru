@@ -22,7 +22,6 @@ class DeleteExpiredDungeonRoutes
     {
         Log::channel('scheduler')->debug('>> Deleting expired routes');
 
-        /** @var Collection $dungeonRoutes */
         $dungeonRoutes = DungeonRoute::whereDate('expires_at', '<', Carbon::now()->toDateTimeString())
             ->where('expires_at', '!=', 0)->whereNotNull('expires_at')->get();
 

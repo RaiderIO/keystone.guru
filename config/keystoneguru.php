@@ -4,7 +4,7 @@
 return [
     'themes' => [
         'superhero' => 'Classic',
-        'darkly' => 'Dark',
+        'darkly'    => 'Dark',
     ],
 
     'super_admins' => [
@@ -39,7 +39,7 @@ return [
         'displayed_affix_groups' => [
             'ttl' => '15 minutes',
         ],
-        'global_view_variables' => [
+        'global_view_variables'  => [
             'ttl' => '1 day',
         ],
     ],
@@ -146,6 +146,11 @@ return [
      * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
     'thumbnail_refresh_min'               => 30,
+
+    /**
+     * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
+     */
+    'thumbnail_refresh_anyways_days'      => 30,
 
     /**
      * The amount of hours it takes before a dungeon route that is created through the 'sandbox' functionality expires and
