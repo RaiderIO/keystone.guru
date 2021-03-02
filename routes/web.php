@@ -70,8 +70,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('{dungeonroute}/edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
     // Submit a patch for your own dungeon route
     Route::patch('{dungeonroute}/edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
-    // Claiming a route that was made by /sandbox functionality
-    Route::get('{dungeonroute}/claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
 
     Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
 
@@ -101,6 +99,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         // Clone a route
         Route::get('{dungeonroute}/clone', [DungeonRouteController::class, 'clone'])->name('dungeonroute.clone');
+        // Claiming a route that was made by /sandbox functionality
+        Route::get('{dungeonroute}/claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');

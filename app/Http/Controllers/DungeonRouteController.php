@@ -108,7 +108,7 @@ class DungeonRouteController extends Controller
     {
         $this->authorize('view', $dungeonroute);
 
-        if( !is_numeric($floorIndex) ) {
+        if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -147,7 +147,7 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, string $floorindex)
     {
-        if( !is_numeric($floorindex) ) {
+        if (!is_numeric($floorindex)) {
             $floorindex = '1';
         }
 
@@ -199,7 +199,7 @@ class DungeonRouteController extends Controller
 //            if (!Auth::user()->hasPaidTier('unlimited-routes')) {
 //                Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
 //            } else {
-                Session::flash('status', __('Route cloned successfully'));
+            Session::flash('status', __('Route cloned successfully'));
 //            }
 
             return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
@@ -215,9 +215,9 @@ class DungeonRouteController extends Controller
      */
     public function claim(Request $request, DungeonRoute $dungeonroute)
     {
-        if ($dungeonroute->isSandbox()) {
-            $dungeonroute->claim(Auth::id());
-        }
+        // Regardless of the result, try to claim the route
+        $dungeonroute->claim(Auth::id());
+
         return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
     }
 
@@ -229,6 +229,7 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
+        /** @var Floor $defaultFloor */
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
         return $this->editfloor($request, $dungeonroute, optional($defaultFloor)->index ?? 1);
     }
@@ -244,7 +245,7 @@ class DungeonRouteController extends Controller
     {
         $this->authorize('edit', $dungeonroute);
 
-        if( !is_numeric($floorIndex) ) {
+        if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -253,21 +254,19 @@ class DungeonRouteController extends Controller
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+        } else if ($dungeonroute->isSandbox()) {
+            return view('dungeonroute.sandbox', [
+                'model'      => $dungeonroute,
+                'floor'      => $floor,
+                'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            ]);
         } else {
-            if ($dungeonroute->isSandbox()) {
-                return view('dungeonroute.sandbox', [
-                    'model'      => $dungeonroute,
-                    'floor'      => $floor,
-                    'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
-                ]);
-            } else {
-                return view('dungeonroute.edit', [
-                    'headerTitle' => __('Edit route'),
-                    'model'       => $dungeonroute,
-                    'floor'       => $floor,
-                    'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
-                ]);
-            }
+            return view('dungeonroute.edit', [
+                'headerTitle' => __('Edit route'),
+                'model'       => $dungeonroute,
+                'floor'       => $floor,
+                'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            ]);
         }
     }
 
@@ -282,7 +281,7 @@ class DungeonRouteController extends Controller
     {
         $this->authorize('embed', $dungeonroute);
 
-        if( !is_numeric($floorIndex) ) {
+        if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -344,7 +343,7 @@ class DungeonRouteController extends Controller
      */
     public function list()
     {
-        return view('dungeonroute.list', ['models' => DungeonRoute::all()]);
+        return view('dungeonroute.list');
     }
 
     /**

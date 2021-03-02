@@ -89,9 +89,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
 
             // If there's a difference in floors then we should display a floor switch row
-            let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
-            if (floorDifference.length > 0) {
-                this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+            if( previousKillZone !== null ) {
+                let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
+                if (floorDifference.length > 0) {
+                    this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+                }
             }
         }
 
