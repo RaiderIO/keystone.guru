@@ -343,7 +343,7 @@ class DungeonRouteController extends Controller
      */
     public function list()
     {
-        return view('dungeonroute.list', ['models' => DungeonRoute::all()]);
+        return view('dungeonroute.list');
     }
 
     /**
