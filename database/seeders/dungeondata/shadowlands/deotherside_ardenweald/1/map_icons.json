@@ -49,7 +49,7 @@
         "map_icon_type_id": 12,
         "lat": -149.21875,
         "lng": 253.25,
-        "comment": "Activates after entering Ardenweald.",
+        "comment": "Activates after entering Ardenweald",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -83,6 +83,28 @@
         "lat": -45.25,
         "lng": 194.125,
         "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -212.72941598992,
+        "lng": 194.46247835016,
+        "comment": "Activates after entering Mechagon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -148.71875,
+        "lng": 138.34375,
+        "comment": "Activates after entering Zul'Gurub",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
