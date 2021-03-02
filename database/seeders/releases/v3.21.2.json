@@ -1,0 +1,25 @@
+{
+    "id": 89,
+    "release_changelog_id": 95,
+    "version": "v3.21.2",
+    "silent": 1,
+    "created_at": "2021-03-02T11:00:40+00:00",
+    "updated_at": "2021-03-02T11:00:40+00:00",
+    "changelog": {
+        "id": 95,
+        "release_id": 89,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 95,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Fixed backdrop z-index being too high, preventing people from being able to log in.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
