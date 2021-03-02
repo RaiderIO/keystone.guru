@@ -6,9 +6,8 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class DevDiscoverService implements DiscoverServiceInterface
 {
@@ -19,7 +18,7 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     private function popularBuilder(): Builder
     {
-        return DB::table('dungeon_routes')->limit(10);
+        return DungeonRoute::query()->limit(10);
     }
 
     /**
@@ -29,7 +28,10 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     private function newBuilder(): Builder
     {
-        return DB::table('dungeon_routes')->limit(10)->orderBy('created_at', 'desc');
+        return DungeonRoute::query()
+            ->whereNull('dungeon_routes.expires_at')
+            ->limit(10)
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -37,7 +39,7 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     function popular(): Collection
     {
-        return $this->popularBuilder()->get()->mapInto(DungeonRoute::class);
+        return $this->popularBuilder()->get();
     }
 
     /**
@@ -45,7 +47,7 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder()->get()->mapInto(DungeonRoute::class);
+        return $this->popularBuilder()->get();
     }
 
     /**
@@ -53,41 +55,8 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     function popularByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->popularBuilder()->get()->mapInto(DungeonRoute::class);
+        return $this->popularBuilder()->get();
     }
-
-    /**
-     * @inheritDoc
-     */
-    function new(): Collection
-    {
-        return $this->newBuilder()->get()->mapInto(DungeonRoute::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection
-    {
-        return $this->newBuilder()->get()->mapInto(DungeonRoute::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function newByDungeon(Dungeon $dungeon): Collection
-    {
-        return $this->newBuilder()->get()->mapInto(DungeonRoute::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
-    {
-        return $this->newBuilder()->get()->mapInto(DungeonRoute::class);
-    }
-
 
     /**
      * @inheritDoc
@@ -95,6 +64,38 @@ class DevDiscoverService implements DiscoverServiceInterface
     function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function new(): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByDungeon(Dungeon $dungeon): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    {
+        return $this->newBuilder()->get();
     }
 
     /**
