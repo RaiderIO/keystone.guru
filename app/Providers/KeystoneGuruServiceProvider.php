@@ -79,6 +79,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
 
+            $currentExpansion = $expansionService->getCurrentExpansion();
+
             return [
                 'isProduction'                    => config('app.env') === 'production',
                 'demoRoutes'                      => $demoRoutes,
@@ -96,7 +98,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'userCount'                       => User::count(),
 
                 // Discover routes
-                'currentExpansionActiveDungeons'  => $expansionService->getCurrentExpansion()->dungeons,
+                'currentExpansion'                => $currentExpansion,
+                'currentExpansionActiveDungeons'  => $currentExpansion->dungeons,
 
                 // Find routes
 
@@ -161,6 +164,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables)
         {
             $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
+        });
+
+        // Dungeon grid view
+        view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables)
+        {
+            $view->with('expansion', $globalViewVariables['currentExpansion']);
+            $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
         });
 
         // Displaying a release

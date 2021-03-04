@@ -87,6 +87,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', [DungeonRouteController::class, 'discover'])->name('dungeonroutes');
     Route::get('routes/{dungeon}', [DungeonRouteController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
+    Route::get('routes/{dungeon}/popular', [DungeonRouteController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
+    Route::get('routes/{dungeon}/affixes/current', [DungeonRouteController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
+    Route::get('routes/{dungeon}/affixes/next', [DungeonRouteController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
+    Route::get('routes/{dungeon}/new', [DungeonRouteController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');

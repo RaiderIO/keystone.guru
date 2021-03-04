@@ -1,9 +1,7 @@
-@inject('expansionService', 'App\Service\Expansion\ExpansionService')
 <?php
 /** @var $expansionService \App\Service\Expansion\ExpansionService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
-$expansion = $expansionService->getCurrentExpansion();
 $dungeons = isset($dungeons) ? $dungeons : $expansion->dungeons;
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);

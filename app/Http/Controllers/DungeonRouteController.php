@@ -380,6 +380,42 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param Dungeon $dungeon
+     * @return Factory
+     */
+    public function discoverdungeonpopular(Dungeon $dungeon)
+    {
+        return view('dungeonroute.discover.discoverdungeon.popular', ['dungeon' => $dungeon]);
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @return Factory
+     */
+    public function discoverdungeonthisweek(Dungeon $dungeon)
+    {
+        return view('dungeonroute.discover.discoverdungeon.thisweek', ['dungeon' => $dungeon]);
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @return Factory
+     */
+    public function discoverdungeonnextweek(Dungeon $dungeon)
+    {
+        return view('dungeonroute.discover.discoverdungeon.nextweek', ['dungeon' => $dungeon]);
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @return Factory
+     */
+    public function discoverdungeonnew(Dungeon $dungeon)
+    {
+        return view('dungeonroute.discover.discoverdungeon.new', ['dungeon' => $dungeon]);
+    }
+
+    /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return RedirectResponse|Redirector
