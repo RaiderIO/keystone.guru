@@ -6,6 +6,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\PublishedState;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -18,7 +19,10 @@ class DevDiscoverService implements DiscoverServiceInterface
      */
     private function popularBuilder(): Builder
     {
-        return DungeonRoute::query()->limit(10);
+        return DungeonRoute::query()
+//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('demo', false)
+            ->limit(10);
     }
 
     /**
@@ -29,7 +33,9 @@ class DevDiscoverService implements DiscoverServiceInterface
     private function newBuilder(): Builder
     {
         return DungeonRoute::query()
+//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
+            ->where('demo', false)
             ->limit(10)
             ->orderBy('created_at', 'desc');
     }

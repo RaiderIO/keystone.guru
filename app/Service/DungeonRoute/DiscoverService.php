@@ -48,7 +48,9 @@ class DiscoverService implements DiscoverServiceInterface
     private function newBuilder(): Builder
     {
         return DungeonRoute::query()
+            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
+            ->where('demo', false)
             ->limit(10)
             ->orderBy('created_at', 'desc');
     }

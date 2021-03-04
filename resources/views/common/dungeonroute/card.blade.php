@@ -12,7 +12,7 @@ $showAffixes = isset($showAffixes) ? $showAffixes : true;
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)
                         <img
-                            src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index)) }}"
+                            src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"
                             loading="lazy"/>
                     @endforeach
                 @else
