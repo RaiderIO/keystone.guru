@@ -31,63 +31,9 @@
             ])
         </div>
 
-        <div class="discover_panel">
-            <div class="row mt-4">
-                <div class="col-xl">
-                    <h2 class="text-center">
-                        {{ __('Popular routes') }}
-                    </h2>
-                    @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => $discoverService->popular()])
-                </div>
-            </div>
-        </div>
-
-        <div class="discover_panel">
-            <div class="row mt-4">
-                <div class="col-xl">
-                    <h2 class="text-center">
-                        {{ __('Popular routes by current affix') }}
-                    </h2>
-                    @include('common.dungeonroute.cardlist', [
-                        'cols' => 2,
-                        'dungeonroutes' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup())
-                    ])
-                </div>
-            </div>
-        </div>
-
-        <div class="discover_panel">
-            <div class="row mt-4">
-                <div class="col-xl">
-                    <h2 class="text-center">
-                        {{ __('Popular routes by next week\'s affix') }}
-                    </h2>
-                    @include('common.dungeonroute.cardlist', [
-                        'cols' => 2,
-                        'dungeonroutes' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getAffixGroupAtTime(now()->addDays(7)))
-                    ])
-                </div>
-            </div>
-        </div>
-
-        <div class="discover_panel">
-            <div class="row mt-4">
-                <div class="col-xl">
-                    <h2 class="text-center">
-                        {{ __('Newly uploaded routes') }}
-                    </h2>
-                    @include('common.dungeonroute.cardlist', ['cols' => 2, 'dungeonroutes' => $discoverService->new()])
-                </div>
-            </div>
-        </div>
-
-        <!--    --><?php
-        //    DB::enableQueryLog();
-        //
-        //    dump($discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()));
-        //
-        //    dump(DB::getQueryLog())
-        //    ?>
-
+        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Popular routes'), 'dungeonroutes' => $dungeonroutes['popular']])
+        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Popular routes by current affix'), 'dungeonroutes' => $dungeonroutes['thisweek']])
+        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Popular routes by next week\'s affix'), 'dungeonroutes' => $dungeonroutes['nextweek']])
+        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Newly uploaded routes'), 'dungeonroutes' => $dungeonroutes['new']])
     </div>
 @endsection

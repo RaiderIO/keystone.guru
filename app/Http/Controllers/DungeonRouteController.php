@@ -10,6 +10,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -363,56 +364,107 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return Factory
      */
-    public function discover()
+    public function discover(DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('dungeonroute.discover.discover');
+        $limit = config('keystoneguru.discover.limits.overview');
+
+        return view('dungeonroute.discover.discover', [
+            'dungeonroutes' => [
+                'popular'  => $discoverService->popular($limit),
+                'thisweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup(), $limit),
+                'nextweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextWeekAffixGroup(), $limit),
+                'new'      => $discoverService->new($limit),
+            ]
+        ]);
     }
 
     /**
      * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return Factory
      */
-    public function discoverdungeon(Dungeon $dungeon)
+    public function discoverdungeon(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('dungeonroute.discover.discoverdungeon', ['dungeon' => $dungeon]);
+        $limit = config('keystoneguru.discover.limits.overview');
+
+        return view('dungeonroute.discover.dungeon.overview', [
+            'dungeon'       => $dungeon,
+            'dungeonroutes' => [
+                'popular'  => $discoverService->popularByDungeon($dungeon, $limit),
+                'thisweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getCurrentAffixGroup(), $limit),
+                'nextweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextWeekAffixGroup(), $limit),
+                'new'      => $discoverService->newByDungeon($dungeon, $limit),
+            ]
+        ]);
     }
 
     /**
      * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      */
-    public function discoverdungeonpopular(Dungeon $dungeon)
+    public function discoverdungeonpopular(Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        return view('dungeonroute.discover.discoverdungeon.popular', ['dungeon' => $dungeon]);
+        return view('dungeonroute.discover.dungeon.category', [
+            'title'         => sprintf(__('%s popular routes'), $dungeon->name),
+            'dungeon'       => $dungeon,
+            'dungeonroutes' => $discoverService->popularByDungeon($dungeon, config('keystoneguru.discover.limits.category')),
+        ]);
     }
 
     /**
      * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return Factory
      */
-    public function discoverdungeonthisweek(Dungeon $dungeon)
+    public function discoverdungeonthisweek(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('dungeonroute.discover.discoverdungeon.thisweek', ['dungeon' => $dungeon]);
+        return view('dungeonroute.discover.dungeon.category', [
+            'dungeon'       => $dungeon,
+            'dungeonroutes' => $discoverService->popularByDungeonAndAffixGroup(
+                $dungeon,
+                $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+                config('keystoneguru.discover.limits.category')
+            ),
+        ]);
     }
 
     /**
      * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return Factory
+     * @throws Exception
      */
-    public function discoverdungeonnextweek(Dungeon $dungeon)
+    public function discoverdungeonnextweek(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('dungeonroute.discover.discoverdungeon.nextweek', ['dungeon' => $dungeon]);
+        return view('dungeonroute.discover.dungeon.category', [
+            'dungeon'       => $dungeon,
+            'dungeonroutes' => $discoverService->popularByDungeonAndAffixGroup(
+                $dungeon,
+                $seasonService->getCurrentSeason()->getNextWeekAffixGroup(),
+                config('keystoneguru.discover.limits.category')
+            ),
+        ]);
     }
 
     /**
      * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      */
-    public function discoverdungeonnew(Dungeon $dungeon)
+    public function discoverdungeonnew(Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        return view('dungeonroute.discover.discoverdungeon.new', ['dungeon' => $dungeon]);
+        return view('dungeonroute.discover.dungeon.category', [
+            'dungeon'       => $dungeon,
+            'dungeonroutes' => $discoverService->newByDungeon($dungeon, config('keystoneguru.discover.limits.category')),
+        ]);
     }
 
     /**

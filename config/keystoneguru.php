@@ -169,5 +169,16 @@ return [
     'prideful'                            => [
         'npc_id' => 173729,
         'count'  => 5
+    ],
+
+    /**
+     * For the discover section of the site - this controls various variables
+     */
+    'discover'                            => [
+        /** Limits for how much dungeonroutes to display on certain pages */
+        'limits' => [
+            'overview' => 10,
+            'category' => 20,
+        ]
     ]
 ];

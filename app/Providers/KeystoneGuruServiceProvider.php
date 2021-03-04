@@ -14,6 +14,7 @@ use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\User;
 use Illuminate\Contracts\View\View;
@@ -62,16 +63,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * Bootstrap services.
      *
      * @param CacheService $cacheService
+     * @param ExpansionService $expansionService
+     * @param DiscoverServiceInterface $discoverService
      * @return void
      * @throws InvalidArgumentException
      */
-    public function boot(CacheService $cacheService, ExpansionService $expansionService)
+    public function boot(CacheService $cacheService, ExpansionService $expansionService, DiscoverServiceInterface $discoverService)
     {
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
 
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService)
+        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService)
         {
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)

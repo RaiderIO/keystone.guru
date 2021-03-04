@@ -18,52 +18,60 @@ interface DiscoverServiceInterface
     |
     */
     /**
+     * @param int $limit
      * @return Collection
      */
-    function popular(): Collection;
+    function popular(int $limit = 10): Collection;
 
     /**
      * @param AffixGroup $affixGroup
+     * @param int $limit
      * @return Collection
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection;
+    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection;
 
     /**
      * @param Dungeon $dungeon
+     * @param int $limit
      * @return Collection
      */
-    function popularByDungeon(Dungeon $dungeon): Collection;
-
-    /**
-     * @param Dungeon $dungeon
-     * @param AffixGroup $affixGroup
-     * @return Collection
-     */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
-
-    /**
-     * @return Collection
-     */
-    function new(): Collection;
-
-    /**
-     * @param AffixGroup $affixGroup
-     * @return Collection
-     */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection;
-
-    /**
-     * @param Dungeon $dungeon
-     * @return Collection
-     */
-    function newByDungeon(Dungeon $dungeon): Collection;
+    function popularByDungeon(Dungeon $dungeon, int $limit = 10): Collection;
 
     /**
      * @param Dungeon $dungeon
      * @param AffixGroup $affixGroup
+     * @param int $limit
      * @return Collection
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection;
+
+    /**
+     * @param int $limit
+     * @return Collection
+     */
+    function new(int $limit = 10): Collection;
+
+    /**
+     * @param AffixGroup $affixGroup
+     * @param int $limit
+     * @return Collection
+     */
+    function newByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection;
+
+    /**
+     * @param Dungeon $dungeon
+     * @param int $limit
+     * @return Collection
+     */
+    function newByDungeon(Dungeon $dungeon, int $limit = 10): Collection;
+
+    /**
+     * @param Dungeon $dungeon
+     * @param AffixGroup $affixGroup
+     * @param int $limit
+     * @return Collection
+     */
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection;
 
     /*
     |--------------------------------------------------------------------------
@@ -74,26 +82,30 @@ interface DiscoverServiceInterface
     |
     */
     /**
+     * @param int $limit
      * @return Collection
      */
-    function popularUsers(): Collection;
+    function popularUsers(int $limit = 10): Collection;
 
     /**
      * @param AffixGroup $affixGroup
+     * @param int $limit
      * @return Collection
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection;
+    function popularUsersByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection;
 
     /**
      * @param Dungeon $dungeon
+     * @param int $limit
      * @return Collection
      */
-    function popularUsersByDungeon(Dungeon $dungeon): Collection;
+    function popularUsersByDungeon(Dungeon $dungeon, int $limit = 10): Collection;
 
     /**
      * @param Dungeon $dungeon
      * @param AffixGroup $affixGroup
+     * @param int $limit
      * @return Collection
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection;
 }

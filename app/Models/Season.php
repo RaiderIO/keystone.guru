@@ -131,6 +131,22 @@ class Season extends CacheModel
         return $result;
     }
 
+    /**
+     * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
+     *
+     * @return AffixGroup
+     */
+    public function getNextWeekAffixGroup()
+    {
+        $result = false;
+        try {
+            $result = $this->getAffixGroupAtTime($this->_getNow()->addDays(7));
+        } catch (Exception $ex) {
+            Log::error('Error getting current affix group: ' . $ex->getMessage());
+        }
+        return $result;
+    }
+
 
     /**
      * Get which affix group is active on this region at a specific point in time.
