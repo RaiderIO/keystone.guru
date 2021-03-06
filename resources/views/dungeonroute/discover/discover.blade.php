@@ -31,10 +31,6 @@
         @endif
 
         <div class="discover_panel">
-
-            <h2 class="text-center">
-                {{ __('Discover routes') }}
-            </h2>
             @include('common.dungeon.griddiscover', [
                 'dungeons' => $dungeons,
                 'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){

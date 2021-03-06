@@ -70,9 +70,9 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $playerclasses
  * @property Collection $playerraces
  *
- * @property Collection $affixgroups
- * @property Collection $affixes
- * @property Collection $ratings
+ * @property Collection|DungeonRouteAffixGroup[] $affixgroups
+ * @property Collection|AffixGroup[] $affixes
+ * @property Collection|DungeonRouteRating[] $ratings
  *
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
@@ -933,6 +933,28 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTyrannical(): bool
+    {
+        return $this->affixes->filter(function (AffixGroup $affixGroup)
+        {
+            return $affixGroup->isTyrannical();
+        })->isNotEmpty();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFortified(): bool
+    {
+        return $this->affixes->filter(function (AffixGroup $affixGroup)
+        {
+            return $affixGroup->isFortified();
+        })->isNotEmpty();
     }
 
     /**

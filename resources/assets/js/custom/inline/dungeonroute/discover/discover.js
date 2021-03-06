@@ -14,6 +14,8 @@ class DungeonrouteDiscoverDiscover extends InlineCode {
             lazyLoadEager: 1,
             items: 1
         });
+
+        $('[data-toggle="popover"]').popover();
     }
 
     cleanup() {

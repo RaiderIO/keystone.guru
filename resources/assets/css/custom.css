@@ -26,13 +26,13 @@
 .select_icon {
     width: 24px !important;
     border-radius: 12px !important;
-    max-height: 24px !important;
+    height: 24px !important;
 }
 
 .display_icon {
     width: 32px;
     border-radius: 16px;
-    max-height: 32px;
+    height: 32px;
 }
 
 .default_table {
@@ -104,6 +104,20 @@
 .discover .owl-carousel {
     width: 192px;
     height: 128px;
+}
+
+.discover .card_dungeonroute .card-body {
+    height: 95px;
+}
+
+.discover .card_dungeonroute .card-footer {
+    height: 33px;
+}
+
+.discover .card_dungeonroute .card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .routes_table .owl-carousel {
