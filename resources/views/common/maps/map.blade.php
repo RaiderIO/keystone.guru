@@ -20,8 +20,7 @@ $zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If this is an embedded route, do not show ads
-if ($embed)
-{
+if ($embed) {
     $showAds = false;
 }
 // No UI on the map
@@ -35,8 +34,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
-if ($isAdmin)
-{
+if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
@@ -111,6 +109,7 @@ if ($isAdmin)
             <ul class="leaflet-draw-actions"></ul>
         </div>
 
+
         </script>
     @endif
 @endsection
@@ -119,61 +118,63 @@ if ($isAdmin)
 
 </div>
 
-@if(($showAds && !$isMobile || !$edit))
-    <header class="fixed-top">
-        @if($showAds && !$isMobile)
-            <div class="container p-0 map_top_header_background" style="width: 728px">
-                @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
-            </div>
-        @endif
-        @if(!$edit)
-            <div class="container p-0 map_top_header_background" style="width: 100px">
-                <!-- Echo controls injected here through echocontrols.js -->
-                <span id="route_echo_container" class="text-center"></span>
-            </div>
-        @endif
-    </header>
-@endif
-
-@component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-    @include('common.userreport.dungeonroute')
-@endcomponent
-
-@component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-    @include('common.userreport.enemy')
-@endcomponent
-
-@if($edit && !$noUI)
-    <footer class="fixed-bottom route_manipulation_tools">
-        <div class="container">
-            <!-- Draw actions are injected here through drawcontrols.js -->
-            <div class="row m-auto text-center">
-                <div id="edit_route_draw_actions_container" class="col">
-
+@if(!$noUI)
+    @if(($showAds && !$isMobile || !$edit))
+        <header class="fixed-top">
+            @if($showAds && !$isMobile)
+                <div class="container p-0 map_top_header_background" style="width: 728px">
+                    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header', 'class' => 'map_top_header_background', 'map' => true])
                 </div>
-            </div>
+            @endif
+            @if(!$edit)
+                <div class="container p-0 map_top_header_background" style="width: 100px">
+                    <!-- Echo controls injected here through echocontrols.js -->
+                    <span id="route_echo_container" class="text-center"></span>
+                </div>
+            @endif
+        </header>
+    @endif
 
-            <div class="row">
-                <div class="col">
-                    <!-- Draw controls are injected here through drawcontrols.js -->
-                    <div id="edit_route_draw_container" class="row">
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.userreport.dungeonroute')
+    @endcomponent
 
+    @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
+        @include('common.userreport.enemy')
+    @endcomponent
+
+    @if($edit)
+        <footer class="fixed-bottom route_manipulation_tools">
+            <div class="container">
+                <!-- Draw actions are injected here through drawcontrols.js -->
+                <div class="row m-auto text-center">
+                    <div id="edit_route_draw_actions_container" class="col">
 
                     </div>
                 </div>
-                @if($echo)
-                    <div class="col route_echo mt-2 mb-2">
-                        <!-- Echo controls injected here through echocontrols.js -->
-                        <span id="route_echo_container" class="text-center">
+
+                <div class="row">
+                    <div class="col">
+                        <!-- Draw controls are injected here through drawcontrols.js -->
+                        <div id="edit_route_draw_container" class="row">
+
+
+                        </div>
+                    </div>
+                    @if($echo)
+                        <div class="col route_echo mt-2 mb-2">
+                            <!-- Echo controls injected here through echocontrols.js -->
+                            <span id="route_echo_container" class="text-center">
 
                     </span>
-                    </div>
-                @endif
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
-    </footer>
-@endif
+        </footer>
+    @endif
 
-@if($showAds && $isMobile)
-    @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
+    @if($showAds && $isMobile)
+        @include('common.thirdparty.adunit', ['id' => 'map_top_header', 'type' => 'header'])
+    @endif
 @endif
