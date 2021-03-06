@@ -16,10 +16,32 @@
 ])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
+
     <div class="container discover">
-        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Popular'), 'dungeonroutes' => $dungeonroutes['popular']])
-        @include('dungeonroute.discover.dungeon.panel', ['title' => __('This week'), 'dungeonroutes' => $dungeonroutes['thisweek']])
-        @include('dungeonroute.discover.dungeon.panel', ['title' => __('Next week'), 'dungeonroutes' => $dungeonroutes['nextweek']])
-        @include('dungeonroute.discover.dungeon.panel', ['title' => __('New'), 'dungeonroutes' => $dungeonroutes['new']])
+        <div class="mt-4">
+            {{ Diglactic\Breadcrumbs\Breadcrumbs::render('dungeonroutes.discoverdungeon', $dungeon) }}
+        </div>
+
+        @include('dungeonroute.discover.panel', [
+            'title' => __('Popular'),
+            'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),
+            'dungeonroutes' => $dungeonroutes['popular']
+        ])
+        @include('dungeonroute.discover.panel', [
+            'title' => __('This week'),
+            'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),
+            'dungeonroutes' => $dungeonroutes['thisweek'],
+        ])
+        @include('dungeonroute.discover.panel', [
+            'title' => __('Next week'),
+            'link' => route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]),
+            'dungeonroutes' => $dungeonroutes['nextweek']
+        ])
+        @include('dungeonroute.discover.panel', [
+            'title' => __('New'),
+            'link' => route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]),
+            'dungeonroutes' => $dungeonroutes['new']
+        ])
     </div>
 @endsection

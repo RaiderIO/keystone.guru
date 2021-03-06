@@ -13,13 +13,13 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 ])
 
 @section('content')
-    @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
     <div class="container discover" style="z-index: 100;">
         <div class="mt-4">
-            {{ Diglactic\Breadcrumbs\Breadcrumbs::render($breadcrumbs, $dungeon) }}
+            {{ Diglactic\Breadcrumbs\Breadcrumbs::render($breadcrumbs) }}
         </div>
 
         <div class="discover_panel">
+
             <h2 class="text-center">
                 {{ $title }}
             </h2>
