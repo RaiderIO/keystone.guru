@@ -125,17 +125,20 @@ if ($isAdmin) {
 
 
 
+
+
         </script>
     @endif
 @endsection
 
-@include('common.maps.controls.header', [
-    'title' => $model->title,
-    'echo' => !$sandboxMode,
-    'dungeonroute' => $dungeonroute,
-])
-
 @if(!$noUI)
+    @include('common.maps.controls.header', [
+        'title' => $model->title,
+        'echo' => !$sandboxMode,
+        'dungeonroute' => $dungeonroute,
+    ])
+
+
     @if($edit)
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
@@ -155,29 +158,31 @@ if ($isAdmin) {
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-@if((($showAds && !$isMobile)))
-    <footer class="fixed-bottom">
-        @if($showAds && !$isMobile)
-            <div class="container p-0" style="width: 728px">
-                @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
-            </div>
-        @endif
-    </footer>
+@if(!$noUI)
+    @if((($showAds && !$isMobile)))
+        <footer class="fixed-bottom">
+            @if($showAds && !$isMobile)
+                <div class="container p-0" style="width: 728px">
+                    @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
+                </div>
+            @endif
+        </footer>
+    @endif
+    @if($showAds && $isMobile)
+        @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
+    @endif
+
+
+
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.modal.userreport.dungeonroute')
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
+        @include('common.modal.userreport.enemy')
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'share_modal'])
+        @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
+    @endcomponent
 @endif
-@if($showAds && $isMobile)
-    @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
-@endif
-
-
-
-@component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-    @include('common.modal.userreport.dungeonroute')
-@endcomponent
-
-@component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-    @include('common.modal.userreport.enemy')
-@endcomponent
-
-@component('common.general.modal', ['id' => 'share_modal'])
-    @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
-@endcomponent

@@ -331,25 +331,27 @@ class EnemyVisual extends Signalable {
 
         let shouldCleanUp = self._circleMenu !== null;
 
-        // Delay it by 500 ms so the animations have a chance to complete
-        let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
-        let cleanupFn = function () {
-            $(this).remove().dequeue();
-            self._circleMenu = null;
+        if (shouldCleanUp) {
+            // Delay it by 500 ms so the animations have a chance to complete
+            let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
+            let cleanupFn = function () {
+                $(this).remove().dequeue();
+                self._circleMenu = null;
 
-            // Re-bind this function
-            $enemyDiv.unbind('contextmenu');
-            $enemyDiv.bind('contextmenu', self._visualRightClicked.bind(self));
+                // Re-bind this function
+                $enemyDiv.unbind('contextmenu');
+                $enemyDiv.bind('contextmenu', self._visualRightClicked.bind(self));
 
-            // Only stop the map state at this point
-            self.map.setMapState(null);
-            self.signal('circlemenu:close');
-        };
+                // Only stop the map state at this point
+                self.map.setMapState(null);
+                self.signal('circlemenu:close');
+            };
 
-        if (fadeOut) {
-            $radial.delay(500).queue(cleanupFn);
-        } else {
-            cleanupFn.call($radial[0]);
+            if (fadeOut) {
+                $radial.delay(500).queue(cleanupFn);
+            } else {
+                cleanupFn.call($radial[0]);
+            }
         }
 
         return shouldCleanUp;

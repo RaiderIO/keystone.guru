@@ -22,25 +22,27 @@ class CommonMapsMap extends InlineCode {
     activate() {
         super.activate();
 
-        this.settingsTabMap.activate();
-        this.settingsTabPull.activate();
-
         this._initDungeonMap();
 
-        this._setupFloorSelection();
-        this._setupMapObjectGroupVisibility();
-        this._setupEnemyVisualTypes();
-        this._setupFavorite();
+        if (!this.options.noUI) {
+            this.settingsTabMap.activate();
+            this.settingsTabPull.activate();
 
-        // Sharing
-        $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
+            this._setupFloorSelection();
+            this._setupMapObjectGroupVisibility();
+            this._setupEnemyVisualTypes();
+            this._setupFavorite();
 
-        // MDT clones button
-        $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', function () {
-            getState().setMdtMappingModeEnabled(
-                $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked')
-            );
-        });
+            // Sharing
+            $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
+
+            // MDT clones button
+            $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', function () {
+                getState().setMdtMappingModeEnabled(
+                    $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked')
+                );
+            });
+        }
     }
 
     /**

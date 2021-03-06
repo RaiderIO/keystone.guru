@@ -34,7 +34,7 @@ $dungeon->load('floors');
             'enemypatrol',
             'enemypack',
             'dungeonfloorswitchmarker',
-        ]
+        ],
     ])
 @endsection
 
