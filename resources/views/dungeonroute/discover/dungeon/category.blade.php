@@ -19,6 +19,12 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
             {{ Diglactic\Breadcrumbs\Breadcrumbs::render($breadcrumbs, $dungeon) }}
         </div>
 
+        @if( $showAds && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
         <div class="discover_panel">
             <h2 class="text-center">
                 {{ $title }}

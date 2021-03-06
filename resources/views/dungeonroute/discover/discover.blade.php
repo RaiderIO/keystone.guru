@@ -24,6 +24,12 @@
             {{ Diglactic\Breadcrumbs\Breadcrumbs::render('dungeonroutes') }}
         </div>
 
+        @if( $showAds && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
         <div class="discover_panel">
 
             <h2 class="text-center">
@@ -49,6 +55,13 @@
             'dungeonroutes' => $dungeonroutes['thisweek'],
             'showMore' => true,
         ])
+
+        @if( $showAds && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by next week\'s affix'),
             'link' => route('dungeonroutes.nextweek'),
