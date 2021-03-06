@@ -147,6 +147,8 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, string $floorindex)
     {
+        $this->authorize('preview', [$dungeonroute, $request->get('secret', '')]);
+
         if (!is_numeric($floorindex)) {
             $floorindex = '1';
         }
