@@ -21,9 +21,9 @@ $connectedFloorCandidates = $floor->dungeon->floors->except($floor->id);
 
 @section('content')
     @isset($floor)
-        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->slug, 'floor' => $floor->id], 'method' => 'patch']) }}
+        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->getSlug(), 'floor' => $floor->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $floor->dungeon->slug]]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $floor->dungeon->getSlug()]]) }}
     @endisset
 
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">

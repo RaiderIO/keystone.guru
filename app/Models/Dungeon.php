@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Mockery\Exception;
 
 /**
@@ -68,6 +69,14 @@ class Dungeon extends CacheModel
     public function getFloorCountAttribute()
     {
         return $this->floors->count();
+    }
+
+    /**
+     * @TODO Remove this when going live with the redesign and use ->slug instead
+     * @return string
+     */
+    public function getSlug() : string {
+        return isset($this->slug) && !empty($this->slug) ? $this->slug : Str::slug($this->name);
     }
 
     /**

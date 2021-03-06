@@ -3,8 +3,6 @@
 
 $showAffixes = isset($showAffixes) ? $showAffixes : true;
 ?>
-
-
 <div class="card ml-2">
     <div class="row no-gutters">
         <div class="col-auto owl-carousel-container">

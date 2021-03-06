@@ -146,7 +146,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * @param DungeonRoute $dungeonRoute
      * @return bool
      */
-    public static function thumbnailsExistsForRoute(DungeonRoute $dungeonRoute)
+    public static function thumbnailsExistsForRoute(DungeonRoute $dungeonRoute): bool
     {
         $result = true;
         // Check for every floor

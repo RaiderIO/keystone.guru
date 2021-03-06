@@ -25,7 +25,7 @@
 @section('content')
     <div class="mb-4">
         @isset($dungeon)
-            {{ Form::model($dungeon, ['route' => ['admin.dungeon.update', $dungeon->slug], 'method' => 'patch']) }}
+            {{ Form::model($dungeon, ['route' => ['admin.dungeon.update', $dungeon->getSlug()], 'method' => 'patch']) }}
         @else
             {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
         @endisset
@@ -91,7 +91,7 @@
     </div>
     <h4>{{ __('Floor management') }}</h4>
     <div class="float-right">
-        <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
+        <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->getSlug()]) }}"
            class="btn btn-success text-white pull-right" role="button">
             <i class="fas fa-plus"></i> {{ __('Add floor') }}
         </a>
@@ -115,11 +115,11 @@
                 <td>{{ $floor->name }}</td>
                 <td>
                     <a class="btn btn-primary"
-                            href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
+                            href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->getSlug(), 'floor' => $floor->id]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                     <a class="btn btn-primary"
-                            href="{{ route('admin.floor.edit.mapping', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
+                            href="{{ route('admin.floor.edit.mapping', ['dungeon' => $dungeon->getSlug(), 'floor' => $floor->id]) }}">
                         <i class="fas fa-route"></i>&nbsp;{{ __('Mapping') }}
                     </a>
                 </td>

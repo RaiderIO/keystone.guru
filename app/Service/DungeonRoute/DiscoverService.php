@@ -112,7 +112,10 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
     {
-        // TODO: Implement newByAffixGroup() method.
+        return $this->newBuilder($limit)
+            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+            ->get();
     }
 
     /**
@@ -120,7 +123,9 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByDungeon(Dungeon $dungeon, int $limit = 10): Collection
     {
-        // TODO: Implement newByDungeon() method.
+        return $this->newBuilder($limit)
+            ->where('dungeon_id', $dungeon->id)
+            ->get();
     }
 
     /**
@@ -128,7 +133,11 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
     {
-        // TODO: Implement newByDungeonAndAffixGroup() method.
+        return $this->newBuilder($limit)
+            ->where('dungeon_id', $dungeon->id)
+            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+            ->get();
     }
 
 
