@@ -121,12 +121,6 @@ if ($isAdmin) {
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
-
-
-
-
-
-
         </script>
     @endif
 @endsection
@@ -158,6 +152,7 @@ if ($isAdmin) {
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
+
 @if(!$noUI)
     @if((($showAds && !$isMobile)))
         <footer class="fixed-bottom">

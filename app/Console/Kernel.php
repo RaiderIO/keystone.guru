@@ -69,6 +69,8 @@ class Kernel extends ConsoleKernel
         if (env('APP_TYPE') === 'mapping') {
             $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
         }
+        // https://laravel.com/docs/8.x/horizon
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

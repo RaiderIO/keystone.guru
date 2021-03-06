@@ -28,6 +28,19 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can view the dungeon route.
+     *
+     * @param User|null $user
+     * @param DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
+    {
+        return env('THUMBNAIL_PREVIEW_SECRET') === $secret ||
+            $user !== null && $user->is_admin;
+    }
+
+    /**
      * Determine whether the user can view an embedded the dungeon route.
      *
      * @param User|null $user
@@ -41,7 +54,7 @@ class DungeonRoutePolicy
             return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
         }
 
-        if($dungeonroute->isSandbox()){
+        if ($dungeonroute->isSandbox()) {
             return $this->deny('Sandbox routes cannot be embedded.');
         }
 

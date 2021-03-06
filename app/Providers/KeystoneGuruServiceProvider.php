@@ -134,8 +134,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
-            // Not logged in or not having paid for free ads will cause ads to come up
-            $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+            // Only show ads if the view didn't already explicitly override this
+            if (!isset($view->getData()['showAds'])) {
+                // Not logged in or not having paid for free ads will cause ads to come up
+                $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+            }
         });
 
         // Home page

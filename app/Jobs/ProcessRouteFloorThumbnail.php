@@ -43,7 +43,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * @param int $floorIndex
      * @return string Get the name of the file this job is generating (without a path!).
      */
-    private static function _getFilename($dungeonRoute, $floorIndex)
+    private static function _getFilename(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
         return sprintf('%s_%s.png', $dungeonRoute->public_key, $floorIndex);
     }
@@ -53,10 +53,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * @param int $floorIndex
      * @return string The eventual path to the file that this job generates.
      */
-    private static function _getTargetFilePath($dungeonRoute, $floorIndex)
+    private static function _getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
-        $publicPath = public_path('images/route_thumbnails/');
-        return sprintf('%s/%s', $publicPath, self::_getFilename($dungeonRoute, $floorIndex));
+        return public_path(sprintf('images/route_thumbnails/%s', self::_getFilename($dungeonRoute, $floorIndex)));
     }
 
     /**
@@ -73,16 +72,20 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         $filename = self::_getFilename($this->model, $this->floorIndex);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
-        $tmpScaledFile = sprintf('/tmp/scaled_%s', $filename);
         $publicPath = public_path('images/route_thumbnails/');
         $target = self::_getTargetFilePath($this->model, $this->floorIndex);
 
         // puppeteer chromium-browser
-        $process = new Process(['node',
+        $process = new Process([
+            'node',
             // Script to execute
             resource_path('assets/puppeteer/route_thumbnail.js'),
             // First argument; where to navigate
-            route('dungeonroute.preview', ['dungeonroute' => $this->model->public_key, 'floorindex' => $this->floorIndex]),
+            route('dungeonroute.preview', [
+                'dungeonroute' => $this->model->public_key,
+                'floorindex'   => $this->floorIndex,
+                'secret'       => env('THUMBNAIL_PREVIEW_SECRET')
+            ]),
             // Second argument; where to save the resulting image
             $tmpFile
         ]);
@@ -108,14 +111,17 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                     }
 
                     // Rescale it
-                    Log::channel('scheduler')->info('Scaling image..');
-                    Image::make($tmpFile)->resize(192, 128)->save();
+                    Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
+                    Image::make($tmpFile)->resize(192, 128)->save($target);
 
-                    Log::channel('scheduler')->info('Removing previous image..');
+                    Log::channel('scheduler')->info(
+                        sprintf('Check if %s exists: %s', $target, var_export(file_exists($target), true))
+                    );
                     // Image now exists in target location; compress it and move it to the target location
                     // Log::channel('scheduler')->info('Compressing image..');
                     // $this->compressPng($tmpScaledFile, $target);
                 } finally {
+                    Log::channel('scheduler')->info('Removing previous image..');
                     // Cleanup
                     if (file_exists($tmpFile)) {
                         unlink($tmpFile);
