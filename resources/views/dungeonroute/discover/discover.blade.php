@@ -65,7 +65,7 @@
             'showMore' => true,
         ])
         @include('dungeonroute.discover.panel', [
-            'title' => __('Newly uploaded routes'),
+            'title' => __('New routes'),
             'link' => route('dungeonroutes.nextweek'),
             'dungeonroutes' => $dungeonroutes['new'],
             'showMore' => true,

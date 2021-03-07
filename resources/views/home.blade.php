@@ -37,16 +37,21 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
         <div class="align-center container">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
-                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1"><strong>M+ routes made easy</strong>
+                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1"><strong>{{ __('M+ routes made easy') }}</strong>
                     </h1>
 
-                    <p class="mbr-text mbr-fonts-style display-7">Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit. Mauris vel tincidunt sem. Suspendisse tempus enim non velit aliquet, sed lobortis justo
-                        pulvinar. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-                        curae; Duis suscipit molestie lectus, vel cursus ligula porta id. Duis eu ultricies neque.</p>
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        {{ __('Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one
+                                place to manage and share your M+ routes.
+') }}
+                    </p>
                     <div class="mbr-section-btn mt-3">
-                        <a class="btn btn-primary display-4" href="https://mobirise.com">Action</a>
-                        <a class="btn btn-primary-outline display-4" href="https://mobirise.com">Another action</a>
+                        <a class="btn btn-primary display-4" href="{{ route('dungeonroutes') }}">
+                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('Discover routes') }}
+                        </a>
+                        <a class="display-4 btn btn-accent" href="#" data-toggle="modal" data-target="#create_route_modal">
+                            <i class="fas fa-plus"></i>&nbsp;{{__('Create route')}}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -59,27 +64,24 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
     </section>
 
     <section class="image1 cid-soU8PSECoL" id="image1-n">
-
-
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img src="{{ url('images/home/1.jpg') }}" alt="Mobirise">
+                        <img src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}" alt="Discover new routes">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
-                            Discover new routes
                         </p>
                     </div>
                 </div>
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>Discover new routes</strong></h3>
+                            <strong>{{ __('Discover new routes') }}</strong>
+                        </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel tincidunt sem.
-                            Suspendisse tempus enim non velit aliquet, sed lobortis justo pulvinar. Vestibulum ante
-                            ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis suscipit
-                            molestie lectus, vel cursus ligula porta id. Duis eu ultricies neque.
+                            {{ __('Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
+                                    Keystone.guru determines if a route is simple or complex so you can easily weed out routes that you can\'t handle - yet.
+                                    Still can\'t find a route that suits your need? The route search page allows you to dial in on your exact needs to find a perfect match.') }}
                         </p>
                     </div>
                 </div>
@@ -88,28 +90,50 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
     </section>
 
     <section class="image2 cid-soU8QlAKKP" id="image2-o">
-
-
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img src="{{ url('images/home/2.jpg') }}" alt="Mobirise">
+                        <img src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}" alt="{{ __('Create your own routes') }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
-                            Create your own
                         </p>
                     </div>
                 </div>
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>Create your own</strong>
+                            <strong>{{ __('Create your own routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel tincidunt sem.
-                            Suspendisse tempus enim non velit aliquet, sed lobortis justo pulvinar. Vestibulum ante
-                            ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis suscipit
-                            molestie lectus, vel cursus ligula porta id. Duis eu ultricies neque.
+                            {{ __('Import your routes from Mythic Dungeon Tools or create a new route from scratch. Keystone.guru offers various tools to make your route a memorable one,
+                                    such as free drawing, pathing and placing of icons/comments. Enemy forces can be displayed raw or in percentage on a whim. Various other settings allow you
+                                    to customize your mapping experience to your liking.') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="image3 cid-soU8PSECoL" id="image3-n">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img src="{{ url('images/home/darkly_feature_get_organized.jpg') }}" alt="Get organized">
+                        <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('Get organized') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {{ __('Organize your routes through teams, route collections or tags. Keystone.guru offers you a wide array of tools to keep all your routes organized
+                                    and accessible by all your M+ team members. You can always export routes to Mythic Dungeon Tools format to share them with others.') }}
                         </p>
                     </div>
                 </div>
@@ -124,7 +148,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                        <strong>Features</strong>
+                        <strong>{{ __('Features') }}</strong>
                     </h3>
 
                 </div>
@@ -134,11 +158,14 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="card-wrapper">
                         <div class="card-box align-center">
                             <div class="iconfont-wrapper">
-                                <i class="fas fa-binoculars mbr-iconfont"></i>
+                                <i class="fas fa-file-export mbr-iconfont"></i>
                             </div>
-                            <h5 class="card-title mbr-fonts-style display-7"><strong>Discover</strong></h5>
-                            <p class="card-text mbr-fonts-style display-7">Discover new routes created by other users to
-                                lift your M+ game above and beyond.</p>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('MDT import/export') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('Get started with your existing routes easily and generate MDT strings for your existing routes so everyone\'s up-to-date.') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -148,9 +175,12 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                             <div class="iconfont-wrapper">
                                 <i class="fas fa-route mbr-iconfont"></i>
                             </div>
-                            <h5 class="card-title mbr-fonts-style display-7"><strong>Plan</strong></h5>
-                            <p class="card-text mbr-fonts-style display-7">Clone an existing route or create your own
-                                route.</p>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('Fluid mapping experience') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('Powered by Leaflet, AI enhanced dungeon maps with 5 zoom levels with a minimalistic UI to give you the best mapping experience possible.') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -158,12 +188,14 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="card-wrapper">
                         <div class="card-box align-center">
                             <div class="iconfont-wrapper">
-                                <i class="fas fa-users mbr-iconfont"></i>
+                                <i class="fas fa-mobile-alt mbr-iconfont"></i>
                             </div>
-                            <h5 class="card-title mbr-fonts-style display-7"><strong>Teams</strong></h5>
-                            <p class="card-text mbr-fonts-style display-7">Create a team and invite your friends to
-                                Keystone.guru. Update your route while changes are synchronized to team members in
-                                real-time.</p>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('Mobile friendly') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('View or edit your routes anywhere you are - making toilet breaks that much more interesting.') }}
+                            </p>
                         </div>
                     </div>
                 </div>
