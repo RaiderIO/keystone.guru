@@ -23,6 +23,6 @@ jobs:
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
             php artisan environment:updateprepare &&
-            php artisan environment:update staging &&
+            php artisan environment:update redesign &&
             php artisan report:release discord;
             php artisan up

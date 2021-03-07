@@ -115,9 +115,9 @@
 }
 
 .discover .card_dungeonroute .card-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
 }
 
 .routes_table .owl-carousel {

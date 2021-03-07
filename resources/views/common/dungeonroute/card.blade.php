@@ -2,6 +2,8 @@
 /** @var $dungeonroute \App\Models\DungeonRoute */
 
 $showAffixes = isset($showAffixes) ? $showAffixes : true;
+$enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dungeon->enemy_forces_required) * 100);
+$enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 ?>
 <div class="card m-1 card_dungeonroute">
     <div class="row no-gutters">
@@ -47,25 +49,40 @@ $showAffixes = isset($showAffixes) ? $showAffixes : true;
                             @endforeach
                             <?php $affixes = ob_get_clean(); ?>
                             @if($isTyrannical && $isFortified)
-                                <div class="btn btn-secondary" data-container="body"
-                                     data-toggle="popover" data-placement="bottom" data-html="true"
-                                     data-content="{{ $affixes }}">
-                                    <img class="select_icon" src="{{ url('/images/affixes/reaping.jpg') }}"/>
+                                <div data-container="body" data-toggle="popover" data-placement="bottom"
+                                     data-html="true"
+                                     data-content="{{ $affixes }}" style="cursor: pointer;">
+                                    <img class="select_icon" src="{{ url('/images/affixes/keystone.jpg') }}"/>
                                 </div>
                             @elseif($isTyrannical)
-                                <div class="btn btn-secondary" data-container="body"
-                                     data-toggle="popover" data-placement="bottom" data-html="true"
-                                     data-content="{{ $affixes }}">
+                                <div data-container="body" data-toggle="popover" data-placement="bottom"
+                                     data-html="true"
+                                     data-content="{{ $affixes }}" style="cursor: pointer;">
                                     <img class="select_icon" src="{{ url('/images/affixes/tyrannical.jpg') }}"/>
                                 </div>
                             @elseif($isFortified)
-                                <div class="btn btn-secondary" data-container="body"
-                                     data-toggle="popover" data-placement="bottom" data-html="true"
-                                     data-content="{{ $affixes }}">
+                                <div data-container="body" data-toggle="popover" data-placement="bottom"
+                                     data-html="true"
+                                     data-content="{{ $affixes }}" style="cursor: pointer;">
                                     <img class="select_icon" src="{{ url('/images/affixes/fortified.jpg') }}"/>
                                 </div>
                             @endif
                         @endif
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        @if( $enemyForcesWarning )
+                            <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
+                        @else
+                            <span class="text-success"> <i class="fas fa-check-circle"></i> </span>
+                        @endif
+                        {{ sprintf(
+                            __('%s/%s (%s%%)'),
+                            $dungeonroute->enemy_forces,
+                            $dungeonroute->dungeon->enemy_forces_required,
+                            $enemyForcesPercentage
+                            ) }}
                     </div>
                 </div>
             </div>
@@ -75,6 +92,10 @@ $showAffixes = isset($showAffixes) ? $showAffixes : true;
                     <a href="{{ route('profile.view', ['user' => $dungeonroute->author->id]) }}">
                         {{ $dungeonroute->author->name }}
                     </a>
+                    @if( $dungeonroute->avg_rating > 1 )
+                        -
+                        @include('common.dungeonroute.rating', ['rating' => (int) $dungeonroute->avg_rating])
+                    @endif
                     <span class="d-lg-inline d-none">
                         -
                         {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}

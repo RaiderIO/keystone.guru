@@ -41,10 +41,10 @@ use Illuminate\Support\Facades\DB;
  * @property $teeming boolean
  * @property $demo boolean
  *
- * @property $setup array
- * @property $avg_rating double
- * @property $rating_count int
- * @property $has_thumbnail boolean
+ * @property array $setup
+ * @property double $avg_rating
+ * @property int $rating_count
+ * @property boolean $has_thumbnail
  *
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
