@@ -1,5 +1,3 @@
-@inject('discoverService', 'App\Service\DungeonRoute\DiscoverServiceInterface')
-@inject('seasonService', 'App\Service\Season\SeasonService')
 @extends('layouts.sitepage', ['title' => __('Routes'), 'custom' => true])
 
 @section('header-title')
@@ -7,9 +5,9 @@
 @endsection
 <?php
 /**
- * @var $discoverService \App\Service\DungeonRoute\DiscoverService
- * @var $seasonService \App\Service\Season\SeasonService
  * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
+ * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup
  */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -48,6 +46,7 @@
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.thisweek'),
+            'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
             'showMore' => true,
         ])
@@ -59,13 +58,14 @@
         @endif
 
         @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by next week\'s affix'),
+            'title' => __('Popular routes by next affixes'),
             'link' => route('dungeonroutes.nextweek'),
+            'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
             'showMore' => true,
         ])
         @include('dungeonroute.discover.panel', [
-            'title' => __('New routes'),
+            'title' => __('Newly published routes'),
             'link' => route('dungeonroutes.nextweek'),
             'dungeonroutes' => $dungeonroutes['new'],
             'showMore' => true,

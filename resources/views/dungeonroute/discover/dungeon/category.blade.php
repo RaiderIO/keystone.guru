@@ -4,6 +4,7 @@
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
 $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
+$affixgroup = isset($affixgroup) ? $affixgroup : null;
 ?>
 @extends('layouts.sitepage', ['custom' => true, 'title' => $title])
 
@@ -25,15 +26,11 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
             </div>
         @endif
 
-        <div class="discover_panel">
-            <h2 class="text-center">
-                {{ $title }}
-            </h2>
 
-            @include('common.dungeonroute.cardlist', [
-                'cols' => 2,
-                'dungeonroutes' => $dungeonroutes
-            ])
-        </div>
+        @include('dungeonroute.discover.panel', [
+            'title' => $title,
+            'dungeonroutes' => $dungeonroutes,
+            'affixgroup' => $affixgroup,
+        ])
     </div>
 @endsection

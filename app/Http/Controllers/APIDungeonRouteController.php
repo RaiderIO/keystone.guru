@@ -269,6 +269,9 @@ class APIDungeonRouteController extends Controller
         }
 
         $dungeonroute->published_state_id = PublishedState::where('name', $publishedState)->first()->id;
+        if ($dungeonroute->published_state_id === PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id) {
+            $dungeonroute->published_at = date('Y-m-d H:i:s', time());
+        }
         $dungeonroute->save();
 
         return response()->noContent();

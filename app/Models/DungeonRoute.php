@@ -52,6 +52,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $thumbnail_updated_at
  * @property Carbon $updated_at
  * @property Carbon $created_at
+ * @property Carbon $published_at
  * @property Carbon $expires_at
  *
  * @property Dungeon $dungeon

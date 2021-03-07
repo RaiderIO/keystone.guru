@@ -33,15 +33,16 @@
 
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular'),
-            'showMore' => true,
             'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),
-            'dungeonroutes' => $dungeonroutes['popular']
+            'dungeonroutes' => $dungeonroutes['popular'],
+            'showMore' => true,
         ])
         @include('dungeonroute.discover.panel', [
-            'title' => __('This week'),
-            'showMore' => true,
+            'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),
+            'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
+            'showMore' => true,
         ])
 
         @if( $showAds && !$isMobile)
@@ -51,16 +52,17 @@
         @endif
 
         @include('dungeonroute.discover.panel', [
-            'title' => __('Next week'),
-            'showMore' => true,
+            'title' => __('Popular routes by next affixes'),
             'link' => route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]),
-            'dungeonroutes' => $dungeonroutes['nextweek']
+            'affixgroup' => $nextAffixGroup,
+            'dungeonroutes' => $dungeonroutes['nextweek'],
+            'showMore' => true,
         ])
         @include('dungeonroute.discover.panel', [
-            'title' => __('New'),
-            'showMore' => true,
+            'title' => __('Newly published routes'),
             'link' => route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]),
-            'dungeonroutes' => $dungeonroutes['new']
+            'dungeonroutes' => $dungeonroutes['new'],
+            'showMore' => true,
         ])
     </div>
 @endsection

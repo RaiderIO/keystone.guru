@@ -10,10 +10,23 @@ $showMore = isset($showMore) ? $showMore : false;
     <div class="row mt-4">
         <div class="col-xl">
             <h2 class="text-center">
-                <a href="{{ $link }}">
+                @isset($link)
+                    <a href="{{ $link }}">
+                        {{ $title }}
+                    </a>
+                @else
                     {{ $title }}
-                </a>
+                @endisset
             </h2>
+            @isset($affixgroup)
+                <div class="row">
+                    <div class="offset-2">
+                    </div>
+                    <div class="col-8">
+                        @include('common.affixgroup.affixgroup', ['affixGroup' => $affixgroup])
+                    </div>
+                </div>
+            @endisset
             @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes])
         </div>
     </div>

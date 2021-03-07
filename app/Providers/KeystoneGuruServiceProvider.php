@@ -16,6 +16,7 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\SeasonService;
 use App\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
@@ -65,16 +66,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @param CacheService $cacheService
      * @param ExpansionService $expansionService
      * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return void
      * @throws InvalidArgumentException
      */
-    public function boot(CacheService $cacheService, ExpansionService $expansionService, DiscoverServiceInterface $discoverService)
+    public function boot(CacheService $cacheService, ExpansionService $expansionService, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
 
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService)
+        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService, $seasonService)
         {
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
@@ -103,6 +105,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 // Discover routes
                 'currentExpansion'                => $currentExpansion,
                 'currentExpansionActiveDungeons'  => $currentExpansion->dungeons,
+                'currentAffixGroup'               => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+                'nextAffixGroup'                  => $seasonService->getCurrentSeason()->getNextAffixGroup(),
 
                 // Find routes
 
@@ -161,9 +165,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
         });
 
-        view()->composer('dungeonroute.discover.discover', function (View $view) use ($globalViewVariables)
+        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)
         {
             $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
+            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
+            $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
 
         // Dungeon grid view

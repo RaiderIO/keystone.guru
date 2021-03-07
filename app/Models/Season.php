@@ -136,7 +136,7 @@ class Season extends CacheModel
      *
      * @return AffixGroup
      */
-    public function getNextWeekAffixGroup()
+    public function getNextAffixGroup()
     {
         $result = false;
         try {
