@@ -42,6 +42,7 @@
             'link' => route('dungeonroutes.popular'),
             'dungeonroutes' => $dungeonroutes['popular'],
             'showMore' => true,
+            'showDungeonImage' => true,
         ])
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
@@ -49,6 +50,7 @@
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
             'showMore' => true,
+            'showDungeonImage' => true,
         ])
 
         @if( $showAds && !$isMobile)
@@ -63,12 +65,14 @@
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
             'showMore' => true,
+            'showDungeonImage' => true,
         ])
         @include('dungeonroute.discover.panel', [
             'title' => __('Newly published routes'),
             'link' => route('dungeonroutes.nextweek'),
             'dungeonroutes' => $dungeonroutes['new'],
             'showMore' => true,
+            'showDungeonImage' => true,
         ])
     </div>
 @endsection

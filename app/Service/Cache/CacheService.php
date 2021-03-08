@@ -42,6 +42,7 @@ class CacheService implements CacheServiceInterface
             if ($value instanceof Closure) {
                 $value = $value();
             }
+
             // Only write it to cache when we're not in debug mode
             if (!env('APP_DEBUG') && env('APP_TYPE') !== 'mapping') {
                 if (is_string($ttl)) {
@@ -51,6 +52,8 @@ class CacheService implements CacheServiceInterface
                 if ($this->set($key, $value, $ttl ?? $this->_getTtl($key))) {
                     $result = $value;
                 }
+            } else {
+                $result = $value;
             }
         }
 

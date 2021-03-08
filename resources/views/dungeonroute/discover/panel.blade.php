@@ -5,6 +5,7 @@
 
 $cols = isset($cols) ? $cols : 2;
 $showMore = isset($showMore) ? $showMore : false;
+$showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">
@@ -27,7 +28,7 @@ $showMore = isset($showMore) ? $showMore : false;
                     </div>
                 </div>
             @endisset
-            @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes])
+            @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'showDungeonImage' => $showDungeonImage])
         </div>
     </div>
     @if($showMore)

@@ -19,7 +19,7 @@ jobs:
           script: cd /var/www/html/keystone.guru.live/;
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
-            php artisan environment:updateprepare &&
+            php artisan environment:updateprepare live &&
             php artisan environment:update live &&
             php artisan report:release discord &&
             php artisan report:release reddit;

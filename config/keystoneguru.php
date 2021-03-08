@@ -176,9 +176,58 @@ return [
      */
     'discover'                            => [
         /** Limits for how much dungeonroutes to display on certain pages */
-        'limits' => [
+        'limits'  => [
             'overview' => 10,
             'category' => 20,
+        ],
+        'service' => [
+            /** Redis prefix */
+            'cache_prefix' => 'discover',
+
+            /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
+            'popular_days' => 7,
+
+
+//            'popular' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'popular_limit_%d',
+//            ],
+//
+//            'popular_by_affix_group' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'popular_by_affix_group_%d',
+//            ],
+//
+//            'popular_by_dungeon' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'popular_by_dungeon_%d',
+//            ],
+//
+//            'popular_by_dungeon_and_affix_group' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'popular_by_dungeon_%d_and_affix_group_%d',
+//            ],
+//
+//
+//            'new' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'popular',
+//            ],
+//
+//            'new_by_affix_group' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'new_by_affix_group_%d',
+//            ],
+//
+//            'new_by_dungeon' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'new_by_dungeon_%d',
+//            ],
+//
+//            'new_by_dungeon_and_affix_group' => [
+//                'ttl'       => '5 min',
+//                'cache_key' => 'new_by_dungeon_%d_and_affix_group_%d',
+//            ],
         ]
     ]
 ];

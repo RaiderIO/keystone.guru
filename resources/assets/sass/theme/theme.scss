@@ -597,6 +597,28 @@ body {
     opacity: 0.8;
   }
 
+  .card_dungeonroute .dungeon_background {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+  }
+
+  .card_dungeonroute .dungeon_background_cover {
+    position: relative;
+    left: 0;
+    top: -95px;
+    width: 100%;
+    height: 100%;
+    background-color: var($--theme-dark);
+    opacity: 0.8;
+  }
+
   //.dungeon_wallpaper_gradient {
   //  position: fixed;
   //  left: 0;

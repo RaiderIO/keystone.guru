@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands\Discover;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Service\Cache\CacheService;
 use App\Service\DungeonRoute\DiscoverService;
 use Illuminate\Console\Command;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class Cache extends Command
 {
@@ -36,12 +37,19 @@ class Cache extends Command
      * Execute the console command.
      *
      * @param DiscoverService $discoverService
+     * @param CacheService $cacheService
      * @return int
+     * @throws InvalidArgumentException
      */
-    public function handle(DiscoverService $discoverService)
+    public function handle(DiscoverService $discoverService, CacheService $cacheService)
     {
-        $discoverService->dropCaches();
-        $discoverService->popular();
+        // Refresh caches for all categories
+//        $popular = $discoverService->popular();
+//        $cacheService->set(
+//            config('keystoneguru.discover.service.popular.cache_key'),
+//            $popular,
+//            config('keystoneguru.discover.service.popular.ttl'),
+//        );
 
         return 0;
     }
