@@ -1,0 +1,49 @@
+// Bootstrap theme (bootstrap should be between these)
+.lux {
+  @import "~bootswatch/dist/lux/variables";
+  @import "~bootstrap/scss/bootstrap";
+  @import "~bootswatch/dist/lux/bootswatch";
+  // Fonts
+  @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+  /** Lux special - make sure the top header has the same height as the one in Darkly */
+  .navbar {
+    padding: 1rem 1rem;
+  }
+
+  .form-control {
+    border: 1px solid #222;
+  }
+
+  .cid-s48MCQYojq {
+    background-image: url('/images/home/lux_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    background-image: url('/images/home/lux_footer.jpg');
+  }
+
+  .btn-accent {
+    color: #fff;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: #55595c;
+    background-color: #fff;
+    border-color: #eceeef #eceeef #fff;
+  }
+
+  .navbar-light .navbar-nav .nav-link {
+    color: unset;
+  }
+
+  .home {
+    .mbr-overlay {
+      opacity: 0.1 !important;
+    }
+
+    .mbr-parallax-background {
+      color: #fff !important;
+    }
+  }
+}

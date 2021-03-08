@@ -2,11 +2,6 @@
 
 
 return [
-    'themes' => [
-        'superhero' => 'Classic',
-        'darkly'    => 'Dark',
-    ],
-
     'super_admins' => [
         'Admin',
         'gallypsa',

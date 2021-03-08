@@ -11,6 +11,10 @@
   @include spread-map($theme-map-darkly);
 }
 
+:root.lux {
+  @include spread-map($theme-map-lux);
+}
+
 body {
   font-family: Raleway, sans-serif !important;
   background-color: var($--theme-darker) !important;
@@ -311,6 +315,11 @@ body {
     background-color: var($--theme-header) !important;
   }
 
+  .route_manipulation_tools .bg-header,
+  #map_header .bg-header {
+    border: var($--theme-header-border) !important;
+  }
+
   .bg-dark {
     background-color: var($--theme-darker) !important;
   }
@@ -546,7 +555,7 @@ body {
 
     .cid-s48MCQYojq .mbr-text,
     .cid-s48MCQYojq .mbr-section-btn {
-      color: var($--theme-light);
+      color: unset;
     }
 
     .form-control {
@@ -564,6 +573,16 @@ body {
 
     .cid-soU6QnGh9A {
       background-color: var($--theme-darker) !important;
+    }
+
+    .cid-soU6QnGh9A .mbr-iconfont {
+      color: var($--theme-btn-accent) !important;
+    }
+
+    .cid-soU9jtw47v .mbr-text,
+    .cid-soU9jtw47v .card-title,
+    .cid-soU9jtw47v .card-box {
+      color: unset !important;
     }
 
     .cid-soU5dLgjOI {

@@ -7,6 +7,7 @@ $--theme-text-contrast: --theme-text-contrast;
 $--theme-form-required: --theme-form-required;
 /* Used for things like the header */
 $--theme-header: --theme-header;
+$--theme-header-border: --theme-header-border;
 $--theme-header-height: --theme-header-height;
 $--theme-btn-accent: --theme-btn-accent;
 
@@ -21,6 +22,7 @@ $theme-map-superhero: (
     $--theme-header-height: 86px,
     $--theme-form-required: var($--theme-primary),
     $--theme-header: var($--theme-dark),
+    $--theme-header-border: unset,
     $--theme-btn-accent: var($--theme-primary)
 );
 
@@ -35,6 +37,23 @@ $theme-map-darkly: (
     $--theme-header-height: 86px,
     $--theme-form-required: #c40000,
     $--theme-header: var($--theme-dark),
+    $--theme-header-border: unset,
     /* The same as success button */
     $--theme-btn-accent: #00bc8c
+);
+
+// Lux
+$theme-map-lux: (
+    $--theme-primary: #1a1a1a,
+    $--theme-primary-hover: #1a1a1a,
+    $--theme-light: #fff,
+    $--theme-dark: #ebebeb,
+    $--theme-darker: #ebebeb,
+    $--theme-text-contrast: #1a1a1a,
+    $--theme-header-height: 86px,
+    $--theme-form-required: #c40000,
+    $--theme-header: var($--theme-light),
+    $--theme-header-border: 1px solid #1a1a1a,
+    /* The same as success button */
+    $--theme-btn-accent: #1a1a1a
 );

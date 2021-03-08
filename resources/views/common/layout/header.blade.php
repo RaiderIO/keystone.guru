@@ -1,6 +1,5 @@
 <?php
 /** @var $hasNewChangelog boolean */
-
 $navs = [
     route('dungeonroutes') => [
         'text' => __('Routes')
@@ -12,11 +11,12 @@ $navs = [
         'text' => __('Changelog'),
         'new' => $hasNewChangelog
     ],
-]
+];
+
 ?>
 <div class="navbar-top-fixed-spacer"></div>
 <nav
-    class="navbar fixed-top navbar-expand-lg navbar-dark bg-header"
+    class="navbar fixed-top navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }} bg-header"
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">

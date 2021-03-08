@@ -45,7 +45,14 @@ class LayoutsApp extends InlineCode {
         // Theme switch button
         $('.theme_switch_btn').bind('click', function () {
             let theme = $(this).data('theme');
-            $('html').removeClass('superhero darkly').addClass(theme);
+
+            if (theme === 'lux') {
+                $('.navbar-dark').removeClass('navbar-dark').addClass('navbar-light');
+            } else {
+                $('.navbar-light').removeClass('navbar-light').addClass('navbar-dark');
+            }
+
+            $('html').removeClass('superhero darkly lux').addClass(theme);
             // Regenerate parallax effects (switches images around)
             $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 

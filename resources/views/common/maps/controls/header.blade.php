@@ -1,7 +1,7 @@
 <?php
 $echo = isset($echo) ? $echo : false;
 ?>
-<nav id="map_header" class="navbar navbar-expand-lg navbar-dark">
+<nav id="map_header" class="navbar navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
             <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}"

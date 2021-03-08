@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\AdminDebugBar;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
@@ -81,7 +80,6 @@ class Kernel extends HttpKernel
         'throttle'        => ThrottleRequests::class,
         'ajax'            => OnlyAjax::class,
         'viewcachebuster' => ViewCacheBuster::class,
-        'admindebugbar'   => AdminDebugBar::class,
         'legal_agreed'    => LegalAgreed::class
     ];
 }
