@@ -21,7 +21,7 @@ use App\Http\Controllers\SiteController;
 
 Auth::routes();
 
-Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
+Route::group(['middleware' => ['viewcachebuster']], function ()
 {
 
     // Catch for hard-coded /home route in RedirectsUsers.php
