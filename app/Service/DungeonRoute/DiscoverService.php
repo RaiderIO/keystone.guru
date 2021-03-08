@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\App;
 
 class DiscoverService implements DiscoverServiceInterface
 {
-    const POPULAR_DAYS = 7;
-    const CACHE_PREFIX = 'discover';
-
     /** @var CacheService */
     private $_cacheService;
 
@@ -51,7 +48,7 @@ class DiscoverService implements DiscoverServiceInterface
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
-            ->whereDate('page_views.created_at', '>', now()->subDays(self::POPULAR_DAYS))
+            ->whereDate('page_views.created_at', '>', now()->subDays(config('keystoneguru.discover.service.popular_days')))
             ->groupBy('dungeon_routes.id')
             ->orderBy('views', 'desc')
             ->limit($limit);
@@ -74,33 +71,11 @@ class DiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * Gets the cache key with the class prefix for a certain key
-     *
-     * @param string $key
-     * @return string
-     */
-    private function cacheKey(string $key)
-    {
-        return sprintf('%s_%s', self::CACHE_PREFIX, $key);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function dropCaches(): void
-    {
-        // $this->_cacheService->
-    }
-
-    /**
      * @inheritDoc
      */
     function popular(int $limit = 10): Collection
     {
-        return $this->_cacheService->remember(
-            $this->cacheKey(sprintf('popular_limit_%s', $limit)),
-            $this->popularBuilder($limit)->get()
-        );
+        return $this->popularBuilder($limit)->get();
     }
 
     /**

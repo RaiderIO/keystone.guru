@@ -44,14 +44,6 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function dropCaches(): void
-    {
-        // We don't keep a cache in dev - so don't bother
-    }
-
-    /**
-     * @inheritDoc
-     */
     function popular(int $limit = 10): Collection
     {
         return $this->popularBuilder($limit)->get();
