@@ -9,6 +9,11 @@ use Illuminate\Support\Collection;
 
 interface DiscoverServiceInterface
 {
+    /**
+     *
+     */
+    function dropCaches() : void;
+
     /*
     |--------------------------------------------------------------------------
     | DungeonRoutes

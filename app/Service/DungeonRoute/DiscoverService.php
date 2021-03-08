@@ -7,13 +7,28 @@ use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
+use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 class DiscoverService implements DiscoverServiceInterface
 {
     const POPULAR_DAYS = 7;
+    const CACHE_PREFIX = 'discover';
+
+    /** @var CacheService */
+    private $_cacheService;
+
+    /**
+     * DiscoverService constructor.
+     */
+    public function __construct()
+    {
+        $this->_cacheService = App::make(CacheService::class);
+    }
+
 
     /**
      * Gets a builder that provides a template for popular routes.
@@ -59,11 +74,33 @@ class DiscoverService implements DiscoverServiceInterface
     }
 
     /**
+     * Gets the cache key with the class prefix for a certain key
+     *
+     * @param string $key
+     * @return string
+     */
+    private function cacheKey(string $key)
+    {
+        return sprintf('%s_%s', self::CACHE_PREFIX, $key);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function dropCaches(): void
+    {
+        // $this->_cacheService->
+    }
+
+    /**
      * @inheritDoc
      */
     function popular(int $limit = 10): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->_cacheService->remember(
+            $this->cacheKey(sprintf('popular_limit_%s', $limit)),
+            $this->popularBuilder($limit)->get()
+        );
     }
 
     /**

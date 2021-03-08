@@ -4,6 +4,7 @@
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
+use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -23,12 +24,12 @@ class CacheService implements CacheServiceInterface
 
     /**
      * @param string $key
-     * @param $closure
+     * @param Closure|mixed $value
      * @param null $ttl
      * @return mixed
      * @throws InvalidArgumentException
      */
-    public function remember(string $key, $closure, $ttl = null)
+    public function remember(string $key, $value, $ttl = null)
     {
         $result = null;
 
@@ -38,14 +39,18 @@ class CacheService implements CacheServiceInterface
         } // When in debug, don't do any caching
         else {
             // Get the result by calling the closure
-            $result = $closure();
+            if ($value instanceof Closure) {
+                $value = $value();
+            }
             // Only write it to cache when we're not in debug mode
             if (!env('APP_DEBUG') && env('APP_TYPE') !== 'mapping') {
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
                 // If not overridden, get the TTL from config, if it's set anyways
-                $this->set($key, $result, $ttl ?? $this->_getTtl($key));
+                if ($this->set($key, $value, $ttl ?? $this->_getTtl($key))) {
+                    $result = $value;
+                }
             }
         }
 
