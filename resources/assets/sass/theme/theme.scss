@@ -315,6 +315,10 @@ body {
     background-color: var($--theme-header) !important;
   }
 
+  #app .bg-header {
+    border-bottom: var($--theme-header-border) !important;
+  }
+
   .route_manipulation_tools .bg-header,
   #map_header .bg-header {
     border: var($--theme-header-border) !important;
@@ -549,6 +553,10 @@ body {
 
   /* HOME PAGE */
   .home {
+    .mbr-overlay {
+      background-color: var($--theme-dark);
+    }
+
     .mbr-overlay {
       background-color: var($--theme-dark);
     }

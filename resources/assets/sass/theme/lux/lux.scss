@@ -23,6 +23,10 @@
     background-image: url('/images/home/lux_footer.jpg');
   }
 
+  .btn {
+    padding: 0.55rem 0.75rem;
+  }
+
   .btn-accent {
     color: #fff;
   }
@@ -33,17 +37,30 @@
     border-color: #eceeef #eceeef #fff;
   }
 
+  .nav-item {
+    margin-right: unset;
+  }
+
   .navbar-light .navbar-nav .nav-link {
     color: unset;
   }
 
   .home {
+    .cid-s48MCQYojq h1,
+    .cid-soU9jtw47v h4 {
+      color: white !important;
+      text-shadow: 1px 1px black;
+    }
+
     .mbr-overlay {
       opacity: 0.1 !important;
     }
 
+
+
     .mbr-parallax-background {
       color: #fff !important;
+      text-shadow: 1px 1px black;
     }
   }
 }

@@ -45,23 +45,31 @@ class LayoutsApp extends InlineCode {
         // Theme switch button
         $('.theme_switch_btn').bind('click', function () {
             let theme = $(this).data('theme');
+            let previousTheme = Cookies.get('theme');
 
-            if (theme === 'lux') {
-                $('.navbar-dark').removeClass('navbar-dark').addClass('navbar-light');
-            } else {
-                $('.navbar-light').removeClass('navbar-light').addClass('navbar-dark');
-            }
+            // Only when the theme has actually changed
+            if (previousTheme !== theme) {
+                // Switch images on the front page
+                $(`.${previousTheme}_image`).hide();
+                $(`.${theme}_image`).show();
 
-            $('html').removeClass('superhero darkly lux').addClass(theme);
-            // Regenerate parallax effects (switches images around)
-            $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
+                if (theme === 'lux') {
+                    $('.navbar-dark').removeClass('navbar-dark').addClass('navbar-light');
+                } else {
+                    $('.navbar-light').removeClass('navbar-light').addClass('navbar-dark');
+                }
 
-            Cookies.set('theme', theme);
+                $('html').removeClass('superhero darkly lux').addClass(theme);
+                // Regenerate parallax effects (switches images around)
+                $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 
-            // Refresh the deme route
-            let elem = document.getElementById('demo_routes_iframe');
-            if (elem !== null) {
-                elem.contentWindow.location.reload();
+                Cookies.set('theme', theme);
+
+                // Refresh the deme route
+                let elem = document.getElementById('demo_routes_iframe');
+                if (elem !== null) {
+                    elem.contentWindow.location.reload();
+                }
             }
         });
     }

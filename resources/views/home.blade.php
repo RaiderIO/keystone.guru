@@ -68,7 +68,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}" alt="Discover new routes">
+                        <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
+                             alt="{{ __('Discover new routes') }}" style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
+                             alt="{{ __('Discover new routes') }}" style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
                     </div>
@@ -94,7 +97,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}" alt="{{ __('Create your own routes') }}">
+                        <img class="darkly_image" src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('Create your own routes') }}" style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('Create your own routes') }}" style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
                     </div>
@@ -121,7 +127,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img src="{{ url('images/home/darkly_feature_get_organized.jpg') }}" alt="Get organized">
+                        <img src="{{ url(sprintf('images/home/%s_feature_get_organized.jpg', $theme)) }}" alt="Get organized">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
                     </div>
