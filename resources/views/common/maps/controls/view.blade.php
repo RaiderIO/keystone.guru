@@ -1,6 +1,7 @@
 <?php
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
+/** @var \App\Models\Dungeonroute $dungeonroute */
 
 ?>
 <nav class="route_manipulation_tools h-100 row align-items-center">
@@ -39,6 +40,12 @@
                         </a>
                     </div>
                 </div>
+
+                @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+
+                @auth
+                    @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
+                @endauth
             </div>
         @endauth
 

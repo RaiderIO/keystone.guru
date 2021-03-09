@@ -297,6 +297,10 @@ html, body, #map, #app, .wrapper {
     background-color: rgba(78, 93, 108, 0.75);
 }
 
+.popover #map_dungeon_route_info_popover_container {
+    font-size: 1rem;
+}
+
 .route_manipulation_tools {
     position: fixed;
     z-index: 99998;

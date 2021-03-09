@@ -22,11 +22,15 @@ class CommonMapsMap extends InlineCode {
     activate() {
         super.activate();
 
+        let self = this;
+
         this._initDungeonMap();
 
         if (!this.options.noUI) {
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
+
+            this._setupRatingSelection();
 
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
@@ -42,6 +46,18 @@ class CommonMapsMap extends InlineCode {
                     $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked')
                 );
             });
+
+            // Trigger info popover
+            $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function(){
+                $('#view_dungeonroute_group_setup').html(
+                    handlebarsGroupSetupParse(self.options.dungeonroute.setup)
+                );
+
+                // refreshTooltips();
+            });
+
+            // Make the user report modal actually do something
+            $('#userreport_dungeonroute_modal_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
         }
     }
 
@@ -110,6 +126,31 @@ class CommonMapsMap extends InlineCode {
         // Refresh the map; draw the layers on it
         this._dungeonMap.refreshLeafletMap();
     }
+
+    /**
+     *
+     * @private
+     */
+    _setupRatingSelection() {
+        let self = this;
+
+        // Floor selection
+        let $mapRatingDropdown = $('#map_rating_dropdown');
+        $mapRatingDropdown.find('a:not(.disabled)').bind('click', function () {
+            let $this = $(this);
+
+            self._rate($this.data('rating'));
+
+            // Reset all back to non-active
+            $('#map_rating_dropdown').find('a:not(.disabled)').each(function (index, element) {
+                $(element).removeClass('active');
+            });
+
+            // Now toggled this floor on
+            $this.addClass('active');
+        });
+    }
+
 
     /**
      *
@@ -318,6 +359,59 @@ class CommonMapsMap extends InlineCode {
             dataType: 'json',
             success: function (json) {
 
+            }
+        });
+    }
+
+
+    /**
+     * Rates the current dungeon route or unset it.
+     * @param value int
+     */
+    _rate(value) {
+        let self = this;
+
+        let isDelete = value === '';
+        $.ajax({
+            type: isDelete ? 'DELETE' : 'POST',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/rate`,
+            dataType: 'json',
+            data: {
+                rating: value
+            },
+            success: function (json) {
+                // Update the new average rating
+                $('#rating').barrating('set', Math.round(json.new_avg_rating));
+            }
+        });
+    }
+
+    /**
+     *
+     * @private
+     */
+    _submitDungeonRouteUserReport() {
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/dungeonroute/${getState().getMapContext().getPublicKey()}`,
+            dataType: 'json',
+            data: {
+                category: $('#dungeonroute_report_category').val(),
+                username: $('#dungeonroute_report_username').val(),
+                message: $('#dungeonroute_report_message').val(),
+                contact_ok: $('#dungeonroute_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_dungeonroute_modal_submit').hide();
+                $('#userreport_dungeonroute_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_dungeonroute_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.dungeonroute_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_dungeonroute_modal_submit').show();
+                $('#userreport_dungeonroute_modal_saving').hide();
             }
         });
     }

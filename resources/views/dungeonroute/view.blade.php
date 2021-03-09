@@ -20,20 +20,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 @endsection
 @section('content')
     <div class="wrapper">
-        @if(!$model->demo)
-            @include('common.maps.viewsidebar', [
-                'dungeon' => $dungeon,
-                'model' => $model,
-                'floorId' => $floor->id,
-                'show' => [
-                    'sharing' => true,
-                    'shareable-link' => !$model->isSandbox(),
-                    'embedable-link' => !$model->isSandbox(),
-                    'export-mdt-string' => true,
-                ]
-            ])
-        @endif
-
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,

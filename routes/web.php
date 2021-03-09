@@ -83,8 +83,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
     Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
     Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 
-    Route::get('profile/{user}', 'ProfileController@view')->name('profile.view');
-
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', [DungeonRouteDiscoverController::class, 'discover'])->name('dungeonroutes');
     Route::get('routes/popular', [DungeonRouteDiscoverController::class, 'discoverpopular'])->name('dungeonroutes.popular');
@@ -372,6 +370,9 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             });
         });
     });
+
+    // At the bottom to let routes such as profile/routes pass through first
+    Route::get('profile/{user}', 'ProfileController@view')->name('profile.view');
 
     // View any dungeon route (catch all)
     Route::get('{dungeonroute}', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');

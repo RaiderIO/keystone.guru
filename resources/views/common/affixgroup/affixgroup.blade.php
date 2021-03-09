@@ -2,8 +2,9 @@
 /** @var $affixGroup \App\Models\AffixGroup */
 $media = isset($media) ? $media : 'lg';
 $showText = isset($showText) ? $showText : true;
+$class = isset($class) ? $class : '';
 ?>
-<div class="row no-gutters">
+<div class="row no-gutters {{ $class }}">
     <?php
     $affixIndex = 0;
     foreach($affixGroup->affixes as $affix) {

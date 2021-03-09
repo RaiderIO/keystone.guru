@@ -41,15 +41,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
                 </div>
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col font-weight-bold">
-                        {{ __('Group setup') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div id="view_dungeonroute_group_setup" class="col">
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col font-weight-bold">
                         {{ __('Affixes') }}:
                     </div>
                 </div>

@@ -74,6 +74,7 @@ if ($isAdmin) {
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
+    'dungeonroute' => $dungeonroute
 ], $adminOptions)])
 
 @section('scripts')
@@ -144,6 +145,7 @@ if ($isAdmin) {
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors,
             'selectedFloorId' => $floorId,
+            'dungeonroute' => $dungeonroute,
         ])
     @endif
 @endif
