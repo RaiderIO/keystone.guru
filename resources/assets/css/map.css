@@ -206,6 +206,10 @@ html, body, #map, #app, .wrapper {
     overflow: auto;
 }
 
+#killzonesidebar.sidebar {
+    user-select: none;
+}
+
 #killzonesidebar.sidebar .sidebar-content.edit {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     height: calc(100vh - 158px);
