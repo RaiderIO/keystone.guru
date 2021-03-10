@@ -634,6 +634,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 0;
+    opacity: 0.8;
   }
 
   .card_dungeonroute .dungeon_background_cover {
@@ -642,8 +643,7 @@ body {
     top: -95px;
     width: 100%;
     height: 100%;
-    background-color: var($--theme-dark);
-    opacity: 0.8;
+    opacity: 1;
   }
 
   //.dungeon_wallpaper_gradient {
