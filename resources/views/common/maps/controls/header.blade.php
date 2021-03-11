@@ -19,22 +19,20 @@ $echo = isset($echo) ? $echo : false;
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <h5 class="mb-0 mr-2">
-                        {{ $title }}
+                        <span>
+                            {{ $title }}
+                            @auth
+                                @isset($dungeonroute)
+                                    <i id="route_favorited" class="fas fa-star favorite_star favorited"
+                                       style="display: {{ $model->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
+                                    <i id="route_not_favorited" class="far fa-star favorite_star"
+                                       style="display: {{ $model->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
+                                    {!! Form::hidden('favorite', $model->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
+                                @endisset
+                            @endauth
+                        </span>
                     </h5>
                 </li>
-                @auth
-                    @isset($dungeonroute)
-                        <li class="nav-item">
-                            <h5 class="mb-0">
-                                <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                   style="display: {{ $model->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
-                                <i id="route_not_favorited" class="far fa-star favorite_star"
-                                   style="display: {{ $model->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
-                                {!! Form::hidden('favorite', $model->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
-                            </h5>
-                        </li>
-                    @endisset
-                @endauth
             </ul>
             @if($echo)
                 @include('common.layout.navconnectedusers')

@@ -2,8 +2,8 @@
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
 ?>
-<nav class="route_manipulation_tools h-100 row align-items-center">
-    <div class="p-2 bg-header">
+<nav class="route_manipulation_tools h-100 row no-gutters">
+    <div class="bg-header">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container">
 

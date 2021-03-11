@@ -148,6 +148,8 @@ if ($isAdmin) {
             'dungeonroute' => $dungeonroute,
         ])
     @endif
+
+    @include('common.maps.controls.enemyinfo')
 @endif
 
 

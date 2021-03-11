@@ -16,6 +16,12 @@ html, body, #map, #app, .wrapper {
     z-index: 99998;
 }
 
+@media ( max-width: 992px ) {
+    #map_header {
+        padding: 0.5rem;
+    }
+}
+
 /** Embed map needs space for the top header */
 .wrapper.embed_wrapper {
     height: calc(100vh - 96px);
@@ -303,8 +309,34 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools {
     position: fixed;
-    z-index: 99998;
-    left: 50px;
+    z-index: 1000;
+    top: 70px;
+    align-items: flex-start !important;
+}
+
+.route_manipulation_tools .bg-header {
+    padding-right: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+@media (min-width: 992px) {
+    .route_manipulation_tools {
+        top: unset;
+        left: 35px;
+        align-items: center !important;
+    }
+
+    .route_manipulation_tools .bg-header {
+        padding: 0.5rem !important;
+    }
+}
+
+#enemy_info_container {
+    width: 300px;
+}
+
+#enemy_info_container .card {
+    border-radius: 0 !important;
 }
 
 #echo_connected_container {

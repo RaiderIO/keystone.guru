@@ -48,7 +48,7 @@ class CommonMapsMap extends InlineCode {
             });
 
             // Trigger info popover
-            $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function(){
+            $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
                 $('#view_dungeonroute_group_setup').html(
                     handlebarsGroupSetupParse(self.options.dungeonroute.setup)
                 );
@@ -58,6 +58,13 @@ class CommonMapsMap extends InlineCode {
 
             // Make the user report modal actually do something
             $('#userreport_dungeonroute_modal_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
+
+            // Enemy info should be set on mouseover
+            getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
+
+            this._dungeonMap.leafletMap.on('move', function () {
+                $('#enemy_info_container').hide();
+            });
         }
     }
 
@@ -281,6 +288,32 @@ class CommonMapsMap extends InlineCode {
         });
     }
 
+    /**
+     * Called when the focused enemy was changed
+     * @param focusedEnemyChangedEvent
+     * @private
+     */
+    _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
+        let focusedEnemy = focusedEnemyChangedEvent.data.focusedenemy;
+        let isNull = focusedEnemy === null;
+        // Show/hide based on being set or not
+        // $('#enemy_info_container').toggle(!isNull);
+        if (!isNull) {
+            let visualData = focusedEnemy.getVisualData();
+            if (visualData !== null) {
+                $('#enemy_info_container').show().find('.card-title').html(focusedEnemy.npc.name);
+
+                // Update the focused enemy in the sidebar
+                let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+
+                $('#enemy_info_key_value_container').html(
+                    template(visualData)
+                );
+                $('#enemy_report_enemy_id').val(focusedEnemy.id);
+            }
+        }
+    }
+
 
     /**
      *
@@ -414,5 +447,11 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_dungeonroute_modal_saving').hide();
             }
         });
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        getState().unregister('focusedenemy:changed', this);
     }
 }

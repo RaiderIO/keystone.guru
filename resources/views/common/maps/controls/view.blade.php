@@ -4,7 +4,7 @@
 /** @var \App\Models\Dungeonroute $dungeonroute */
 
 ?>
-<nav class="route_manipulation_tools h-100 row align-items-center">
+<nav class="route_manipulation_tools h-100 row no-gutters align-items-center">
     <div class="p-2 bg-header">
         @auth
             <div id="view_route_actions_container" class="mb-3">
