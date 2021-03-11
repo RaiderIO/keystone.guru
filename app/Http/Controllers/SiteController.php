@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
 use App\Models\Release;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use Illuminate\Contracts\Foundation\Application;
@@ -111,12 +112,22 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
+     * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory|View
      */
-    public function affixes(Request $request, SeasonService $seasonService)
+    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => (int)$request->get('offset', 0)]);
+        $limit = config('keystoneguru.discover.limits.affix_overview');
+
+        return view('misc.affixes', [
+            'seasonService' => $seasonService,
+            'offset'        => (int)$request->get('offset', 0),
+            'dungeonroutes' => [
+                'thisweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup(), $limit),
+                'nextweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup(), $limit),
+            ]
+        ]);
     }
 
     /**

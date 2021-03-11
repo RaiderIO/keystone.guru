@@ -179,7 +179,7 @@ class SeasonService implements SeasonServiceInterface
 
             // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
             // Then, fetch an additional TWO affixes, one to show extra at the top, one to show extra at the bottom
-            return $affixGroups->slice($affixGroups->count() - ($affixCount * 2), $affixCount + 2);
+            return $affixGroups->slice($affixGroups->count() - ($affixCount + 2), $affixCount + 2);
         }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
     }
 }
