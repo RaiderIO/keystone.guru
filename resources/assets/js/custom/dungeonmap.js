@@ -596,7 +596,13 @@ class DungeonMap extends Signalable {
      */
     getEnemyForcesRequired() {
         let dungeonData = getState().getMapContext().getDungeon();
-        return getState().getMapContext().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
+        let result = dungeonData.enemy_forces_required;
+
+        if (getState().getMapContext().getTeeming() && dungeonData.enemy_forces_required_teeming > 0) {
+            result = dungeonData.enemy_forces_required_teeming;
+        }
+
+        return result;
     }
 
     /**

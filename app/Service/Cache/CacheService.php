@@ -43,8 +43,8 @@ class CacheService implements CacheServiceInterface
                 $value = $value();
             }
 
-            // Only write it to cache when we're not in debug mode
-            if (!env('APP_DEBUG') && env('APP_TYPE') !== 'mapping') {
+            // Only write it to cache when we're not local
+            if (env('APP_ENV') !== 'local') {
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
