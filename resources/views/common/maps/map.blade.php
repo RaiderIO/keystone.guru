@@ -81,6 +81,8 @@ if ($isAdmin) {
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
+    @include('common.handlebars.groupsetup')
+
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),

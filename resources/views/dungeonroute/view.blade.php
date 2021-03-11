@@ -15,7 +15,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
     @parent
 
     @include('common.handlebars.affixgroupsselect', ['affixgroups' => $model->affixes])
-    @include('common.handlebars.groupsetup')
 
 @endsection
 @section('content')

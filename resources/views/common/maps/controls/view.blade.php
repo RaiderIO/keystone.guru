@@ -6,8 +6,8 @@
 ?>
 <nav class="route_manipulation_tools h-100 row no-gutters align-items-center">
     <div class="p-2 bg-header">
-        @auth
-            <div id="view_route_actions_container" class="mb-3">
+        <div id="view_route_actions_container" class="mb-3">
+            @auth
                 @if($model->mayUserEdit(Auth::user()))
                     <div class="row no-gutters" data-toggle="tooltip" data-placement="right"
                          title="{{ __('Edit this route') }}">
@@ -41,13 +41,11 @@
                     </div>
                 </div>
 
-                @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+                @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
+            @endauth
 
-                @auth
-                    @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
-                @endauth
-            </div>
-        @endauth
+            @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+        </div>
 
         <div id="view_route_map_actions_container">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
