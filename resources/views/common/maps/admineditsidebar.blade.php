@@ -65,5 +65,17 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
                 @endif
             </div>
         </div>
+
+        <!-- Mouseover enemy information -->
+        <div id="enemy_info_container" class="form-group" style="display: none">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ __('Enemy info') }}</h5>
+                    <div id="enemy_info_key_value_container">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endcomponent
