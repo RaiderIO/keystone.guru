@@ -392,8 +392,7 @@ class DungeonRoute extends Model
         $avg = 1;
         if (!$this->ratings->isEmpty()) {
             /** @var Collection $ratings */
-            $ratings = $this->ratings;
-            $ratingsArr = $ratings->pluck(['rating'])->toArray();
+            $ratingsArr = $this->ratings->pluck(['rating'])->toArray();
 
             $avg = array_sum($ratingsArr) / count($ratingsArr);
         }

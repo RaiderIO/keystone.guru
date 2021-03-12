@@ -36,7 +36,7 @@ class DiscoverService implements DiscoverServiceInterface
     private function popularBuilder(int $limit = 10): Builder
     {
         return DungeonRoute::query()
-            ->with('author')
+            ->with(['author', 'affixes', 'ratings'])
             ->selectRaw('dungeon_routes.*, COUNT(page_views.id) as views')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('page_views', function (JoinClause $join)
@@ -46,7 +46,7 @@ class DiscoverService implements DiscoverServiceInterface
             })
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
-            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->whereDate('page_views.created_at', '>', now()->subDays(config('keystoneguru.discover.service.popular_days')))
             ->groupBy('dungeon_routes.id')
@@ -73,20 +73,43 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popular(int $limit = 10): Collection
+    function popular(): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        /** @var CacheService $cacheService */
+        $cacheService = App::make(CacheService::class);
+
+        return $cacheService->remember('discover_routes_popular', function ()
+        {
+            $result = collect();
+
+            $activeDungeons = Dungeon::active()->get();
+            foreach ($activeDungeons as $dungeon) {
+                $result = $result->merge($this->popularByDungeon($dungeon, 2));
+            }
+
+            return $result;
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
+        /** @var CacheService $cacheService */
+        $cacheService = App::make(CacheService::class);
+
+        return $cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup)
+        {
+            $result = collect();
+
+            $activeDungeons = Dungeon::active()->get();
+            foreach ($activeDungeons as $dungeon) {
+                $result = $result->merge($this->popularByDungeonAndAffixGroup($dungeon, $affixGroup, 2));
+            }
+
+            return $result;
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**

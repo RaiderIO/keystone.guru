@@ -21,14 +21,14 @@ interface DiscoverServiceInterface
      * @param int $limit
      * @return Collection
      */
-    function popular(int $limit = 10): Collection;
+    function popular(): Collection;
 
     /**
      * @param AffixGroup $affixGroup
      * @param int $limit
      * @return Collection
      */
-    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection;
+    function popularByAffixGroup(AffixGroup $affixGroup): Collection;
 
     /**
      * @param Dungeon $dungeon

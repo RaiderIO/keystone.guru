@@ -47,7 +47,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Model helpers
         if (env('APP_ENV') === 'local') {
-            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
+            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         } else {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
@@ -137,7 +137,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
-            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             // Only show ads if the view didn't already explicitly override this
             if (!isset($view->getData()['showAds'])) {
                 // Not logged in or not having paid for free ads will cause ads to come up
@@ -156,6 +155,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Main view
         view()->composer(['layouts.app', 'layouts.sitepage', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables)
         {
+            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
         });

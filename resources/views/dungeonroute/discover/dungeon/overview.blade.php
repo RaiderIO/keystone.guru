@@ -31,12 +31,12 @@
             </div>
         @endif
 
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular'),
-            'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),
-            'dungeonroutes' => $dungeonroutes['popular'],
-            'showMore' => true,
-        ])
+{{--        @include('dungeonroute.discover.panel', [--}}
+{{--            'title' => __('Popular'),--}}
+{{--            'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),--}}
+{{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
+{{--            'showMore' => true,--}}
+{{--        ])--}}
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),

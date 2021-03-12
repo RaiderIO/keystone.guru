@@ -44,17 +44,17 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popular(int $limit = 10): Collection
+    function popular(): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder(10)->get();
     }
 
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder(10)->get();
     }
 
     /**

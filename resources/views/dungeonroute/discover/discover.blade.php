@@ -37,13 +37,13 @@
             ])
         </div>
 
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes'),
-            'link' => route('dungeonroutes.popular'),
-            'dungeonroutes' => $dungeonroutes['popular'],
-            'showMore' => true,
-            'showDungeonImage' => true,
-        ])
+{{--        @include('dungeonroute.discover.panel', [--}}
+{{--            'title' => __('Popular routes'),--}}
+{{--            'link' => route('dungeonroutes.popular'),--}}
+{{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
+{{--            'showMore' => true,--}}
+{{--            'showDungeonImage' => true,--}}
+{{--        ])--}}
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.thisweek'),
@@ -69,7 +69,7 @@
         ])
         @include('dungeonroute.discover.panel', [
             'title' => __('Newly published routes'),
-            'link' => route('dungeonroutes.nextweek'),
+            'link' => route('dungeonroutes.new'),
             'dungeonroutes' => $dungeonroutes['new'],
             'showMore' => true,
             'showDungeonImage' => true,
