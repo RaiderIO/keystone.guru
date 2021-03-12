@@ -18,23 +18,25 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     ?>
     <div class="p-2 col-md-{{ 12 / $colCount }}">
         <div class="card">
-            <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()]) }}">
-                <img class="card-img-top"
-                     src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"
-                     style="width: 100%; height: 100%" alt="{{ __($dungeon->name) }}"/>
-                <h5 class="card-img-overlay text-center text-white">
-                    {{ $dungeon->name }}
-                </h5>
-            </a>
+            <div class="card-img-caption">
+                <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()]) }}">
+                    <h5 class="card-text text-white">
+                        {{ $dungeon->name }}
+                    </h5>
+                    <img class="card-img-top"
+                         src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"
+                         style="width: 100%; height: 100%" alt="{{ __($dungeon->name) }}"/>
+                </a>
+            </div>
             @if($names)
                 <div class="card-body">
                     <!-- Normal big screen view -->
                     <div class="d-xl-inline d-none">
                         <p class="card-text text-center">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">
-                                {{ __('Popular') }}
-                            </a>
-                            &middot;
+{{--                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">--}}
+{{--                                {{ __('Popular') }}--}}
+{{--                            </a>--}}
+{{--                            &middot;--}}
                             <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('This week') }}
                             </a>
@@ -51,11 +53,11 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 
                     <!-- Mobile view -->
                     <div class="row no-gutters card-text text-center d-xl-none">
-                        <div class="col-xl">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">
-                                {{ __('Popular') }}
-                            </a>
-                        </div>
+{{--                        <div class="col-xl">--}}
+{{--                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">--}}
+{{--                                {{ __('Popular') }}--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('This week') }}

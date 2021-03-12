@@ -106,6 +106,23 @@
     height: 128px;
 }
 
+.discover .card-img-caption {
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+.discover .card-img-caption .card-img-top {
+    z-index: 0;
+}
+
+.discover .card-img-caption .card-text {
+    text-align: center;
+    width: 100%;
+    margin: 6% 0;
+    position: absolute;
+    z-index: 1;
+}
+
 .discover .card_dungeonroute .card-body {
     height: 95px;
 }
