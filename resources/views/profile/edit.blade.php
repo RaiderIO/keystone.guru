@@ -35,6 +35,9 @@ $deleteConsequences = $user->getDeleteConsequences();
             // Code for base app
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
+
+
+            $('#user_reports_table').DataTable({});
         });
     </script>
 @endsection
@@ -55,7 +58,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             @if(isset($user->iconfile))
                 <div class="form-group">
                     {{__('Avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
-                                                 alt="{{ __('User avatar') }}" style="max-width: 48px"/>
+                                           alt="{{ __('User avatar') }}" style="max-width: 48px"/>
                 </div>
             @endif
 
@@ -70,11 +73,11 @@ $deleteConsequences = $user->getDeleteConsequences();
                     @include('common.forms.form-error', ['key' => 'name'])
                 </div>
             @endif
-{{--            <div class="form-group{{ $errors->has('theme') ? ' has-error' : '' }}">--}}
-{{--                {!! Form::label('theme', __('Theme')) !!}--}}
-{{--                {!! Form::select('theme', config('keystoneguru.themes'), null, ['class' => 'form-control']) !!}--}}
-{{--                @include('common.forms.form-error', ['key' => 'theme'])--}}
-{{--            </div>--}}
+            {{--            <div class="form-group{{ $errors->has('theme') ? ' has-error' : '' }}">--}}
+            {{--                {!! Form::label('theme', __('Theme')) !!}--}}
+            {{--                {!! Form::select('theme', config('keystoneguru.themes'), null, ['class' => 'form-control']) !!}--}}
+            {{--                @include('common.forms.form-error', ['key' => 'theme'])--}}
+            {{--            </div>--}}
             @if(!$isOAuth)
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     {!! Form::label('email', __('Email')) !!}
@@ -296,6 +299,36 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('All routes, enemies and other reports you have made on the site will be listed here.') }}
             </p>
 
+            <table id="user_reports_table" class="tablesorter default_table table-striped">
+                <thead>
+                <tr>
+                    <th width="5%">{{ __('Id') }}</th>
+                    <th width="10%">{{ __('Category') }}</th>
+                    <th width="60%">{{ __('Message') }}</th>
+                    <th width="15%">{{ __('Created at') }}</th>
+                    <th width="10%">{{ __('Status') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach ($user->reports()->orderByDesc('id')->get() as $report)
+                    <?php /** @var $user \App\Models\UserReport */?>
+                    <tr>
+                        <td>{{ $report->id }}</td>
+                        <td>{{ $report->category }}</td>
+                        <td>{{ $report->message }}</td>
+                        <td>{{ $report->contact_ok ? $report->user->email : '-' }}</td>
+                        <td>{{ $report->created_at }}</td>
+                        <td>
+                            <button class="btn btn-success mark_as_handled_btn" data-id="{{$report->id}}">
+                                <i class="fas fa-check-circle"></i> {{ __('Handled') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+
+            </table>
         </div>
     </div>
 @endsection

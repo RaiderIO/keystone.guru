@@ -1,9 +1,8 @@
 class SettingsTab extends Signalable {
 
-    constructor(map, options) {
+    constructor(options) {
         super();
 
-        this.map = map;
         this.options = options;
     }
 

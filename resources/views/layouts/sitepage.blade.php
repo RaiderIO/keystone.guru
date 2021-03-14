@@ -1,5 +1,6 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
+/** @var $viewName string */
 /** @var $isProduction string */
 /** @var $isMobile boolean */
 /** @var $nameAndVersion string */
@@ -21,6 +22,9 @@ $showAds = isset($showAds) ? $showAds : true;
 $rootClass = isset($rootClass) ? $rootClass : '';
 // Page title
 $title = isset($title) ? $title : null;
+// Breadcrumbs
+$breadcrumbs = isset($breadcrumbs) ? $breadcrumbs : $viewName;
+$breadcrumbsParams = isset($breadcrumbsParams) ? $breadcrumbsParams : [];
 ?>
 @extends('layouts.app', ['title' => $title, 'showAds' => $showAds])
 
@@ -49,6 +53,9 @@ $title = isset($title) ? $title : null;
 
     @elseif(isset($menuItems))
         <div class="container container_wide mt-3">
+
+            @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+
             <div class="row">
                 <div class="col-xl-3 bg-secondary p-3">
                     <h4>{{ $menuTitle }}</h4>
@@ -99,40 +106,36 @@ $title = isset($title) ? $title : null;
 
         @yield('global-message')
 
-        @if( $showAds && !$isMobile)
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-            </div>
-        @endif
+        <div class="container-fluid {{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
-                    <div class="card mt-3 mb-3">
-                        <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
-                            <div class="row">
-                                @hasSection('header-addition')
-                                    <div class="col text-center">
-                                        <h4>@yield('header-title')</h4>
-                                    </div>
-                                    <div class="ml-auto">
-                                        @yield('header-addition')
-                                    </div>
-                                @else
-                                    <div class="col-lg-12 text-center">
-                                        <h4>@yield('header-title')</h4>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            @include('common.general.messages')
+            @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-                            @yield('content')
-                        </div>
-                    </div>
+            @if( $showAds && !$isMobile)
+                <div align="center" class="my-4">
+                    @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
                 </div>
-            </div>
+            @endif
+
+            @hasSection('header-title')
+                <div class="row my-4">
+                    @hasSection('header-addition')
+                        <div class="col text-center">
+                            <h4>@yield('header-title')</h4>
+                        </div>
+                        <div class="ml-auto">
+                            @yield('header-addition')
+                        </div>
+                    @else
+                        <div class="col-lg-12 text-center">
+                            <h4>@yield('header-title')</h4>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            @include('common.general.messages')
+
+            @yield('content')
         </div>
     @endif
 

@@ -1,14 +1,9 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit expansion')])
-@section('header-title', __('View expansion'))
-@section('header-addition')
-    <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white float-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Expansion list') }}
-    </a>
-@endsection
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$expansion ?? null], 'showAds' => false, 'title' => $headerTitle])
+@section('header-title', $headerTitle)
 
 @section('content')
-    @isset($model)
-        {{ Form::model($model, ['route' => ['admin.expansion.update', $model->id], 'method' => 'patch', 'files' => true]) }}
+    @isset($expansion)
+        {{ Form::model($expansion, ['route' => ['admin.expansion.update', $expansion->id], 'method' => 'patch', 'files' => true]) }}
     @else
         {{ Form::open(['route' => 'admin.expansion.savenew', 'files' => true]) }}
     @endisset
@@ -31,10 +26,11 @@
         @include('common.forms.form-error', ['key' => 'icon'])
     </div>
 
-    @isset($model)
-    <div class="form-group">
-        {{__('Current image:')}} <img src="{{ $model->iconfile->getUrl() }}" style="width: 32px; height: 32px;"/>
-    </div>
+    @isset($expansion)
+        <div class="form-group">
+            {{__('Current image:')}} <img src="{{ $expansion->iconfile->getUrl() }}"
+                                          style="width: 32px; height: 32px;"/>
+        </div>
     @endisset
 
     <div class="form-group{{ $errors->has('color') ? ' has-error' : '' }}">
@@ -43,7 +39,7 @@
         @include('common.forms.form-error', ['key' => 'color'])
     </div>
 
-    {!! Form::submit(isset($model) ? __('Edit') : __('Submit'), ['class' => 'btn btn-info']) !!}
+    {!! Form::submit(isset($expansion) ? __('Edit') : __('Submit'), ['class' => 'btn btn-info']) !!}
 
     {!! Form::close() !!}
 @endsection

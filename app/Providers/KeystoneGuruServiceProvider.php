@@ -47,7 +47,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Model helpers
         if (env('APP_ENV') === 'local') {
-            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
+            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
         } else {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
@@ -135,12 +135,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Can use the Auth() global here!
         view()->composer('*', function (View $view)
         {
+            // Don't include the viewName in the layouts - they must inherit from whatever calls it!
+            if (strpos($view->getName(), 'layouts') !== 0) {
+                $view->with('viewName', $view->getName());
+            }
+
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
             // Only show ads if the view didn't already explicitly override this
             if (!isset($view->getData()['showAds'])) {
+                // Always show ads when on dev environment so that we are reminded the site has ads and their placement
                 // Not logged in or not having paid for free ads will cause ads to come up
-                $view->with('showAds', !Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+                $view->with('showAds', env('APP_ENV') === 'local' || (!Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE)));
             }
         });
 
@@ -153,9 +159,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Main view
-        view()->composer(['layouts.app', 'layouts.sitepage', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables)
+        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables)
         {
-            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
         });
@@ -163,6 +168,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.layout.header', function (View $view) use ($globalViewVariables)
         {
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
+        });
+
+        view()->composer('common.layout.navuser', function (View $view)
+        {
+            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)

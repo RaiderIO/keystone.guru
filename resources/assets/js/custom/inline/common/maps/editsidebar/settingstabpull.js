@@ -1,7 +1,7 @@
 class SettingsTabPull extends SettingsTab {
 
-    constructor(map, options) {
-        super(map, options);
+    constructor(options) {
+        super(options);
 
     }
 
@@ -9,77 +9,79 @@ class SettingsTabPull extends SettingsTab {
 
         let self = this;
 
-        // Gradient setup
-        this._grapick = new Grapick({
-            el: '#edit_route_freedraw_options_gradient',
-            colorEl: '<div id="grapick_color_picker" class="handler-color-wrap"></div>'
-        });
-        this._grapick.setColorPicker(handler => {
-            let defaultColor = self._parseHandlerColor(handler.getColor());
-            Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                el: `#grapick_color_picker`,
-                // Convert if necessary
-                default: defaultColor
-            })).on('save', (color, instance) => {
-                let newColor = '#' + color.toHEXA().join('');
-                // Apply the new color
-                handler.setColor(newColor);
+        if (this.options.dungeonroute !== null) {
+            // Gradient setup
+            this._grapick = new Grapick({
+                el: '#edit_route_freedraw_options_gradient',
+                colorEl: '<div id="grapick_color_picker" class="handler-color-wrap"></div>'
+            });
+            this._grapick.setColorPicker(handler => {
+                let defaultColor = self._parseHandlerColor(handler.getColor());
+                Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+                    el: `#grapick_color_picker`,
+                    // Convert if necessary
+                    default: defaultColor
+                })).on('save', (color, instance) => {
+                    let newColor = '#' + color.toHEXA().join('');
+                    // Apply the new color
+                    handler.setColor(newColor);
 
-                // Reset ourselves
-                instance.hide();
+                    // Reset ourselves
+                    instance.hide();
+                });
+
+                $('.pull_settings_tools .pickr').addClass('grapick_color_picker_button grapick_color_picker_button_outer');
+                $('.pull_settings_tools .pcr-button').addClass('grapick_color_picker_button');
             });
 
-            $('.pull_settings_tools .pickr').addClass('grapick_color_picker_button grapick_color_picker_button_outer');
-            $('.pull_settings_tools .pcr-button').addClass('grapick_color_picker_button');
-        });
-
-        // Restore pull_gradient if set
-        let handlers = getState().getPullGradientHandlers();
-        for (let index in handlers) {
-            if (handlers.hasOwnProperty(index)) {
-                this._grapick.addHandler(handlers[index][0], handlers[index][1]);
+            // Restore pull_gradient if set
+            let handlers = getState().getPullGradientHandlers();
+            for (let index in handlers) {
+                if (handlers.hasOwnProperty(index)) {
+                    this._grapick.addHandler(handlers[index][0], handlers[index][1]);
+                }
             }
-        }
 
-        // Do stuff on change of the gradient
-        this._grapick.on('change', complete => {
-            // construct pull_gradient string from handlers
-            let pullGradient = [];
-            for (let i = 0; i < self._grapick.getHandlers().length; i++) {
-                let handler = self._grapick.getHandler(i);
-                pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
-            }
-            let result = pullGradient.join(',');
+            // Do stuff on change of the gradient
+            this._grapick.on('change', complete => {
+                // construct pull_gradient string from handlers
+                let pullGradient = [];
+                for (let i = 0; i < self._grapick.getHandlers().length; i++) {
+                    let handler = self._grapick.getHandler(i);
+                    pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
+                }
+                let result = pullGradient.join(',');
 
-            getState().getMapContext().setPullGradient(result);
+                getState().getMapContext().setPullGradient(result);
 
-            self._savePullGradientSettings();
-        });
-
-        $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
-            $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
-            $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
-
-            let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-
-            killZoneMapObjectGroup.applyPullGradient(true, function () {
-                $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();
-                $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').hide();
+                self._savePullGradientSettings();
             });
-        });
 
-        let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
-        let alwaysApplyPullGradient = getState().getMapContext().getPullGradientApplyAlways();
-        if (alwaysApplyPullGradient) {
-            $alwaysApplyPullGradient.attr('checked', 'checked');
-        } else {
-            $alwaysApplyPullGradient.removeAttr('checked');
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
+
+                let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+                killZoneMapObjectGroup.applyPullGradient(true, function () {
+                    $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();
+                    $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').hide();
+                });
+            });
+
+            let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
+            let alwaysApplyPullGradient = getState().getMapContext().getPullGradientApplyAlways();
+            if (alwaysApplyPullGradient) {
+                $alwaysApplyPullGradient.attr('checked', 'checked');
+            } else {
+                $alwaysApplyPullGradient.removeAttr('checked');
+            }
+            $alwaysApplyPullGradient.bind('change', function () {
+                getState().getMapContext().setPullGradientApplyAlways($(this).is(':checked'));
+
+                self._savePullGradientSettings();
+            });
         }
-        $alwaysApplyPullGradient.bind('change', function () {
-            getState().getMapContext().setPullGradientApplyAlways($(this).is(':checked'));
-
-            self._savePullGradientSettings();
-        });
     }
 
     /**

@@ -2,17 +2,14 @@
 /** @var $dungeon \App\Models\Dungeon */
 /* @var $floor \App\Models\Floor */
 /* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
-$connectedFloorCandidates = $floor->dungeon->floors->except($floor->id);
+$connectedFloorCandidates = $dungeon->floors;
+if (isset($floor)) {
+    $connectedFloorCandidates = $connectedFloorCandidates->except(optional($floor)->id);
+}
 ?>
-@extends('layouts.sitepage', ['showAds' => false, 'title' => $headerTitle])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$dungeon, $floor ?? null], 'showAds' => false, 'title' => $headerTitle])
 @section('header-title')
     {{ $headerTitle }}
-@endsection
-@section('header-addition')
-    <a href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon]) }}" class="btn btn-info text-white pull-right"
-       role="button">
-        <i class="fas fa-backward"></i> {{ sprintf(__('Edit %s'), $dungeon->name) }}
-    </a>
 @endsection
 <?php
 /**
@@ -23,7 +20,7 @@ $connectedFloorCandidates = $floor->dungeon->floors->except($floor->id);
     @isset($floor)
         {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->getSlug(), 'floor' => $floor->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $floor->dungeon->getSlug()]]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->getSlug()]]) }}
     @endisset
 
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
@@ -82,7 +79,9 @@ $connectedFloorCandidates = $floor->dungeon->floors->except($floor->id);
         <?php
         foreach($connectedFloorCandidates as $connectedFloorCandidate){
         /** @var \App\Models\FloorCoupling $floorCoupling */
-        $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        if (isset($floorCouplings)) {
+            $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        }
         ?>
         <div class="row mb-3">
             <div class="col-2">

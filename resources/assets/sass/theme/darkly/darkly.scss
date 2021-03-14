@@ -17,4 +17,8 @@
   .cid-soU9jtw47v {
     background-image: url('/images/home/darkly_footer.jpg');
   }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--theme-darker);
+  }
 }

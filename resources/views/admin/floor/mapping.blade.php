@@ -12,21 +12,16 @@
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
+            'showAds' => false,
             'dungeon' => $floor->dungeon,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,
+            'floorId' => $floor->id,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
                 'killzone'
-            ]
-        ])
-
-        @include('common.maps.admineditsidebar', [
-            'show' => [
-                'sharing' => true,
-                'route-publish' => true
             ]
         ])
     </div>

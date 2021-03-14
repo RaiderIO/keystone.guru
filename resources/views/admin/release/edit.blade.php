@@ -1,20 +1,15 @@
 <?php
-/** @var \App\Models\Release $model */
-$changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelog();
+/** @var \App\Models\Release $release */
+$changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChangelog();
 ?>
 
-@extends('layouts.sitepage', ['showAds' => false, 'title' => $headerTitle])
-@section('header-title', __('View releases'))
-@section('header-addition')
-    <a href="{{ route('admin.releases') }}" class="btn btn-info text-white float-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Release list') }}
-    </a>
-@endsection
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$release ?? null], 'showAds' => false, 'title' => $headerTitle])
+@section('header-title', __('New release'))
 @include('common.general.inline', ['path' => 'admin/release/edit', 'options' => ['changelog' => $changelog, 'categories' => $categories]])
 
 @section('content')
-    @isset($model)
-        {{ Form::model($model, ['route' => ['admin.release.update', $model->version], 'method' => 'patch', 'files' => true]) }}
+    @isset($release)
+        {{ Form::model($release, ['route' => ['admin.release.update', $release->version], 'method' => 'patch', 'files' => true]) }}
     @else
         {{ Form::open(['route' => 'admin.release.savenew', 'files' => true]) }}
     @endisset
@@ -26,7 +21,7 @@ $changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelo
 
     <div class="form-group{{ $errors->has('silent') ? ' has-error' : '' }}">
         {!! Form::label('silent', __('Silent')) !!}
-        {!! Form::checkbox('silent', 1, isset($model) ? $model->silent : 0, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}
     </div>
 
     <h4>{{ __('Changelog') }}</h4>
@@ -55,7 +50,7 @@ $changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelo
         </div>
     </div>
 
-    {!! Form::submit(isset($model) ? __('Edit') : __('Submit'), ['class' => 'btn btn-info']) !!}
+    {!! Form::submit(isset($release) ? __('Edit') : __('Submit'), ['class' => 'btn btn-info']) !!}
 
     {!! Form::close() !!}
 @endsection

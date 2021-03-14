@@ -3,7 +3,7 @@ $title = isset($team) ? sprintf(__('Invitation to join team %s'), $team->name) :
 // Checks if you're already a member or not
 $member = isset($member) ? $member : false;
 ?>
-@extends('layouts.sitepage', ['showAds' => false, 'title' => $title])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$team], 'showAds' => false, 'title' => $title])
 @section('header-title', $title)
 
 @section('content')
@@ -30,7 +30,7 @@ $member = isset($member) ? $member : false;
             <div class="row">
                 <div class="col">
                     @if( $member )
-                        <a href="{{ route('team.edit', ['team' => $team->name ]) }}" class="btn btn-primary col-lg-auto">
+                        <a href="{{ route('team.edit', ['team' => $team]) }}" class="btn btn-primary col-lg-auto">
                             <i class="fas fa-backward"></i> {{ __('Return to team') }}
                         </a>
                     @else

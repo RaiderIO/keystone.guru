@@ -1,11 +1,6 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit dungeon')])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$dungeon ?? null], 'showAds' => false, 'title' => __('Edit dungeon')])
 @section('header-title')
     {{ $headerTitle }}
-@endsection
-@section('header-addition')
-    <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Dungeon list') }}
-    </a>
 @endsection
 <?php
 /**

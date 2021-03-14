@@ -13,7 +13,7 @@
         </div>
     @endguest
     <div class="form-group">
-        {!! Form::label('dungeonroute_report_message', sprintf(__('Why do you want to report this route? (max. 1000 characters)'), $model->name)) !!}
+        {!! Form::label('dungeonroute_report_message', sprintf(__('Why do you want to report this route? (max. 1000 characters)'), $dungeonroute->name)) !!}
         {!! Form::textarea('dungeonroute_report_message', null, ['id' => 'dungeonroute_report_message', 'class' => 'form-control', 'cols' => '50', 'rows' => '10']) !!}
     </div>
 

@@ -62,9 +62,10 @@ class Expansion extends CacheModel
      *
      * @param Request $request
      * @param string $fileUploadDirectory
+     * @return bool
      * @throws Exception
      */
-    public function saveFromRequest(Request $request, $fileUploadDirectory = 'uploads')
+    public function saveFromRequest(Request $request, $fileUploadDirectory = 'uploads') : bool
     {
         $new = isset($this->id);
 
@@ -93,6 +94,10 @@ class Expansion extends CacheModel
                     throw $ex;
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 }

@@ -57,7 +57,14 @@ Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), functi
 {
     $result = false;
     if ($user->hasRole('admin')) {
-        $result = ['name' => $user->name, 'color' => $user->echo_color];
+        $result = [
+            'id'         => $user->id,
+            'name'       => $user->name,
+            'initials'   => $user->initials,
+            'color'      => $user->echo_color,
+            'avatar_url' => optional($user->iconfile)->getURL(),
+            'anonymous'  => false,
+        ];
     }
     return $result;
 });

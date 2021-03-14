@@ -1,23 +1,18 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Edit Spell')])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$spell ?? null], 'showAds' => false, 'title' => __('Edit Spell')])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
-@section('header-addition')
-    <a href="{{ route('admin.spells') }}" class="btn btn-info text-white float-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Spell list') }}
-    </a>
-@endsection
 <?php
 /**
- * @var $model \App\Models\Spell
+ * @var $spell \App\Models\Spell
  * @var $floor \App\Models\Floor
  * @var $dispelTypes array
  */
 ?>
 
 @section('content')
-    @isset($model)
-        {{ Form::model($model, ['route' => ['admin.spell.update', $model->id], 'autocomplete' => 'off', 'method' => 'patch', 'files' => true]) }}
+    @isset($spell)
+        {{ Form::model($spell, ['route' => ['admin.spell.update', $spell->id], 'autocomplete' => 'off', 'method' => 'patch', 'files' => true]) }}
     @else
         {{ Form::open(['route' => 'admin.spell.savenew', 'autocomplete' => 'off', 'files' => true]) }}
     @endisset
@@ -48,19 +43,19 @@
 
     <div class="form-group{{ $errors->has('schools') ? ' has-error' : '' }}">
         {!! Form::label('schools[]', __('Schools'), [], false) !!}
-        {!! Form::select('schools[]', array_flip($schools), isset($model) ? $model->getSchoolsAsArray() : null, ['class' => 'form-control', 'multiple' => 'multiple', 'size' => count($schools)]) !!}
+        {!! Form::select('schools[]', array_flip($schools), isset($spell) ? $spell->getSchoolsAsArray() : null, ['class' => 'form-control', 'multiple' => 'multiple', 'size' => count($schools)]) !!}
         @include('common.forms.form-error', ['key' => 'schools'])
     </div>
 
     <div class="form-group{{ $errors->has('aura') ? ' has-error' : '' }}">
         {!! Form::label('aura', __('Aura')) !!}
-        {!! Form::checkbox('aura', 1, isset($model) ? $model->aura : 1, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('aura', 1, isset($spell) ? $spell->aura : 1, ['class' => 'form-control left_checkbox']) !!}
         @include('common.forms.form-error', ['key' => 'aura'])
     </div>
 
     <div>
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
-        @isset($model)
+        @isset($spell)
             <div class="float-right">
                 {!! Form::submit(__('Save as new spell'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'saveasnew']) !!}
             </div>

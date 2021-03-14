@@ -10,11 +10,13 @@
 
         </div>
 
-        <div id="view_route_actions_container" class="mb-3">
-            @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
-        </div>
+        @isset($dungeonroute)
+            <div id="view_route_actions_container" class="mb-3">
+                @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+            </div>
+        @endisset
 
-        <!-- Draw actions are injected here through drawcontrols.js -->
+    <!-- Draw actions are injected here through drawcontrols.js -->
         <div id="edit_route_draw_actions_container">
 
         </div>

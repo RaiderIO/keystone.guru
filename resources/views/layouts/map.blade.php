@@ -10,7 +10,7 @@ $rootClass = isset($rootClass) ? $rootClass : '';
 // Page title
 $title = isset($title) ? $title : null;
 ?>
-@extends('layouts.app', ['title' => $title, 'showAds' => $showAds])
+@extends('layouts.app', ['showAds' => $showAds, 'title' => $title, 'showAds' => $showAds])
 
 @section('app-content')
 

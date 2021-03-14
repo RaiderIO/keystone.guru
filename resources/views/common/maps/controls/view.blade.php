@@ -1,8 +1,7 @@
 <?php
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
-/** @var \App\Models\Dungeonroute $dungeonroute */
-
+/** @var \App\Models\Dungeonroute|null $dungeonroute */
 ?>
 <nav class="route_manipulation_tools h-100 row no-gutters align-items-center">
     <div class="p-2 bg-header">
@@ -41,10 +40,14 @@
                     </div>
                 </div>
 
-                @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
+                @isset($dungeonroute)
+                    @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
+                @endisset
             @endauth
 
-            @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+            @isset($dungeonroute)
+                @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+            @endisset
         </div>
 
         <div id="view_route_map_actions_container">

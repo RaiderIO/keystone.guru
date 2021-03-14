@@ -41,12 +41,12 @@ return [
     'preset_label' => 'Preset',
     'add_label'    => 'Add',
 
-    'color_label'                                     => 'Color',
-    'weight_label'                                    => 'Weight',
-    'mapobject_visibility_label'                      => 'Visibility',
+    'color_label'                  => 'Color',
+    'weight_label'                 => 'Weight',
+    'mapobject_visibility_label'   => 'Visibility',
 
     // Map object translations
-    'header_floor_selection_label'                   => 'Floors',
+    'header_floor_selection_label' => 'Floors',
 
     'header_map_object_group_label'                   => 'Show/hide',
     'enemy_map_object_group_label'                    => 'Enemies',
@@ -395,6 +395,7 @@ return [
     'leave_team_disband_confirm_label' => 'Are you sure you wish to leave this team? WARNING: this will disband the team.',
 
     'name_label'             => 'Name',
+    'email_label'            => 'Email',
     'join_date_label'        => 'Join date',
     'role_label'             => 'Role',
     'assignable_roles_label' => 'Assignable roles',

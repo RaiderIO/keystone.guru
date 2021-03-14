@@ -76,14 +76,12 @@ class FloorController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @return Factory|View
      */
-    public function new(Request $request)
+    public function new(Request $request, Dungeon $dungeon)
     {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::findOrFail($request->get('dungeon'));
-
-        return view('admin.floor.new', [
+        return view('admin.floor.edit', [
             'headerTitle' => __('New floor'),
             'dungeon'     => $dungeon
         ]);

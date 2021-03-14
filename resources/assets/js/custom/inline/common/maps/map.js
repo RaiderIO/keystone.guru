@@ -345,7 +345,11 @@ class CommonMapsMap extends InlineCode {
             for (let index in toHide) {
                 if (toHide.hasOwnProperty(index)) {
                     let group = getState().getDungeonMap().mapObjectGroupManager.getByName(toHide[index]);
-                    group.setVisibility(false);
+                    if (group instanceof MapObjectGroup) {
+                        group.setVisibility(false);
+                    } else {
+                        console.warn(`Unable to find map object group ${toHide[index]} - was a map object removed or does admin have different map object groups?`);
+                    }
                 }
             }
         }

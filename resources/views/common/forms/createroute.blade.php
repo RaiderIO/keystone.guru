@@ -7,14 +7,14 @@ $teeming = old('teeming') ?? $currentAffixGroup->isTeeming();
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 
 // Make sure $model exists
-$model = $model ?? null;
+$dungeonroute = $dungeonroute ?? null;
 ?>
 
-@if(!isset($model))
+@if(!isset($dungeonroute))
     {{ Form::open(['route' => 'dungeonroute.savenew']) }}
 @endisset
 <div class="container">
-    @if( !isset($model) )
+    @if( !isset($dungeonroute) )
         @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
     @endif
 
@@ -25,7 +25,7 @@ $model = $model ?? null;
             __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
              }}"></i>
         </label>
-        {!! Form::text('dungeon_route_title', optional($model)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+        {!! Form::text('dungeon_route_title', optional($dungeonroute)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
     </div>
 
     <div class="form-group">
@@ -49,7 +49,7 @@ $model = $model ?? null;
                         </h3>
 
                         @include('common.group.affixes', [
-                            'dungeonroute'     => $model ?? null,
+                            'dungeonroute'     => $dungeonroute ?? null,
                             'teemingSelector'  => '#teeming',
                             'collapseSelector' => '#createRouteAdvancedCollapse',
                             'defaultSelected'  => $defaultSelectedAffixes
@@ -62,7 +62,7 @@ $model = $model ?? null;
                         </h3>
                         @include('common.group.composition', [
                             'collapseSelector' => '#createRouteAdvancedCollapse',
-                            'dungeonroute'     => $model ?? null,
+                            'dungeonroute'     => $dungeonroute ?? null,
                             ])
 
                         @if(Auth::check() && Auth::user()->hasRole('admin'))
@@ -80,7 +80,7 @@ $model = $model ?? null;
         </div>
     </div>
 
-    @if(!isset($model))
+    @if(!isset($dungeonroute))
         <div class="col-lg-12">
             <div class="form-group">
                 {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
@@ -89,7 +89,7 @@ $model = $model ?? null;
     @endif
 </div>
 
-@if(!isset($model))
+@if(!isset($dungeonroute))
     {!! Form::close() !!}
 @else
     <div class="form-group">

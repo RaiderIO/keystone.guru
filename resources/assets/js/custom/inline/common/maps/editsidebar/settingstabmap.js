@@ -1,7 +1,7 @@
 class SettingsTabMap extends SettingsTab {
 
-    constructor(map, options) {
-        super(map, options);
+    constructor(options) {
+        super(options);
 
     }
 

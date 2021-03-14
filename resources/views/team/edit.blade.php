@@ -32,6 +32,7 @@ foreach ($team->teamusers as $teamuser) {
     'title' => $title,
     'menuTitle' => __('Teams'),
     'menuItems' => $menuItems,
+    'breadcrumbsParams' => [$team],
     // The models to display as an option in the menu, plus the route to take when selecting them
     'menuModels' => $user->teams,
     'menuModelsRoute' => 'team.edit',
