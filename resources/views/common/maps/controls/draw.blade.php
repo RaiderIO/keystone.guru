@@ -2,7 +2,7 @@
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
 ?>
-<nav class="route_manipulation_tools h-100 row no-gutters">
+<nav class="route_manipulation_tools h-100 row no-gutters map_fade_out">
     <div class="bg-header">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container">
@@ -11,7 +11,7 @@
         </div>
 
         @isset($dungeonroute)
-            <div id="view_route_actions_container" class="mb-3">
+            <div id="view_route_actions_container" class="mb-2">
                 @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
             </div>
         @endisset

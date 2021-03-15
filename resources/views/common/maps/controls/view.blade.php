@@ -3,26 +3,26 @@
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\Dungeonroute|null $dungeonroute */
 ?>
-<nav class="route_manipulation_tools h-100 row no-gutters align-items-center">
-    <div class="p-2 bg-header">
-        <div id="view_route_actions_container" class="mb-3">
+<nav class="route_manipulation_tools h-100 row no-gutters map_fade_out">
+    <div class="bg-header">
+        <div id="view_route_actions_container" class="mb-2">
             @auth
-                @if($model->mayUserEdit(Auth::user()))
+                @if($dungeonroute->mayUserEdit(Auth::user()))
                     <div class="row no-gutters" data-toggle="tooltip" data-placement="right"
                          title="{{ __('Edit this route') }}">
                         <div class="col">
-                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                                class="btn btn-info" target="_blank">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </div>
                     </div>
                 @endif
-                @if($model->dungeon->active)
+                @if($dungeonroute->dungeon->active)
                     <div class="row no-gutters" data-toggle="tooltip" data-placement="right"
                          title="{{ __('Clone this route') }}">
                         <div class="col">
-                            <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $model->public_key]) }}"
+                            <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $dungeonroute]) }}"
                                class="btn btn-info" target="_blank">
                                 <i class="fas fa-clone"></i>
                             </a>

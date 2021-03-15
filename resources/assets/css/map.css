@@ -16,6 +16,17 @@ html, body, #map, #app, .wrapper {
     z-index: 99998;
 }
 
+.map_fade_out {
+    opacity: 0.8;
+    transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -webkit-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+}
+
+.map_fade_out:hover {
+    opacity: 1;
+}
 @media ( max-width: 992px ) {
     #map_header {
         padding: 0.5rem;
@@ -317,17 +328,26 @@ html, body, #map, #app, .wrapper {
 .route_manipulation_tools .bg-header {
     padding-right: 0.5rem !important;
     padding-bottom: 0.5rem !important;
+    margin-left: 0 !important;
+}
+
+#enemy_info_container {
+    margin: 0 !important;
 }
 
 @media (min-width: 992px) {
     .route_manipulation_tools {
         top: unset;
-        left: 35px;
         align-items: center !important;
     }
 
     .route_manipulation_tools .bg-header {
         padding: 0.5rem !important;
+        margin-left: 0.5rem !important;
+    }
+
+    #enemy_info_container {
+        margin: 0.5rem !important;
     }
 }
 
