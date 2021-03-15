@@ -29,20 +29,20 @@ $dungeonroute = $dungeonroute ?? null;
     </div>
 
     <div class="form-group">
-        <div id="accordion">
+        <div id="create_route">
             <div class="card">
-                <div class="card-header" id="headingOne">
+                <div class="card-header" id="create_route_heading">
                     <h5 class="mb-0">
                         <a href="#" class="btn btn-link" data-toggle="collapse"
-                           data-target="#createRouteAdvancedCollapse"
-                           aria-expanded="false" aria-controls="createRouteAdvancedCollapse">
+                           data-target="#create_route_advanced_collapse"
+                           aria-expanded="false" aria-controls="create_route_advanced_collapse">
                             {{ __('Advanced options') }}
                         </a>
                     </h5>
                 </div>
 
-                <div id="createRouteAdvancedCollapse" class="collapse" aria-labelledby="headingOne"
-                     data-parent="#accordion">
+                <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_heading"
+                     data-parent="#create_route">
                     <div class="card-body">
                         <h3>
                             {{ __('Affixes') }} <span class="form-required">*</span>

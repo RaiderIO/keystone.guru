@@ -16,7 +16,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     $dungeon = $dungeons->get($index);
     $link = $links->where('dungeon', $dungeon->key)->first();
     ?>
-    <div class="p-2 col-md-{{ 12 / $colCount }}">
+    <div class="p-2 col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} ">
         <div class="card">
             <div class="card-img-caption">
                 <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()]) }}">
