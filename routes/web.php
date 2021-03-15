@@ -85,6 +85,7 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', [DungeonRouteDiscoverController::class, 'discover'])->name('dungeonroutes');
+    Route::get('search', [DungeonRouteDiscoverController::class, 'search'])->name('dungeonroutes.search');
     Route::get('routes/popular', [DungeonRouteDiscoverController::class, 'discoverpopular'])->name('dungeonroutes.popular');
     Route::get('routes/affixes/current', [DungeonRouteDiscoverController::class, 'discoverthisweek'])->name('dungeonroutes.thisweek');
     Route::get('routes/affixes/next', [DungeonRouteDiscoverController::class, 'discovernextweek'])->name('dungeonroutes.nextweek');

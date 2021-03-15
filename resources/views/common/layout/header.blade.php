@@ -44,6 +44,11 @@ $navs = [
                 @endforeach
             </ul>
             <ul class="navbar-nav">
+                <li class="nav-item mr-2">
+                    <a class="nav-link" href="{{ route('dungeonroutes.search') }}">
+                        <i class="fas fa-search"></i> {{__('Search')}}
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">

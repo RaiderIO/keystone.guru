@@ -26,47 +26,8 @@ use Teapot\StatusCode;
 
 class DungeonRouteController extends Controller
 {
-//    /**
-//     * @param Request $request
-//     * @param SeasonService $seasonService
-//     * @return Factory|View|null
-//     */
-//    public function sandbox(Request $request, SeasonService $seasonService)
-//    {
-//        $result = null;
-//
-//        // User posted
-//        if ($request->has('dungeon_id')) {
-//            $dungeonRoute = new DungeonRoute();
-//            $dungeonRoute->dungeon_id = $request->get('dungeon_id');
-//            $dungeonRoute->author_id = -1;
-//            $dungeonRoute->faction_id = 1; // Unspecified
-//            $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-//            $dungeonRoute->teeming = 0; //(int)$request->get('teeming', 0) === 1;
-//            $dungeonRoute->save();
-//
-//            $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
-//        } else if ($request->has('dungeonroute')) {
-//            // Navigation to /try
-//            // Only routes that are in try mode
-//            try {
-//                $dungeonRoute = DungeonRoute::where('public_key', $request->get('dungeonroute'))
-//                    ->isSandbox()->firstOrFail();
-//
-//                $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
-//            } catch (Exception $exception) {
-//                $result = view('dungeonroute.sandboxclaimed');
-//            }
-//        } else {
-//            $result = view('dungeonroute.sandbox', ['headerTitle' => __('Keystone.guru Sandbox')]);
-//        }
-//
-//        return $result;
-//    }
 
     /**
-     * Show a page for creating a new dungeon route.
-     *
      * @return Factory|View
      */
     public function new()
@@ -75,8 +36,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * Show a page for creating a new dungeon route.
-     *
      * @return Factory|View
      */
     public function newtemporary()

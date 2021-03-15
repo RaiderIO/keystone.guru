@@ -47,6 +47,11 @@ Breadcrumbs::for('dungeonroutes', function (Generator $trail)
     $trail->parent('home');
     $trail->push(__('Routes'), route('dungeonroutes'));
 });
+Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail)
+{
+    $trail->parent('dungeonroutes');
+    $trail->push(__('Search'), route('dungeonroutes.search'));
+});
 
 /**
  * General categories

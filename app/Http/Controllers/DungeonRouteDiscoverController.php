@@ -7,10 +7,20 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class DungeonRouteDiscoverController extends Controller
 {
+    /**
+     * @return Factory|View
+     */
+    public function search()
+    {
+        return view('dungeonroute.discover.search', [
+
+        ]);
+    }
+
     /**
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService

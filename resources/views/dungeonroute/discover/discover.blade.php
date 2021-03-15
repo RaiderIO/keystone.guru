@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['title' => __('Routes'), 'custom' => true])
+@extends('layouts.sitepage', ['rootClass' => 'discover', 'breadcrumbs' => 'dungeonroutes', 'title' => __('Routes')])
 
 @section('header-title')
     {{ __('Routes') }}
@@ -16,63 +16,50 @@
 ])
 
 @section('content')
-    <div class="container discover">
-
-        <div class="mt-4">
-            {{ Diglactic\Breadcrumbs\Breadcrumbs::render('dungeonroutes') }}
-        </div>
-
-        @if( $showAds && !$isMobile)
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-            </div>
-        @endif
-
-        <div class="discover_panel">
-            @include('common.dungeon.griddiscover', [
-                'dungeons' => $dungeons,
-                'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-                    return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
-                })
-            ])
-        </div>
-
-{{--        @include('dungeonroute.discover.panel', [--}}
-{{--            'title' => __('Popular routes'),--}}
-{{--            'link' => route('dungeonroutes.popular'),--}}
-{{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
-{{--            'showMore' => true,--}}
-{{--            'showDungeonImage' => true,--}}
-{{--        ])--}}
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by current affixes'),
-            'link' => route('dungeonroutes.thisweek'),
-            'affixgroup' => $currentAffixGroup,
-            'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => true,
-            'showDungeonImage' => true,
-        ])
-
-        @if( $showAds && !$isMobile)
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-            </div>
-        @endif
-
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by next affixes'),
-            'link' => route('dungeonroutes.nextweek'),
-            'affixgroup' => $nextAffixGroup,
-            'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => true,
-            'showDungeonImage' => true,
-        ])
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Newly published routes'),
-            'link' => route('dungeonroutes.new'),
-            'dungeonroutes' => $dungeonroutes['new'],
-            'showMore' => true,
-            'showDungeonImage' => true,
+    <div class="discover_panel">
+        @include('common.dungeon.griddiscover', [
+            'dungeons' => $dungeons,
+            'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
+            })
         ])
     </div>
+
+    {{--        @include('dungeonroute.discover.panel', [--}}
+    {{--            'title' => __('Popular routes'),--}}
+    {{--            'link' => route('dungeonroutes.popular'),--}}
+    {{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
+    {{--            'showMore' => true,--}}
+    {{--            'showDungeonImage' => true,--}}
+    {{--        ])--}}
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Popular routes by current affixes'),
+        'link' => route('dungeonroutes.thisweek'),
+        'affixgroup' => $currentAffixGroup,
+        'dungeonroutes' => $dungeonroutes['thisweek'],
+        'showMore' => true,
+        'showDungeonImage' => true,
+    ])
+
+    @if( $showAds && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
+
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Popular routes by next affixes'),
+        'link' => route('dungeonroutes.nextweek'),
+        'affixgroup' => $nextAffixGroup,
+        'dungeonroutes' => $dungeonroutes['nextweek'],
+        'showMore' => true,
+        'showDungeonImage' => true,
+    ])
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Newly published routes'),
+        'link' => route('dungeonroutes.new'),
+        'dungeonroutes' => $dungeonroutes['new'],
+        'showMore' => true,
+        'showDungeonImage' => true,
+    ])
 @endsection
