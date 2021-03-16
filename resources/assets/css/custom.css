@@ -137,6 +137,15 @@
     /*text-overflow: ellipsis;*/
 }
 
+.discover #route_list_overlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
 .routes_table .owl-carousel {
     width: 192px;
     height: 128px;

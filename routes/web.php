@@ -271,6 +271,7 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
         Route::post('userreport/enemy/{enemy}', 'APIUserReportController@enemyStore')->name('userreport.enemy');
 
         Route::get('/routes', 'APIDungeonRouteController@list');
+        Route::get('/search', 'APIDungeonRouteController@htmlsearch');
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
 

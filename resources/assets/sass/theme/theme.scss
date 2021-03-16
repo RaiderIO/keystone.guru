@@ -653,15 +653,27 @@ body {
   }
 
   .irs--flat .irs-from:before,
-  .irs--flat .irs-to:before {
+  .irs--flat .irs-to:before,
+  .irs--flat .irs-single:before, {
     border-top-color: var($--theme-primary);
   }
 
   .irs--flat .irs-from,
   .irs--flat .irs-to,
+  .irs--flat .irs-single,
   .irs--flat .irs-handle>i:first-child,
   .irs--flat .irs-bar {
     background-color: var($--theme-primary);
+  }
+
+  .irs--flat.inverse {
+    .irs-line {
+      background-color: var($--theme-primary);
+    }
+
+    .irs-bar {
+      background-color: #e1e4e9;
+    }
   }
 
   //.dungeon_wallpaper_gradient {

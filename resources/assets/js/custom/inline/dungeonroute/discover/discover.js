@@ -6,7 +6,6 @@ class DungeonrouteDiscoverDiscover extends InlineCode {
         super.activate();
 
         $('.owl-carousel').owlCarousel({
-            // True to enable overlayed buttons (custom styled, wasted time :( )
             nav: false,
             loop: true,
             dots: false,

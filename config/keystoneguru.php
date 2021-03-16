@@ -18,6 +18,11 @@ return [
         'plusthreefactor' => 0.6,
     ],
 
+    'levels' => [
+        'min' => 2,
+        'max' => 28
+    ],
+
     'cache' => [
         'npcs'                   => [
             'ttl' => '1 hour',

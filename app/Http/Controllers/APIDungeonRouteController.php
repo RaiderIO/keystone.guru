@@ -10,7 +10,8 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Http\Requests\APIDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -187,6 +188,32 @@ class APIDungeonRouteController extends Controller
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
+    }
+
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request)
+    {
+        $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes']);
+
+        if ($request->has('title')) {
+            $query->where('title', 'LIKE', sprintf('%%%s%%', $request->get('title')));
+        }
+
+        $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
+        {
+            $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
+        })->offset((int)$request->get('offset', 0))
+            ->limit(10);
+
+        $html = '';
+        foreach ($query->get() as $dungeonroute) {
+            $html .= view('common.dungeonroute.card', [
+                'dungeonroute'     => $dungeonroute,
+                'showAffixes'      => true,
+                'showDungeonImage' => true,
+            ])->render();
+        }
+
+        return $html;
     }
 
     /**

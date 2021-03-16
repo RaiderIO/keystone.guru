@@ -9,10 +9,13 @@ $expanded = $expanded ?? true;
         <div class="card">
             <div class="card-header p-0" id="filter_heading_{{ $key }}">
                 <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#filter_body_{{ $key }}"
-                            aria-expanded="{{ $expanded ? 'true' : 'false' }}" aria-controls="filter_body_{{ $key }}">
-                        {{ $text }}
-                    </button>
+                    <label for="{{ $key  }}" class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#filter_body_{{ $key }}"
+                                aria-expanded="{{ $expanded ? 'true' : 'false' }}"
+                                aria-controls="filter_body_{{ $key }}">
+                            {{ $text }}
+                        </button>
+                    </label>
                 </h5>
             </div>
 
