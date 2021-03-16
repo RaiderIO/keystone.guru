@@ -80,6 +80,7 @@ window.toggle = require('bootstrap4-toggle');
 window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
+window.ionRangeSlider = require('ion-rangeslider');
 
 require('@fortawesome/fontawesome-free');
 

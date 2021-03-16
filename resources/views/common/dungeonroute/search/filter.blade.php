@@ -5,7 +5,7 @@
 $expanded = $expanded ?? true;
 ?>
 <div class="form-group">
-    <div id="filter_{{ $key }}">
+    <div id="filter_accordeon_{{ $key }}">
         <div class="card">
             <div class="card-header p-0" id="filter_heading_{{ $key }}">
                 <h5 class="mb-0">
@@ -18,7 +18,7 @@ $expanded = $expanded ?? true;
 
             <div id="filter_body_{{ $key }}" class="collapse {{ $expanded ? 'show' : '' }}"
                  aria-labelledby="filter_heading_{{ $key }}"
-                 data-parent="#filter_{{ $key }}">
+                 data-parent="#filter_accordeon_{{ $key }}">
                 <div class="card-body px-3 py-2">
                     {{ $slot }}
                 </div>

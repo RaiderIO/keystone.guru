@@ -46,6 +46,7 @@
         "hull.js": "^0.2.10",
         "imports-loader": "^0.8.0",
         "intro.js": "github:Wotuu/intro.js",
+        "ion-rangeslider": "^2.3.1",
         "jarallax": "^1.12.5",
         "jquery-bar-rating": "^1.2.2",
         "jquery-mousewheel": "^3.1.13",

@@ -652,6 +652,18 @@ body {
     opacity: 1;
   }
 
+  .irs--flat .irs-from:before,
+  .irs--flat .irs-to:before {
+    border-top-color: var($--theme-primary);
+  }
+
+  .irs--flat .irs-from,
+  .irs--flat .irs-to,
+  .irs--flat .irs-handle>i:first-child,
+  .irs--flat .irs-bar {
+    background-color: var($--theme-primary);
+  }
+
   //.dungeon_wallpaper_gradient {
   //  position: fixed;
   //  left: 0;

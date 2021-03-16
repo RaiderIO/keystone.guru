@@ -7,6 +7,10 @@
 /**
  */
 ?>
+@include('common.general.inline', ['path' => 'dungeonroute/discover/search',
+        'options' =>  [
+        ]
+])
 
 @section('content')
     <div class="discover_panel">
@@ -15,10 +19,14 @@
     <div class="row">
         <div class="col-lg-3">
             @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('Title')])
-                Title
+                {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('Filter by title')]) !!}
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'key_level', 'text' => __('Key level')])
-                Key level
+            @component('common.dungeonroute.search.filter', ['key' => 'level', 'text' => __('Key level')])
+                <div class="row">
+                    <div class="col">
+                        <input id="level" type="text" name="level" value="{{ old('level') }}" />
+                    </div>
+                </div>
             @endcomponent
             @component('common.dungeonroute.search.filter', ['key' => 'enemy_forces', 'text' => __('Enemy forces')])
                 Enemy forces reached?
