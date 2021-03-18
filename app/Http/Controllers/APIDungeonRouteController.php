@@ -71,7 +71,7 @@ class APIDungeonRouteController extends Controller
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
-            ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
+            ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query)
@@ -192,15 +192,50 @@ class APIDungeonRouteController extends Controller
 
     function htmlsearch(APIDungeonRouteSearchFormRequest $request)
     {
-        $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes']);
+        $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
+            // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
+            // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
+            // other may work, this covers all bases for both dev and live
+            ->where(function ($query)
+            {
+                /** @var $query \Illuminate\Database\Query\Builder */
+                $query->where('expires_at', 0);
+                $query->orWhereNull('expires_at');
+            });
 
+        // Title handling
         if ($request->has('title')) {
             $query->where('title', 'LIKE', sprintf('%%%s%%', $request->get('title')));
         }
 
+        // Enemy forces
+        if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
+        }
+
+        // User handling
+        if ($request->has('user')) {
+            $query->join('users', 'dungeon_routes.author_id', '=', 'users.id');
+            $query->where('users.name', $request->get('user'));
+        }
+
+        // Rating - prevent 1 rating from filtering out all routes without a rating
+        if ($request->has('rating') && (int)$request->get('rating') > 1) {
+            $query->join('dungeon_route_ratings', 'dungeon_route_ratings.dungeon_route_id', '=', 'dungeon_routes.id');
+            $query->selectRaw('AVG(dungeon_route_ratings.rating) as rating');
+            $query->having('rating', '>=', $request->get('rating'));
+        }
+
+        // Some base queries
         $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
         {
-            $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
+            $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
+                ->where('demo', 0)
+                ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
             ->limit(10);
 

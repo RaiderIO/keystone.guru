@@ -4,6 +4,10 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         super(options);
 
         this.searchHandler = new SearchHandler();
+        // Previous search params are used to prevent searching for the same thing multiple times for no reason
+        this._previousSearchParams = null;
+        // The current offset
+        this.offset = 0;
     }
 
     /**
@@ -13,7 +17,12 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         let self = this;
 
-        $('#title').on('focusout', function(){
+        $('#title,#user').on('keypress', function (keyEvent) {
+            // Enter pressed
+            if (keyEvent.keyCode === 13) {
+                self._search();
+            }
+        }).on('focusout', function () {
             self._search();
         })
 
@@ -23,26 +32,51 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             min: this.options.min,
             max: this.options.max,
             from: 2,
-            to: 30
+            to: 30,
+            onFinish: function (data) {
+                self._search();
+            }
+        });
+
+        $('#enemy_forces').change(function () {
+            self._search();
         });
 
         $('#rating').ionRangeSlider({
             grid: true,
             min: 1,
             max: 10,
-            extra_classes: 'inverse'
+            extra_classes: 'inverse',
+            onFinish: function (data) {
+                self._search();
+            }
         });
     }
 
-    _getSearchParams(){
-        return new SearchParams(
-            0,
-            $('#title').val()
-        );
+    /**
+     *
+     * @returns {SearchParams}
+     * @private
+     */
+    _getSearchParams() {
+        return new SearchParams({
+            offset: this.offset,
+            title: $('#title').val(),
+            enemy_forces: $('#enemy_forces').is(':checked') ? 1 : 0,
+            rating: $('#rating').val(),
+            user: $('#user').val(),
+        });
     }
 
-    _search(){
-        this.searchHandler.search(this._getSearchParams(), $('#route_list'));
+    _search() {
+        let searchParams = this._getSearchParams();
+
+        // Only search if the search parameters have changed
+        if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
+            this.searchHandler.search(searchParams, $('#route_list'));
+
+            this._previousSearchParams = searchParams;
+        }
     }
 
     cleanup() {
