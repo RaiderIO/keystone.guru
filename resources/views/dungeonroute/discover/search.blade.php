@@ -16,7 +16,7 @@
 
 @section('content')
     <div class="discover_panel">
-        @include('common.dungeon.grid', ['names' => true])
+        @include('common.dungeon.grid', ['names' => true, 'selectable' => true])
     </div>
     <div class="row">
         <div class="col-lg-3">

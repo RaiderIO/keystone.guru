@@ -1,6 +1,10 @@
 class SearchParams {
     constructor(options) {
         this.fields = [{
+            name: 'dungeons',
+            default: [],
+            array: true
+        }, {
             name: 'offset',
             default: 0
         }, {
@@ -35,7 +39,11 @@ class SearchParams {
             let value = this[field.name];
             // Prevent sending empty strings
             if (value !== null && value !== '') {
-                result[field.name] = value;
+                if (field.array) {
+                    result[`${field.name}[]`] = value;
+                } else {
+                    result[field.name] = value;
+                }
             }
         }
 

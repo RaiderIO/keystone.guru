@@ -106,6 +106,22 @@
     height: 128px;
 }
 
+.discover .grid_dungeon.selectable {
+    cursor: pointer;
+}
+
+.discover .grid_dungeon.selectable.selected {
+    border: 0.125rem solid red;
+    padding: 0.375rem !important;
+    border-radius: 5px;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.discover .grid_dungeon.selectable.selected h5 {
+    padding-right: 0.25rem !important
+}
+
+
 .discover .card-img-caption {
     border-top-left-radius: calc(.25rem - 1px);
     border-top-right-radius: calc(.25rem - 1px);

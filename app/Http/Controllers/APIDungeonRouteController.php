@@ -190,6 +190,10 @@ class APIDungeonRouteController extends Controller
         ])->applyRequestToBuilder()->getResult();
     }
 
+    /**
+     * @param APIDungeonRouteSearchFormRequest $request
+     * @return string
+     */
     function htmlsearch(APIDungeonRouteSearchFormRequest $request)
     {
         $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
@@ -205,6 +209,11 @@ class APIDungeonRouteController extends Controller
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
             });
+
+        // Dungeon selector handling
+        if ($request->has('dungeons') && !empty($request->get('dungeons'))) {
+            $query->whereIn('dungeon_routes.dungeon_id', $request->get('dungeons'));
+        }
 
         // Title handling
         if ($request->has('title')) {
@@ -230,7 +239,7 @@ class APIDungeonRouteController extends Controller
             $query->having('rating', '>=', $request->get('rating'));
         }
 
-        // Some base queries
+        // Disable some checks when we're local - otherwise we'd get no routes at all
         $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
         {
             $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)

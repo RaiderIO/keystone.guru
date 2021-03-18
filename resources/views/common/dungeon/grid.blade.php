@@ -8,6 +8,7 @@ $rowCount = (int)ceil($dungeons->count() / $colCount);
 
 $names = isset($names) ? $names : true;
 $links = isset($links) ? $links : collect();
+$selectable = $selectable ?? false;
 ?>
 
 
@@ -19,10 +20,10 @@ $links = isset($links) ? $links : collect();
     $dungeon = $dungeons->get($index);
     $link = $links->where('dungeon', $dungeon->key)->first();
     ?>
-    <div class="col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2">
+    <div class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}" data-id="{{ $dungeon->id }}">
         <div class="card-img-caption">
             @if($names)
-                <h5 class="card-text text-white">
+                <h5 class="card-text text-white pr-2">
                     {{ $dungeon->name }}
                 </h5>
             @endif

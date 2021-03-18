@@ -17,6 +17,11 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         let self = this;
 
+        $('.grid_dungeon.selectable').bind('click', function () {
+            $(this).toggleClass('selected');
+            self._search();
+        })
+
         $('#title,#user').on('keypress', function (keyEvent) {
             // Enter pressed
             if (keyEvent.keyCode === 13) {
@@ -59,7 +64,13 @@ class DungeonrouteDiscoverSearch extends InlineCode {
      * @private
      */
     _getSearchParams() {
+        let dungeonIds = [];
+        $('.grid_dungeon.selected').each(function (index, element) {
+            dungeonIds.push($(element).data('id'));
+        });
+
         return new SearchParams({
+            dungeons: dungeonIds,
             offset: this.offset,
             title: $('#title').val(),
             enemy_forces: $('#enemy_forces').is(':checked') ? 1 : 0,
