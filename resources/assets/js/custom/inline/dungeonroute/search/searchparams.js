@@ -11,6 +11,14 @@ class SearchParams {
             name: 'title',
             default: ''
         }, {
+            name: 'affixgroups',
+            default: [],
+            array: true
+        }, {
+            name: 'affixes',
+            default: [],
+            array: true
+        }, {
             name: 'enemy_forces',
             default: 1
         }, {

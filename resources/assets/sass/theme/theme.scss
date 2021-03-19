@@ -369,11 +369,11 @@ body {
     background-color: var($--theme-darker);
   }
 
-  #affixes_list_custom .affix_list_row_selected {
+  .affix_list .affix_list_row_selected {
     background-color: var($--theme-darker);
   }
 
-  #affixes_list_custom .affix_list_row:hover {
+  .affix_list .affix_list_row:hover {
     background-color: var($--theme-darker);
   }
 

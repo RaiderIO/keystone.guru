@@ -43,6 +43,18 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
+        // Grouped affixes
+        $('#filter_affixes').change(function () {
+            console.log('change');
+            self._search();
+        })
+
+        // Individual affixes
+        $('.select_icon.class_icon.selectable').bind('click', function () {
+            $(this).toggleClass('selected');
+            self._search();
+        })
+
         $('#enemy_forces').change(function () {
             self._search();
         });
@@ -69,10 +81,18 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             dungeonIds.push($(element).data('id'));
         });
 
+        // Individual affixes
+        let affixes = [];
+        $('.select_icon.class_icon.selected').each(function (index, element) {
+            affixes.push($(element).data('id'));
+        });
+
         return new SearchParams({
             dungeons: dungeonIds,
             offset: this.offset,
             title: $('#title').val(),
+            affixgroups: $('#filter_affixes').val(),
+            affixes: affixes,
             enemy_forces: $('#enemy_forces').is(':checked') ? 1 : 0,
             rating: $('#rating').val(),
             user: $('#user').val(),

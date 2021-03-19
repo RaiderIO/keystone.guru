@@ -106,14 +106,19 @@
     height: 128px;
 }
 
+.discover .select_icon.class_icon.selectable,
 .discover .grid_dungeon.selectable {
     cursor: pointer;
 }
 
+.discover .select_icon.class_icon.selectable.selected,
 .discover .grid_dungeon.selectable.selected {
     border: 0.125rem solid red;
-    padding: 0.375rem !important;
     border-radius: 5px;
+}
+
+.discover .grid_dungeon.selectable.selected {
+    padding: 0.375rem !important;
 }
 
 /** Prevents the title from jumping when it gets selected */
@@ -209,30 +214,30 @@
     align-items: center;
 }
 
-#affixes_list_custom.affix_list {
+.affix_list {
     border: 1px solid #ccd0d2;
     border-radius: 4px;
 }
 
-#affixes_list_custom .affix_row {
+.affix_list .affix_row {
     padding-right: 10px;
 }
 
-#affixes_list_custom .affix_list_row {
+.affix_list .affix_list_row {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-#affixes_list_custom .affix_list_row_disabled {
+.affix_list .affix_list_row_disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
-#affixes_list_custom .affix_list_row:hover {
+.affix_list .affix_list_row:hover {
     cursor: pointer;
 }
 
-#affixes_list_custom .affixselect {
+.affix_list .affixselect {
     height: 100px;
 }
 

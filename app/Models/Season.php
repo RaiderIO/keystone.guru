@@ -60,6 +60,20 @@ class Season extends CacheModel
     }
 
     /**
+     * @return Collection
+     */
+    public function getFeaturedAffixes(): Collection
+    {
+        return Affix::query()
+            ->selectRaw('affixes.*')
+            ->join('affix_group_couplings', 'affix_group_couplings.affix_id', '=', 'affixes.id')
+            ->join('affix_groups', 'affix_groups.id', '=', 'affix_group_couplings.affix_group_id')
+            ->where('affix_groups.season_id', $this->id)
+            ->get()
+            ->unique('id');
+    }
+
+    /**
      * @return Carbon The start date of this season.
      */
     public function start()

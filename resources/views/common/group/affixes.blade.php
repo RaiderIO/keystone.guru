@@ -9,20 +9,24 @@ $seasonalIndexLetters = $currentSeason->getSeasonalIndexesAsLetters();
 $affixGroups = $currentSeason->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::all();
 $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
+$teemingSelector = $teemingSelector ?? null;
+$names = $names ?? true;
+$id = $id ?? 'affixes';
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
+    'selectSelector'   => '#' . $id,
     'teemingSelector'  => $teemingSelector,
     'affixGroups'      => $affixGroups,
-    'modal'            => isset($modal) ? $modal : false
+    'modal'            => isset($modal) ? $modal : false,
 ]])
 
 <div class="form-group">
-    {!! Form::select('affixes[]', $affixGroups->pluck('id', 'id'),
+    {!! Form::select($id . '[]', $affixGroups->pluck('id', 'id'),
         !isset($dungeonroute) ? $defaultSelected : $dungeonroute->affixgroups->pluck(['affix_group_id']),
-        ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
+        ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
 
-    <div id="affixes_list_custom" class="affix_list col-lg-12">
+    <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
             <div
                 class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
@@ -42,14 +46,16 @@ $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
                              title="{{ $affix->description }}"
                              style="height: 24px;">
                         </div>
-                        <div class="col d-md-block d-none pl-1">
-                            {{ $affix->name }}
-                            @if($last)
-                                @isset($affixGroup->seasonal_index)
-                                    {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
-                                @endisset
-                            @endif
-                        </div>
+                        @if($names)
+                            <div class="col d-md-block d-none pl-1">
+                                {{ $affix->name }}
+                                @if($last)
+                                    @isset($affixGroup->seasonal_index)
+                                        {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
+                                    @endisset
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <?php $count++;

@@ -220,6 +220,23 @@ class APIDungeonRouteController extends Controller
             $query->where('title', 'LIKE', sprintf('%%%s%%', $request->get('title')));
         }
 
+        // Affixes
+        $hasAffixGroups = $request->has('affixgroups');
+        $hasAffixes = $request->has('affixes');
+        if ($hasAffixGroups || $hasAffixes) {
+            $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
+
+            if ($hasAffixGroups) {
+                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $request->get('affixgroups'));
+            }
+
+            if ($hasAffixes) {
+                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id');
+                $query->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id');
+                $query->whereIn('affix_group_couplings.affix_id', $request->get('affixes'));
+            }
+        }
+
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
             $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
