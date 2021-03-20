@@ -37,6 +37,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -196,10 +197,12 @@ class APIDungeonRouteController extends Controller
      */
     function htmlsearch(APIDungeonRouteSearchFormRequest $request)
     {
+        // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
+        // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
+        // May be modified/adjusted later on
+        $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
+
         $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
-            // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
-            // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -208,7 +211,8 @@ class APIDungeonRouteController extends Controller
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
-            });
+            })
+            ->groupBy('dungeon_routes.id');
 
         // Dungeon selector handling
         if ($request->has('dungeons') && !empty($request->get('dungeons'))) {
@@ -231,9 +235,12 @@ class APIDungeonRouteController extends Controller
             }
 
             if ($hasAffixes) {
-                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id');
-                $query->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id');
-                $query->whereIn('affix_group_couplings.affix_id', $request->get('affixes'));
+                $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
+                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
+                    ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
+                    ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
+                    ->groupBy('affix_group_couplings.affix_group_id')
+                    ->having('affixMatches', '>=', count($request->get('affixes')));
             }
         }
 
@@ -263,7 +270,8 @@ class APIDungeonRouteController extends Controller
                 ->where('demo', 0)
                 ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
-            ->limit(10);
+            ->limit(10)
+            ->selectRaw($selectRaw);
 
         $html = '';
         foreach ($query->get() as $dungeonroute) {
