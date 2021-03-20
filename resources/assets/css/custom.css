@@ -99,14 +99,14 @@
     padding-right: 15px !important;
 }
 
-/* Container is required for the page load to have a proper width */
-.discover .owl-carousel-container.single,
-.discover .owl-carousel.single {
-    max-width: 288px;
-    max-height: 192px;
-}
-
 @media (min-width: 1200px) {
+    /* Container is required for the page load to have a proper width */
+    .discover .owl-carousel-container.single,
+    .discover .owl-carousel.single {
+        max-width: 288px;
+        max-height: 192px;
+    }
+
     .discover img.dungeon {
         max-width: 288px;
         max-height: 192px;
@@ -156,18 +156,37 @@
     z-index: 1;
 }
 
-.discover .card_dungeonroute .card-body {
-    height: 95px;
+.discover .card_dungeonroute .description {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
-.discover .card_dungeonroute .card-footer {
-    height: 33px;
+.discover .card_dungeonroute .header,
+.discover .card_dungeonroute .description,
+.discover .card_dungeonroute .enemy_forces {
+    text-shadow: #000 1px 1px;
 }
 
-.discover .card_dungeonroute .card-title {
-    /*white-space: nowrap;*/
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
+@media (min-width: 1200px) {
+    .discover .card_dungeonroute {
+        max-height: 192px;
+    }
+
+    .discover .card_dungeonroute .header {
+        overflow: hidden;
+    }
+
+    .discover .card_dungeonroute .description,
+    .discover .card_dungeonroute .description .col {
+        max-height: 80px;
+    }
+}
+
+/** Prevent descriptions from taking on a huge height if people enter only */
+@media (max-width: 1200px) {
+    .discover .card_dungeonroute .description {
+        max-height: 250px;
+    }
 }
 
 .discover #route_list_overlay {

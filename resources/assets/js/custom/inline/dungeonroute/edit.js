@@ -42,6 +42,7 @@ class DungeonrouteEdit extends InlineCode {
             dataType: 'json',
             data: {
                 dungeon_route_title: $('#dungeon_route_title').val(),
+                dungeon_route_description: $('#dungeon_route_description').val(),
                 // teeming: $('#teeming').is(':checked') ? 1 : 0,
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
@@ -77,7 +78,10 @@ class DungeonrouteEdit extends InlineCode {
                 if ($seasonalIndex.length > 0) {
                     getState().getMapContext().setSeasonalIndex(parseInt($seasonalIndex.val()));
                 }
-                getState().getMapContext().setTeeming($('#teeming').is(':checked'));
+                let $teeming = $('#teeming');
+                if ($teeming.length > 0) {
+                    getState().getMapContext().setTeeming($teeming.is(':checked'));
+                }
             },
             complete: function () {
                 $('#save_route_settings').show();

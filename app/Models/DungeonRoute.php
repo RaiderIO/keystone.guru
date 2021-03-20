@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property $clone_of string
  * @property $title string
+ * @property $description string
  * @property $difficulty string
  * @property $seasonal_index int
  * @property $enemy_forces int
@@ -616,6 +617,7 @@ class DungeonRoute extends Model
         // Sandbox routes have some fixed properties
         // Fetch the title if the user set anything
         $this->title = $request->get('dungeon_route_title', $this->title);
+        $this->description = $request->get('dungeon_route_description', $this->description);
         if (empty($this->title)) {
             $this->title = $this->dungeon->name;
         }

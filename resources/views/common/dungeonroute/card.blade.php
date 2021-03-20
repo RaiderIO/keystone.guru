@@ -9,24 +9,24 @@ $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enem
 $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
 ?>
 
-<div class="row no-gutters m-1 card_dungeonroute">
+<div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute">
     <div class="col-xl-auto">
-        {{--    <div class="col-auto owl-carousel-container {{ $owlClass }}">--}}
-        {{--        <div class="owl-carousel owl-theme {{ $owlClass }}">--}}
-        @if( $dungeonroute->has_thumbnail )
-            @foreach($dungeonroute->dungeon->floors as $floor)
-                <img class="thumbnail w-100"
-                     src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"/>
-            @endforeach
-        @else
-            <img class="dungeon w-100" src="{{ url(sprintf(
+        <div class="owl-carousel-container {{ $owlClass }}">
+            <div class="owl-carousel owl-theme {{ $owlClass }}">
+                @if( $dungeonroute->has_thumbnail )
+                    @foreach($dungeonroute->dungeon->floors as $floor)
+                        <img class="thumbnail w-100"
+                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"/>
+                    @endforeach
+                @else
+                    <img class="dungeon w-100" src="{{ url(sprintf(
                             '/images/dungeons/%s/%s_3-2.jpg',
                             $dungeonroute->dungeon->expansion->shortname,
                             $dungeonroute->dungeon->key
                             )) }}"/>
-        @endif
-        {{--        </div>--}}
-        {{--    </div>--}}
+                @endif
+            </div>
+        </div>
     </div>
     <div class="col">
         <div class="d-flex flex-column h-100 bg-card"
@@ -36,7 +36,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                     }}'); background-size: cover;"
             @endif
         >
-            <div class="row no-gutters p-2">
+            <div class="row no-gutters p-2 header">
                 <div class="col">
                     <h4 class="mb-0">
                         <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]) }}"
@@ -83,7 +83,14 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                     @endif
                 </div>
             </div>
-            <div class="row no-gutters p-2 flex-fill d-flex">
+            <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
+                <div class="col">
+                    {{
+                        empty($dungeonroute->description) ? __('No description') : $dungeonroute->description
+                    }}
+                </div>
+            </div>
+            <div class="row no-gutters p-2 enemy_forces">
                 <div class="col">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
@@ -98,7 +105,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         ) }}
                 </div>
             </div>
-            <div class="row no-gutters">
+            <div class="row no-gutters footer">
                 <div class="col bg-card-footer px-2 py-1">
                     <small class="text-muted">
                         {{ __('By') }}

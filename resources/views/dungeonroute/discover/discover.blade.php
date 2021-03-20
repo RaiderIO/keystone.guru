@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover', 'breadcrumbs' => 'dungeonroutes', 'title' => __('Routes')])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'breadcrumbs' => 'dungeonroutes', 'title' => __('Routes')])
 
 @section('header-title')
     {{ __('Routes') }}
@@ -17,12 +17,14 @@
 
 @section('content')
     <div class="discover_panel">
-        @include('common.dungeon.griddiscover', [
-            'dungeons' => $dungeons,
-            'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
-            })
-        ])
+        <div class="col-xl-8 offset-xl-2">
+            @include('common.dungeon.griddiscover', [
+                'dungeons' => $dungeons,
+                'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
+                    return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
+                })
+            ])
+        </div>
     </div>
 
     {{--        @include('dungeonroute.discover.panel', [--}}

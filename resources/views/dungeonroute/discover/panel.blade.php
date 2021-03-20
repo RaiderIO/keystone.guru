@@ -20,7 +20,7 @@ $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
                 @endisset
             </h2>
             @isset($affixgroup)
-                <div class="row">
+                <div class="row mb-2">
                     <div class="offset-2">
                     </div>
                     <div class="col-8">

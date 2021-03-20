@@ -146,7 +146,7 @@ if ($timezone === null) {
 
 
         @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by current affixes'),
+            'title' => __('Popular routes by next affixes'),
             'link' => route('dungeonroutes.nextweek'),
             'affixgroup' => $seasonService->getCurrentSeason()->getNextAffixGroup(),
             'dungeonroutes' => $dungeonroutes['nextweek'],

@@ -68,6 +68,9 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                 self._search();
             }
         });
+
+        // Show some not very useful routes to get people to start using the filters
+        self._search();
     }
 
     /**

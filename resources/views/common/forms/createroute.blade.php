@@ -22,10 +22,19 @@ $dungeonroute = $dungeonroute ?? null;
         <label for="dungeon_route_title">
             {{ __('Title') }}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title may be visible to others once you choose to publish your route.')
+            __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.')
              }}"></i>
         </label>
         {!! Form::text('dungeon_route_title', optional($dungeonroute)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+    </div>
+    <div class="form-group">
+        <label for="dungeon_route_description">
+            {{ __('Description') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            __('An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.')
+             }}"></i>
+        </label>
+        {!! Form::textarea('dungeon_route_description', optional($dungeonroute)->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
     </div>
 
     <div class="form-group">
@@ -44,9 +53,8 @@ $dungeonroute = $dungeonroute ?? null;
                 <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_heading"
                      data-parent="#create_route">
                     <div class="card-body">
-                        <h3>
-                            {{ __('Affixes') }} <span class="form-required">*</span>
-                        </h3>
+
+                        <p>{{ __('Affixes') }} <span class="form-required">*</span></p>
 
                         @include('common.group.affixes', [
                             'dungeonroute'     => $dungeonroute ?? null,
@@ -57,13 +65,13 @@ $dungeonroute = $dungeonroute ?? null;
 
                         @include('common.dungeonroute.attributes')
 
-                        <h3>
-                            {{ __('Group composition') }}
-                        </h3>
-                        @include('common.group.composition', [
-                            'collapseSelector' => '#createRouteAdvancedCollapse',
-                            'dungeonroute'     => $dungeonroute ?? null,
-                            ])
+                        <p>{{ __('Group composition') }}</p>
+                        <div class="form-group">
+                            @include('common.group.composition', [
+                                'collapseSelector' => '#createRouteAdvancedCollapse',
+                                'dungeonroute'     => $dungeonroute ?? null,
+                                ])
+                        </div>
 
                         @if(Auth::check() && Auth::user()->hasRole('admin'))
                             <h3>
