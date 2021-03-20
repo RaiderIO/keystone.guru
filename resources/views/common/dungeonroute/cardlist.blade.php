@@ -10,7 +10,7 @@ for ($i = 0; $i < (int)ceil($dungeonroutes->count() / $cols); $i++) { ?>
     <?php for ($j = 0; $j < $cols; $j++) {
     $dungeonroute = $dungeonroutes->get(($i * $cols) + $j);
     ?>
-    <div class="col-lg">
+    <div class="col-xl">
         @if($dungeonroute !== null)
             @include('common.dungeonroute.card', ['dungeonroute' => $dungeonroute, 'showDungeonImage' => $showDungeonImage])
         @endif

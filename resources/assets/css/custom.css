@@ -100,11 +100,23 @@
 }
 
 /* Container is required for the page load to have a proper width */
-.discover .owl-carousel-container,
-.discover .owl-carousel {
-    width: 192px;
-    height: 128px;
+.discover .owl-carousel-container.single,
+.discover .owl-carousel.single {
+    max-width: 288px;
+    max-height: 192px;
 }
+
+@media (min-width: 1200px) {
+    .discover img.dungeon {
+        max-width: 288px;
+        max-height: 192px;
+    }
+}
+
+/*.discover img.dungeon {*/
+/*    max-width: 192px;*/
+/*    max-height: 128px;*/
+/*}*/
 
 .discover .select_icon.class_icon.selectable,
 .discover .grid_dungeon.selectable {

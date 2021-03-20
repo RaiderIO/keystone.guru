@@ -10,6 +10,8 @@ $--theme-header: --theme-header;
 $--theme-header-border: --theme-header-border;
 $--theme-header-height: --theme-header-height;
 $--theme-btn-accent: --theme-btn-accent;
+$--theme-bg-card: --theme-bg-card;
+$--theme-bg-card-footer: --theme-bg-card-footer;
 
 // Superhero
 $theme-map-superhero: (
@@ -23,7 +25,9 @@ $theme-map-superhero: (
     $--theme-form-required: var($--theme-primary),
     $--theme-header: var($--theme-dark),
     $--theme-header-border: unset,
-    $--theme-btn-accent: var($--theme-primary)
+    $--theme-btn-accent: var($--theme-primary),
+    $--theme-bg-card: #4e5d6c,
+    $--theme-bg-card-footer: rgba(255, 255, 255, 0.075)
 );
 
 // Darkly
@@ -39,7 +43,9 @@ $theme-map-darkly: (
     $--theme-header: var($--theme-dark),
     $--theme-header-border: unset,
     /* The same as success button */
-    $--theme-btn-accent: #00bc8c
+    $--theme-btn-accent: #00bc8c,
+    $--theme-bg-card: #303030,
+    $--theme-bg-card-footer: #444
 );
 
 // Lux
@@ -55,5 +61,7 @@ $theme-map-lux: (
     $--theme-header: var($--theme-light),
     $--theme-header-border: 1px solid #1a1a1a,
     /* The same as success button */
-    $--theme-btn-accent: #1a1a1a
+    $--theme-btn-accent: #1a1a1a,
+    $--theme-bg-card: #fff,
+    $--theme-bg-card-footer: rgba(0, 0, 0, 0.03)
 );

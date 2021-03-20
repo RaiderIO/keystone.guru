@@ -330,6 +330,14 @@ body {
       }
   }
 
+  .bg-card {
+    background-color: var($--theme-bg-card) !important;
+  }
+
+  .bg-card-footer {
+    background-color: var($--theme-bg-card-footer) !important;
+  }
+
   .bg-dark {
     background-color: var($--theme-darker) !important;
   }
@@ -628,28 +636,6 @@ body {
     z-index: -1;
     background-color: var($--theme-dark);
     opacity: 0.8;
-  }
-
-  .card_dungeonroute .dungeon_background {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 0;
-    opacity: 0.8;
-  }
-
-  .card_dungeonroute .dungeon_background_cover {
-    position: relative;
-    left: 0;
-    top: -95px;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
   }
 
   .irs--flat .irs-from:before,
