@@ -31,17 +31,14 @@ class SearchHandler {
                 let $container = $('<div/>').addClass(containerClass).append(html);
 
                 $targetContainer.append($container);
+                // Do init of html below here
 
-                // Do init of html
-                // @TODO make settings come from same source as discover.js?
-                $(`.${containerClass} .owl-carousel`).owlCarousel({
-                    nav: false,
-                    loop: true,
-                    dots: false,
-                    lazyLoad: true,
-                    lazyLoadEager: 1,
-                    items: 1
-                });
+                // For some reason doing this immediately will cause the carousel to not load properly, maybe because the image is not rendered yet?
+                // This delay causes it to be rendered OK
+                setTimeout(function () {
+                    (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
+                }, 50)
+
 
                 // Init the affix popovers
                 $(`.${containerClass} [data-toggle="popover"]`).popover();
