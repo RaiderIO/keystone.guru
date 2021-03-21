@@ -15,11 +15,11 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
             <div class="owl-carousel owl-theme {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)
-                        <img class="thumbnail w-100"
+                        <img class="thumbnail"
                              src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"/>
                     @endforeach
                 @else
-                    <img class="dungeon w-100" src="{{ url(sprintf(
+                    <img class="dungeon" src="{{ url(sprintf(
                             '/images/dungeons/%s/%s_3-2.jpg',
                             $dungeonroute->dungeon->expansion->shortname,
                             $dungeonroute->dungeon->key
@@ -91,7 +91,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                 </div>
             </div>
             <div class="row no-gutters p-2 enemy_forces">
-                <div class="col-auto">
+                <div class="col">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
                     @else
@@ -105,7 +105,9 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         ) }}
                 </div>
                 <div class="col">
-                    @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
+                    @if( $dungeonroute->level_min !== config('keystoneguru.levels.min') && $dungeonroute->level_max !== config('keystoneguru.levels.max'))
+                        @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
+                    @endif
                 </div>
             </div>
             <div class="row no-gutters footer">

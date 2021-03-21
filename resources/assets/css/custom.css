@@ -107,6 +107,7 @@
         max-height: 192px;
     }
 
+    .discover img.thumbnail,
     .discover img.dungeon {
         max-width: 288px;
         max-height: 192px;

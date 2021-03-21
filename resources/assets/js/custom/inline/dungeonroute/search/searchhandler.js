@@ -16,7 +16,7 @@ class SearchHandler {
             type: 'GET',
             url: `/ajax/search`,
             dataType: 'html',
-            data: searchParams.toObject(),
+            data: searchParams.params,
             beforeSend: function () {
                 $('#route_list_overlay').show();
                 // $('#save_pull_settings_saving').show();

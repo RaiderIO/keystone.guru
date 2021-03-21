@@ -7,12 +7,12 @@ class LevelHandler {
     apply(selector, options) {
         $(selector).ionRangeSlider($.extend({
             grid: true,
+            grid_snap: true,
             type: 'double',
             min: this.min,
             max: this.max,
             from: this.min,
             to: this.max,
-            grid_snap: true
         }, options));
     }
 }

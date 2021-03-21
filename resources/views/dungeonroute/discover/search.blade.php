@@ -34,6 +34,14 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
     </div>
     <div class="row">
         <div class="col-xl-3">
+
+        </div>
+        <div id="route_list_current_filters" class="col-xl-9">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-3">
             @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('Title')])
                 {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('Filter by title'), 'autocomplete' => 'off']) !!}
             @endcomponent

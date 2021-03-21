@@ -1,64 +1,29 @@
 class SearchParams {
-    constructor(options) {
-        this.fields = [{
-            name: 'dungeons',
-            default: [],
-            array: true
-        }, {
-            name: 'offset',
-            default: 0
-        }, {
-            name: 'title',
-            default: ''
-        }, {
-            name: 'level',
-            default: ''
-        }, {
-            name: 'affixgroups',
-            default: [],
-            array: true
-        }, {
-            name: 'affixes',
-            default: [],
-            array: true
-        }, {
-            name: 'enemy_forces',
-            default: 1
-        }, {
-            name: 'rating',
-            default: 1
-        }, {
-            name: 'user',
-            default: ''
-        }];
-
-        for (let i = 0; i < this.fields.length; i++) {
-            let field = this.fields[i];
-            this[field.name] = options.hasOwnProperty(field.name) ? options[field.name] : field.default;
-        }
-    }
-
     /**
      *
-     * @returns {{offset: number, title: string}}
+     * @param filters {SearchFilter[]}
+     * @param offset {Number}
      */
-    toObject() {
-        let result = {};
-        for (let i = 0; i < this.fields.length; i++) {
-            let field = this.fields[i];
+    constructor(filters, offset) {
+        this.filters = filters;
+        this.offset = offset;
 
-            let value = this[field.name];
+
+        this.params = {offset: this.offset};
+
+        for (let i = 0; i < this.filters.length; i++) {
+            let filter = this.filters[i];
+
+            let value = filter.getValue();
             // Prevent sending empty strings
             if (value !== null && value !== '') {
-                if (field.array) {
-                    result[`${field.name}[]`] = value;
+                if (filter.options.array) {
+                    this.params[`${filter.options.name}[]`] = value;
                 } else {
-                    result[field.name] = value;
+                    this.params[filter.options.name] = value;
                 }
             }
         }
-
-        return result;
     }
 
     /**
@@ -68,6 +33,6 @@ class SearchParams {
      */
     equals(searchParams) {
         return searchParams instanceof SearchParams &&
-            (JSON.stringify(searchParams.toObject()) === JSON.stringify(this.toObject()));
+            (JSON.stringify(searchParams.params) === JSON.stringify(this.params));
     }
 }
