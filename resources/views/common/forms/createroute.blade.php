@@ -27,15 +27,28 @@ $dungeonroute = $dungeonroute ?? null;
         </label>
         {!! Form::text('dungeon_route_title', optional($dungeonroute)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
     </div>
-    <div class="form-group">
-        <label for="dungeon_route_description">
-            {{ __('Description') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    <?php // The user does not really know a description for his/her route when creating it, so hide it. It will be available from the route settings ?>
+    @isset($dungeonroute)
+        <div class="form-group">
+            <label for="dungeon_route_description">
+                {{ __('Description') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
             __('An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.')
              }}"></i>
-        </label>
-        {!! Form::textarea('dungeon_route_description', optional($dungeonroute)->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
-    </div>
+            </label>
+            {!! Form::textarea('dungeon_route_description', $dungeonroute->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
+        </div>
+        <div class="form-group">
+            <label for="dungeon_route_level">
+                {{ __('Key levels') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            __('Indicate for which key levels your route is suited.')
+             }}"></i>
+            </label>
+            {!! Form::text('dungeon_route_level', sprintf('%s;%s', $dungeonroute->level_min, $dungeonroute->level_max) ?? '',
+                ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+        </div>
+    @endisset
 
     <div class="form-group">
         <div id="create_route">

@@ -638,6 +638,11 @@ body {
     opacity: 0.8;
   }
 
+  /** Disable fractional markers -> https://github.com/IonDen/ion.rangeSlider/issues/171 */
+  .irs--flat .irs-grid-pol.small {
+    height: 0;
+  }
+
   .irs--flat .irs-from:before,
   .irs--flat .irs-to:before,
   .irs--flat .irs-single:before, {

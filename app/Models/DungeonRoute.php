@@ -36,6 +36,8 @@ use Illuminate\Support\Facades\DB;
  * @property $clone_of string
  * @property $title string
  * @property $description string
+ * @property $level_min int
+ * @property $level_max int
  * @property $difficulty string
  * @property $seasonal_index int
  * @property $enemy_forces int
@@ -621,6 +623,9 @@ class DungeonRoute extends Model
         if (empty($this->title)) {
             $this->title = $this->dungeon->name;
         }
+
+        $this->level_min = $request->get('level_min', config('keystoneguru.levels.min'));
+        $this->level_max = $request->get('level_max', config('keystoneguru.levels.max'));
 
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;

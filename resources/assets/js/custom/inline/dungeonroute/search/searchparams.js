@@ -11,6 +11,9 @@ class SearchParams {
             name: 'title',
             default: ''
         }, {
+            name: 'level',
+            default: ''
+        }, {
             name: 'affixgroups',
             default: [],
             array: true

@@ -75,7 +75,9 @@ if ($isAdmin) {
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
-    'dungeonroute' => $dungeonroute ?? null
+    'dungeonroute' => $dungeonroute ?? null,
+    'levelMin' => config('keystoneguru.levels.min'),
+    'levelMax' => config('keystoneguru.levels.max'),
 ], $adminOptions)])
 
 @section('scripts')

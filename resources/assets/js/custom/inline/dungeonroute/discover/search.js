@@ -29,19 +29,14 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         }).on('focusout', function () {
             self._search();
-        })
+        });
 
-        $('#level').ionRangeSlider({
-            grid: true,
-            type: 'double',
-            min: this.options.min,
-            max: this.options.max,
-            from: 2,
-            to: 30,
+        // Level
+        (new LevelHandler(this.options.levelMin, this.options.levelMax).apply('#level', {
             onFinish: function (data) {
                 self._search();
             }
-        });
+        }));
 
         // Grouped affixes
         $('#filter_affixes').change(function () {
@@ -94,6 +89,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             dungeons: dungeonIds,
             offset: this.offset,
             title: $('#title').val(),
+            level: $('#level').val(),
             affixgroups: $('#filter_affixes').val(),
             affixes: affixes,
             enemy_forces: $('#enemy_forces').is(':checked') ? 1 : 0,

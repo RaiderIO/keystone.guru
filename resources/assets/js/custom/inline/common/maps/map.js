@@ -4,6 +4,7 @@ class CommonMapsMap extends InlineCode {
         super(options);
         this._dungeonMap = null;
 
+        this.settingsTabRoute = new SettingsTabRoute(options);
         this.settingsTabMap = new SettingsTabMap(options);
         this.settingsTabPull = new SettingsTabPull(options);
     }
@@ -27,6 +28,7 @@ class CommonMapsMap extends InlineCode {
         this._initDungeonMap();
 
         if (!this.options.noUI) {
+            this.settingsTabRoute.activate();
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 

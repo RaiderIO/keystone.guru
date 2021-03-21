@@ -91,7 +91,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                 </div>
             </div>
             <div class="row no-gutters p-2 enemy_forces">
-                <div class="col">
+                <div class="col-auto">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
                     @else
@@ -103,6 +103,9 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         $dungeonroute->dungeon->enemy_forces_required,
                         $enemyForcesPercentage
                         ) }}
+                </div>
+                <div class="col">
+                    @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
                 </div>
             </div>
             <div class="row no-gutters footer">

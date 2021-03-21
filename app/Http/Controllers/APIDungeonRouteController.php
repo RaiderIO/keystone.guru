@@ -37,7 +37,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -222,6 +221,26 @@ class APIDungeonRouteController extends Controller
         // Title handling
         if ($request->has('title')) {
             $query->where('title', 'LIKE', sprintf('%%%s%%', $request->get('title')));
+        }
+
+        // Level handling
+        if ($request->has('level')) {
+            $split = explode(';', $request->get('level'));
+            if (count($split) === 2) {
+//                dd($split);
+                $query->where(function (Builder $query) use ($split)
+                {
+                    $query->where('level_min', '>=', (int)$split[0])
+                        ->where('level_min', '<=', (int)$split[1])
+                    ;
+                });
+
+                $query->where(function (Builder $query) use ($split)
+                {
+                    $query->where('level_max', '>=', (int)$split[0])
+                        ->where('level_max', '<=', (int)$split[1]);
+                });
+            }
         }
 
         // Affixes

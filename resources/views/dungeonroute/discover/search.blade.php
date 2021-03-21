@@ -14,8 +14,8 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/search',
         'options' =>  [
-            'min' => config('keystoneguru.levels.min'),
-            'max' => config('keystoneguru.levels.max'),
+            'levelMin' => config('keystoneguru.levels.min'),
+            'levelMax' => config('keystoneguru.levels.max'),
         ]
 ])
 

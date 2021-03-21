@@ -12,7 +12,7 @@ $showPublish = $show['publish'] ?? true;
     <!-- Published state -->
     <div class="form-group">
         <label for="map_route_publish">
-            {{ __('Publish') }}:
+            {{ __('Publish') }}
         </label>
         <div class="row">
             <div id="map_route_publish_container" class="col"
@@ -22,12 +22,19 @@ $showPublish = $show['publish'] ?? true;
                 @include('common.dungeonroute.publish', ['dungeonroute' => $dungeonroute])
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                {!! sprintf(__('Review your %s before publishing your route'),
+                    sprintf('<a href="#" data-toggle="modal" data-target="#route_settings_modal">%s</a>', __('route settings'))
+                ) !!}
+            </div>
+        </div>
     </div>
 @endif
 @if($showLink)
     <div class="form-group">
         <label for="map_shareable_link">
-            {{ __('Link') }}:
+            {{ __('Link') }}
         </label>
         <div class="row">
             <div class="col input-group">
@@ -46,7 +53,7 @@ $showPublish = $show['publish'] ?? true;
 @if($showEmbed)
     <div class="form-group">
         <label for="map_embedable_link">
-            {{ __('Embed') }}:
+            {{ __('Embed') }}
         </label>
         <div class="row">
             <div class="col input-group">
@@ -66,7 +73,7 @@ $showPublish = $show['publish'] ?? true;
 @if($showMdtExport)
     <div class="form-group">
         <label for="map_mdt_export">
-            {{ __('MDT String') }}:
+            {{ __('MDT String') }}
         </label>
 
         <div class="form-group">
