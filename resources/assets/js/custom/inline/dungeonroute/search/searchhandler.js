@@ -35,9 +35,7 @@ class SearchHandler {
 
                 // For some reason doing this immediately will cause the carousel to not load properly, maybe because the image is not rendered yet?
                 // This delay causes it to be rendered OK
-                setTimeout(function () {
-                    (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
-                }, 50)
+                (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
 
 
                 // Init the affix popovers
