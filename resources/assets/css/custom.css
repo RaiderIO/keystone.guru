@@ -101,16 +101,12 @@
 
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
-    .discover .single,
-    .discover .owl-carousel.single,
-    .discover .multiple,
-    .discover .owl-carousel.multiple {
-        width: 288px;
-        height: 192px;
-    }
-
-    .discover img.thumbnail,
-    .discover img.dungeon {
+    .card_dungeonroute .single,
+    .card_dungeonroute .owl-carousel.single,
+    .card_dungeonroute .multiple,
+    .card_dungeonroute .owl-carousel.multiple,
+    .card_dungeonroute img.thumbnail,
+    .card_dungeonroute img.dungeon {
         width: 288px;
         height: 192px;
     }
