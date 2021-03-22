@@ -23,4 +23,8 @@ class SearchFilterLevel extends SearchFilterInput {
             }
         }));
     }
+
+    getFilterHeaderText() {
+        return `Level: +${this.getValue().replace(';', ' - +')}`;
+    }
 }

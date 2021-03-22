@@ -63,4 +63,17 @@
       text-shadow: 1px 1px black;
     }
   }
+
+  .card_dungeonroute {
+    h4 a,
+    .header,
+    .description,
+    .enemy_forces {
+      color: #fff;
+    }
+
+    .bg-card-footer {
+      background-color: #F7F7F7 !important;
+    }
+  }
 }

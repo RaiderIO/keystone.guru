@@ -14,4 +14,8 @@ class SearchFilterAffixGroups extends SearchFilterInput {
         // Grouped affixes
         $(this.options.selector).change(this.options.onChange);
     }
+
+    getFilterHeaderText() {
+        return `Affix groups: ${this.getValue().length} selected`;
+    }
 }

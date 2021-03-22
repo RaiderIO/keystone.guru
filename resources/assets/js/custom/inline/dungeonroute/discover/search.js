@@ -41,15 +41,26 @@ class DungeonrouteDiscoverSearch extends InlineCode {
      * @private
      */
     _updateFilters() {
-        // $('#route_list_current_filters').html(
-        //
-        // );
+        let html = '';
+
+        for (let index in this.filters) {
+            if (this.filters.hasOwnProperty(index)) {
+                let filter = this.filters[index];
+                let value = filter.getValue();
+
+                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
+                    html += filter.getFilterHeaderHtml();
+                }
+            }
+        }
+
+        $('#route_list_current_filters').html(
+            `<span class="mr-2">Filters:</span>${html}`
+        )
     }
 
     _search() {
         let searchParams = new SearchParams(this.filters, this.offset);
-
-        console.log('searching!');
 
         this._updateFilters();
 

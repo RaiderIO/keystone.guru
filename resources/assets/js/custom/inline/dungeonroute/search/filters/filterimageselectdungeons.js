@@ -8,4 +8,8 @@ class SearchFilterDungeons extends SearchFilterImageSelect {
             array: true,
         });
     }
+
+    getFilterHeaderText() {
+        return `Dungeons: ${this.getValue().length} selected`;
+    }
 }

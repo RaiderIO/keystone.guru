@@ -7,4 +7,8 @@ class SearchFilterTitle extends SearchFilterInputText {
             onChange: onChange
         });
     }
+
+    getFilterHeaderText() {
+        return `Title: ${this.getValue()}`;
+    }
 }

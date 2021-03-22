@@ -12,8 +12,16 @@ class SearchFilter {
 
     }
 
-    getFilterHeaderHtml() {
+    getFilterHeaderText() {
 
+    }
+
+    getFilterHeaderHtml() {
+        let template = Handlebars.templates['search_filter_active_badge_template'];
+
+        return template({
+            text: this.getFilterHeaderText()
+        });
     }
 
     getValue() {

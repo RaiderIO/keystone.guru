@@ -7,4 +7,8 @@ class SearchFilterUser extends SearchFilterInputText {
             onChange: onChange
         });
     }
+
+    getFilterHeaderText() {
+        return `User: ${this.getValue()}`;
+    }
 }

@@ -24,4 +24,8 @@ class SearchFilterRating extends SearchFilterInput {
             }
         });
     }
+
+    getFilterHeaderText() {
+        return `Rating: ${this.getValue()} and higher`;
+    }
 }

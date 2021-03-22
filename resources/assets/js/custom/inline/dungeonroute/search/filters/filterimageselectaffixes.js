@@ -8,4 +8,8 @@ class SearchFilterAffixes extends SearchFilterImageSelect {
             array: true,
         });
     }
+
+    getFilterHeaderText() {
+        return `Affixes: ${this.getValue().length} selected`;
+    }
 }

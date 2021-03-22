@@ -32,7 +32,7 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
     <div class="discover_panel">
         @include('common.dungeon.grid', ['names' => true, 'selectable' => true])
     </div>
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-xl-3">
 
         </div>
@@ -86,7 +86,7 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
                        checked="checked"
                        data-toggle="toggle" data-width="100%" data-height="20px"
                        data-onstyle="success" data-offstyle="warning"
-                       data-on="{{ __('Complete') }}" data-off="{{ __('Not complete') }}">
+                       data-on="{{ __('Complete') }}" data-off="{{ __('Incomplete') }}">
             @endcomponent
             @component('common.dungeonroute.search.filter', ['key' => 'rating', 'text' => __('Rating')])
                 <input id="rating" type="text" name="level" value="{{ old('rating') }}" style="display: none;"/>
