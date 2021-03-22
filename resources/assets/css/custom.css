@@ -101,8 +101,10 @@
 
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
-    .discover .owl-carousel-container.single,
-    .discover .owl-carousel.single {
+    .discover .single,
+    .discover .owl-carousel.single,
+    .discover .multiple,
+    .discover .owl-carousel.multiple {
         width: 288px;
         height: 192px;
     }

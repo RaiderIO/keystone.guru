@@ -11,7 +11,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
 
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute">
     <div class="col-xl-auto">
-        <div class="owl-carousel-container {{ $owlClass }}">
+        <div class="{{ $owlClass }}">
             <div class="owl-carousel owl-theme {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)

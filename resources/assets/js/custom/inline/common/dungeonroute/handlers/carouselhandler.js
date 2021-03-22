@@ -19,8 +19,5 @@ class CarouselHandler {
             $(`${prefix} .owl-carousel.single`).owlCarousel(baseSettings);
             $(`${prefix} .owl-carousel.multiple`).owlCarousel($.extend({}, baseSettings, {loop: true}));
         });
-
-        setTimeout(function () {
-        }, 100);
     }
 }
