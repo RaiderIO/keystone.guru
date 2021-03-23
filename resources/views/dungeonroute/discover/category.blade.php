@@ -9,6 +9,7 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
         'options' =>  [
+            'loadMore' => true
         ]
 ])
 
@@ -29,6 +30,10 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 
         <div id="category_route_load_more">
 
+        </div>
+
+        <div id="category_route_load_more_loader" class="text-center">
+            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Loading...') }}
         </div>
     </div>
 @endsection

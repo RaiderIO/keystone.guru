@@ -5,21 +5,34 @@ class SearchHandler {
 
     /**
      *
-     * @param searchParams {SearchParams}
-     * @param $targetContainer {jQuery}
+     * @protected
      */
-    search(searchParams, $targetContainer) {
+    getSearchUrl() {
+        return `/ajax/search`;
+    }
+
+    /**
+     *
+     * @param $targetContainer {jQuery}
+     * @param searchParams {SearchParams}
+     * @param options {{}}
+     */
+    search($targetContainer, searchParams = null, options = {}) {
         console.assert(this instanceof SearchHandler, 'this was not a SearchHandler', this);
-        console.assert(searchParams instanceof SearchParams, 'searchParams was not a SearchParams', searchParams);
+        console.assert(searchParams instanceof SearchParams, 'searchParams was not null or a SearchParams', searchParams);
 
         $.ajax({
             type: 'GET',
-            url: `/ajax/search`,
+            url: this.getSearchUrl(),
             dataType: 'html',
             data: searchParams.params,
             beforeSend: function () {
                 $('#route_list_overlay').show();
                 // $('#save_pull_settings_saving').show();
+
+                if( options.hasOwnProperty('beforeSend') ) {
+                    options.beforeSend();
+                }
             },
             success: function (html) {
                 if (searchParams.offset === 0) {
@@ -37,14 +50,22 @@ class SearchHandler {
                 // This delay causes it to be rendered OK
                 (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
 
-
                 // Init the affix popovers
                 $(`.${containerClass} [data-toggle="popover"]`).popover();
+                refreshTooltips();
+
+                if( options.hasOwnProperty('success') ) {
+                    options.success();
+                }
             },
             complete: function () {
                 $('#route_list_overlay').hide();
                 // $('#save_pull_settings').show();
                 // $('#save_pull_settings_saving').hide();
+
+                if( options.hasOwnProperty('complete') ) {
+                    options.complete();
+                }
             }
         });
     }

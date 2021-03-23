@@ -257,7 +257,7 @@ function getFormattedPercentage(value, max) {
 function copyToClipboard(value, $input = null, timeoutMS = null) {
     // https://codepen.io/shaikmaqsood/pen/XmydxJ
     let $temp = null;
-    if( $input === null ) {
+    if ($input === null) {
         $temp = $('<input>');
         $('body').append($temp);
         $temp.val(value);
@@ -266,12 +266,12 @@ function copyToClipboard(value, $input = null, timeoutMS = null) {
         $input.select();
     }
     document.execCommand('copy');
-    if( $input === null ) {
+    if ($input === null) {
         $temp.remove();
     }
 
     let opts = {};
-    if( timeoutMS !== null ) {
+    if (timeoutMS !== null) {
         opts.timeout = timeoutMS;
     }
     showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
@@ -363,7 +363,7 @@ function getMapIcon(id) {
 
 $.fn.insertIndex = function (i) {
     // The element we want to swap with
-    var $target = this.parent().children().eq(i);
+    let $target = this.parent().children().eq(i);
 
     // Determine the direction of the appended index so we know what side to place it on
     if (this.index() > i) {
@@ -373,4 +373,13 @@ $.fn.insertIndex = function (i) {
     }
 
     return this;
+};
+
+// https://medium.com/talk-like/detecting-if-an-element-is-in-the-viewport-jquery-a6a4405a3ea2
+$.fn.isInViewport = function () {
+    let elementTop = $(this).offset().top;
+    let elementBottom = elementTop + $(this).outerHeight();
+    let viewportTop = $(window).scrollTop();
+    let viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
 };

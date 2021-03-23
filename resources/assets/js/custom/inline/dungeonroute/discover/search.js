@@ -66,7 +66,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         // Only search if the search parameters have changed
         if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
-            this.searchHandler.search(searchParams, $('#route_list'));
+            this.searchHandler.search($('#route_list'), searchParams);
 
             this._previousSearchParams = searchParams;
         }

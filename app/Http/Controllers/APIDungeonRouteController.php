@@ -29,6 +29,7 @@ use App\Models\DungeonRouteRating;
 use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -231,8 +232,7 @@ class APIDungeonRouteController extends Controller
                 $query->where(function (Builder $query) use ($split)
                 {
                     $query->where('level_min', '>=', (int)$split[0])
-                        ->where('level_min', '<=', (int)$split[1])
-                    ;
+                        ->where('level_min', '<=', (int)$split[1]);
                 });
 
                 $query->where(function (Builder $query) use ($split)
@@ -292,16 +292,36 @@ class APIDungeonRouteController extends Controller
             ->limit(10)
             ->selectRaw($selectRaw);
 
-        $html = '';
-        foreach ($query->get() as $dungeonroute) {
-            $html .= view('common.dungeonroute.card', [
-                'dungeonroute'     => $dungeonroute,
-                'showAffixes'      => true,
-                'showDungeonImage' => true,
-            ])->render();
+
+        return view('common.dungeonroute.cardlist', [
+            'dungeonroutes'    => $query->get(),
+            'showAffixes'      => true,
+            'showDungeonImage' => true,
+        ])->render();
+    }
+
+    /**
+     * @param Request $request
+     * @param string $category
+     * @param DiscoverServiceInterface $discoverService
+     * @return string
+     */
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService)
+    {
+        $result = collect();
+
+        switch ($category) {
+            case 'popular':
+                $result = $discoverService->popular();
+                break;
         }
 
-        return $html;
+        return view('common.dungeonroute.cardlist', [
+            'dungeonroutes'    => $result,
+            'showAffixes'      => true,
+            'showDungeonImage' => true,
+            'cols'             => 2,
+        ])->render();
     }
 
     /**

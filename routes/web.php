@@ -272,6 +272,7 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
         Route::get('/routes', 'APIDungeonRouteController@list');
         Route::get('/search', 'APIDungeonRouteController@htmlsearch');
+        Route::get('/search/{category}', 'APIDungeonRouteController@htmlsearchcategory');
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
 
