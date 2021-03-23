@@ -1,8 +1,5 @@
-@extends('layouts.sitepage', ['custom' => true, 'title' => sprintf('%s routes', $dungeon->name)])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'breadcrumbsParams' => [$dungeon], 'title' => sprintf('%s routes', $dungeon->name)])
 
-@section('header-title')
-    {{ sprintf('%s routes', $dungeon->name) }}
-@endsection
 <?php
 /**
  * @var $showAds boolean
@@ -20,49 +17,31 @@
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 
-    <div class="container discover">
-        <div class="mt-4">
-            {{ Diglactic\Breadcrumbs\Breadcrumbs::render('dungeonroutes.discoverdungeon', $dungeon) }}
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Popular routes by current affixes'),
+        'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),
+        'affixgroup' => $currentAffixGroup,
+        'dungeonroutes' => $dungeonroutes['thisweek'],
+        'showMore' => true,
+    ])
+
+    @if( $showAds && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
         </div>
+    @endif
 
-        @if( $showAds && !$isMobile)
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-            </div>
-        @endif
-
-{{--        @include('dungeonroute.discover.panel', [--}}
-{{--            'title' => __('Popular'),--}}
-{{--            'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),--}}
-{{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
-{{--            'showMore' => true,--}}
-{{--        ])--}}
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by current affixes'),
-            'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),
-            'affixgroup' => $currentAffixGroup,
-            'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => true,
-        ])
-
-        @if( $showAds && !$isMobile)
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-            </div>
-        @endif
-
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by next affixes'),
-            'link' => route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]),
-            'affixgroup' => $nextAffixGroup,
-            'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => true,
-        ])
-        @include('dungeonroute.discover.panel', [
-            'title' => __('Newly published routes'),
-            'link' => route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]),
-            'dungeonroutes' => $dungeonroutes['new'],
-            'showMore' => true,
-        ])
-    </div>
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Popular routes by next affixes'),
+        'link' => route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]),
+        'affixgroup' => $nextAffixGroup,
+        'dungeonroutes' => $dungeonroutes['nextweek'],
+        'showMore' => true,
+    ])
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Newly published routes'),
+        'link' => route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]),
+        'dungeonroutes' => $dungeonroutes['new'],
+        'showMore' => true,
+    ])
 @endsection

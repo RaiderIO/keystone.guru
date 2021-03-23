@@ -44,17 +44,33 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popular(): Collection
+    function popular(int $limit = 10): Collection
     {
-        return $this->popularBuilder(10)->get();
+        return $this->popularBuilder($limit)->get();
     }
 
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularGroupedByDungeon(): Collection
     {
-        return $this->popularBuilder(10)->get();
+        return $this->popularBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    {
+        return $this->popularBuilder($limit)->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
+    {
+        return $this->popularBuilder()->get();
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 ?>
-@extends('layouts.sitepage', ['custom' => true, 'title' => $title])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
         'options' =>  [
@@ -13,21 +13,22 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 ])
 
 @section('content')
-    <div class="container discover" style="z-index: 100;">
-        <div class="mt-4">
-            {{ Diglactic\Breadcrumbs\Breadcrumbs::render($breadcrumbs) }}
-        </div>
+    <div class="discover_panel">
 
-        <div class="discover_panel">
+        <h2 class="text-center">
+            {{ $title }}
+        </h2>
 
-            <h2 class="text-center">
-                {{ $title }}
-            </h2>
-
+        <div id="category_route_list">
             @include('common.dungeonroute.cardlist', [
                 'cols' => 2,
-                'dungeonroutes' => $dungeonroutes
+                'dungeonroutes' => $dungeonroutes,
+                'showDungeonImage' => true,
             ])
+        </div>
+
+        <div id="category_route_load_more">
+
         </div>
     </div>
 @endsection

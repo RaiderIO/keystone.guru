@@ -31,11 +31,12 @@ class DungeonRouteDiscoverController extends Controller
         $limit = config('keystoneguru.discover.limits.overview');
 
         return view('dungeonroute.discover.discover', [
+            'breadcrumbs'   => 'dungeonroutes.discover',
             'dungeonroutes' => [
-//                'popular'  => $discoverService->popular(),
-                'thisweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
-                'nextweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+                'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
                 'new'      => $discoverService->new($limit),
+                // 'popular'  => $discoverService->popular(),
             ]
         ]);
     }
@@ -52,11 +53,12 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.overview', [
             'dungeon'       => $dungeon,
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
             'dungeonroutes' => [
-//                'popular'  => $discoverService->popularByDungeon($dungeon, $limit),
                 'thisweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getCurrentAffixGroup(), $limit),
                 'nextweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextAffixGroup(), $limit),
                 'new'      => $discoverService->newByDungeon($dungeon, $limit),
+                // 'popular'  => $discoverService->popularByDungeon($dungeon, $limit),
             ]
         ]);
     }
@@ -70,7 +72,9 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.category', [
             'title'         => __('Popular routes'),
             'breadcrumbs'   => 'dungeonroutes.popular',
-            'dungeonroutes' => $discoverService->popular(),
+            'dungeonroutes' => $discoverService->popular(
+                config('keystoneguru.discover.limits.category')
+            ),
         ]);
     }
 
@@ -85,9 +89,10 @@ class DungeonRouteDiscoverController extends Controller
             'title'         => __('This week\'s affixes'),
             'breadcrumbs'   => 'dungeonroutes.thisweek',
             'dungeonroutes' => $discoverService->popularByAffixGroup(
-                $seasonService->getCurrentSeason()->getCurrentAffixGroup()
+                $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+                config('keystoneguru.discover.limits.category')
             ),
-            'affixgroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'affixgroup'    => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
         ]);
     }
 
@@ -103,9 +108,10 @@ class DungeonRouteDiscoverController extends Controller
             'title'         => __('Next week\'s affixes'),
             'breadcrumbs'   => 'dungeonroutes.nextweek',
             'dungeonroutes' => $discoverService->popularByAffixGroup(
-                $seasonService->getCurrentSeason()->getNextAffixGroup()
+                $seasonService->getCurrentSeason()->getNextAffixGroup(),
+                config('keystoneguru.discover.limits.category')
             ),
-            'affixgroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'affixgroup'    => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
         ]);
     }
 
@@ -160,7 +166,7 @@ class DungeonRouteDiscoverController extends Controller
                 $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
                 config('keystoneguru.discover.limits.category')
             ),
-            'affixgroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'affixgroup'    => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
         ]);
     }
 
@@ -182,7 +188,7 @@ class DungeonRouteDiscoverController extends Controller
                 $seasonService->getCurrentSeason()->getNextAffixGroup(),
                 config('keystoneguru.discover.limits.category')
             ),
-            'affixgroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'affixgroup'    => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
         ]);
     }
 

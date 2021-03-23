@@ -73,7 +73,16 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popular(): Collection
+    function popular(int $limit = 10): Collection
+    {
+        return $this->popularBuilder($limit)
+            ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function popularGroupedByDungeon(): Collection
     {
         /** @var CacheService $cacheService */
         $cacheService = App::make(CacheService::class);
@@ -94,7 +103,18 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    {
+        return $this->popularBuilder($limit)
+            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+            ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
     {
         /** @var CacheService $cacheService */
         $cacheService = App::make(CacheService::class);

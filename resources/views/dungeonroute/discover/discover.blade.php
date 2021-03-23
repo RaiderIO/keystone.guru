@@ -1,8 +1,5 @@
 @extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'breadcrumbs' => 'dungeonroutes', 'title' => __('Routes')])
 
-@section('header-title')
-    {{ __('Routes') }}
-@endsection
 <?php
 /**
  * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection

@@ -26,7 +26,7 @@ $title = isset($title) ? $title : null;
 $breadcrumbs = isset($breadcrumbs) ? $breadcrumbs : $viewName;
 $breadcrumbsParams = isset($breadcrumbsParams) ? $breadcrumbsParams : [];
 ?>
-@extends('layouts.app', ['title' => $title, 'showAds' => $showAds])
+@extends('layouts.app', ['title' => $title])
 
 @section('head')
     @parent
