@@ -6,47 +6,59 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DevDiscoverService implements DiscoverServiceInterface
 {
+    /** @var Closure|null */
+    private ?Closure $_closure = null;
+
     /**
-     * Gets a builder that provides a template for popular routes.
-     *
-     * @param int $limit
-     * @return Builder
+     * @inheritDoc
      */
-    private function popularBuilder(int $limit = 10): Builder
+    function withBuilder(Closure $closure): DiscoverServiceInterface
     {
-        return DungeonRoute::query()
-//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
-            ->where('demo', false)
-            ->limit($limit);
+        $this->_closure = $closure;
+
+        return $this;
     }
 
     /**
      * Gets a builder that provides a template for popular routes.
      *
-     * @param int $limit
      * @return Builder
      */
-    private function newBuilder(int $limit = 10): Builder
+    private function popularBuilder(): Builder
     {
-        return DungeonRoute::query()
+        return DungeonRoute::query()->limit(10)
+            ->when($this->_closure !== null, $this->_closure)
+//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('demo', false);
+    }
+
+    /**
+     * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder
+     */
+    private function newBuilder(): Builder
+    {
+        return DungeonRoute::query()->limit(10)
+            ->when($this->_closure !== null, $this->_closure)
 //            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)
-            ->orderBy('published_at', 'desc')
-            ->limit($limit);
+            ->orderBy('published_at', 'desc');
     }
 
     /**
      * @inheritDoc
      */
-    function popular(int $limit = 10): Collection
+    function popular(): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder()->get();
     }
 
     /**
@@ -60,9 +72,9 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder()->get();
     }
 
     /**
@@ -76,55 +88,55 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByDungeon(Dungeon $dungeon, int $limit = 10): Collection
+    function popularByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)->get();
+        return $this->popularBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function new(int $limit = 10): Collection
+    function new(): Collection
     {
-        return $this->newBuilder($limit)->get();
+        return $this->newBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function newByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function newByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->newBuilder($limit)->get();
+        return $this->newBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function newByDungeon(Dungeon $dungeon, int $limit = 10): Collection
+    function newByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->newBuilder($limit)->get();
+        return $this->newBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->newBuilder($limit)->get();
+        return $this->newBuilder()->get();
     }
 
     /**
      * @inheritDoc
      */
-    function popularUsers(int $limit = 10): Collection
+    function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.
     }
@@ -132,7 +144,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
     }
@@ -140,7 +152,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeon(Dungeon $dungeon, int $limit = 10): Collection
+    function popularUsersByDungeon(Dungeon $dungeon): Collection
     {
         // TODO: Implement popularUsersByDungeon() method.
     }
@@ -148,7 +160,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
     }

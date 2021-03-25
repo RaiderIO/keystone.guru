@@ -3,13 +3,15 @@ class SearchParams {
      *
      * @param filters {SearchFilter[]}
      * @param offset {Number}
+     * @param limit {Number}
      */
-    constructor(filters, offset) {
+    constructor(filters, offset, limit) {
         this.filters = filters;
         this.offset = offset;
+        this.limit = limit;
 
 
-        this.params = {offset: this.offset};
+        this.params = {offset: this.offset, limit: this.limit};
 
         for (let i = 0; i < this.filters.length; i++) {
             let filter = this.filters[i];

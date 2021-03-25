@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
 use App\Service\Cache\CacheService;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -16,7 +17,10 @@ use Illuminate\Support\Facades\App;
 class DiscoverService implements DiscoverServiceInterface
 {
     /** @var CacheService */
-    private $_cacheService;
+    private CacheService $_cacheService;
+
+    /** @var Closure|null */
+    private ?Closure $_closure;
 
     /**
      * DiscoverService constructor.
@@ -26,16 +30,25 @@ class DiscoverService implements DiscoverServiceInterface
         $this->_cacheService = App::make(CacheService::class);
     }
 
+    /**
+     * @inheritDoc
+     */
+    function withBuilder(Closure $closure): DiscoverServiceInterface
+    {
+        $this->_closure = $closure;
+
+        return $this;
+    }
 
     /**
      * Gets a builder that provides a template for popular routes.
      *
-     * @param int $limit
      * @return Builder
      */
-    private function popularBuilder(int $limit = 10): Builder
+    private function popularBuilder(): Builder
     {
-        return DungeonRoute::query()
+        return DungeonRoute::query()->limit(10)
+            ->when($this->_closure !== null, $this->_closure)
             ->with(['author', 'affixes', 'ratings'])
             ->selectRaw('dungeon_routes.*, COUNT(page_views.id) as views')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
@@ -50,32 +63,30 @@ class DiscoverService implements DiscoverServiceInterface
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->whereDate('page_views.created_at', '>', now()->subDays(config('keystoneguru.discover.service.popular_days')))
             ->groupBy('dungeon_routes.id')
-            ->orderBy('views', 'desc')
-            ->limit($limit);
+            ->orderBy('views', 'desc');
     }
 
     /**
      * Gets a builder that provides a template for popular routes.
      *
-     * @param int $limit
      * @return Builder
      */
-    private function newBuilder(int $limit = 10): Builder
+    private function newBuilder(): Builder
     {
-        return DungeonRoute::query()
+        return DungeonRoute::query()->limit(10)
+            ->when($this->_closure !== null, $this->_closure)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)
-            ->orderBy('published_at', 'desc')
-            ->limit($limit);
+            ->orderBy('published_at', 'desc');
     }
 
     /**
      * @inheritDoc
      */
-    function popular(int $limit = 10): Collection
+    function popular(): Collection
     {
-        return $this->popularBuilder($limit)
+        return $this->popularBuilder()
             ->get();
     }
 
@@ -91,9 +102,12 @@ class DiscoverService implements DiscoverServiceInterface
         {
             $result = collect();
 
+            // Limit the amount of results of our queries to 2
+            $this->setBuilder(DungeonRoute::query()->limit(2));
+
             $activeDungeons = Dungeon::active()->get();
             foreach ($activeDungeons as $dungeon) {
-                $result = $result->merge($this->popularByDungeon($dungeon, 2));
+                $result = $result->merge($this->popularByDungeon($dungeon));
             }
 
             return $result;
@@ -103,9 +117,9 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)
+        return $this->popularBuilder()
             ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
             ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
             ->get();
@@ -123,9 +137,12 @@ class DiscoverService implements DiscoverServiceInterface
         {
             $result = collect();
 
+            // Limit the amount of results of our queries to 2
+            $this->setBuilder(DungeonRoute::query()->limit(2));
+
             $activeDungeons = Dungeon::active()->get();
             foreach ($activeDungeons as $dungeon) {
-                $result = $result->merge($this->popularByDungeonAndAffixGroup($dungeon, $affixGroup, 2));
+                $result = $result->merge($this->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
             }
 
             return $result;
@@ -135,9 +152,9 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByDungeon(Dungeon $dungeon, int $limit = 10): Collection
+    function popularByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->popularBuilder($limit)
+        return $this->popularBuilder()
             ->where('dungeon_id', $dungeon->id)
             ->get();
     }
@@ -145,10 +162,29 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder($limit)
+        return $this->popularBuilder()
             ->where('dungeon_id', $dungeon->id)
+            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+            ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function new(): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    {
+        return $this->newBuilder()
             ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
             ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
             ->get();
@@ -157,28 +193,9 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function new(int $limit = 10): Collection
+    function newByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->newBuilder($limit)->get();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function newByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
-    {
-        return $this->newBuilder($limit)
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function newByDungeon(Dungeon $dungeon, int $limit = 10): Collection
-    {
-        return $this->newBuilder($limit)
+        return $this->newBuilder()
             ->where('dungeon_id', $dungeon->id)
             ->get();
     }
@@ -186,9 +203,9 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->newBuilder($limit)
+        return $this->newBuilder()
             ->where('dungeon_id', $dungeon->id)
             ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
             ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
@@ -199,7 +216,7 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsers(int $limit = 10): Collection
+    function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.
     }
@@ -207,7 +224,7 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
     }
@@ -215,7 +232,7 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeon(Dungeon $dungeon, int $limit = 10): Collection
+    function popularUsersByDungeon(Dungeon $dungeon): Collection
     {
         // TODO: Implement popularUsersByDungeon() method.
     }
@@ -223,7 +240,7 @@ class DiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup, int $limit = 10): Collection
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
     }

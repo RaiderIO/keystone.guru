@@ -8,6 +8,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this._previousSearchParams = null;
         // The current offset
         this.offset = 0;
+        this.count = 0;
 
         this.filters = [
             new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
@@ -60,7 +61,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     }
 
     _search() {
-        let searchParams = new SearchParams(this.filters, this.offset);
+        let searchParams = new SearchParams(this.filters, this.offset, this.count);
 
         this._updateFilters();
 

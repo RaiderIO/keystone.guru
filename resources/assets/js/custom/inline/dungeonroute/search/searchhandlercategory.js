@@ -1,9 +1,10 @@
 class SearchHandlerCategory extends SearchHandler {
-    constructor(category, offset, options) {
+    constructor(category, offset, limit, options) {
         super();
 
         this.category = category;
         this.offset = offset;
+        this.limit = limit;
         this.options = options;
     }
 
@@ -21,10 +22,15 @@ class SearchHandlerCategory extends SearchHandler {
      * @param $targetContainer
      */
     searchMore($targetContainer) {
-        this.search($targetContainer, new SearchParams([], this.offset), $.extend({}, {
-            success: function () {
-                // Increase the offset so that we load new rows whenever we fetch more
-                this.offset += this.offset;
+        let self = this;
+
+        this.search($targetContainer, new SearchParams([], this.offset, this.limit), $.extend({}, {
+            success: function (html) {
+                // Only if we actually got any results back
+                if (html.length > 0) {
+                    // Increase the offset so that we load new rows whenever we fetch more
+                    self.offset += self.limit;
+                }
             }
         }, this.options));
     }

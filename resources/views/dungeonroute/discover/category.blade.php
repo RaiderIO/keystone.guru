@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var $category string
  * @var $dungeon \App\Models\Dungeon
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
@@ -7,11 +8,7 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 ?>
 @extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title])
 
-@include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
-        'options' =>  [
-            'loadMore' => true
-        ]
-])
+@include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
     <div class="discover_panel">
@@ -28,12 +25,6 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
             ])
         </div>
 
-        <div id="category_route_load_more">
-
-        </div>
-
-        <div id="category_route_load_more_loader" class="text-center">
-            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Loading...') }}
-        </div>
+        @include('common.dungeonroute.search.loadmore', ['category' => $category, 'routeListContainerSelector' => '#category_route_list'])
     </div>
 @endsection

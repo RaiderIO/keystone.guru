@@ -176,12 +176,16 @@ return [
      */
     'discover'                            => [
         /** Limits for how much dungeonroutes to display on certain pages */
-        'limits'  => [
+        'limits'   => [
             'overview'       => 10,
             'category'       => 20,
             'affix_overview' => 10,
         ],
-        'service' => [
+        /** How many routes to load more when the user uses the infinite scroll */
+        'loadmore' => [
+            'count' => 20,
+        ],
+        'service'  => [
             /** Redis prefix */
             'cache_prefix' => 'discover',
 
@@ -189,7 +193,7 @@ return [
             'popular_days' => 7,
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
-            'popular' => [
+            'popular'      => [
                 'ttl' => '5 min',
             ]
 

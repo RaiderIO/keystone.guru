@@ -304,15 +304,35 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param string $category
      * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
      * @return string
      */
-    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService)
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
         $result = collect();
 
+        // Prevent jokesters from playing around
+        $offset = max($request->get('offset', 10), 0);
+        $limit = min($request->get('limit', 10), 20);
+
+        // Apply an offset and a limit by default for all subsequent queries
+        $closure = function (Builder $builder) use ($offset, $limit)
+        {
+            $builder->offset($offset)->limit($limit);
+        };
+
         switch ($category) {
             case 'popular':
-                $result = $discoverService->popular();
+                $result = $discoverService->withBuilder($closure)->popular();
+                break;
+            case 'thisweek':
+                $result = $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                break;
+            case 'nextweek':
+                $result = $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup());
+                break;
+            case 'new':
+                $result = $discoverService->withBuilder($closure)->new();
                 break;
         }
 
@@ -353,6 +373,7 @@ class APIDungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      *
      * @return Response
+     * @throws AuthorizationException
      */
     function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {

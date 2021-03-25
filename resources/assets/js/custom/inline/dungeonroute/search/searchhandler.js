@@ -55,7 +55,7 @@ class SearchHandler {
                 refreshTooltips();
 
                 if( options.hasOwnProperty('success') ) {
-                    options.success();
+                    options.success(html);
                 }
             },
             complete: function () {
