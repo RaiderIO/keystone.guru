@@ -102,12 +102,14 @@ class DiscoverService implements DiscoverServiceInterface
         {
             $result = collect();
 
-            // Limit the amount of results of our queries to 2
-            $this->setBuilder(DungeonRoute::query()->limit(2));
 
             $activeDungeons = Dungeon::active()->get();
             foreach ($activeDungeons as $dungeon) {
-                $result = $result->merge($this->popularByDungeon($dungeon));
+                // Limit the amount of results of our queries to 2
+                $result = $result->merge($this->withBuilder(function (Builder $builder)
+                {
+                    $builder->limit(2);
+                })->popularByDungeon($dungeon));
             }
 
             return $result;
@@ -137,12 +139,13 @@ class DiscoverService implements DiscoverServiceInterface
         {
             $result = collect();
 
-            // Limit the amount of results of our queries to 2
-            $this->setBuilder(DungeonRoute::query()->limit(2));
-
             $activeDungeons = Dungeon::active()->get();
             foreach ($activeDungeons as $dungeon) {
-                $result = $result->merge($this->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
+            // Limit the amount of results of our queries to 2
+                $result = $result->merge($this->withBuilder(function (Builder $builder)
+                {
+                    $builder->limit(2);
+                })->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
             }
 
             return $result;
