@@ -23,6 +23,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportWarning;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -314,25 +315,46 @@ class APIDungeonRouteController extends Controller
         // Prevent jokesters from playing around
         $offset = max($request->get('offset', 10), 0);
         $limit = min($request->get('limit', 10), 20);
+        $dungeonId = (int)$request->get('dungeon');
+
+        // Fetch the dungeon if it was set, and only if it is active
+        $dungeon = $dungeonId !== null ? Dungeon::active()->where('id', $dungeonId)->first() : null;
 
         // Apply an offset and a limit by default for all subsequent queries
         $closure = function (Builder $builder) use ($offset, $limit)
         {
             $builder->offset($offset)->limit($limit);
         };
+        $discoverService = $discoverService->withBuilder($closure);
 
         switch ($category) {
             case 'popular':
-                $result = $discoverService->withBuilder($closure)->popular();
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeon($dungeon);
+                } else {
+                    $result = $discoverService->popular();
+                }
                 break;
             case 'thisweek':
-                $result = $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                } else {
+                    $result = $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                }
                 break;
             case 'nextweek':
-                $result = $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup());
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextAffixGroup());
+                } else {
+                    $result = $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup());
+                }
                 break;
             case 'new':
-                $result = $discoverService->withBuilder($closure)->new();
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->newByDungeon($dungeon);
+                } else {
+                    $result = $discoverService->new();
+                }
                 break;
         }
 

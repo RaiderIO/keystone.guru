@@ -6,6 +6,7 @@ class DungeonrouteDiscoverSearchloadmore extends InlineCode {
         this.loading = false;
 
         this.searchHandler = new SearchHandlerCategory(this.options.category, 20, this.options.loadMoreCount, {
+            dungeon: this.options.dungeon,
             beforeSend: function () {
                 self.loading = true;
                 $(self.options.routeLoaderSelector).show();
@@ -20,7 +21,7 @@ class DungeonrouteDiscoverSearchloadmore extends InlineCode {
 
         $(window).on('resize scroll', function () {
             let inViewport = self.$loadMore.isInViewport();
-            if (!self.loading && inViewport) {
+            if (!self.loading && inViewport && self.searchHandler.hasMore) {
                 self.searchHandler.searchMore($(self.options.routeContainerListSelector));
             }
         });

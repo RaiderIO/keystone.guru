@@ -14,14 +14,12 @@
 
 @section('content')
     <div class="discover_panel">
-        <div class="col-xl-8 offset-xl-2">
-            @include('common.dungeon.griddiscover', [
-                'dungeons' => $dungeons,
-                'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-                    return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
-                })
-            ])
-        </div>
+        @include('common.dungeon.griddiscover', [
+            'dungeons' => $dungeons,
+            'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
+            })
+        ])
     </div>
 
     {{--        @include('dungeonroute.discover.panel', [--}}

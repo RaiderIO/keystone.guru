@@ -61,7 +61,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     }
 
     _search() {
-        let searchParams = new SearchParams(this.filters, this.offset, this.count);
+        let searchParams = new SearchParams(this.filters, {offset: this.offset, count: this.count});
 
         this._updateFilters();
 

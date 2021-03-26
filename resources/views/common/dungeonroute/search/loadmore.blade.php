@@ -1,6 +1,9 @@
-<?php ?>
+<?php
+$dungeon = $dungeon ?? null;
+?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/searchloadmore', 'options' => [
         'category' => $category,
+        'dungeon' => $dungeon,
         'routeContainerListSelector' => $routeListContainerSelector,
         'routeLoadMoreSelector' => '#category_route_load_more',
         'routeLoaderSelector' => '#category_route_load_more_loader',

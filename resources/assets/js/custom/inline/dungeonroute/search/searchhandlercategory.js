@@ -6,6 +6,7 @@ class SearchHandlerCategory extends SearchHandler {
         this.offset = offset;
         this.limit = limit;
         this.options = options;
+        this.hasMore = true;
     }
 
 
@@ -14,7 +15,7 @@ class SearchHandlerCategory extends SearchHandler {
      * @protected
      */
     getSearchUrl() {
-        return `/ajax/search/${this.category}`
+        return `/ajax/search/${this.category}`;
     }
 
     /**
@@ -24,10 +25,15 @@ class SearchHandlerCategory extends SearchHandler {
     searchMore($targetContainer) {
         let self = this;
 
-        this.search($targetContainer, new SearchParams([], this.offset, this.limit), $.extend({}, {
+        this.search($targetContainer, new SearchParams([], {
+            offset: this.offset,
+            limit: this.limit,
+            dungeon: this.options.hasOwnProperty('dungeon') && this.options.dungeon !== null ? this.options.dungeon.id : null
+        }), $.extend({}, {
             success: function (html) {
                 // Only if we actually got any results back
-                if (html.length > 0) {
+                self.hasMore = html.length > 0;
+                if (self.hasMore) {
                     // Increase the offset so that we load new rows whenever we fetch more
                     self.offset += self.limit;
                 }

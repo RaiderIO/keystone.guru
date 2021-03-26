@@ -169,6 +169,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'category'      => 'popular',
             'title'         => sprintf(__('%s popular routes'), $dungeon->name),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
             'dungeon'       => $dungeon,
@@ -190,6 +191,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'category'      => 'thisweek',
             'title'         => sprintf(__('%s this week'), $dungeon->name),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
             'dungeon'       => $dungeon,
@@ -216,6 +218,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'category'      => 'nextweek',
             'title'         => sprintf(__('%s next week'), $dungeon->name),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
             'dungeon'       => $dungeon,
@@ -240,6 +243,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'category'      => 'new',
             'title'         => sprintf(__('%s new routes'), $dungeon->name),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
             'dungeon'       => $dungeon,

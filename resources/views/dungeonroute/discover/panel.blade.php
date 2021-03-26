@@ -35,7 +35,7 @@ $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
         <div class="row mt-4">
             <div class="col-xl text-center">
                 <a href="{{ $link }}">
-                    {{ __('> Show more') }}
+                    {{ __('>> Show more') }}
                 </a>
             </div>
         </div>

@@ -21,4 +21,6 @@ $affixgroup = isset($affixgroup) ? $affixgroup : null;
         'dungeonroutes' => $dungeonroutes,
         'affixgroup' => $affixgroup,
     ])
+
+    @include('common.dungeonroute.search.loadmore', ['category' => $category, 'dungeon' => $dungeon, 'routeListContainerSelector' => '#category_route_list'])
 @endsection
