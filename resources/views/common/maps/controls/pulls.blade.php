@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="" data-simplebar>
+        <div class="" style="overflow: auto; max-height: 90vh;" data-simplebar>
 
             <div id="killzones_loading" class="row">
                 <div class="col text-center">
