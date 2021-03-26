@@ -8,7 +8,9 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this._previousSearchParams = null;
         // The current offset
         this.offset = 0;
-        this.count = 0;
+        this.limit = this.options.limit;
+        this.loading = false;
+        this.hasMore = true;
 
         this.filters = [
             new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
@@ -27,11 +29,22 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     activate() {
         super.activate();
 
+        let self = this;
+
         for (let index in this.filters) {
             if (this.filters.hasOwnProperty(index)) {
                 this.filters[index].activate();
             }
         }
+
+        this.$loadMore = $('#route_list_load_more');
+
+        $(window).on('resize scroll', function () {
+            let inViewport = self.$loadMore.isInViewport();
+            if (!self.loading && inViewport && self.searchHandler.hasMore) {
+                self._search(true);
+            }
+        });
 
         // Show some not very useful routes to get people to start using the filters
         this._search();
@@ -60,14 +73,37 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         )
     }
 
-    _search() {
-        let searchParams = new SearchParams(this.filters, {offset: this.offset, count: this.count});
+    _search(searchMore = false) {
+        let self = this;
+
+        let searchParams = new SearchParams(this.filters, {offset: this.offset, limit: this.limit});
 
         this._updateFilters();
 
         // Only search if the search parameters have changed
         if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
-            this.searchHandler.search($('#route_list'), searchParams);
+            this.searchHandler.search($('#route_list'), searchParams, {
+                beforeSend: function () {
+                    self.loading = true;
+                    $('#route_list_overlay').show();
+                },
+                success: function() {
+                    // Only if we actually got any results back
+                    if( searchMore ) {
+                        self.hasMore = html.length > 0;
+                        if (self.hasMore) {
+                            // Increase the offset so that we load new rows whenever we fetch more
+                            self.offset += self.limit;
+                        }
+                    } else {
+                        self.hasMore = true;
+                    }
+                },
+                complete: function () {
+                    self.loading = false;
+                    $('#route_list_overlay').hide();
+                }
+            });
 
             this._previousSearchParams = searchParams;
         }

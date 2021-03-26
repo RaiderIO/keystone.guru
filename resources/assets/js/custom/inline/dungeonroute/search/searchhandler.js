@@ -27,9 +27,6 @@ class SearchHandler {
             dataType: 'html',
             data: searchParams.params,
             beforeSend: function () {
-                $('#route_list_overlay').show();
-                // $('#save_pull_settings_saving').show();
-
                 if( options.hasOwnProperty('beforeSend') ) {
                     options.beforeSend();
                 }
@@ -59,10 +56,6 @@ class SearchHandler {
                 }
             },
             complete: function () {
-                $('#route_list_overlay').hide();
-                // $('#save_pull_settings').show();
-                // $('#save_pull_settings_saving').hide();
-
                 if( options.hasOwnProperty('complete') ) {
                     options.complete();
                 }

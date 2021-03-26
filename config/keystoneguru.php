@@ -180,6 +180,7 @@ return [
             'overview'       => 10,
             'category'       => 20,
             'affix_overview' => 10,
+            'search'         => 20,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [

@@ -196,7 +196,7 @@ class APIDungeonRouteController extends Controller
      * @param APIDungeonRouteSearchFormRequest $request
      * @return string
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request)
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request): string
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -290,7 +290,7 @@ class APIDungeonRouteController extends Controller
                 ->where('demo', 0)
                 ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
-            ->limit(10)
+            ->limit((int)$request->get('limit', 20))
             ->selectRaw($selectRaw);
 
 
@@ -308,7 +308,7 @@ class APIDungeonRouteController extends Controller
      * @param SeasonService $seasonService
      * @return string
      */
-    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonService $seasonService): string
     {
         $result = collect();
 
