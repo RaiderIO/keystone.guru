@@ -11,20 +11,15 @@ $title = isset($title) ? $title : sprintf('%s routes', $dungeon->name);
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
-    <div class="discover_panel">
 
-        <h2 class="text-center">
-            {{ $title }}
-        </h2>
+    @include('dungeonroute.discover.panel', [
+        'cols' => 2,
+        'category' => $category,
+        'title' => $title,
+        'dungeonroutes' => $dungeonroutes,
+        'affixgroup' => $affixgroup,
+        'showDungeonImage' => true,
+        'loadMore' => true,
+    ])
 
-        <div id="category_route_list">
-            @include('common.dungeonroute.cardlist', [
-                'cols' => 2,
-                'dungeonroutes' => $dungeonroutes,
-                'showDungeonImage' => true,
-            ])
-        </div>
-
-        @include('common.dungeonroute.search.loadmore', ['category' => $category, 'routeListContainerSelector' => '#category_route_list'])
-    </div>
 @endsection

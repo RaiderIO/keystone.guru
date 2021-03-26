@@ -3,8 +3,10 @@
 /** @var $cols int */
 /** @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection */
 
+$dungeon = isset($dungeon) ? $dungeon : null;
 $cols = isset($cols) ? $cols : 2;
 $showMore = isset($showMore) ? $showMore : false;
+$loadMore = isset($loadMore) ? $loadMore : false;
 $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
 ?>
 <div class="discover_panel">
@@ -28,7 +30,9 @@ $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
                     </div>
                 </div>
             @endisset
-            @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'showDungeonImage' => $showDungeonImage])
+            <div id="category_route_list">
+                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'showDungeonImage' => $showDungeonImage])
+            </div>
         </div>
     </div>
     @if($showMore)
@@ -39,5 +43,9 @@ $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
                 </a>
             </div>
         </div>
+    @endif
+
+    @if($loadMore)
+        @include('common.dungeonroute.search.loadmore', ['category' => $category, 'dungeon' => $dungeon, 'routeListContainerSelector' => '#category_route_list'])
     @endif
 </div>

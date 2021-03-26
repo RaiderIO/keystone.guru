@@ -17,10 +17,11 @@ $affixgroup = isset($affixgroup) ? $affixgroup : null;
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 
     @include('dungeonroute.discover.panel', [
+        'category' => $category,
+        'dungeon' => $dungeon,
         'title' => $title,
         'dungeonroutes' => $dungeonroutes,
         'affixgroup' => $affixgroup,
+        'loadMore' => true,
     ])
-
-    @include('common.dungeonroute.search.loadmore', ['category' => $category, 'dungeon' => $dungeon, 'routeListContainerSelector' => '#category_route_list'])
 @endsection

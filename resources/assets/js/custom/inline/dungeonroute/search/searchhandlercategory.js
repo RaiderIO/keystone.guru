@@ -28,7 +28,7 @@ class SearchHandlerCategory extends SearchHandler {
         this.search($targetContainer, new SearchParams([], {
             offset: this.offset,
             limit: this.limit,
-            dungeon: this.options.hasOwnProperty('dungeon') && this.options.dungeon !== null ? this.options.dungeon.id : null
+            dungeon: typeof this.options.dungeon !== 'undefined' && this.options.dungeon !== null ? this.options.dungeon.id : null
         }), $.extend({}, {
             success: function (html) {
                 // Only if we actually got any results back
