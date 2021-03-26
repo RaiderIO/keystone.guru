@@ -221,49 +221,49 @@ html, body, #map, #app, .wrapper {
     padding: 0.75rem 1.25rem;
 }
 
-#killzonesidebar .sidebar-content .card-body {
-    padding: 0.2rem 0.5rem;
-}
+/*#killzonesidebar .sidebar-content .card-body {*/
+/*    padding: 0.2rem 0.5rem;*/
+/*}*/
 
-#killzonesidebar .sidebar-content .card-title {
-    margin-bottom: 0.4rem;
-}
+/*#killzonesidebar .sidebar-content .card-title {*/
+/*    margin-bottom: 0.4rem;*/
+/*}*/
 
 
-#killzonesidebar .form-group {
-    margin-bottom: 0.6rem;
-}
+/*#killzonesidebar .form-group {*/
+/*    margin-bottom: 0.6rem;*/
+/*}*/
 
-.sidebar .sidebar-panel {
-    margin: 4px;
-}
+/*.sidebar .sidebar-panel {*/
+/*    margin: 4px;*/
+/*}*/
 
-#killzonesidebar .map_killzonessidebar_killzone_fill_space {
-    flex: 1 1 auto
-}
+/*#killzonesidebar .map_killzonessidebar_killzone_fill_space {*/
+/*    flex: 1 1 auto*/
+/*}*/
 
-#killzonesidebar [data-toggle="collapse"] .fa:before {
-    content: "\f077";
-}
+/*#killzonesidebar [data-toggle="collapse"] .fa:before {*/
+/*    content: "\f077";*/
+/*}*/
 
-#killzonesidebar [data-toggle="collapse"].collapsed .fa:before {
-    content: "\f078";
-}
+/*#killzonesidebar [data-toggle="collapse"].collapsed .fa:before {*/
+/*    content: "\f078";*/
+/*}*/
 
-#killzonesidebar .map_killzonessidebar_floor_switch h6 {
-    font-size: 1.1em;
-}
+/*#killzonesidebar .map_killzonessidebar_floor_switch h6 {*/
+/*    font-size: 1.1em;*/
+/*}*/
 
-#killzonesidebar .map_killzonessidebar_floor_switch,
-#killzonesidebar .map_killzonessidebar_killzone .selectable {
-    cursor: pointer;
-}
+/*#killzonesidebar .map_killzonessidebar_floor_switch,*/
+/*#killzonesidebar .map_killzonessidebar_killzone .selectable {*/
+/*    cursor: pointer;*/
+/*}*/
 
-#killzonesidebar .map_killzonessidebar_color_btn {
-    cursor: pointer;
-}
+/*#killzonesidebar .map_killzonessidebar_color_btn {*/
+/*    cursor: pointer;*/
+/*}*/
 
-#killzonesidebar .pickr {
+#pulls_sidebar .pickr {
     flex: 1 1 auto;
 }
 
@@ -276,9 +276,9 @@ html, body, #map, #app, .wrapper {
     z-index: 100100;
 }
 
-#killzonesidebar .map_killzonessidebar_killzone .selected .text-success {
-    color: unset !important;
-}
+/*#killzonesidebar .map_killzonessidebar_killzone .selected .text-success {*/
+/*    color: unset !important;*/
+/*}*/
 
 .grapick_color_picker_button_outer {
     left: -6px;
@@ -325,6 +325,10 @@ html, body, #map, #app, .wrapper {
     align-items: flex-start !important;
 }
 
+.route_manipulation_tools.right {
+    right: 0;
+}
+
 .route_manipulation_tools .bg-header {
     padding-right: 0.5rem !important;
     padding-bottom: 0.5rem !important;
@@ -343,7 +347,14 @@ html, body, #map, #app, .wrapper {
 
     .route_manipulation_tools .bg-header {
         padding: 0.5rem !important;
+    }
+
+    .route_manipulation_tools.left .bg-header {
         margin-left: 0.5rem !important;
+    }
+
+    .route_manipulation_tools.right .bg-header {
+        margin-right: 0.5rem !important;
     }
 
     #enemy_info_container {

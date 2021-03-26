@@ -3,7 +3,7 @@
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\Dungeonroute|null $dungeonroute */
 ?>
-<nav class="route_manipulation_tools h-100 row no-gutters map_fade_out">
+<nav class="route_manipulation_tools left h-100 row no-gutters map_fade_out">
     <div class="bg-header">
         <div id="view_route_actions_container" class="mb-2">
             @auth

@@ -160,6 +160,11 @@ if ($isAdmin) {
         ])
     @endif
 
+    @include('common.maps.controls.pulls', [
+        'edit' => $edit,
+        'dungeonroute' => $dungeonroute,
+    ])
+
     @include('common.maps.controls.enemyinfo')
 @endif
 

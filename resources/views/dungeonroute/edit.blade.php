@@ -30,11 +30,11 @@ $sandbox = $model->isSandbox();
             ]
         ])
 
-        @include('common.maps.killzonessidebar', [
-            'edit' => true,
-            'show' => [
-                'route-settings' => !$sandbox,
-            ],
-        ])
+{{--        @include('common.maps.killzonessidebar', [--}}
+{{--            'edit' => true,--}}
+{{--            'show' => [--}}
+{{--                'route-settings' => !$sandbox,--}}
+{{--            ],--}}
+{{--        ])--}}
     </div>
 @endsection

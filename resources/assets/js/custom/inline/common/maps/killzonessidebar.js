@@ -3,7 +3,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     constructor(options) {
         super(options);
-        this.sidebar = new Sidebar(options);
 
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
@@ -365,7 +364,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         super.activate();
 
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-        this.sidebar.activate();
 
         this.map = getState().getDungeonMap();
 
@@ -480,8 +478,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // this.map.unregister('map:beforerefresh', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
-
-        this.sidebar.cleanup();
 
         getState().unregister('killzonesnumberstyle:changed', this);
     }
