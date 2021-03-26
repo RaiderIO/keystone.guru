@@ -41,7 +41,8 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         $(window).on('resize scroll', function () {
             let inViewport = self.$loadMore.isInViewport();
-            if (!self.loading && inViewport && self.searchHandler.hasMore) {
+
+            if (!self.loading && inViewport && self.hasMore) {
                 self._search(true);
             }
         });
@@ -76,27 +77,27 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     _search(searchMore = false) {
         let self = this;
 
+        // If we're not searching for more, we have to start over with searching and replace the entire contents
+        if (!searchMore) {
+            this.offset = 0;
+        }
+
         let searchParams = new SearchParams(this.filters, {offset: this.offset, limit: this.limit});
 
         this._updateFilters();
 
         // Only search if the search parameters have changed
-        if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
+        if (searchMore || this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
             this.searchHandler.search($('#route_list'), searchParams, {
                 beforeSend: function () {
                     self.loading = true;
                     $('#route_list_overlay').show();
                 },
-                success: function() {
-                    // Only if we actually got any results back
-                    if( searchMore ) {
-                        self.hasMore = html.length > 0;
-                        if (self.hasMore) {
-                            // Increase the offset so that we load new rows whenever we fetch more
-                            self.offset += self.limit;
-                        }
-                    } else {
-                        self.hasMore = true;
+                success: function (html) {
+                    self.hasMore = html.length > 0;
+                    if (self.hasMore) {
+                        // Increase the offset so that we load new rows whenever we fetch more
+                        self.offset += self.limit;
                     }
                 },
                 complete: function () {

@@ -32,12 +32,12 @@ class SearchHandler {
                 }
             },
             success: function (html) {
-                if (searchParams.offset === 0) {
+                if (searchParams.params.offset === 0) {
                     $targetContainer.empty();
                 }
 
                 // Wrap the result in a container so that we can selectively refresh things
-                let containerClass = `search_result_${searchParams.offset}`;
+                let containerClass = `search_result_${searchParams.params.offset}`;
                 let $container = $('<div/>').addClass(containerClass).append(html);
 
                 $targetContainer.append($container);
