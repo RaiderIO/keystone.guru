@@ -83,7 +83,6 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
                             {{ __('Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
-                                    Keystone.guru determines if a route is simple or complex so you can easily weed out routes that you can\'t handle - yet.
                                     Still can\'t find a route that suits your need? The route search page allows you to dial in on your exact needs to find a perfect match.') }}
                         </p>
                     </div>
@@ -138,7 +137,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                             <strong>{{ __('Get organized') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('Organize your routes through teams, route collections or tags. Keystone.guru offers you a wide array of tools to keep all your routes organized
+                            {{ __('Organize your routes from your profile or through teams. Keystone.guru offers you a wide array of tools to keep all your routes organized
                                     and accessible by all your M+ team members. You can always export routes to Mythic Dungeon Tools format to share them with others.') }}
                         </p>
                     </div>

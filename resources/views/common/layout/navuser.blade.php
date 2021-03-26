@@ -62,15 +62,23 @@ $user = Auth::user();
                 </a>
                 <div class="dropdown-divider"></div>
             @endif
-            <a class="dropdown-item" href="{{ route('profile.routes') }}">{{ __('My routes') }} </a>
-            <a class="dropdown-item" href="{{ route('profile.tags') }}">{{ __('My tags') }} </a>
-            <a class="dropdown-item" href="{{ route('team.list') }}">{{ __('My teams') }} </a>
-            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
+            <a class="dropdown-item" href="{{ route('profile.routes') }}">
+                <i class="fa fa-route"></i> {{ __('My routes') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('profile.tags') }}">
+                <i class="fa fa-tag"></i> {{ __('My tags') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('team.list') }}">
+                <i class="fa fa-users"></i> {{ __('My teams') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                <i class="fa fa-user"></i> {{ __('My profile') }}
+            </a>
             <div class="dropdown-divider"></div>
 
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
+                <i class="fa fa-sign-out-alt"></i> {{ __('Logout') }}
             </a>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST"

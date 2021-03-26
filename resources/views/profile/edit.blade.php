@@ -36,8 +36,8 @@ $deleteConsequences = $user->getDeleteConsequences();
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
 
-
-            $('#user_reports_table').DataTable({});
+            // Disabled since it's not shown by default and causes a JS error otherwise
+            // $('#user_reports_table').DataTable({});
         });
     </script>
 @endsection

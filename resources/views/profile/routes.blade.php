@@ -1,8 +1,4 @@
-@extends('layouts.sitepage', ['wide' => true, 'title' => __('My routes')])
-
-@section('header-title')
-    {{ __('My routes') }}
-@endsection
+@extends('layouts.sitepage', ['rootClass' => 'col-xl-10 offset-xl-1', 'wide' => true, 'title' => __('My routes')])
 
 @section('content')
     @include('common.general.messages')
