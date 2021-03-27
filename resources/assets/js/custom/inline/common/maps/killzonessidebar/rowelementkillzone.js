@@ -69,7 +69,7 @@ class RowElementKillZone extends RowElement {
     _selectKillZoneByMapObject(killZone) {
         console.assert(this instanceof RowElementKillZone, 'this is not a RowElementKillZone', this);
 
-        this._killZoneRowClicked.call($(`#map_killzonessidebar_killzone_${this.killZone.id} .selectable`));
+        this._killZoneRowClicked.call($(`#map_killzonessidebar_killzone_${this.killZone.id}.selectable`));
     }
 
     /**
@@ -193,17 +193,12 @@ class RowElementKillZone extends RowElement {
             let enemyForcesPercent = getFormattedPercentage(killZoneEnemyForces, this.map.getEnemyForcesRequired());
 
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
-                .text(`${enemyForcesCumulativePercent}%`);
-            $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces:not(.draggable--original)`).text(
-                `+${enemyForcesPercent}%`
-            );
+                .text(`${enemyForcesCumulativePercent}%`)
+                .attr('title', `+${enemyForcesPercent}%`);
         } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
-                .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
-
-            $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces:not(.draggable--original)`).text(
-                `+${killZoneEnemyForces}`
-            );
+                .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`)
+                .attr('title', `+${killZoneEnemyForces}`);
         }
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
@@ -251,7 +246,7 @@ class RowElementKillZone extends RowElement {
             refreshTooltips();
         }
 
-        $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
+        // $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
     }
 
@@ -276,6 +271,7 @@ class RowElementKillZone extends RowElement {
                     // If not in our array, add it
                     if (!npcs.hasOwnProperty(enemy.npc.id)) {
                         npcs[enemy.npc.id] = {
+                            name: enemy.npc.name,
                             awakened: enemy.isAwakenedNpc(),
                             prideful: enemy.isPridefulNpc(),
                             inspiring: false, // Will be set below
@@ -298,12 +294,14 @@ class RowElementKillZone extends RowElement {
             if (npcs.hasOwnProperty(index)) {
                 let obj = npcs[index];
 
-                let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_row_template'];
+                let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_template'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                    'id': index,
+                    'pull_color': obj.enemy.getKillZone().color,
                     'enemy_forces': obj.enemy_forces,
                     'count': obj.count,
-                    'name': obj.enemy.npc.name,
+                    'name': obj.name,
                     'awakened': obj.awakened,
                     'prideful': obj.prideful,
                     'inspiring': obj.inspiring,
@@ -363,7 +361,7 @@ class RowElementKillZone extends RowElement {
         let self = this;
 
         // Make it interactive
-        $(`#map_killzonessidebar_killzone_${self.killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
+        $(`#map_killzonessidebar_killzone_${self.killZone.id}.selectable`).bind('click', this._killZoneRowClicked);
 
         if (this.killZonesSidebar.options.edit) {
             $(`#map_killzonessidebar_killzone_${self.killZone.id}_color`).bind('click', function (clickedEvent) {
@@ -424,12 +422,12 @@ class RowElementKillZone extends RowElement {
         // Deselect if we were selected and shouldn't be
         let classes = 'selected bg-success';
         if (this._selected && !selected) {
-            $(`#map_killzonessidebar_killzone_${this.killZone.id} .selected`).removeClass(classes);
+            $(`#map_killzonessidebar_killzone_${this.killZone.id}.selected`).removeClass(classes);
         }
 
         // Select the new one if we should
         if (!this._selected && selected) {
-            $(`#map_killzonessidebar_killzone_${this.killZone.id} .selectable`).addClass(classes);
+            $(`#map_killzonessidebar_killzone_${this.killZone.id}.selectable`).addClass(classes);
 
             // Make sure we can see the killzone in the sidebar
             let $killzone = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);

@@ -27,6 +27,7 @@ html, body, #map, #app, .wrapper {
 .map_fade_out:hover {
     opacity: 1;
 }
+
 @media ( max-width: 992px ) {
     #map_header {
         padding: 0.5rem;
@@ -207,18 +208,24 @@ html, body, #map, #app, .wrapper {
     user-select: none;
 }
 
-#killzonesidebar.sidebar .sidebar-content.edit {
-    /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
-    height: calc(100vh - 158px);
-}
-
-#killzonesidebar.sidebar .sidebar-content.edit.settings-shown {
-    /** Bit of a hack, but the 254 is the height of the header now which somehow isn't taken into account */
-    height: calc(100vh - 254px);
-}
-
 .sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
+}
+
+#pulls_sidebar,
+#pulls_sidebar .bg-header {
+    width: 375px;
+    padding-right: 0 !important;
+}
+
+#pulls_sidebar .edit .pulls_container {
+    /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
+    max-height: calc(100vh - 158px);
+}
+
+#pulls_sidebar .edit .pulls_container.settings-shown {
+    /** Bit of a hack, but the 254 is the height of the header now which somehow isn't taken into account */
+    max-height: calc(100vh - 254px);
 }
 
 #pulls_sidebar .map_killzonessidebar_killzone_fill_space {
@@ -238,7 +245,7 @@ html, body, #map, #app, .wrapper {
 }
 
 #pulls_sidebar .map_killzonessidebar_floor_switch,
-#pulls_sidebar .map_killzonessidebar_killzone .selectable {
+#pulls_sidebar .map_killzonessidebar_killzone.selectable {
     cursor: pointer;
 }
 
@@ -303,7 +310,7 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools {
     position: fixed;
-    z-index: 1000;
+    z-index: 99999;
     top: 70px;
     align-items: flex-start !important;
 }
@@ -316,10 +323,6 @@ html, body, #map, #app, .wrapper {
     padding-right: 0.5rem !important;
     padding-bottom: 0.5rem !important;
     margin-left: 0 !important;
-}
-
-#enemy_info_container {
-    margin: 0 !important;
 }
 
 @media (min-width: 992px) {
@@ -347,6 +350,8 @@ html, body, #map, #app, .wrapper {
 
 #enemy_info_container {
     width: 300px;
+    margin: 0 !important;
+    z-index: 100000;
 }
 
 #enemy_info_container .card {

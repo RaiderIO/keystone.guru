@@ -5,8 +5,7 @@
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
-    'sidebarSelector' => '#killzonesidebar',
-    'sidebarScrollSelector' => '#killzonesidebar .sidebar-content',
+    'sidebarScrollSelector' => '#pulls_sidebar .pulls_container',
     'sidebarToggleSelector' => '#killzonesidebarToggle',
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
@@ -20,11 +19,6 @@
 
 <nav id="pulls_sidebar" class="route_manipulation_tools right h-100 row no-gutters map_fade_out">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
-        <div class="">
-            <div id="edit_route_enemy_forces_container"></div>
-        </div>
-
-
         <div class="">
             <div class="container">
                 <div class="form-group">
@@ -57,7 +51,11 @@
             </div>
         </div>
 
-        <div class="" style="overflow: auto; max-height: 90vh;" data-simplebar>
+        <div class="">
+            <div id="edit_route_enemy_forces_container"></div>
+        </div>
+
+        <div class="pulls_container" data-simplebar>
 
             <div id="killzones_loading" class="row">
                 <div class="col text-center">
@@ -73,7 +71,7 @@
                     @endif
                 </div>
             </div>
-            <div id="killzones_container">
+            <div id="killzones_container" class="mr-3">
             </div>
         </div>
 

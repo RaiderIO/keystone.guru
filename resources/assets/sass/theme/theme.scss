@@ -324,10 +324,10 @@ body {
     border: var($--theme-header-border) !important;
   }
 
-  @media( max-width: 992px ){
-      #map_header {
-          background-color: var($--theme-header) !important;
-      }
+  @media(max-width: 992px) {
+    #map_header {
+      background-color: var($--theme-header) !important;
+    }
   }
 
   .bg-card {
@@ -429,10 +429,6 @@ body {
     background-color: var($--theme-darker);
   }
 
-  .sidebar-background {
-    background-color: #0c0c0caa;
-  }
-
   .sidebar {
     background-color: var($--theme-dark);
   }
@@ -468,6 +464,11 @@ body {
   .route_manipulation_tools .draw_icon .col:hover {
     background: var($--theme-primary);
     color: var($--theme-light) !important;
+  }
+
+  #pulls_sidebar .map_killzonessidebar_floor_switch:not(.selected):hover,
+  #pulls_sidebar .map_killzonessidebar_killzone.selectable:not(.selected):hover {
+    background-color: var($--theme-darker) !important;
   }
 
   .enemy_icon.melee,
@@ -652,7 +653,7 @@ body {
   .irs--flat .irs-from,
   .irs--flat .irs-to,
   .irs--flat .irs-single,
-  .irs--flat .irs-handle>i:first-child,
+  .irs--flat .irs-handle > i:first-child,
   .irs--flat .irs-bar {
     background-color: var($--theme-primary);
   }
