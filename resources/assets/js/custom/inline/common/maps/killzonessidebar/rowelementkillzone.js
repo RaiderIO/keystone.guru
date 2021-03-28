@@ -27,7 +27,6 @@ class RowElementKillZone extends RowElement {
 
         return {
             'id': this.killZone.id,
-            'text-class': 'text-white',
             'color': this.killZone.color, // For viewing
             'has_kill_area': this.killZone.hasKillArea() ? '1' : '0'
         };

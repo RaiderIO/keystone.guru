@@ -1,27 +1,42 @@
-<div id="map_killzonessidebar_killzone_{{id}}" class="form-group map_killzonessidebar_killzone" data-id="{{id}}">
-    <div class="card">
-        <div class="card-body selectable">
-            <div class="row mb-1">
-                <div class="col">
-                    <div class="input-group">
-                        <div class="input-group-append mr-1 map_killzonessidebar_killzone_fill_space">
-                            <h5 class="card-title map_killzonessidebar_killzone_text {{text-class}}">
-                                <span id="map_killzonessidebar_killzone_{{id}}_index"></span>:
-                                <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_cumulative"></span>
-                                <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_container">
-                                    (<span class="text-success" id="map_killzonessidebar_killzone_{{id}}_enemy_forces"></span>)
-                                </span>
-                            </h5>
-                        </div>
-                        <div class="input-group-append mr-1" style="width: 32px; background-color: {{color}};">
+<div id="map_killzonessidebar_killzone_{{id}}" class="map_killzonessidebar_killzone selectable pl-2" data-id="{{id}}">
+    <div class="row no-gutters">
+        <div class="col-auto pt-1">
+            <h5 class="map_killzonessidebar_killzone_text {{text-class}}">
+                <span id="map_killzonessidebar_killzone_{{id}}_index"></span>
+            </h5>
+        </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="map_killzonessidebar_killzone_{{id}}_enemy_list" class="input-group mb-1">
+        <div class="col px-2 py-1">
+            <div id="map_killzonessidebar_killzone_{{id}}_enemy_list" class="row no-gutters">
 
             </div>
+        </div>
+
+        <div id="map_killzonessidebar_killzone_{{id}}_has_boss" class="col-auto px-2 py-1"
+             data-toggle="tooltip" title="{{kill_zone_has_boss_label}}" style="display: none;">
+            <img class="mt-1" src="/images/mapicon/raid_marker_skull.png" style="width: 16px; height: 16px;"/>
+        </div>
+
+        <div id="map_killzonessidebar_killzone_{{id}}_has_awakened" class="col-auto  px-2 py-1"
+             data-toggle="tooltip" title="{{kill_zone_has_awakened_label}}" style="display: none;">
+            <img class="mt-1" src="/images/enemymodifiers/awakened.png" style="width: 16px; height: 16px;"/>
+        </div>
+
+        <div id="map_killzonessidebar_killzone_{{id}}_has_prideful" class="col-auto px-2 py-1"
+             data-toggle="tooltip" title="{{kill_zone_has_prideful_label}}" style="display: none;">
+            <img class="mt-1" src="/images/enemymodifiers/prideful.png"
+                 style="width: 16px; height: 16px; border-radius: 16px;"/>
+        </div>
+
+        <div id="map_killzonessidebar_killzone_{{id}}_has_inspiring" class="col-auto px-2 py-1"
+             data-toggle="tooltip" title="{{kill_zone_has_inspiring_label}}" style="display: none;">
+            <img class="mt-1" src="/images/enemymodifiers/inspiring.png" style="width: 16px; height: 16px;"/>
+        </div>
+
+        <div class="col-auto px-2 py-1">
+            <h5 class="map_killzonessidebar_killzone_text {{text-class}} pt-1">
+                <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_cumulative" data-toggle="tooltip"></span>
+            </h5>
         </div>
     </div>
 </div>

@@ -36,15 +36,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
                 ]
             ]
         ])
-
-        @if(!$model->demo)
-            @include('common.maps.killzonessidebar', [
-                'edit' => false,
-                'show' => [
-                    'route-settings' => !$model->isSandbox(),
-                ],
-            ])
-        @endif
     </div>
 @endsection
 

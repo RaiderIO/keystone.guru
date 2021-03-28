@@ -277,6 +277,6 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
     <!-- Fade into solid -->
     <section>
-        <div class="gradient-top">&nbsp;</div>
+        <div class="gradient-top footer">&nbsp;</div>
     </section>
 @endsection

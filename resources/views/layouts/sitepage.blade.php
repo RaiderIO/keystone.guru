@@ -106,7 +106,7 @@ $breadcrumbsParams = isset($breadcrumbsParams) ? $breadcrumbsParams : [];
 
         @yield('global-message')
 
-        <div class="container-fluid {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "col-md-8 offset-md-2" }}">
+        <div class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "col-md-8 offset-md-2" }}">
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
@@ -136,16 +136,16 @@ $breadcrumbsParams = isset($breadcrumbsParams) ? $breadcrumbsParams : [];
             @include('common.general.messages')
 
             @yield('content')
+
+            @if( $showAds )
+                <div align="center" class="mt-4">
+                    @include('common.thirdparty.adunit', ['id' => 'site_bottom_header', 'type' => 'footer'])
+                </div>
+            @endif
         </div>
     @endif
 
     @if( $footer )
-
-        @if( $showAds )
-            <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_bottom_header', 'type' => 'footer'])
-            </div>
-        @endif
 
 
         @include('common.layout.footer')

@@ -366,7 +366,7 @@ body {
   }
 
   .form-control:disabled, .form-control[readonly] {
-    color: rgb(235, 235, 235);
+    color: var($--theme-text-contrast);
     background-color: var($--theme-dark);
     opacity: 1;
   }
@@ -614,9 +614,18 @@ body {
       background-color: var($--theme-darker) !important;
     }
 
+    .cid-soU7JptK9v {
+      background-color: var($--theme-header) !important;
+    }
+
     .gradient-top {
       background: var($--theme-darker);
       background: linear-gradient(0deg, var($--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .gradient-top.footer {
+      background: var($--theme-darker);
+      background: linear-gradient(0deg, var($--theme-header) 0%, rgba(0, 0, 0, 0) 100%);
     }
 
     .gradient-bottom {
