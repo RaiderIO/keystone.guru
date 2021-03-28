@@ -17,7 +17,7 @@
     'edit' => $edit
 ]])
 
-<nav id="pulls_sidebar" class="route_manipulation_tools right h-100 row no-gutters map_fade_out">
+<nav id="pulls_sidebar" class="route_manipulation_tools top right h-100 row no-gutters map_fade_out">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
         <div class="">
             <div class="container">

@@ -326,7 +326,11 @@ html, body, #map, #app, .wrapper {
 }
 
 @media (min-width: 992px) {
-    .route_manipulation_tools {
+    .route_manipulation_tools.top {
+        padding-top: 1rem !important;
+    }
+
+    .route_manipulation_tools:not(.top) {
         top: unset;
         align-items: center !important;
     }
