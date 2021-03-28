@@ -20,7 +20,7 @@ class DiscoverService implements DiscoverServiceInterface
     private CacheService $_cacheService;
 
     /** @var Closure|null */
-    private ?Closure $_closure;
+    private ?Closure $_closure = null;
 
     /**
      * DiscoverService constructor.

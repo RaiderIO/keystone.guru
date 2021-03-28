@@ -182,6 +182,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
         this._updatePullTexts(killZone.getIndex());
+
+        // Update this particular row element to refresh enemy lists etc
+        let rowElement = this._getRowElementKillZone(killZone);
+        rowElement.refresh();
     }
 
     /**
