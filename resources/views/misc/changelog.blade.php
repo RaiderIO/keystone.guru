@@ -17,5 +17,12 @@
         @include('common.release.release', ['release' => $release])
     @endforeach
 
-    {{ $releases->onEachSide(2)->links() }}
+    <div class="row mt-2">
+        <div class="col">
+
+        </div>
+        <div class="col-auto">
+            {{ $releases->onEachSide(2)->links() }}
+        </div>
+    </div>
 @endsection

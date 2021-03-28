@@ -30,9 +30,7 @@ body {
   }
 
   .nav-item-divider {
-    background-color: var($--theme-text-contrast);
-    width: 1px;
-    margin: 0 0.5em;
+    margin: 0 1em;
   }
 
   /* Weird offset because of theme */
@@ -309,6 +307,10 @@ body {
 
   .btn-accent {
     background-color: var($--theme-btn-accent) !important;
+  }
+
+  .btn-accent:hover {
+    background-color: var($--theme-btn-accent-hover) !important;
   }
 
   .bg-header {
@@ -610,11 +612,6 @@ body {
 
     .cid-soU5dLgjOI {
       background-color: var($--theme-darker) !important;
-    }
-
-    /* Footer - do not show any special background */
-    .cid-soU7JptK9v {
-      background-color: unset !important;
     }
 
     .gradient-top {

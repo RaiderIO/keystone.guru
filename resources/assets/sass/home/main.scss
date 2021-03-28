@@ -290,7 +290,7 @@
     font-size: 0;
   }
 
-  .btn {
+  .btn:not(.dropdown-toggle) {
     font-weight: 600;
     border-width: 1px;
     font-style: normal;

@@ -2,13 +2,13 @@
 $user = Auth::user();
 ?>
 @guest
-    <li class="nav-item">
+    <li class="nav-item px-3">
         <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
             <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="modal" data-target="#register_modal">
+        <a class="nav-link px-3" href="#" data-toggle="modal" data-target="#register_modal">
             {{__('Register')}}
         </a>
     </li>

@@ -111,18 +111,25 @@ if ($timezone === null) {
             </tbody>
         </table>
 
-        <ul class="pagination" role="navigation">
-            <li class="page-item">
-                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
-                    ‹ {{ __('Previous') }}
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
-                    {{ __('Next') }} ›
-                </a>
-            </li>
-        </ul>
+        <div class="row mt-2">
+            <div class="col">
+
+            </div>
+            <div class="col-auto">
+                <ul class="pagination" role="navigation">
+                    <li class="page-item">
+                        <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
+                            ‹ {{ __('Previous') }}
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
+                            {{ __('Next') }} ›
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="mt-4 text-center">
             <p>

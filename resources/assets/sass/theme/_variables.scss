@@ -10,6 +10,7 @@ $--theme-header: --theme-header;
 $--theme-header-border: --theme-header-border;
 $--theme-header-height: --theme-header-height;
 $--theme-btn-accent: --theme-btn-accent;
+$--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-bg-card: --theme-bg-card;
 $--theme-bg-card-footer: --theme-bg-card-footer;
 
@@ -26,6 +27,7 @@ $theme-map-superhero: (
     $--theme-header: var($--theme-dark),
     $--theme-header-border: unset,
     $--theme-btn-accent: var($--theme-primary),
+    $--theme-btn-accent-hover: var($--theme-primary-hover),
     $--theme-bg-card: #4e5d6c,
     $--theme-bg-card-footer: rgba(255, 255, 255, 0.075)
 );
@@ -44,6 +46,7 @@ $theme-map-darkly: (
     $--theme-header-border: unset,
     /* The same as success button */
     $--theme-btn-accent: #00bc8c,
+    $--theme-btn-accent-hover: #007053,
     $--theme-bg-card: #303030,
     $--theme-bg-card-footer: #444
 );
@@ -62,6 +65,7 @@ $theme-map-lux: (
     $--theme-header-border: 1px solid #1a1a1a,
     /* The same as success button */
     $--theme-btn-accent: #1a1a1a,
+    $--theme-btn-accent-hover: black,
     $--theme-bg-card: #fff,
     $--theme-bg-card-footer: rgba(0, 0, 0, 0.03)
 );

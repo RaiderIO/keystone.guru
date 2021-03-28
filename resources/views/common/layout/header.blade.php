@@ -1,15 +1,14 @@
 <?php
-/** @var $hasNewChangelog boolean */
 $navs = [
+    route('dungeonroutes.search') => [
+        'fa' => 'fas fa-search',
+        'text' => __('Search')
+    ],
     route('dungeonroutes') => [
-        'text' => __('Routes')
+        'text' => __('Discover')
     ],
     route('misc.affixes') => [
         'text' => __('Affixes')
-    ],
-    route('misc.changelog') => [
-        'text' => __('Changelog'),
-        'new' => $hasNewChangelog
     ],
 ];
 
@@ -32,29 +31,32 @@ $navs = [
 
         <div class="collapse navbar-collapse text-center text-lg-left" id="mainNavbar">
             <ul class="navbar-nav mr-auto">
-                @foreach($navs as $route => $opts)
-                    <li class="nav-item">
-                        <a class="nav-link  {{ strpos(Request::url(), $route) === 0 ? 'active' : '' }}" href="{{ $route }}">
-                            {{ $opts['text'] }}
-                            @if(isset($opts['new']) && $opts['new'])
-                                <sup class="text-success">{{ __('NEW') }}</sup>
-                            @endif
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item mr-2">
-                    <a class="nav-link" href="{{ route('dungeonroutes.search') }}">
-                        <i class="fas fa-search"></i> {{__('Search')}}
-                    </a>
-                </li>
-                <li class="nav-item">
+                <li class="nav-item px-3">
                     <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('Create route')}}
                     </a>
                 </li>
+                @foreach($navs as $route => $opts)
+                    @if($opts === 'divider')
+                        <li class="nav-item nav-item-divider"></li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link pr-3 {{ strpos(Request::url(), $route) === 0 ? 'active' : '' }}"
+                               href="{{ $route }}">
+                                @isset($opts['fa'])
+                                    <i class="{{ $opts['fa'] }}"></i>
+                                @endisset
+                                {{ $opts['text'] }}
+                                @if(isset($opts['new']) && $opts['new'])
+                                    <sup class="text-success">{{ __('NEW') }}</sup>
+                                @endif
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+            <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')
