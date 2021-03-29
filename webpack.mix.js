@@ -106,6 +106,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/killzonepathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
 
@@ -135,6 +136,7 @@ let scripts = [
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',
     'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/killzonepath.js',
     'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',

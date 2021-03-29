@@ -34,7 +34,10 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
                     'mdt-export' => true,
                     'publish' => false,
                 ]
-            ]
+            ],
+            'hiddenMapObjectGroups' => [
+                'killzonepath'
+            ],
         ])
     </div>
 @endsection

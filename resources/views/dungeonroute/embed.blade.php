@@ -90,8 +90,8 @@ if (count($affixes) == 0) {
             'floorId' => $floor->id,
             'showAttribution' => false,
             'hiddenMapObjectGroups' => [
-                'enemypatrol',
-                'enemypack'
+                'enemypack',
+                'killzonepath'
             ]
         ])
     </div>

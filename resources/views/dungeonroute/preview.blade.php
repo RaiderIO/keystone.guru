@@ -32,7 +32,7 @@ $dungeon->load('floors');
         'zoomToContents' => false,
         'hiddenMapObjectGroups' => [
             'enemypatrol',
-            'enemypack',
+            'enemypack'
         ],
     ])
 @endsection

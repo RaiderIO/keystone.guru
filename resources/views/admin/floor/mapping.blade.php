@@ -21,7 +21,8 @@
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
-                'killzone'
+                'killzone',
+                'killzonepath'
             ]
         ])
     </div>

@@ -27,7 +27,10 @@ $sandbox = $model->isSandbox();
                     'mdt-export' => true,
                     'publish' => !$sandbox,
                 ]
-            ]
+            ],
+            'hiddenMapObjectGroups' => [
+                'killzonepath'
+            ],
         ])
 
 {{--        @include('common.maps.killzonessidebar', [--}}
