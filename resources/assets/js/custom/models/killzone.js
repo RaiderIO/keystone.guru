@@ -833,7 +833,7 @@ class KillZone extends MapObject {
 
     /**
      * Get a latlng object describing the centeroid of the enemies layer.
-     * @returns {object}
+     * @returns {L.latLng}
      */
     getLayerCenteroid() {
         return getCenteroid(this._getVisibleEntitiesLatLngs());

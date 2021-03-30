@@ -93,8 +93,6 @@ class MapObjectGroupManager extends Signalable {
             }
         }
 
-        console.assert(result !== false, `Unable to find MapObjectGroup ${name}`, this);
-
         return result;
     }
 
