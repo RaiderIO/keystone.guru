@@ -218,14 +218,14 @@ html, body, #map, #app, .wrapper {
     padding-right: 0 !important;
 }
 
-#pulls_sidebar .edit .pulls_container {
+#pulls_sidebar .pulls_container {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     max-height: calc(100vh - 158px);
 }
 
-#pulls_sidebar .edit .pulls_container.settings-shown {
-    /** Bit of a hack, but the 254 is the height of the header now which somehow isn't taken into account */
-    max-height: calc(100vh - 254px);
+#pulls_sidebar .edit .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(100vh - (158px + 55px));
 }
 
 #pulls_sidebar .map_killzonessidebar_killzone_fill_space {

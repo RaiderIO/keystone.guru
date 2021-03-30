@@ -10,7 +10,6 @@
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
-    'killZonesPullsSettingsSelector' => '#killzones_pulls_settings_container',
     'killZonesPullsSettingsMapNumberStyleSelector' => '#killzones_pulls_settings_map_number_style',
     'killZonesPullsSettingsNumberStyleSelector' => '#killzones_pulls_settings_number_style',
     'killZonesPullsSettingsDeleteAllSelector' => '#killzones_pulls_settings_delete_all',
@@ -22,31 +21,22 @@
         @if($edit)
             <div class="">
                 <div class="container">
-                    <div class="form-group">
-                        <div class="row mb-2 mt-2 no-gutters">
-                            <div class="col-2">
-                                <button class="btn btn-info w-100" data-toggle="modal"
-                                        data-target="#route_settings_modal">
-                                    <i class='fas fa-cog'></i>
-                                </button>
-                            </div>
-                            <div class="col-8 pl-2 pr-2">
-                                <div id="killzones_new_pull" class="btn btn-success w-100">
-                                    <i class="fas fa-plus"></i> {{__('New pull')}}
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                    <div class="row mb-2 mt-2 no-gutters">
+                        <div class="col-2">
+                            <button class="btn btn-info w-100" data-toggle="modal"
+                                    data-target="#route_settings_modal">
+                                <i class='fas fa-cog'></i>
+                            </button>
+                        </div>
+                        <div class="col-8 pl-2 pr-2">
+                            <div id="killzones_new_pull" class="btn btn-success w-100">
+                                <i class="fas fa-plus"></i> {{__('New pull')}}
                             </div>
                         </div>
-                    </div>
-
-                    <div id="killzones_pulls_settings_container" class="collapse">
-                        <div class="form-group">
-                            <div class="row">
-                            </div>
+                        <div class="col-2">
+                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

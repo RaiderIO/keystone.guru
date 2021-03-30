@@ -375,11 +375,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Setup new pull button
         $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
-        $(this.options.killZonesPullsSettingsSelector).on('shown.bs.collapse', function () {
-            $(self.options.sidebarScrollSelector).addClass('settings-shown');
-        }).on('hidden.bs.collapse', function () {
-            $(self.options.sidebarScrollSelector).removeClass('settings-shown');
-        });
 
 
         $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
