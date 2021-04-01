@@ -56,25 +56,25 @@ class KillZonePath extends Polyline {
         return c.map.polyline.killzonepath.color;
     }
 
-    /**
-     * Rebuild the decorators for this route (directional arrows etc).
-     * @private
-     */
-    _getDecorator() {
-        console.assert(this instanceof KillZonePath, 'this is not a KillZonePath', this);
-        return L.polylineDecorator(this.layer, {
-            patterns: [
-                {
-                    offset: 25,
-                    repeat: 50,
-                    symbol: L.Symbol.arrowHead({
-                        pixelSize: 24,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polyline.color}
-                    })
-                }
-            ]
-        });
-    }
+    // /**
+    //  * Rebuild the decorators for this route (directional arrows etc).
+    //  * @private
+    //  */
+    // _getDecorator() {
+    //     console.assert(this instanceof KillZonePath, 'this is not a KillZonePath', this);
+    //     return L.polylineDecorator(this.layer, {
+    //         patterns: [
+    //             {
+    //                 offset: 25,
+    //                 repeat: 50,
+    //                 symbol: L.Symbol.arrowHead({
+    //                     pixelSize: 24,
+    //                     pathOptions: {fillOpacity: 1, weight: 0, color: this.polyline.color}
+    //                 })
+    //             }
+    //         ]
+    //     });
+    // }
 
     toString() {
         return 'KillZonePath';

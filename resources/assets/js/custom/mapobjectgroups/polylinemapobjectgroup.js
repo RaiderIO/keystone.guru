@@ -7,7 +7,7 @@ class PolylineMapObjectGroup extends MapObjectGroup {
      * Converts polyline.vertices_json to a list of L.LatLngs
      * @param remoteMapObject {Object}
      * @returns {[]}
-     * @private
+     * @protected
      */
     _restorePoints(remoteMapObject) {
         // Create the polyline first
