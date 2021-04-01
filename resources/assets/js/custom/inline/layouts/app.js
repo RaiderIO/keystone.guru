@@ -98,15 +98,13 @@ class LayoutsApp extends InlineCode {
      * Called whenever the MDT import string has been pasted into the text area.
      **/
     _importStringPasted(typedEvent) {
-        let self = this;
-
         // https://stackoverflow.com/questions/686995/catch-paste-input
         let $importStringTextArea = $(this);
         let $root = $importStringTextArea.closest('.modal');
-        console.log($root);
 
         let $loader = $root.find('.import_mdt_string_loader');
         let $details = $root.find('.import_mdt_string_details');
+        let $warnings = $root.find('.mdt_string_warnings');
         let $importString = $root.find('.import_string');
         let $submitBtn = $root.find('input[type="submit"]');
 
@@ -162,7 +160,7 @@ class LayoutsApp extends InlineCode {
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
                     (new MdtStringWarnings(responseData.warnings))
-                        .render($root.find('.mdt_string_warnings'));
+                        .render($warnings);
                 }
 
                 // Tooltips may be added above

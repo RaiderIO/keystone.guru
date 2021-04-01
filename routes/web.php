@@ -23,8 +23,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['viewcachebuster']], function ()
 {
-
-    // Catch for hard-coded /home route in RedirectsUsers.php
+        // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
 
     Route::get('credits', [SiteController::class, 'credits'])->name('misc.credits');

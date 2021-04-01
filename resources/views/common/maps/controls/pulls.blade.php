@@ -49,18 +49,20 @@
 
         <div class="pulls_container" data-simplebar>
 
-            <div id="killzones_loading" class="row">
+            <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">
                     <h5>{{ __('Loading...') }}</h5>
                 </div>
             </div>
-            <div id="killzones_no_pulls" class="row" style="display: none;">
+            <div id="killzones_no_pulls" class="row no-gutters" style="display: none;">
                 <div class="col text-center">
-                    @if($edit)
-                        <h5>{{ __('No pulls created. Click on the button above or on an enemy to add them to your first pull.') }}</h5>
-                    @else
-                        <h5>{{ __('No pulls created.') }}</h5>
-                    @endif
+                    <h5>
+                        @if($edit)
+                            {{ __('No pulls created. Click on the button above or on an enemy to add them to your first pull.') }}
+                        @else
+                            {{ __('No pulls created.') }}
+                        @endif
+                    </h5>
                 </div>
             </div>
             <div id="killzones_container" class="mr-3">

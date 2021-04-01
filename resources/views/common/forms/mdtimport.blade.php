@@ -14,6 +14,7 @@
                 }}
         </div>
     </div>
+    {!! Form::hidden('mdt_import_sandbox', 1) !!}
 @else
     <div class="form-group">
         <label for="mdt_import_sandbox">

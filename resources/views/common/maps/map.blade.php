@@ -127,12 +127,6 @@ if ($isAdmin) {
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
-
-
-
-
-
-
         </script>
     @endif
 @endsection
@@ -209,8 +203,9 @@ if ($isAdmin) {
 
 
     @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
+        @php($hasRouteSettings = isset($dungeonroute) && !$dungeonroute->isSandbox())
         <ul class="nav nav-tabs" role="tablist">
-            @isset($dungeonroute)
+            @if( $hasRouteSettings ) )
                 <li class="nav-item">
                     <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
                        aria-controls="edit_route" aria-selected="true">
@@ -219,7 +214,7 @@ if ($isAdmin) {
                 </li>
             @endisset
             <li class="nav-item">
-                <a class="nav-link {{ isset($dungeonroute) ? '' : 'active' }}"
+                <a class="nav-link {{ $hasRouteSettings ? '' : 'active' }}"
                    id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
                    aria-controls="edit_route_map_settings" aria-selected="false">
                     {{ __('Map settings') }}
@@ -234,12 +229,12 @@ if ($isAdmin) {
         </ul>
 
         <div class="tab-content">
-            @isset($dungeonroute)
+            @if($hasRouteSettings)
                 <div id="edit" class="tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="edit_route_tab">
                     @include('common.forms.createroute', ['dungeonroute' => $dungeonroute])
                 </div>
             @endisset
-            <div id="map-settings" class="tab-pane fade {{ isset($dungeonroute) ? '' : 'show active' }} mt-3"
+            <div id="map-settings" class="tab-pane fade {{ $hasRouteSettings ? '' : 'show active' }} mt-3"
                  role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
                 @include('common.forms.mapsettings', ['dungeonroute' => $dungeonroute])
             </div>
