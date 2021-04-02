@@ -13,6 +13,9 @@ $--theme-btn-accent: --theme-btn-accent;
 $--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-bg-card: --theme-bg-card;
 $--theme-bg-card-footer: --theme-bg-card-footer;
+$--theme-affix-page-seasonal-color: --theme-affix-page-seasonal-color;
+$--theme-affix-page-seasonal-background-color: --theme-affix-page-seasonal-background-color;
+$--theme-affix-page-current-week-border-color: --theme-affix-page-current-week-border-color;
 
 // Superhero
 $theme-map-superhero: (
@@ -29,7 +32,10 @@ $theme-map-superhero: (
     $--theme-btn-accent: var($--theme-primary),
     $--theme-btn-accent-hover: var($--theme-primary-hover),
     $--theme-bg-card: #4e5d6c,
-    $--theme-bg-card-footer: rgba(255, 255, 255, 0.075)
+    $--theme-bg-card-footer: rgba(255, 255, 255, 0.075),
+    $--theme-affix-page-seasonal-color: #df691a,
+    $--theme-affix-page-seasonal-background-color: #df691abb,
+    $--theme-affix-page-current-week-border-color: rgb(235, 235, 235)
 );
 
 // Darkly
@@ -48,7 +54,10 @@ $theme-map-darkly: (
     $--theme-btn-accent: #00bc8c,
     $--theme-btn-accent-hover: #007053,
     $--theme-bg-card: #303030,
-    $--theme-bg-card-footer: #444
+    $--theme-bg-card-footer: #444,
+    $--theme-affix-page-seasonal-color: #00bc8c,
+    $--theme-affix-page-seasonal-background-color: #00bc8cbb,
+    $--theme-affix-page-current-week-border-color: rgb(235, 235, 235)
 );
 
 // Lux
@@ -67,5 +76,8 @@ $theme-map-lux: (
     $--theme-btn-accent: #1a1a1a,
     $--theme-btn-accent-hover: black,
     $--theme-bg-card: #fff,
-    $--theme-bg-card-footer: rgba(0, 0, 0, 0.03)
+    $--theme-bg-card-footer: rgba(0, 0, 0, 0.03),
+    $--theme-affix-page-seasonal-color: #df691a,
+    $--theme-affix-page-seasonal-background-color: #df691abb,
+    $--theme-affix-page-current-week-border-color: var($--theme-primary)
 );

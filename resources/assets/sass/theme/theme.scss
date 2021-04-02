@@ -684,4 +684,37 @@ body {
   //  z-index: -1;
   //  background: linear-gradient(0deg, var(--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
   //}
+
+  /** Affixes page **/
+
+
+  .affixes_overview_table {
+    .last_column {
+      border-left: var($--theme-affix-page-seasonal-color) 3px solid;
+      border-right: var($--theme-affix-page-seasonal-color) 3px solid;
+      /* bb to make semi-transparent to let row offsets shine through */
+      background-color:var($--theme-affix-page-seasonal-background-color);
+    }
+
+    .last_column.first_row {
+      border-top: var($--theme-affix-page-seasonal-color) 3px solid;
+    }
+
+    .last_column.last_row {
+      border-bottom: var($--theme-affix-page-seasonal-color) 3px solid;
+    }
+
+    .current_week {
+      border-top: var($--theme-affix-page-current-week-border-color) 3px solid !important;
+      border-bottom: var($--theme-affix-page-current-week-border-color) 3px solid !important;
+    }
+
+    .current_week.first_column {
+      border-left: var($--theme-affix-page-current-week-border-color) 3px solid;
+    }
+
+    .current_week.last_column {
+      border-right: var($--theme-affix-page-current-week-border-color) 3px solid;
+    }
+  }
 }
