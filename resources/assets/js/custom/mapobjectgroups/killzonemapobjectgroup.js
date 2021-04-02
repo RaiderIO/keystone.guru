@@ -98,7 +98,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         let result = null;
 
         // Do not return an already saving map object which has id -1 of which multiple can exist
-        if( index > 0 ) {
+        if (index > 0) {
             for (let i = 0; i < this.objects.length; i++) {
                 let objectCandidate = this.objects[i];
                 if (objectCandidate.index === index) {
@@ -284,7 +284,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 confirm: 'yes',
             },
             success: function (json) {
-                showSuccessNotification(lang.get('messages.delete_all_pulls_successful'));
 
                 for (let i = self.objects.length - 1; i >= 0; i--) {
                     let killZone = self.objects[i];
@@ -292,9 +291,20 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     killZone.onDeleteSuccess(json, true);
                 }
 
+                let enemyMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+                    let enemy = enemyMapObjectGroup.objects[i];
+                    if (enemy instanceof PridefulEnemy && enemy.isAssigned()) {
+                        // Prideful enemies override the delete method, so we can delete them without deleting the actual enemy
+                        enemy.unsetAssignedLocation();
+                    }
+                }
+
                 if (callback !== null) {
                     callback();
                 }
+
+                showSuccessNotification(lang.get('messages.delete_all_pulls_successful'));
             }
         });
     }

@@ -313,7 +313,7 @@ class DrawControls extends MapControl {
     _addControlSetupFakePridefulButton() {
         let $disabledPridefulButton = $('<a>', {
             id: 'disabled_pridefulenemy_button',
-            class: 'col draw_icon mt-2 leaflet-disabled draw-control-disabled',
+            class: 'draw_icon leaflet-disabled draw-control-disabled',
             href: '#'
         });
 
@@ -349,7 +349,7 @@ class DrawControls extends MapControl {
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');
-            $buttons.addClass('draw_icon mt-2');
+            $buttons.addClass('draw_icon');
 
             $.each($buttons, function (index, button) {
                 let $button = $(button);

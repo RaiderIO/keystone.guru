@@ -254,29 +254,29 @@ class APIKillZoneController extends Controller
             try {
                 $killZones = $dungeonroute->killzones;
                 $pridefulEnemies = $dungeonroute->pridefulenemies;
-                if ($dungeonroute->killzones()->delete() && $dungeonroute->pridefulenemies()->delete()) {
-                    if (Auth::check()) {
-                        foreach ($killZones as $killZone) {
-                            broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killZone));
-                        }
 
-                        foreach ($pridefulEnemies as $pridefulEnemy) {
-                            broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $pridefulEnemy));
-                        }
+                $dungeonroute->killzones()->delete();
+                $dungeonroute->pridefulenemies()->delete();
+                
+                if (Auth::check()) {
+                    foreach ($killZones as $killZone) {
+                        broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killZone));
                     }
 
-                    // Refresh the killzones relation
-                    $dungeonroute->load('killzones');
-
-                    // Update the enemy forces
-                    $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
-                    // Touch the route so that the thumbnail gets updated
-                    $dungeonroute->touch();
-
-                    $result = ['enemy_forces' => $dungeonroute->enemy_forces];
-                } else {
-                    $result = response('Unable to delete all pulls', Http::INTERNAL_SERVER_ERROR);
+                    foreach ($pridefulEnemies as $pridefulEnemy) {
+                        broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $pridefulEnemy));
+                    }
                 }
+
+                // Refresh the killzones relation
+                $dungeonroute->load('killzones');
+
+                // Update the enemy forces
+                $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
+
+                $result = ['enemy_forces' => $dungeonroute->enemy_forces];
 
             } catch (\Exception $ex) {
                 $result = response('Not found', Http::NOT_FOUND);

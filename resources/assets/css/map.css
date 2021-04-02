@@ -214,8 +214,31 @@ html, body, #map, #app, .wrapper {
 
 #pulls_sidebar,
 #pulls_sidebar .bg-header {
-    width: 375px;
     padding-right: 0 !important;
+}
+
+@media (max-width: 1440px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 350px;
+        padding-right: 0 !important;
+    }
+}
+
+@media (min-width: 1440px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 400px;
+        padding-right: 0 !important;
+    }
+}
+
+@media (min-width: 1920px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 450px;
+        padding-right: 0 !important;
+    }
 }
 
 #pulls_sidebar .pulls_container {
