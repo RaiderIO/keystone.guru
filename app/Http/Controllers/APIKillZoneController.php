@@ -253,10 +253,15 @@ class APIKillZoneController extends Controller
         if ($request->get('confirm') === 'yes') {
             try {
                 $killZones = $dungeonroute->killzones;
-                if ($dungeonroute->killzones()->delete()) {
+                $pridefulEnemies = $dungeonroute->pridefulenemies;
+                if ($dungeonroute->killzones()->delete() && $dungeonroute->pridefulenemies()->delete()) {
                     if (Auth::check()) {
                         foreach ($killZones as $killZone) {
                             broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killZone));
+                        }
+
+                        foreach ($pridefulEnemies as $pridefulEnemy) {
+                            broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $pridefulEnemy));
                         }
                     }
 
