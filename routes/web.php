@@ -99,6 +99,9 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
 
+    // Webhooks
+    Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
+
     Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
     {
         // Legacy redirects
