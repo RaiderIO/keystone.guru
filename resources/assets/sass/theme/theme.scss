@@ -578,6 +578,10 @@ body {
       background-color: var($--theme-dark);
     }
 
+    .demo-loader {
+      background-color: var($--theme-darker);
+    }
+
     .cid-s48MCQYojq .mbr-text,
     .cid-s48MCQYojq .mbr-section-btn {
       color: unset;
@@ -693,7 +697,7 @@ body {
       border-left: var($--theme-affix-page-seasonal-color) 3px solid;
       border-right: var($--theme-affix-page-seasonal-color) 3px solid;
       /* bb to make semi-transparent to let row offsets shine through */
-      background-color:var($--theme-affix-page-seasonal-background-color);
+      background-color: var($--theme-affix-page-seasonal-background-color);
     }
 
     .last_column.first_row {
