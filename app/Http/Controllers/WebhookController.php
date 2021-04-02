@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service\Discord\DiscordApiServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -41,6 +42,7 @@ class WebhookController extends Controller
     /**
      * @param Request $request
      * @param DiscordApiServiceInterface $discordApiService
+     * @return Response
      */
     public function github(Request $request, DiscordApiServiceInterface $discordApiService)
     {
@@ -50,14 +52,14 @@ class WebhookController extends Controller
 
         $embeds = [];
         foreach ($commits as $commit) {
-            $lines = explode('\n', $commit['description']);
+            $lines = explode('\n', $commit['message']);
 
             $embed = [
                 'color'       => 14641434, // '#DF691A'
                 'title'       => substr(array_shift($lines), 0, 256),
                 'description' => substr(trim(view('app.commit.github', [
                     'commit' => $commit,
-                    'lines' => $lines,
+                    'lines'  => $lines,
                 ])->render()), 0, 2000),
                 'url'         => $commit['url'],
                 'timestamp'   => $commit['timestamp'],
@@ -71,5 +73,7 @@ class WebhookController extends Controller
         }
 
         $discordApiService->sendEmbeds(env('DISCORD_GITHUB_WEBHOOK'), $embeds);
+
+        return response()->noContent();
     }
 }

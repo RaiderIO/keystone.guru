@@ -18,6 +18,7 @@ use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\WebhookController;
 
 Auth::routes();
 
