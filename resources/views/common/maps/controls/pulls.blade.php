@@ -31,7 +31,7 @@
             <div class="">
                 <div class="container">
                     <div class="row mb-2 mt-2 no-gutters">
-                        <div class="col-2">
+                        <div class="col-2" data-toggle="tooltip" title="{{ __('Settings') }}">
                             <button class="btn btn-info w-100" data-toggle="modal"
                                     data-target="#route_settings_modal">
                                 <i class='fas fa-cog'></i>
@@ -42,7 +42,7 @@
                                 <i class="fas fa-plus"></i> {{__('New pull')}}
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-2" data-toggle="tooltip" title="{{ __('Delete all pulls') }}">
                             <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
                                 <i class="fas fa-trash"></i>
                             </button>

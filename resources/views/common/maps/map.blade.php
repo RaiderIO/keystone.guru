@@ -205,7 +205,7 @@ if ($isAdmin) {
     @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
         @php($hasRouteSettings = isset($dungeonroute) && !$dungeonroute->isSandbox())
         <ul class="nav nav-tabs" role="tablist">
-            @if( $hasRouteSettings ) )
+            @if( $hasRouteSettings )
                 <li class="nav-item">
                     <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
                        aria-controls="edit_route" aria-selected="true">

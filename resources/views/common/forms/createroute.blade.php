@@ -42,7 +42,7 @@ $dungeonroute = $dungeonroute ?? null;
             <label for="dungeon_route_level">
                 {{ __('Key levels') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('Indicate for which key levels your route is suited.')
+            __('Indicate for which key levels your route is suited. This can help others find your route more easily.')
              }}"></i>
             </label>
             {!! Form::text('dungeon_route_level', sprintf('%s;%s', $dungeonroute->level_min, $dungeonroute->level_max) ?? '',
