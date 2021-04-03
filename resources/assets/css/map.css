@@ -13,7 +13,7 @@ html, body, #map, #app, .wrapper {
 #map_header {
     position: fixed;
     width: 100%;
-    z-index: 99998;
+    z-index: 100000;
 }
 
 .map_fade_out {
@@ -222,6 +222,18 @@ html, body, #map, #app, .wrapper {
     #pulls_sidebar .bg-header {
         width: 350px;
         padding-right: 0 !important;
+
+        -webkit-transition: right 0.2s;
+        -o-transition: right 0.2s;
+        transition: right 0.2s;
+    }
+
+    #pulls_sidebar.mobile:not(.active) {
+        right: -350px;
+    }
+
+    #pulls_sidebar.mobile.active {
+        right: 0;
     }
 }
 
@@ -241,14 +253,35 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-#pulls_sidebar .pulls_container {
+#pulls_sidebar:not(.mobile) .pulls_container {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     max-height: calc(100vh - 158px);
 }
 
-#pulls_sidebar .edit .pulls_container {
+#pulls_sidebar:not(.mobile) .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (158px + 55px));
+}
+
+/** Mobile heights */
+#pulls_sidebar.mobile .handle {
+    background-color: #2E2E2E;
+    left: -40px;
+    padding: 10px 15px;
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+#pulls_sidebar.mobile .pulls_container {
+    max-height: calc(100vh - 109px);
+}
+
+#pulls_sidebar.mobile .edit .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(100vh - (109px + 55px));
 }
 
 #pulls_sidebar .map_killzonessidebar_killzone_fill_space {

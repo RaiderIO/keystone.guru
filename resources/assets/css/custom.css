@@ -280,7 +280,7 @@
 }
 
 .affixes_overview_table .affix_row {
-    padding: 5px;
+    padding: 6px;
 }
 
 .affixes_overview_table .last_column:not(.current_week) {

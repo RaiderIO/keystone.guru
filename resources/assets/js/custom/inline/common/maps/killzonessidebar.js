@@ -4,6 +4,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
     constructor(options) {
         super(options);
 
+        if (isMobile()) {
+            this.sidebar = new Sidebar(options);
+        }
+
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
         this._newPullKillZone = null;
@@ -373,6 +377,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let self = this;
 
+        if (this.sidebar instanceof Sidebar) {
+            this.sidebar.activate();
+        }
+
+        console.log(this.sidebar);
+
         // Setup new pull button
         $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
 
@@ -429,7 +439,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._removeKillZone(killZone);
 
             // If the killzone switched floors, we gotta rebuild the floor switches.
-            if( !isMassDelete ){
+            if (!isMassDelete) {
                 self._rebuildFloorSwitches();
             }
 

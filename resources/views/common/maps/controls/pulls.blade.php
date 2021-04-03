@@ -5,8 +5,10 @@
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
+    // Mobile sidebar options
+    'sidebarSelector' => '#pulls_sidebar',
+    'sidebarToggleSelector' => '#pulls_sidebar_trigger',
     'sidebarScrollSelector' => '#pulls_sidebar .pulls_container',
-    'sidebarToggleSelector' => '#killzonesidebarToggle',
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
@@ -16,8 +18,15 @@
     'edit' => $edit
 ]])
 
-<nav id="pulls_sidebar" class="route_manipulation_tools top right row no-gutters map_fade_out">
+<nav id="pulls_sidebar"
+     class="route_manipulation_tools top right row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
+        @if($isMobile)
+            <div id="pulls_sidebar_trigger" class="handle">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+        @endif
+
         @if($edit)
             <div class="">
                 <div class="container">
