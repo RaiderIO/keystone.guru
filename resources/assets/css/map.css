@@ -215,6 +215,7 @@ html, body, #map, #app, .wrapper {
 #pulls_sidebar,
 #pulls_sidebar .bg-header {
     padding-right: 0 !important;
+    user-select: none;
 }
 
 @media (max-width: 1440px) {
