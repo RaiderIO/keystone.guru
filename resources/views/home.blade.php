@@ -228,7 +228,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
         <div class="align-center container mb-4">
             <div class="row justify-content-center no-gutters">
-                <div class="col-4">
+                <div class="col-xl-4">
                     @include('common.dungeon.select', [
                         'id'       => $dungeonSelectId,
                         'label'    => false,

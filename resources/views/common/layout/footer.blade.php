@@ -27,8 +27,6 @@
                         <li class="mbr-text item-wrap">
                             <a href="{{ route('misc.about') }}">{{ __('About') }}</a>
                         </li>
-                        <li class="mbr-text item-wrap"><br></li>
-                        <li class="mbr-text item-wrap"><br></li>
                     </ul>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
