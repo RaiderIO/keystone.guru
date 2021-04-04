@@ -239,6 +239,23 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 </div>
                             </li>
                         @endif
+                        @php($isRedesign = str_contains(env('APP_URL'), 'redesign.'))
+                        <li class="nav-item">
+                            <a class="nav-link btn p-1" href="{{ route('redesign') }}"
+                               data-toggle="tooltip"
+                               @if( $isRedesign )
+                               title="{{ __('Revert to old Keystone.guru') }}"
+                               @else
+                               title="{{ __('Try the Keystone.guru redesign') }}"
+                                @endif
+                            >
+                                @if($isRedesign)
+                                    <i class="fas fa-level-down-alt text-warning"></i>
+                                @else
+                                    <i class="fas fa-level-up-alt text-success"></i>
+                                @endif
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -290,13 +307,29 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     @else
 
         @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
-            <div class="container-fluid alert alert-warning text-center mt-4">
-                <i class="fa fa-exclamation-triangle"></i>
+            @component('common.general.alert', ['type' => 'warning', 'dismiss' => false])
                 {{ __('Warning! You are currently on the staging environment of Keystone.guru. This is NOT the main site.') }}
                 <br>
                 <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
-            </div>
+            @endcomponent
         @endif
+
+        @component('common.general.alert', ['name' => 'redesign', 'type' => 'info'])
+            {{ __('Keystone.guru\'s redesign public beta is now available for opt-in prior to release. Would you like to try it?') }}
+            <br>
+            {{ __('You can always switch back using the button in the header\'s top right corner.') }}
+            <div class="row mt-2">
+                <div class="offset-md-4 col-md-4">
+                    <a class="btn btn-success" href="{{ route('redesign') }}">
+                        <i class="fas fa-check-circle"></i> {{ __('Yes please') }}
+                    </a>
+                    <a class="btn btn-danger close_alternative" href="#" data-dismiss="alert" aria-label="close"
+                       data-alert-dismiss-id="redesign">
+                        <i class="fas fa-times-circle"></i> {{ __('No thank you') }}
+                    </a>
+                </div>
+            </div>
+        @endcomponent
 
         @yield('global-message')
 

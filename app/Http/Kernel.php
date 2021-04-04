@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\RedesignRedirect;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -61,6 +62,7 @@ class Kernel extends HttpKernel
         'ajax' => \App\Http\Middleware\OnlyAjax::class,
         'viewcachebuster' => \App\Http\Middleware\ViewCacheBuster::class,
         'admindebugbar' => \App\Http\Middleware\AdminDebugBar::class,
-        'legal_agreed' => \App\Http\Middleware\LegalAgreed::class
+        'legal_agreed' => \App\Http\Middleware\LegalAgreed::class,
+        'redesignredirect' => RedesignRedirect::class
     ];
 }
