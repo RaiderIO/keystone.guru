@@ -60,6 +60,25 @@ $navs = [
                 <li class="nav-item nav-item-divider"></li>
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')
+                @php($isRedesign = str_contains(env('APP_URL'), 'redesign.'))
+                <li>
+                    <label class="btn btn-dark">
+                        <a href="{{ route('redesign') }}"
+                           data-toggle="tooltip"
+                           @if( $isRedesign )
+                           title="{{ __('Revert to old Keystone.guru') }}"
+                           @else
+                           title="{{ __('Try the Keystone.guru redesign') }}"
+                            @endif
+                        >
+                            @if($isRedesign)
+                                <i class="fas fa-level-down-alt text-warning"></i>
+                            @else
+                                <i class="fas fa-level-up-alt text-success"></i>
+                            @endif
+                        </a>
+                    </label>
+                </li>
             </ul>
         </div>
     </div>
