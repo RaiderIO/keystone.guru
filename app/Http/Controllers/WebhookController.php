@@ -55,14 +55,12 @@ class WebhookController extends Controller
             $lines = explode('\\n', $commit['message']);
 
             $embeds[] = [
-                'color'       => 14641434, // '#DF691A'
                 'title'       => substr(array_shift($lines), 0, 256),
                 'description' => substr(trim(view('app.commit.commit', [
                     'commit' => $commit,
                     'lines'  => $lines,
                 ])->render()), 0, 2000),
                 'url'         => $commit['url'],
-                'timestamp'   => $commit['timestamp'],
             ];
 
             if (!empty($commit['added'])) {
@@ -91,6 +89,9 @@ class WebhookController extends Controller
                     ])->render()), 0, 2000)
                 ];
             }
+
+            $lastKey = array_key_last($embeds);
+            $embeds[$lastKey]['timestamp'] = $commit['timestamp'];
         }
 
         // Add footer to the last embed
