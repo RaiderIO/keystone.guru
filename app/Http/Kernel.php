@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
+use App\Http\Middleware\RedesignRedirect;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -72,14 +73,15 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'            => Authenticate::class,
-        'auth.basic'      => AuthenticateWithBasicAuth::class,
-        'bindings'        => SubstituteBindings::class,
-        'can'             => Authorize::class,
-        'guest'           => RedirectIfAuthenticated::class,
-        'throttle'        => ThrottleRequests::class,
-        'ajax'            => OnlyAjax::class,
-        'viewcachebuster' => ViewCacheBuster::class,
-        'legal_agreed'    => LegalAgreed::class
+        'auth'             => Authenticate::class,
+        'auth.basic'       => AuthenticateWithBasicAuth::class,
+        'bindings'         => SubstituteBindings::class,
+        'can'              => Authorize::class,
+        'guest'            => RedirectIfAuthenticated::class,
+        'throttle'         => ThrottleRequests::class,
+        'ajax'             => OnlyAjax::class,
+        'viewcachebuster'  => ViewCacheBuster::class,
+        'legal_agreed'     => LegalAgreed::class,
+        'redesignredirect' => RedesignRedirect::class
     ];
 }

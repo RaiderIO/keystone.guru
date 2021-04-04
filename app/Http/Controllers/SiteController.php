@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+use Spatie\Url\Url;
 
 class SiteController extends Controller
 {
@@ -174,5 +175,21 @@ class SiteController extends Controller
     public function embed(Request $request, DungeonRoute $dungeonroute)
     {
         return view('misc.embed', ['model' => $dungeonroute]);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function redesign(Request $request)
+    {
+        // Get the existing redesign state
+        $redesign = (int) ($_COOKIE['redesign'] ?? 0);
+
+        // Flip it
+        setcookie('redesign', abs($redesign - 1));
+
+        // Redirect to home, this will then redirect to the redesign site because of middleware
+        return redirect()->home();
     }
 }

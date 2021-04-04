@@ -22,7 +22,7 @@ use App\Http\Controllers\WebhookController;
 
 Auth::routes();
 
-Route::group(['middleware' => ['viewcachebuster']], function ()
+Route::group(['middleware' => ['viewcachebuster', 'redesignredirect']], function ()
 {
         // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
@@ -99,6 +99,9 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
+
+    // Redesign redirect
+    Route::get('redesign', [SiteController::class, 'redesign'])->name('redesign');
 
     // Webhooks
     Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
