@@ -70,7 +70,7 @@ tput setaf 2;
 echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
-php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
+#php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 php artisan vendor:publish --provider="PragmaRX\Tracker\Vendor\Laravel\ServiceProvider"
 
 # In case Tracker is not working, check this -> https://github.com/antonioribeiro/tracker#installing

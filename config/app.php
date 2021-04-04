@@ -182,7 +182,6 @@ return [
          * Custom
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -254,7 +253,6 @@ return [
         'Image'        => Intervention\Image\Facades\Image::class,
         'Tracker'      => PragmaRX\Tracker\Vendor\Laravel\Facade::class,
         'DataTables'   => Yajra\DataTables\Facades\DataTables::class,
-        'Debugbar'     => Barryvdh\Debugbar\Facade::class,
         'Agent'        => Jenssegers\Agent\Facades\Agent::class,
         'GitHub'       => GrahamCampbell\GitHub\GitHubServiceProvider::class,
     ],
