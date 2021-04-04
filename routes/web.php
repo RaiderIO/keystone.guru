@@ -20,7 +20,7 @@ use App\Http\Controllers\SiteController;
 
 Auth::routes();
 
-Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
+Route::group(['middleware' => ['viewcachebuster', 'admindebugbar', 'redesignredirect']], function ()
 {
 
     // Catch for hard-coded /home route in RedirectsUsers.php
@@ -86,6 +86,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
+
+    // Redesign redirect
+    Route::get('redesign', [SiteController::class, 'redesign'])->name('redesign');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
     {

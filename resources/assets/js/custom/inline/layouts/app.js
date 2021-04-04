@@ -26,19 +26,17 @@ class LayoutsApp extends InlineCode {
             this._newPassword('#modal-register_password');
         }
 
-        $('.close').bind('click', function () {
-            let dimissId = $(this).data('alert-dismiss-id');
+        $('.close,.close_alternative').bind('click', function () {
+            let dismissId = $(this).data('alert-dismiss-id');
             // Cookie is now set to dismiss this alert permanently
-            Cookies.set('alert-dismiss-' + dimissId, true, {expires: 30});
+            Cookies.set(`alert-dismiss-${dismissId}`, true, {expires: 30});
         });
 
         // When in a model-based layout with tabs, make sure the selected_modal_id actually moves the page to another when changed
         let $selectedModal = $('#selected_model_id');
         if ($selectedModal.length > 0) {
             $selectedModal.bind('change', function () {
-                let optionSelected = $("option:selected", this);
-
-                window.location.href = optionSelected.data('url');
+                window.location.href = $("option:selected", this).data('url');
             });
         }
     }
