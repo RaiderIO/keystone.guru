@@ -52,25 +52,53 @@ class WebhookController extends Controller
 
         $embeds = [];
         foreach ($commits as $commit) {
-            $lines = explode('\n', $commit['message']);
+            $lines = explode('\\n', $commit['message']);
 
-            $embed = [
+            $embeds[] = [
                 'color'       => 14641434, // '#DF691A'
                 'title'       => substr(array_shift($lines), 0, 256),
-                'description' => substr(trim(view('app.commit.github', [
+                'description' => substr(trim(view('app.commit.commit', [
                     'commit' => $commit,
                     'lines'  => $lines,
                 ])->render()), 0, 2000),
                 'url'         => $commit['url'],
                 'timestamp'   => $commit['timestamp'],
-                'footer'      => [
-                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                    'text'     => 'Keystone.guru Discord Bot'
-                ],
             ];
 
-            $embeds[] = $embed;
+            if (!empty($commit['added'])) {
+                $embeds[] = [
+                    'color'       => 2328118, // #238636
+                    'description' => substr(trim(view('app.commit.added', [
+                        'commit' => $commit,
+                    ])->render()), 0, 2000)
+                ];
+            }
+
+            if (!empty($commit['modified'])) {
+                $embeds[] = [
+                    'color'       => 25284, // #0062C4
+                    'description' => substr(trim(view('app.commit.modified', [
+                        'commit' => $commit,
+                    ])->render()), 0, 2000)
+                ];
+            }
+
+            if (!empty($commit['removed'])) {
+                $embeds[] = [
+                    'color'       => 14300723, // #DA3633
+                    'description' => substr(trim(view('app.commit.removed', [
+                        'commit' => $commit,
+                    ])->render()), 0, 2000)
+                ];
+            }
         }
+
+        // Add footer to the last embed
+        $lastKey = array_key_last($embeds);
+        $embeds[$lastKey]['footer'] = [
+            'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+            'text'     => 'Keystone.guru Discord Bot'
+        ];
 
         $discordApiService->sendEmbeds(env('DISCORD_GITHUB_WEBHOOK'), $embeds);
 

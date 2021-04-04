@@ -269,7 +269,7 @@ class DungeonrouteTable extends InlineCode {
 
                                 let data = $.extend({}, {
                                     edit: false,
-                                    dark: tag.color === null ? null : isColorDark(tag.color)
+                                    dark: tag.color === null ? false : isColorDark(tag.color)
                                 }, tag);
 
                                 tags.push(template(data));

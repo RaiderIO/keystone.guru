@@ -13,7 +13,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Spatie\Url\Url;
 
 class SiteController extends Controller
 {
@@ -181,7 +180,7 @@ class SiteController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function redesign(Request $request)
+    public function redesignToggle(Request $request)
     {
         // Get the existing redesign state
         $redesign = (int) ($_COOKIE['redesign'] ?? 0);

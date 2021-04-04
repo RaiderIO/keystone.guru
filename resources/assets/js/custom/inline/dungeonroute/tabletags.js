@@ -84,7 +84,7 @@ class DungeonRouteTableTagsHandler {
 
         let data = $.extend({}, {
             edit: true,
-            dark: tag.color === null ? null : isColorDark(tag.color)
+            dark: tag.color === null ? false : isColorDark(tag.color)
         }, tag);
 
         $('#tags_container').append(template(data));

@@ -101,7 +101,8 @@ Route::group(['middleware' => ['viewcachebuster', 'redesignredirect']], function
     Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
 
     // Redesign redirect
-    Route::get('redesign', [SiteController::class, 'redesign'])->name('redesign');
+    Route::get('redesign', [SiteController::class, 'redesignToggle'])->name('redesign');
+    Route::get('old', [SiteController::class, 'redesignToggle'])->name('old');
 
     // Webhooks
     Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
