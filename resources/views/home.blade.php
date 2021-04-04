@@ -6,13 +6,11 @@
     @include('common.general.messages', ['center' => true])
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
-        <div class="container-fluid alert alert-warning text-center mt-4">
-            <div class="container">
-                {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
-                 not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
-                 Firefox or Microsoft Edge. My apologies.') }}
-            </div>
-        </div>
+        @component('common.general.alert', ['type' => 'warning', 'dismiss' => false])
+            {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
+             not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
+             Firefox or Microsoft Edge.') }}
+        @endcomponent
     @endif
     <section class="probootstrap-hero mt-4">
         <div class="container">

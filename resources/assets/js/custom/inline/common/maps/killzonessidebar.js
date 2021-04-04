@@ -445,7 +445,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (this.map.options.edit) {
             this._draggable = new Draggable.Sortable(document.querySelectorAll('#killzones_container'), {
                 draggable: '.map_killzonessidebar_killzone',
-                classes: 'bg-primary'
+                classes: 'bg-primary',
+                delay: 100
             });
             this._draggable.on('drag:out', self._draggedKillZoneRow.bind(self));
             this._draggable.on('drag:stop', self._dragStop.bind(self));

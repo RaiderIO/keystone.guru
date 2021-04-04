@@ -20,7 +20,10 @@ use App\Http\Controllers\SiteController;
 
 Auth::routes();
 
-Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
+// Redesign redirect
+Route::get('redesign', [SiteController::class, 'redesign'])->name('redesign');
+
+Route::group(['middleware' => ['viewcachebuster', 'redesignredirect']], function ()
 {
 
     // Catch for hard-coded /home route in RedirectsUsers.php
