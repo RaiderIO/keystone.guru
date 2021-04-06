@@ -203,7 +203,7 @@ class APIDungeonRouteController extends Controller
         // May be modified/adjusted later on
         $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
 
-        $query = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
+        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live

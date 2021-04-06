@@ -77,6 +77,7 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|DungeonRouteAffixGroup[] $affixgroups
  * @property Collection|AffixGroup[] $affixes
  * @property Collection|DungeonRouteRating[] $ratings
+ * @property Collection|DungeonRouteFavorite[] $favorites
  *
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
@@ -851,23 +852,12 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int|mixed
+     * @return bool
      */
-    public function isFavoritedByCurrentUser()
+    public function isFavoritedByCurrentUser(): bool
     {
-        $result = false;
-        $user = Auth::user();
-        if ($user !== null) {
-            // @TODO Probably going to want an index on this one
-            $favorite = DB::table('dungeon_route_favorites')
-                ->where('dungeon_route_id', '=', $this->id)
-                ->where('user_id', '=', $user->id)
-                ->first();
-
-            $result = $favorite !== null;
-        }
-
-        return $result;
+        // Use relationship caching instead of favorites() to save some queries
+        return Auth::check() ? $this->favorites->where('user_id', Auth::id())->isNotEmpty() : false;
     }
 
     /**

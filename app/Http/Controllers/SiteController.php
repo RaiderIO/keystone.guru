@@ -9,6 +9,7 @@ use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -118,14 +119,17 @@ class SiteController extends Controller
      */
     public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $limit = config('keystoneguru.discover.limits.affix_overview');
+        $closure = function (Builder $builder)
+        {
+            $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
+        };
 
         return view('misc.affixes', [
             'seasonService' => $seasonService,
             'offset'        => (int)$request->get('offset', 0),
             'dungeonroutes' => [
-                'thisweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup(), $limit),
-                'nextweek' => $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup(), $limit),
+                'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
             ]
         ]);
     }
@@ -183,7 +187,7 @@ class SiteController extends Controller
     public function redesignToggle(Request $request)
     {
         // Get the existing redesign state
-        $redesign = (int) ($_COOKIE['redesign'] ?? 0);
+        $redesign = (int)($_COOKIE['redesign'] ?? 0);
 
         // Flip it
         setcookie('redesign', abs($redesign - 1), 0, '', 'keystone.guru');
