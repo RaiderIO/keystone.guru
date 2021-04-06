@@ -49,11 +49,12 @@ class WebhookController extends Controller
         $this->validateGithubWebhook($request);
 
         $commits = $request->get('commits');
+        $ref = $request->get('ref');
 
         $embeds = [];
         foreach ($commits as $commit) {
             // Skip system commits (such as merge branch X into Y)
-            if ($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com' ||
+            if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
                 // Skip commits that have originally be done on another branch
                 !$commit['distinct']) {
                 continue;
@@ -65,7 +66,7 @@ class WebhookController extends Controller
                 'title'       => sprintf(
                     '%s: %s',
                     // Branch name
-                    str_replace('refs/heads/', '', $commit['ref']),
+                    str_replace('refs/heads/', '', $ref),
                     substr(array_shift($lines), 0, 256)
                 ),
                 'description' => substr(trim(view('app.commit.commit', [
