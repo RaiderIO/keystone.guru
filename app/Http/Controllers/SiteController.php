@@ -186,7 +186,7 @@ class SiteController extends Controller
         $redesign = (int) ($_COOKIE['redesign'] ?? 0);
 
         // Flip it
-        setcookie('redesign', abs($redesign - 1));
+        setcookie('redesign', abs($redesign - 1), 0, '', 'keystone.guru');
 
         // Redirect to home, this will then redirect to the redesign site because of middleware
         return redirect()->home();

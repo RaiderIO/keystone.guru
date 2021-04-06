@@ -4,9 +4,6 @@
     {{ __('View Users') }}
 @endsection
 
-<?php
-/** @var $models \Illuminate\Support\Collection */
-?>
 @section('scripts')
     <script type="text/javascript">
         /** @type object */

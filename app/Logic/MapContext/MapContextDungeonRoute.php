@@ -55,7 +55,7 @@ class MapContextDungeonRoute extends MapContext
             'enemyForces'             => $this->_context->enemy_forces,
 
             // Relations
-            'killZones'               => $this->_context->killzones()->orderBy('index')->get(),
+            'killZones'               => $this->_context->killzones,
             'mapIcons'                => $this->_context->mapicons,
             'paths'                   => $this->_context->paths,
             'brushlines'              => $this->_context->brushlines,

@@ -244,7 +244,7 @@ class DungeonRoute extends Model
      */
     public function killzones()
     {
-        return $this->hasMany('App\Models\KillZone');
+        return $this->hasMany('App\Models\KillZone')->orderBy('index');
     }
 
     /**
@@ -767,6 +767,7 @@ class DungeonRoute extends Model
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming = $this->teeming;
+        $dungeonroute->enemy_forces = $this->enemy_forces;
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.

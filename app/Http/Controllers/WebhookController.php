@@ -52,10 +52,22 @@ class WebhookController extends Controller
 
         $embeds = [];
         foreach ($commits as $commit) {
+            // Skip system commits (such as merge branch X into Y)
+            if ($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com' ||
+                // Skip commits that have originally be done on another branch
+                !$commit['distinct']) {
+                continue;
+            }
+
             $lines = explode('\\n', $commit['message']);
 
             $embeds[] = [
-                'title'       => substr(array_shift($lines), 0, 256),
+                'title'       => sprintf(
+                    '%s: %s',
+                    // Branch name
+                    str_replace('refs/heads/', '', $commit['ref']),
+                    substr(array_shift($lines), 0, 256)
+                ),
                 'description' => substr(trim(view('app.commit.commit', [
                     'commit' => $commit,
                     'lines'  => $lines,

@@ -26,7 +26,6 @@ class UserController extends Controller
     public function list()
     {
         return view('admin.user.list', [
-            'models'    => User::with('roles', 'dungeonroutes', 'patreondata')->get(),
             'paidTiers' => PaidTier::all()
         ]);
     }
