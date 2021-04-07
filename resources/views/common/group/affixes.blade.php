@@ -1,13 +1,13 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
 /** @var $seasonService \App\Service\Season\SeasonService */
+/** @var $affixes \Illuminate\Support\Collection */
 /** This is the display of affixes when selecting them when creating a new route */
 
 /** @var \Illuminate\Support\Collection|\App\Models\AffixGroup[] $affixGroups */
 $currentSeason = $seasonService->getCurrentSeason();
 $seasonalIndexLetters = $currentSeason->getSeasonalIndexesAsLetters();
 $affixGroups = $currentSeason->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
-$affixes = \App\Models\Affix::all();
 $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
 $teemingSelector = $teemingSelector ?? null;
 $names = $names ?? true;

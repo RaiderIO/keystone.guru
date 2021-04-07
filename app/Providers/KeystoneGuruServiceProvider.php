@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
@@ -118,6 +119,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
                 'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
+                'affixes'                         => Affix::all(),
 
                 // Misc
                 'expansions'                      => Expansion::all(),
@@ -199,6 +201,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.release.release', function (View $view) use ($globalViewVariables)
         {
             $view->with('categories', $globalViewVariables['releaseChangelogCategories']);
+        });
+
+        // Displaying affixes
+        view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('affixes', $globalViewVariables['affixes']);
         });
 
         // Displaying a release

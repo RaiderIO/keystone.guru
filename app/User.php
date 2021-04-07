@@ -83,6 +83,8 @@ class User extends Authenticatable
         'initials'
     ];
 
+    protected $with = 'iconfile';
+
     /**
      * @return string
      */
