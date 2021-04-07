@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use App\Models\MapIcon;
 use App\Models\MapObjectToAwakenedObeliskLink;
 use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Support\Collection;
 trait HasLinkedAwakenedObelisk
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function linkedawakenedobelisks()
     {

@@ -69,7 +69,7 @@ class APIDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', $tagsRelationshipName])
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'ratings', 'pageviews', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')

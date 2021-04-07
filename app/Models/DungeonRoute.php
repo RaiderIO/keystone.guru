@@ -119,6 +119,8 @@ class DungeonRoute extends Model
 
     protected $fillable = ['enemy_forces'];
 
+    protected $with = ['faction', 'specializations', 'classes', 'races'];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string
