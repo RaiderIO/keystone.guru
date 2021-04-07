@@ -21,27 +21,6 @@ class APIEnemyPackController extends Controller
 {
     use ChangesMapping;
     use ChecksForDuplicates;
-    use ListsEnemyPacks;
-
-    /**
-     * @param Request $request
-     * @return EnemyPack[]|Builder[]|Collection
-     */
-    function list(Request $request)
-    {
-        $floorId = $request->get('floor_id');
-        $enemies = $request->get('enemies', true);
-        $teeming = $request->get('teeming', false);
-
-        // If logged in, and we're NOT an admin
-        if (Auth::check() && !Auth::user()->hasRole('admin')) {
-            // Don't expose vertices
-            $enemies = true;
-        }
-
-
-        return $this->listEnemyPacks($floorId, $enemies, $teeming);
-    }
 
     /**
      * @param Request $request

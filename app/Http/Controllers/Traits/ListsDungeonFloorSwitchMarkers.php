@@ -20,7 +20,7 @@ trait ListsDungeonFloorSwitchMarkers
      * @param $floorId
      * @return Collection
      */
-    function listDungeonFloorSwitchMarkers($floorId)
+    function listDungeonFloorSwitchMarkers($floorId): Collection
     {
         return DungeonFloorSwitchMarker::where('floor_id', $floorId)->get();
     }

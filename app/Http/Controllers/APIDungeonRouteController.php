@@ -582,19 +582,17 @@ class APIDungeonRouteController extends Controller
 
         // Start parsing
         $result = [];
-        if ($publickey === 'admin') {
-            // Delete it so we don't fetch stuff we shouldn't!
-            $publickey = null;
-        } else {
+        $dungeonRoute = $publickey === 'admin' ? null : DungeonRoute::findOrFail($publickey);
+        if ($dungeonRoute !== null) {
             // Fetch dungeon route specific properties
             // Paths
             if (in_array('path', $fields)) {
-                $result['path'] = $this->listPaths($request->get('floor'), $publickey);
+                $result['path'] = $this->listPaths((int)$request->get('floor'), $dungeonRoute);
             }
 
             // Brushline
             if (in_array('brushline', $fields)) {
-                $result['brushline'] = $this->listBrushlines($request->get('floor'), $publickey);
+                $result['brushline'] = $this->listBrushlines((int)$request->get('floor'), $dungeonRoute);
             }
         }
 
@@ -605,24 +603,23 @@ class APIDungeonRouteController extends Controller
                 // Don't expose vertices
                 $enemyPackEnemies = true;
             }
-            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemyPackEnemies, $teeming);
+            $result['enemypack'] = $this->listEnemyPacks((int)$request->get('floor'), $enemyPackEnemies, $teeming);
         }
 
         // Enemy patrols
         if (in_array('enemypatrol', $fields)) {
-            $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
+            $result['enemypatrol'] = $this->listEnemyPatrols((int)$request->get('floor'));
         }
 
         // Map icons
         if (in_array('mapicon', $fields)) {
-            $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
+            $result['mapicon'] = $this->listMapIcons((int)$request->get('floor'), $dungeonRoute);
         }
 
         // Dungeon floor switch markers
         if (in_array('dungeonfloorswitchmarker', $fields)) {
-            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers($request->get('floor'));
+            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers((int)$request->get('floor'));
         }
-
 
         return $result;
     }

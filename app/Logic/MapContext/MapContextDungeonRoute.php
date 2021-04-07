@@ -41,7 +41,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context->getRouteKey());
+        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context);
     }
 
     public function toArray(): array
