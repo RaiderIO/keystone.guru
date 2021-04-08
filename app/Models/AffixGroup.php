@@ -6,13 +6,15 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property $id int The ID of this Affix.
  * @property $season_id int
  * @property $seasonal_index int
  *
- * @property Collection $affixes
+ * @property Collection|AffixGroupEaseTier[] $easetiers
+ * @property Collection|Affix[] $affixes
  * @property Season $season
  *
  * @mixin Eloquent
@@ -41,6 +43,14 @@ class AffixGroup extends CacheModel
         // rather than the normal id. This caused affixes to be misplaced in the Affixes page. But not elsewhere, so it's double strange.
         // No clue, this works so I'll keep it this way for the time being.
         return $this->belongsToMany('App\Models\Affix', 'affix_group_couplings')->orderBy('affix_group_couplings.id', 'asc');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function easetiers()
+    {
+        return $this->hasMany('App\Models\AffixGroupEaseTier');
     }
 
     /**

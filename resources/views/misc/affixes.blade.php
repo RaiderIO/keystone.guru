@@ -1,7 +1,7 @@
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Affixes')])
 <?php
 /** @var \App\Service\Season\SeasonService $seasonService */
-/** @var $offset */
+/** @var int $offset */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;

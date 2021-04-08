@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
  * @property $start datetime
  * @property $presets int
  *
- * @property Collection $affixgroups
+ * @property Collection|AffixGroup[] $affixgroups
  *
  * @mixin Eloquent
  */
