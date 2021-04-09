@@ -5,9 +5,11 @@ namespace App\Console\Commands\Scheduler;
 use App\Models\Affix;
 use App\Models\AffixGroupEaseTier;
 use App\Models\Dungeon;
+use App\Models\SubcreationEaseTierPull;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Subcreation\SubcreationApiServiceInterface;
 use Carbon\Carbon;
+use DateTimeZone;
 use Illuminate\Console\Command;
 
 class RefreshAffixGroupEaseTiers extends Command
@@ -48,54 +50,59 @@ class RefreshAffixGroupEaseTiers extends Command
     {
         $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
 
-        $dungeonList = Dungeon::active()->get();
-        $startTime = Carbon::now();
-        $totalSaved = 0;
+        $lastUpdatedAt = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
+        $lastEaseTierPull = SubcreationEaseTierPull::latest()->first();
 
-        foreach ($tierLists['tier_lists'] as $affixString => $tierList) {
-            $this->info(sprintf('Parsing %s', $affixString));
+        if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
 
-            $affixGroupId = $this->getAffixGroupByString($seasonService, $affixString);
+            $subcreationEaseTierPull = SubcreationEaseTierPull::create([
+                'current_affixes' => $tierLists['current_affixes'],
+                'source_url'      => $tierLists['source_url'],
+                'last_updated_at' => $lastUpdatedAt->setTimezone(new DateTimeZone(config('app.timezone')))->toDateTimeString()
+            ]);
 
-            // Only if we actually found an affix..
-            if ($affixGroupId !== null) {
-                $this->info(sprintf('Parsing for AffixGroup %s', $affixGroupId));
-                $saved = 0;
+            $dungeonList = Dungeon::active()->get();
+            $totalSaved = 0;
 
-                foreach ($tierList as $tier => $dungeons) {
-                    foreach ($dungeons as $dungeonName) {
+            foreach ($tierLists['tier_lists'] as $affixString => $tierList) {
+                $this->info(sprintf('Parsing %s', $affixString));
 
-                        // If found
-                        $dungeon = $dungeonList->where('name', $dungeonName)->first();
+                $affixGroupId = $this->getAffixGroupByString($seasonService, $affixString);
 
-                        if ($dungeon instanceof Dungeon) {
-                            (new AffixGroupEaseTier([
-                                'affix_group_id' => $affixGroupId,
-                                'dungeon_id'     => $dungeon->id,
-                                'tier'           => $tier
-                            ]))->save();
+                // Only if we actually found an affix..
+                if ($affixGroupId !== null) {
+                    $this->info(sprintf('Parsing for AffixGroup %s', $affixGroupId));
+                    $saved = 0;
 
-                            $saved++;
-                            $totalSaved++;
-                        } else {
-                            $this->error(sprintf('Unknown dungeon %s', $dungeonName));
+                    foreach ($tierList as $tier => $dungeons) {
+                        foreach ($dungeons as $dungeonName) {
+                            // If found
+                            $dungeon = $dungeonList->where('name', $dungeonName)->first();
+
+                            if ($dungeon instanceof Dungeon) {
+                                (new AffixGroupEaseTier([
+                                    'subcreation_ease_tier_pull_id' => $subcreationEaseTierPull->id,
+                                    'affix_group_id'                => $affixGroupId,
+                                    'dungeon_id'                    => $dungeon->id,
+                                    'tier'                          => $tier
+                                ]))->save();
+
+                                $saved++;
+                                $totalSaved++;
+                            } else {
+                                $this->error(sprintf('Unknown dungeon %s', $dungeonName));
+                            }
+                            break;
                         }
-                        break;
                     }
+
+                    $this->info(sprintf('Saved %s ease tiers', $saved));
+                } else {
+                    $this->error(sprintf('Unable to find Affixgroup for affixes %s', $affixString));
                 }
-
-                $this->info(sprintf('Saved %s ease tiers', $saved));
-            } else {
-                $this->error(sprintf('Unable to find Affixgroup for affixes %s', $affixString));
             }
-        }
-
-        // Only if we actually updated the table
-        if ($totalSaved > 0) {
-            $this->info($startTime->toDateTimeString());
-            // Delete all old ease tiers
-            $deleted = AffixGroupEaseTier::where('created_at', '<', $startTime)->delete();
-            $this->info(sprintf('Deleted %s old tiers', $deleted));
+        } else {
+            $this->error('Cannot update the subcreation ease tier tiers - the data has not updated yet');
         }
 
         return 0;

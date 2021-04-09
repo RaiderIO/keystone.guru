@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $id int The ID of this Affix.
+ * @property $subcreation_ease_tier_pull_id int
  * @property $affix_group_id int
  * @property $dungeon_id int
  * @property $tier string
@@ -19,7 +20,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AffixGroupEaseTier extends CacheModel
 {
     public $with = ['affixgroup', 'dungeon'];
-    public $fillable = ['affix_group_id', 'dungeon_id', 'tier'];
+    public $fillable = ['subcreation_ease_tier_pull_id', 'affix_group_id', 'dungeon_id', 'tier'];
+
+    /**
+     * @return BelongsTo
+     */
+    public function subcreationeasetierpull()
+    {
+        return $this->belongsTo('App\Models\SubcreationEaseTierPull');
+    }
 
     /**
      * @return BelongsTo
