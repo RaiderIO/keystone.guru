@@ -35,17 +35,17 @@
                     <ul class="list mbr-fonts-style display-4">
 
                         <li class="mbr-text item-wrap">
-                            <a href="https://www.patreon.com/keystoneguru" target="_blank">
+                            <a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-patreon"></i> {{ __('Patreon') }}
                             </a>
                         </li>
                         <li class="mbr-text item-wrap">
-                            <a href="https://discord.gg/2KtWrqw" target="_blank">
+                            <a href="https://discord.gg/2KtWrqw" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-discord"></i> {{ __('Discord') }}
                             </a>
                         </li>
                         <li class="mbr-text item-wrap">
-                            <a href="https://github.com/Wotuu/keystone.guru" target="_blank">
+                            <a href="https://github.com/Wotuu/keystone.guru" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-github"></i> {{ __('Github') }}
                             </a>
                         </li>
@@ -78,17 +78,17 @@
                     </h5>
                     <div class="social-row display-7">
                         <div class="soc-item">
-                            <a href="https://www.youtube.com/channel/UCtjlNmuS2kVQhNvPdW5D2Jg" target="_blank">
+                            <a href="https://www.youtube.com/channel/UCtjlNmuS2kVQhNvPdW5D2Jg" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-youtube"></i>
                             </a>
                         </div>
                         <div class="soc-item">
-                            <a href="https://twitter.com/keystoneguru" target="_blank">
+                            <a href="https://twitter.com/keystoneguru" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-twitter"></i>
                             </a>
                         </div>
                         <div class="soc-item">
-                            <a href="https://reddit.com/r/KeystoneGuru" target="_blank">
+                            <a href="https://reddit.com/r/KeystoneGuru" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-reddit"></i>
                             </a>
                         </div>

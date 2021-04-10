@@ -3,11 +3,11 @@
 /** @var $cols int */
 /** @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection */
 
-$dungeon = isset($dungeon) ? $dungeon : null;
-$cols = isset($cols) ? $cols : 2;
-$showMore = isset($showMore) ? $showMore : false;
-$loadMore = isset($loadMore) ? $loadMore : false;
-$showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
+$dungeon = $dungeon ?? null;
+$cols = $cols ?? 2;
+$showMore = $showMore ?? false;
+$loadMore = $loadMore ?? false;
+$showDungeonImage = $showDungeonImage ?? false;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">

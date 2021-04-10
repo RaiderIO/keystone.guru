@@ -1,5 +1,7 @@
+@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
 
 $showAffixes = isset($showAffixes) ? $showAffixes : true;
 $showDungeonImage = isset($showDungeonImage) ? $showDungeonImage : false;
@@ -45,8 +47,8 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         </a>
                     </h4>
                 </div>
-                <div class="col-auto">
-                    @if( $showAffixes )
+                @if( $showAffixes )
+                    <div class="col-auto">
                         <?php
                         $isTyrannical = $dungeonroute->isTyrannical();
                         $isFortified = $dungeonroute->isFortified();
@@ -54,7 +56,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         ?>
                         @foreach($dungeonroute->affixes as $affixGroup)
                             <div class="row no-gutters">
-                                @include('common.affixgroup.affixgroup', ['affixGroup' => $affixGroup, 'showText' => false])
+                                @include('common.affixgroup.affixgroup', ['affixGroup' => $affixGroup, 'showText' => false, 'dungeon' => $dungeonroute->dungeon])
                             </div>
                         @endforeach
                         <?php $affixes = ob_get_clean(); ?>
@@ -80,8 +82,18 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                                      src="{{ url('/images/affixes/fortified.jpg') }}"/>
                             </div>
                         @endif
+                    </div>
+                    @if($dungeonroute->affixes->count() === 1)
+                        <div class="col-auto px-1">
+                            <?php $tier = $subcreationTierListService->getTierForAffixAndDungeon($dungeonroute->affixes->first(), $dungeonroute->dungeon); ?>
+                            @if($tier !== null)
+                                <h4 class="font-weight-bold px-1">
+                                    @include('common.dungeonroute.tier', ['tier' => $tier])
+                                </h4>
+                            @endif
+                        </div>
                     @endif
-                </div>
+                @endif
             </div>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
                 <div class="col">

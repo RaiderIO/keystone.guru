@@ -216,7 +216,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('Patreon') }}
             </h4>
             @isset($user->patreondata)
-                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
+                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank" rel="noopener noreferrer">
                     {{ __('Unlink from Patreon') }}
                 </a>
 
@@ -232,7 +232,9 @@ $deleteConsequences = $user->getDeleteConsequences();
                             'redirect_uri' => route('patreon.link'),
                             'state' => csrf_token()
                             ])
-                        }}" target="_blank">{{ __('Link to Patreon') }}</a>
+                        }}" target="_blank" rel="noopener noreferrer">
+                    {{ __('Link to Patreon') }}
+                </a>
 
                 <p class="mt-2">
                     <span class="text-info"><i class="fa fa-info-circle"></i></span>
