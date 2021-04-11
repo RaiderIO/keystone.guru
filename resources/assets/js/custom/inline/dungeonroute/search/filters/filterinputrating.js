@@ -2,7 +2,6 @@ class SearchFilterRating extends SearchFilterInput {
     constructor(selector, onChange) {
         super({
             name: 'rating',
-            default: '',
             selector: selector,
             onChange: onChange
         });
@@ -27,5 +26,16 @@ class SearchFilterRating extends SearchFilterInput {
 
     getFilterHeaderText() {
         return `Rating: ${this.getValue()} and higher`;
+    }
+
+    /**
+     *
+     * @param value
+     */
+    setValue(value) {
+        $(this.options.selector).data('ionRangeSlider').update({
+            from: value.split(';')[0],
+            to: value.split(';')[1],
+        });
     }
 }

@@ -2,10 +2,12 @@ class LevelHandler {
     constructor(min, max) {
         this.min = min;
         this.max = max;
+
+        this.rangeSlider = null;
     }
 
     apply(selector, options) {
-        $(selector).ionRangeSlider($.extend({
+        this.rangeSlider = $(selector).ionRangeSlider($.extend({
             grid: true,
             grid_snap: true,
             type: 'double',

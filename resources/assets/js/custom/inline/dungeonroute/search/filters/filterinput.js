@@ -3,7 +3,19 @@ class SearchFilterInput extends SearchFilter {
         super(options);
     }
 
+    /**
+     *
+     * @returns {string}
+     */
     getValue() {
         return $(this.options.selector).val();
+    }
+
+    /**
+     *
+     * @param value
+     */
+    setValue(value) {
+        $(this.options.selector).val(value);
     }
 }

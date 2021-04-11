@@ -2,7 +2,6 @@ class SearchFilterEnemyForces extends SearchFilter {
     constructor(selector, onChange) {
         super({
             name: 'enemy_forces',
-            default: '',
             selector: selector,
             onChange: onChange
         });
@@ -16,6 +15,14 @@ class SearchFilterEnemyForces extends SearchFilter {
 
     getValue() {
         return $(this.options.selector).is(':checked') ? 1 : 0;
+    }
+
+    setValue(value) {
+        if( value ) {
+            $(this.options.selector).attr('checked', 'checked');
+        } else {
+            $(this.options.selector).removeAttr('checked');
+        }
     }
 
     getFilterHeaderText() {

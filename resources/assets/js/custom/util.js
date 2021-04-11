@@ -383,3 +383,26 @@ $.fn.isInViewport = function () {
     let viewportBottom = viewportTop + $(window).height();
     return elementBottom > viewportTop && elementTop < viewportBottom;
 };
+
+/**
+ * @see https://stackoverflow.com/a/1099670/771270
+ * @returns {{}}
+ */
+function getQueryParams() {
+    let qs = document.location.search.split('+').join(' '),
+        params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    let count = 0;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+
+        // Just in case..
+        if( ++count > 100 ){
+            break;
+        }
+    }
+
+    return params;
+}

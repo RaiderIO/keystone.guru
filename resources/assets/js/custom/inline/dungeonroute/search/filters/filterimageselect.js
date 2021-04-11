@@ -24,4 +24,16 @@ class SearchFilterImageSelect extends SearchFilter {
 
         return ids;
     }
+
+    setValue(value) {
+        $(`${this.options.selector}`).removeClass('selected');
+
+        let split = value.split(',');
+
+        for (let index in split) {
+            if (split.hasOwnProperty(index)) {
+                $(`${this.options.selector}[data-id='${split[index]}']`).addClass('selected');
+            }
+        }
+    }
 }

@@ -14,7 +14,7 @@ class SearchParams {
 
             let value = filter.getValue();
             // Prevent sending empty strings
-            if (value !== null && value !== '' && value.length > 0) {
+            if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
                 if (filter.options.array) {
                     this.params[`${filter.options.name}[]`] = value;
                 } else {
