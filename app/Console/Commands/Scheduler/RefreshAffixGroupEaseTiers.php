@@ -102,8 +102,11 @@ class RefreshAffixGroupEaseTiers extends Command
                 }
             }
         } else {
-            $this->error('Cannot update the subcreation ease tier tiers - the data has not updated yet');
+            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
         }
+
+        // Clear model cache so that it will be refreshed upon next request
+        $this->call('modelCache:clear', ['--model' => 'App\Models\AffixGroupEaseTier']);
 
         return 0;
     }
