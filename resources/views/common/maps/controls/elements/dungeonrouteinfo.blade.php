@@ -35,9 +35,9 @@ ob_start();
             {{ __('Affixes') }}
         </div>
     </div>
-    @foreach($dungeonroute->affixes as $affixGroup)
+    @foreach($dungeonroute->affixes as $affixgroup)
         <div class="row no-gutters">
-            @include('common.affixgroup.affixgroup', ['affixGroup' => $affixGroup, 'showText' => false, 'class' => 'w-100'])
+            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'showText' => false, 'class' => 'w-100'])
         </div>
     @endforeach
 </div>

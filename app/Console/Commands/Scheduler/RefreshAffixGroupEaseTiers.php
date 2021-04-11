@@ -53,7 +53,7 @@ class RefreshAffixGroupEaseTiers extends Command
         $lastUpdatedAt = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
         $lastEaseTierPull = SubcreationEaseTierPull::latest()->first();
 
-        if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
+//        if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
 
             $subcreationEaseTierPull = SubcreationEaseTierPull::create([
                 'current_affixes' => $tierLists['current_affixes'],
@@ -71,7 +71,7 @@ class RefreshAffixGroupEaseTiers extends Command
 
                 // Only if we actually found an affix..
                 if ($affixGroupId !== null) {
-                    $this->info(sprintf('Parsing for AffixGroup %s', $affixGroupId));
+                    $this->info(sprintf('Parsing for AffixGroup %s (%s)', $affixString, $affixGroupId));
                     $saved = 0;
 
                     foreach ($tierList as $tier => $dungeons) {
@@ -89,10 +89,10 @@ class RefreshAffixGroupEaseTiers extends Command
 
                                 $saved++;
                                 $totalSaved++;
+                                $this->info(sprintf('Saved dungeon %s (%s)', $dungeonName, $dungeon->id));
                             } else {
                                 $this->error(sprintf('Unknown dungeon %s', $dungeonName));
                             }
-                            break;
                         }
                     }
 
@@ -101,12 +101,13 @@ class RefreshAffixGroupEaseTiers extends Command
                     $this->error(sprintf('Unable to find Affixgroup for affixes %s', $affixString));
                 }
             }
-        } else {
-            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
-        }
+//        } else {
+//            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
+//        }
 
         // Clear model cache so that it will be refreshed upon next request
         $this->call('modelCache:clear', ['--model' => 'App\Models\AffixGroupEaseTier']);
+        $this->call('modelCache:clear', ['--model' => 'App\Models\SubcreationEaseTierPull']);
 
         return 0;
     }

@@ -1,7 +1,7 @@
 @inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
 <?php
 /** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
-/** @var $affixGroup \App\Models\AffixGroup */
+/** @var $affixgroup \App\Models\AffixGroup */
 $media = $media ?? 'lg';
 $showText = $showText ?? true;
 $class = $class ?? '';
@@ -10,8 +10,8 @@ $dungeon = $dungeon ?? null;
 <div class="row no-gutters {{ $class }}">
     <?php
     $affixIndex = 0;
-    foreach($affixGroup->affixes as $affix) {
-    $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
+    foreach($affixgroup->affixes as $affix) {
+    $lastColumn = count($affixgroup->affixes) - 1 === $affixIndex;
     ?>
     <div class="col">
         <div class="row no-gutters mt-2">
@@ -24,8 +24,8 @@ $dungeon = $dungeon ?? null;
             @if($showText)
                 <div class="col d-{{ $media }}-block d-none pl-1">
                     {{ $affix->name }}
-                    {{--                @if($lastColumn && $affixGroup->season->presets > 0 )--}}
-                    {{--                    {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}--}}
+                    {{--                @if($lastColumn && $affixgroup->season->presets > 0 )--}}
+                    {{--                    {{ __(sprintf('preset %s', $affixgroup->season->getPresetAt($startDate))) }}--}}
                     {{--                @endif--}}
                 </div>
             @endif
@@ -36,7 +36,7 @@ $dungeon = $dungeon ?? null;
     }
     ?>
     @if($dungeon instanceof \App\Models\Dungeon)
-        <?php $tier = $subcreationTierListService->getTierForAffixAndDungeon($affixGroup, $dungeon); ?>
+        <?php $tier = $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon); ?>
         @if($tier !== null)
             <div class="col">
                 <h5 class="font-weight-bold pl-1 mt-2">

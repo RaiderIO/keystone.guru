@@ -229,7 +229,6 @@ class APIDungeonRouteController extends Controller
         if ($request->has('level')) {
             $split = explode(';', $request->get('level'));
             if (count($split) === 2) {
-//                dd($split);
                 $query->where(function (Builder $query) use ($split)
                 {
                     $query->where('level_min', '>=', (int)$split[0])
@@ -327,6 +326,7 @@ class APIDungeonRouteController extends Controller
         };
         $discoverService = $discoverService->withBuilder($closure);
 
+        $affixGroup = null;
         switch ($category) {
             case 'popular':
                 if ($dungeon instanceof Dungeon) {
@@ -337,16 +337,16 @@ class APIDungeonRouteController extends Controller
                 break;
             case 'thisweek':
                 if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup());
                 } else {
-                    $result = $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup());
                 }
                 break;
             case 'nextweek':
                 if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextAffixGroup());
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $seasonService->getCurrentSeason()->getNextAffixGroup());
                 } else {
-                    $result = $discoverService->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup());
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $seasonService->getCurrentSeason()->getNextAffixGroup());
                 }
                 break;
             case 'new':
@@ -360,8 +360,9 @@ class APIDungeonRouteController extends Controller
 
         return view('common.dungeonroute.cardlist', [
             'dungeonroutes'    => $result,
+            'affixgroup'       => $affixGroup,
             'showAffixes'      => true,
-            'showDungeonImage' => true,
+            'showDungeonImage' => $dungeonId === null,
             'cols'             => 2,
         ])->render();
     }

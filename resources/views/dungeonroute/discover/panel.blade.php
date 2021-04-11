@@ -8,6 +8,7 @@ $cols = $cols ?? 2;
 $showMore = $showMore ?? false;
 $loadMore = $loadMore ?? false;
 $showDungeonImage = $showDungeonImage ?? false;
+$affixgroup = $affixgroup ?? null;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">
@@ -21,17 +22,17 @@ $showDungeonImage = $showDungeonImage ?? false;
                     {{ $title }}
                 @endisset
             </h2>
-            @isset($affixgroup)
+            @if($affixgroup !== null)
                 <div class="row mb-2">
                     <div class="offset-2">
                     </div>
                     <div class="col-8">
-                        @include('common.affixgroup.affixgroup', ['affixGroup' => $affixgroup])
+                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup])
                     </div>
                 </div>
             @endisset
             <div id="category_route_list">
-                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'showDungeonImage' => $showDungeonImage])
+                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'affixgroup' => $affixgroup, 'showDungeonImage' => $showDungeonImage])
             </div>
         </div>
     </div>
