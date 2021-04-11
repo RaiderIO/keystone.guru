@@ -1,7 +1,5 @@
-@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-/** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
 /** @var $tierAffixGroup \App\Models\AffixGroup|null */
 
 // Attempt a default value if there's only one affix set
@@ -88,14 +86,9 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                     </div>
                     <div class="col-auto px-1">
                         @if($tierAffixGroup !== null)
-                            <?php $tier = $subcreationTierListService->getTierForAffixAndDungeon($tierAffixGroup, $dungeonroute->dungeon); ?>
-                            @if($tier !== null)
-                                <h4 class="font-weight-bold px-1">
-                                    @include('common.dungeonroute.tier', ['tier' => $tier, 'affixgroup' => $tierAffixGroup])
-                                </h4>
-                            @else
-                                @dump($tierAffixGroup->id, $dungeonroute->dungeon->id)
-                            @endif
+                            <h4 class="font-weight-bold px-1">
+                                @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
+                            </h4>
                         @endif
                     </div>
                 @endif

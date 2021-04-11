@@ -1,6 +1,4 @@
-@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
 <?php
-/** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
 /** @var $affixgroup \App\Models\AffixGroup */
 $media = $media ?? 'lg';
 $showText = $showText ?? true;
@@ -36,13 +34,10 @@ $dungeon = $dungeon ?? null;
     }
     ?>
     @if($dungeon instanceof \App\Models\Dungeon)
-        <?php $tier = $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon); ?>
-        @if($tier !== null)
-            <div class="col">
-                <h5 class="font-weight-bold pl-1 mt-2">
-                    @include('common.dungeonroute.tier', ['tier' => $tier])
-                </h5>
-            </div>
-        @endif
+        <div class="col">
+            <h5 class="font-weight-bold pl-1 mt-2">
+                @include('common.dungeonroute.tier', ['affixgroup' => $affixgroup, 'dungeon' => $dungeon])
+            </h5>
+        </div>
     @endif
 </div>

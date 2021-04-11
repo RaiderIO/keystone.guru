@@ -1,12 +1,16 @@
+@inject('seasonService', 'App\Service\Season\SeasonService')
+
 <?php
-/** @var $expansionService \App\Service\Expansion\ExpansionService */
+/** @var $seasonService \App\Service\Season\SeasonService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
-$names = isset($names) ? $names : true;
-$links = isset($links) ? $links : collect();
+$names = $names ?? true;
+$links = $links ?? collect();
+
+$currentSeason = $seasonService->getCurrentSeason();
 
 for( $i = 0; $i < $rowCount; $i++ ) { ?>
 <div class="row no-gutters">
@@ -37,13 +41,25 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 {{--                                {{ __('Popular') }}--}}
 {{--                            </a>--}}
 {{--                            &middot;--}}
-                            <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]) }}">
-                                {{ __('This week') }}
+                            <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]); ?>
+                            <a href="{{ $url }}">
+                                {{ __('This week ') }}
                             </a>
+                            @include('common.dungeonroute.tier', [
+                                'dungeon' => $dungeon,
+                                'affixgroup' => $currentSeason->getCurrentAffixGroup(),
+                                'url' => $url,
+                            ])
                             &middot;
-                            <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]) }}">
-                                {{ __('Next week') }}
+                            <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]); ?>
+                            <a href="{{ $url }}">
+                                {{ __('Next week ') }}
                             </a>
+                            @include('common.dungeonroute.tier', [
+                                'dungeon' => $dungeon,
+                                'affixgroup' => $currentSeason->getNextAffixGroup(),
+                                'url' => $url,
+                            ])
                             &middot;
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('New') }}
