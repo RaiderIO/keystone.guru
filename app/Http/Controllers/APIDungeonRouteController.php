@@ -124,7 +124,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Handle favorites
-            if (array_search('favorite', $requirements) !== false) {
+            if (array_search('favorite', $requirements) !== false || $request->get('favorites', false)) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user)
                 {
                     /** @var $query Builder */

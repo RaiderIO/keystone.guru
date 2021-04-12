@@ -157,6 +157,7 @@ Route::group(['middleware' => ['viewcachebuster', 'redesignredirect']], function
         {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::get('routes', [ProfileController::class, 'routes'])->name('profile.routes');
+            Route::get('favorites', [ProfileController::class, 'favorites'])->name('profile.favorites');
             Route::get('tags', [ProfileController::class, 'tags'])->name('profile.tags');
             Route::patch('{user}', [ProfileController::class, 'update'])->name('profile.update');
             Route::delete('delete', [ProfileController::class, 'delete'])->name('profile.delete');

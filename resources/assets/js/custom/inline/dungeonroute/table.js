@@ -72,6 +72,10 @@ class DungeonrouteTable extends InlineCode {
      */
     setTableView(value) {
         switch (value) {
+            case 'favorites': {
+                this._tableView = new FavoritesTableView();
+                break;
+            }
             case 'profile': {
                 this._tableView = new ProfileTableView();
                 break;

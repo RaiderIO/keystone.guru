@@ -9,7 +9,8 @@ if (!isset($affixgroups)) {
 }
 
 /** @var App\Models\Team|null $team */
-$team = isset($team) ? $team : null;
+$team = $team ?? null;
+
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
@@ -100,7 +101,7 @@ if( Auth::check() ) {
         {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
         <?php
         $requirements = ['enough_enemy_forces' => __('Enough enemy forces')];
-        if (Auth::check()) {
+        if (Auth::check() && $view !== 'favorites') {
             $requirements['favorite'] = __('Favorite');
         }
         ?>
@@ -112,7 +113,7 @@ if( Auth::check() ) {
             'data-count-selected-text' => __('{0} requirements')
         ]) !!}
     </div>
-    @if($view === 'profile' || $view === 'team')
+    @if(($view === 'profile' || $view === 'team') && !$favorites)
         <div class="col-lg pl-1 pr-1">
             {!! Form::label('dungeonroute_tags_select[]', __('Tags')) !!}
             {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,

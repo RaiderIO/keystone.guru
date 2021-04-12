@@ -55,6 +55,15 @@ class ProfileController extends Controller
      * @param Request $request
      * @return Application|Factory|View
      */
+    public function favorites(Request $request)
+    {
+        return view('profile.favorites');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
     public function tags(Request $request)
     {
         return view('profile.tags');

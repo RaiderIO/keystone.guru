@@ -65,6 +65,9 @@ $user = Auth::user();
             <a class="dropdown-item" href="{{ route('profile.routes') }}">
                 <i class="fa fa-route"></i> {{ __('My routes') }}
             </a>
+            <a class="dropdown-item" href="{{ route('profile.favorites') }}">
+                <i class="fa fa-star"></i> {{ __('My favorites') }}
+            </a>
             <a class="dropdown-item" href="{{ route('profile.tags') }}">
                 <i class="fa fa-tag"></i> {{ __('My tags') }}
             </a>

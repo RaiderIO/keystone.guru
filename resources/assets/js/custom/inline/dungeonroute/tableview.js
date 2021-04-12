@@ -71,7 +71,8 @@ class ProfileTableView extends TableView {
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
-                {name: 'features', width: '25%'},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
                 {name: 'actions', width: '7%', clickable: false},
             ]
         };
@@ -83,6 +84,16 @@ class ProfileTableView extends TableView {
 
     getName() {
         return 'profile';
+    }
+}
+
+class FavoritesTableView extends ProfileTableView {
+    getAjaxParameters() {
+        return {favorites: 1};
+    }
+
+    getName() {
+        return 'favorites';
     }
 }
 
