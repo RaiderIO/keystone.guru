@@ -4,13 +4,14 @@
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show ads if not set
-$showAds = isset($showAds) ? $showAds : true;
+$showAds = $showAds ?? true;
 // Any class to add to the root div
-$rootClass = isset($rootClass) ? $rootClass : '';
+$rootClass = $rootClass ?? '';
 // Page title
-$title = isset($title) ? $title : null;
+$title = $title ?? null;
+$cookieConsent = $cookieConsent ?? true;
 ?>
-@extends('layouts.app', ['showAds' => $showAds, 'title' => $title, 'showAds' => $showAds])
+@extends('layouts.app', ['showAds' => $showAds, 'title' => $title, 'showAds' => $showAds, 'cookieConsent' => $cookieConsent])
 
 @section('app-content')
 

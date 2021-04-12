@@ -12,9 +12,9 @@ $title = isset($title) ? $title . ' - ' : '';
 $loginParams = isset($loginParams) ? $loginParams : [];
 $registerParams = isset($registerParams) ? $registerParams : [];
 // Show cookie consent
-$cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
+$cookieConsent = $cookieConsent ?? true;
 // If user already approved of the cookie..
-if (isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] === 'dismiss') {
+if ($cookieConsent && isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] === 'dismiss') {
     // Don't bother the user with it anymore
     $cookieConsent = false;
 }

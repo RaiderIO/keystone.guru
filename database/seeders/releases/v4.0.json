@@ -1,0 +1,75 @@
+{
+    "id": 94,
+    "release_changelog_id": 100,
+    "version": "v4.0",
+    "silent": 0,
+    "created_at": "2021-04-12T21:44:50+00:00",
+    "updated_at": "2021-04-12T21:44:50+00:00",
+    "changelog": {
+        "id": 100,
+        "release_id": 94,
+        "description": "Keystone.guru has a complete redesign! The design of almost the entire site has been reworked or revisited. Over 40 tickets have been resolved fixing bugs and adding a host of new features. A highlight of all new features:",
+        "changes": [
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 1,
+                "ticket_id": 706,
+                "change": "Added a dark and white theme.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 1,
+                "ticket_id": 691,
+                "change": "You can now upload an avatar for your profile.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 1,
+                "ticket_id": 693,
+                "change": "Added a new route discovery page, allowing you to easily find the routes you're looking for.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 1,
+                "ticket_id": 689,
+                "change": "If you still can't find what you're looking for, a dedicated search page allows you to to set custom filters to find exactly what you're looking for.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 1,
+                "ticket_id": 732,
+                "change": "https:\/\/mplus.subcreation.net\/ has been integrated in the above pages, allowing you to easily see the success rate of a dungeon for a specific affix.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 100,
+                "release_changelog_category_id": 3,
+                "ticket_id": 674,
+                "change": "Map settings have been completely reworked and many new options have been added.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            }
+        ]
+    }
+}

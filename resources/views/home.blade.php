@@ -84,8 +84,11 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                             <strong>{{ __('Discover new routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
-                                    Still can\'t find a route that suits your need? The route search page allows you to dial in on your exact needs to find a perfect match.') }}
+                            {!! __('Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
+                                    Integration with :subcreation makes it easy to see which dungeons are the easiest to time for any affix.
+                                    Still can\'t find a route that suits your needs? The :routesearch page allows you to dial in on your exact needs to find a perfect match.',
+                                    ['subcreation' => '<a href="https://mplus.subcreation.net/" target="_blank">mplus.subcreation.net</a>',
+                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
                         </p>
                     </div>
                 </div>
@@ -115,9 +118,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                             <strong>{{ __('Create your own routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('Import your routes from Mythic Dungeon Tools or create a new route from scratch. Keystone.guru offers various tools to make your route a memorable one,
+                            {!! __('Import your routes from Mythic Dungeon Tools or :createANewRoute from scratch. Keystone.guru offers various tools to make your route a memorable one,
                                     such as free drawing, pathing and placing of icons/comments. Enemy forces can be displayed raw or in percentage on a whim. Various other settings allow you
-                                    to customize your mapping experience to your liking.') }}
+                                    to customize your route creation experience to your liking.',
+                                    ['createANewRoute' => sprintf('<a href="#" data-toggle="modal" data-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
                         </p>
                     </div>
                 </div>
@@ -132,7 +136,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img src="{{ url(sprintf('images/home/%s_feature_get_organized.jpg', $theme)) }}"
-                             alt="Get organized">
+                             alt="{{ __('Get organized') }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
                     </div>
@@ -145,6 +149,36 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <p class="mbr-text mbr-fonts-style display-7">
                             {{ __('Organize your routes from your profile or through teams. Keystone.guru offers you a wide array of tools to keep all your routes organized
                                     and accessible by all your M+ team members. You can always export routes to Mythic Dungeon Tools format to share them with others.') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="image4 cid-soU8QlAKKP" id="image4-o">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img class="darkly_image"
+                             src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
+                             alt="{{ __('Custom dungeon mapping') }}"
+                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
+                             alt="{{ __('Custom dungeon mapping') }}"
+                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                        <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('Custom dungeon mapping') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {{ __('Keystone.guru has its own dungeon mapping with no dependencies on any external tool. View which enemies bolster others, drop sanguine ichor or burst your party. The mapping is open source and free. Always.') }}
                         </p>
                     </div>
                 </div>
@@ -205,7 +239,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <strong>{{ __('Mobile friendly') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('View or edit your routes anywhere you are - making toilet breaks that much more interesting.') }}
+                                {{ __('View or edit your routes anywhere you are on your phone or tablet - making toilet breaks that much more interesting.') }}
                             </p>
                         </div>
                     </div>
