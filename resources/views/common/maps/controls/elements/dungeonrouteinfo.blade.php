@@ -43,8 +43,8 @@ ob_start();
 </div>
 <?php $content = ob_get_clean(); ?>
 <!-- Dungeonroute info -->
-<div class="row">
-    <div class="col">
+<div class="row no-gutters">
+    <div class="col" data-toggle="tooltip" data-placement="right" title="{{ __('Route info') }}">
         <button id="map_dungeon_route_info_popover" class="btn btn-info w-100" data-toggle="popover"
                 data-placement="right"
                 data-content="{{ $content }}" data-html="true">

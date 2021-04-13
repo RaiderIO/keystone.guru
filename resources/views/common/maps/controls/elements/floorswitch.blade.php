@@ -1,8 +1,9 @@
 <?php
 /** @var \Illuminate\Support\Collection $floors */
 ?>
-<div class="row">
-    <div class="col btn-group dropright">
+<div class="row no-gutters">
+    <div class="col btn-group dropright" data-toggle="tooltip" data-placement="right"
+         title="{{ __('Switch floors') }}">
         <button type="button"
                 class="btn btn-accent dropdown-toggle {{ $floors->count() > 1 ? '' : 'disabled' }}"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
