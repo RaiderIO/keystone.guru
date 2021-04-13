@@ -203,7 +203,7 @@ if ($isAdmin) {
 
 
     @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
-        @php($hasRouteSettings = isset($dungeonroute) && !$dungeonroute->isSandbox())
+        <?php $hasRouteSettings = isset($dungeonroute) && !$dungeonroute->isSandbox() && $edit; ?>
         <ul class="nav nav-tabs" role="tablist">
             @if( $hasRouteSettings )
                 <li class="nav-item">
