@@ -88,6 +88,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
 
             $currentExpansion = $expansionService->getCurrentExpansion();
+            /** @var Release $latestRelease */
+            $latestRelease = Release::latest()->first();
 
             return [
                 'isProduction'                    => config('app.env') === 'production',
@@ -98,7 +100,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                     {
                         return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
                     }),
-                'latestReleaseId'                 => Release::max('id'),
+                'latestRelease'                   => $latestRelease,
+                'hasMinorVersionUpgrade'          => $latestRelease->isMajorUpgrade() || $latestRelease->isMinorUpgrade(),
                 'appVersion'                      => GitVersionHelper::getVersion(),
                 'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
 
@@ -167,11 +170,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
+            $view->with('hasMinorVersionUpgrade', $globalViewVariables['hasMinorVersionUpgrade']);
+            $view->with('latestRelease', $globalViewVariables['latestRelease']);
         });
 
-        view()->composer('common.layout.footer', function (View $view) use ($globalViewVariables)
+        view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables)
         {
-            $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestReleaseId'] > (int)$_COOKIE['changelog_release'] : true);
+            $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
         });
 
         view()->composer('common.layout.navuser', function (View $view)
