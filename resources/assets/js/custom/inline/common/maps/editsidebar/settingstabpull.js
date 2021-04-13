@@ -9,7 +9,7 @@ class SettingsTabPull extends SettingsTab {
 
         let self = this;
 
-        if (this.options.dungeonroute !== null) {
+        if (this.options.dungeonroute !== null && $('#edit_route_freedraw_options_gradient').length > 0) {
             // Gradient setup
             this._grapick = new Grapick({
                 el: '#edit_route_freedraw_options_gradient',

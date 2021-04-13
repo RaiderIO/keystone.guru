@@ -104,8 +104,8 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col pr-2">
                 <label for="map_settings_enemy_dangerous_border">
                     {{ __('Highlight dangerous enemies') }} <i class="fas fa-info-circle" data-toggle="tooltip"
-                                                              title="{{
-                    __('Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. 
+                                                               title="{{
+                    __('Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru.
                         These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.')
                      }}"></i>
                 </label>
@@ -121,27 +121,29 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
     </div>
 
-    <h4 class="mt-4">{{ __('Drawing') }}</h4>
-    <!-- Default line weight -->
-    <div class="form-group">
-        <div class="row">
-            <div class="col">
-                <label for="edit_route_freedraw_options_weight">
-                    {{ __('Default line weight') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    @if($edit)
+        <h4 class="mt-4">{{ __('Drawing') }}</h4>
+        <!-- Default line weight -->
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="edit_route_freedraw_options_weight">
+                        {{ __('Default line weight') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                     __('This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.')
                      }}"></i>
-                </label>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col line_weight_selection">
+                    <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                    {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
+                        $_COOKIE['polyline_default_weight'] ?? 0,
+                        ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col line_weight_selection">
-                <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
-                    isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
-                    ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-            </div>
-        </div>
-    </div>
+    @endif
 
     {{--    <div class="form-group mb-0">--}}
     {{--        <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">--}}

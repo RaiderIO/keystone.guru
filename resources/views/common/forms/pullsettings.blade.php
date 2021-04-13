@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
 
-$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
+$killZonesNumberStyleChecked = ($_COOKIE['kill_zones_number_style'] ?? 'percentage') === 'percentage';
 ?>
 <div class="pull_settings_tools container">
     <div class="form-group">
@@ -23,7 +23,7 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
         </div>
     </div>
 
-    @isset($dungeonroute)
+    @if(isset($dungeonroute) && $edit)
         <div class="form-group">
             <div class="row view_dungeonroute_details_row mt-2">
                 <div class="col">

@@ -236,11 +236,11 @@ if ($isAdmin) {
             @endisset
             <div id="map-settings" class="tab-pane fade {{ $hasRouteSettings ? '' : 'show active' }} mt-3"
                  role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
-                @include('common.forms.mapsettings', ['dungeonroute' => $dungeonroute])
+                @include('common.forms.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
             </div>
             <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel"
                  aria-labelledby="edit_route_pull_settings_tab">
-                @include('common.forms.pullsettings', ['dungeonroute' => $dungeonroute])
+                @include('common.forms.pullsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
             </div>
         </div>
 
