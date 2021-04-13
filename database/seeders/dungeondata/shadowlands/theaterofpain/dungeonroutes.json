@@ -9,6 +9,8 @@
         "published_state_id": 3,
         "title": "Sanguine-Quaking-Petko",
         "description": "",
+        "level_min": 2,
+        "level_max": 28,
         "difficulty": "Casual",
         "seasonal_index": 0,
         "enemy_forces": 271,
