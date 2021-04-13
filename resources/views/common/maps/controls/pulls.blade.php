@@ -29,32 +29,45 @@
 
         @if($edit)
             <div class="">
-                <div class="container">
-                    <div class="row mb-2 mt-2 no-gutters">
-                        <div class="col-2" data-toggle="tooltip" title="{{ __('Settings') }}">
-                            <button class="btn btn-info w-100" data-toggle="modal"
-                                    data-target="#route_settings_modal">
-                                <i class='fas fa-cog'></i>
-                            </button>
+                <div class="row pr-2 mb-2 no-gutters">
+                    <div class="col-auto" data-toggle="tooltip" title="{{ __('Settings') }}">
+                        <button class="btn btn-info w-100" data-toggle="modal"
+                                data-target="#route_settings_modal">
+                            <i class='fas fa-cog'></i>
+                        </button>
+                    </div>
+                    <div class="col pl-2 pr-2">
+                        <div id="killzones_new_pull" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> {{__('New pull')}}
                         </div>
-                        <div class="col-8 pl-2 pr-2">
-                            <div id="killzones_new_pull" class="btn btn-success w-100">
-                                <i class="fas fa-plus"></i> {{__('New pull')}}
-                            </div>
-                        </div>
-                        <div class="col-2" data-toggle="tooltip" title="{{ __('Delete all pulls') }}">
-                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                    </div>
+                    <div class="col-auto" data-toggle="tooltip" title="{{ __('Delete all pulls') }}">
+                        <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         @endif
 
+        @if($edit)
         <div class="">
             <div id="edit_route_enemy_forces_container"></div>
         </div>
+        @else
+        <div class="row pr-2 mb-2 no-gutters">
+            <div class="col-auto" data-toggle="tooltip" title="{{ __('Settings') }}">
+                <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
+                    <i class='fas fa-cog'></i>
+                </button>
+            </div>
+            <div class="col">
+                <div id="edit_route_enemy_forces_container" class="pt-1">
+
+                </div>
+            </div>
+        </div>
+        @endif
 
         <div class="pulls_container" data-simplebar>
 

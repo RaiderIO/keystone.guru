@@ -32,7 +32,7 @@ class DungeonRouteController extends Controller
      */
     public function new()
     {
-        return view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New route')]);
+        return view('dungeonroute.new');
     }
 
     /**
