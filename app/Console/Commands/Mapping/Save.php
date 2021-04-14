@@ -14,6 +14,7 @@ use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Save extends Command
@@ -41,6 +42,9 @@ class Save extends Command
      */
     public function handle()
     {
+        // Drop all caches for all models - otherwise it may produce some strange results
+        $this->call('modelCache:clear');
+
         $dungeonDataDir = database_path('/seeders/dungeondata/');
 
         $this->_saveDungeons($dungeonDataDir);
@@ -127,7 +131,7 @@ class Save extends Command
                 $demoRoute->setAppends([]);
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
-                $demoRoute->setHidden(['id', 'thumbnail_updated_at', 'unlisted']);
+                $demoRoute->setHidden(['id', 'thumbnail_updated_at', 'unlisted', 'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes']);
                 $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                                   'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
                                   'pridefulenemies', 'mapicons']);
@@ -136,7 +140,7 @@ class Save extends Command
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
                 // Thus, remove the IDs from both Paths and KillZones as we need to make new IDs when the DungeonRoute
                 // is imported into the production environment
-                $toHide = new \Illuminate\Database\Eloquent\Collection();
+                $toHide = new Collection();
                 // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
                 foreach ($demoRoute->playerspecializations as $item) {
                     $toHide->add($item);

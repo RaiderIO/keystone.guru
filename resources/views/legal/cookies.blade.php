@@ -119,7 +119,7 @@
         </tr>
         <tr>
             <td>
-                changelog_release_last_viewed
+                changelog_release
             </td>
             <td>
                 Keeps track of the latest release you've viewed so we can show the NEW keyword next to the changelog in

@@ -172,7 +172,7 @@ class Release extends CacheModel
     }
 
     /**
-     * @return Version|\PHLAK\SemVer\Version
+     * @return \PHLAK\SemVer\Version
      * @throws InvalidVersionException
      */
     public function getSymVer()

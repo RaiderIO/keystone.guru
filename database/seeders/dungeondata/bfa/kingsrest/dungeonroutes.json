@@ -9,6 +9,8 @@
         "published_state_id": 1,
         "title": "4.12 KR by Dratnos",
         "description": "",
+        "level_min": 2,
+        "level_max": 28,
         "difficulty": "Casual",
         "seasonal_index": 1,
         "enemy_forces": 252,

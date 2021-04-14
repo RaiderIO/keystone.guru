@@ -2,6 +2,9 @@
 /** @var $isProduction string */
 /** @var $version string */
 /** @var $theme string */
+/** @var $hasMinorVersionUpgrade bool */
+/** @var $hasNewChangelog bool */
+/** @var $latestRelease \App\Models\Release */
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -23,6 +26,11 @@ $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 $analytics = isset($analytics) ? $analytics : $isProduction;
 
 $rootClass = isset($rootClass) ? $rootClass : '';
+
+// Bit of a hack to do this here - but for now this works
+if ($hasMinorVersionUpgrade && $hasNewChangelog) {
+    setcookie('changelog_release', $latestRelease->id);
+}
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
 <head>
@@ -78,17 +86,23 @@ $rootClass = isset($rootClass) ? $rootClass : '';
 
 @guest
     <!-- Modal login -->
-    @component('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
+    @component('common.general.modal', ['id' => 'login_modal', 'class' => 'modal-dialog-small'])
         @include('common.forms.login', array_merge(['modal' => true], $loginParams))
     @endcomponent
     <!-- END modal login -->
 
     <!-- Modal register -->
-    @component('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
+    @component('common.general.modal', ['id' => 'register_modal', 'class' => 'modal-dialog-small register-modal-dialog'])
         @include('common.forms.register', array_merge(['modal' => true], $registerParams))
     @endcomponent
     <!-- END modal register -->
 @endguest
+
+@if($hasMinorVersionUpgrade && $hasNewChangelog)
+    @component('common.general.modal', ['id' => 'new_release_modal', 'active' => true])
+        @include('common.release.release', ['release' => $latestRelease])
+    @endcomponent
+@endif
 
 <!-- Scripts -->
 <script src="{{ asset('js/app-' . $version . '.js') . $devCacheBuster }}"></script>

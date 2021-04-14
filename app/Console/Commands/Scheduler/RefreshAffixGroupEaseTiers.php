@@ -10,6 +10,7 @@ use App\Service\Season\SeasonServiceInterface;
 use App\Service\Subcreation\SubcreationApiServiceInterface;
 use Carbon\Carbon;
 use DateTimeZone;
+use Exception;
 use Illuminate\Console\Command;
 
 class RefreshAffixGroupEaseTiers extends Command
@@ -44,7 +45,7 @@ class RefreshAffixGroupEaseTiers extends Command
      * @param SubcreationApiServiceInterface $subcreationApiService
      * @param SeasonServiceInterface $seasonService
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(SubcreationApiServiceInterface $subcreationApiService, SeasonServiceInterface $seasonService)
     {
@@ -53,8 +54,7 @@ class RefreshAffixGroupEaseTiers extends Command
         $lastUpdatedAt = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
         $lastEaseTierPull = SubcreationEaseTierPull::latest()->first();
 
-//        if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
-
+        if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
             $subcreationEaseTierPull = SubcreationEaseTierPull::create([
                 'current_affixes' => $tierLists['current_affixes'],
                 'source_url'      => $tierLists['source_url'],
@@ -65,13 +65,13 @@ class RefreshAffixGroupEaseTiers extends Command
             $totalSaved = 0;
 
             foreach ($tierLists['tier_lists'] as $affixString => $tierList) {
-                $this->info(sprintf('Parsing %s', $affixString));
+                $this->info(sprintf('- Parsing %s', $affixString));
 
                 $affixGroupId = $this->getAffixGroupByString($seasonService, $affixString);
 
                 // Only if we actually found an affix..
                 if ($affixGroupId !== null) {
-                    $this->info(sprintf('Parsing for AffixGroup %s (%s)', $affixString, $affixGroupId));
+                    $this->info(sprintf('-- Parsing for AffixGroup %s (%s)', $affixString, $affixGroupId));
                     $saved = 0;
 
                     foreach ($tierList as $tier => $dungeons) {
@@ -89,21 +89,21 @@ class RefreshAffixGroupEaseTiers extends Command
 
                                 $saved++;
                                 $totalSaved++;
-                                $this->info(sprintf('Saved dungeon %s (%s)', $dungeonName, $dungeon->id));
+                                $this->info(sprintf('--- Saved dungeon %s (%s)', $dungeonName, $dungeon->id));
                             } else {
-                                $this->error(sprintf('Unknown dungeon %s', $dungeonName));
+                                $this->error(sprintf('--- Unknown dungeon %s', $dungeonName));
                             }
                         }
                     }
 
-                    $this->info(sprintf('Saved %s ease tiers', $saved));
+                    $this->info(sprintf('-- Saved %s ease tiers', $saved));
                 } else {
-                    $this->error(sprintf('Unable to find Affixgroup for affixes %s', $affixString));
+                    $this->error(sprintf('-- Unable to find Affixgroup for affixes %s', $affixString));
                 }
             }
-//        } else {
-//            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
-//        }
+        } else {
+            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
+        }
 
         // Clear model cache so that it will be refreshed upon next request
         $this->call('modelCache:clear', ['--model' => 'App\Models\AffixGroupEaseTier']);
