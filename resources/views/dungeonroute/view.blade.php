@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title])
+@extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title, 'cookieConsent' => $model->demo === 1 ? false : null ])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
@@ -15,33 +15,29 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
     @parent
 
     @include('common.handlebars.affixgroupsselect', ['affixgroups' => $model->affixes])
-    @include('common.handlebars.groupsetup')
 
 @endsection
 @section('content')
     <div class="wrapper">
-        @include('common.maps.viewsidebar', [
-            'dungeon' => $dungeon,
-            'model' => $model,
-            'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
-            'floorId' => $floor->id,
-            'show' => [
-                'sharing' => true,
-                'shareable-link' => !$model->isSandbox(),
-                'embedable-link' => !$model->isSandbox(),
-                'export-mdt-string' => true,
-            ]
-        ])
-
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => false,
-            'floorId' => $floor->id
-        ])
-
-        @include('common.maps.killzonessidebar', [
-            'edit' => false
+            'floorId' => $floor->id,
+            'noUI' => (bool)$model->demo,
+            'gestureHandling' => (bool)$model->demo,
+            'showAttribution' => !(bool)$model->demo,
+            'show' => [
+                'share' => [
+                    'link' => !$model->isSandbox(),
+                    'embed' => !$model->isSandbox(),
+                    'mdt-export' => true,
+                    'publish' => false,
+                ]
+            ],
+            'hiddenMapObjectGroups' => [
+                'killzonepath'
+            ],
         ])
     </div>
 @endsection

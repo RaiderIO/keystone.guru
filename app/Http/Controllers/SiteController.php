@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
 use App\Models\Release;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Spatie\Url\Url;
 
 class SiteController extends Controller
 {
@@ -112,12 +113,25 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
+     * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory|View
      */
-    public function affixes(Request $request, SeasonService $seasonService)
+    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => (int)$request->get('offset', 0)]);
+        $closure = function (Builder $builder)
+        {
+            $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
+        };
+
+        return view('misc.affixes', [
+            'seasonService' => $seasonService,
+            'offset'        => (int)$request->get('offset', 0),
+            'dungeonroutes' => [
+                'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+            ]
+        ]);
     }
 
     /**
@@ -170,13 +184,13 @@ class SiteController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function redesign(Request $request)
+    public function redesignToggle(Request $request)
     {
         // Get the existing redesign state
-        $redesign = (int) ($_COOKIE['redesign'] ?? 0);
+        $redesign = (int)($_COOKIE['redesign'] ?? 0);
 
         // Flip it
-        setcookie('redesign', abs($redesign - 1));
+        setcookie('redesign', abs($redesign - 1), 0, '', 'keystone.guru');
 
         // Redirect to home, this will then redirect to the redesign site because of middleware
         return redirect()->home();

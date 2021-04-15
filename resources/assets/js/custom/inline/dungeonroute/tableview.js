@@ -71,7 +71,8 @@ class ProfileTableView extends TableView {
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
-                {name: 'features', width: '25%'},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
                 {name: 'actions', width: '7%', clickable: false},
             ]
         };
@@ -83,6 +84,41 @@ class ProfileTableView extends TableView {
 
     getName() {
         return 'profile';
+    }
+}
+
+class FavoritesTableView extends ProfileTableView {
+    getAjaxParameters() {
+        return {favorites: 1};
+    }
+
+    getName() {
+        return 'favorites';
+    }
+}
+
+class UserProfileTableView extends ProfileTableView {
+    constructor() {
+        super();
+
+        this._user = null;
+    }
+
+    getAjaxParameters() {
+        return {user_id: this._user.id};
+    }
+
+    getName() {
+        return 'userprofile';
+    }
+
+    /**
+     * Sets the user for which we're viewing the profile
+     * @param user
+     */
+    setUser(user) {
+        console.log('setUser', user);
+        this._user = user;
     }
 }
 

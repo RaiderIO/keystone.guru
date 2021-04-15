@@ -1,17 +1,7 @@
-.popupCustom .leaflet-popup-tip,
-.popupCustom .leaflet-popup-content-wrapper {
-    background: #4E5D6C;
-    color: #EBEBEB;
-}
-
 .popupCustom .leaflet-popup-content-wrapper {
     border-radius: 0;
 }
 
 .popupCustom .pickr .pcr-button {
     width: 100%;
-}
-
-.popupCustom .leaflet-popup-close-button {
-    color: #DF691A !important;
 }

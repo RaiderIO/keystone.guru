@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -17,7 +19,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Session;
@@ -25,64 +26,21 @@ use Teapot\StatusCode;
 
 class DungeonRouteController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param SeasonService $seasonService
-     * @return Factory|View|null
-     */
-    public function sandbox(Request $request, SeasonService $seasonService)
-    {
-        $result = null;
-
-        // User posted
-        if ($request->has('dungeon_id')) {
-            $dungeonRoute = new DungeonRoute();
-            $dungeonRoute->dungeon_id = $request->get('dungeon_id');
-            $dungeonRoute->title = sprintf('%s Sandbox', $dungeonRoute->dungeon->name);
-            $dungeonRoute->author_id = -1;
-            $dungeonRoute->faction_id = 1; // Unspecified
-            $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-            $dungeonRoute->teeming = 0; //(int)$request->get('teeming', 0) === 1;
-            $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
-            $dungeonRoute->save();
-
-            $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
-        } else if ($request->has('dungeonroute')) {
-            // Navigation to /try
-            // Only routes that are in try mode
-            try {
-                $dungeonRoute = DungeonRoute::where('public_key', $request->get('dungeonroute'))
-                    ->isSandbox()->firstOrFail();
-
-                $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
-            } catch (Exception $exception) {
-                $result = view('dungeonroute.sandboxclaimed');
-            }
-        } else {
-            $result = view('dungeonroute.sandbox', ['headerTitle' => __('Keystone.guru Sandbox')]);
-        }
-
-        return $result;
-    }
 
     /**
-     * Show a page for creating a new dungeon route.
-     *
      * @return Factory|View
      */
     public function new()
     {
-        $result = null;
+        return view('dungeonroute.new');
+    }
 
-        $user = Auth::user();
-        // @TODO This should be handled differently imho
-        if ($user->canCreateDungeonRoute()) {
-            $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New route')]);
-        } else {
-            $result = view('dungeonroute.limitreached');
-        }
-
-        return $result;
+    /**
+     * @return Factory|View
+     */
+    public function newtemporary()
+    {
+        return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New temporary route')]);
     }
 
     /**
@@ -183,6 +141,23 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return mixed
+     */
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
+    {
+        $dungeonroute = new DungeonRoute();
+
+        // May fail
+        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService)) {
+            abort(500, __('Unable to save route'));
+        }
+
+        return $dungeonroute;
+    }
+
+    /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return Application|RedirectResponse|Redirector
@@ -256,12 +231,6 @@ class DungeonRouteController extends Controller
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
-        } else if ($dungeonroute->isSandbox()) {
-            return view('dungeonroute.sandbox', [
-                'model'      => $dungeonroute,
-                'floor'      => $floor,
-                'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
-            ]);
         } else {
             return view('dungeonroute.edit', [
                 'headerTitle' => __('Edit route'),
@@ -339,13 +308,20 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory|
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function list()
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
     {
-        return view('dungeonroute.list');
+        // Store it and show the edit page
+        $dungeonroute = $this->storetemporary($request, $seasonService);
+
+        // Message to the user
+        Session::flash('status', __('Route created'));
+
+        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
     }
 
     /**

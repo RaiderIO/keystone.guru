@@ -8,10 +8,9 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Models\DungeonRoute;
 use App\Models\Path;
 use Illuminate\Support\Collection;
-use Mockery\Exception;
-use Teapot\StatusCode\Http;
 
 trait ListsPaths
 {
@@ -19,22 +18,14 @@ trait ListsPaths
      * Lists all paths on a specific floor of a dungeon route.
      *
      * @param $floorId
-     * @param $publicKey
+     * @param DungeonRoute|null $dungeonRoute
      * @return Collection
      */
-    function listPaths($floorId, $publicKey)
+    function listPaths($floorId, ?DungeonRoute $dungeonRoute): Collection
     {
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
-
-            $result = Path::with('polyline')
-                ->where('dungeon_route_id', $dungeonRoute->id)
-                ->where('floor_id', $floorId)
-                ->get();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
-
-        return $result;
+        return Path::with('polyline')
+            ->where('dungeon_route_id', $dungeonRoute->id)
+            ->where('floor_id', $floorId)
+            ->get();
     }
 }

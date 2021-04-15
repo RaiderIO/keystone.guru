@@ -21,13 +21,7 @@ class APIEnemyPatrolController extends Controller
 {
     use ChangesMapping;
     use ChecksForDuplicates;
-    use ListsEnemyPatrols;
     use SavesPolylines;
-
-    function list(Request $request)
-    {
-        return $this->listEnemyPatrols($request->get('floor_id'));
-    }
 
     /**
      * @param Request $request

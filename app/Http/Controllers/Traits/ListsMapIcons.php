@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
@@ -18,13 +19,12 @@ trait ListsMapIcons
      * Lists all map icons of a floor.
      *
      * @param $floorId
-     * @param $publicKey
+     * @param DungeonRoute|null $dungeonRoute
      * @return MapIcon[]|Collection
      */
-    function listMapIcons($floorId, $publicKey)
+    function listMapIcons($floorId, ?DungeonRoute $dungeonRoute)
     {
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
             $dungeonRouteId = $dungeonRoute->id;
             $teamId = $dungeonRoute->team_id;
         } catch (\Exception $ex) {

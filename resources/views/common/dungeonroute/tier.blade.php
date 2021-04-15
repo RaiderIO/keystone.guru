@@ -1,0 +1,25 @@
+@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
+<?php
+/** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
+/** @var $tier string */
+/** @var $dungeon \App\Models\Dungeon */
+/** @var $affixgroup \App\Models\AffixGroup */
+
+$tier = $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon);
+$url = $url ?? null;
+?>
+@if($tier !== null)
+    <a href="{{ $url ?? 'https://mplus.subcreation.net' }}" target="_blank" rel="noopener noreferrer">
+    <span class="tier {{ strtolower($tier) }}"
+          @if( $url === null )
+          data-toggle="tooltip"
+          title="{{ sprintf(
+            __('%s - data by https://mplus.subcreation.net'),
+                $affixgroup->getTextAttribute()
+            )}}"
+          @endif
+    >
+        {{ $tier }}
+    </span>
+    </a>
+@endif

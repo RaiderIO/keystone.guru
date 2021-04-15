@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpansionFormRequest;
 use App\Models\Expansion;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Session;
 
 class ExpansionController extends Controller
 {
     /**
      * @param ExpansionFormRequest $request
-     * @param Expansion $expansion
+     * @param Expansion|null $expansion
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(ExpansionFormRequest $request, Expansion $expansion = null)
     {
@@ -31,7 +36,7 @@ class ExpansionController extends Controller
     /**
      * Show a page for creating a new expansion.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
@@ -41,18 +46,18 @@ class ExpansionController extends Controller
     /**
      * @param Request $request
      * @param Expansion $expansion
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(Request $request, Expansion $expansion)
     {
-        return view('admin.expansion.edit', ['model' => $expansion, 'headerTitle' => __('Edit expansion')]);
+        return view('admin.expansion.edit', ['expansion' => $expansion, 'headerTitle' => __('Edit expansion')]);
     }
 
     /**
      * @param ExpansionFormRequest $request
      * @param Expansion $expansion
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function update(ExpansionFormRequest $request, Expansion $expansion)
     {
@@ -60,7 +65,7 @@ class ExpansionController extends Controller
         $expansion = $this->store($request, $expansion);
 
         // Message to the user
-        \Session::flash('status', __('Expansion updated'));
+        Session::flash('status', __('Expansion updated'));
 
         // Display the edit page
         return $this->edit($request, $expansion);
@@ -68,8 +73,8 @@ class ExpansionController extends Controller
 
     /**
      * @param ExpansionFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(ExpansionFormRequest $request)
     {
@@ -77,7 +82,7 @@ class ExpansionController extends Controller
         $expansion = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Expansion created'));
+        Session::flash('status', __('Expansion created'));
 
         return redirect()->route('admin.expansion.edit', ["expansion" => $expansion]);
     }
@@ -85,10 +90,10 @@ class ExpansionController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function list()
     {
-        return view('admin.expansion.list', ['models' => Expansion::all()]);
+        return view('admin.expansion.list', ['expansions' => Expansion::all()]);
     }
 }

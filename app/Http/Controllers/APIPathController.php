@@ -19,16 +19,7 @@ use Teapot\StatusCode\Http;
 class APIPathController extends Controller
 {
     use ChecksForDuplicates;
-    use ListsPaths;
     use SavesPolylines;
-
-    function list(Request $request)
-    {
-        return $this->listPaths(
-            $request->get('floor_id'),
-            $request->get('dungeonroute')
-        );
-    }
 
     /**
      * @param Request $request

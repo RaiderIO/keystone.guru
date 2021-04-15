@@ -4,10 +4,13 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 let gitRevisionPlugin = null; // Init in the config below
 
-mix.webpackConfig({
+mix.options({
+    // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
+    processCssUrls: false
+}).webpackConfig({
     watchOptions: {
-        ignored: ['node_modules', 'vendor'],
-        poll: 2000 // Check for changes every second
+        ignored: ['node_modules', 'vendor', 'storage'],
+        poll: 2000 // Check for changes every two seconds
     },
     // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
     resolve: {
@@ -103,6 +106,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/killzonepathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
 
@@ -132,6 +136,7 @@ let scripts = [
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',
     'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/killzonepath.js',
     'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',
@@ -223,6 +228,8 @@ mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.versio
     // Build a dashboard version for the admin
     .scripts(dashboardScripts, 'public/js/dashboard-' + gitRevisionPlugin.version() + '.js')
     .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
+    .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
+    .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')
     // Lib processing
     .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
     .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
@@ -252,6 +259,7 @@ if (images) {
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+    mix.copy('resources/assets/images/logo', 'public/images/logo', false);
     mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
     mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);

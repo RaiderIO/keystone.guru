@@ -25,15 +25,6 @@ class APIMapIconController extends Controller
     use ChangesMapping;
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
-    use ListsMapIcons;
-
-    function list(Request $request)
-    {
-        return $this->listMapIcons(
-            $request->get('floor_id'),
-            $request->get('dungeonroute', null)
-        );
-    }
 
     /**
      * @param Request $request
@@ -50,7 +41,7 @@ class APIMapIconController extends Controller
                 throw new Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
-        else if ($dungeonroute !== null && !$dungeonroute->isSandbox()) {
+        else if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 

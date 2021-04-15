@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Throw an exception')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Throw an exception')])
 
 @section('header-title', __('Throw an exception'))
 

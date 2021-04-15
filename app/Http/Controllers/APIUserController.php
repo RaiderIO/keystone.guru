@@ -23,7 +23,7 @@ class APIUserController
 
         foreach ($datatablesResult['data'] as $user) {
             /** @var $user User */
-            $user->makeVisible(['id', 'name', 'created_at', 'patreondata', 'roles_string', 'routes']);
+            $user->makeVisible(['id', 'name', 'email', 'created_at', 'patreondata', 'roles_string', 'routes']);
             $user->roles_string = $user->roles->pluck(['display_name'])->join(', ');
             $user->routes = $user->dungeonroutes->count();
             $user->unsetRelation('roles')->unsetRelation('dungeonroutes');

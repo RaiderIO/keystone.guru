@@ -580,11 +580,13 @@ class MapObject extends Signalable {
 
     /**
      * Deletes this object locally; removing it from the screen and everywhere else.
+     *
+     * @param massDelete boolean
      */
-    localDelete() {
+    localDelete(massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        this.signal('object:deleted');
+        this.signal('object:deleted', {mass_delete: massDelete});
     }
 
     /**
@@ -806,7 +808,7 @@ class MapObject extends Signalable {
     /**
      * Called when this map object was saved successfully.
      * @param json {object} The JSON response (if any).
-     * @param massSave (Boolean) True if the source of saving came from a mass-save action
+     * @param massSave {Boolean} True if the source of saving came from a mass-save action
      */
     onSaveSuccess(json, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
@@ -816,8 +818,9 @@ class MapObject extends Signalable {
     /**
      * Called when this map object was deleted successfully.
      * @param json {object} The JSON response (if any).
+     * @param massDelete {Boolean} True if the source of deletion came from a mass-delete action
      */
-    onDeleteSuccess(json) {
+    onDeleteSuccess(json, massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         this.cleanup();

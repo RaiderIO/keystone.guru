@@ -94,7 +94,7 @@ class MDTImportController extends Controller
     {
         $user = Auth::user();
 
-        $sandbox = (bool)$request->get('sandbox', false);
+        $sandbox = (bool)$request->get('mdt_import_sandbox', false);
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
             $string = $request->get('import_string');

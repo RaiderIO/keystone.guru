@@ -28,7 +28,7 @@ class Path extends Model
 
     public $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
     public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
-    public $with = ['polyline'];
+    public $with = ['polyline', 'linkedawakenedobelisks'];
     protected $appends = ['linked_awakened_obelisk_id'];
 
     /**

@@ -1,9 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 /** @var \App\Models\Dungeon $dungeon */
-
-$mapNumberStyleChecked = (isset($_COOKIE['map_number_style']) ? $_COOKIE['map_number_style'] : 'percentage') === 'percentage';
-$killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_COOKIE['kill_zones_number_style'] : 'percentage') === 'percentage';
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
@@ -25,16 +22,20 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
         <div class="container">
             <div class="form-group">
                 <div class="row mb-2 mt-2 no-gutters">
-                    <div class="col-10 pr-2">
+                    <div class="col-2">
+                        <button class="btn btn-info w-100" data-toggle="modal"
+                                data-target="#route_settings_modal">
+                            <i class='fas fa-cog'></i>
+                        </button>
+                    </div>
+                    <div class="col-8 pl-2 pr-2">
                         <div id="killzones_new_pull" class="btn btn-success w-100">
                             <i class="fas fa-plus"></i> {{__('New pull')}}
                         </div>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-info w-100"
-                                data-toggle="collapse" data-target="#killzones_pulls_settings_container"
-                                aria-expanded="false" aria-controls="killzones_pulls_settings_container">
-                            <i class="fas fa-cog"></i>
+                        <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -43,43 +44,6 @@ $killZonesNumberStyleChecked = (isset($_COOKIE['kill_zones_number_style']) ? $_C
             <div id="killzones_pulls_settings_container" class="collapse">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-6">
-                            <div class="font-weight-bold">
-                                {{ __('Enemy style') }}:
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <input id="killzones_pulls_settings_map_number_style" type="checkbox"
-                                   {{ $mapNumberStyleChecked ? 'checked' : '' }}
-                                   data-toggle="toggle" data-width="120px" data-height="20px"
-                                   data-onstyle="primary" data-offstyle="primary"
-                                   data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="font-weight-bold">
-                                {{ __('Pull style') }}:
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <input id="killzones_pulls_settings_number_style" type="checkbox"
-                                   {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
-                                   data-toggle="toggle" data-width="120px" data-height="20px"
-                                   data-onstyle="primary" data-offstyle="primary"
-                                   data-on="{{ __('Percentage') }}" data-off="{{ __('Forces') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
-                                <i class="fas fa-trash"></i> {{ __('Delete all pulls') }}
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>

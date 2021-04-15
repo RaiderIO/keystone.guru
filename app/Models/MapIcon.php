@@ -33,7 +33,7 @@ class MapIcon extends Model
     protected $fillable = ['floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
     protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
 
-    protected $with = ['mapicontype'];
+    protected $with = ['mapicontype', 'linkedawakenedobelisks'];
 
     /**
      * @return BelongsTo

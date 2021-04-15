@@ -72,8 +72,16 @@ class DungeonrouteTable extends InlineCode {
      */
     setTableView(value) {
         switch (value) {
+            case 'favorites': {
+                this._tableView = new FavoritesTableView();
+                break;
+            }
             case 'profile': {
                 this._tableView = new ProfileTableView();
+                break;
+            }
+            case 'userprofile': {
+                this._tableView = new UserProfileTableView();
                 break;
             }
             case 'team': {
@@ -269,7 +277,7 @@ class DungeonrouteTable extends InlineCode {
 
                                 let data = $.extend({}, {
                                     edit: false,
-                                    dark: tag.color === null ? null : isColorDark(tag.color)
+                                    dark: tag.color === null ? false : isColorDark(tag.color)
                                 }, tag);
 
                                 tags.push(template(data));

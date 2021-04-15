@@ -43,6 +43,8 @@ class MapObjectGroupManager extends Signalable {
             result = new PathMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
             result = new KillZoneMapObjectGroup(this, !getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_KILLZONE_PATH) {
+            result = new KillZonePathMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
             result = new BrushlineMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MAPICON) {
@@ -90,8 +92,6 @@ class MapObjectGroupManager extends Signalable {
                 break;
             }
         }
-
-        console.assert(result !== false, `Unable to find MapObjectGroup ${name}`, this);
 
         return result;
     }

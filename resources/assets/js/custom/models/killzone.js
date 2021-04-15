@@ -41,7 +41,7 @@ class KillZone extends MapObject {
         this.id = 0;
         this.floor_id = 0;
         this.label = 'KillZone';
-        this.color = c.map.killzone.polygonOptions.color();
+        this.color = '#000'; // This is just a default that should never be used anywhere
         this.index = 0;
         // May be changed based on the amount of enemies in our pull (see redrawConnectionsToEnemies())
         this.indexLabelDirection = 'center';
@@ -177,13 +177,24 @@ class KillZone extends MapObject {
 
         // Reconstruct the enemies we're coupled with in a format we expect
         if (typeof remoteEnemies !== 'undefined') {
+            // Check if the remote enemies differ in one shape or form of our current list
+            let enemiesEqual = this.enemies.length === remoteEnemies.length;
             let enemies = [];
             for (let i = 0; i < remoteEnemies.length; i++) {
                 let enemy = remoteEnemies[i];
                 enemies.push(enemy.enemy_id);
+
+                // If we haven't already signified the enemies are not equal
+                // If we do not have an enemy at this index or if the enemy's ID at this index is not the same
+                if (enemiesEqual && (!this.enemies.hasOwnProperty(i) || this.enemies[i] !== enemy.enemy_id)) {
+                    enemiesEqual = false;
+                }
             }
 
-            this.setEnemies(enemies);
+            // Do not unnecessarily call this function - it can be heavy
+            if (!enemiesEqual) {
+                this.setEnemies(enemies);
+            }
         }
     }
 
@@ -768,7 +779,7 @@ class KillZone extends MapObject {
         if (latLngs.length > 1 && p.length > 1) {
             try {
                 p = (new Offset()).data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
-            } catch (error){
+            } catch (error) {
                 // May be thrown if 'vertices overlap'
                 console.warn(`Vertices overlap!`, p);
             }
@@ -822,7 +833,7 @@ class KillZone extends MapObject {
 
     /**
      * Get a latlng object describing the centeroid of the enemies layer.
-     * @returns {object}
+     * @returns {L.latLng}
      */
     getLayerCenteroid() {
         return getCenteroid(this._getVisibleEntitiesLatLngs());
@@ -941,11 +952,11 @@ class KillZone extends MapObject {
         });
     }
 
-    localDelete() {
+    localDelete(massDelete = false) {
         // Detach from all enemies upon deletion
         this._detachFromEnemies();
 
-        super.localDelete();
+        super.localDelete(massDelete);
     }
 
     /**
@@ -959,10 +970,13 @@ class KillZone extends MapObject {
         this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: massSave});
     }
 
-    onDeleteSuccess(json) {
+    /**
+     * @inheritDoc
+     **/
+    onDeleteSuccess(json, massDelete = false) {
         super.onDeleteSuccess(json);
 
-        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_save: false});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces, mass_delete: massDelete});
     }
 
     cleanup() {

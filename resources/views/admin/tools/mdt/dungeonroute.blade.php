@@ -2,7 +2,7 @@
 $dungeonroute = isset($dungeonroute) ? $dungeonroute : false;
 ?>
 
-@extends('layouts.app', ['showAds' => false, 'title' => __('View dungeonroute as MDT String')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('View dungeonroute as MDT String')])
 
 @section('header-title', __('View dungeonroute as MDT String'))
 

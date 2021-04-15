@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
  * @property $start datetime
  * @property $presets int
  *
- * @property Collection $affixgroups
+ * @property Collection|AffixGroup[] $affixgroups
  *
  * @mixin Eloquent
  */
@@ -57,6 +57,20 @@ class Season extends CacheModel
     public function affixgroups()
     {
         return $this->hasMany('App\Models\AffixGroup');
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFeaturedAffixes(): Collection
+    {
+        return Affix::query()
+            ->selectRaw('affixes.*')
+            ->join('affix_group_couplings', 'affix_group_couplings.affix_id', '=', 'affixes.id')
+            ->join('affix_groups', 'affix_groups.id', '=', 'affix_group_couplings.affix_group_id')
+            ->where('affix_groups.season_id', $this->id)
+            ->get()
+            ->unique('id');
     }
 
     /**
@@ -125,6 +139,22 @@ class Season extends CacheModel
         $result = false;
         try {
             $result = $this->getAffixGroupAtTime($this->_getNow());
+        } catch (Exception $ex) {
+            Log::error('Error getting current affix group: ' . $ex->getMessage());
+        }
+        return $result;
+    }
+
+    /**
+     * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
+     *
+     * @return AffixGroup
+     */
+    public function getNextAffixGroup()
+    {
+        $result = false;
+        try {
+            $result = $this->getAffixGroupAtTime($this->_getNow()->addDays(7));
         } catch (Exception $ex) {
             Log::error('Error getting current affix group: ' . $ex->getMessage());
         }

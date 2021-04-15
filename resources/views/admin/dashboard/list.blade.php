@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Admin dashboard')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Admin dashboard')])
 
 @section('header-title', __('Admin dashboard'))
 

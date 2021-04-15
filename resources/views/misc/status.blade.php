@@ -1,4 +1,4 @@
-@extends('layouts.app', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false])
+@extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false])
 
 @section('header-title', __('Status'))
 

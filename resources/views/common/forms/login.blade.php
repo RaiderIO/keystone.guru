@@ -36,14 +36,12 @@ $errors = isset($errors) ? $errors : collect();
             </div>
 
             <div class="form-group">
+                <label for="{{ $modalClass }}login_remember">
+                    {{ __('Remember me') }}
+                </label>
                 <div class="col col-xl-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
-                    <div class="checkbox">
-                        <label for="{{ $modalClass }}login_remember">
-                            <input id="{{ $modalClass }}login_remember" type="checkbox"
-                                   name="remember" class="left_checkbox" {{ old('remember') ? 'checked' : '' }}>
-                            {{ __('Remember me') }}
-                        </label>
-                    </div>
+                    <input id="{{ $modalClass }}login_remember" type="checkbox"
+                           name="remember" class="form-control left_checkbox" {{ old('remember') ? 'checked' : '' }}>
                 </div>
             </div>
 

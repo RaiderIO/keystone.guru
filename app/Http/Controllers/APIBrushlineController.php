@@ -17,16 +17,7 @@ use Teapot\StatusCode\Http;
 class APIBrushlineController extends Controller
 {
     use ChecksForDuplicates;
-    use ListsBrushlines;
     use SavesPolylines;
-
-    function list(Request $request)
-    {
-        return $this->listBrushlines(
-            $request->get('floor_id'),
-            $request->get('dungeonroute')
-        );
-    }
 
     /**
      * @param Request $request

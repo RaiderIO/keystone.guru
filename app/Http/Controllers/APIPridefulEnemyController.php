@@ -50,7 +50,7 @@ class APIPridefulEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($pridefulEnemy->floor->dungeon, Auth::getUser(), $pridefulEnemy));
+            broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
         }
 
         return $pridefulEnemy;
@@ -69,7 +69,7 @@ class APIPridefulEnemyController extends Controller
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($pridefulEnemy->floor->dungeon, Auth::getUser(), $pridefulEnemy));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
                 }
             }
             $result = response()->noContent();

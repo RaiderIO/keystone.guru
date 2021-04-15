@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Spell listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Spell listing')])
 
 @section('header-title')
     {{ __('View spells') }}

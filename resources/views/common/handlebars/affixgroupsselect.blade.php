@@ -7,12 +7,14 @@
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
+
+$id = $id ?? 'affixes';
 ?>
 <script>
     let _affixGroups = {!! $affixgroups !!};
 
     $(function () {
-        handlebarsLoadAffixGroupSelect('#affixes');
+        handlebarsLoadAffixGroupSelect('#{{ $id }}');
     });
 
     /**

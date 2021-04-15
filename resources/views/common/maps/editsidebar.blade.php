@@ -3,6 +3,8 @@
 /** @var \App\Models\Dungeon $dungeon */
 
 $show = isset($show) ? $show : [];
+$showVirtualTour = $show['virtual-tour'] ?? false;
+$showSandbox = $show['sandbox'] ?? true;
 // May not be set in the case of a sandbox version
 if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
@@ -25,10 +27,6 @@ if (isset($model)) {
     'id' => 'editsidebar',
     'show' => $show,
 ])
-    @isset($show['sharing'])
-        @include('common.maps.share', ['model' => $model, 'show' => $show])
-    @endisset
-
     <!-- Visibility -->
     <div class="form-group visibility_tools">
         <div class="card">
@@ -43,24 +41,6 @@ if (isset($model)) {
 
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="map_map_object_group_visibility_container">
-                    <div class="row view_dungeonroute_details_row">
-                        <div class="col font-weight-bold">
-                            {{ __('Map elements') }}:
-                        </div>
-                    </div>
-                    <div class="row view_dungeonroute_details_row">
-                        <div class="col">
-                            {!! Form::select('map_map_object_group_visibility', [], 0,
-                                ['id' => 'map_map_object_group_visibility',
-                                'class' => 'form-control selectpicker',
-                                'multiple' => 'multiple',
-                                'data-selected-text-format' => 'count > 1',
-                                'data-count-selected-text' => __('{0} visible')]) !!}
                         </div>
                     </div>
                 </div>
@@ -87,63 +67,49 @@ if (isset($model)) {
     </div>
 
     <!-- Actions -->
+    @if( $showVirtualTour || $showSandbox)
     <div class="form-group route_actions">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Actions') }}</h5>
 
-                @isset($show['virtual-tour'])
+                @if($showVirtualTour)
                     <div class="form-group">
                         <!-- Virtual tour -->
                         <div class="row">
                             <div class="col">
-                                <button id="start_virtual_tour" class="btn btn-info col">
-                                    <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                                <button id="start_tutorial" class="btn btn-info col">
+                                    <i class="fas fa-info-circle"></i> {{ __('Start tutorial') }}
                                 </button>
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
 
-                @isset($show['draw-settings'])
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div id="map_draw_settings_btn_container" class="col">
-                                <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
-                                    <i class='fas fa-palette'></i> {{ __('Draw settings') }}
+                @if($showSandbox)
+                    @guest
+                        <div class="form-group">
+                            <div id="map_login_and_continue">
+                                <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                        data-target="#login_modal">
+                                    <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
+                                </button>
+                            </div>
+                            <div id="map_register_and_continue">
+                                <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                        data-target="#register_modal">
+                                    <i class="fas fa-user-plus"></i> {{ __('Register') }}
                                 </button>
                             </div>
                         </div>
-                    </div>
-                @endisset
-
-                @isset($show['route-settings'])
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div class="col">
-                                <button class="btn btn-info col" data-toggle="modal"
-                                        data-target="#route_settings_modal">
-                                    <i class='fas fa-cog'></i> {{ __('Route settings') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-                @isset($show['sandbox'])
-                    @if (Auth::guest())
-                        <div id="map_login_and_continue" class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
-                                <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
-                            </button>
-                        </div>
-                        <div id="map_register_and_continue" class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
-                                    data-target="#register_modal">
-                                <i class="fas fa-user-plus"></i> {{ __('Register') }}
-                            </button>
+                        <div class="form-group">
+                            <span class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ sprintf(__('This temporary route expires on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d at H:i')) }}
+                            </span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                            __('A temporary route will exist for up to 24 hours before it is automatically removed. If you login or register, you can save the route to your profile if you wish to keep it. It will then no longer be scheduled for removal.')
+                             }}"></i>
                         </div>
                     @else
                         <div id="map_save_and_continue" class="form-group">
@@ -152,11 +118,21 @@ if (isset($model)) {
                                 <i class="fas fa-save"></i> {{ __('Save to profile') }}
                             </a>
                         </div>
-                    @endif
-                @endisset
+                        <div class="form-group">
+                            <span class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ sprintf(__('This temporary route expires on %s.'), \Illuminate\Support\Carbon::parse($model->expires_at)->format('Y-m-d at H:i')) }}
+                            </span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                            __('A temporary route will exist for up to 24 hours before it is automatically removed. You can save the route to your profile if you wish to keep it, it will then no longer be scheduled for removal.')
+                             }}"></i>
+                        </div>
+                    @endguest
+                @endif
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Mouseover enemy information -->
     <div id="enemy_info_container" class="form-group" style="display: none">
@@ -181,141 +157,3 @@ if (isset($model)) {
         </div>
     </div>
 @endcomponent
-
-@isset($show['draw-settings'])
-    @component('common.general.modal', ['id' => 'draw_settings_modal'])
-        <div class="draw_settings_tools">
-            <?php // Weight ?>
-            <div class="form-group">
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col font-weight-bold">
-                        {{ __('Default line weight') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col line_weight_selection">
-                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                        {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
-                            isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
-                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col font-weight-bold">
-                        {{ __('Pull gradient') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row mt-3">
-                    <div id="edit_route_freedraw_options_gradient" class="col-10">
-
-                    </div>
-                    <div class="col-2">
-                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-success"
-                                data-toggle="tooltip" title="{{ __('Apply to current pulls') }}">
-                            {{ __('Apply') }}
-                        </button>
-                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls_saving"
-                                class="btn btn-success disabled"
-                                style="display: none">
-                            <i class='fas fa-circle-notch fa-spin'></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row no-gutters view_dungeonroute_details_row">
-                    <div class="col-2 pr-2">
-                        {!! Form::checkbox('pull_gradient_apply_always', 1,
-                            isset($model) ? $model->pull_gradient_apply_always : false,
-                            ['id' => 'pull_gradient_apply_always', 'class' => 'form-control left_checkbox'])
-                            !!}
-
-                    </div>
-                    <div class="col-10">
-                        <label for="pull_gradient_apply_always">
-                            {{ __('Always apply when I change pulls') }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group mb-0">
-                <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">
-                    <i class="fas fa-save"></i> {{ __('Save') }}
-                </button>
-                <button id="save_draw_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
-                        style="display: none;">
-                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('Save') }}
-                </button>
-            </div>
-        </div>
-    @endcomponent
-@endisset
-
-@isset($show['route-settings'])
-    @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
-
-        <div class="col-lg-12">
-            <h3>
-                {{ __('General') }}
-            </h3>
-            <div class="form-group">
-                <label for="dungeon_route_title">
-                    {{ __('Title') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                                        __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
-                                         }}"></i>
-                </label>
-                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
-
-                {{--                <label for="teeming">--}}
-                {{--                    {{ __('Teeming') }}--}}
-                {{--                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
-                {{--                                            __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')--}}
-                {{--                                             }}"></i>--}}
-                {{--                </label>--}}
-                {{--                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}--}}
-            </div>
-            @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
-
-            <h3 class="mt-1">
-                {{ __('Affixes') }} <span class="form-required">*</span>
-            </h3>
-
-            <div class="container mt-1">
-                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
-            </div>
-
-            <h3>
-                {{ __('Group composition') }}
-            </h3>
-
-            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
-            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
-
-            @if(Auth::user()->hasRole('admin'))
-                <h3>
-                    {{ __('Admin') }}
-                </h3>
-                <div class="form-group">
-                    {!! Form::label('demo', __('Demo route')) !!}
-                    {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
-
-            <div class="form-group">
-                <div id="save_route_settings" class="offset-lg-5 col-lg-2 btn btn-success">
-                    <i class="fas fa-save"></i> {{ __('Save settings') }}
-                </div>
-                <div id="save_route_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
-                     style="display: none;">
-                    <i class="fas fa-circle-notch fa-spin"></i>
-                </div>
-            </div>
-        </div>
-    @endcomponent
-@endisset

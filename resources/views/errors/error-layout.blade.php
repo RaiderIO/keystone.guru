@@ -1,4 +1,4 @@
-@extends('layouts.app', [
+@extends('layouts.sitepage', [
     'showLegalModal' => false,
     'title' => $title
 ])

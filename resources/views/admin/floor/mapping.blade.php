@@ -1,10 +1,10 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $floor->dungeon->name])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
 <?php
 /**
- * @var $model \App\Models\Floor
+ * @var $floor \App\Models\Floor
  * @var $mapContext \App\Logic\MapContext\MapContextDungeon
  */
 ?>
@@ -12,23 +12,17 @@
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
-            'dungeon' => $model->dungeon,
+            'showAds' => false,
+            'dungeon' => $floor->dungeon,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,
+            'floorId' => $floor->id,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
-                'killzone'
-            ]
-        ])
-
-        @include('common.maps.admineditsidebar', [
-            'show' => [
-                'sharing' => true,
-                'draw-settings' => true,
-                'route-settings' => true,
-                'route-publish' => true
+                'killzone',
+                'killzonepath'
             ]
         ])
     </div>

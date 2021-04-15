@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title, 'cookieConsent' => false])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
@@ -90,8 +90,8 @@ if (count($affixes) == 0) {
             'floorId' => $floor->id,
             'showAttribution' => false,
             'hiddenMapObjectGroups' => [
-                'enemypatrol',
-                'enemypack'
+                'enemypack',
+                'killzonepath'
             ]
         ])
     </div>

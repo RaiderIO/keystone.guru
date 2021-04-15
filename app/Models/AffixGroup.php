@@ -6,13 +6,15 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property $id int The ID of this Affix.
  * @property $season_id int
  * @property $seasonal_index int
  *
- * @property Collection $affixes
+ * @property Collection|AffixGroupEaseTier[] $easetiers
+ * @property Collection|Affix[] $affixes
  * @property Season $season
  *
  * @mixin Eloquent
@@ -44,6 +46,14 @@ class AffixGroup extends CacheModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function easetiers()
+    {
+        return $this->hasMany('App\Models\AffixGroupEaseTier');
+    }
+
+    /**
      * @return string The text representation of this affix group.
      */
     public function getTextAttribute()
@@ -65,19 +75,25 @@ class AffixGroup extends CacheModel
     /**
      * @return bool Checks if this group contains the Teeming affix.
      */
-    public function isTeeming()
+    public function isTeeming(): bool
     {
-        $result = false;
+        return $this->hasAffix('Teeming');
+    }
 
-        foreach ($this->affixes as $affix) {
-            /** @var $affix Affix */
-            // A bit hacky I guess? But Teeming is such a special case that I'm justifying this magic string
-            if ($result = ($affix->name === 'Teeming')) {
-                break;
-            }
-        }
+    /**
+     * @return bool Checks if this group contains the Tyrannical affix.
+     */
+    public function isTyrannical(): bool
+    {
+        return $this->hasAffix('Tyrannical');
+    }
 
-        return $result;
+    /**
+     * @return bool Checks if this group contains the Fortified affix.
+     */
+    public function isFortified(): bool
+    {
+        return $this->hasAffix('Fortified');
     }
 
     /**
@@ -90,6 +106,24 @@ class AffixGroup extends CacheModel
         if ($this->seasonal_index !== null) {
             $seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
             $result = $seasonalIndices[$this->seasonal_index];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    private function hasAffix(string $name): bool
+    {
+        $result = false;
+
+        foreach ($this->affixes as $affix) {
+            /** @var $affix Affix */
+            if ($result = ($affix->name === $name)) {
+                break;
+            }
         }
 
         return $result;

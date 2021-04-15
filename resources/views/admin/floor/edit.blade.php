@@ -1,18 +1,15 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-/* @var $model \App\Models\Floor */
+/* @var $floor \App\Models\Floor */
 /* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
-$connectedFloorCandidates = $model->dungeon->floors->except($model->id);
+$connectedFloorCandidates = $dungeon->floors;
+if (isset($floor)) {
+    $connectedFloorCandidates = $connectedFloorCandidates->except(optional($floor)->id);
+}
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => $headerTitle])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$dungeon, $floor ?? null], 'showAds' => false, 'title' => $headerTitle])
 @section('header-title')
     {{ $headerTitle }}
-@endsection
-@section('header-addition')
-    <a href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon]) }}" class="btn btn-info text-white pull-right"
-       role="button">
-        <i class="fas fa-backward"></i> {{ sprintf(__('Edit %s'), $dungeon->name) }}
-    </a>
 @endsection
 <?php
 /**
@@ -20,10 +17,10 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
 ?>
 
 @section('content')
-    @isset($model)
-        {{ Form::model($model, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->id, 'floor' => $model->id], 'method' => 'patch']) }}
+    @isset($floor)
+        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->getSlug(), 'floor' => $floor->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $model->dungeon->id]]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->getSlug()]]) }}
     @endisset
 
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
@@ -57,7 +54,7 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)')
                  }}"></i>
-        {!! Form::checkbox('default', 1, isset($model) ? $model->default : 1, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('default', 1, isset($floor) ? $floor->default : 1, ['class' => 'form-control left_checkbox']) !!}
         @include('common.forms.form-error', ['key' => 'default'])
     </div>
 
@@ -82,7 +79,9 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
         <?php
         foreach($connectedFloorCandidates as $connectedFloorCandidate){
         /** @var \App\Models\FloorCoupling $floorCoupling */
-        $floorCoupling = $floorCouplings->where('floor1_id', $model->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        if (isset($floorCouplings)) {
+            $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        }
         ?>
         <div class="row mb-3">
             <div class="col-2">

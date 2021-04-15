@@ -1,0 +1,724 @@
+// https://bcodes.io/blog/post/theming-css-variables-in-scss
+
+@import 'variables';
+@import 'mixins';
+
+:root.superhero {
+  @include spread-map($theme-map-superhero);
+}
+
+:root.darkly {
+  @include spread-map($theme-map-darkly);
+}
+
+:root.lux {
+  @include spread-map($theme-map-lux);
+}
+
+body {
+  font-family: Raleway, sans-serif !important;
+  background-color: var($--theme-darker) !important;
+}
+
+/* Required to give these things a bump over the .darkly and .superhero selectors */
+.theme {
+  /** BOOTSTRAP **/
+  .bootstrap-select .btn {
+    background-color: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+  }
+
+  .nav-item-divider {
+    margin: 0 1em;
+  }
+
+  /* Weird offset because of theme */
+  .bootstrap-select.form-control {
+    padding: 0;
+  }
+
+  .bootstrap-select.form-control {
+    margin-bottom: 0;
+    padding: 0;
+    border: none;
+    height: auto;
+  }
+
+  .bootstrap-select > .dropdown-toggle {
+    position: relative;
+    width: 100%;
+    text-align: right;
+    white-space: nowrap;
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .bootstrap-select .dropdown-menu {
+    min-width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
+  @media (max-width: 576px) and (orientation: landscape) {
+    .hide-on-landscape {
+      display: none;
+    }
+  }
+
+  @media (max-width: 576px) and (orientation: portrait) {
+    .hide-on-portrait {
+      display: none;
+    }
+  }
+
+  @media (min-width: 576px) and (orientation: landscape) {
+    .hide-on-landscape-sm {
+      display: none;
+    }
+  }
+
+  @media (min-width: 576px) and (orientation: portrait) {
+    .hide-on-portrait-sm {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) and (orientation: landscape) {
+    .hide-on-landscape-md {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) and (orientation: portrait) {
+    .hide-on-portrait-md {
+      display: none;
+    }
+  }
+
+  @media (min-width: 992px) and (orientation: landscape) {
+    .hide-on-landscape-lg {
+      display: none;
+    }
+  }
+
+  @media (min-width: 992px) and (orientation: portrait) {
+    .hide-on-portrait-lg {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1200px) and (orientation: landscape) {
+    .hide-on-landscape-xl {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1200px) and (orientation: portrait) {
+    .hide-on-portrait-xl {
+      display: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .login-modal-dialog {
+      max-width: 900px;
+    }
+
+    .register-modal-dialog {
+      max-width: 900px;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+      border: hidden;
+    }
+  }
+
+  /** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
+  @media (max-width: 900px) {
+    .login-modal-dialog .border-left.border-white {
+      border: none !important;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+      border: none !important;
+    }
+  }
+
+  /* normal container */
+  @media (min-width: 1440px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+
+  /* wide container */
+  @media (min-width: 1440px) {
+    .container_wide {
+      max-width: 1400px;
+    }
+  }
+
+  @media (min-width: 1800px) {
+    .container_wide {
+      max-width: 1750px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .menu_sidebar {
+      -ms-flex: 0 0 230px;
+      flex: 0 0 230px;
+    }
+  }
+
+  @media (max-width: 690px) {
+    .my-sidebar {
+      display: none;
+    }
+  }
+
+  /** TOGGLE **/
+  .toggle-on {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 50%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .toggle-on.btn {
+    padding-right: 1.5rem;
+  }
+
+  .toggle-off {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .toggle-off.btn {
+    padding-left: 1.5rem;
+  }
+
+  .toggle-group label, .toggle-group span {
+    cursor: pointer;
+  }
+
+  .toggle-group {
+    position: absolute;
+    width: 200%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: left .35s;
+    -webkit-transition: left .35s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .left_checkbox {
+    width: 40px;
+  }
+
+  .modal-backdrop {
+    z-index: 100010;
+  }
+
+  .modal {
+    z-index: 100011;
+  }
+
+  .modal-lg {
+    max-width: 80%;
+  }
+
+  .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
+    background-color: #20895e;
+  }
+
+  .navbar-default .navbar-nav > li > a.btn-success {
+    color: #FFF;
+  }
+
+  .navbar-default .navbar-nav > li > a.btn-success:hover {
+    background-color: #20895E;
+  }
+
+  .panel-heading {
+    font-size: 28px;
+  }
+
+  .panel-heading-wide {
+    text-align: center;
+  }
+
+  .alert.alert-danger ul {
+    margin-bottom: 0;
+  }
+
+  /* Override this so that long race names fit in their group selection boxes */
+  .dropdown-item {
+    cursor: pointer;
+    padding: 0.25em 0.9em;
+  }
+
+  /* Fixed messages always on top */
+  .fixed-bottom {
+    z-index: 1000;
+  }
+
+  /* Floating top header should be top, but not too top */
+  .fixed-top {
+    z-index: 800 !important;
+  }
+
+  .popover {
+    z-index: 100000 !important;
+  }
+
+  .alert_fixed_footer {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-accent {
+    background-color: var($--theme-btn-accent) !important;
+  }
+
+  .btn-accent:hover {
+    background-color: var($--theme-btn-accent-hover) !important;
+  }
+
+  .bg-header {
+    background-color: var($--theme-header) !important;
+  }
+
+  #app .bg-header {
+    border-bottom: var($--theme-header-border) !important;
+  }
+
+  .route_manipulation_tools .bg-header,
+  #map_header .bg-header {
+    border: var($--theme-header-border) !important;
+  }
+
+  @media(max-width: 992px) {
+    #map_header {
+      background-color: var($--theme-header) !important;
+    }
+  }
+
+  .bg-card {
+    background-color: var($--theme-bg-card) !important;
+  }
+
+  .bg-card-footer {
+    background-color: var($--theme-bg-card-footer) !important;
+  }
+
+  .bg-dark {
+    background-color: var($--theme-darker) !important;
+  }
+
+  .border-dark {
+    border-color: var($--theme-darker) !important;
+  }
+
+  .dropdown .dropdown-menu {
+    background-color: var($--theme-dark);
+  }
+
+  .dropdown .dropdown-header {
+    font-weight: bold;
+    color: var($--theme-primary) !important;
+  }
+
+  .dropdown-item.selected {
+    background-color: var($--theme-dark) !important;
+  }
+
+  #map .dropdown-item:hover, .dropdown-item:focus {
+    color: black;
+  }
+
+  .form-control:disabled, .form-control[readonly] {
+    color: var($--theme-text-contrast);
+    background-color: var($--theme-dark);
+    opacity: 1;
+  }
+
+  .patreon-color {
+    background-color: rgb(250, 118, 100);
+  }
+
+  .class_icon {
+    background-color: var($--theme-darker);
+  }
+
+  .affix_list .affix_list_row_selected {
+    background-color: var($--theme-darker);
+  }
+
+  .affix_list .affix_list_row:hover {
+    background-color: var($--theme-darker);
+  }
+
+  .affixes_overview_table .current_week {
+    background-color: var($--theme-darker);
+  }
+
+  #team_members_table .dropdown.bootstrap-select .btn {
+    border: 1px solid var($--theme-darker);
+  }
+
+  /* On home page */
+  .probootstrap-showcase-nav ul li.active {
+    background-color: #8d9dad !important;
+  }
+
+  .probootstrap-showcase-nav ul li.active a {
+    color: rgb(235, 235, 235) !important;
+  }
+
+  .probootstrap-showcase-nav ul li > a {
+    color: var($--theme-primary) !important;
+  }
+
+  .service .icon i {
+    color: var($--theme-primary) !important;
+  }
+
+  /** INTRO.JS */
+  .introjs-button {
+    color: var($--theme-dark) !important;
+  }
+
+  .form-required {
+    color: var($--theme-form-required) !important;
+  }
+
+
+  /** Map */
+  .favorited {
+    color: #ffd048;
+  }
+
+  .leaflet-container {
+    background-color: var($--theme-darker);
+  }
+
+  .sidebar {
+    background-color: var($--theme-dark);
+  }
+
+  .sidebar.anchor-left {
+    border-right: var($--theme-darker) solid 1px;
+  }
+
+  .sidebar.anchor-right {
+    border-left: var($--theme-darker) solid 1px;
+  }
+
+  .sidebar-toggle {
+    background: var($--theme-dark);
+    color: var($--theme-primary);
+  }
+
+  .sidebar-toggle:hover {
+    background: var($--theme-primary);
+    color: var($--theme-light);
+  }
+
+  .sidebar .sidebar-header {
+    background: var($--theme-darker);
+  }
+
+  .embed .embed-header-subtitle,
+  .sidebar .sidebar-header-subtitle {
+    color: var($--theme-light);
+  }
+
+  .route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
+  .route_manipulation_tools .draw_icon .col:hover {
+    background: var($--theme-primary);
+    color: var($--theme-light) !important;
+  }
+
+  #pulls_sidebar .map_killzonessidebar_floor_switch:not(.selected):hover,
+  #pulls_sidebar .map_killzonessidebar_killzone.selectable:not(.selected):hover {
+    background-color: var($--theme-darker) !important;
+  }
+
+  .enemy_icon.melee,
+  .enemy_icon.caster,
+  .enemy_icon.ranged,
+  .enemy_icon.healer,
+  .enemy_icon.enemy_forces {
+    background-color: var($--theme-darker);
+  }
+
+  .dropdown.bootstrap-select {
+    background-color: var($--theme-dark);
+  }
+
+  #edit_route_freedraw_options_color,
+  .dropdown.bootstrap-select .btn {
+    background-color: var($--theme-dark);
+    color: var($--theme-text-contrast);
+    border: 1px solid var($--theme-darker);
+  }
+
+  #edit_route_draw_container a {
+    color: var($--theme-text-contrast);
+  }
+
+  #edit_route_draw_container a:hover {
+    text-decoration: none;
+  }
+
+  #view_route_actions_container .btn,
+  #edit_route_draw_container .row {
+    width: 100%;
+    height: 40px;
+  }
+
+  .route_manipulation_tools.left .btn {
+    border: none;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.750rem;
+  }
+
+  #view_route_map_actions_container .btn,
+  #edit_route_draw_map_actions_container .btn {
+    border-radius: 0;
+  }
+
+  #edit_route_draw_actions_container .leaflet-draw-actions a {
+    background: inherit;
+    color: var($--theme-text-contrast);
+  }
+
+  #map .dropdown-menu.show li {
+    background-color: var($--theme-darker);
+  }
+
+  .popupCustom .leaflet-popup-tip,
+  .popupCustom .leaflet-popup-content-wrapper {
+    background: var($--theme-dark);
+    color: var($--theme-light);
+  }
+
+  .popupCustom .leaflet-popup-close-button {
+    color: var($--theme-primary) !important;
+  }
+
+  /* DATATABLES */
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: var($--theme-light) !important;
+    border: none;
+    background: none;
+    background-color: var($--theme-primary);
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
+    color: var($--theme-light) !important;
+    border: none;
+    background: none;
+    background-color: var($--theme-primary-hover);
+  }
+
+  table.dataTable tbody tr {
+    background-color: var($--theme-dark);
+  }
+
+  table.dataTable tbody tr.selected {
+    background-color: var($--theme-darker);
+  }
+
+  .navbar-top-fixed-spacer {
+    height: var($--theme-header-height);
+  }
+
+  /* HOME PAGE */
+  .home {
+    .mbr-overlay {
+      background-color: var($--theme-dark);
+    }
+
+    .mbr-overlay {
+      background-color: var($--theme-dark);
+    }
+
+    .demo-loader {
+      background-color: var($--theme-darker);
+    }
+
+    .cid-s48MCQYojq .mbr-text,
+    .cid-s48MCQYojq .mbr-section-btn {
+      color: unset;
+    }
+
+    .form-control {
+      background-color: var($--theme-dark);
+      color: var($--theme-text-contrast);
+    }
+
+    .cid-soU8PSECoL {
+      background-color: var($--theme-darker) !important;;
+    }
+
+    .cid-soU8QlAKKP {
+      background-color: var($--theme-darker) !important;
+    }
+
+    .cid-soU6QnGh9A {
+      background-color: var($--theme-darker) !important;
+    }
+
+    .cid-soU6QnGh9A .mbr-iconfont {
+      color: var($--theme-btn-accent) !important;
+    }
+
+    .cid-soU9jtw47v .mbr-text,
+    .cid-soU9jtw47v .card-title,
+    .cid-soU9jtw47v .card-box {
+      color: unset !important;
+    }
+
+    .cid-soU5dLgjOI {
+      background-color: var($--theme-darker) !important;
+    }
+
+    .cid-soU7JptK9v {
+      background-color: var($--theme-header) !important;
+    }
+
+    .gradient-top {
+      background: var($--theme-darker);
+      background: linear-gradient(0deg, var($--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .gradient-top.footer {
+      background: var($--theme-darker);
+      background: linear-gradient(0deg, var($--theme-header) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .gradient-bottom {
+      background: var($--theme-darker);
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, var($--theme-darker) 100%);
+    }
+  }
+
+  .dungeon_wallpaper_cover {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    background-color: var($--theme-dark);
+    opacity: 0.8;
+  }
+
+  /** Disable fractional markers -> https://github.com/IonDen/ion.rangeSlider/issues/171 */
+  .irs--flat .irs-grid-pol.small {
+    height: 0;
+  }
+
+  .irs--flat .irs-from:before,
+  .irs--flat .irs-to:before,
+  .irs--flat .irs-single:before, {
+    border-top-color: var($--theme-primary);
+  }
+
+  .irs--flat .irs-from,
+  .irs--flat .irs-to,
+  .irs--flat .irs-single,
+  .irs--flat .irs-handle > i:first-child,
+  .irs--flat .irs-bar {
+    background-color: var($--theme-primary);
+  }
+
+  .irs--flat.inverse {
+    .irs-line {
+      background-color: var($--theme-primary);
+    }
+
+    .irs-bar {
+      background-color: #e1e4e9;
+    }
+  }
+
+  //.dungeon_wallpaper_gradient {
+  //  position: fixed;
+  //  left: 0;
+  //  top: 0;
+  //  margin-top: 95vh;
+  //  width: 100%;
+  //  height: 5vh;
+  //  z-index: -1;
+  //  background: linear-gradient(0deg, var(--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
+  //}
+
+  /** Affixes page **/
+
+
+  .affixes_overview_table {
+    .last_column {
+      border-left: var($--theme-affix-page-seasonal-color) 3px solid;
+      border-right: var($--theme-affix-page-seasonal-color) 3px solid;
+      /* bb to make semi-transparent to let row offsets shine through */
+      background-color: var($--theme-affix-page-seasonal-background-color);
+    }
+
+    .last_column.first_row {
+      border-top: var($--theme-affix-page-seasonal-color) 3px solid;
+    }
+
+    .last_column.last_row {
+      border-bottom: var($--theme-affix-page-seasonal-color) 3px solid;
+    }
+
+    .current_week {
+      border-top: var($--theme-affix-page-current-week-border-color) 3px solid !important;
+      border-bottom: var($--theme-affix-page-current-week-border-color) 3px solid !important;
+    }
+
+    .current_week.first_column {
+      border-left: var($--theme-affix-page-current-week-border-color) 3px solid;
+    }
+
+    .current_week.last_column {
+      border-right: var($--theme-affix-page-current-week-border-color) 3px solid;
+    }
+  }
+}

@@ -9,6 +9,13 @@ class UpdatePrepare extends Command
 {
     use ExecutesShellCommands;
 
+    const NO_DEV = [
+        'live'     => true,
+        'local'    => false,
+        'mapping'  => true,
+        'staging'  => true,
+        'redesign' => true
+    ];
 
     /**
      * The console command description.
@@ -20,7 +27,7 @@ class UpdatePrepare extends Command
     /**
      * @var string
      */
-    protected $signature = 'environment:updateprepare';
+    protected $signature = 'environment:updateprepare {environment}';
 
     /**
      * Execute the console command.
@@ -29,6 +36,8 @@ class UpdatePrepare extends Command
      */
     public function handle()
     {
+        $environment = $this->argument('environment');
+
         $this->shell([
             // Git commands
             'git checkout .',
@@ -44,8 +53,8 @@ class UpdatePrepare extends Command
         // Install composer here - a next command can then have the updated definitions of the autoloader when called
         // Any code after this will use the old definitions and get class not found errors
         $this->shell([
-            // Prevent root warning from blocking the entire thing
-            'export COMPOSER_ALLOW_SUPERUSER=1; composer install',
+            // Prevent root warning from blocking the entire thing; only install dev dependencies in local
+            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', (self::NO_DEV[$environment] ? '--no-dev' : '')),
             'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload'
         ]);
 

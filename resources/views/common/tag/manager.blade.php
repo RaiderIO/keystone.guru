@@ -1,6 +1,7 @@
 <?php
 
 /** @var string $category */
+/** @var string $theme */
 
 $tagCategoryNameMapping = [
     1 => __('Route'),
@@ -9,6 +10,7 @@ $tagCategoryNameMapping = [
 
 $tagCategory = \App\Models\Tags\TagCategory::fromName($category);
 $tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['tag_category_id']);
+$isDarkTheme = $theme === 'darkly';
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 
@@ -37,7 +39,7 @@ $tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['t
                     {!! Form::text('tag_name', $categoryTag->name, ['id' => sprintf('tag_name_%d', $categoryTag->id), 'class' => 'form-control']) !!}
                 </div>
                 <div class="col-4 col-lg-3 ">
-                    {!! Form::color('tag_color', $categoryTag->color ?? '#DF691A', ['id' => sprintf('tag_color_%d', $categoryTag->id), 'class' => 'form-control']) !!}
+                    {!! Form::color('tag_color', $categoryTag->color ?? ($isDarkTheme ? '#375a7f' : '#ebebeb'), ['id' => sprintf('tag_color_%d', $categoryTag->id), 'class' => 'form-control']) !!}
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
                     {{ sprintf('%s %s(s)', $categoryTag->getUsage()->count(), strtolower($tagCategoryNameMapping[$categoryId])) }}
@@ -56,7 +58,7 @@ $tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['t
         @endforeach
     </div>
 @endforeach
-{{ Form::model($user, ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
+{{ Form::model(Auth::user(), ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
     {!! Form::label('tag_name_new', __('Create tag')) !!}
     {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Demo routes')])
+@extends('layouts.sitepage', ['title' => __('Demo routes')])
 
 @section('header-title', __('Demo routes'))
 

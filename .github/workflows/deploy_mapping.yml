@@ -22,6 +22,6 @@ jobs:
             php artisan mapping:save &&
             php artisan mapping:commit &&
             php artisan mapping:merge &&
-            php artisan environment:updateprepare &&
+            php artisan environment:updateprepare mapping &&
             php artisan environment:update mapping;
             php artisan up

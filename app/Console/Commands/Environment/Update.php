@@ -10,17 +10,19 @@ class Update extends Command
     use ExecutesShellCommands;
 
     const COMPILE = [
-        'live'    => true,
-        'local'   => false,
-        'mapping' => true,
-        'staging' => true
+        'live'     => true,
+        'local'    => false,
+        'mapping'  => true,
+        'staging'  => true,
+        'redesign' => true
     ];
 
     const COMPILE_AS = [
-        'live'    => 'production',
-        'local'   => 'dev',
-        'mapping' => 'production',
-        'staging' => 'dev'
+        'live'     => 'production',
+        'local'    => 'dev',
+        'mapping'  => 'production',
+        'staging'  => 'dev',
+        'redesign' => 'production'
     ];
 
     /**
@@ -59,10 +61,13 @@ class Update extends Command
         // Drop all caches for all models while we re-seed
         $this->call('modelCache:clear');
 
-        $this->call('db:seed', [
-            '--database' => 'migrate',
-            '--force'    => true
-        ]);
+        // Redesign is coupled to live - do not reseed lest it affects the live site!
+        if ($environment !== 'redesign') {
+            $this->call('db:seed', [
+                '--database' => 'migrate',
+                '--force'    => true
+            ]);
+        }
 
         // After seed, create a release if necessary
         if ($environment === 'live') {
@@ -81,10 +86,17 @@ class Update extends Command
         ]);
 
         $this->call('optimize:clear');
-        $this->call('route:cache');
+        if ($environment === 'live') {
+            $this->call('route:cache');
+        } else {
+            $this->call('route:clear');
+        }
         $this->call('config:clear');
         $this->call('queue:restart');
         $this->call('keystoneguru:startsupervisor');
+
+        // Refresh the subcreation ease tiers (for a first run to populate the data)
+        $this->call('affixgroupeasetiers:refresh');
 
         return 0;
     }

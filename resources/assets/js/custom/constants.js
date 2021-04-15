@@ -10,6 +10,22 @@ if (typeof Cookies.get('map_number_style') === 'undefined') {
 if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
     Cookies.set('kill_zones_number_style', 'percentage');
 }
+if (typeof Cookies.get('map_unkilled_enemy_opacity') === 'undefined') {
+    Cookies.set('map_unkilled_enemy_opacity', '50');
+}
+if (typeof Cookies.get('map_unkilled_important_enemy_opacity') === 'undefined') {
+    Cookies.set('map_unkilled_important_enemy_opacity', '80');
+}
+if (typeof Cookies.get('map_enemy_aggressiveness_border') === 'undefined') {
+    Cookies.set('map_enemy_aggressiveness_border', 0);
+}
+if (typeof Cookies.get('map_enemy_dangerous_border') === 'undefined') {
+    Cookies.set('map_enemy_dangerous_border', 0);
+}
+if (typeof Cookies.get('enemy_display_type') === 'undefined') {
+    Cookies.set('enemy_display_type', 'enemy_portrait');
+}
+
 
 // Map object groups
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
@@ -17,6 +33,7 @@ const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
 const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
@@ -33,7 +50,8 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_MAPICON,
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
-    MAP_OBJECT_GROUP_KILLZONE
+    MAP_OBJECT_GROUP_KILLZONE,
+    MAP_OBJECT_GROUP_KILLZONE_PATH
 ];
 
 // Kill zones
@@ -133,7 +151,7 @@ let c = {
                 // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size
-                return Math.floor(result);
+                return Math.ceil(result);
             }
         },
         adminenemy: {
@@ -186,6 +204,11 @@ let c = {
             awakenedObeliskGatewayPolylineColor: '#80FF1A',
             awakenedObeliskGatewayPolylineColorAnimated: '#244812',
             awakenedObeliskGatewayPolylineWeight: 3,
+            killzonepath: {
+                color: 'red',
+                colorAnimated: 'red',
+                weight: 5,
+            },
         },
         brushline: {
             /**
@@ -211,7 +234,17 @@ let c = {
                 weight: 1
             },
             polygonOptions: {
-                color: randomColor, //Cookies.get('polyline_default_color'),
+                color: function (previousPullColor = null) {
+                    let isPreviousColorDark = typeof previousPullColor === 'undefined' || previousPullColor === null ? false : isColorDark(previousPullColor);
+                    let color = null;
+
+                    // Generate colors until a color
+                    do {
+                        color = randomColor();
+                    } while (isColorDark(color) === isPreviousColorDark);
+
+                    return color;
+                }, //Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1,

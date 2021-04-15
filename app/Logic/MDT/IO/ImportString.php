@@ -664,6 +664,9 @@ class ImportString extends MDTBase
             // Re-calculate the enemy forces
             if ($save) {
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+            } else {
+                // Do not do this - the enemy_forces are incremented while creating the route
+                // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
             }
         }
 

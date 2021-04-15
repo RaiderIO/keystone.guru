@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('About')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('About')])
 
 @section('header-title', __('About Keystone.guru'))
 

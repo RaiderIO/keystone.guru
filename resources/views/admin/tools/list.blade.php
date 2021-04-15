@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Admin tools')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Admin tools')])
 
 @section('header-title', __('Admin tools'))
 

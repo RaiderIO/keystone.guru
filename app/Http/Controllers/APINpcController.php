@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\Datatables\ColumnHandler\Users\DungeonColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Users\EmailColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
@@ -53,6 +54,7 @@ class APINpcController extends Controller
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
             new IdColumnHandler($datatablesHandler),
             new NameColumnHandler($datatablesHandler),
+            new EmailColumnHandler($datatablesHandler),
             new DungeonColumnHandler($datatablesHandler)
         ])->applyRequestToBuilder()->getResult();
     }

@@ -9,6 +9,8 @@
         "published_state_id": 1,
         "title": "4.12 FH by Dratnos",
         "description": "",
+        "level_min": 2,
+        "level_max": 28,
         "difficulty": "Casual",
         "seasonal_index": 1,
         "enemy_forces": 266,
@@ -459,6 +461,21 @@
                 ]
             },
             {
+                "floor_id": -1,
+                "color": "#4fa343",
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 178
+                    },
+                    {
+                        "enemy_id": 4288
+                    }
+                ]
+            },
+            {
                 "floor_id": 0,
                 "color": "#3effff",
                 "lat": null,
@@ -482,21 +499,6 @@
                     },
                     {
                         "enemy_id": 746
-                    }
-                ]
-            },
-            {
-                "floor_id": -1,
-                "color": "#4fa343",
-                "lat": null,
-                "lng": null,
-                "index": 18,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 178
-                    },
-                    {
-                        "enemy_id": 4288
                     }
                 ]
             }
