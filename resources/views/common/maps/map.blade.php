@@ -9,8 +9,8 @@ $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 $embed = isset($embed) && $embed;
 $edit = isset($edit) && $edit;
-$mapClasses = isset($mapClasses) ? $mapClasses : '';
-$dungeonroute = isset($dungeonroute) ? $dungeonroute : null;
+$mapClasses = $mapClasses ?? '';
+$dungeonroute = $dungeonroute ?? null;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode = isset($sandboxMode) && $sandboxMode;
@@ -20,11 +20,11 @@ $unkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 
 // Allow echo to be overridden
-$echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
-$zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
+$echo = $echo ?? Auth::check() && !$sandboxMode;
+$zoomToContents = $zoomToContents ?? false;
 
 // Show ads or not
-$showAds = isset($showAds) ? $showAds : true;
+$showAds = $showAds ?? true;
 // If this is an embedded route, do not show ads
 if ($embed || optional($dungeonroute)->demo === 1) {
     $showAds = false;
@@ -33,9 +33,9 @@ if ($embed || optional($dungeonroute)->demo === 1) {
 $noUI = isset($noUI) && $noUI;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
-$defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
+$defaultZoom = $defaultZoom ?? 2;
 // By default hidden elements
-$hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
+$hiddenMapObjectGroups = $hiddenMapObjectGroups ?? [];
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 

@@ -59,7 +59,7 @@ Route::get('old', [SiteController::class, 'redesignToggle'])->name('old');
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'redesignredirect']], function ()
+Route::group(['middleware' => ['viewcachebuster']], function ()
 {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);

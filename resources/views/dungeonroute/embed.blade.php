@@ -86,12 +86,16 @@ if (count($affixes) == 0) {
             'embed' => true,
             'edit' => false,
             'echo' => false,
+            'noUI' => true,
             'defaultZoom' => 1,
             'floorId' => $floor->id,
             'showAttribution' => false,
             'hiddenMapObjectGroups' => [
                 'enemypack',
                 'killzonepath'
+            ],
+            'show' => [
+                'share' => []
             ]
         ])
     </div>
