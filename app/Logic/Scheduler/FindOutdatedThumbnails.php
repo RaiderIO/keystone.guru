@@ -30,6 +30,7 @@ class FindOutdatedThumbnails
                 $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
                     ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail_refresh_min'))->toDateTimeString());
             })->orWhere('thumbnail_updated_at', '<', now()->subDays(config('keystoneguru.thumbnail_refresh_anyways_days')))
+            ->orderBy('id', 'desc')
             ->get();
         Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', $routes->count()));
 
@@ -44,9 +45,10 @@ class FindOutdatedThumbnails
             // ProcessRouteFloorThumbnail::thumbnailsExistsForRoute() gets more expensive the more jobs there are
             // It has to deserialize the job's payload for each attempt to queue more jobs. If this goes to the 100s
             // it will cause the server to come to a crawl for no real reason. Thus, this magic 100 is introduced.
-            if ($currentJobCount < 100 &&
+            if ($currentJobCount < 100
                 // Thumbnail does not exist in the folder it should
-                !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)) {
+//               && !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)
+            ) {
 
                 if (!$this->isJobQueuedForModel(ProcessRouteFloorThumbnail::class, $dungeonRoute, $queue)) {
                     Log::channel('scheduler')->debug(
