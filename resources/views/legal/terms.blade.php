@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Terms of Service')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Terms of Service')])
 
 @section('header-title', __('Terms and Conditions'))
 

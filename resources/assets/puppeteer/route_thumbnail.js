@@ -20,7 +20,7 @@ function delay(timeout) {
 
     await page.setViewport({width: 768, height: 512});
     await page.goto(process.argv[2]);
-    await delay(10000);
+    await delay(5000);
     await page.screenshot({path: process.argv[3]});
 
     await browser.close();

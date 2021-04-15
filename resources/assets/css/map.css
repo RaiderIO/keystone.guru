@@ -9,6 +9,31 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
+/** HEADER */
+#map_header {
+    position: fixed;
+    width: 100%;
+    z-index: 100000;
+}
+
+.map_fade_out {
+    opacity: 0.8;
+    transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -webkit-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+}
+
+.map_fade_out:hover {
+    opacity: 1;
+}
+
+@media ( max-width: 992px ) {
+    #map_header {
+        padding: 0.5rem;
+    }
+}
+
 /** Embed map needs space for the top header */
 .wrapper.embed_wrapper {
     height: calc(100vh - 96px);
@@ -53,19 +78,6 @@ html, body, #map, #app, .wrapper {
     white-space: normal;
 }
 
-.leaflet-container {
-    background-color: #2B3E50;
-}
-
-#map .modal-backdrop,
-#map .modal {
-    z-index: 100010;
-}
-
-.modal-lg {
-    max-width: 80%;
-}
-
 .sidebar {
     width: 300px;
     position: fixed;
@@ -74,7 +86,6 @@ html, body, #map, #app, .wrapper {
     /* Above NitroPay ads */
     z-index: 99999;
     transition: right 0.2s, left 0.2s;
-    background-color: #4E5D6C;
 }
 
 /** Tooltips should show above the sidebar */
@@ -85,7 +96,6 @@ html, body, #map, #app, .wrapper {
 .sidebar.anchor-left {
     left: -300px;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-right: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-left.active {
@@ -95,7 +105,6 @@ html, body, #map, #app, .wrapper {
 .sidebar.anchor-right {
     right: -300px;
     box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-left: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-right.active {
@@ -116,9 +125,6 @@ html, body, #map, #app, .wrapper {
     top: 106px;
     cursor: pointer;
     z-index: 100000;
-
-    background: #4E5D6C;
-    color: #DF691A;
 }
 
 .sidebar-toggle.anchor-left {
@@ -137,11 +143,6 @@ html, body, #map, #app, .wrapper {
 
 .sidebar-toggle.anchor-right.active {
     right: 300px;
-}
-
-.sidebar-toggle:hover {
-    background: #DF691A;
-    color: #FFF;
 }
 
 .embed,
@@ -165,12 +166,10 @@ html, body, #map, #app, .wrapper {
 }
 
 .sidebar .sidebar-header {
-    background: #2B3E50;
     height: 106px;
 }
 
 .sidebar-background {
-    background-color: #0c0c0caa;
     border-radius: 5px;
     padding: 3px;
 }
@@ -188,7 +187,6 @@ html, body, #map, #app, .wrapper {
 .sidebar .sidebar-header-subtitle {
     padding-left: 10px;
     min-height: 25px;
-    color: #C1C1C1;
 }
 
 .sidebar .sidebar-header-pulls-spacer {
@@ -210,78 +208,122 @@ html, body, #map, #app, .wrapper {
     user-select: none;
 }
 
-#killzonesidebar.sidebar .sidebar-content.edit {
-    /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
-    height: calc(100vh - 158px);
-}
-
-#killzonesidebar.sidebar .sidebar-content.edit.settings-shown {
-    /** Bit of a hack, but the 254 is the height of the header now which somehow isn't taken into account */
-    height: calc(100vh - 254px);
-}
-
 .sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
 }
 
-#killzonesidebar .sidebar-content .card-body {
-    padding: 0.2rem 0.5rem;
+#pulls_sidebar,
+#pulls_sidebar .bg-header {
+    padding-right: 0 !important;
+    user-select: none;
 }
 
-#killzonesidebar .sidebar-content .card-title {
-    margin-bottom: 0.4rem;
+@media (max-width: 1440px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 350px;
+        padding-right: 0 !important;
+
+        -webkit-transition: right 0.2s;
+        -o-transition: right 0.2s;
+        transition: right 0.2s;
+    }
+
+    #pulls_sidebar.mobile:not(.active) {
+        right: -350px;
+    }
+
+    #pulls_sidebar.mobile.active {
+        right: 0;
+    }
 }
 
-
-#killzonesidebar .form-group {
-    margin-bottom: 0.6rem;
+@media (min-width: 1440px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 400px;
+        padding-right: 0 !important;
+    }
 }
 
-.sidebar .sidebar-panel {
-    /*padding: 10px;*/
-    /*border: #2B3E50 solid 1px;*/
-    margin: 4px;
+@media (min-width: 1920px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 450px;
+        padding-right: 0 !important;
+    }
 }
 
-#killzonesidebar .map_killzonessidebar_killzone {
-    /*background-color: #2B3E50;*/
-    /*padding: 6px;*/
+#pulls_sidebar:not(.mobile) .pulls_container {
+    /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
+    max-height: calc(100vh - 158px);
 }
 
-#killzonesidebar .map_killzonessidebar_killzone_fill_space {
+#pulls_sidebar:not(.mobile) .edit .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(100vh - (158px + 55px));
+}
+
+/** Mobile heights */
+#pulls_sidebar.mobile .handle {
+    background-color: #2E2E2E;
+    left: -40px;
+    padding: 10px 15px;
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+#pulls_sidebar.mobile .pulls_container {
+    max-height: calc(100vh - 109px);
+}
+
+#pulls_sidebar.mobile .edit .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(100vh - (109px + 55px));
+}
+
+#pulls_sidebar .map_killzonessidebar_killzone_fill_space {
     flex: 1 1 auto
 }
 
-#killzonesidebar [data-toggle="collapse"] .fa:before {
+#pulls_sidebar [data-toggle="collapse"] .fa:before {
     content: "\f077";
 }
 
-#killzonesidebar [data-toggle="collapse"].collapsed .fa:before {
+#pulls_sidebar [data-toggle="collapse"].collapsed .fa:before {
     content: "\f078";
 }
 
-#killzonesidebar .map_killzonessidebar_floor_switch h6 {
+#pulls_sidebar .map_killzonessidebar_floor_switch h6 {
     font-size: 1.1em;
 }
 
-#killzonesidebar .map_killzonessidebar_floor_switch,
-#killzonesidebar .map_killzonessidebar_killzone .selectable {
+#pulls_sidebar .map_killzonessidebar_floor_switch,
+#pulls_sidebar .map_killzonessidebar_killzone.selectable {
     cursor: pointer;
 }
 
-#killzonesidebar .map_killzonessidebar_color_btn {
+#pulls_sidebar .map_killzonessidebar_color_btn {
     cursor: pointer;
 }
 
-#killzonesidebar .pickr {
+#pulls_sidebar .pickr {
     flex: 1 1 auto;
 }
 
-.draw_settings_tools .pickr {
+.pull_settings_tools .pickr {
     height: 100%;
 }
 
-#killzonesidebar .map_killzonessidebar_killzone .selected .text-success {
+/** Should render above modals */
+.pcr-app {
+    z-index: 100100;
+}
+
+#pulls_sidebar .map_killzonessidebar_killzone .selected .text-success {
     color: unset !important;
 }
 
@@ -299,20 +341,82 @@ html, body, #map, #app, .wrapper {
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
     background-color: inherit;
+    width: 36px;
+    height: 36px;
 }
 
-.map_top_header_background,
-.route_manipulation_tools {
+
+.theme #edit_route_echo_members_container .list-group-item .nav-link,
+.theme #edit_route_echo_members_container .list-group-item .nav-link img {
+    padding: 0 !important;
+    width: 30px;
+    height: 30px;
+}
+
+.theme .echo_user {
+    border-radius: 30px !important;
+}
+
+.map_ad_background {
     background-color: rgba(78, 93, 108, 0.75);
 }
 
-.route_manipulation_tools {
-    margin: auto;
+.popover #map_dungeon_route_info_popover_container {
+    font-size: 1rem;
 }
 
-.route_echo {
-    -ms-flex: 0 0 100px;
-    flex: 0 0 100px;
+.route_manipulation_tools {
+    position: fixed;
+    z-index: 99999;
+    top: 70px;
+    align-items: flex-start !important;
+}
+
+.route_manipulation_tools.right {
+    right: 0;
+}
+
+.route_manipulation_tools .bg-header {
+    padding-right: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    margin-left: 0 !important;
+}
+
+@media (min-width: 992px) {
+    .route_manipulation_tools.top {
+        padding-top: 1rem !important;
+    }
+
+    .route_manipulation_tools:not(.top) {
+        top: unset;
+        align-items: center !important;
+    }
+
+    .route_manipulation_tools .bg-header {
+        padding: 0.5rem !important;
+    }
+
+    .route_manipulation_tools.left .bg-header {
+        margin-left: 0.5rem !important;
+    }
+
+    .route_manipulation_tools.right .bg-header {
+        margin-right: 0.5rem !important;
+    }
+
+    #enemy_info_container {
+        margin: 0.5rem !important;
+    }
+}
+
+#enemy_info_container {
+    width: 300px;
+    margin: 0 !important;
+    z-index: 100000;
+}
+
+#enemy_info_container .card {
+    border-radius: 0 !important;
 }
 
 #echo_connected_container {
@@ -320,19 +424,6 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-@media screen and (min-width: 1100px) {
-    .route_echo_status {
-        width: 400px;
-    }
-
-    #route_echo_container {
-        width: 400px;
-    }
-
-    .route_manipulation_tools {
-        width: 1000px;
-    }
-}
 
 .echo_connected {
     color: green;
@@ -367,10 +458,6 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 }
 
-.route_manipulation_tools .draw_icon .col {
-    background: #5bc0de;
-}
-
 .route_manipulation_tools .draw_element {
     text-align: center;
     margin-top: 8px;
@@ -388,30 +475,9 @@ html, body, #map, #app, .wrapper {
     cursor: default;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
-.route_manipulation_tools .draw_icon .col:hover {
-    background: #DF691A;
-    color: rgb(235, 235, 235) !important;
-}
-
 .floating_panel,
 .sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown.bootstrap-select {
-    background-color: #4E5D6C;
-}
-
-#edit_route_freedraw_options_color,
-.dropdown.bootstrap-select .btn {
-    background-color: #4E5D6C;
-    color: #FFF;
-    border: 1px solid #2B3E5066;
-}
-
-#edit_route_draw_container a {
-    color: #FFF;
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions {
@@ -422,6 +488,7 @@ html, body, #map, #app, .wrapper {
     top: unset !important;
     position: unset !important;
     left: unset !important;
+    margin: 0 !important;
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions li {
@@ -429,8 +496,6 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_draw_actions_container .leaflet-draw-actions a {
-    background: inherit;
-    color: #DF691A;
     font-size: 14px;
 }
 
@@ -448,28 +513,6 @@ html, body, #map, #app, .wrapper {
 
 #map-controls {
     height: 700px;
-}
-
-.map-scroll:before {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    content: '';
-    background: #00000061;
-    z-index: 999;
-}
-
-.map-scroll:after {
-    content: 'Use ctrl + scroll to zoom the map';
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    z-index: 999;
-    font-size: 34px;
-    color: #eaeaea;
-    text-align: center;
 }
 
 /* Remove square background and border around enemies, but leave editing drag squares alone */
@@ -503,10 +546,6 @@ html, body, #map, #app, .wrapper {
     margin-right: 10px;
 }
 
-#map .dropdown-menu.show li {
-    background-color: #2B3E50;
-}
-
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 
@@ -527,9 +566,9 @@ html, body, #map, #app, .wrapper {
     border-color: red !important;
 }
 
-.map_icon.leaflet-edit-marker-selected {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
+.map_icon.leaflet-edit-marker-selected.leaflet-marker-icon {
+    border: unset;
+    background-color: unset;
 }
 
 .mdt_enemy_icon.leaflet-edit-marker-selected {
@@ -586,6 +625,10 @@ html, body, #map, #app, .wrapper {
     border-radius: 100px;
 }
 
+/** Odd case where the background would otherwise be white and it'd show through the border */
+.enemy_icon.enemy_portrait.dangerous {
+    background-color: black;
+}
 
 /*
  * Enemy classes
@@ -610,14 +653,6 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemyclassifications/boss.png') !important;
 }
 
-.enemy_icon.melee,
-.enemy_icon.caster,
-.enemy_icon.ranged,
-.enemy_icon.healer,
-.enemy_icon.enemy_forces {
-    background-color: #2B3E50;
-}
-
 .enemy_icon.mdt {
     background-color: hotpink;
 }
@@ -640,14 +675,8 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
-.map_enemy_visual_fade {
-    opacity: 50%;
-}
-
-.map_enemy_visual_fade.prideful,
-.map_enemy_visual_fade.inspiring,
-.map_enemy_visual_fade.unskippable {
-    opacity: 80%;
+.enemy_icon_npc_enemy_portrait {
+    background-color: black;
 }
 
 .enemy_icon_npc_mdt {

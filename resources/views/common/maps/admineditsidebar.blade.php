@@ -1,11 +1,8 @@
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\Dungeon $dungeon */
+/** @var \App\Models\Floor $floor */
 
 $show = isset($show) ? $show : [];
-// May not be set in the case of a sandbox version
-if (isset($model)) {
-    $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
-}
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 // Set correctly displayed floor
 ?>
@@ -15,7 +12,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
     'sidebarScrollSelector' => '#admineditsidebar .sidebar-content',
     'sidebarToggleSelector' => '#admineditsidebarToggle',
     'switchDungeonFloorSelect' => '#map_floor_selection',
-    'defaultSelectedFloorId' => $model->id,
+    'defaultSelectedFloorId' => $floor->id,
 ]])
 
 @component('common.maps.sidebar', [
@@ -39,12 +36,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="font-weight-bold">{{ __('MDT enemy mapping') }}:</div>
-                            <input type="checkbox" class="form-control left_checkbox" value="1"
-                                   id="map_enemy_visuals_map_mdt_clones_to_enemies"
-                                   name="map_enemy_visuals_map_mdt_clones_to_enemies"/>
-                        </div>
                     </div>
                 </div>
 
@@ -57,11 +48,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
                     <div class="row view_dungeonroute_details_row mt-1">
                         <div class="col floor_selection">
                             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                            {!! Form::select('map_floor_selection', [__('Select floor')], $model->id, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                            {!! Form::select('map_floor_selection', [__('Select floor')], $floor->id, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
                         </div>
                     </div>
                 @else
-                    {!! Form::input('hidden', 'map_floor_selection', $model->id, ['id' => 'map_floor_selection']) !!}
+                    {!! Form::input('hidden', 'map_floor_selection', $floor->id, ['id' => 'map_floor_selection']) !!}
                 @endif
             </div>
         </div>

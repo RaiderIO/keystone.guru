@@ -158,8 +158,10 @@ class SeasonService implements SeasonServiceInterface
             $weeksSinceBeginning = (floor($weeksSinceBeginning / $affixCount) + 1) * $affixCount;
 
             $affixGroups = new Collection();
-            for ($i = 0; $i < $weeksSinceBeginning; $i++) {
-                /** $firstSeasonStart will contain the current date we're iterating on; so it's kinda misleading. This comment should eliminate that*/
+            // Add 1 week so that we can always have a next or previous week on the charts, regardless of where we are.
+            // That additional week is used to fetch the first row of the next week
+            for ($i = 0; $i < $weeksSinceBeginning + 1; $i++) {
+                /** $firstSeasonStart will contain the current date we're iterating on; so it's kinda misleading. This comment should eliminate that */
                 $season = $this->getSeasonAt($firstSeasonStart);
 
                 // Get the affix group index
@@ -175,8 +177,9 @@ class SeasonService implements SeasonServiceInterface
                 $firstSeasonStart->addWeek();
             }
 
-            // Return the last $affixCount affixes
-            return $affixGroups->slice($affixGroups->count() - $affixCount, $affixCount);
+            // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
+            // Then, fetch an additional TWO affixes, one to show extra at the top, one to show extra at the bottom
+            return $affixGroups->slice($affixGroups->count() - ($affixCount + 2), $affixCount + 2);
         }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
     }
 }

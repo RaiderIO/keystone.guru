@@ -13,19 +13,60 @@ use Exception;
 use Faker\Provider\Color;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use Session;
 
 class ProfileController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
     public function edit(Request $request)
     {
         return view('profile.edit');
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return Application|Factory|View
+     */
+    public function view(Request $request, User $user)
+    {
+        return view('profile.view', ['user' => $user]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function routes(Request $request)
+    {
+        return view('profile.routes');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function favorites(Request $request)
+    {
+        return view('profile.favorites');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function tags(Request $request)
+    {
+        return view('profile.tags');
     }
 
     /**
@@ -51,6 +92,7 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
+        $user->theme = $request->get('theme');
         $user->echo_color = $request->get('echo_color', Color::hexColor());
         $user->echo_anonymous = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
@@ -70,6 +112,13 @@ class ProfileController extends Controller
         // Only when no duplicates are found!
         if (!$emailExists && !$nameExists) {
             if ($user->save()) {
+
+                // Handle changing of avatar if the user did so
+                $avatar = $request->file('avatar');
+                if ($avatar !== null) {
+                    $user->saveUploadedFile($avatar);
+                }
+
                 Session::flash('status', __('Profile updated'));
 
                 try {
@@ -126,11 +175,6 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profile.edit');
-    }
-
-    public function view(Request $request, User $user)
-    {
-        return view('profile.view');
     }
 
     /**
@@ -197,11 +241,20 @@ class ProfileController extends Controller
         return view('profile.edit')->withErrors($error);
     }
 
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
     public function list(Request $request)
     {
         return view('profile.list');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws Exception
+     */
     public function delete(Request $request)
     {
         if (Auth::getUser()->hasRole('admin')) {

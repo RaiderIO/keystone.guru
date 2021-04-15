@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Embed a route')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Embed a route')])
 
 @section('header-title', __('Keystone.guru embed test on webpage'))
 

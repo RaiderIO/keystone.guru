@@ -139,6 +139,9 @@ class DrawControls extends MapControl {
         }, {
             hotkey: '5',
             cssClass: 'leaflet-draw-edit-edit',
+        }, {
+            hotkey: '6',
+            cssClass: 'leaflet-draw-edit-remove',
         }];
     }
 
@@ -230,29 +233,27 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: 'Draw a path',
+                    title: lang.get('messages.path_title'),
                     hotkey: this._findHotkeyByCssClass('path')
                 },
                 killzone: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     cssClass: 'd-none',
-                    faClass: 'fa-bullseye',
-                    title: 'Draw a killzone'
+                    faClass: 'fa-bullseye'
                 },
                 mapicon: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-icons',
-                    title: 'Create an icon',
+                    title: lang.get('messages.mapicon_title'),
                     hotkey: this._findHotkeyByCssClass('icon')
                 },
                 awakenedobeliskgatewaymapicon: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     cssClass: 'd-none',
-                    faClass: 'fa-icons',
-                    title: 'Create an awakened obelisk gateway icon',
+                    faClass: 'fa-icons'
                 },
                 pridefulenemy: {
                     repeatMode: false,
@@ -290,16 +291,20 @@ class DrawControls extends MapControl {
      * @param faIconClass string
      * @param text string
      * @param hotkey string
+     * @param title string
+     * @param btnType string
      * @returns {string}
      * @private
      */
-    _getButtonHtml(faIconClass, text, hotkey = '') {
+    _getButtonHtml(faIconClass, text, hotkey = '', title = '', btnType = '') {
         let template = Handlebars.templates['map_controls_route_edit_button_template'];
 
         let data = {
             fa_class: faIconClass,
             text: text,
-            hotkey: hotkey
+            hotkey: hotkey,
+            title: title,
+            btnType: btnType
         };
 
         return template(data);
@@ -308,16 +313,20 @@ class DrawControls extends MapControl {
     _addControlSetupFakePridefulButton() {
         let $disabledPridefulButton = $('<a>', {
             id: 'disabled_pridefulenemy_button',
-            class: 'col draw_icon mt-2 leaflet-disabled draw-control-disabled',
-            href: '#',
-            'data-toggle': 'tooltip',
-            title: c.map.pridefulenemy.isEnabled() ? lang.get('messages.pridefulenemy_disabled_title') : lang.get('messages.pridefulenemy_disabled_no_shadowlands_title'),
+            class: 'draw_icon leaflet-disabled draw-control-disabled',
+            href: '#'
         });
+
         $disabledPridefulButton.html(
-            this._getButtonHtml('fa-user', lang.get('messages.brushline'))
+            this._getButtonHtml(
+                'fa-user',
+                lang.get('messages.brushline'),
+                '',
+                c.map.pridefulenemy.isEnabled() ? lang.get('messages.pridefulenemy_disabled_title') : lang.get('messages.pridefulenemy_disabled_no_shadowlands_title')
+            )
         );
 
-        $disabledPridefulButton.hide()
+        $disabledPridefulButton.hide();
         $disabledPridefulButton.insertAfter('.leaflet-draw-draw-pridefulenemy');
     }
 
@@ -336,12 +345,19 @@ class DrawControls extends MapControl {
             let $child = $(child);
 
             // Clear of classes, add a row
-            let $parent = $child.removeClass().addClass('row no-gutters');
+            let $parent = $child.removeClass().addClass('test')
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');
-            $buttons.addClass('col-lg col-4 draw_icon mt-2');
-            $buttons.attr('data-toggle', 'tooltip');
+            $buttons.addClass('draw_icon');
+
+            $.each($buttons, function (index, button) {
+                let $button = $(button);
+                let $row = $($button.children()[0]);
+                $row.attr('data-toggle', 'tooltip');
+                $row.attr('data-placement', 'right');
+                $row.attr('title', $button.attr('title'));
+            });
 
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
             $parent.append($buttons);
@@ -350,11 +366,11 @@ class DrawControls extends MapControl {
         // Put the draw actions in a different div
         let $drawActions = $container.find('.leaflet-draw-actions');
         // Add the col class to make it align properly in its 'row' parent
-        $drawActions.addClass('col');
+        // $drawActions.addClass('col');
         // Add to the proper container
         $('#edit_route_draw_actions_container').append(
             $drawActions
-        )
+        );
     }
 
     _addControlSetupBrushlineButton() {
@@ -364,15 +380,18 @@ class DrawControls extends MapControl {
 
         // Add a special button for the Brushline
         let $brushlineButton = $('<a>', {
-            class: 'leaflet-draw-draw-brushline col draw_icon mt-2' +
+            class: 'leaflet-draw-draw-brushline draw_icon mt-2' +
                 // If pather was enabled, make sure it stays active
                 (self.map.getMapState() instanceof PatherMapState ? ' leaflet-draw-toolbar-button-enabled' : ''),
             href: '#',
-            'data-toggle': 'tooltip',
-            title: lang.get('messages.brushline_title'),
         });
         $brushlineButton.html(
-            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), this._findHotkeyByCssClass('brushline'))
+            this._getButtonHtml(
+                'fa-paint-brush',
+                lang.get('messages.brushline'),
+                this._findHotkeyByCssClass('brushline'),
+                lang.get('messages.brushline_title')
+            )
         );
         $brushlineButton.bind('click', function () {
             // Check if it's enabled now
@@ -410,6 +429,7 @@ class DrawControls extends MapControl {
         let $button = $('<a>', {
             href: '#',
             'data-toggle': 'tooltip',
+            'data-placement': 'right',
             title: lang.get('messages.finish_drawing'),
             text: lang.get('messages.finish')
         });
@@ -436,9 +456,15 @@ class DrawControls extends MapControl {
 
         // Add custom content for the edit and remove buttons
         let $buttons = $editRouteControls.find('a');
-        $buttons.attr('data-toggle', 'tooltip');
-        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), this._findHotkeyByCssClass('edit')));
-        $($buttons[1]).html(this._getButtonHtml('fa-trash', lang.get('messages.delete')));
+        let $editButton = $($buttons[0]);
+        $editButton.html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), this._findHotkeyByCssClass('edit'), lang.get('messages.edit_title')));
+        $editButton.attr('title', '');
+
+        let $deleteButton = $($buttons[1]);
+        $deleteButton.html(
+            this._getButtonHtml('fa-trash', lang.get('messages.delete'), this._findHotkeyByCssClass('delete'), lang.get('messages.delete_title'), 'btn-danger')
+        );
+        $deleteButton.attr('title', '');
 
         // Remove from the second row, inject in the first row
         $buttonContainer.append($buttons);

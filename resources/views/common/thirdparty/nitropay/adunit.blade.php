@@ -1,13 +1,14 @@
 <?php
+/** @var boolean $isMobile */
 /** @var string $id */
-$id   = 'nitropay-' . $id;
+$id = 'nitropay-' . $id;
 $type = isset($type) ? $type : 'responsive';
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
     'responsive' => 'top-right',
-    'header'     => 'bottom-right',
-    'footer'     => 'top-right',
+    'header' => 'bottom-right',
+    'footer' => 'top-right',
 ];
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
@@ -24,7 +25,7 @@ if ($isMobile) {
         let adId = '{{ $id }}';
 
         // Fail safe just in case
-        if( count > 5 ) {
+        if (count > 5) {
             // console.log(`Broke out of too much checking for ${adId}`);
             return;
         }
@@ -115,7 +116,7 @@ if ($isMobile) {
                     "demo": {{$demo}},
                     "sizes": [
                         [
-                            "{{ isset($map) && $map ? '728' : '970'}}",
+                            "{{ isset($map) && $map ? 728 : 970}}",
                             "90"
                         ]
                     ],
@@ -158,8 +159,8 @@ if ($isMobile) {
                     "demo": {{$demo}},
                     "sizes": [
                         [
-                            "970",
-                            "250"
+                            "{{ isset($map) && $map ? 728 : 970 }}",
+                            "{{ isset($map) && $map ? 90 : 250 }}"
                         ]
                     ],
                     "report": {

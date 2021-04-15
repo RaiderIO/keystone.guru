@@ -27,30 +27,6 @@ class APIEnemyController extends Controller
     use ChangesMapping;
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
-    use ListsEnemies;
-
-    function list(Request $request)
-    {
-        $showMdtEnemies = false;
-
-        // Only admins are allowed to see this
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
-            // Only fetch it now
-            $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
-        }
-
-        $enemies = $this->listEnemies(
-            $request->get('floorId'),
-            $showMdtEnemies,
-            $request->get('dungeonroute', null)
-        );
-
-        if ($enemies === false) {
-            return response('Not found', Http::NOT_FOUND);
-        } else {
-            return $enemies;
-        }
-    }
 
     /**
      * @param Request $request

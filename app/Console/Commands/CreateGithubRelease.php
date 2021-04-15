@@ -47,7 +47,6 @@ class CreateGithubRelease extends Command
     public function handle()
     {
         $version = $this->argument('version');
-        $this->info(sprintf('>> Creating Github release for %s', $version));
 
         if ($version === null) {
             $release = Release::latest()->first();
@@ -61,6 +60,8 @@ class CreateGithubRelease extends Command
         }
 
         if ($release !== null) {
+            $this->info(sprintf('>> Creating Github release for %s', $release->version));
+
             $username = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
@@ -68,8 +69,8 @@ class CreateGithubRelease extends Command
             $githubRepoClient = GitHub::repo();
             // May throw an exception if it doesn't exist
             foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
-                if ($githubRelease['name'] === $version) {
-                    $this->error(sprintf('Unable to create release for %s; already exists!', $version));
+                if ($githubRelease['name'] === $release->version) {
+                    $this->error(sprintf('Unable to create release for %s; already exists!', $release->version));
                     return;
                 }
             }
@@ -82,18 +83,17 @@ class CreateGithubRelease extends Command
                     'name'     => $release->version,
                     'body'     => $body
                 ]);
-                $this->info(sprintf('Successfully created GitHub release %s', $version));
+                $this->info(sprintf('Successfully created GitHub release %s', $release->version));
 
                 // Fetch the created version from Github so we can use it later on
                 $this->shell('git fetch');
             } catch (ValidationFailedException $exception) {
-                $this->warn(sprintf('Unable to create Github release for %s: %s', $version, $exception->getMessage()));
+                $this->warn(sprintf('Unable to create Github release for %s: %s', $release->version, $exception->getMessage()));
             }
 
+            $this->info(sprintf('OK Creating Github release for %s', $release->version));
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }
-
-        $this->info(sprintf('OK Creating Github release for %s', $version));
     }
 }

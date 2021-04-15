@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Mass import NPCs')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Mass import NPCs')])
 
 @section('header-title', __('Mass import NPCs'))
 

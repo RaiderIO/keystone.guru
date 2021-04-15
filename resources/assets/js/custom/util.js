@@ -166,7 +166,7 @@ function hexToRgb(hex) {
 
 function _componentToHex(c) {
     let hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    return hex.length === 1 ? "0" + hex : hex;
 }
 
 /**
@@ -257,7 +257,7 @@ function getFormattedPercentage(value, max) {
 function copyToClipboard(value, $input = null, timeoutMS = null) {
     // https://codepen.io/shaikmaqsood/pen/XmydxJ
     let $temp = null;
-    if( $input === null ) {
+    if ($input === null) {
         $temp = $('<input>');
         $('body').append($temp);
         $temp.val(value);
@@ -266,12 +266,12 @@ function copyToClipboard(value, $input = null, timeoutMS = null) {
         $input.select();
     }
     document.execCommand('copy');
-    if( $input === null ) {
+    if ($input === null) {
         $temp.remove();
     }
 
     let opts = {};
-    if( timeoutMS !== null ) {
+    if (timeoutMS !== null) {
         opts.timeout = timeoutMS;
     }
     showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
@@ -363,7 +363,7 @@ function getMapIcon(id) {
 
 $.fn.insertIndex = function (i) {
     // The element we want to swap with
-    var $target = this.parent().children().eq(i);
+    let $target = this.parent().children().eq(i);
 
     // Determine the direction of the appended index so we know what side to place it on
     if (this.index() > i) {
@@ -374,3 +374,35 @@ $.fn.insertIndex = function (i) {
 
     return this;
 };
+
+// https://medium.com/talk-like/detecting-if-an-element-is-in-the-viewport-jquery-a6a4405a3ea2
+$.fn.isInViewport = function () {
+    let elementTop = $(this).offset().top;
+    let elementBottom = elementTop + $(this).outerHeight();
+    let viewportTop = $(window).scrollTop();
+    let viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+
+/**
+ * @see https://stackoverflow.com/a/1099670/771270
+ * @returns {{}}
+ */
+function getQueryParams() {
+    let qs = document.location.search.split('+').join(' '),
+        params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    let count = 0;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+
+        // Just in case..
+        if( ++count > 100 ){
+            break;
+        }
+    }
+
+    return params;
+}

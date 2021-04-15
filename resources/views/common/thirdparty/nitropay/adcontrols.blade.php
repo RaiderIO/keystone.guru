@@ -1,7 +1,7 @@
 @if( isset($map) && $map )
     <div>
         <div id="{{ $id }}-remove-ads" class="text-right nitropay-style float-left" style="display: none;">
-            <a href="https://www.patreon.com/keystoneguru" target="_blank">
+            <a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">
                 {{ __('Remove ads') }}
             </a>
         </div>
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div id="{{ $id }}-remove-ads" class="col text-right nitropay-style" style="display: none;">
-                <a href="https://www.patreon.com/keystoneguru" target="_blank">
+                <a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">
                     {{ __('Remove ads') }}
                 </a>
             </div>

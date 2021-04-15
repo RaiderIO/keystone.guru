@@ -10,7 +10,8 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Http\Requests\APIDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -22,12 +23,14 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportWarning;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -59,6 +62,7 @@ class APIDungeonRouteController extends Controller
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
+        $userId = (int) $request->get('user_id', 0);
         // Check if we should load the team's tags or the personal tags
         $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
         $tagCategory = TagCategory::fromName($tagCategoryName);
@@ -66,11 +70,11 @@ class APIDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', $tagsRelationshipName])
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'ratings', 'pageviews', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
-            ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
+            ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query)
@@ -121,7 +125,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Handle favorites
-            if (array_search('favorite', $requirements) !== false) {
+            if (array_search('favorite', $requirements) !== false || $request->get('favorites', false)) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user)
                 {
                     /** @var $query Builder */
@@ -159,8 +163,13 @@ class APIDungeonRouteController extends Controller
             }
         }
 
+        // Add a filter for a specific user if the request called for it
+        if( $userId > 0 ){
+            $routes = $routes->where('author_id', $userId);
+        }
+
         // Only show routes that are visible to the world, unless we're viewing our own routes
-        if (!$mine && !$teamPublicKey) {
+        if ((!$mine && !$teamPublicKey) || $userId !== 0) {
             $routes = $routes->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
         }
 
@@ -187,6 +196,181 @@ class APIDungeonRouteController extends Controller
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
+    }
+
+    /**
+     * @param APIDungeonRouteSearchFormRequest $request
+     * @return string
+     */
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request): string
+    {
+        // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
+        // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
+        // May be modified/adjusted later on
+        $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
+
+        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
+            // other may work, this covers all bases for both dev and live
+            ->where(function ($query)
+            {
+                /** @var $query \Illuminate\Database\Query\Builder */
+                $query->where('expires_at', 0);
+                $query->orWhereNull('expires_at');
+            })
+            ->groupBy('dungeon_routes.id');
+
+        // Dungeon selector handling
+        if ($request->has('dungeons') && !empty($request->get('dungeons'))) {
+            $query->whereIn('dungeon_routes.dungeon_id', $request->get('dungeons'));
+        }
+
+        // Title handling
+        if ($request->has('title')) {
+            $query->where('title', 'LIKE', sprintf('%%%s%%', $request->get('title')));
+        }
+
+        // Level handling
+        if ($request->has('level')) {
+            $split = explode(';', $request->get('level'));
+            if (count($split) === 2) {
+                $query->where(function (Builder $query) use ($split)
+                {
+                    $query->where('level_min', '>=', (int)$split[0])
+                        ->where('level_min', '<=', (int)$split[1]);
+                });
+
+                $query->where(function (Builder $query) use ($split)
+                {
+                    $query->where('level_max', '>=', (int)$split[0])
+                        ->where('level_max', '<=', (int)$split[1]);
+                });
+            }
+        }
+
+        // Affixes
+        $hasAffixGroups = $request->has('affixgroups');
+        $hasAffixes = $request->has('affixes');
+        if ($hasAffixGroups || $hasAffixes) {
+            $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
+
+            if ($hasAffixGroups) {
+                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $request->get('affixgroups'));
+            }
+
+            if ($hasAffixes) {
+                $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
+                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
+                    ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
+                    ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
+                    ->groupBy('affix_group_couplings.affix_group_id')
+                    ->having('affixMatches', '>=', count($request->get('affixes')));
+            }
+        }
+
+        // Enemy forces
+        if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
+        }
+
+        // User handling
+        if ($request->has('user')) {
+            $query->join('users', 'dungeon_routes.author_id', '=', 'users.id');
+            $query->where('users.name', $request->get('user'));
+        }
+
+        // Rating - prevent 1 rating from filtering out all routes without a rating
+        if ($request->has('rating') && (int)$request->get('rating') > 1) {
+            $query->join('dungeon_route_ratings', 'dungeon_route_ratings.dungeon_route_id', '=', 'dungeon_routes.id');
+            $query->selectRaw('AVG(dungeon_route_ratings.rating) as rating');
+            $query->having('rating', '>=', $request->get('rating'));
+        }
+
+        // Disable some checks when we're local - otherwise we'd get no routes at all
+        $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
+        {
+            $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
+                ->where('demo', 0)
+                ->where('dungeons.active', 1);
+        })->offset((int)$request->get('offset', 0))
+            ->limit((int)$request->get('limit', 20))
+            ->selectRaw($selectRaw);
+
+
+        return view('common.dungeonroute.cardlist', [
+            'dungeonroutes'    => $query->get(),
+            'showAffixes'      => true,
+            'showDungeonImage' => true,
+        ])->render();
+    }
+
+    /**
+     * @param Request $request
+     * @param string $category
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
+     * @return string
+     */
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonService $seasonService): string
+    {
+        $result = collect();
+
+        // Prevent jokesters from playing around
+        $offset = max($request->get('offset', 10), 0);
+        $limit = min($request->get('limit', 10), 20);
+        $dungeonId = (int)$request->get('dungeon');
+
+        // Fetch the dungeon if it was set, and only if it is active
+        $dungeon = $dungeonId !== null ? Dungeon::active()->where('id', $dungeonId)->first() : null;
+
+        // Apply an offset and a limit by default for all subsequent queries
+        $closure = function (Builder $builder) use ($offset, $limit)
+        {
+            $builder->offset($offset)->limit($limit);
+        };
+        $discoverService = $discoverService->withBuilder($closure);
+
+        $affixGroup = null;
+        switch ($category) {
+            case 'popular':
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeon($dungeon);
+                } else {
+                    $result = $discoverService->popular();
+                }
+                break;
+            case 'thisweek':
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                } else {
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup());
+                }
+                break;
+            case 'nextweek':
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $seasonService->getCurrentSeason()->getNextAffixGroup());
+                } else {
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $seasonService->getCurrentSeason()->getNextAffixGroup());
+                }
+                break;
+            case 'new':
+                if ($dungeon instanceof Dungeon) {
+                    $result = $discoverService->newByDungeon($dungeon);
+                } else {
+                    $result = $discoverService->new();
+                }
+                break;
+        }
+
+        return view('common.dungeonroute.cardlist', [
+            'dungeonroutes'    => $result,
+            'affixgroup'       => $affixGroup,
+            'showAffixes'      => true,
+            'showDungeonImage' => $dungeonId === null,
+            'cols'             => 2,
+        ])->render();
     }
 
     /**
@@ -218,6 +402,7 @@ class APIDungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      *
      * @return Response
+     * @throws AuthorizationException
      */
     function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
@@ -269,6 +454,9 @@ class APIDungeonRouteController extends Controller
         }
 
         $dungeonroute->published_state_id = PublishedState::where('name', $publishedState)->first()->id;
+        if ($dungeonroute->published_state_id === PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id) {
+            $dungeonroute->published_at = date('Y-m-d H:i:s', time());
+        }
         $dungeonroute->save();
 
         return response()->noContent();
@@ -401,19 +589,17 @@ class APIDungeonRouteController extends Controller
 
         // Start parsing
         $result = [];
-        if ($publickey === 'admin') {
-            // Delete it so we don't fetch stuff we shouldn't!
-            $publickey = null;
-        } else {
+        $dungeonRoute = $publickey === 'admin' ? null : DungeonRoute::findOrFail($publickey);
+        if ($dungeonRoute !== null) {
             // Fetch dungeon route specific properties
             // Paths
             if (in_array('path', $fields)) {
-                $result['path'] = $this->listPaths($request->get('floor'), $publickey);
+                $result['path'] = $this->listPaths((int)$request->get('floor'), $dungeonRoute);
             }
 
             // Brushline
             if (in_array('brushline', $fields)) {
-                $result['brushline'] = $this->listBrushlines($request->get('floor'), $publickey);
+                $result['brushline'] = $this->listBrushlines((int)$request->get('floor'), $dungeonRoute);
             }
         }
 
@@ -424,24 +610,23 @@ class APIDungeonRouteController extends Controller
                 // Don't expose vertices
                 $enemyPackEnemies = true;
             }
-            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemyPackEnemies, $teeming);
+            $result['enemypack'] = $this->listEnemyPacks((int)$request->get('floor'), $enemyPackEnemies, $teeming);
         }
 
         // Enemy patrols
         if (in_array('enemypatrol', $fields)) {
-            $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
+            $result['enemypatrol'] = $this->listEnemyPatrols((int)$request->get('floor'));
         }
 
         // Map icons
         if (in_array('mapicon', $fields)) {
-            $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
+            $result['mapicon'] = $this->listMapIcons((int)$request->get('floor'), $dungeonRoute);
         }
 
         // Dungeon floor switch markers
         if (in_array('dungeonfloorswitchmarker', $fields)) {
-            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers($request->get('floor'));
+            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers((int)$request->get('floor'));
         }
-
 
         return $result;
     }

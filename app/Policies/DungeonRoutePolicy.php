@@ -36,8 +36,7 @@ class DungeonRoutePolicy
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
     {
-        return env('THUMBNAIL_PREVIEW_SECRET') === $secret ||
-            $user !== null && $user->is_admin;
+        return env('THUMBNAIL_PREVIEW_SECRET') === $secret || ($user !== null && $user->is_admin);
     }
 
     /**

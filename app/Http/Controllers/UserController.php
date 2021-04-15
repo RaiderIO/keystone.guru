@@ -5,8 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\PaidTier;
 use App\Models\PatreonTier;
 use App\User;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Session;
 use Teapot\StatusCode\Http;
 
 class UserController extends Controller
@@ -14,12 +21,11 @@ class UserController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory
      */
     public function list()
     {
         return view('admin.user.list', [
-            'models'    => User::with('roles', 'dungeonroutes', 'patreondata')->get(),
             'paidTiers' => PaidTier::all()
         ]);
     }
@@ -27,7 +33,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function makeadmin(Request $request, User $user)
     {
@@ -37,12 +43,12 @@ class UserController extends Controller
                 $user->attachRole('admin');
 
                 // Message to the user
-                \Session::flash('status', sprintf(__('User %s is now an admin'), $user->name));
+                Session::flash('status', sprintf(__('User %s is now an admin'), $user->name));
             } else {
                 $user->detachRole('admin');
 
                 // Message to the user
-                \Session::flash('status', sprintf(__('User %s is no longer an admin'), $user->name));
+                Session::flash('status', sprintf(__('User %s is no longer an admin'), $user->name));
             }
         }
 
@@ -52,7 +58,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function makeuser(Request $request, User $user)
     {
@@ -63,7 +69,7 @@ class UserController extends Controller
             $user->attachRole('user');
 
             // Message to the user
-            \Session::flash('status', sprintf(__('User %s is now a user'), $user->name));
+            Session::flash('status', sprintf(__('User %s is now a user'), $user->name));
         }
 
         return redirect()->route('admin.users');
@@ -72,15 +78,15 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function delete(Request $request, User $user)
     {
         try {
             $user->delete();
-            \Session::flash('status', __('Account deleted successfully.'));
-        } catch (\Exception $e) {
-            \Session::flash('warning', __('An error occurred. Please try again.'));
+            Session::flash('status', __('Account deleted successfully.'));
+        } catch (Exception $e) {
+            Session::flash('warning', __('An error occurred. Please try again.'));
         }
 
         return redirect()->route('admin.users');
@@ -89,6 +95,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param User $user
+     * @return Application|ResponseFactory|Response
      */
     public function storepaidtiers(Request $request, User $user)
     {

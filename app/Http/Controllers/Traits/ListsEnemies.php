@@ -10,11 +10,11 @@ namespace App\Http\Controllers\Traits;
 
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
 use Error;
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -24,33 +24,23 @@ trait ListsEnemies
     /**
      * Lists all enemies for a specific floor.
      *
-     * @param $dungeonId
+     * @param int $dungeonId
      * @param bool $showMdtEnemies
-     * @param string|null $publicKey
+     * @param DungeonRoute|null $dungeonRoute
      * @return array|bool
      */
-    function listEnemies($dungeonId, $showMdtEnemies = false, $publicKey = null)
+    function listEnemies(int $dungeonId, bool $showMdtEnemies = false, ?DungeonRoute $dungeonRoute = null)
     {
-        $dungeonRoute = null;
-        // If dungeon route was set, fetch the markers as well
-        if ($publicKey !== null) {
-            try {
-                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
-            } catch (Exception $ex) {
-                return false;
-            }
-        }
-
         // Eloquent wasn't working with me, raw SQL it is
         /** @var array $result */
         $result = DB::select($query = '
-                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`
+                select `enemies`.*, `raid_markers`.`name` as `raid_marker_name`
                 from `enemies`
                        left join `dungeon_route_enemy_raid_markers`
                          on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
                             `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
                        left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                       left join `floors` on enemies.floor_id = floors.id
+                       join `floors` on enemies.floor_id = floors.id
                 where `floors`.dungeon_id = :dungeonId
                 group by `enemies`.`id`;
                 ', $params = [

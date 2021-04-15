@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Expansion listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Expansion listing')])
 
 @section('header-title')
     <div class="row">
@@ -35,9 +35,9 @@
         </thead>
 
         <tbody>
-        @foreach ($models->all() as $expansion)
+        @foreach ($expansions->all() as $expansion)
             <tr>
-                <td><img src="{{ Image::url($expansion->iconfile->getUrl(), 32, 32) }}"/></td>
+                <td><img src="{{ $expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/></td>
                 <td>{{ $expansion->id }}</td>
                 <td>{{ $expansion->name }}</td>
                 <td>{{ $expansion->color }}</td>

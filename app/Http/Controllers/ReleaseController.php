@@ -102,7 +102,7 @@ class ReleaseController extends Controller
     public function edit(Request $request, Release $release)
     {
         return view('admin.release.edit', [
-            'model'       => $release,
+            'release'     => $release,
             'headerTitle' => __('Edit release'),
             'categories'  => ReleaseChangelogCategory::all()
         ]);

@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
 /**
  * @property $id int
  * @property $public_key string
- * @property $icon_file_id int
  * @property $name string
  * @property $description string
  * @property $invite_code string

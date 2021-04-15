@@ -74,7 +74,7 @@ class PatreonController extends Controller
                 $patreonData->user_id = $userId;
                 $patreonData->access_token = $tokens['access_token'];
                 $patreonData->refresh_token = $tokens['refresh_token'];
-                $patreonData->expires_at = date("Y-m-d H:i:s", time() + $tokens['expires_in']);
+                $patreonData->expires_at = date('Y-m-d H:i:s', time() + $tokens['expires_in']);
 
                 $patreonData->save();
 

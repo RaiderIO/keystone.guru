@@ -153,7 +153,7 @@ class AdminToolsController extends Controller
      */
     public function mdtviewasdungeonroute()
     {
-        return view('admin.tools.mdt.string', ['dungeonroute' => true]);
+        return view('admin.tools.mdt.string', ['asDungeonroute' => true]);
     }
 
     /**

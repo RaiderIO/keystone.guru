@@ -4,7 +4,7 @@
 return [
     'super_admins' => [
         'Admin',
-        'gallypsa'
+        'gallypsa',
     ],
 
     'github_username' => 'Wotuu',
@@ -18,24 +18,29 @@ return [
         'plusthreefactor' => 0.6,
     ],
 
+    'levels' => [
+        'min' => 2,
+        'max' => 28
+    ],
+
     'cache' => [
         'npcs'                   => [
-            'ttl' => '1 hour'
+            'ttl' => '1 hour',
         ],
         'dungeonData'            => [
-            'ttl' => '1 hour'
+            'ttl' => '1 hour',
         ],
         'static_data'            => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
         'mdt'                    => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
         'displayed_affix_groups' => [
-            'ttl' => '15 minutes'
+            'ttl' => '15 minutes',
         ],
         'global_view_variables'  => [
-            'ttl' => '1 day'
+            'ttl' => '1 day',
         ],
     ],
 
@@ -164,5 +169,76 @@ return [
     'prideful'                            => [
         'npc_id' => 173729,
         'count'  => 5
+    ],
+
+    /**
+     * For the discover section of the site - this controls various variables
+     */
+    'discover'                            => [
+        /** Limits for how much dungeonroutes to display on certain pages */
+        'limits'   => [
+            'overview'       => 10,
+            'category'       => 20,
+            'affix_overview' => 10,
+            'search'         => 20,
+        ],
+        /** How many routes to load more when the user uses the infinite scroll */
+        'loadmore' => [
+            'count' => 20,
+        ],
+        'service'  => [
+            /** Redis prefix */
+            'cache_prefix' => 'discover',
+
+            /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
+            'popular_days' => 7,
+
+            /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
+            'popular'      => [
+                'ttl' => '5 min',
+            ]
+
+
+            //            'popular' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'popular_limit_%d',
+            //            ],
+            //
+            //            'popular_by_affix_group' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'popular_by_affix_group_%d',
+            //            ],
+            //
+            //            'popular_by_dungeon' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'popular_by_dungeon_%d',
+            //            ],
+            //
+            //            'popular_by_dungeon_and_affix_group' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'popular_by_dungeon_%d_and_affix_group_%d',
+            //            ],
+            //
+            //
+            //            'new' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'popular',
+            //            ],
+            //
+            //            'new_by_affix_group' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'new_by_affix_group_%d',
+            //            ],
+            //
+            //            'new_by_dungeon' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'new_by_dungeon_%d',
+            //            ],
+            //
+            //            'new_by_dungeon_and_affix_group' => [
+            //                'ttl'       => '5 min',
+            //                'cache_key' => 'new_by_dungeon_%d_and_affix_group_%d',
+            //            ],
+        ]
     ]
 ];

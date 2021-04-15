@@ -117,14 +117,6 @@ class NpcController extends Controller
             abort(500, 'Unable to save npc!');
         }
 
-        $portrait = $request->file('portrait');
-        // Save was successful, now do any file handling that may be necessary
-        if ($portrait !== null) {
-//            $portrait->move(public_path('images/enemyportraits'), $npc->id . '.png');
-            // Move file to the enemyportraits folder
-            dd($portrait->storeAs('images/enemyportraits', $npc->id . '.png', 'public'));
-        }
-
         return $npc;
     }
 
@@ -167,7 +159,7 @@ class NpcController extends Controller
     public function edit(Request $request, Npc $npc)
     {
         return view('admin.npc.edit', [
-            'model'           => $npc,
+            'npc'           => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>

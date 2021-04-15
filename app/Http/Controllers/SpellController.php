@@ -80,8 +80,8 @@ class SpellController extends Controller
     {
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'      => Spell::ALL_SCHOOLS,
-            'headerTitle'  => __('New spell')
+            'schools'     => Spell::ALL_SCHOOLS,
+            'headerTitle' => __('New spell')
         ]);
     }
 
@@ -93,10 +93,10 @@ class SpellController extends Controller
     public function edit(Request $request, Spell $spell)
     {
         return view('admin.spell.edit', [
-            'model'        => $spell,
+            'spell'       => $spell,
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'      => Spell::ALL_SCHOOLS,
-            'headerTitle'  => __('New spell')
+            'schools'     => Spell::ALL_SCHOOLS,
+            'headerTitle' => __('Edit spell')
         ]);
     }
 

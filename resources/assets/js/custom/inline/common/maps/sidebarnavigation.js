@@ -16,17 +16,16 @@ class SidebarNavigation extends Sidebar {
 
         // Copy to clipboard functionality
         $('#map_shareable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_shareable_link').val());
+            let $shareableLink = $('#map_shareable_link');
+            copyToClipboard($shareableLink.val(), $shareableLink);
         });
         $('#map_embedable_link_copy_to_clipboard').bind('click', function () {
-            copyToClipboard($('#map_embedable_link').val());
+            let $embedableLink = $('#map_embedable_link');
+            copyToClipboard($embedableLink.val(), $embedableLink);
         });
         $('.copy_mdt_string_to_clipboard').bind('click', function () {
             let $exportResult = $('#mdt_export_result');
             copyToClipboard($exportResult.val(), $exportResult);
-        });
-        $('#map_mdt_export').bind('click', function () {
-            self._fetchMdtExportString();
         });
 
         // Register for external changes so that we update our dropdown
@@ -82,70 +81,6 @@ class SidebarNavigation extends Sidebar {
 
         // Switch floors
         $(this.options.switchDungeonFloorSelect).val(this.options.defaultSelectedFloorId);
-
-        // Map object group visibility
-        let $mapObjectGroupVisibilitySelect = $('#map_map_object_group_visibility');
-
-        let map = getState().getDungeonMap();
-        // After load complete, properly toggle the visibility. Then all layers get toggled properly
-        map.register('map:mapobjectgroupsloaded', this, this._mapObjectGroupVisibilityChanged);
-
-        let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
-        let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
-
-        for (let i in mapObjectGroups) {
-            if (mapObjectGroups.hasOwnProperty(i)) {
-                let group = mapObjectGroups[i];
-
-                // If any of the names of a map object group is found in the array, hide the selection
-                let selected = {selected: 'selected'};
-                for (let index in group.names) {
-                    if (group.names.hasOwnProperty(index) && cookieHiddenMapObjectGroups.includes(group.names[index])) {
-                        selected = {};
-                        break;
-                    }
-                }
-
-                $mapObjectGroupVisibilitySelect.append($('<option>', $.extend(selected, {
-                    text: lang.get(`messages.${group.names[0]}_map_object_group_label`),
-                    value: group.names[0]
-                })));
-            }
-        }
-
-        // Trigger the change event now to initialize the map object groups
-        $mapObjectGroupVisibilitySelect.bind('change', this._mapObjectGroupVisibilityChanged);
-        this._mapObjectGroupVisibilityChanged();
-    }
-
-    /**
-     *
-     * @private
-     */
-    _fetchMdtExportString() {
-        $.ajax({
-            type: 'GET',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
-            dataType: 'json',
-            beforeSend: function () {
-                $('.mdt_export_loader_container').show();
-                $('.mdt_export_result_container').hide();
-            },
-            success: function (json) {
-                $('#mdt_export_result').val(json.mdt_string);
-
-                // Inject the warnings, if there are any
-                if (json.warnings.length > 0) {
-                    (new MdtStringWarnings(json.warnings))
-                        .render($('#mdt_export_result_warnings'));
-                }
-
-            },
-            complete: function () {
-                $('.mdt_export_loader_container').hide();
-                $('.mdt_export_result_container').show();
-            }
-        });
     }
 
     /**
@@ -168,40 +103,6 @@ class SidebarNavigation extends Sidebar {
 
             // Now handled by dungeonmap refresh
             // refreshSelectPickers();
-        }
-    }
-
-    /**
-     *
-     * @private
-     */
-    _mapObjectGroupVisibilityChanged() {
-        let $mapObjectGroupVisibilitySelect = $('#map_map_object_group_visibility');
-        if ($mapObjectGroupVisibilitySelect.length > 0) {
-            let selected = $mapObjectGroupVisibilitySelect.val();
-
-            // Make a copy so we don't modify the OG array
-            let toHide = MAP_OBJECT_GROUP_NAMES.slice();
-            // Show everything that needs to be shown
-            for (let i = 0; i < selected.length; i++) {
-                let name = selected[i];
-                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(name);
-                group.setVisibility(true);
-
-                // Remove it from the toHide list
-                toHide.splice(toHide.indexOf(name), 1);
-            }
-
-            // Update our cookie so that we know upon page refresh
-            Cookies.set('hidden_map_object_groups', toHide);
-
-            // Hide everything that needs to be hidden
-            for (let index in toHide) {
-                if (toHide.hasOwnProperty(index)) {
-                    let group = getState().getDungeonMap().mapObjectGroupManager.getByName(toHide[index]);
-                    group.setVisibility(false);
-                }
-            }
         }
     }
 

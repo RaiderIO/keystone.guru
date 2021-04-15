@@ -13,7 +13,7 @@ class Polyline extends MapObject {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState) {
                 // Show it again when the edit/delete map state was restored
-                self._setAnimatedLayerVisibility(true);
+                self._setAnimatedLayerVisibility(self.shouldBeVisible());
             }
             // Don't do else; we may transition from edit to delete map state
             if (mapStateChangedEvent.data.newMapState instanceof EditMapState ||
@@ -145,13 +145,13 @@ class Polyline extends MapObject {
     /**
      * @inheritDoc
      */
-    localDelete() {
+    localDelete(massDelete = false) {
         console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this._setAnimatedLayerVisibility(false);
         this.layerAnimated = null;
 
-        super.localDelete();
+        super.localDelete(massDelete);
     }
 
     /**

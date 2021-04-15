@@ -1,0 +1,115 @@
+#sandbox_modal .modal-dialog {
+    max-width: 600px;
+}
+
+/** .rounded class doesn't work, unfortunately */
+#import_string_loader {
+    border-radius: .25rem !important
+}
+
+.btn-bnet {
+    background-color: #005c99;
+}
+
+.btn-bnet:hover {
+    background-color: #31b0d5;
+    border-color: #005c99;
+}
+
+.google_login_image {
+    background-image: url('/images/oauth/btn_google_signin_dark_normal_web.png');
+    width: 191px;
+    height: 46px;
+}
+
+.google_login_image:hover {
+    background-image: url('/images/oauth/btn_google_signin_dark_pressed_web.png');
+}
+
+.navbar {
+    -webkit-transition: padding 0.2s ease;
+    -moz-transition: padding 0.2s ease;
+    -o-transition: padding 0.2s ease;
+    transition: padding 0.2s ease;
+}
+
+.navbar-shrink {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+
+    -webkit-transition: padding 0.2s ease;
+    -moz-transition: padding 0.2s ease;
+    -o-transition: padding 0.2s ease;
+    transition: padding 0.2s ease;
+}
+
+/* This takes up the space that the fixed-top navbar leaves because it floats */
+.navbar-top-fixed-spacer {
+    -webkit-transition: height 0.2s ease;
+    -moz-transition: height 0.2s ease;
+    -o-transition: height 0.2s ease;
+    transition: height 0.2s ease;
+}
+
+
+/* Modals */
+.modal .probootstrap-modal-flex .probootstrap-modal-content {
+    width: 100%;
+    padding: 40px;
+    position: relative;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-figure,
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        width: 100%;
+    }
+}
+
+.modal .modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 26px;
+    color: white;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .modal-content .close {
+        top: 20px;
+        right: 20px;
+    }
+}
+
+.modal .probootstrap-modal-flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 900px) {
+    .modal-dialog-small {
+        max-width: 900px;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+        border: hidden;
+    }
+}
+
+/** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
+@media (max-width: 900px) {
+    .modal-dialog-small .border-left.border-white {
+        border: none !important;
+    }
+}

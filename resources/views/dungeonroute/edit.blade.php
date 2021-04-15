@@ -1,9 +1,12 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
 $dungeon = $model->dungeon->load(['expansion', 'floors']);
+
+$sandbox = $model->isSandbox();
 ?>
+@extends('layouts.map', ['title' => sprintf(__('Edit %s'), $model->title)])
+
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
     'dependencies' => ['common/maps/map']
@@ -11,27 +14,30 @@ $dungeon = $model->dungeon->load(['expansion', 'floors']);
 
 @section('content')
     <div class="wrapper">
-        @include('common.maps.editsidebar', [
-            'dungeon' => $dungeon,
-            'floorId' => $floor->id,
-            'show' => [
-                'sharing' => true,
-                'draw-settings' => true,
-                'route-settings' => true,
-                'route-publish' => true,
-            ]
-        ])
-
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => true,
-            'test' => 'test',
-            'floorId' => $floor->id
+            'sandboxMode' => $sandbox,
+            'floorId' => $floor->id,
+            'show' => [
+                'share' => [
+                    'link' => !$sandbox,
+                    'embed' => !$sandbox,
+                    'mdt-export' => true,
+                    'publish' => !$sandbox,
+                ]
+            ],
+            'hiddenMapObjectGroups' => [
+                'killzonepath'
+            ],
         ])
 
-        @include('common.maps.killzonessidebar', [
-            'edit' => true
-        ])
+{{--        @include('common.maps.killzonessidebar', [--}}
+{{--            'edit' => true,--}}
+{{--            'show' => [--}}
+{{--                'route-settings' => !$sandbox,--}}
+{{--            ],--}}
+{{--        ])--}}
     </div>
 @endsection

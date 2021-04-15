@@ -15,6 +15,6 @@ class NameColumnHandler extends SimpleColumnHandler
 {
     public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, 'name', 'npcs.name');
+        parent::__construct($dtHandler, 'name', 'users.name');
     }
 }

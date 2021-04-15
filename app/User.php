@@ -10,6 +10,7 @@ use App\Models\PatreonData;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\Traits\HasIconFile;
 use App\Models\UserReport;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +27,9 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $game_server_region_id
  * @property string $timezone
  * @property string $name
+ * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string $email
+ * @property string $theme
  * @property string $echo_color
  * @property boolean $echo_anonymous
  * @property string $password
@@ -49,6 +52,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  */
 class User extends Authenticatable
 {
+    use HasIconFile;
     use LaratrustUserTrait;
     use Notifiable;
 
@@ -75,6 +79,30 @@ class User extends Authenticatable
         'id', 'name', 'echo_color'
     ];
 
+    protected $appends = [
+        'initials'
+    ];
+
+    protected $with = 'iconfile';
+
+    /**
+     * @return string
+     */
+    public function getInitialsAttribute(): string
+    {
+        $result = '';
+
+        $explode = explode(' ', $this->name);
+        if( count($explode) > 1 ) {
+            $result = join('', array_map(function($element){
+                return $element[0];
+            }, $explode));
+        } else {
+            $result = substr($this->name, 0, 2);
+        }
+
+        return strtoupper($result);
+    }
 
     /**
      * @return bool

@@ -122,6 +122,9 @@ class StateManager extends Signalable {
         this._map = map;
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
+        this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
+        this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
+        this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
         this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary
@@ -162,6 +165,54 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('enemydisplaytype:changed', {enemyDisplayType: this._enemyDisplayType});
+    }
+
+    /**
+     * Sets the opacity at which unkilled enemies should be rendered.
+     * @param unkilledEnemyOpacity int
+     */
+    setUnkilledEnemyOpacity(unkilledEnemyOpacity) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_unkilled_enemy_opacity', unkilledEnemyOpacity);
+
+        // Let everyone know it's changed
+        this.signal('unkilledenemyopacity:changed', {opacity: unkilledEnemyOpacity});
+    }
+
+    /**
+     * Sets the opacity at which unkilled important enemies should be rendered.
+     * @param unkilledImportantEnemyOpacity int
+     */
+    setUnkilledImportantEnemyOpacity(unkilledImportantEnemyOpacity) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_unkilled_important_enemy_opacity', unkilledImportantEnemyOpacity);
+
+        // Let everyone know it's changed
+        this.signal('unkilledimportantenemyopacity:changed', {opacity: unkilledImportantEnemyOpacity});
+    }
+
+    /**
+     * Sets whether enemies should feature an aggressiveness border or not.
+     * @param visible {Boolean}
+     */
+    setEnemyAggressivenessBorder(visible) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_enemy_aggressiveness_border', visible ? 1 : 0);
+
+        // Let everyone know it's changed
+        this.signal('enemyaggressivenessborder:changed', {visible: visible});
+    }
+
+    /**
+     * Sets whether enemies should feature a dangerous border or not.
+     * @param visible {Boolean}
+     */
+    setEnemyDangerousBorder(visible) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_enemy_dangerous_border', visible ? 1 : 0);
+
+        // Let everyone know it's changed
+        this.signal('enemydangerousborder:changed', {visible: visible});
     }
 
     /**
@@ -281,8 +332,9 @@ class StateManager extends Signalable {
     getPullGradientHandlers() {
         let result = [];
 
-        if (typeof this._pullGradient !== 'undefined' && this._pullGradient.length > 0) {
-            let handlers = this._pullGradient.split(',');
+        let pullGradient = this.getMapContext().getPullGradient();
+        if (typeof pullGradient !== 'undefined' && pullGradient.length > 0) {
+            let handlers = pullGradient.split(',');
             for (let index in handlers) {
                 if (handlers.hasOwnProperty(index)) {
                     let handler = handlers[index];
@@ -309,6 +361,42 @@ class StateManager extends Signalable {
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this._enemyDisplayType;
+    }
+
+    /**
+     * Get the opacity at which unkilled enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_enemy_opacity');
+    }
+
+    /**
+     * Get the opacity at which unkilled important enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledImportantEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_important_enemy_opacity');
+    }
+
+    /**
+     * Get whether enemies should feature an aggressiveness border or not.
+     * @returns {boolean}
+     */
+    hasEnemyAggressivenessBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
+    }
+
+    /**
+     * Get whether enemies should feature a dangerous border or not.
+     * @returns {boolean}
+     */
+    hasEnemyDangerousBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_dangerous_border')) === 1;
     }
 
     /**

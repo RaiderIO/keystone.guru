@@ -11,11 +11,14 @@ class CommonGroupAffixes extends InlineCode {
 
         this._automaticSeasonalIndexChange = typeof this.options.dungeonroute !== 'object';
 
-        $(this.options.teemingSelector).bind('change', function () {
-            $('#affixes').val('');
-            self._applyAffixRowSelectionOnList();
-        });
-        $('.affix_list_row').bind('click', this._affixRowClicked.bind(this));
+        if (this.options.hasOwnProperty('teemingSelector')) {
+            $(this.options.teemingSelector).bind('change', function () {
+                $(self.options.selectSelector).val('');
+                self._applyAffixRowSelectionOnList();
+            });
+        }
+
+        $(`${this.options.selectSelector}_list_custom .affix_list_row`).bind('click', this._affixRowClicked.bind(this));
 
         // Perform loading of existing affix groups
         this._applyAffixRowSelectionOnList();
@@ -41,12 +44,13 @@ class CommonGroupAffixes extends InlineCode {
      */
     _affixRowClicked(clickEvent) {
         console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this);
+
         let $el = $(clickEvent.currentTarget);
         // Convert to string since currentSelection has strings
-        let id = $el.data('id') + "";
+        let id = $el.data('id') + '';
 
         // Affixes is leading!
-        let $affixRowSelect = $('#affixes');
+        let $affixRowSelect = $(this.options.selectSelector);
         let currentSelection = $affixRowSelect.val();
 
         // If it exists in the current selection
@@ -85,8 +89,8 @@ class CommonGroupAffixes extends InlineCode {
         console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this);
         let self = this;
 
-        let $list = $('#affixes_list_custom');
-        let selection = $('#affixes').val();
+        let $list = $(`${this.options.selectSelector}_list_custom`);
+        let selection = $(this.options.selectSelector).val();
         let selectedSeasonalIndices = [];
 
         $.each($list.children(), function (index, child) {

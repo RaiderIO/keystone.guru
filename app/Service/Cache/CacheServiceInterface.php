@@ -5,7 +5,7 @@ namespace App\Service\Cache;
 
 interface CacheServiceInterface
 {
-    public function remember(string $key, $closure, $ttl = null);
+    public function remember(string $key, $value, $ttl = null);
 
     public function get(string $key);
 

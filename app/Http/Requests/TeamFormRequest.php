@@ -34,12 +34,10 @@ class TeamFormRequest extends FormRequest
             $nameRules = Rule::unique('teams')->ignore($team);
         }
 
-        $rules = [
+        return [
             'name' => $nameRules,
             'description' => 'string|nullable',
             'logo' => 'image|mimes:png|max:256'
         ];
-
-        return $rules;
     }
 }

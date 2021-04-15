@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -34,16 +35,19 @@ use Illuminate\Support\Facades\DB;
  *
  * @property $clone_of string
  * @property $title string
+ * @property $description string
+ * @property $level_min int
+ * @property $level_max int
  * @property $difficulty string
  * @property $seasonal_index int
  * @property $enemy_forces int
  * @property $teeming boolean
  * @property $demo boolean
  *
- * @property $setup array
- * @property $avg_rating double
- * @property $rating_count int
- * @property $has_thumbnail boolean
+ * @property array $setup
+ * @property double $avg_rating
+ * @property int $rating_count
+ * @property boolean $has_thumbnail
  *
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
@@ -51,6 +55,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $thumbnail_updated_at
  * @property Carbon $updated_at
  * @property Carbon $created_at
+ * @property Carbon $published_at
  * @property Carbon $expires_at
  *
  * @property Dungeon $dungeon
@@ -69,9 +74,10 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $playerclasses
  * @property Collection $playerraces
  *
- * @property Collection $affixgroups
- * @property Collection $affixes
- * @property Collection $ratings
+ * @property Collection|DungeonRouteAffixGroup[] $affixgroups
+ * @property Collection|AffixGroup[] $affixes
+ * @property Collection|DungeonRouteRating[] $ratings
+ * @property Collection|DungeonRouteFavorite[] $favorites
  *
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
@@ -112,6 +118,8 @@ class DungeonRoute extends Model
                          'published_state_id', 'published_state'];
 
     protected $fillable = ['enemy_forces'];
+
+    protected $with = ['faction', 'specializations', 'classes', 'races', 'affixes'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -239,7 +247,7 @@ class DungeonRoute extends Model
      */
     public function killzones()
     {
-        return $this->hasMany('App\Models\KillZone');
+        return $this->hasMany('App\Models\KillZone')->orderBy('index');
     }
 
     /**
@@ -390,8 +398,7 @@ class DungeonRoute extends Model
         $avg = 1;
         if (!$this->ratings->isEmpty()) {
             /** @var Collection $ratings */
-            $ratings = $this->ratings;
-            $ratingsArr = $ratings->pluck(['rating'])->toArray();
+            $ratingsArr = $this->ratings->pluck(['rating'])->toArray();
 
             $avg = array_sum($ratingsArr) / count($ratingsArr);
         }
@@ -543,7 +550,42 @@ class DungeonRoute extends Model
      */
     public function isSandbox(): bool
     {
-        return $this->author_id === -1 && $this->expires_at !== null;
+        return $this->expires_at !== null;
+    }
+
+    /**
+     * @param DungeonRouteTemporaryFormRequest $request
+     * @param SeasonService $seasonService
+     * @return bool
+     */
+    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): bool
+    {
+        $this->author_id = Auth::id() ?? -1;
+        $this->public_key = DungeonRoute::generateRandomPublicKey();
+
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+
+        $this->faction_id = 1;
+        $this->difficulty = 1;
+        $this->seasonal_index = 0;
+        $this->teeming = 0;
+
+        $this->pull_gradient = '';
+        $this->pull_gradient_apply_always = 0;
+
+        $this->title = sprintf('%s Sandbox', $this->dungeon->name);
+        $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+
+        $saveResult = $this->save();
+        if ($saveResult) {
+            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
+            $drAffixGroup = new DungeonRouteAffixGroup();
+            $drAffixGroup->affix_group_id = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+            $drAffixGroup->dungeon_route_id = $this->id;
+            $drAffixGroup->save();
+        }
+
+        return $saveResult;
     }
 
     /**
@@ -560,13 +602,15 @@ class DungeonRoute extends Model
         // Overwrite the author_id if it's not been set yet
         $new = !isset($this->id);
         if ($new) {
-            $this->author_id = \Auth::user()->id;
+            $this->author_id = Auth::id() ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
-        $this->title = $request->get('dungeon_route_title', $this->title);
+        // If it was empty just set Unspecified instead
+        $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
@@ -575,17 +619,24 @@ class DungeonRoute extends Model
         $this->pull_gradient = $request->get('pull_gradient', '');
         $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
-        if (Auth::check()) {
-            $user = User::findOrFail(Auth::id());
-            if ($user->hasRole('admin')) {
-                $this->demo = intval($request->get('demo', 0)) > 0;
-            }
+        // Sandbox routes have some fixed properties
+        // Fetch the title if the user set anything
+        $this->title = $request->get('dungeon_route_title', $this->title);
+        $this->description = $request->get('dungeon_route_description', $this->description) ?? '';
+        if (empty($this->title)) {
+            $this->title = $this->dungeon->name;
+        }
+
+        $this->level_min = $request->get('level_min', config('keystoneguru.levels.min'));
+        $this->level_max = $request->get('level_max', config('keystoneguru.levels.max'));
+
+        if (User::findOrFail(Auth::id())->hasRole('admin')) {
+            $this->demo = intval($request->get('demo', 0)) > 0;
         }
 
 
         // Update or insert it
         if ($this->save()) {
-
             $newAttributes = $request->get('attributes', array());
             if (!empty($newAttributes)) {
                 // Remove old attributes
@@ -719,6 +770,7 @@ class DungeonRoute extends Model
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming = $this->teeming;
+        $dungeonroute->enemy_forces = $this->enemy_forces;
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.
@@ -802,23 +854,12 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int|mixed
+     * @return bool
      */
-    public function isFavoritedByCurrentUser()
+    public function isFavoritedByCurrentUser(): bool
     {
-        $result = false;
-        $user = Auth::user();
-        if ($user !== null) {
-            // @TODO Probably going to want an index on this one
-            $favorite = DB::table('dungeon_route_favorites')
-                ->where('dungeon_route_id', '=', $this->id)
-                ->where('user_id', '=', $user->id)
-                ->first();
-
-            $result = $favorite !== null;
-        }
-
-        return $result;
+        // Use relationship caching instead of favorites() to save some queries
+        return Auth::check() ? $this->favorites->where('user_id', Auth::id())->isNotEmpty() : false;
     }
 
     /**
@@ -892,6 +933,28 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTyrannical(): bool
+    {
+        return $this->affixes->filter(function (AffixGroup $affixGroup)
+        {
+            return $affixGroup->isTyrannical();
+        })->isNotEmpty();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFortified(): bool
+    {
+        return $this->affixes->filter(function (AffixGroup $affixGroup)
+        {
+            return $affixGroup->isFortified();
+        })->isNotEmpty();
     }
 
     /**

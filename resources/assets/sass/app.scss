@@ -1,13 +1,11 @@
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 // Variables
 @import "variables";
-// Bootstrap
+@import "theme/darkly/darkly";
+@import "theme/superhero/superhero";
+@import "theme/lux/lux";
+
+// Bootstrap Select
 @import "~bootstrap-select/dist/css/bootstrap-select.min.css";
-// Bootstrap theme (bootstrap should be between these)
-@import "~bootswatch/dist/superhero/variables";
-@import "~bootstrap/scss/bootstrap";
-@import "~bootswatch/dist/superhero/bootswatch";
 // Datatables
 @import "~datatables/media/css/jquery.dataTables.min.css";
 // Font-Awesome
@@ -19,6 +17,7 @@
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet-draw/dist/leaflet.draw.css";
 @import "~leaflet-contextmenu/dist/leaflet.contextmenu.css";
+@import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 // Bar rating
 @import "~jquery-bar-rating/dist/themes/bars-1to10.css";
 // Owl Carousel
@@ -40,3 +39,5 @@
 @import "~simplebar/dist/simplebar.min.css";
 // Bootstrap4-toggle
 @import "~bootstrap4-toggle/css/bootstrap4-toggle.min.css";
+// Ion Range Slider
+@import "~ion-rangeslider/css/ion.rangeSlider.min.css";

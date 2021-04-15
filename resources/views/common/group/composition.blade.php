@@ -9,10 +9,10 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
 'options' => [
-    'factions' => $factions,
-    'specializations' => $specializations,
-    'classDetails' => $classes,
-    'races' =>  $racesClasses,
+    'factions'         => $factions,
+    'specializations'  => $specializations,
+    'classDetails'     => $classes,
+    'races'            => $racesClasses,
 ]])
 
 @section('head')
@@ -51,9 +51,9 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
                 if( isset($dungeonroute) ){ ?>
 
                 _oldFaction = '{{ $dungeonroute->faction_id }}';
-            _oldSpecializations = {!! $dungeonroute->specializations !!};
-            _oldClasses = {!! $dungeonroute->classes !!};
-            _oldRaces = {!! $dungeonroute->races !!};
+            _oldSpecializations = {!! $dungeonroute->specializations ?? collect() !!};
+            _oldClasses = {!! $dungeonroute->classes ?? collect() !!};
+            _oldRaces = {!! $dungeonroute->races ?? collect() !!};
 
             <?php } else {
                 // convert old values in a format we can read it in
@@ -80,14 +80,14 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 
 
             <?php
-            /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
-            if( isset($modal) ){ ?>
-            $('{{$modal}}').on('shown.bs.modal', function () {
+            /** If collapseSelector is set, only load this when we're actually opening the collapseSelector to speed up loading. */
+            if( isset($collapseSelector) ){ ?>
+            $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
             <?php } ?>
             let composition = _inlineManager.getInlineCode('common/group/composition');
             composition._loadDungeonRouteDefaults();
 
-            <?php if( isset($modal) ){ ?>
+            <?php if( isset($collapseSelector) ){ ?>
             });
             <?php } ?>
 
@@ -100,7 +100,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 @endsection
 
 <div class="row">
-    <div class="col-xl-2 offset-xl-5">
+    <div class="col-md-4 offset-md-4">
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
@@ -108,7 +108,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
         </div>
     </div>
     @isset($dungeonroute)
-        <div class="offset-lg-4 col-lg-1">
+        <div class="col-md-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
                     <i class="fas fa-undo"></i> {{ __('Undo') }}

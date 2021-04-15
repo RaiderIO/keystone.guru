@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Route already claimed')])
+@extends('layouts.sitepage', ['title' => __('Route already claimed')])
 @section('header-title', __('Route already claimed'))
 
 @section('content')

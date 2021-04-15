@@ -3,7 +3,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     constructor(options) {
         super(options);
-        this.sidebar = new Sidebar(options);
+
+        if (isMobile()) {
+            this.sidebar = new Sidebar(options);
+        }
 
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
@@ -89,7 +92,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
 
             // If there's a difference in floors then we should display a floor switch row
-            if( previousKillZone !== null ) {
+            if (previousKillZone !== null) {
                 let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
                 if (floorDifference.length > 0) {
                     this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
@@ -183,6 +186,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
         this._updatePullTexts(killZone.getIndex());
+
+        // Update this particular row element to refresh enemy lists etc
+        let rowElement = this._getRowElementKillZone(killZone);
+        rowElement.refresh();
     }
 
     /**
@@ -196,7 +203,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            if (killZone.getIndex() >= minIndex) {
+            // Do not update pull texts for killzones that do not have
+            if (killZone.id > 0 && killZone.getIndex() >= minIndex) {
                 self._updatePullText(killZone);
             }
         });
@@ -260,7 +268,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
                 // Don't perform this when mass-saving - that is handled already and causes a big slowdown
-                if (!killZoneChangedEvent.data.hasOwnProperty('mass_save') || !killZoneChangedEvent.data.mass_save) {
+                let isMassSave = killZoneChangedEvent.data.hasOwnProperty('mass_save') && killZoneChangedEvent.data.mass_save;
+
+                if (!isMassSave || (killZoneChangedEvent.name === 'object:changed')) {
                     self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
                 }
             });
@@ -362,19 +372,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
         super.activate();
 
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-        this.sidebar.activate();
 
         this.map = getState().getDungeonMap();
 
         let self = this;
 
+        if (this.sidebar instanceof Sidebar) {
+            this.sidebar.activate();
+        }
+
         // Setup new pull button
         $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
-        $(this.options.killZonesPullsSettingsSelector).on('shown.bs.collapse', function () {
-            $(self.options.sidebarScrollSelector).addClass('settings-shown');
-        }).on('hidden.bs.collapse', function () {
-            $(self.options.sidebarScrollSelector).removeClass('settings-shown');
-        });
 
 
         $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
@@ -390,6 +398,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 killZoneMapObjectGroup.deleteAll();
+                self._rebuildFloorSwitches();
             });
         });
 
@@ -421,9 +430,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
+            let isMassDelete = killZoneDeletedEvent.data.hasOwnProperty('mass_delete') && killZoneDeletedEvent.data.mass_delete;
+
             let killZone = killZoneDeletedEvent.data.object;
             // Add the killzone to our list
             self._removeKillZone(killZone);
+
+            // If the killzone switched floors, we gotta rebuild the floor switches.
+            if (!isMassDelete) {
+                self._rebuildFloorSwitches();
+            }
+
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
         });
@@ -469,8 +486,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // this.map.unregister('map:beforerefresh', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
-
-        this.sidebar.cleanup();
 
         getState().unregister('killzonesnumberstyle:changed', this);
     }

@@ -14,7 +14,7 @@ trait PublicKeyDungeonRoute
      * @return DungeonRoute
      * @throws Exception
      */
-    function _getDungeonRouteFromPublicKey($publicKey, $auth = true)
+    function _getDungeonRouteFromPublicKey(string $publicKey, $auth = true): DungeonRoute
     {
         /** @var DungeonRoute $dungeonRoute */
         $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->firstOrFail();

@@ -19,13 +19,9 @@ class EchoControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_controls_route_echo_template'];
-
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    edit: self.map.options.edit
-                });
-
-                return $(template(data))[0];
+                return jQuery('<span>', {
+                    text: 'Connecting...'
+                })[0];
             }
         };
     }
@@ -105,14 +101,13 @@ class EchoControls extends MapControl {
     _addUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let template = Handlebars.templates['map_controls_route_echo_popover_template'];
+        let template = Handlebars.templates['map_controls_route_echo_connected_users_template'];
 
         let result = template($.extend({}, getHandlebarsDefaultVariables(), {
             users: getState().getEcho().getUsers()
         }));
 
-        $('#echo_connected_container').data('content', result).popover();
-        $('#echo_connected_users_count').text(getState().getEcho().getUsers().length);
+        $('#route_echo_container').html(result);
 
         // Update the color
         this._applyUserColor(user);
@@ -128,7 +123,7 @@ class EchoControls extends MapControl {
     _removeUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove element
-        $(`.echo_user_${convertToSlug(user.name)}`).remove();
+        $(`.echo_user_${user.id}`).remove();
     }
 
     /**
@@ -139,18 +134,18 @@ class EchoControls extends MapControl {
     _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let styleID = 'style_color_' + user.id;
+        let styleID = `echo_user_${user.id}`;
         // Delete any previous styles
-        $('#' + styleID).remove();
+        $(`#${styleID}`).remove();
 
         // Gets funky here, create a new CSS class with the user's color so we can direct some elements to use this class
-        $("<style id='" + styleID + "'>")
+        $(`<style id="${styleID}">`)
             .prop('type', 'text/css')
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
-            .html("\
-            .user_color_" + user.id + " {\
-                background-color: " + user.color + " !important\
-            }")
+            .html(`
+            .echo_user_${user.id} {
+                border: 3px ${user.color} solid !important
+            }`)
             .appendTo('head');
 
         // Update the text color depending on the luminance

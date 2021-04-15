@@ -39,6 +39,37 @@ class LayoutsApp extends InlineCode {
                 window.location.href = $("option:selected", this).data('url');
             });
         }
+
+        // Theme switch button
+        $('.theme_switch_btn').bind('click', function () {
+            let theme = $(this).data('theme');
+            let previousTheme = Cookies.get('theme');
+
+            // Only when the theme has actually changed
+            if (previousTheme !== theme) {
+                // Switch images on the front page
+                $(`.${previousTheme}_image`).hide();
+                $(`.${theme}_image`).show();
+
+                if (theme === 'lux') {
+                    $('.navbar-dark').removeClass('navbar-dark').addClass('navbar-light');
+                } else {
+                    $('.navbar-light').removeClass('navbar-light').addClass('navbar-dark');
+                }
+
+                $('html').removeClass('superhero darkly lux').addClass(theme);
+                // Regenerate parallax effects (switches images around)
+                $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
+
+                Cookies.set('theme', theme);
+
+                // Refresh the deme route
+                let elem = document.getElementById('demo_routes_iframe');
+                if (elem !== null) {
+                    elem.contentWindow.location.reload();
+                }
+            }
+        });
     }
 
     /**
@@ -65,15 +96,13 @@ class LayoutsApp extends InlineCode {
      * Called whenever the MDT import string has been pasted into the text area.
      **/
     _importStringPasted(typedEvent) {
-        let self = this;
-
         // https://stackoverflow.com/questions/686995/catch-paste-input
         let $importStringTextArea = $(this);
         let $root = $importStringTextArea.closest('.modal');
-        console.log($root);
 
         let $loader = $root.find('.import_mdt_string_loader');
         let $details = $root.find('.import_mdt_string_details');
+        let $warnings = $root.find('.mdt_string_warnings');
         let $importString = $root.find('.import_string');
         let $submitBtn = $root.find('input[type="submit"]');
 
@@ -129,7 +158,7 @@ class LayoutsApp extends InlineCode {
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
                     (new MdtStringWarnings(responseData.warnings))
-                        .render($root.find('.mdt_string_warnings'));
+                        .render($warnings);
                 }
 
                 // Tooltips may be added above

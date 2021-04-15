@@ -3,10 +3,8 @@
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
-    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
-    ['icon' => 'fa-tag', 'text' => __('Personal tags'), 'target' => '#tags'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -19,10 +17,10 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#repo
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
-@extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
+@extends('layouts.sitepage', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
-    'model' => $user
+    'menuModelEdit' => $user
 ])
 
 @include('common.general.inline', ['path' => 'profile/edit', 'options' => [
@@ -37,26 +35,32 @@ $deleteConsequences = $user->getDeleteConsequences();
             // Code for base app
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
+
+            // Disabled since it's not shown by default and causes a JS error otherwise
+            // $('#user_reports_table').DataTable({});
         });
     </script>
 @endsection
 
 @section('content')
     <div class="tab-content">
-
-        <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-            <h3>{{ __('My routes') }}</h3>
-
-            @include('common.general.messages')
-
-            @include('common.dungeonroute.table', ['view' => 'profile'])
-        </div>
-
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch']) }}
+        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch', 'files' => true]) }}
             <h4>
                 {{ $menuTitle }}
             </h4>
+
+            <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
+                {!! Form::label('avatar', __('Avatar')) !!}
+                {!! Form::file('avatar', ['class' => 'form-control']) !!}
+            </div>
+
+            @if(isset($user->iconfile))
+                <div class="form-group">
+                    {{__('Avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
+                                           alt="{{ __('User avatar') }}" style="max-width: 48px"/>
+                </div>
+            @endif
 
             @if($isOAuth && !$user->changed_username)
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -69,6 +73,11 @@ $deleteConsequences = $user->getDeleteConsequences();
                     @include('common.forms.form-error', ['key' => 'name'])
                 </div>
             @endif
+            {{--            <div class="form-group{{ $errors->has('theme') ? ' has-error' : '' }}">--}}
+            {{--                {!! Form::label('theme', __('Theme')) !!}--}}
+            {{--                {!! Form::select('theme', config('keystoneguru.themes'), null, ['class' => 'form-control']) !!}--}}
+            {{--                @include('common.forms.form-error', ['key' => 'theme'])--}}
+            {{--            </div>--}}
             @if(!$isOAuth)
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     {!! Form::label('email', __('Email')) !!}
@@ -136,7 +145,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                     </h5>
                     <ul>
                         <li>
-                            {{ __(sprintf('Your %s route(s) will be deleted.', $deleteConsequences['dungeonroutes']['delete_count'])) }}
+                            {{ sprintf(__('Your %s route(s) will be deleted.'), $deleteConsequences['dungeonroutes']['delete_count']) }}
                         </li>
                     </ul>
                 </div>
@@ -202,24 +211,12 @@ $deleteConsequences = $user->getDeleteConsequences();
             {!! Form::close() !!}
         </div>
 
-        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="personal-tags-tab">
-            <h4>
-                {{ __('Personal tags') }}
-            </h4>
-            <p>
-                {{ __('You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
-                        you can manage a separate set of tags for just that team.') }}
-            </p>
-
-            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])
-        </div>
-
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
             <h4>
                 {{ __('Patreon') }}
             </h4>
             @isset($user->patreondata)
-                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
+                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank" rel="noopener noreferrer">
                     {{ __('Unlink from Patreon') }}
                 </a>
 
@@ -235,7 +232,9 @@ $deleteConsequences = $user->getDeleteConsequences();
                             'redirect_uri' => route('patreon.link'),
                             'state' => csrf_token()
                             ])
-                        }}" target="_blank">{{ __('Link to Patreon') }}</a>
+                        }}" target="_blank" rel="noopener noreferrer">
+                    {{ __('Link to Patreon') }}
+                </a>
 
                 <p class="mt-2">
                     <span class="text-info"><i class="fa fa-info-circle"></i></span>
@@ -302,6 +301,36 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('All routes, enemies and other reports you have made on the site will be listed here.') }}
             </p>
 
+            <table id="user_reports_table" class="tablesorter default_table table-striped">
+                <thead>
+                <tr>
+                    <th width="5%">{{ __('Id') }}</th>
+                    <th width="10%">{{ __('Category') }}</th>
+                    <th width="60%">{{ __('Message') }}</th>
+                    <th width="15%">{{ __('Created at') }}</th>
+                    <th width="10%">{{ __('Status') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach ($user->reports()->orderByDesc('id')->get() as $report)
+                    <?php /** @var $user \App\Models\UserReport */?>
+                    <tr>
+                        <td>{{ $report->id }}</td>
+                        <td>{{ $report->category }}</td>
+                        <td>{{ $report->message }}</td>
+                        <td>{{ $report->contact_ok ? $report->user->email : '-' }}</td>
+                        <td>{{ $report->created_at }}</td>
+                        <td>
+                            <button class="btn btn-success mark_as_handled_btn" data-id="{{$report->id}}">
+                                <i class="fas fa-check-circle"></i> {{ __('Handled') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+
+            </table>
         </div>
     </div>
 @endsection

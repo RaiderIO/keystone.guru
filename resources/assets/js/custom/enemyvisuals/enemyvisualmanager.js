@@ -38,6 +38,13 @@ class EnemyVisualManager extends Signalable {
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
+        getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));
+        getState().register('enemyaggressivenessborder:changed', this, this._onEnemyAggressivenessBorderChanged.bind(this));
+        getState().register('enemydangerousborder:changed', this, this._onEnemyDangerousBorderChanged.bind(this));
+
+
+        getState().register('enemydisplaytype:changed', this, this._onEnemyDisplayTypeChanged.bind(this));
+
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
@@ -56,7 +63,7 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the map's zoom level was changed.
-     * @param zoomLevelChangedEvent
+     * @param zoomLevelChangedEvent {Object}
      * @private
      */
     _onZoomLevelChanged(zoomLevelChangedEvent) {
@@ -86,7 +93,7 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the number style was changed.
-     * @param numberStyleChangedEvent
+     * @param numberStyleChangedEvent {Object}
      * @private
      */
     _onNumberStyleChanged(numberStyleChangedEvent) {
@@ -99,6 +106,82 @@ class EnemyVisualManager extends Signalable {
             // Only refresh what we can see
             if (enemy.id > 0 && enemy.isVisible() && enemy.visual.mainVisual.shouldRefreshOnNumberStyleChanged()) {
                 window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called when the user has changed one of the enemy opacity changed sliders
+     * @param unkilledEnemyOpacityChangedEvent {Object}
+     * @private
+     */
+    _onUnkilledEnemyOpacityChanged(unkilledEnemyOpacityChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let opacity = unkilledEnemyOpacityChangedEvent.data.opacity;
+        let selector = '.map_enemy_visual_fade'
+
+        if (unkilledEnemyOpacityChangedEvent.name === 'unkilledimportantenemyopacity:changed') {
+            selector += '.important';
+        } else {
+            // Otherwise it will also select all important enemies
+            selector += ':not(.important)';
+        }
+
+        $(selector).css('opacity', `${opacity}%`);
+    }
+
+    /**
+     * Called when the user has decided to add/remove aggressiveness borders
+     * @param enemyAggressivenessBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyAggressivenessBorderChanged(enemyAggressivenessBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            if (enemy.id > 0 && enemy.isVisible()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called when the user has decided to add/remove dangerous borders
+     * @param enemyDangerousBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyDangerousBorderChanged(enemyDangerousBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            if (enemy.id > 0 && enemy.isVisible() && enemy.npc !== null && enemy.npc.dangerous) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called whenever the user has decided to change the enemy display type
+     * @param enemyDisplayTypeChangedEvent
+     * @private
+     */
+    _onEnemyDisplayTypeChanged(enemyDisplayTypeChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+            console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', this);
+            if (enemy.visual !== null) {
+                enemy.visual.setVisualType(enemyDisplayTypeChangedEvent.data.enemyDisplayType);
             }
         }
     }
