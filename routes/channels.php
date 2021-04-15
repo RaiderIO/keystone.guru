@@ -19,7 +19,6 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\User;
-use Faker\Provider\Color;
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?User $user, DungeonRoute $dungeonroute)
 {
@@ -35,7 +34,8 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
             $result = [
                 'id'        => random_int(158402, 99999999),
                 'name'      => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()),
-                'color'     => Color::hexColor(),
+                // https://stackoverflow.com/a/9901154/771270
+                'color'     => randomHexColor(),
                 'anonymous' => true,
             ];
         } else {
