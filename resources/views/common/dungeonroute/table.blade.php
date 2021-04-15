@@ -1,6 +1,8 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
 /** @var $seasonService \App\Service\Season\SeasonService */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
+/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute $model */
@@ -10,14 +12,12 @@ if (!isset($affixgroups)) {
 
 /** @var App\Models\Team|null $team */
 $team = $team ?? null;
+$favorites = $favorites ?? false;
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
-
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
 
 if ($team !== null) {
     $searchTags = $team->getAvailableTags();
@@ -113,7 +113,7 @@ if( Auth::check() ) {
             'data-count-selected-text' => __('{0} requirements')
         ]) !!}
     </div>
-    @if(($view === 'profile' || $view === 'team') && !$favorites)
+    @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
             {!! Form::label('dungeonroute_tags_select[]', __('Tags')) !!}
             {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,

@@ -80,6 +80,10 @@ class DungeonrouteTable extends InlineCode {
                 this._tableView = new ProfileTableView();
                 break;
             }
+            case 'userprofile': {
+                this._tableView = new UserProfileTableView();
+                break;
+            }
             case 'team': {
                 this._tableView = new TeamTableView();
                 break;

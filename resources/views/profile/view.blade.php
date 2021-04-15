@@ -1,9 +1,20 @@
-@extends('layouts.sitepage', ['wide' => true, 'title' => __('My routes')])
+<?php
+/** @var $user \App\User */
+$title = sprintf(__('%s\'s routes'), $user->name);
+?>
+@extends('layouts.sitepage', ['wide' => true, 'title' => $title])
+
+@include('common.general.inline', ['path' => 'profile/view', 'options' => [
+    'dependencies' => ['dungeonroute/table'],
+    'user' => $user
+]])
 
 @section('header-title')
-    {{ __('My routes') }}
+    {{ $title }}
 @endsection
 
 @section('content')
-    {{ sprintf('This is %s profile', $user->name) }}
+    @include('common.general.messages')
+
+    @include('common.dungeonroute.table', ['view' => 'userprofile'])
 @endsection

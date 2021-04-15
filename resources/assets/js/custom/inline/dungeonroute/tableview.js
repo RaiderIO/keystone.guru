@@ -97,6 +97,31 @@ class FavoritesTableView extends ProfileTableView {
     }
 }
 
+class UserProfileTableView extends ProfileTableView {
+    constructor() {
+        super();
+
+        this._user = null;
+    }
+
+    getAjaxParameters() {
+        return {user_id: this._user.id};
+    }
+
+    getName() {
+        return 'userprofile';
+    }
+
+    /**
+     * Sets the user for which we're viewing the profile
+     * @param user
+     */
+    setUser(user) {
+        console.log('setUser', user);
+        this._user = user;
+    }
+}
+
 class TeamTableView extends TableView {
     constructor() {
         super();
