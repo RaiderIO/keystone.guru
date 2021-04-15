@@ -17,10 +17,9 @@ class AddEchoColorToUsersTable extends Migration
             $table->string('echo_color')->after('email');
         });
 
-        $faker = \Faker\Factory::create();
         foreach(\App\User::all() as $user ){
             /** @var $user \App\User */
-            $user->echo_color = $faker->hexColor;
+            $user->echo_color = randomHexColor();
             $user->save();
         }
     }

@@ -10,7 +10,6 @@ use App\Models\Tags\TagCategory;
 use App\Service\EchoServerHttpApiService;
 use App\User;
 use Exception;
-use Faker\Provider\Color;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -93,7 +92,7 @@ class ProfileController extends Controller
             $user->email = $request->get('email');
         }
         $user->theme = $request->get('theme');
-        $user->echo_color = $request->get('echo_color', Color::hexColor());
+        $user->echo_color = $request->get('echo_color', randomHexColor());
         $user->echo_anonymous = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
         $user->timezone = $request->get('timezone');
