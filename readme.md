@@ -2,23 +2,23 @@
 
 # About Keystone.guru
 Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Shadowlands™.
-This repository contains the source code of (most parts of) the website. It is built with [Laravel](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySql](https://www.mysql.com/).
+This repository contains the source code of (most parts of) the website. It is built with [Laravel 8.0](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySql](https://www.mysql.com/).
 It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer for thumbnail generation, REDIS for cache, Laravel Echo Server for real-time communication and much, much more.
 
-The website is free to use, now and forever. You may support the creation of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
+The website is free to use, now and forever. You may support the development of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
 
 # Features
 * Full interactive Leaflet map of all Shadowlands™ dungeons
-* All known enemies and patrols inside dungeons (updated to 8.3)
-* Enemy forces of all different NPCs in both normal and Teeming weeks
-* Easily import your Mythic Dungeon Tools strings and convert them to a Keystone.guru route
+* Enhanced dungeon map images to allow for 5 zoom levels
+* Custom dungeon mapping with all known enemies and patrols inside dungeons (updated to 9.0)
+* Full import/export support for Mythic Dungeon Tools strings
 * Route planning functions such as
   * Plotting a path through the dungeon, allowing a route to split up should the need arise
   * Free-drawing of lines
   * Easy creation of pulls of which enemies to kill and optionally where
     * Manage your pull colors by applying a custom gradient
   * Various icons with optional comments to indicate difficult enemies, strategies to use or abilities to use
-  * Publish your planned route whenever you're ready to share it
+  * Various publishing options for your route - keep it private, share it with your team or with everyone
   * Attach attributes to your route to give an indication of difficulty (death/invisibility skips or classes required)
 * Collaboration with your group members through Teams
   * Attach routes to a Team for easy sharing with your group members
@@ -26,19 +26,20 @@ The website is free to use, now and forever. You may support the creation of thi
   * Permission management for who can view or edit routes attached to your team
 * User voting; increase visibility of your favorite routes
 * Favorite routes you liked best for easy reference later on
+* Tag routes for managing your stockpile of routes
+* Discover page where you can easily find routes created by other users by clicking around
 * Search function for looking up routes others have made
-  * Search by dungeon, affixes, attributes and/or favorite state
-  * Full sorting by dungeon, affixes, author, views and ratings
-  * Multiple route listing display modes to suit your needs
+  * Search by dungeon, affixes, target key level, ratings, author or whether enemy forces have been reached or not
 * An up-to-date overview of upcoming affixes and their time based on your region
 * When not registered, you are free to view any routes found in the search function, or when directly linked by others
-  * Sandbox mode available in which you can try out your route/the website with no strings attached
+  * Temporary routes available in which you can try out your route/the website with no strings attached
 * Log in through Google, Discord or Battle.net if you don't want to register
+* Mobile friendly!
 
 # Patreon features
-* Create animated lines on the map
-* Create private routes
 * No ads
+* Create animated lines on the map
+* Create unlisted private routes that can be shared with others by link
   
 # Not included in this repository
 * Map tiles of all dungeons
