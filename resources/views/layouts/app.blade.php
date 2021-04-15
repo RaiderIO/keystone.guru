@@ -6,14 +6,16 @@
 /** @var $hasNewChangelog bool */
 /** @var $latestRelease \App\Models\Release */
 
+// Show ads or not
+$showAds = $showAds ?? true;
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
-$showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
+$showLegalModal = $showLegalModal ?? true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
 // Any additional parameters to pass to the login/register blade
-$loginParams = isset($loginParams) ? $loginParams : [];
-$registerParams = isset($registerParams) ? $registerParams : [];
+$loginParams = $loginParams ?? [];
+$registerParams = $registerParams ?? [];
 // Show cookie consent
 $cookieConsent = $cookieConsent ?? true;
 // If user already approved of the cookie..
@@ -23,9 +25,9 @@ if ($cookieConsent && isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cooki
 }
 $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Analytics or not, default = $isProduction
-$analytics = isset($analytics) ? $analytics : $isProduction;
+$analytics = $analytics ?? $isProduction;
 
-$rootClass = isset($rootClass) ? $rootClass : '';
+$rootClass = $rootClass ?? '';
 
 // Bit of a hack to do this here - but for now this works
 if ($hasMinorVersionUpgrade && $hasNewChangelog) {
