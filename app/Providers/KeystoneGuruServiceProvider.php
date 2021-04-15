@@ -149,6 +149,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
+        });
+
+        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view)
+        {
             // Only show ads if the view didn't already explicitly override this
             if (!isset($view->getData()['showAds'])) {
                 // Always show ads when on dev environment so that we are reminded the site has ads and their placement
