@@ -41,26 +41,35 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 {{--                                {{ __('Popular') }}--}}
 {{--                            </a>--}}
 {{--                            &middot;--}}
+
                             <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]); ?>
                             <a href="{{ $url }}">
                                 {{ __('This week ') }}
                             </a>
+                            <?php ob_start() ?>
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $currentSeason->getCurrentAffixGroup(),
                                 'url' => $url,
                             ])
+                            {!! ($thisWeekTier = ob_get_clean()) !!}
+
                             &middot;
+
                             <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]); ?>
                             <a href="{{ $url }}">
                                 {{ __('Next week ') }}
                             </a>
+                            <?php ob_start() ?>
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $currentSeason->getNextAffixGroup(),
                                 'url' => $url,
                             ])
+                            {!! ($nextWeekTier = ob_get_clean()) !!}
+
                             &middot;
+
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('New') }}
                             </a>
@@ -78,11 +87,13 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                             <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('This week') }}
                             </a>
+                            {!! $thisWeekTier !!}
                         </div>
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]) }}">
                                 {{ __('Next week') }}
                             </a>
+                            {!! $nextWeekTier !!}
                         </div>
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->getSlug()]) }}">

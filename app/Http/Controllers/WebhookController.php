@@ -50,71 +50,75 @@ class WebhookController extends Controller
 
         $commits = $request->get('commits');
         $ref = $request->get('ref');
+        $branch = str_replace('refs/heads/', '', $ref);
 
-        $embeds = [];
-        foreach ($commits as $commit) {
-            // Skip system commits (such as merge branch X into Y)
-            if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
-                // Skip commits that have originally be done on another branch
-                !$commit['distinct']) {
-                continue;
+        // We don't need duplicate messages in Discord since mapping is automatically managed
+        if ($branch !== 'mapping') {
+            $embeds = [];
+            foreach ($commits as $commit) {
+                // Skip system commits (such as merge branch X into Y)
+                if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
+                    // Skip commits that have originally be done on another branch
+                    !$commit['distinct']) {
+                    continue;
+                }
+
+                $lines = explode('\\n', $commit['message']);
+
+                $embeds[] = [
+                    'title'       => sprintf(
+                        '%s: %s',
+                        $branch,
+                        substr(array_shift($lines), 0, 256)
+                    ),
+                    'description' => substr(trim(view('app.commit.commit', [
+                        'commit' => $commit,
+                        'lines'  => $lines,
+                    ])->render()), 0, 2000),
+                    'url'         => $commit['url'],
+                ];
+
+                if (!empty($commit['added'])) {
+                    $embeds[] = [
+                        'color'       => 2328118, // #238636
+                        'description' => substr(trim(view('app.commit.added', [
+                            'commit' => $commit,
+                        ])->render()), 0, 2000)
+                    ];
+                }
+
+                if (!empty($commit['modified'])) {
+                    $embeds[] = [
+                        'color'       => 25284, // #0062C4
+                        'description' => substr(trim(view('app.commit.modified', [
+                            'commit' => $commit,
+                        ])->render()), 0, 2000)
+                    ];
+                }
+
+                if (!empty($commit['removed'])) {
+                    $embeds[] = [
+                        'color'       => 14300723, // #DA3633
+                        'description' => substr(trim(view('app.commit.removed', [
+                            'commit' => $commit,
+                        ])->render()), 0, 2000)
+                    ];
+                }
+
+                $lastKey = array_key_last($embeds);
+                $embeds[$lastKey]['timestamp'] = $commit['timestamp'];
             }
 
-            $lines = explode('\\n', $commit['message']);
-
-            $embeds[] = [
-                'title'       => sprintf(
-                    '%s: %s',
-                    // Branch name
-                    str_replace('refs/heads/', '', $ref),
-                    substr(array_shift($lines), 0, 256)
-                ),
-                'description' => substr(trim(view('app.commit.commit', [
-                    'commit' => $commit,
-                    'lines'  => $lines,
-                ])->render()), 0, 2000),
-                'url'         => $commit['url'],
+            // Add footer to the last embed
+            $lastKey = array_key_last($embeds);
+            $embeds[$lastKey]['footer'] = [
+                'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                'text'     => 'Keystone.guru Discord Bot'
             ];
 
-            if (!empty($commit['added'])) {
-                $embeds[] = [
-                    'color'       => 2328118, // #238636
-                    'description' => substr(trim(view('app.commit.added', [
-                        'commit' => $commit,
-                    ])->render()), 0, 2000)
-                ];
-            }
+            $discordApiService->sendEmbeds(env('DISCORD_GITHUB_WEBHOOK'), $embeds);
 
-            if (!empty($commit['modified'])) {
-                $embeds[] = [
-                    'color'       => 25284, // #0062C4
-                    'description' => substr(trim(view('app.commit.modified', [
-                        'commit' => $commit,
-                    ])->render()), 0, 2000)
-                ];
-            }
-
-            if (!empty($commit['removed'])) {
-                $embeds[] = [
-                    'color'       => 14300723, // #DA3633
-                    'description' => substr(trim(view('app.commit.removed', [
-                        'commit' => $commit,
-                    ])->render()), 0, 2000)
-                ];
-            }
-
-            $lastKey = array_key_last($embeds);
-            $embeds[$lastKey]['timestamp'] = $commit['timestamp'];
         }
-
-        // Add footer to the last embed
-        $lastKey = array_key_last($embeds);
-        $embeds[$lastKey]['footer'] = [
-            'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-            'text'     => 'Keystone.guru Discord Bot'
-        ];
-
-        $discordApiService->sendEmbeds(env('DISCORD_GITHUB_WEBHOOK'), $embeds);
 
         return response()->noContent();
     }

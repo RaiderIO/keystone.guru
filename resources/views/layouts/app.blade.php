@@ -2,9 +2,9 @@
 /** @var $isProduction string */
 /** @var $version string */
 /** @var $theme string */
-/** @var $hasMinorVersionUpgrade bool */
 /** @var $hasNewChangelog bool */
 /** @var $latestRelease \App\Models\Release */
+/** @var $latestReleaseSpotlight \App\Models\Release */
 
 // Show ads or not
 $showAds = $showAds ?? true;
@@ -30,8 +30,15 @@ $analytics = $analytics ?? $isProduction;
 $rootClass = $rootClass ?? '';
 
 // Bit of a hack to do this here - but for now this works
-if ($hasMinorVersionUpgrade && $hasNewChangelog) {
-    setcookie('changelog_release', $latestRelease->id);
+$showSpotlightRelease = false;
+if ($latestReleaseSpotlight instanceof \App\Models\Release) {
+    // Only if the user hasn't seen the latest spotlight release yet
+    $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
+
+    // It's now at least the release of the latest spotlight release since that's what's pushed in your face atm
+    if ($showSpotlightRelease) {
+        setcookie('changelog_release', $latestReleaseSpotlight->id);
+    }
 }
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
@@ -100,9 +107,9 @@ if ($hasMinorVersionUpgrade && $hasNewChangelog) {
     <!-- END modal register -->
 @endguest
 
-@if($hasMinorVersionUpgrade && $hasNewChangelog)
+@if($showSpotlightRelease)
     @component('common.general.modal', ['id' => 'new_release_modal', 'active' => true])
-        @include('common.release.release', ['release' => $latestRelease])
+        @include('common.release.release', ['release' => $latestReleaseSpotlight])
     @endcomponent
 @endif
 

@@ -3,6 +3,7 @@
     "release_changelog_id": 39,
     "version": "v2.7.3",
     "silent": 0,
+    "spotlight": 0,
     "created_at": "2019-12-05T00:22:13+00:00",
     "updated_at": "2019-12-05T00:22:13+00:00",
     "changelog": {
