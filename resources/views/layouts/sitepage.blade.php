@@ -52,7 +52,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
         @endisset
 
     @elseif(isset($menuItems))
-        <div class="container container_wide mt-3">
+        <div class="container container_wide mt-4 mb-4 {{$rootClass}}">
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
