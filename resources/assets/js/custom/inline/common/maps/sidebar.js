@@ -49,8 +49,6 @@ class Sidebar {
      * @private
      */
     _hideSidebar() {
-        console.log('_hideSidebar');
-
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
@@ -72,8 +70,6 @@ class Sidebar {
      * @private
      */
     _showSidebar() {
-        console.log('_showSidebar');
-
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 

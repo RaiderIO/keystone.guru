@@ -19,7 +19,7 @@ use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
-use App\Logic\Scheduler\FindOutdatedThumbnails;
+use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -72,7 +72,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         Log::channel('scheduler')->debug('Starting scheduler');
-        $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
+        $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
         if (env('APP_TYPE') === 'mapping') {
             $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
