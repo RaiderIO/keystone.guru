@@ -16,6 +16,7 @@ use Throwable;
  * @property int $release_changelog_id
  * @property string $version
  * @property boolean $silent
+ * @property boolean $spotlight
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *

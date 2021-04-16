@@ -75,6 +75,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      */
     public function boot(CacheService $cacheService, ExpansionService $expansionService, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
+        if (app()->runningInConsole()) {
+            return;
+        }
+
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
 
@@ -90,6 +95,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $currentExpansion = $expansionService->getCurrentExpansion();
             /** @var Release $latestRelease */
             $latestRelease = Release::latest()->first();
+            $latestReleaseSpotlight = Release::where('spotlight', true)->latest()->first();
 
             return [
                 'isProduction'                    => config('app.env') === 'production',
@@ -101,7 +107,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                         return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
                     }),
                 'latestRelease'                   => $latestRelease,
-                'hasMinorVersionUpgrade'          => $latestRelease->isMajorUpgrade() || $latestRelease->isMinorUpgrade(),
+                'latestReleaseSpotlight'          => $latestReleaseSpotlight,
                 'appVersion'                      => GitVersionHelper::getVersion(),
                 'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
 
@@ -174,8 +180,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         {
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
-            $view->with('hasMinorVersionUpgrade', $globalViewVariables['hasMinorVersionUpgrade']);
             $view->with('latestRelease', $globalViewVariables['latestRelease']);
+            $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
         });
 
         view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables)
