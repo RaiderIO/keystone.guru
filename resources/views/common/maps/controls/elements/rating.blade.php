@@ -5,7 +5,7 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
 <!-- Rating -->
 <div class="row no-gutters">
 
-    <div class="col" data-toggle="tooltip" data-placement="right" title="{{ __('Rate this route') }}">
+    <div class="col btn-group dropright" data-toggle="tooltip" title="{{ __('Rate this route') }}" data-placement="right">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="{{ $currentUserRating !== false ? 'fas' : 'far' }} fa-star"></i>
