@@ -19,7 +19,6 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\User;
-use Faker\Provider\Color;
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?User $user, DungeonRoute $dungeonroute)
 {
@@ -32,10 +31,14 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
             // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
             ($dungeonroute->team === null || ($dungeonroute->team !== null && !$dungeonroute->team->isUserMember($user)))) {
 
+            $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
+
             $result = [
                 'id'        => random_int(158402, 99999999),
-                'name'      => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()),
-                'color'     => Color::hexColor(),
+                'name'      => sprintf('Anonymous %s', $randomName),
+                'initials'  => initials($randomName),
+                // https://stackoverflow.com/a/9901154/771270
+                'color'     => randomHexColor(),
                 'anonymous' => true,
             ];
         } else {

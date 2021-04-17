@@ -52,6 +52,7 @@ use Illuminate\Support\Facades\DB;
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
  *
+ * @property Carbon $thumbnail_refresh_queued_at
  * @property Carbon $thumbnail_updated_at
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -872,6 +873,9 @@ class DungeonRoute extends Model
             // Set it for processing in a queue
             ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
         }
+
+        $this->thumbnail_refresh_queued_at = Carbon::now()->toDateTimeString();
+        $this->save();
     }
 
 

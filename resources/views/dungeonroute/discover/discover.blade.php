@@ -22,13 +22,13 @@
         ])
     </div>
 
-    {{--        @include('dungeonroute.discover.panel', [--}}
-    {{--            'title' => __('Popular routes'),--}}
-    {{--            'link' => route('dungeonroutes.popular'),--}}
-    {{--            'dungeonroutes' => $dungeonroutes['popular'],--}}
-    {{--            'showMore' => true,--}}
-    {{--            'showDungeonImage' => true,--}}
-    {{--        ])--}}
+    @include('dungeonroute.discover.panel', [
+        'title' => __('Popular routes'),
+        'link' => route('dungeonroutes.popular'),
+        'dungeonroutes' => $dungeonroutes['popular'],
+        'showMore' => false,
+        'showDungeonImage' => true,
+    ])
     @include('dungeonroute.discover.panel', [
         'title' => __('Popular routes by current affixes'),
         'link' => route('dungeonroutes.thisweek'),

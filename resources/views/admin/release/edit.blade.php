@@ -24,6 +24,11 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
         {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}
     </div>
 
+    <div class="form-group{{ $errors->has('spotlight') ? ' has-error' : '' }}">
+        {!! Form::label('spotlight', __('Spotlight')) !!}
+        {!! Form::checkbox('spotlight', 1, isset($release) ? $release->spotlight : 0, ['class' => 'form-control left_checkbox']) !!}
+    </div>
+
     <h4>{{ __('Changelog') }}</h4>
 
     <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">

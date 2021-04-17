@@ -3,6 +3,7 @@
     "release_changelog_id": 73,
     "version": "v3.6.3",
     "silent": 1,
+    "spotlight": 0,
     "created_at": "2020-10-07T20:09:09+00:00",
     "updated_at": "2020-10-07T21:15:07+00:00",
     "changelog": {

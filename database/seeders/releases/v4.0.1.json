@@ -1,0 +1,86 @@
+{
+    "id": 95,
+    "release_changelog_id": 101,
+    "version": "v4.0.1",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-04-18T22:27:15+00:00",
+    "updated_at": "2021-04-18T22:27:15+00:00",
+    "changelog": {
+        "id": 101,
+        "release_id": 95,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 1,
+                "ticket_id": 746,
+                "change": "Reworked release spotlighting (some releases will prompt a modal once, most won't).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 1,
+                "ticket_id": 750,
+                "change": "Thumbnails for Theater of Pain and De Other Side will no longer sometimes render just an empty map.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 3,
+                "ticket_id": 742,
+                "change": "Route thumbnail generation scheduling logic reworked to be more simple, perform better and prioritize routes differently to make a bit more sense.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 3,
+                "ticket_id": 748,
+                "change": "Pulls sidebar now also features an option to hide it instead of just on mobile. The map view's header looks better various smaller resolutions.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 5,
+                "ticket_id": 744,
+                "change": "Mobile view of Discovery page now show subcreation ease tiers in 'current week' and 'next week'.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 5,
+                "ticket_id": 751,
+                "change": "Temporary routes can now once again be claimed to your profile once you're logged in.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 101,
+                "release_changelog_category_id": 5,
+                "ticket_id": 747,
+                "change": "Various light theme bugfixes related to colors (white text on white background for example) and placements of elements.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
