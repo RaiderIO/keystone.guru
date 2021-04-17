@@ -87,31 +87,40 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                     if (killZoneOnCurrentFloor && previousKillZoneOnCurrentFloor) {
                         centeroidSource = previousKillZoneCenteroid;
                         centeroidTarget = killZoneCenteroid;
-                    } else {
-                        if (killZoneOnCurrentFloor) {
-                            centeroidSource = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], previousKillZoneCenteroid).layer.getLatLng();
+                    } else if (killZoneOnCurrentFloor) {
+                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], previousKillZoneCenteroid);
+                        // It can be null if someone skips a floor and there's no direct connection from previous to current floor
+                        if (closestMarker !== null) {
+                            centeroidSource = closestMarker.layer.getLatLng();
                             centeroidTarget = killZoneCenteroid;
-                        } else if (previousKillZoneOnCurrentFloor) {
+                        }
+                    } else if (previousKillZoneOnCurrentFloor) {
+
+                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], killZoneCenteroid);
+                        // It can be null if someone skips a floor and there's no direct connection from previous to current floor
+                        if (closestMarker !== null) {
                             centeroidSource = previousKillZoneCenteroid;
-                            centeroidTarget = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], killZoneCenteroid).layer.getLatLng();
+                            centeroidTarget = closestMarker.layer.getLatLng();
                         }
                     }
 
-                    // Draw the paths from the
-                    this.createNewPath([{
-                        lat: centeroidSource.lat,
-                        lng: centeroidSource.lng
-                    }, {
-                        lat: centeroidTarget.lat,
-                        lng: centeroidTarget.lng
-                    }], {
-                        polyline: {
-                            // From red to green, add one to compensate for the dungeon start to
-                            color: pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
-                                ((i + dungeonStartOffset)) / (killzoneMapObjectGroup.objects.length + dungeonStartOffset) * 100
-                            )
-                        }
-                    });
+                    if (centeroidSource !== null && centeroidTarget !== null) {
+                        // Draw the paths from the
+                        this.createNewPath([{
+                            lat: centeroidSource.lat,
+                            lng: centeroidSource.lng
+                        }, {
+                            lat: centeroidTarget.lat,
+                            lng: centeroidTarget.lng
+                        }], {
+                            polyline: {
+                                // From red to green, add one to compensate for the dungeon start to
+                                color: pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
+                                    ((i + dungeonStartOffset)) / (killzoneMapObjectGroup.objects.length + dungeonStartOffset) * 100
+                                )
+                            }
+                        });
+                    }
                 }
 
                 // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
