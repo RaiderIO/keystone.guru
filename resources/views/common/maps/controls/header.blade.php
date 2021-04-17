@@ -16,7 +16,7 @@ $echo = $echo ?? false;
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse text-center text-lg-left" id="mainNavbar">
+        <div class="collapse navbar-collapse text-center text-xl-left" id="mainNavbar">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <h5 class="mb-0 mr-2">
