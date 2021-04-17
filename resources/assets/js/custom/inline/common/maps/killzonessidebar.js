@@ -4,9 +4,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
     constructor(options) {
         super(options);
 
-        if (isMobile()) {
-            this.sidebar = new Sidebar(options);
-        }
+        this.sidebar = new Sidebar(options);
 
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
@@ -377,9 +375,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let self = this;
 
-        if (this.sidebar instanceof Sidebar) {
-            this.sidebar.activate();
-        }
+        this.sidebar.activate();
 
         // Setup new pull button
         $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));

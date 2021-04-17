@@ -12,7 +12,7 @@ $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enem
 $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
 ?>
 
-<div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute">
+<div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }}">
             <div class="owl-carousel owl-theme {{ $owlClass }}">
@@ -42,8 +42,7 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
             <div class="row no-gutters p-2 header">
                 <div class="col">
                     <h4 class="mb-0">
-                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]) }}"
-                           target="_blank">
+                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]) }}">
                             {{ $dungeonroute->title }}
                         </a>
                     </h4>
@@ -129,12 +128,10 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         </a>
                         @if( $dungeonroute->avg_rating > 1 )
                             -
-                            @include('common.dungeonroute.rating', ['rating' => (int) $dungeonroute->avg_rating])
+                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])
                         @endif
-                        <span class="d-lg-inline d-none">
-                                    -
-                                    {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
-                                </span>
+                        -
+                        {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
                     </small>
                 </div>
             </div>

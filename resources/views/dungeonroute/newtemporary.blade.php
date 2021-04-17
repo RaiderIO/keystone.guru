@@ -2,6 +2,6 @@
 @section('header-title', $headerTitle)
 
 @section('content')
-    @include('common.forms.createtemporaryroute'])
+    @include('common.forms.createtemporaryroute')
 @endsection
 

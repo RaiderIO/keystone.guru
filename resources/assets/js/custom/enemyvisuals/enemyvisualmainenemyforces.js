@@ -20,7 +20,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         let width = this._getWidth();
 
         // Just append a single class
-        data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
+        data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-center';
         // Slightly hacky fix to get the enemy forces to show up properly (font was changed away from Leaflet default to site default for all others)
         data.main_visual_html = `<div 
             id="map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_forces" 

@@ -57,14 +57,18 @@
     }
 
 
-
     .mbr-parallax-background {
       color: #fff !important;
       text-shadow: 1px 1px black;
     }
   }
 
-  .card_dungeonroute {
+  .card_dungeonroute.dungeon_image {
+    /* Fixed issue with a gap in the footer in lux, see #747 */
+    .header {
+      min-height: 44px;
+    }
+
     h4 a,
     .header,
     .description,

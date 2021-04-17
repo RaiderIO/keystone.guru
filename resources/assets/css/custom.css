@@ -160,9 +160,9 @@
     overflow: hidden;
 }
 
-.discover .card_dungeonroute .header,
-.discover .card_dungeonroute .description,
-.discover .card_dungeonroute .enemy_forces {
+.discover .card_dungeonroute.dungeon_image .header,
+.discover .card_dungeonroute.dungeon_image .description,
+.discover .card_dungeonroute.dungeon_image .enemy_forces {
     text-shadow: #000 1px 1px;
 }
 

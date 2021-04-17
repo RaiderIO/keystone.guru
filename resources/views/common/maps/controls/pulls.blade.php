@@ -19,16 +19,14 @@
 ]])
 
 <nav id="pulls_sidebar"
-     class="route_manipulation_tools top right row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+     class="route_manipulation_tools top right row no-gutters map_fade_out {{ $isMobile ? 'mobile' : 'active' }}">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
-        @if($isMobile)
-            <div id="pulls_sidebar_trigger" class="handle">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-        @endif
+        <div id="pulls_sidebar_trigger" class="handle">
+            <i class="fas {{ $isMobile ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+        </div>
 
         @if($edit)
-            <div class="">
+            <div class="p-1">
                 <div class="row pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip" title="{{ __('Settings') }}">
                         <button class="btn btn-info w-100" data-toggle="modal"

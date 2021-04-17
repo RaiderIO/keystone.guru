@@ -19,7 +19,7 @@ $max = config('keystoneguru.levels.max');
         <div class="progress-bar text-center bg-success px-1" role="progressbar" aria-valuenow="{{ $levelMin }}"
              aria-valuemin="{{ $levelMin }}" aria-valuemax="{{ $levelMax }}"
              style="width: {{ (($levelMax - $levelMin) / ($max - $min)) * 100 }}%">
-            <div class="row">
+            <div class="row no-gutters">
                 <div class="col text-left">
                     +{{ $levelMin }}
                 </div>
