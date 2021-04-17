@@ -480,6 +480,11 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+/** Fix a boatload of 404s being thrown because of missing images/spritesheet.svg */
+.leaflet-draw-toolbar a {
+    background-image: none !important;
+}
+
 #edit_route_draw_actions_container .leaflet-draw-actions {
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
