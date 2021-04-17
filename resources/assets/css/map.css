@@ -674,7 +674,6 @@ html, body, #map, #app, .wrapper {
 .enemy_icon_npc_enemy_portrait,
 .enemy_icon_npc_class,
 .enemy_icon_npc_type {
-    background-color: white;
     border: black 2px solid;
     border-radius: 100px;
     background-blend-mode: luminosity;

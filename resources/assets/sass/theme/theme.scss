@@ -479,6 +479,7 @@ body {
   .enemy_icon.healer,
   .enemy_icon.enemy_forces {
     background-color: var($--theme-darker);
+    color: var($--theme-text-contrast);
   }
 
   .dropdown.bootstrap-select {
