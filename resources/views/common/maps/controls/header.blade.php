@@ -43,7 +43,7 @@ $echo = $echo ?? false;
 
                 </li>
                 @auth
-                    @isset($dungeonroute)
+                    @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
                         <li class="nav-item mr-2">
                             <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $dungeonroute]) }}">
                                 <button class="btn btn-success h-100">
@@ -51,7 +51,7 @@ $echo = $echo ?? false;
                                 </button>
                             </a>
                         </li>
-                    @endisset
+                    @endif
                 @endauth
                 <li class="nav-item">
                     <button class="btn btn-info h-100" data-toggle="modal" data-target="#share_modal">
