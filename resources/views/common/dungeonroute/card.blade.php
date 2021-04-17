@@ -131,10 +131,8 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                             -
                             @include('common.dungeonroute.rating', ['rating' => (int) $dungeonroute->avg_rating])
                         @endif
-                        <span class="d-lg-inline d-none">
-                                    -
-                                    {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
-                                </span>
+                        -
+                        {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
                     </small>
                 </div>
             </div>

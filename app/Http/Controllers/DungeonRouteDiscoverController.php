@@ -40,7 +40,7 @@ class DungeonRouteDiscoverController extends Controller
                 'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
                 'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
                 'new'      => $discoverService->withBuilder($closure)->new(),
-                // 'popular'  => $discoverService->popular(),
+                'popular'  => $discoverService->popularGroupedByDungeon(),
             ]
         ]);
     }
@@ -65,7 +65,7 @@ class DungeonRouteDiscoverController extends Controller
                 'thisweek' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getCurrentAffixGroup()),
                 'nextweek' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextAffixGroup()),
                 'new'      => $discoverService->withBuilder($closure)->newByDungeon($dungeon),
-                // 'popular'  => $discoverService->popularByDungeon($dungeon, $limit),
+                'popular'  => $discoverService->withBuilder($closure)->popularByDungeon($dungeon),
             ]
         ]);
     }
