@@ -90,18 +90,7 @@ class User extends Authenticatable
      */
     public function getInitialsAttribute(): string
     {
-        $result = '';
-
-        $explode = explode(' ', $this->name);
-        if( count($explode) > 1 ) {
-            $result = join('', array_map(function($element){
-                return $element[0];
-            }, $explode));
-        } else {
-            $result = substr($this->name, 0, 2);
-        }
-
-        return strtoupper($result);
+        initials($this->name);
     }
 
     /**
