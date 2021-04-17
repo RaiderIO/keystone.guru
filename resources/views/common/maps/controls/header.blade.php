@@ -2,7 +2,7 @@
 $echo = $echo ?? false;
 ?>
 <nav id="map_header"
-     class="map_fade_out navbar navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
+     class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
             <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}"

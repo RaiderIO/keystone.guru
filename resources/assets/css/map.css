@@ -28,7 +28,7 @@ html, body, #map, #app, .wrapper {
     opacity: 1;
 }
 
-@media ( max-width: 992px ) {
+@media (max-width: 1200px) {
     #map_header {
         padding: 0.5rem;
     }
@@ -218,6 +218,10 @@ html, body, #map, #app, .wrapper {
     user-select: none;
 }
 
+#pulls_sidebar.active {
+    right: 0;
+}
+
 @media (max-width: 1440px) {
     #pulls_sidebar,
     #pulls_sidebar .bg-header {
@@ -229,12 +233,8 @@ html, body, #map, #app, .wrapper {
         transition: right 0.2s;
     }
 
-    #pulls_sidebar.mobile:not(.active) {
+    #pulls_sidebar:not(.active) {
         right: -350px;
-    }
-
-    #pulls_sidebar.mobile.active {
-        right: 0;
     }
 }
 
@@ -244,6 +244,10 @@ html, body, #map, #app, .wrapper {
         width: 400px;
         padding-right: 0 !important;
     }
+
+    #pulls_sidebar:not(.active) {
+        right: -400px;
+    }
 }
 
 @media (min-width: 1920px) {
@@ -251,6 +255,10 @@ html, body, #map, #app, .wrapper {
     #pulls_sidebar .bg-header {
         width: 450px;
         padding-right: 0 !important;
+    }
+
+    #pulls_sidebar:not(.active) {
+        right: -450px;
     }
 }
 
@@ -265,7 +273,7 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Mobile heights */
-#pulls_sidebar.mobile .handle {
+#pulls_sidebar .handle {
     background-color: #2E2E2E;
     left: -40px;
     padding: 10px 15px;
@@ -276,11 +284,11 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-#pulls_sidebar.mobile .pulls_container {
+#pulls_sidebar .pulls_container {
     max-height: calc(100vh - 109px);
 }
 
-#pulls_sidebar.mobile .edit .pulls_container {
+#pulls_sidebar .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (109px + 55px));
 }
@@ -382,9 +390,13 @@ html, body, #map, #app, .wrapper {
     margin-left: 0 !important;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
     .route_manipulation_tools.top {
         padding-top: 1rem !important;
+    }
+
+    #pulls_sidebar_trigger {
+        margin-top: 1rem !important;
     }
 
     .route_manipulation_tools:not(.top) {

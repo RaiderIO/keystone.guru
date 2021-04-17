@@ -3,16 +3,12 @@ class Sidebar {
 
     constructor(options) {
         this.options = options;
-
-        console.warn(this.options);
     }
 
     /**
      *
      */
     activate() {
-        console.log('activating!', this.options);
-
         let self = this;
 
         if (isMobile()) {

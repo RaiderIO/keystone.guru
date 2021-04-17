@@ -90,7 +90,7 @@ class User extends Authenticatable
      */
     public function getInitialsAttribute(): string
     {
-        initials($this->name);
+        return initials($this->name);
     }
 
     /**
