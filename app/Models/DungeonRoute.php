@@ -874,8 +874,12 @@ class DungeonRoute extends Model
             ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
         }
 
+        // Temporarily disable timestamps since we don't want this action to update the updated_at
+        $this->timestamps = false;
         $this->thumbnail_refresh_queued_at = Carbon::now()->toDateTimeString();
         $this->save();
+        // Re-enable them
+        $this->timestamps = true;
     }
 
 

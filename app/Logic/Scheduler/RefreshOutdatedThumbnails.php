@@ -20,14 +20,17 @@ class RefreshOutdatedThumbnails
         Log::channel('scheduler')->debug('>> Finding thumbnails');
 
         /** @var DungeonRoute[]|Collection $routes */
-        $routes = DungeonRoute::whereNotNull('expires_at')
-            // Only if it's not already queued!
-            ->whereRaw('thumbnail_refresh_queued_at < thumbnail_updated_at')
+        $routes = DungeonRoute::where('author_id', '>', '0')
+            ->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
             ->where(function (Builder $builder)
             {
-                $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                    ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail_refresh_min'))->toDateTimeString());
-            })->orWhere('thumbnail_updated_at', '<', now()->subDays(config('keystoneguru.thumbnail_refresh_anyways_days')))
+                // Only if it's not already queued!
+                $builder->where(function (Builder $builder)
+                {
+                    $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
+                        ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail_refresh_min'))->toDateTimeString());
+                })->orWhere('thumbnail_updated_at', '<', now()->subDays(config('keystoneguru.thumbnail_refresh_anyways_days')));
+            })
             // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
             ->orderBy('published_state_id', 'desc')
             // Oldest first
