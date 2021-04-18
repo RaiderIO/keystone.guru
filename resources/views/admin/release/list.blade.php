@@ -29,7 +29,8 @@
         <thead>
         <tr>
             <th width="10%">{{ __('Id') }}</th>
-            <th width="75%">{{ __('Version') }}</th>
+            <th width="15%">{{ __('Version') }}</th>
+            <th width="60%">{{ __('Title') }}</th>
             <th width="15%">{{ __('Actions') }}</th>
         </tr>
         </thead>
@@ -38,7 +39,8 @@
         @foreach ($models->all() as $release)
             <tr>
                 <td>{{ $release->id }}</td>
-                <td>{{ $release->version }}</td>
+                <td>{{ $release->version }}
+                <td>{{ $release->title }}</td>
                 <td>
                     <a class="btn btn-primary"
                        href="{{ route('admin.release.edit', ['release' => $release->version]) }}">

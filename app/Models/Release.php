@@ -15,6 +15,7 @@ use Throwable;
  * @property int $id
  * @property int $release_changelog_id
  * @property string $version
+ * @property string $title
  * @property boolean $silent
  * @property boolean $spotlight
  * @property Carbon $updated_at
@@ -109,6 +110,15 @@ class Release extends CacheModel
     }
 
     /**
+     * Get the title formatted with the current date etc.
+     */
+    public function getFormattedTitle() : string {
+        return sprintf('Release %s (%s)%s',
+                    $this->version, now()->format('Y/m/d'),
+                    empty($this->title) ? '' : sprintf(' - %s', $this->title));
+    }
+
+    /**
      * @return array
      */
     public function getDiscordEmbeds()
@@ -160,7 +170,7 @@ class Release extends CacheModel
         return [
             [
                 'color'       => 14641434, // '#DF691A'
-                'title'       => sprintf('Release %s (%s)', $this->version, $this->created_at->format('Y/m/d')),
+                'title'       => $this->getFormattedTitle(),
                 'description' => $discordBody,
                 'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),

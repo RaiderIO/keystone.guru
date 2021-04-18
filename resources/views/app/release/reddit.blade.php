@@ -1,7 +1,7 @@
 <?php /** @var $model \App\Models\Release */ ?>
 [https://keystone.guru/release/{{ $model->version }}](https://keystone.guru/release/{{ $model->version }})
-@isset($model->description)
-    {{ $model->description }}
+@isset($model->changelog->description)
+    {{ $model->changelog->description }}
 @endisset
 
 @foreach($model->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $changes)

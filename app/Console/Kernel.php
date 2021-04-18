@@ -16,6 +16,7 @@ use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
 use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
+use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
@@ -58,6 +59,7 @@ class Kernel extends ConsoleKernel
 
         // Scheduler
         RefreshAffixGroupEaseTiers::class,
+        Telemetry::class,
 
         // Test
         Test::class,
@@ -77,10 +79,12 @@ class Kernel extends ConsoleKernel
         if (env('APP_TYPE') === 'mapping') {
             $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
         }
-//        $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
+        $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
         // https://laravel.com/docs/8.x/horizon
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
+        $schedule->command('scheduler:telemetry')->everyMinute();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

@@ -65,7 +65,7 @@ class ReportRelease extends Command
                 case 'reddit':
                     $result = $redditApiService->createPost(
                         config('keystoneguru.reddit_subreddit'),
-                        sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')),
+                        $release->getFormattedTitle(),
                         $release->reddit_body
                     );
                     break;

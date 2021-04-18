@@ -2,9 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Mapping\MappingChangeLog;
-use App\Models\Mapping\MappingCommitLog;
-use Artisan;
 use Illuminate\Console\Command;
 
 class Test extends Command
