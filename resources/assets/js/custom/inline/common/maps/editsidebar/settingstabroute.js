@@ -6,15 +6,18 @@ class SettingsTabRoute extends SettingsTab {
     }
 
     activate() {
-        // Level
-        (new LevelHandler(this.options.levelMin, this.options.levelMax)
-            .apply('#dungeon_route_level', {
-                from: this.options.dungeonroute.level_min,
-                to: this.options.dungeonroute.level_max,
-            }));
 
-        // Save settings in the modal
-        $('#save_route_settings').bind('click', this._saveRouteSettings);
+        if (this.options.hasOwnProperty('dungeonroute') && this.options.dungeonroute !== null) {
+            // Level
+            (new LevelHandler(this.options.levelMin, this.options.levelMax)
+                .apply('#dungeon_route_level', {
+                    from: this.options.dungeonroute.level_min,
+                    to: this.options.dungeonroute.level_max,
+                }));
+
+            // Save settings in the modal
+            $('#save_route_settings').bind('click', this._saveRouteSettings);
+        }
     }
 
     /**
