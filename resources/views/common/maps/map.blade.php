@@ -154,7 +154,7 @@ if ($isAdmin) {
         ])
     @endif
 
-    @if(!$admin)
+    @if(!$isAdmin)
         @include('common.maps.controls.pulls', [
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,
