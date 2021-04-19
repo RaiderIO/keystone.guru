@@ -14,7 +14,7 @@ class AddTitleColumnToReleasesTable extends Migration
     public function up()
     {
         Schema::table('releases', function (Blueprint $table) {
-            $table->string('title')->after('version');
+            $table->string('title')->after('version')->default('');
         });
     }
 
