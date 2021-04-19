@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Scheduler\Telemetry;
 
 use App\Console\Commands\Scheduler\Telemetry\Measurements\DungeonRouteCount;
+use App\Console\Commands\Scheduler\Telemetry\Measurements\MachineStats;
 use App\Console\Commands\Scheduler\Telemetry\Measurements\Measurement;
 use App\Console\Commands\Scheduler\Telemetry\Measurements\TeamCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurements\UserCount;
@@ -40,9 +41,13 @@ class Telemetry extends Command
         parent::__construct();
 
         $this->measurements = [
+            // Site stats
             new UserCount(),
             new TeamCount(),
             new DungeonRouteCount(),
+
+            // Machine
+            new MachineStats()
         ];
     }
 

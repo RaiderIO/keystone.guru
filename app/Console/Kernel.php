@@ -74,9 +74,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         Log::channel('scheduler')->debug('Starting scheduler');
+
+        $appType = env('APP_TYPE');
+
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
-        if (env('APP_TYPE') === 'mapping') {
+        if ($appType === 'mapping') {
             $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
         }
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
@@ -84,7 +87,9 @@ class Kernel extends ConsoleKernel
         // https://laravel.com/docs/8.x/horizon
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
-        $schedule->command('scheduler:telemetry')->everyMinute();
+        if ($appType === 'local' || $appType === 'live') {
+            $schedule->command('scheduler:telemetry')->everyMinute();
+        }
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 
