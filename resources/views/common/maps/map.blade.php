@@ -154,10 +154,12 @@ if ($isAdmin) {
         ])
     @endif
 
-    @include('common.maps.controls.pulls', [
-        'edit' => $edit,
-        'dungeonroute' => $dungeonroute,
-    ])
+    @if(!$isAdmin)
+        @include('common.maps.controls.pulls', [
+            'edit' => $edit,
+            'dungeonroute' => $dungeonroute,
+        ])
+    @endif
 
     @include('common.maps.controls.enemyinfo')
 @endif

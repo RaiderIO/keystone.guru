@@ -5,6 +5,7 @@
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
 $title = $title ?? sprintf('%s routes', $dungeon->name);
+$affixgroup = $affixgroup ?? null;
 ?>
 @extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title])
 

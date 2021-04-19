@@ -88,7 +88,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         if ($appType === 'local' || $appType === 'live') {
-            $schedule->command('scheduler:telemetry')->everyMinute();
+            $schedule->command('scheduler:telemetry')->everyFiveMinutes();
         }
         Log::channel('scheduler')->debug('Finished scheduler');
     }
