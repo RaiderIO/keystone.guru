@@ -1799,46 +1799,46 @@
                 ]
             },
             {
-                "id": 95,
-                "index": 4,
-                "name": "Lower Barrow of Carnage",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": [
-                    {
-                        "id": 114,
-                        "floor1_id": 95,
-                        "floor2_id": 93,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 115,
-                        "floor1_id": 95,
-                        "floor2_id": 96,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
                 "id": 96,
-                "index": 5,
+                "index": 4,
                 "name": "Upper Barrow of Carnage",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 112,
+                        "id": 118,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 113,
+                        "id": 119,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 95,
+                "index": 5,
+                "name": "Lower Barrow of Carnage",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 116,
+                        "floor1_id": 95,
+                        "floor2_id": 93,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 117,
+                        "floor1_id": 95,
+                        "floor2_id": 96,
+                        "direction": "up"
                     }
                 ]
             }
