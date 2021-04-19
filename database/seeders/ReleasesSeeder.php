@@ -34,36 +34,20 @@ class ReleasesSeeder extends Seeder
             if (isset($modelsData['changelog'])) {
                 $changelogData = $modelsData['changelog'];
                 // Changelog
-                $changelog = new ReleaseChangelog([
-                    'id'          => $changelogData['id'],
-                    'release_id'  => $changelogData['release_id'],
-                    'description' => $changelogData['description'],
-                ]);
+                $changelog = new ReleaseChangelog(array_filter($changelogData, function($value){ return !is_array($value); }));
                 $changelog->save();
 
                 // Save the changes for each changelog
                 foreach ($changelogData['changes'] as $changeData) {
                     // Changelog changes
-                    $changelogChange = new ReleaseChangelogChange([
-                        'release_changelog_id'          => $changeData['release_changelog_id'],
-                        'release_changelog_category_id' => $changeData['release_changelog_category_id'],
-                        'ticket_id'                     => $changeData['ticket_id'],
-                        'change'                        => $changeData['change'],
-                    ]);
+                    $changelogChange = new ReleaseChangelogChange(array_filter($changeData, function($value){ return !is_array($value); }));
                     $changelogChange->save();
                 }
             }
 
             // Save the release last!
             $this->command->info(sprintf('Adding release %s', $modelsData['version']));
-            $release = new Release([
-                'id'                   => $modelsData['id'],
-                'release_changelog_id' => $modelsData['release_changelog_id'],
-                'version'              => $modelsData['version'],
-                'silent'               => $modelsData['silent'],
-                'created_at'           => $modelsData['created_at'],
-                'updated_at'           => $modelsData['updated_at'],
-            ]);
+            $release = new Release(array_filter($modelsData, function($value){ return !is_array($value); }));
             $release->save();
         }
     }

@@ -93,6 +93,12 @@ class MapIconTypesSeeder extends Seeder
             'portal_orange' => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
             'portal_pink'   => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
             'portal_red'    => ['name' => 'Portal', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            'nw_item_anima'   => ['name' => 'Anima', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'nw_item_goliath' => ['name' => 'Goliath', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'nw_item_hammer'  => ['name' => 'Hammer', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'nw_item_shield'  => ['name' => 'Shield', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            'nw_item_spear'   => ['name' => 'Spear', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {

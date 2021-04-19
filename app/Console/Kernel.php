@@ -84,7 +84,7 @@ class Kernel extends ConsoleKernel
         // https://laravel.com/docs/8.x/horizon
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
-        $schedule->command('scheduler:telemetry')->everyMinute();
+        $schedule->command('scheduler:telemetry')->everyFiveMinutes();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

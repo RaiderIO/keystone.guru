@@ -60,6 +60,7 @@ class Telemetry extends Command
             $points = array_merge($points, $measurement->getPoints());
         }
 
+        // This function does actually exist
         InfluxDB::writePoints($points, Database::PRECISION_SECONDS);
 
         return 0;
