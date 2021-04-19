@@ -2,8 +2,8 @@
 @if($mention)
     @everyone
 @endif
-@isset($model->description)
-{{ $model->description }}
+@isset($model->changelog->description)
+{{ $model->changelog->description }}
 
 @endisset
 @foreach($model->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $changes)

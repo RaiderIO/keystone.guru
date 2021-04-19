@@ -19,6 +19,11 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
         {!! Form::text('version', null, ['class' => 'form-control']) !!}
     </div>
 
+    <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+        {!! Form::label('title', __('Title')) !!}
+        {!! Form::text('title', null, ['class' => 'form-control']) !!}
+    </div>
+
     <div class="form-group{{ $errors->has('silent') ? ' has-error' : '' }}">
         {!! Form::label('silent', __('Silent')) !!}
         {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}

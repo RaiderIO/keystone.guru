@@ -1,0 +1,47 @@
+{
+    "id": 96,
+    "release_changelog_id": 102,
+    "version": "v4.0.2",
+    "title": "Release titles & telemetry updates",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2021-04-19T08:21:05+00:00",
+    "updated_at": "2021-04-19T08:33:19+00:00",
+    "changelog": {
+        "id": 102,
+        "release_id": 96,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 102,
+                "release_changelog_category_id": 1,
+                "ticket_id": 758,
+                "change": "Releases may now have titles, this will help seeing at a glance what the release is for. Useful on Reddit for example.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 102,
+                "release_changelog_category_id": 1,
+                "ticket_id": 760,
+                "change": "Updated backend telemetry system to show me some more info about the site's performance\/statistics.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 102,
+                "release_changelog_category_id": 4,
+                "ticket_id": 762,
+                "change": "Updated icons in Necrotic Wake for various items - thanks Jastola for providing them!",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
