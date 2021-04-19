@@ -366,6 +366,8 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
                 Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'adminDelete']);
+
+                Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
             });
 
             Route::put('/userreport/{userreport}/status', [APIUserReportController::class, 'status']);

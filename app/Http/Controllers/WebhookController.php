@@ -59,7 +59,10 @@ class WebhookController extends Controller
                 // Skip system commits (such as merge branch X into Y)
                 if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
                     // Skip commits that have originally be done on another branch
-                    !$commit['distinct']) {
+                    !$commit['distinct'] ||
+                    // Skip merge commits
+                    strpos($commit['message'], 'Merge remote-tracking branch') === 0
+                    ) {
                     continue;
                 }
 

@@ -91,6 +91,21 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
                         @endif
                     </div>
                 @endif
+                @auth
+                    @if(Auth::user()->hasRole('admin'))
+                        <div class="col-auto px-1 refresh_thumbnail" title="{{ __('Refresh thumbnail') }}"
+                             data-toggle="tooltip" data-publickey="{{ $dungeonroute->public_key }}">
+                            <a class="btn p-0">
+                                <span class="refresh">
+                                    <i class="fas fa-sync"></i>
+                                </span>
+                                <span class="loader" style="display: none;">
+                                    <i class="fas fa-circle-notch fa-spin"></i>
+                                </span>
+                            </a>
+                        </div>
+                    @endif
+                @endauth
             </div>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
                 <div class="col">
