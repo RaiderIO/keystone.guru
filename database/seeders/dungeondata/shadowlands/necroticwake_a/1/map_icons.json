@@ -2,7 +2,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
         "comment": "Bloody Javelin",
@@ -13,7 +13,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
         "comment": "Forgotten Forgehammer",
@@ -35,7 +35,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
         "comment": "Forgotten Forgehammer",
@@ -46,7 +46,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
         "comment": "Bloody Javelin",
@@ -57,7 +57,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
         "comment": "Discharged Anima",
@@ -79,7 +79,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
         "comment": "Discarded Shield",
@@ -134,7 +134,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
         "comment": "Discharged Anima",
@@ -167,7 +167,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
         "comment": "Forgotten Forgehammer",
@@ -178,7 +178,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
         "comment": "Bloody Javelin",
@@ -189,7 +189,7 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 9,
+        "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
         "comment": "Discarded Shield",

@@ -1807,13 +1807,13 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 102,
+                        "id": 118,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 103,
+                        "id": 119,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
@@ -1829,13 +1829,13 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 104,
+                        "id": 116,
                         "floor1_id": 95,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 105,
+                        "id": 117,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
