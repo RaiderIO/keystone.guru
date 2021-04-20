@@ -42,11 +42,6 @@ class APIKillZoneController extends Controller
         $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
         $killZone->index = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
 
-        if (!$killZone->exists && $killZone->lat !== null && $killZone->lng !== null) {
-            // Find out of there is a duplicate
-            $this->checkForDuplicate($killZone);
-        }
-
         if ($killZone->save()) {
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
@@ -257,7 +252,7 @@ class APIKillZoneController extends Controller
 
                 $dungeonroute->killzones()->delete();
                 $dungeonroute->pridefulenemies()->delete();
-                
+
                 if (Auth::check()) {
                     foreach ($killZones as $killZone) {
                         broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killZone));

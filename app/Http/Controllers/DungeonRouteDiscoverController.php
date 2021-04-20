@@ -226,7 +226,7 @@ class DungeonRouteDiscoverController extends Controller
                 $dungeon,
                 $seasonService->getCurrentSeason()->getNextAffixGroup()
             ),
-            'affixgroup'    => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'affixgroup'    => $seasonService->getCurrentSeason()->getNextAffixGroup(),
         ]);
     }
 

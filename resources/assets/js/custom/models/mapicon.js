@@ -56,6 +56,11 @@ class MapIcon extends Icon {
                 }
             }),
             new Attribute({
+                name: 'permanent_tooltip',
+                type: 'bool',
+                default: false
+            }),
+            new Attribute({
                 name: 'linked_awakened_obelisk_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
@@ -107,7 +112,7 @@ class MapIcon extends Icon {
      *
      * @returns {{permanent}}
      */
-    getTooltipOptions(){
+    getTooltipOptions() {
         return {
             permanent: this.permanent_tooltip
         };
