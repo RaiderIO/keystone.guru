@@ -15,11 +15,11 @@ use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
 use App\Console\Commands\Release\Save as ReleaseSave;
+use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
-use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
 use Illuminate\Console\Scheduling\Schedule;
@@ -60,6 +60,7 @@ class Kernel extends ConsoleKernel
         // Scheduler
         RefreshAffixGroupEaseTiers::class,
         Telemetry::class,
+        DeleteExpiredDungeonRoutes::class,
 
         // Test
         Test::class,
@@ -78,7 +79,7 @@ class Kernel extends ConsoleKernel
         $appType = env('APP_TYPE');
 
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
-        $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
+        $schedule->command('scheduler:deleteexpired')->hourly();
         if ($appType === 'mapping') {
             $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
         }
