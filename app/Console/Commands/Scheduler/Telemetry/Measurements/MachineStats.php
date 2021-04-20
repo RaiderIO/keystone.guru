@@ -25,7 +25,7 @@ class MachineStats extends Measurement
                 null,
                 $tags,
                 [
-                    'load_percent' => (is_array($cpuLoadAvg) ? $cpuLoadAvg[0] : 0) * 100
+                    'load_percent' => (is_array($cpuLoadAvg) ? $cpuLoadAvg[1] : 0) * 100
                 ],
                 time()
             ),
