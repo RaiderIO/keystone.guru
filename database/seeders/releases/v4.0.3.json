@@ -1,0 +1,47 @@
+{
+    "id": 97,
+    "release_changelog_id": 103,
+    "version": "v4.0.3",
+    "title": "Bugfixes and some additional admin functionality",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-04-20T21:23:30+00:00",
+    "updated_at": "2021-04-20T21:23:30+00:00",
+    "changelog": {
+        "id": 103,
+        "release_id": 97,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 103,
+                "release_changelog_category_id": 5,
+                "ticket_id": 769,
+                "change": "Temporary routes will no longer all be wiped at midnight GMT +2 but only be removed when they actually expire.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 103,
+                "release_changelog_category_id": 5,
+                "ticket_id": 766,
+                "change": "Fixed new release popup from showing up in generated thumbnails.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 103,
+                "release_changelog_category_id": 5,
+                "ticket_id": 770,
+                "change": "Map icons can now once again be assigned a permanent tooltip. Thanks \/u\/Twine52!",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
