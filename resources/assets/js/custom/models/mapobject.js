@@ -529,6 +529,11 @@ class MapObject extends Signalable {
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        if( remoteMapObject === null ) {
+            console.warn('Unable to parse empty remoteMapObject');
+            return;
+        }
+
         // If we're parsing recursively, get the attributes of the parent instead of the root
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
             ? parentAttribute.attributes : this._getAttributes();

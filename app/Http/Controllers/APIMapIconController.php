@@ -89,10 +89,6 @@ class APIMapIconController extends Controller
         $mapIcon->lat = (float) $request->get('lat');
         $mapIcon->lng = (float) $request->get('lng');
 
-        if (!$mapIcon->exists) {
-            $this->checkForDuplicate($mapIcon, ['floor_id', 'dungeon_route_id']);
-        }
-
         if ($mapIcon->save()) {
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));

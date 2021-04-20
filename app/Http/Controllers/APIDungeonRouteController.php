@@ -62,7 +62,7 @@ class APIDungeonRouteController extends Controller
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
-        $userId = (int) $request->get('user_id', 0);
+        $userId = (int)$request->get('user_id', 0);
         // Check if we should load the team's tags or the personal tags
         $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
         $tagCategory = TagCategory::fromName($tagCategoryName);
@@ -164,7 +164,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Add a filter for a specific user if the request called for it
-        if( $userId > 0 ){
+        if ($userId > 0) {
             $routes = $routes->where('author_id', $userId);
         }
 
@@ -368,7 +368,7 @@ class APIDungeonRouteController extends Controller
             'dungeonroutes'    => $result,
             'affixgroup'       => $affixGroup,
             'showAffixes'      => true,
-            'showDungeonImage' => $dungeonId === null,
+            'showDungeonImage' => $dungeon === null,
             'cols'             => 2,
         ])->render();
     }
@@ -666,5 +666,14 @@ class APIDungeonRouteController extends Controller
 
             throw $error;
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     */
+    function refreshThumbnail(Request $request, DungeonRoute $dungeonroute)
+    {
+        $dungeonroute->queueRefreshThumbnails();
     }
 }

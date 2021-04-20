@@ -11,6 +11,7 @@ $showAds = $showAds ?? true;
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal = $showLegalModal ?? true;
+$showSpotlight = $showSpotlight ?? true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
 // Any additional parameters to pass to the login/register blade
@@ -31,7 +32,7 @@ $rootClass = $rootClass ?? '';
 
 // Bit of a hack to do this here - but for now this works
 $showSpotlightRelease = false;
-if ($latestReleaseSpotlight instanceof \App\Models\Release) {
+if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     // Only if the user hasn't seen the latest spotlight release yet
     $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
 
@@ -107,7 +108,7 @@ if ($latestReleaseSpotlight instanceof \App\Models\Release) {
     <!-- END modal register -->
 @endguest
 
-@if($showSpotlightRelease)
+@if($showSpotlight && $showSpotlightRelease)
     @component('common.general.modal', ['id' => 'new_release_modal', 'active' => true])
         @include('common.release.release', ['release' => $latestReleaseSpotlight])
     @endcomponent
