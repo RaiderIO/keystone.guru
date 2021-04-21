@@ -816,7 +816,7 @@ class KillZone extends MapObject {
                     if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
                         newMapState = null;
                     } else if (self.map.options.edit) {
-                        newMapState = new KillZoneEnemySelection(self.map, self);
+                        newMapState = new EditKillZoneEnemySelection(self.map, self);
                     } else {
                         newMapState = new ViewKillZoneEnemySelection(self.map, self);
                     }
