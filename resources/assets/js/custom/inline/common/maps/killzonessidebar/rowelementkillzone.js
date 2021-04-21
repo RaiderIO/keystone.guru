@@ -112,22 +112,14 @@ class RowElementKillZone extends RowElement {
             if (killZone !== null) {
                 // Same as this.options.edit, really
                 if (map.options.edit) {
-                    newMapState = new KillZoneEnemySelection(map, killZone);
+                    newMapState = new EditKillZoneEnemySelection(map, killZone);
                 } else {
                     // Just highlight the pull when the user clicked a pull
                     newMapState = new ViewKillZoneEnemySelection(map, killZone);
                 }
 
-                // Switch floors if the floor is not on the current map
-                let floorIds = killZone.getFloorIds();
-                if (floorIds.length > 0 && !floorIds.includes(getState().getCurrentFloor().id)) {
-                    getState().setFloorId(floorIds[0]);
-                }
-
-                // Center the map to this killzone
-                if (killZone.enemies.length > 0 && killZone.isVisible()) {
-                    getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel());
-                }
+                // Move the map to the killzone's center location
+                map.focusOnKillZone(killZone);
             }
         }
 

@@ -1,4 +1,4 @@
-class KillZoneEnemySelection extends EnemySelection {
+class EditKillZoneEnemySelection extends EnemySelection {
 
 
     constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
@@ -17,7 +17,7 @@ class KillZoneEnemySelection extends EnemySelection {
         // This would cause a cascade of .save() calls since the previous change would cause this selection to
         // save it as 'this killzone changed', which is not what we want. This code prevents those calls from
         // affecting the new selection instance
-        if (this._previousKillZoneEnemySelection instanceof KillZoneEnemySelection) {
+        if (this._previousKillZoneEnemySelection instanceof EditKillZoneEnemySelection) {
             this._blackListedKillZoneIds = this._previousKillZoneEnemySelection._changedKillZoneIds;
 
             // Once the save:success is called, we can safely remove them from the blacklist
@@ -34,7 +34,7 @@ class KillZoneEnemySelection extends EnemySelection {
     }
 
     getName() {
-        return 'KillZoneEnemySelection';
+        return 'EditKillZoneEnemySelection';
     }
 
     /**
@@ -61,7 +61,7 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _filter(source, enemyCandidate) {
-        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
+        console.assert(this instanceof EditKillZoneEnemySelection, 'this is not a EditKillZoneEnemySelection', this);
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
 
@@ -81,7 +81,7 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _getLayerIcon() {
-        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
+        console.assert(this instanceof EditKillZoneEnemySelection, 'this is not a EditKillZoneEnemySelection', this);
         return LeafletKillZoneIconEditMode;
     }
 
@@ -90,7 +90,7 @@ class KillZoneEnemySelection extends EnemySelection {
      * @private
      */
     _onMapObjectDeleted(mapObjectDeletedEvent) {
-        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
+        console.assert(this instanceof EditKillZoneEnemySelection, 'this is not a EditKillZoneEnemySelection', this);
 
         if (mapObjectDeletedEvent.data.object.id === this.sourceMapObject.id) {
             this.map.setMapState(null);
@@ -165,7 +165,7 @@ class KillZoneEnemySelection extends EnemySelection {
     static isEnemySelectable(enemy) {
         // If it's looks stupid and it works it's not stupid
         let source = new KillZone(getState().getDungeonMap());
-        let result = (new KillZoneEnemySelection(getState().getDungeonMap(), source))._filter(source, enemy);
+        let result = (new EditKillZoneEnemySelection(getState().getDungeonMap(), source))._filter(source, enemy);
         source.cleanup();
         return result;
     }

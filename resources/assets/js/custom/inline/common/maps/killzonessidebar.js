@@ -297,7 +297,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         let killZone = killZoneMapObjectGroup.createNewPull();
 
-        this.map.setMapState(new KillZoneEnemySelection(this.map, killZone));
+        this.map.setMapState(new EditKillZoneEnemySelection(this.map, killZone));
     }
 
     _draggedKillZoneRow() {
@@ -470,6 +470,56 @@ class CommonMapsKillzonessidebar extends InlineCode {
             //     });
             // }
         }
+
+        // Handle selection of pulls with A+D or arrow keys
+        $(document).keypress(function (event) {
+            // A key
+            let selectPrevious = event.charCode === 97;
+            // D key
+            let selectNext = event.charCode === 100;
+
+            if (selectPrevious || selectNext) {
+                // Get the currently selected killzone
+                let mapState = self.map.getMapState();
+                let newSelectedKillZone = null;
+
+                if (mapState instanceof EditKillZoneEnemySelection || mapState instanceof ViewKillZoneEnemySelection) {
+                    if (selectNext) {
+                        // Search from the first to the end
+                        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+                            let killZone = killZoneMapObjectGroup.objects[i];
+                            if (killZone.index > mapState.getMapObject().index) {
+                                newSelectedKillZone = killZone;
+                                break;
+                            }
+                        }
+                    } else {
+                        // Search from the end to the first
+                        for (let i = killZoneMapObjectGroup.objects.length - 1; i >= 0; i--) {
+                            let killZone = killZoneMapObjectGroup.objects[i];
+                            if (killZone.index < mapState.getMapObject().index) {
+                                newSelectedKillZone = killZone;
+                                break;
+                            }
+                        }
+                    }
+                } else if( mapState === null ) {
+                    // Grab the first
+                    newSelectedKillZone = killZoneMapObjectGroup.objects[0];
+                }
+
+                // Only if we have one to select
+                if (newSelectedKillZone instanceof KillZone) {
+                    self.map.setMapState(
+                        self.map.options.edit ? new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState) :
+                            new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState)
+                    );
+
+                    // Move the map to the killzone's center location
+                    self.map.focusOnKillZone(newSelectedKillZone);
+                }
+            }
+        });
     }
 
     /**
