@@ -472,11 +472,16 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         // Handle selection of pulls with A+D or arrow keys
-        $(document).keypress(function (event) {
+        $(document).keypress(function (keyPressEvent) {
+            if ($(keyPressEvent.target).attr('id') !== 'map') {
+                // Ignore key presses that aren't on the map itself
+                return;
+            }
+
             // A key
-            let selectPrevious = event.charCode === 97;
+            let selectPrevious = keyPressEvent.charCode === 97;
             // D key
-            let selectNext = event.charCode === 100;
+            let selectNext = keyPressEvent.charCode === 100;
 
             if (selectPrevious || selectNext) {
                 // Get the currently selected killzone
@@ -503,7 +508,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                             }
                         }
                     }
-                } else if( mapState === null ) {
+                } else if (mapState === null) {
                     // Grab the first
                     newSelectedKillZone = killZoneMapObjectGroup.objects[0];
                 }
