@@ -26,7 +26,7 @@
       "type": "package",
       "package": {
         "name": "nnoggie/mythicdungeontools",
-        "version": "3.4.6",
+        "version": "3.5.6",
         "source": {
           "url": "https://github.com/nnoggie/MythicDungeonTools.git",
           "type": "git",
@@ -55,7 +55,7 @@
     "laravel/ui": "^3.0",
     "laravelcollective/html": "6.2.*",
     "lefuturiste/monolog-discord-handler": "^0.2.0",
-    "nnoggie/mythicdungeontools": "*",
+    "nnoggie/mythicdungeontools": "3.5.6",
     "patreon/patreon": "^0.3.1",
     "phlak/semver": "^3.2",
     "php-http/guzzle6-adapter": "^2.0",
