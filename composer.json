@@ -30,7 +30,7 @@
         "source": {
           "url": "https://github.com/nnoggie/MythicDungeonTools.git",
           "type": "git",
-          "reference": "master"
+          "reference": "e8d4d9ee7d51b2fa2e823d0f9da3e23066495f62"
         }
       }
     }
