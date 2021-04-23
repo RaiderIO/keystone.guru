@@ -6,7 +6,7 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables\ColumnHandler\Users;
+namespace App\Logic\Datatables\ColumnHandler\Npc;
 
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;

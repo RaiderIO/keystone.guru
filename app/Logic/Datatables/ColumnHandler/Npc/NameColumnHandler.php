@@ -6,15 +6,15 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables\ColumnHandler\Users;
+namespace App\Logic\Datatables\ColumnHandler\Npc;
 
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 
-class IdColumnHandler extends SimpleColumnHandler
+class NameColumnHandler extends SimpleColumnHandler
 {
     public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, 'id', 'npcs.id');
+        parent::__construct($dtHandler, 'name', 'npcs.name');
     }
 }
