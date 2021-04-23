@@ -74,7 +74,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
         @include('common.thirdparty.cookieconsent')
     @endif
 
-    @if($showAds)
+    @if(!$adFree && $showAds)
         @include('common.thirdparty.ads')
     @endif
     @if($analytics)

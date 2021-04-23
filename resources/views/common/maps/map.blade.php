@@ -4,6 +4,7 @@
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute|null $dungeonroute */
 /** @var array $show */
+/** @var bool $adFree */
 
 $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
@@ -127,6 +128,7 @@ if ($isAdmin) {
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
+
         </script>
     @endif
 @endsection
@@ -171,17 +173,16 @@ if ($isAdmin) {
 
 @if(!$noUI)
 
-    @if($showAds && !$isMobile)
-        <footer class="fixed-bottom">
-            @if($showAds && !$isMobile)
+    @if(!$adFree && $showAds)
+        @if($isMobile)
+            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
+        @else
+            <footer class="fixed-bottom">
                 <div class="container p-0" style="width: 728px">
                     @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
                 </div>
-            @endif
-        </footer>
-    @endif
-    @if($showAds && $isMobile)
-        @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
+            </footer>
+        @endif
     @endif
 
 

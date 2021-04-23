@@ -38,7 +38,7 @@
         'showDungeonImage' => true,
     ])
 
-    @if( $showAds && !$isMobile)
+    @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">
             @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
         </div>

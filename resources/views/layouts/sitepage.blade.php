@@ -106,11 +106,12 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
 
         @yield('global-message')
 
-        <div class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "col-md-8 offset-md-2" }}">
+        <div
+            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "col-md-8 offset-md-2" }}">
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-            @if( $showAds && !$isMobile)
+            @if( !$adFree && $showAds && !$isMobile)
                 <div align="center" class="my-4">
                     @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
                 </div>
@@ -137,7 +138,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
 
             @yield('content')
 
-            @if( $showAds )
+            @if( !$adFree && $showAds )
                 <div align="center" class="mt-4">
                     @include('common.thirdparty.adunit', ['id' => 'site_bottom_header', 'type' => 'footer'])
                 </div>
@@ -145,9 +146,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
         </div>
     @endif
 
-    @if( $footer )
-
-
+    @if($footer)
         @include('common.layout.footer')
     @endif
 

@@ -155,16 +155,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
+
+            // Set a variable that checks if the user is adfree or not
+            $view->with('adFree', env('APP_ENV') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view)
         {
-            // Only show ads if the view didn't already explicitly override this
-            if (!isset($view->getData()['showAds'])) {
-                // Always show ads when on dev environment so that we are reminded the site has ads and their placement
-                // Not logged in or not having paid for free ads will cause ads to come up
-                $view->with('showAds', env('APP_ENV') === 'local' || (!Auth::check() || !Auth::user()->hasPaidTier(PaidTier::AD_FREE)));
-            }
         });
 
         // Home page
