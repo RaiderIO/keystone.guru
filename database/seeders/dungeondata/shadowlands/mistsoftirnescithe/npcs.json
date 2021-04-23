@@ -519,7 +519,7 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Mistveil Defender",
-        "base_health": 12345,
+        "base_health": 92115,
         "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
