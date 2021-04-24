@@ -40,6 +40,7 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
                 // https://stackoverflow.com/a/9901154/771270
                 'color'     => randomHexColor(),
                 'anonymous' => true,
+                'url'       => '#'
             ];
         } else {
             $result = [
@@ -49,6 +50,7 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
                 'color'      => $user->echo_color,
                 'avatar_url' => optional($user->iconfile)->getURL(),
                 'anonymous'  => false,
+                'url'        => route('profile.view', $user)
             ];
         }
     }

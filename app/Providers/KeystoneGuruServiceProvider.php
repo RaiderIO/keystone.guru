@@ -239,5 +239,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
         });
+
+        // Profile pages
+        view()->composer('profile.edit', function (View $view) use ($globalViewVariables)
+        {
+            $view->with('allClasses', $globalViewVariables['characterClasses']);
+        });
     }
 }
