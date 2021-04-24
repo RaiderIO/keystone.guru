@@ -114,7 +114,8 @@ class MapIcon extends Icon {
      */
     getTooltipOptions() {
         return {
-            permanent: this.permanent_tooltip
+            // Disable permanent tooltips if no UI should be shown
+            permanent: this.map.options.noUI ? false : this.permanent_tooltip
         };
     }
 
