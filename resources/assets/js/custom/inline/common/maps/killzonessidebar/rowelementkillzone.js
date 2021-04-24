@@ -291,6 +291,7 @@ class RowElementKillZone extends RowElement {
                     'id': index,
                     'pull_color': obj.enemy.getKillZone().color,
                     'enemy_forces': obj.enemy_forces,
+                    'enemy_forces_percent': getFormattedPercentage(obj.enemy_forces, this.map.getEnemyForcesRequired()),
                     'count': obj.count,
                     'name': obj.name,
                     'awakened': obj.awakened,
