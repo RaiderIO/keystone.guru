@@ -359,6 +359,7 @@ html, body, #map, #app, .wrapper {
     padding: 0 !important;
     width: 30px;
     height: 30px;
+    font-size: 1.15rem;
 }
 
 .theme .echo_user {
