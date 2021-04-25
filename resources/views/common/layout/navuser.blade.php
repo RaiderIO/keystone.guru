@@ -26,14 +26,16 @@ $user = Auth::user();
         </a>
         <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole('admin'))
-                <a class="dropdown-item"
-                   href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
-                @if( env('TRACKER_ENABLED'))
+                @if( env('TELESCOPE_ENABLED'))
                     <a class="dropdown-item"
-                       href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
+                       href="{{ route('telescope') }}">
+                        <i class="fa fa-binoculars"></i> {{__('Telescope')}}
+                    </a>
                 @endif
                 <a class="dropdown-item"
-                   href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
+                   href="{{ route('admin.tools') }}">
+                    <i class="fa fa-hammer"></i> {{__('Tools')}}
+                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item"
                    href="{{ route('admin.releases') }}">{{__('View releases')}}</a>

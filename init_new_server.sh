@@ -70,14 +70,7 @@ tput setaf 2;
 echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
-#php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-php artisan vendor:publish --provider="PragmaRX\Tracker\Vendor\Laravel\ServiceProvider"
-
-# In case Tracker is not working, check this -> https://github.com/antonioribeiro/tracker#installing
-tput setaf 2;
-echo "Setting up tracker..."
-tput sgr0;
-php artisan tracker:tables
+php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 
 # Generate encryption key
 #tput setaf 2;
@@ -87,25 +80,6 @@ php artisan tracker:tables
 
 # Run migrate again to fix the tracker
 ./migrate.sh
-
-# Install some packages
-git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git public/templates/sb-admin-2
-cd public/templates/sb-admin-2
-git checkout tags/v3.3.7+1
-git checkout -b v3.3.7+1
-
-# Back to where we came from
-cd ../../..
-
-# Setup argon dashboard
-php artisan ui argon
-# This does way too much though, undo the damage it did (we require SOME of it though)
-git checkout .
-git clean -f
-rm -rf resources/views/layouts/footers
-rm -rf resources/views/layouts/headers
-rm -rf resources/views/layouts/navbars
-rm -rf resources/views/users
 
 # Setup Horizon
 php artisan horizon:install
