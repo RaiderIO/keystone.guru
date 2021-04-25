@@ -374,6 +374,7 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
+        /** @type KillZoneMapObjectGroup */
         let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
         let enemy = enemyClickedEvent.context;
