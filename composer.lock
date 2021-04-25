@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b1d9a805902511ec19e0683d3d17065",
+    "content-hash": "194b5b09711fb4e4290a6761389c370a",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -3126,6 +3126,70 @@
             "time": "2021-04-06T14:38:16+00:00"
         },
         {
+            "name": "laravel/telescope",
+            "version": "v4.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/telescope.git",
+                "reference": "506aa21c7ead98d6666cf8341f25d4d2f333f385"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/506aa21c7ead98d6666cf8341f25d4d2f333f385",
+                "reference": "506aa21c7ead98d6666cf8341f25d4d2f333f385",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.29",
+                "php": "^7.3|^8.0",
+                "symfony/var-dumper": "^5.0"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "orchestra/testbench": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Telescope\\TelescopeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Telescope\\": "src/",
+                    "Laravel\\Telescope\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mohamed Said",
+                    "email": "mohamed@laravel.com"
+                }
+            ],
+            "description": "An elegant debug assistant for the Laravel framework.",
+            "keywords": [
+                "debugging",
+                "laravel",
+                "monitoring"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/telescope/issues",
+                "source": "https://github.com/laravel/telescope/tree/v4.4.9"
+            },
+            "time": "2021-04-13T15:47:06+00:00"
+        },
+        {
             "name": "laravel/tinker",
             "version": "v2.6.1",
             "source": {
@@ -4994,201 +5058,6 @@
             "time": "2020-07-20T17:29:33+00:00"
         },
         {
-            "name": "pragmarx/datatables",
-            "version": "dev-wotuu-bugfix",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Wotuu/laravel4-datatables-package.git",
-                "reference": "0dcadb66ca8801c5da1e506dc946d2c42817b565"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/laravel4-datatables-package/zipball/0dcadb66ca8801c5da1e506dc946d2c42817b565",
-                "reference": "0dcadb66ca8801c5da1e506dc946d2c42817b565",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": ">=4.0.0",
-                "illuminate/filesystem": ">=4.0.0",
-                "illuminate/support": ">=4.0.0",
-                "illuminate/view": ">=4.0.0",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "laravel/laravel": ">=4.0.0",
-                "mockery/mockery": "0.7.2",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/migrations"
-                ],
-                "psr-0": {
-                    "Bllim\\Datatables": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bilal Gultekin",
-                    "email": "bilal@bilal.im"
-                }
-            ],
-            "description": "Server-side handler of DataTables Jquery Plugin for Laravel 4",
-            "keywords": [
-                "datatable",
-                "datatables",
-                "datatables jquery plugin",
-                "laravel",
-                "laravel4"
-            ],
-            "support": {
-                "source": "https://github.com/Wotuu/laravel4-datatables-package/tree/wotuu-bugfix"
-            },
-            "time": "2020-05-27T10:14:55+00:00"
-        },
-        {
-            "name": "pragmarx/support",
-            "version": "v0.9.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/antonioribeiro/support.git",
-                "reference": "fb0c7891ac6ce172f2d7e790cb70ef30a090f03c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/support/zipball/fb0c7891ac6ce172f2d7e790cb70ef30a090f03c",
-                "reference": "fb0c7891ac6ce172f2d7e790cb70ef30a090f03c",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/filesystem": "~4.0|~5.0|~6.0|~7.0|~8.0",
-                "php": ">=5.4.0",
-                "symfony/var-dumper": "~2.6|~3.0|~4.0|~5.0"
-            },
-            "suggest": {
-                "laravel/framework": "Laravel framework.",
-                "symfony/yaml": "The Yaml class needs it"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.7.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PragmaRX\\Support\\": "src/"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator"
-                }
-            ],
-            "description": "PragmaRX components support package",
-            "keywords": [
-                "laravel",
-                "pragmarx"
-            ],
-            "support": {
-                "issues": "https://github.com/antonioribeiro/support/issues",
-                "source": "https://github.com/antonioribeiro/support/tree/v0.9.3"
-            },
-            "time": "2020-09-27T14:43:22+00:00"
-        },
-        {
-            "name": "pragmarx/tracker",
-            "version": "dev-wotuu-bugfix",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Wotuu/tracker.git",
-                "reference": "17b7d227d689475f29a27dd29b8fb75aad23c32d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/17b7d227d689475f29a27dd29b8fb75aad23c32d",
-                "reference": "17b7d227d689475f29a27dd29b8fb75aad23c32d",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "^2.6",
-                "jaybizzle/crawler-detect": "~1.0",
-                "jenssegers/agent": "~2.1",
-                "laravel/framework": "~5|~6|~7|~8",
-                "php": ">=7.0",
-                "pragmarx/datatables": "dev-wotuu-bugfix#0dcadb66ca8801c5da1e506dc946d2c42817b565",
-                "pragmarx/support": "~0.6|~0.7|~0.8|~0.9",
-                "psr/log": "~1.0",
-                "ramsey/uuid": "^3 || ^4",
-                "snowplow/referer-parser": "~0.1",
-                "ua-parser/uap-php": "~3.4"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.8"
-            },
-            "suggest": {
-                "geoip/geoip": "~1.14",
-                "geoip2/geoip2": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1.x-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "Tracker": "PragmaRX\\Tracker\\Vendor\\Laravel\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PragmaRX\\Tracker\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator & Designer"
-                }
-            ],
-            "description": "A Laravel Visitor Tracker",
-            "keywords": [
-                "laravel",
-                "logging",
-                "mobile detection",
-                "pragmarx",
-                "tracker",
-                "tracking",
-                "user agent",
-                "visitor"
-            ],
-            "support": {
-                "source": "https://github.com/Wotuu/tracker/tree/wotuu-bugfix"
-            },
-            "time": "2021-02-08T20:50:22+00:00"
-        },
-        {
             "name": "predis/predis",
             "version": "v1.1.7",
             "source": {
@@ -6242,50 +6111,6 @@
                 "source": "https://github.com/shrikeh/teapot/tree/master"
             },
             "time": "2017-09-01T13:56:48+00:00"
-        },
-        {
-            "name": "snowplow/referer-parser",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/snowplow/referer-parser.git",
-                "reference": "5ce872b60999c63039723959a45928ef1196f03d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/snowplow/referer-parser/zipball/5ce872b60999c63039723959a45928ef1196f03d",
-                "reference": "5ce872b60999c63039723959a45928ef1196f03d",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.*",
-                "symfony/yaml": "*"
-            },
-            "suggest": {
-                "symfony/yaml": "Support for YAML configuration file"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Snowplow\\RefererParser": "php/src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lars Strojny",
-                    "email": "lars@strojny.net"
-                }
-            ],
-            "description": "Snowplow Refer(r)er parser for PHP",
-            "support": {
-                "issues": "https://github.com/snowplow/referer-parser/issues",
-                "source": "https://github.com/snowplow/referer-parser/tree/master"
-            },
-            "time": "2016-01-29T16:43:00+00:00"
         },
         {
             "name": "socialiteproviders/battlenet",
@@ -9418,69 +9243,6 @@
             "time": "2020-04-09T13:16:02+00:00"
         },
         {
-            "name": "ua-parser/uap-php",
-            "version": "v3.9.14",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ua-parser/uap-php.git",
-                "reference": "b796c5ea5df588e65aeb4e2c6cce3811dec4fed6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/b796c5ea5df588e65aeb4e2c6cce3811dec4fed6",
-                "reference": "b796c5ea5df588e65aeb4e2c6cce3811dec4fed6",
-                "shasum": ""
-            },
-            "require": {
-                "composer/ca-bundle": "^1.1",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.12.33",
-                "phpunit/phpunit": "^8 || ^9",
-                "symfony/console": "^3.4 || ^4.2 || ^4.3 || ^5.0",
-                "symfony/filesystem": "^3.4 || ^4.2 ||  ^4.3 || ^5.0",
-                "symfony/finder": "^3.4 || ^4.2 || ^4.3 || ^5.0",
-                "symfony/yaml": "^3.4 || ^4.2 || ^4.3 || ^5.0",
-                "vimeo/psalm": "^3.12"
-            },
-            "suggest": {
-                "symfony/console": "Required for CLI usage - ^3.4 || ^4.3 || ^5.0",
-                "symfony/filesystem": "Required for CLI usage - ^3.4 || ^4.3 || ^5.0",
-                "symfony/finder": "Required for CLI usage - ^3.4 || ^4.3 || ^5.0",
-                "symfony/yaml": "Required for CLI usage - ^3.4 || ^4.3 || ^5.0"
-            },
-            "bin": [
-                "bin/uaparser"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "UAParser\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dave Olsen",
-                    "email": "dmolsen@gmail.com"
-                },
-                {
-                    "name": "Lars Strojny",
-                    "email": "lars@strojny.net"
-                }
-            ],
-            "description": "A multi-language port of Browserscope's user agent parser.",
-            "support": {
-                "issues": "https://github.com/ua-parser/uap-php/issues",
-                "source": "https://github.com/ua-parser/uap-php/tree/v3.9.14"
-            },
-            "time": "2020-10-02T23:36:20+00:00"
-        },
-        {
             "name": "vlucas/phpdotenv",
             "version": "v5.3.0",
             "source": {
@@ -12043,7 +11805,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "pragmarx/tracker": 20,
         "tray-labs/laravel-influxdb": 20
     },
     "prefer-stable": true,

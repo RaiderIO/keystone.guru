@@ -95,6 +95,9 @@ class Kernel extends ConsoleKernel
         if ($appType === 'local' || $appType === 'live') {
             $schedule->command('scheduler:telemetry')->everyFiveMinutes();
         }
+
+        // https://laravel.com/docs/8.x/telescope#data-pruning
+        $schedule->command('telescope:prune --hours=48')->daily();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

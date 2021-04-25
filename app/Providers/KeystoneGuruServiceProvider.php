@@ -42,10 +42,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Internals
         $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
 
-        // Dashboard
-        $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\UsersStatisticsService');
-        $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');
-
         // Model helpers
         if (env('APP_ENV') === 'local') {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
