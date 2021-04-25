@@ -314,6 +314,12 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
+#pulls_sidebar .map_killzonessidebar_floor_switch,
+#pulls_sidebar .map_killzonessidebar_killzone .grip {
+    cursor: move;
+    font-size: 1.2em;
+}
+
 #pulls_sidebar .map_killzonessidebar_color_btn {
     cursor: pointer;
 }
