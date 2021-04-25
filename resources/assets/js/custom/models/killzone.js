@@ -881,6 +881,7 @@ class KillZone extends MapObject {
 
     bindTooltip() {
         super.bindTooltip();
+
         if (!this.map.options.noUI && this.enemiesLayer !== null) {
             this.enemiesLayer.unbindTooltip();
 
@@ -897,11 +898,15 @@ class KillZone extends MapObject {
                     }
                 }
 
-                this.enemiesLayer.bindTooltip(tooltipText, {
-                    direction: this.indexLabelDirection,
-                    className: 'leaflet-tooltip-killzone-index',
-                    permanent: true
-                });
+                try {
+                    this.enemiesLayer.bindTooltip(tooltipText, {
+                        direction: this.indexLabelDirection,
+                        className: 'leaflet-tooltip-killzone-index',
+                        permanent: true
+                    });
+                } catch (error) {
+                    console.warn('Too fast adding new pulls - couldn\'t add tooltip to killzone because previous was not actually added to map yet!');
+                }
             }
         }
     }
