@@ -1,8 +1,14 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
 
-class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParser
+namespace Database\Seeders\RelationImport\Parsers;
+
+use App\Models\Floor;
+use App\Models\FloorCoupling;
+use App\Models\NpcBolsteringWhitelist;
+use App\Models\NpcSpell;
+
+class DungeonFloorsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -10,7 +16,7 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === 'App\Models\Dungeon';
     }
 
     /**
@@ -20,7 +26,7 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'enemyraidmarkers' && is_array($value);
+        return $name === 'floors';
     }
 
     /**
@@ -32,11 +38,15 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $enemyRaidMarkerData) {
-            // We now know the dungeon route ID, set it back to the Route
-            $enemyRaidMarkerData['dungeon_route_id'] = $modelData['id'];
+        foreach ($value as $floor) {
+            $floor['dungeon_id'] = $modelData['id'];
 
-            \App\Models\DungeonRouteEnemyRaidMarker::insert($enemyRaidMarkerData);
+            foreach($floor['floorcouplings'] as $floorcoupling ){
+                FloorCoupling::insert($floorcoupling);
+            }
+
+            unset($floor['floorcouplings']);
+            Floor::insert($floor);
         }
 
         // Didn't really change anything so just return the value.

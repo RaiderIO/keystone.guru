@@ -1,8 +1,10 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-class DungeonRoutePlayerSpecializationRelationParser implements RelationParser
+use App\Models\DungeonRouteAffixGroup;
+
+class DungeonRouteAffixGroupRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -20,7 +22,7 @@ class DungeonRoutePlayerSpecializationRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'playerspecializations' && is_array($value);
+        return $name === 'affixgroups' && is_array($value);
     }
 
     /**
@@ -32,11 +34,11 @@ class DungeonRoutePlayerSpecializationRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $playerSpecialization) {
-            // We now know the dungeon route ID, set it back to the player class
-            $playerSpecialization['dungeon_route_id'] = $modelData['id'];
+        foreach ($value as $affixGroup) {
+            // We now know the dungeon route ID, set it back to the Route
+            $affixGroup['dungeon_route_id'] = $modelData['id'];
 
-            \App\Models\DungeonRoutePlayerSpecialization::insert($playerSpecialization);
+            DungeonRouteAffixGroup::insert($affixGroup);
         }
 
         // Didn't really change anything so just return the value.

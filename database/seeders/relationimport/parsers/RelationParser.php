@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
 /**
  * A RelationParser can convert a saved relation in the JSON file back to the database. This way we can save the model

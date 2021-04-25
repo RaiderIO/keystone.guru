@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-class DungeonRouteAttributesRelationParser implements RelationParser
+class EnemyPatrolPolylineRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -10,7 +10,7 @@ class DungeonRouteAttributesRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === 'App\Models\EnemyPatrol';
     }
 
     /**
@@ -20,7 +20,7 @@ class DungeonRouteAttributesRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'routeattributesraw' && is_array($value);
+        return $name === 'polyline';
     }
 
     /**
@@ -32,12 +32,11 @@ class DungeonRouteAttributesRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $attribute) {
-            // We now know the dungeon route ID, set it back to the player class
-            $attribute['dungeon_route_id'] = $modelData['id'];
+        // Make sure the polyline's relation with the model is restored.
+        $value['model_class'] = $modelClassName;
+        $value['model_id'] = $modelData['id'];
 
-            \App\Models\DungeonRouteAttribute::insert($attribute);
-        }
+        $modelData['polyline_id'] = \App\Models\Polyline::insertGetId($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

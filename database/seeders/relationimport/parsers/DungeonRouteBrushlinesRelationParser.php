@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
 class DungeonRouteBrushlinesRelationParser implements RelationParser
 {
