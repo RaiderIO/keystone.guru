@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "194b5b09711fb4e4290a6761389c370a",
+    "content-hash": "071d08ee35168357e0143b12df926bad",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -3715,31 +3715,42 @@
             "time": "2021-01-20T01:40:53+00:00"
         },
         {
-            "name": "lefuturiste/monolog-discord-handler",
-            "version": "0.2.1",
+            "name": "marvinlabs/laravel-discord-logger",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lefuturiste/monolog-discord-handler.git",
-                "reference": "703b64601518d592e5e71ad4fb8f50939eb38610"
+                "url": "https://github.com/marvinlabs/laravel-discord-logger.git",
+                "reference": "cff9b9755afe9cb488016eacd8b500f6e339511e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lefuturiste/monolog-discord-handler/zipball/703b64601518d592e5e71ad4fb8f50939eb38610",
-                "reference": "703b64601518d592e5e71ad4fb8f50939eb38610",
+                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/cff9b9755afe9cb488016eacd8b500f6e339511e",
+                "reference": "cff9b9755afe9cb488016eacd8b500f6e339511e",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "*",
-                "monolog/monolog": "*"
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3|^7.0",
+                "illuminate/support": "^7.0|^8.0",
+                "php": ">=7.3 | ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.2",
-                "vlucas/phpdotenv": "^3.4"
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0",
+                "roave/security-advisories": "dev-master"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MarvinLabs\\DiscordLogger\\ServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "DiscordHandler\\": "src"
+                    "MarvinLabs\\DiscordLogger\\": "src/DiscordLogger"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3748,29 +3759,30 @@
             ],
             "authors": [
                 {
-                    "name": "Matthieu Bessat",
-                    "email": "mail@matthieubessat.fr",
-                    "homepage": "https://matthieubessat.fr"
+                    "name": "Vincent Mimoun-Prat",
+                    "email": "contact@vincentprat.info",
+                    "homepage": "https://vincentprat.info",
+                    "role": "Developer"
                 }
             ],
-            "description": "A simple monolog handler for support Discord webhooks",
-            "homepage": "https://github.com/lefuturiste/monolog-discord-handler",
+            "description": "Logging to a discord channel in Laravel",
             "keywords": [
-                "PSR3",
                 "discord",
-                "integration",
-                "log",
-                "logging",
-                "monolog",
-                "webhook"
+                "laravel",
+                "logger",
+                "logging"
             ],
             "support": {
-                "docs": "https://github.com/lefuturiste/monolog-discord-handler/blob/master/README.md",
-                "email": "mail@matthieubessat.fr",
-                "issues": "https://github.com/lefuturiste/monolog-discord-handler/issues",
-                "source": "https://github.com/lefuturiste/monolog-discord-handler"
+                "issues": "https://github.com/marvinlabs/laravel-discord-logger/issues",
+                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.1.7"
             },
-            "time": "2019-08-01T20:48:19+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/vpratfr",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-02-23T07:56:15+00:00"
         },
         {
             "name": "maxmind-db/reader",
