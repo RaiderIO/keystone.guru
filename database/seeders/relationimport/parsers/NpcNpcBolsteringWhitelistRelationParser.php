@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\NpcBolsteringWhitelist;
 
-class DungeonRouteAffixGroupRelationParser implements RelationParser
+class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -12,7 +12,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === 'App\Models\Npc';
     }
 
     /**
@@ -22,7 +22,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'affixgroups' && is_array($value);
+        return $name === 'npcbolsteringwhitelists';
     }
 
     /**
@@ -34,11 +34,8 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $affixGroup) {
-            // We now know the dungeon route ID, set it back to the Route
-            $affixGroup['dungeon_route_id'] = $modelData['id'];
-
-            DungeonRouteAffixGroup::insert($affixGroup);
+        foreach ($value as $npcBolsteringWhitelist) {
+            NpcBolsteringWhitelist::insert($npcBolsteringWhitelist);
         }
 
         // Didn't really change anything so just return the value.

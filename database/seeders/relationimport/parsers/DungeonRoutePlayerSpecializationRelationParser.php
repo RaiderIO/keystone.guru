@@ -1,10 +1,8 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\NpcBolsteringWhitelist;
-
-class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
+class DungeonRoutePlayerSpecializationRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -12,7 +10,7 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\Npc';
+        return $modelClassName === 'App\Models\DungeonRoute';
     }
 
     /**
@@ -22,7 +20,7 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'npcbolsteringwhitelists';
+        return $name === 'playerspecializations' && is_array($value);
     }
 
     /**
@@ -34,8 +32,11 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $npcBolsteringWhitelist) {
-            NpcBolsteringWhitelist::insert($npcBolsteringWhitelist);
+        foreach ($value as $playerSpecialization) {
+            // We now know the dungeon route ID, set it back to the player class
+            $playerSpecialization['dungeon_route_id'] = $modelData['id'];
+
+            \App\Models\DungeonRoutePlayerSpecialization::insert($playerSpecialization);
         }
 
         // Didn't really change anything so just return the value.

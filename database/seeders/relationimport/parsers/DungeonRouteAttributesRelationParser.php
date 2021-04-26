@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-class DungeonRoutePlayerRaceRelationParser implements RelationParser
+class DungeonRouteAttributesRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -20,7 +20,7 @@ class DungeonRoutePlayerRaceRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'playerraces' && is_array($value);
+        return $name === 'routeattributesraw' && is_array($value);
     }
 
     /**
@@ -32,11 +32,11 @@ class DungeonRoutePlayerRaceRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $playerRace) {
-            // We now know the dungeon route ID, set it back to the player race
-            $playerRace['dungeon_route_id'] = $modelData['id'];
+        foreach ($value as $attribute) {
+            // We now know the dungeon route ID, set it back to the player class
+            $attribute['dungeon_route_id'] = $modelData['id'];
 
-            \App\Models\DungeonRoutePlayerRace::insert($playerRace);
+            \App\Models\DungeonRouteAttribute::insert($attribute);
         }
 
         // Didn't really change anything so just return the value.

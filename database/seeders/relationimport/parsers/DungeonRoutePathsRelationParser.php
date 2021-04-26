@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
 use App\Models\MapObjectToAwakenedObeliskLink;
 use App\Models\Path;

@@ -1,11 +1,8 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\NpcBolsteringWhitelist;
-use App\Models\NpcSpell;
-
-class NpcNpcSpellsRelationParser implements RelationParser
+class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -13,7 +10,7 @@ class NpcNpcSpellsRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\Npc';
+        return $modelClassName === 'App\Models\DungeonRoute';
     }
 
     /**
@@ -23,7 +20,7 @@ class NpcNpcSpellsRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'npcspells';
+        return $name === 'enemyraidmarkers' && is_array($value);
     }
 
     /**
@@ -35,8 +32,11 @@ class NpcNpcSpellsRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $spell) {
-            NpcSpell::insert($spell);
+        foreach ($value as $enemyRaidMarkerData) {
+            // We now know the dungeon route ID, set it back to the Route
+            $enemyRaidMarkerData['dungeon_route_id'] = $modelData['id'];
+
+            \App\Models\DungeonRouteEnemyRaidMarker::insert($enemyRaidMarkerData);
         }
 
         // Didn't really change anything so just return the value.

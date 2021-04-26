@@ -1,8 +1,11 @@
 <?php
 
-namespace Database\Seeders\RelationImport;
+namespace Database\Seeders\RelationImport\Parsers;
 
-class EnemyPatrolPolylineRelationParser implements RelationParser
+use App\Models\NpcBolsteringWhitelist;
+use App\Models\NpcSpell;
+
+class NpcNpcSpellsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -10,7 +13,7 @@ class EnemyPatrolPolylineRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\EnemyPatrol';
+        return $modelClassName === 'App\Models\Npc';
     }
 
     /**
@@ -20,7 +23,7 @@ class EnemyPatrolPolylineRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'polyline';
+        return $name === 'npcspells';
     }
 
     /**
@@ -32,11 +35,9 @@ class EnemyPatrolPolylineRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        // Make sure the polyline's relation with the model is restored.
-        $value['model_class'] = $modelClassName;
-        $value['model_id'] = $modelData['id'];
-
-        $modelData['polyline_id'] = \App\Models\Polyline::insertGetId($value);
+        foreach ($value as $spell) {
+            NpcSpell::insert($spell);
+        }
 
         // Didn't really change anything so just return the value.
         return $modelData;
