@@ -427,6 +427,8 @@ class AdminToolsController extends Controller
         switch ($request->get('exception')) {
             case 'TokenMismatchException':
                 throw new TokenMismatchException('Exception thrown in admin panel');
+            case 'InternalServerError':
+                throw new Exception('Exception thrown in admin panel');
         }
     }
 }
