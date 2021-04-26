@@ -21,7 +21,9 @@ $echo = $echo ?? false;
                 <li class="nav-item">
                     <h5 class="mb-0 mr-2">
                         <span>
-                            {{ $title }}
+                            <span id="route_title">
+                                {{ $title }}
+                            </span>
                             @auth
                                 @isset($dungeonroute)
                                     <i id="route_favorited" class="fas fa-star favorite_star favorited"

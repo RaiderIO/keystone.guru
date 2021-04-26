@@ -67,6 +67,11 @@ class SettingsTabRoute extends SettingsTab {
             success: function (json) {
                 showSuccessNotification(lang.get('messages.settings_saved'));
 
+                let $title = $('#route_title');
+                if ($title.length > 0) {
+                    $title.html(json.title);
+                }
+
                 let $seasonalIndex = $('#seasonal_index');
                 if ($seasonalIndex.length > 0) {
                     getState().getMapContext().setSeasonalIndex(parseInt($seasonalIndex.val()));
