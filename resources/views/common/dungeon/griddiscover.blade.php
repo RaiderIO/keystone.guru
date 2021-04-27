@@ -23,7 +23,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     <div class="p-2 col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} ">
         <div class="card">
             <div class="card-img-caption">
-                <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()]) }}">
+                <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug]) }}">
                     <h5 class="card-text text-white">
                         {{ $dungeon->name }}
                     </h5>
@@ -37,13 +37,13 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                     <!-- Normal big screen view -->
                     <div class="d-xl-inline d-none">
                         <p class="card-text text-center">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('Popular') }}
                             </a>
 
                             &middot;
 
-                            <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]); ?>
+                            <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->slug]); ?>
                             <a href="{{ $url }}">
                                 {{ __('This week ') }}
                             </a>
@@ -57,7 +57,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 
                             &middot;
 
-                            <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]); ?>
+                            <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->slug]); ?>
                             <a href="{{ $url }}">
                                 {{ __('Next week ') }}
                             </a>
@@ -71,7 +71,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 
                             &middot;
 
-                            <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('New') }}
                             </a>
                         </p>
@@ -80,24 +80,24 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                     <!-- Mobile view -->
                     <div class="row no-gutters card-text text-center d-xl-none">
                         <div class="col-xl">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('Popular') }}
                             </a>
                         </div>
                         <div class="col-xl">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('This week') }}
                             </a>
                             {!! $thisWeekTier !!}
                         </div>
                         <div class="col-xl">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('Next week') }}
                             </a>
                             {!! $nextWeekTier !!}
                         </div>
                         <div class="col-xl">
-                            <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->getSlug()]) }}">
+                            <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->slug]) }}">
                                 {{ __('New') }}
                             </a>
                         </div>

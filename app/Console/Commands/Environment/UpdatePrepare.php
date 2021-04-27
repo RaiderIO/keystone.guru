@@ -14,7 +14,6 @@ class UpdatePrepare extends Command
         'local'    => false,
         'mapping'  => true,
         'staging'  => true,
-        'redesign' => true
     ];
 
     /**

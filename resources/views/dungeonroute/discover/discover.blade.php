@@ -17,7 +17,7 @@
         @include('common.dungeon.griddiscover', [
             'dungeons' => $dungeons,
             'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug])];
             })
         ])
     </div>
