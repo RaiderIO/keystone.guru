@@ -5,7 +5,7 @@
         "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
-        "comment": "Bloody Javelin",
+        "comment": "Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true
@@ -16,7 +16,7 @@
         "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
-        "comment": "Forgotten Forgehammer",
+        "comment": "Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true
@@ -24,10 +24,10 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 56,
+        "map_icon_type_id": 66,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
+        "comment": "KYRIAN: Malfunctioning Goliath:  Ejects 5 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants Anima Exhaust. This increases movement speed by 20% and causes AoE damage procs and healing every 4 seconds for 1 minute.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
-        "comment": "Forgotten Forgehammer",
+        "comment": "Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -49,7 +49,7 @@
         "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
-        "comment": "Bloody Javelin",
+        "comment": "Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -60,7 +60,7 @@
         "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
-        "comment": "Discharged Anima",
+        "comment": "Discharged Anima: Unleash the stored anima, inflicting Arcane damage to nearby enemies and interrupting their spellcasting every 1 sec for 8 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -82,7 +82,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "Discarded Shield",
+        "comment": "Discarded Shield: Activate to reduce damage taken by 50% for all allies within 8 yds for 6 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -123,10 +123,10 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 56,
+        "map_icon_type_id": 66,
         "lat": -65,
         "lng": 233,
-        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
+        "comment": "KYRIAN: Malfunctioning Goliath:  Ejects 5 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants Anima Exhaust. This increases movement speed by 20% and causes AoE damage procs and healing every 4 seconds for 1 minute.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "Discharged Anima",
+        "comment": "Discharged Anima: Unleash the stored anima, inflicting Arcane damage to nearby enemies and interrupting their spellcasting every 1 sec for 8 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -170,7 +170,7 @@
         "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "Forgotten Forgehammer",
+        "comment": "Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -181,7 +181,7 @@
         "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "Bloody Javelin",
+        "comment": "Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -192,7 +192,7 @@
         "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
-        "comment": "Discarded Shield",
+        "comment": "Discarded Shield: Activate to reduce damage taken by 50% for all allies within 8 yds for 6 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -200,10 +200,10 @@
     {
         "floor_id": 89,
         "team_id": null,
-        "map_icon_type_id": 56,
+        "map_icon_type_id": 66,
         "lat": -179.625,
         "lng": 237.5,
-        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
+        "comment": "KYRIAN: Malfunctioning Goliath:  Ejects 5 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants Anima Exhaust. This increases movement speed by 20% and causes AoE damage procs and healing every 4 seconds for 1 minute.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
