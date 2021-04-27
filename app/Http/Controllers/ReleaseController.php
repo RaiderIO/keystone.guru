@@ -61,7 +61,7 @@ class ReleaseController extends Controller
 
 
         $release->version = $request->get('version');
-        $release->title = $request->get('title', '');
+        $release->title = $request->get('title', '') ?? '';
         $release->silent = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
 
