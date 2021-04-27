@@ -35,7 +35,9 @@ class GameServerRegion extends CacheModel
      */
     public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        return Auth::check() ? Auth::user()->gameserverregion : GameServerRegion::where('short', 'us')->first();
+        return Auth::check() ?
+            Auth::user()->gameserverregion ?? GameServerRegion::where('short', 'us')->first() :
+            GameServerRegion::where('short', 'us')->first();
     }
 
     public static function boot()
