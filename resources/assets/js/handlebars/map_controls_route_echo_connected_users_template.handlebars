@@ -2,7 +2,7 @@
     {{#each users}}
         <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}"
             data-toggle="tooltip" title="{{name}}">
-            <a class="nav-link text-center" href="/user/{{id}}" target="_blank">
+            <a class="nav-link text-center" href="{{url}}">
                 {{#ifCond avatar_url '==' null}}
                     {{initials}}
                 {{else}}

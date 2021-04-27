@@ -2,25 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute;
 use App\Models\Expansion;
-use Database\Seeders\RelationImport\DungeonFloorsRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteAffixGroupRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteAttributesRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteBrushlinesRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteEnemyRaidMarkersRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteKillZoneRelationParser;
-use Database\Seeders\RelationImport\DungeonRouteMapIconsRelationParser;
-use Database\Seeders\RelationImport\DungeonRoutePathsRelationParser;
-use Database\Seeders\RelationImport\DungeonRoutePlayerClassRelationParser;
-use Database\Seeders\RelationImport\DungeonRoutePlayerRaceRelationParser;
-use Database\Seeders\RelationImport\DungeonRoutePlayerSpecializationRelationParser;
-use Database\Seeders\RelationImport\DungeonRoutePridefulEnemiesRelationParser;
-use Database\Seeders\RelationImport\EnemyPatrolPolylineRelationParser;
-use Database\Seeders\RelationImport\NestedModelRelationParser;
-use Database\Seeders\RelationImport\NpcNpcBolsteringWhitelistRelationParser;
-use Database\Seeders\RelationImport\NpcNpcSpellsRelationParser;
-use Database\Seeders\RelationImport\RelationParser;
+use Database\Seeders\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
+use Database\Seeders\RelationImport\Mapping\DungeonRelationMapping;
+use Database\Seeders\RelationImport\Mapping\DungeonRouteRelationMapping;
+use Database\Seeders\RelationImport\Mapping\EnemyPackRelationMapping;
+use Database\Seeders\RelationImport\Mapping\EnemyPatrolRelationMapping;
+use Database\Seeders\RelationImport\Mapping\EnemyRelationMapping;
+use Database\Seeders\RelationImport\Mapping\MapIconRelationMapping;
+use Database\Seeders\RelationImport\Mapping\NpcRelationMapping;
+use Database\Seeders\RelationImport\Mapping\RelationMapping;
+use Database\Seeders\RelationImport\Mapping\SpellRelationMapping;
+use Database\Seeders\RelationImport\Parsers\RelationParser;
 use Exception;
 use FilesystemIterator;
 use Illuminate\Database\Eloquent\Model;
@@ -44,19 +39,20 @@ class DungeonDataSeeder extends Seeder
 
         $this->command->info('Starting import of dungeon data for all dungeons');
 
-        $nameMapping = [
+        $mappings = [
             // Loose files
-            'dungeons'                     => 'App\Models\Dungeon',
-            'npcs'                         => 'App\Models\Npc',
-            'dungeonroutes'                => 'App\Models\DungeonRoute',
-            'spells'                       => 'App\Models\Spell',
+            new DungeonRelationMapping(),
+            new NpcRelationMapping(),
+            new DungeonRouteRelationMapping(),
+            new SpellRelationMapping(),
 
             // Files inside floor folder
-            'enemies'                      => 'App\Models\Enemy',
-            'enemy_packs'                  => 'App\Models\EnemyPack',
-            'enemy_patrols'                => 'App\Models\EnemyPatrol',
-            'dungeon_floor_switch_markers' => 'App\Models\DungeonFloorSwitchMarker',
-            'map_icons'                    => 'App\Models\MapIcon'
+            new EnemyRelationMapping(),
+
+            new EnemyPackRelationMapping(),
+            new EnemyPatrolRelationMapping(),
+            new DungeonFloorSwitchMarkerRelationMapping(),
+            new MapIconRelationMapping(),
         ];
 
         $rootDir = database_path('/seeders/dungeondata/');
@@ -81,7 +77,7 @@ class DungeonDataSeeder extends Seeder
                         // Parse loose files
                         if (!is_dir($floorDirFile)) {
                             // npcs, dungeon_routes
-                            $this->_parseRawFile($rootDir, $floorDirFile, $nameMapping, 2);
+                            $this->_parseRawFile($rootDir, $floorDirFile, $mappings, 2);
                         } // Parse floor dir
                         else {
                             $this->command->info('-- Importing floor ' . basename($floorDirFile));
@@ -89,96 +85,75 @@ class DungeonDataSeeder extends Seeder
                             $importFileIterator = new FilesystemIterator($floorDirFile);
                             // For each file inside a floor
                             foreach ($importFileIterator as $importFile) {
-                                $this->_parseRawFile($rootDir, $importFile, $nameMapping, 3);
+                                $this->_parseRawFile($rootDir, $importFile, $mappings, 3);
                             }
                         }
                     }
                 }
             } // It's a 'global' file, parse it
             else if (strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5) { // 5 for length of .json
-                $this->_parseRawFile($rootDir, $rootDirChild, $nameMapping, 1);
+                $this->_parseRawFile($rootDir, $rootDirChild, $mappings, 1);
             }
         }
+
+        Stopwatch::dumpAll();
     }
 
     /**
      * @param $rootDir string
-     * @param $file string
-     * @param $nameMapping array
+     * @param $filePath string
+     * @param $mappings RelationMapping[]
      * @param $depth integer
      * @throws Exception
      */
-    private function _parseRawFile($rootDir, $file, $nameMapping, $depth = 1)
+    private function _parseRawFile(string $rootDir, string $filePath, array $mappings, int $depth = 1): void
     {
         $prefix = str_repeat('-', $depth) . ' ';
 
-        $tableName = basename($file, '.json');
+        $fileName = basename($filePath);
 
         // Import file
-        $this->command->info($prefix . 'Importing ' . $tableName);
-        // Get contents
-        if (!array_key_exists($tableName, $nameMapping)) {
-            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $file);
-        } else {
-            $count = $this->_loadModelsFromFile($file, $nameMapping[$tableName]);
-            $this->command->info(sprintf($prefix . 'Imported %s (%s into %s)', str_replace($rootDir, '', $file), $count, $tableName));
+        $this->command->info($prefix . 'Importing ' . $fileName);
+        $found = false;
+        foreach ($mappings as $mapping) {
+            if ($mapping->getFileName() === $fileName) {
+                $count = $this->_loadModelsFromFile($filePath, $mapping);
+                $this->command->info(sprintf(
+                    $prefix . 'Imported %s (%s into %s)',
+                    str_replace($rootDir, '', $fileName),
+                    $count,
+                    $fileName
+                ));
+
+                $found = true;
+                break;
+            }
+        }
+
+        // Let the user know if something wrong happened
+        if (!$found) {
+            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $filePath);
         }
     }
 
     /**
      * @param $filePath string
-     * @param $modelClassName Model
-     * @param $update boolean
+     * @param $mapping RelationMapping
      * @return int The amount of models loaded from the file
      * @throws Exception
      */
-    private function _loadModelsFromFile($filePath, $modelClassName, $update = false)
+    private function _loadModelsFromFile(string $filePath, RelationMapping $mapping): int
     {
-        // $this->command->info('>> _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
         // Load contents
         $modelJson = file_get_contents($filePath);
         // Convert to models
         $modelsData = json_decode($modelJson, true);
 
         // Pre-fetch all valid columns to make the below loop a bit faster
-        $modelColumns = Schema::getColumnListing($modelClassName::newModelInstance()->getTable());
+        $modelColumns = Schema::getColumnListing($mapping->getClass()::newModelInstance()->getTable());
 
-        $preModelSaveAttributeParsers = [
-            // Generic
-            new NestedModelRelationParser(),
-
-            // Enemy Patrols, Paths and Brushlines
-            new EnemyPatrolPolylineRelationParser(),
-
-            // Npc
-            new NpcNpcBolsteringWhitelistRelationParser(),
-            new NpcNpcSpellsRelationParser(),
-
-            // Dungeon
-            new DungeonFloorsRelationParser(),
-        ];
-
-        // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
-        $postModelSaveAttributeParsers = [
-            // Dungeon route
-            new DungeonRoutePlayerSpecializationRelationParser(),
-            new DungeonRoutePlayerRaceRelationParser(),
-            new DungeonRoutePlayerClassRelationParser(),
-
-            new DungeonRouteAttributesRelationParser(),
-
-            new DungeonRouteAffixGroupRelationParser(),
-
-            new DungeonRouteBrushlinesRelationParser(),
-            new DungeonRoutePathsRelationParser(),
-
-            new DungeonRouteKillZoneRelationParser(),
-
-            new DungeonRouteEnemyRaidMarkersRelationParser(),
-            new DungeonRoutePridefulEnemiesRelationParser(),
-
-            new DungeonRouteMapIconsRelationParser()
-        ];
+        // In case there's no post-save relation parsers we can mass-save instead to save time
+        $modelsToSave = collect();
 
         // Do some php fuckery to make this a bit cleaner
         foreach ($modelsData as $modelData) {
@@ -192,14 +167,13 @@ class DungeonDataSeeder extends Seeder
 
                 // $this->command->info(json_encode($key) . ' ' . json_encode($value));
 
-                foreach ($preModelSaveAttributeParsers as $attributeParser) {
-                    /** @var $attributeParser RelationParser */
+                foreach ($mapping->getPreSaveAttributeParsers() as $attributeParser) {
                     // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
                     if (is_array($value) &&
-                        $attributeParser->canParseModel($modelClassName) &&
+                        $attributeParser->canParseModel($mapping->getClass()) &&
                         $attributeParser->canParseRelation($key, $value)) {
 
-                        $modelData = $attributeParser->parseRelation($modelClassName, $modelData, $key, $value);
+                        $modelData = $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
                     }
                 }
 
@@ -214,35 +188,52 @@ class DungeonDataSeeder extends Seeder
 
             // $this->command->info("Creating model " . json_encode($modelData));
             // Create and save a new instance to the database
+
             /** @var Model $createdModel */
-            if (isset($modelData['id'])) {
+            // Check if we need to update this model instead of saving it
+            if (isset($modelData['id']) && $mapping->isPersistent()) {
                 // Load first
-                $createdModel = $modelClassName::findOrNew($modelData['id']);
+                $createdModel = $mapping->getClass()::findOrNew($modelData['id']);
                 // Apply, then save
                 $createdModel->setRawAttributes($modelData);
                 $createdModel->save();
-            } else {
-                $createdModel = $modelClassName::create($modelData);
+
+            } // If we should do some post processing, create & save it now so that we can do just that
+            else if ($mapping->getPostSaveAttributeParsers()->isNotEmpty()) {
+                $createdModel = $mapping->getClass()::create($modelData);
+            } // We don't need to do post processing, add it to the list to be saved
+            else {
+                $modelsToSave->push($modelData);
+                continue;
             }
-            $modelData['id'] = $createdModel->id;
 
-            // Merge the unset relations with the model again so we can parse the model again
-            $modelData = $modelData + $unsetRelations;
+            // If we have models to mass-save later, we should not do post-processing since it's incompatible
+            if ($modelsToSave->isEmpty()) {
+                $modelData['id'] = $createdModel->id;
 
-            foreach ($modelData as $key => $value) {
-                foreach ($postModelSaveAttributeParsers as $attributeParser) {
-                    /** @var $attributeParser RelationParser */
-                    // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
-                    if (is_array($value) &&
-                        $attributeParser->canParseModel($modelClassName) &&
-                        $attributeParser->canParseRelation($key, $value)) {
+                // Merge the unset relations with the model again so we can parse the model again
+                $modelData = $modelData + $unsetRelations;
 
-                        // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
-                        // model that's about to be saved. It's already saved at this point
-                        $attributeParser->parseRelation($modelClassName, $modelData, $key, $value);
+                foreach ($mapping->getPostSaveAttributeParsers() as $attributeParser) {
+                    foreach ($modelData as $key => $value) {
+                        /** @var $attributeParser RelationParser */
+                        // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
+                        if (is_array($value) &&
+                            $attributeParser->canParseModel($mapping->getClass()) &&
+                            $attributeParser->canParseRelation($key, $value)) {
+
+                            // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
+                            // model that's about to be saved. It's already saved at this point
+                            $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
+                        }
                     }
                 }
             }
+        }
+
+        // Bulk save the models that did not need any post-attribute parsing
+        if ($modelsToSave->isNotEmpty()) {
+            $mapping->getClass()::insert($modelsToSave->toArray());
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);

@@ -306,12 +306,18 @@ html, body, #map, #app, .wrapper {
 }
 
 #pulls_sidebar .map_killzonessidebar_floor_switch h6 {
-    font-size: 1.1em;
+    font-size: 1.1rem;
 }
 
 #pulls_sidebar .map_killzonessidebar_floor_switch,
 #pulls_sidebar .map_killzonessidebar_killzone.selectable {
     cursor: pointer;
+}
+
+#pulls_sidebar .map_killzonessidebar_floor_switch,
+#pulls_sidebar .map_killzonessidebar_killzone .grip {
+    cursor: move;
+    font-size: 1.2em;
 }
 
 #pulls_sidebar .map_killzonessidebar_color_btn {
@@ -359,6 +365,7 @@ html, body, #map, #app, .wrapper {
     padding: 0 !important;
     width: 30px;
     height: 30px;
+    font-size: 1.15rem;
 }
 
 .theme .echo_user {

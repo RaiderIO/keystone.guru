@@ -1,5 +1,7 @@
 <?php
 /** @var \App\User $user */
+/** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
+
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
@@ -111,21 +113,24 @@ $deleteConsequences = $user->getDeleteConsequences();
                 </label>
                 {!! Form::color('echo_color', null, ['id' => 'echo_color', 'class' => 'form-control']) !!}
 
-                @php($classes = \App\Models\CharacterClass::all())
-                @php($half = ($classes->count() / 2))
-                @for($i = 0; $i < $classes->count(); $i++)
-                    @php($class = $classes->get($i))
-                    @if($i % $half === 0)
-                        <div class="row no-gutters pt-1">
-                            @endif
-                            <div class="col profile_class_color border-dark"
-                                 data-color="{{ $class->color }}"
-                                 style="background-color: {{ $class->color }};">
-                            </div>
-                            @if($i % $half === $half - 1)
+                <?php
+                $half = ($allClasses->count() / 2);
+                for($i = 0; $i < $allClasses->count(); $i++){
+                $class = $allClasses->get($i)
+                ?>
+                @if($i % $half === 0)
+                    <div class="row no-gutters pt-1">
+                        @endif
+                        <div class="col profile_class_color border-dark"
+                             data-color="{{ $class->color }}"
+                             style="background-color: {{ $class->color }};">
                         </div>
-                    @endif
-                @endfor
+                        @if($i % $half === $half - 1)
+                    </div>
+                @endif
+                <?php
+                }
+                ?>
             </div>
 
             {!! Form::submit(__('Save'), ['class' => 'btn btn-info']) !!}
@@ -162,14 +167,14 @@ $deleteConsequences = $user->getDeleteConsequences();
                             <?php
                             $consequenceText = '';
                             if ($consequence['result'] === 'new_owner') {
-                                if ($consequence['new_owner'] === null) {
-                                    $consequenceText = __('You will be removed from this team.');
-                                } else {
-                                    $consequenceText = sprintf(__('%s will be appointed Admin of this team.'),
-                                        $consequence['new_owner']->name);
-                                }
+                            if ($consequence['new_owner'] === null) {
+                            $consequenceText = __('You will be removed from this team.');
+                            } else {
+                            $consequenceText = sprintf(__('%s will be appointed Admin of this team.'),
+                            $consequence['new_owner']->name);
+                            }
                             } elseif ($consequence['result'] === 'deleted') {
-                                $consequenceText = __('This team will be deleted (you are the only user in this team).');
+                            $consequenceText = __('This team will be deleted (you are the only user in this team).');
                             }
                             ?>
                             {{ sprintf(__('%s: %s'), $teamName, $consequenceText) }}
@@ -217,7 +222,8 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('Patreon') }}
             </h4>
             @isset($user->patreondata)
-                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank" rel="noopener noreferrer">
+                <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank"
+                   rel="noopener noreferrer">
                     {{ __('Unlink from Patreon') }}
                 </a>
 

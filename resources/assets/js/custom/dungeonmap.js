@@ -14,7 +14,7 @@ class DungeonMap extends Signalable {
 
         // Listen for floor changes
         getState().register('floorid:changed', this, function () {
-            self.refreshLeafletMap();
+            self.refreshLeafletMap(false);
         });
 
         // How many map objects have returned a success status
@@ -374,11 +374,12 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
+        /** @type KillZoneMapObjectGroup */
         let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
         let enemy = enemyClickedEvent.context;
 
-        if (this.options.edit && KillZoneEnemySelection.isEnemySelectable(enemy)) {
+        if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
@@ -391,17 +392,17 @@ class DungeonMap extends Signalable {
                 // Add it to a new pull
                 let newKillZone = killZoneMapObjectGroup.createNewPull([enemy.id]);
 
-                this.setMapState(new KillZoneEnemySelection(this, newKillZone, this.getMapState()));
+                this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             } else if (existingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
                 // Only when we're not doing anything right now
                 if (this.options.edit) {
-                    this.setMapState(new KillZoneEnemySelection(this, existingKillZone));
+                    this.setMapState(new EditKillZoneEnemySelection(this, existingKillZone));
                 } else {
                     this.setMapState(new ViewKillZoneEnemySelection(this, existingKillZone));
                 }
             }
             // Shift click creates a new pack always
-            else if (this.mapState === null || (this.mapState instanceof KillZoneEnemySelection && shiftKeyPressed)) {
+            else if (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed)) {
                 // Create a new pack instead
 
                 // Add ourselves to this new pull
@@ -419,7 +420,7 @@ class DungeonMap extends Signalable {
                 // Create a new pull; all UI will update based on the events fired here.
                 let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
 
-                this.setMapState(new KillZoneEnemySelection(this, newKillZone, this.getMapState()));
+                this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             }
         }
     }
@@ -607,8 +608,9 @@ class DungeonMap extends Signalable {
 
     /**
      * Refreshes the leaflet map so
+     * @param clearMapState {Boolean}
      */
-    refreshLeafletMap() {
+    refreshLeafletMap(clearMapState = true) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
@@ -618,7 +620,9 @@ class DungeonMap extends Signalable {
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were doing anything, we're no longer doing it
-        this.setMapState(null);
+        if( clearMapState ) {
+            this.setMapState(null);
+        }
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -787,6 +791,29 @@ class DungeonMap extends Signalable {
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor()
         });
+    }
+
+    /**
+     * Focuses the map on a killzone
+     * @param killZone {KillZone}
+     */
+    focusOnKillZone(killZone) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
+
+        // Cache the zoom level
+        let currentZoomLevel = getState().getMapZoomLevel();
+
+        // Switch floors if the floor is not on the current map
+        let floorIds = killZone.getFloorIds();
+        if (floorIds.length > 0 && !floorIds.includes(getState().getCurrentFloor().id)) {
+            getState().setFloorId(floorIds[0]);
+        }
+
+        // Center the map to this killzone
+        if (killZone.enemies.length > 0 && killZone.isVisible()) {
+            this.leafletMap.setView(killZone.getLayerCenteroid(), currentZoomLevel);
+        }
     }
 }
 

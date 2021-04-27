@@ -7,6 +7,7 @@ use App\Console\Commands\CreateGithubReleaseTicket;
 use App\Console\Commands\Discover\Cache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
+use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
@@ -41,21 +42,24 @@ class Kernel extends ConsoleKernel
         // Discover
         Cache::class,
 
-        // Release
-        GetCurrentRelease::class,
-        GetReleaseBody::class,
-        ReportRelease::class,
-        ReleaseSave::class,
-
         // Environment
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
+
+        // Handlebars
+        HandlebarsRefresh::class,
 
         // Mapping
         MappingCommit::class,
         MappingMerge::class,
         MappingSave::class,
         MappingRestore::class,
+
+        // Release
+        GetCurrentRelease::class,
+        GetReleaseBody::class,
+        ReportRelease::class,
+        ReleaseSave::class,
 
         // Scheduler
         RefreshAffixGroupEaseTiers::class,
@@ -91,6 +95,9 @@ class Kernel extends ConsoleKernel
         if ($appType === 'local' || $appType === 'live') {
             $schedule->command('scheduler:telemetry')->everyFiveMinutes();
         }
+
+        // https://laravel.com/docs/8.x/telescope#data-pruning
+        $schedule->command('telescope:prune --hours=48')->daily();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

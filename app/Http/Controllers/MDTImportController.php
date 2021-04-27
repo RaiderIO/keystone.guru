@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Teapot\StatusCode;
 use Throwable;
@@ -73,6 +74,8 @@ class MDTImportController extends Controller
             } else {
                 $message = __('Invalid MDT string');
             }
+
+            Log::error($ex->getMessage(), ['string' => $string]);
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
@@ -115,6 +118,8 @@ class MDTImportController extends Controller
                 if (env('APP_DEBUG')) {
                     throw $ex;
                 } else {
+                    Log::error($ex->getMessage(), ['string' => $string]);
+
                     return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
                 }
             } catch (Throwable $error) {

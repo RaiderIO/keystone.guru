@@ -69,7 +69,7 @@
                 <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
                 <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->getSlug()]) }}">
+                    <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->slug]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>

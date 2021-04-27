@@ -39,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -658,8 +659,11 @@ class APIDungeonRouteController extends Controller
 
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
-            return abort(400, sprintf(__('An error occurred generating your MDT string: %s'), $ex->getMessage()));
+            Log::error($ex->getMessage(), ['dungeonroute' => $dungeonroute]);
+            return abort(400, sprintf(__('An error occurred generating your MDT string: %s %s'), $ex->getMessage(), $ex->getTraceAsString()));
         } catch (Throwable $error) {
+            Log::critical($error->getMessage());
+
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
             }

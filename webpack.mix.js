@@ -153,7 +153,7 @@ let scripts = [
     'resources/assets/js/custom/mapstate/addawakenedobeliskgatewaymapstate.js',
     'resources/assets/js/custom/mapstate/raidmarkerselectmapstate.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
-    'resources/assets/js/custom/mapstate/enemyselection/killzoneenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
@@ -207,16 +207,6 @@ let scripts = [
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom-' + gitRevisionPlugin.version() + '.css');
 
-// Dashboard JS
-let dashboardScripts = [
-    'resources/assets/js/dashboard/argon.js',
-    'resources/assets/js/dashboard/charts.js',
-    'resources/assets/js/dashboard/customcharts.js',
-    // 'resources/assets/js/dashboard/routes/*.js',
-    // 'resources/assets/js/dashboard/teams/*.js',
-    // 'resources/assets/js/dashboard/users/*.js',
-];
-
 // Do not translate in development
 if (mix.inProduction()) {
     mix.babel(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
@@ -225,8 +215,6 @@ if (mix.inProduction()) {
 }
 
 mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.version() + '.js')
-    // Build a dashboard version for the admin
-    .scripts(dashboardScripts, 'public/js/dashboard-' + gitRevisionPlugin.version() + '.js')
     .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')

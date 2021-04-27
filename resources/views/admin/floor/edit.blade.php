@@ -18,9 +18,9 @@ if (isset($floor)) {
 
 @section('content')
     @isset($floor)
-        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->getSlug(), 'floor' => $floor->id], 'method' => 'patch']) }}
+        {{ Form::model($floor, ['route' => ['admin.floor.update', 'dungeon' => $dungeon->slug, 'floor' => $floor->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->getSlug()]]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->slug]]) }}
     @endisset
 
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">

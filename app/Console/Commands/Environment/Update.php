@@ -14,7 +14,6 @@ class Update extends Command
         'local'    => false,
         'mapping'  => true,
         'staging'  => true,
-        'redesign' => true
     ];
 
     const COMPILE_AS = [
@@ -22,7 +21,6 @@ class Update extends Command
         'local'    => 'dev',
         'mapping'  => 'production',
         'staging'  => 'dev',
-        'redesign' => 'production'
     ];
 
     /**
@@ -61,13 +59,10 @@ class Update extends Command
         // Drop all caches for all models while we re-seed
         $this->call('modelCache:clear');
 
-        // Redesign is coupled to live - do not reseed lest it affects the live site!
-        if ($environment !== 'redesign') {
-            $this->call('db:seed', [
-                '--database' => 'migrate',
-                '--force'    => true
-            ]);
-        }
+        $this->call('db:seed', [
+            '--database' => 'migrate',
+            '--force'    => true
+        ]);
 
         // After seed, create a release if necessary
         if ($environment === 'live') {

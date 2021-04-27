@@ -17,7 +17,7 @@
         @include('common.dungeon.griddiscover', [
             'dungeons' => $dungeons,
             'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon){
-                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->getSlug()])];
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug])];
             })
         ])
     </div>
@@ -38,7 +38,7 @@
         'showDungeonImage' => true,
     ])
 
-    @if( $showAds && !$isMobile)
+    @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">
             @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
         </div>

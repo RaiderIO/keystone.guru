@@ -72,14 +72,6 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @TODO Remove this when going live with the redesign and use ->slug instead
-     * @return string
-     */
-    public function getSlug() : string {
-        return isset($this->slug) && !empty($this->slug) ? $this->slug : Str::slug($this->name);
-    }
-
-    /**
      * Gets the amount of enemy forces that this dungeon has mapped (non-zero enemy_forces on NPCs)
      */
     public function getEnemyForcesMappedStatusAttribute()

@@ -22,8 +22,6 @@ class GameServerRegion extends CacheModel
     protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
 
-    private static $cachedDefaultRegion = null;
-
     /**
      * @return HasMany
      */
@@ -37,16 +35,7 @@ class GameServerRegion extends CacheModel
      */
     public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        if (self::$cachedDefaultRegion === null) {
-            if (Auth::check()) {
-                self::$cachedDefaultRegion = Auth::user()->gameserverregion;
-            }
-
-            if (self::$cachedDefaultRegion === null) {
-                self::$cachedDefaultRegion = GameServerRegion::where('short', 'us')->first();
-            }
-        }
-        return self::$cachedDefaultRegion;
+        return Auth::check() ? Auth::user()->gameserverregion : GameServerRegion::where('short', 'us')->first();
     }
 
     public static function boot()

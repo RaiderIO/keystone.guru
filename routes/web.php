@@ -52,10 +52,6 @@ use App\Http\Controllers\WebhookController;
 
 Auth::routes();
 
-// Redesign redirect
-Route::get('redesign', [SiteController::class, 'redesignToggle'])->name('redesign');
-Route::get('old', [SiteController::class, 'redesignToggle'])->name('old');
-
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
@@ -266,8 +262,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
             Route::get('userreports', [UserReportController::class, 'list'])->name('admin.userreports');
 
-            Route::get('dashboard', [AdminToolsController::class, 'dashboard'])->name('admin.dashboard');
-
             Route::group(['prefix' => 'tools'], function ()
             {
                 Route::get('/', [AdminToolsController::class, 'index'])->name('admin.tools');
@@ -297,21 +291,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
                 Route::get('datadump/exportdungeondata', [AdminToolsController::class, 'exportdungeondata'])->name('admin.tools.datadump.exportdungeondata');
                 Route::get('datadump/exportreleases', [AdminToolsController::class, 'exportreleases'])->name('admin.tools.datadump.exportreleases');
             });
-        });
-
-        // Dashboard
-        Route::group(['prefix' => 'dashboard'], function ()
-        {
-            Route::get('/', [DashboardController::class, 'index'])->name('dashboard.home');
-            Route::get('/users', [DashboardController::class, 'users'])->name('dashboard.users');
-            Route::get('/routes', [DashboardController::class, 'dungeonroutes'])->name('dashboard.routes');
-            Route::get('/teams', [DashboardController::class, 'teams'])->name('dashboard.teams');
-            Route::get('/pageviews', [DashboardController::class, 'pageviews'])->name('dashboard.pageviews');
-
-//            Route::resource('user', 'DashboardUserController', ['except' => ['show']]);
-//            Route::get('profile', ['as' => 'profile.edit', 'uses' => 'DashboardProfileController@edit']);
-//            Route::put('profile', ['as' => 'profile.update', 'uses' => 'DashboardProfileController@update']);
-//            Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'DashboardProfileController@password']);
         });
     });
 

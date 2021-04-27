@@ -16,21 +16,17 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/Wotuu/tracker"
-    },
-    {
-      "type": "vcs",
       "url": "https://github.com/Wotuu/laravel4-datatables-package"
     },
     {
       "type": "package",
       "package": {
         "name": "nnoggie/mythicdungeontools",
-        "version": "3.4.6",
+        "version": "3.5.6",
         "source": {
           "url": "https://github.com/nnoggie/MythicDungeonTools.git",
           "type": "git",
-          "reference": "master"
+          "reference": "e8d4d9ee7d51b2fa2e823d0f9da3e23066495f62"
         }
       }
     }
@@ -51,15 +47,15 @@
     "laravel/framework": "^8.0",
     "laravel/horizon": "^5.0",
     "laravel/socialite": "^5.0",
+    "laravel/telescope": "^4.4",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",
     "laravelcollective/html": "6.2.*",
-    "lefuturiste/monolog-discord-handler": "^0.2.0",
-    "nnoggie/mythicdungeontools": "*",
+    "marvinlabs/laravel-discord-logger": "^1.1",
+    "nnoggie/mythicdungeontools": "3.5.6",
     "patreon/patreon": "^0.3.1",
     "phlak/semver": "^3.2",
     "php-http/guzzle6-adapter": "^2.0",
-    "pragmarx/tracker": "dev-wotuu-bugfix#17b7d227d689475f29a27dd29b8fb75aad23c32d",
     "predis/predis": "^1.1",
     "santigarcor/laratrust": "^6.0",
     "shrikeh/teapot": "^2.3",

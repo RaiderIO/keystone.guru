@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
 
         /**
          * Custom
@@ -185,7 +186,6 @@ return [
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
@@ -251,7 +251,6 @@ return [
         'Form'         => Collective\Html\FormFacade::class,
         'Html'         => Collective\Html\HtmlFacade::class,
         'Image'        => Intervention\Image\Facades\Image::class,
-        'Tracker'      => PragmaRX\Tracker\Vendor\Laravel\Facade::class,
         'DataTables'   => Yajra\DataTables\Facades\DataTables::class,
         'Agent'        => Jenssegers\Agent\Facades\Agent::class,
         'GitHub'       => GrahamCampbell\GitHub\GitHubServiceProvider::class,
