@@ -52,10 +52,6 @@ use App\Http\Controllers\WebhookController;
 
 Auth::routes();
 
-// Redesign redirect
-Route::get('redesign', [SiteController::class, 'redesignToggle'])->name('redesign');
-Route::get('old', [SiteController::class, 'redesignToggle'])->name('old');
-
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 

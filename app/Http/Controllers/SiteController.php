@@ -179,20 +179,4 @@ class SiteController extends Controller
     {
         return view('misc.embed', ['model' => $dungeonroute]);
     }
-
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function redesignToggle(Request $request)
-    {
-        // Get the existing redesign state
-        $redesign = (int)($_COOKIE['redesign'] ?? 0);
-
-        // Flip it
-        setcookie('redesign', abs($redesign - 1), 0, '', 'keystone.guru');
-
-        // Redirect to home, this will then redirect to the redesign site because of middleware
-        return redirect()->home();
-    }
 }
