@@ -195,7 +195,7 @@ return [
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
             'popular'      => [
-                'ttl' => '5 min',
+                'ttl' => '10 min',
             ]
 
 
