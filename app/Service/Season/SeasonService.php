@@ -135,10 +135,10 @@ class SeasonService implements SeasonServiceInterface
     public function getDisplayedAffixGroups(int $iterationOffset): Collection
     {
         /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+//        $cacheService = App::make(CacheService::class);
 
-        return $cacheService->remember(sprintf('displayed_affix_groups_%d', $iterationOffset), function () use ($iterationOffset)
-        {
+//        return $cacheService->remember(sprintf('displayed_affix_groups_%d', $iterationOffset), function () use ($iterationOffset)
+//        {
             // Gotta start at the beginning to work out what we should display
             $firstSeason = $this->getFirstSeason();
 
@@ -180,6 +180,6 @@ class SeasonService implements SeasonServiceInterface
             // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
             // Then, fetch an additional TWO affixes, one to show extra at the top, one to show extra at the bottom
             return $affixGroups->slice($affixGroups->count() - ($affixCount + 2), $affixCount + 2);
-        }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
+//        }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
     }
 }
