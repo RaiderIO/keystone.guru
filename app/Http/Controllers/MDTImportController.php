@@ -75,6 +75,7 @@ class MDTImportController extends Controller
                 $message = __('Invalid MDT string');
             }
 
+            report($ex);
             Log::error($ex->getMessage(), ['string' => $string]);
             return abort(400, $message);
         } catch (Throwable $error) {
@@ -114,6 +115,8 @@ class MDTImportController extends Controller
                 $mdtImport->import_string = $string;
                 $mdtImport->save();
             } catch (Exception $ex) {
+                report($ex);
+
                 // Makes it easier to debug
                 if (env('APP_DEBUG')) {
                     throw $ex;

@@ -1,6 +1,15 @@
 {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
 <div class="form-group">
-    {!! Form::label('import_string', __('Paste your Mythic Dungeon Tools export string') . '<span class="form-required">*</span>', [], false) !!}
+    <div class="row mb-2">
+        <div class="col">
+            {!! Form::label('import_string', __('Paste your Mythic Dungeon Tools export string') . '<span class="form-required">*</span>', [], false) !!}
+        </div>
+        <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
+            <div class="btn btn-outline-warning" data-toggle="tooltip" title="{{ __('Reset') }}">
+                <i class="fas fa-undo"></i>
+            </div>
+        </div>
+    </div>
     {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea', 'data-simplebar' => '']) }}
     {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
 </div>
