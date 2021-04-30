@@ -6,7 +6,6 @@ use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\MapIcon;
@@ -86,8 +85,8 @@ class APIMapIconController extends Controller
         // don't use empty() since 0 is valid
         $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
-        $mapIcon->lat = (float) $request->get('lat');
-        $mapIcon->lng = (float) $request->get('lng');
+        $mapIcon->lat = (float)$request->get('lat');
+        $mapIcon->lng = (float)$request->get('lng');
 
         if ($mapIcon->save()) {
             // Set or unset the linked awakened obelisks now that we have an ID
@@ -101,6 +100,8 @@ class APIMapIconController extends Controller
             if ($dungeonroute === null) {
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($mapIconBefore, $mapIcon);
+            } else {
+                $dungeonroute->touch();
             }
         } else {
             throw new Exception('Unable to save map icon!');
@@ -138,6 +139,8 @@ class APIMapIconController extends Controller
                 if ($dungeonroute === null) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
                     $this->mappingChanged($mapicon, null);
+                } else {
+                    $dungeonroute->touch();
                 }
 
                 $result = response()->noContent();
