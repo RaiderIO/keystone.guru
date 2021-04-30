@@ -53,16 +53,5 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
-    },
-    {
-        "floor_id": 81,
-        "team_id": null,
-        "map_icon_type_id": 42,
-        "lat": -52.59375,
-        "lng": 156.4375,
-        "comment": "Plagueroc: reintroduced in 9.0.5 - may be removed again at any point.",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
     }
 ]
