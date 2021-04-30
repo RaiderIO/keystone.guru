@@ -11,6 +11,8 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\AffixGroup;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
@@ -588,10 +590,11 @@ class ImportString extends MDTBase
      * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
      * @param $sandbox boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
-     * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
+     * @return DungeonRoute DungeonRoute if the route could be constructed
+     * @throws InvalidMDTString
      * @throws Exception
      */
-    public function getDungeonRoute(Collection $warnings, $sandbox = false, $save = false)
+    public function getDungeonRoute(Collection $warnings, $sandbox = false, $save = false): DungeonRoute
     {
         $lua = $this->_getLua();
         // Import it to a table
@@ -599,75 +602,76 @@ class ImportString extends MDTBase
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
-        $dungeonRoute = false;
-        if ($isValid) {
-            // Create a dungeon route
-            $dungeonRoute = new DungeonRoute();
-            $dungeonRoute->author_id = $sandbox ? -1 : Auth::id();
-            $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
-            // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
-            $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
-            $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
-            $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-            $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
-            $dungeonRoute->title = $decoded['text'];
-            $dungeonRoute->difficulty = 'Casual';
-            // Must expire if we're trying
-            if ($sandbox) {
-                $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
-            }
+        if (!$isValid) {
+            throw new InvalidMDTString();
+        }
 
+        // Create a dungeon route
+        $dungeonRoute = new DungeonRoute();
+        $dungeonRoute->author_id = $sandbox ? -1 : Auth::id();
+        $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
+        // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
+        $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
+        $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
+        $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
+        $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
+        $dungeonRoute->title = $decoded['text'];
+        $dungeonRoute->difficulty = 'Casual';
+        // Must expire if we're trying
+        if ($sandbox) {
+            $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+        }
+
+        if ($save) {
+            // Pre-emptively save the route
+            $dungeonRoute->save();
+        } else {
+            $dungeonRoute->killzones = new Collection();
+            $dungeonRoute->brushlines = new Collection();
+            $dungeonRoute->mapicons = new Collection();
+            $dungeonRoute->paths = new Collection();
+            $dungeonRoute->affixes = new Collection();
+        }
+
+        // Set the affix for this route
+        $affixGroup = Conversion::convertWeekToAffixGroup($this->_seasonService, $decoded['week']);
+        if ($affixGroup instanceof AffixGroup) {
             if ($save) {
-                // Pre-emptively save the route
-                $dungeonRoute->save();
+                // Something we can save to the database
+                $dungeonAffixGroup = new DungeonRouteAffixGroup();
+                $dungeonAffixGroup->affix_group_id = $affixGroup->id;
+                $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
+                $dungeonAffixGroup->save();
             } else {
-                $dungeonRoute->killzones = new Collection();
-                $dungeonRoute->brushlines = new Collection();
-                $dungeonRoute->mapicons = new Collection();
-                $dungeonRoute->paths = new Collection();
-                $dungeonRoute->affixes = new Collection();
+                // Something we can just return and have the user read
+                $dungeonRoute->affixes->push($affixGroup);
             }
+            // Apply the seasonal index to the route
+            $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
+        } else {
+            $dungeonRoute->seasonal_index = 0;
+        }
 
-            // Set the affix for this route
-            $affixGroup = Conversion::convertWeekToAffixGroup($this->_seasonService, $decoded['week']);
-            if ($affixGroup instanceof AffixGroup) {
-                if ($save) {
-                    // Something we can save to the database
-                    $dungeonAffixGroup = new DungeonRouteAffixGroup();
-                    $dungeonAffixGroup->affix_group_id = $affixGroup->id;
-                    $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
-                    $dungeonAffixGroup->save();
-                } else {
-                    // Something we can just return and have the user read
-                    $dungeonRoute->affixes->push($affixGroup);
-                }
-                // Apply the seasonal index to the route
-                $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
-            } else {
-                $dungeonRoute->seasonal_index = 0;
-            }
+        // Update seasonal index
+        if ($save) {
+            $dungeonRoute->save();
+        }
 
-            // Update seasonal index
-            if ($save) {
-                $dungeonRoute->save();
-            }
+        // Create a path and map icons for MDT rift offsets
+        $this->_parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
 
-            // Create a path and map icons for MDT rift offsets
-            $this->_parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
+        // Create killzones and attach enemies
+        $this->_parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
 
-            // Create killzones and attach enemies
-            $this->_parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
+        // For each object the user created
+        $this->_parseObjects($warnings, $decoded, $dungeonRoute, $save);
 
-            // For each object the user created
-            $this->_parseObjects($warnings, $decoded, $dungeonRoute, $save);
-
-            // Re-calculate the enemy forces
-            if ($save) {
-                $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
-            } else {
-                // Do not do this - the enemy_forces are incremented while creating the route
-                // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
-            }
+        // Re-calculate the enemy forces
+        if ($save) {
+            $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+        } else {
+            // Do not do this - the enemy_forces are incremented while creating the route
+            // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
         }
 
         return $dungeonRoute;

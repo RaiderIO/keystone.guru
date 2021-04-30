@@ -11,6 +11,7 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;

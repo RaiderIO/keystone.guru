@@ -6,11 +6,11 @@
  * Time: 16:53
  */
 
-namespace App\Logic\MDT\IO;
+namespace App\Logic\MDT\Exception;
 
 
 /**
- * @package App\Logic\MDT
+ * @package App\Logic\MDT\Exception
  * @author Wouter
  * @since 05/01/2019
  */
