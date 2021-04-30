@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Scheduler\Telemetry\Measurements;
+namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
 
 use App\Models\Team;
