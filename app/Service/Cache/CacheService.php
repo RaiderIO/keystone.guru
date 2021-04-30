@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
@@ -111,9 +112,14 @@ class CacheService implements CacheServiceInterface
         }
 
         foreach (Dungeon::all() as $dungeon) {
-            $this->unset(sprintf('dungeon_%s', $dungeon->id));
+            $this->unset(sprintf('dungeon_%d', $dungeon->id));
+        }
+
+        // Clear all view caches for dungeonroutes - use a simple query to prevent loading of all kinds of relations
+        $dungeonRouteIds = collect(DB::select('SELECT `id` FROM dungeon_routes'))->pluck('id')->toArray();
+
+        foreach ($dungeonRouteIds as $dungeonRouteId) {
+            $this->unset(sprintf('view:dungeonroute_card_%d', $dungeonRouteId));
         }
     }
-
-
 }

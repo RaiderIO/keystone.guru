@@ -1,7 +1,13 @@
+@inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
+
 <?php
+/** @var $cacheService \App\Service\Cache\CacheService */
 /** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $tierAffixGroup \App\Models\AffixGroup|null */
+/** @var $__env array */
 
+// Echo the result of this function
+echo $cacheService->remember(sprintf('view:dungeonroute_card_%s', $dungeonroute->id), function() use ($dungeonroute, $tierAffixGroup, $__env) {
 // Attempt a default value if there's only one affix set
 $tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ? $dungeonroute->affixes->first() : null;
 $showAffixes = $showAffixes ?? true;
@@ -10,8 +16,8 @@ $enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dun
 $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 
 $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
-?>
 
+ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }}">
@@ -153,3 +159,8 @@ $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->coun
         </div>
     </div>
 </div>
+
+<?php
+return ob_get_clean();
+});
+?>

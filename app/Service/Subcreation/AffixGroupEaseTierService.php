@@ -7,6 +7,7 @@ use App\Models\AffixGroup;
 use App\Models\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use App\Models\SubcreationEaseTierPull;
+use Illuminate\Support\Collection;
 
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
@@ -33,4 +34,24 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     */
+    function getTiersByAffixGroups(Collection $affixGroups): Collection
+    {
+        $result = collect();
+
+        $latestSubcreationEaseTierPull = SubcreationEaseTierPull::latest()->first();
+        if ($latestSubcreationEaseTierPull !== null) {
+            /** @var AffixGroupEaseTier|null $affixGroupEaseTier */
+            $result = $latestSubcreationEaseTierPull->affixgroupeasetiers()
+                ->whereIn('affix_group_id', $affixGroups->pluck('id')->toArray())
+                ->get()
+                ->groupBy('affix_group_id');
+        }
+
+        return $result;
+    }
+
 }

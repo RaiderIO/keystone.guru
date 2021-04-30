@@ -1,6 +1,8 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
+@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
 
 <?php
+/** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
@@ -11,6 +13,13 @@ $names = $names ?? true;
 $links = $links ?? collect();
 
 $currentSeason = $seasonService->getCurrentSeason();
+$currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+$nextAffixGroup = $currentSeason->getNextAffixGroup();
+
+$tiers = $subcreationTierListService->getTiersByAffixGroups(collect([
+    $currentAffixGroup,
+    $nextAffixGroup
+]));
 
 for( $i = 0; $i < $rowCount; $i++ ) { ?>
 <div class="row no-gutters">
@@ -50,8 +59,9 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                             <?php ob_start() ?>
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
-                                'affixgroup' => $currentSeason->getCurrentAffixGroup(),
+                                'affixgroup' => $currentAffixGroup,
                                 'url' => $url,
+                                'tier' => $tiers->get($currentAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
                             ])
                             {!! ($thisWeekTier = ob_get_clean()) !!}
 
@@ -64,8 +74,9 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                             <?php ob_start() ?>
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
-                                'affixgroup' => $currentSeason->getNextAffixGroup(),
+                                'affixgroup' => $nextAffixGroup,
                                 'url' => $url,
+                                'tier' => $tiers->get($nextAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
                             ])
                             {!! ($nextWeekTier = ob_get_clean()) !!}
 

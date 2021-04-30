@@ -7,7 +7,8 @@ $showDungeonImage = $showDungeonImage ?? false;
 $affixgroup = $affixgroup ?? null;
 
 $i = 0;
-for ($i = 0; $i < (int)ceil($dungeonroutes->count() / $cols); $i++) { ?>
+$count = $dungeonroutes->count();
+for ($i = 0; $i < (int)ceil($count / $cols); $i++) { ?>
 <div class="row no-gutters">
     <?php for ($j = 0; $j < $cols; $j++) {
     $dungeonroute = $dungeonroutes->get(($i * $cols) + $j);
