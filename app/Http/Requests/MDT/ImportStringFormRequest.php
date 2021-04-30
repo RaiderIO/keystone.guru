@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\DungeonRoute;
+namespace App\Http\Requests\MDT;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class APIDungeonRouteSearchFormRequest extends FormRequest
+class ImportStringFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // Auth::user()->hasRole(["user", "admin"]);
+        return true;
     }
 
     /**
@@ -24,9 +24,8 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'offset' => 'integer|required',
-            'limit'  => 'integer|required',
-            'title'  => 'string'
+            'import_string' => 'required|string',
+            'mdt_import_sandbox' => 'bool'
         ];
     }
 }

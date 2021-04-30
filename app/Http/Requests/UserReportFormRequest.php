@@ -25,11 +25,11 @@ class UserReportFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => 'required|max:255',
+            'category'   => 'required|max:255',
             // Required when not logged in
-            'name' => !Auth::check() ? 'required' : '',
+            'name'       => !Auth::check() ? 'required' : '',
             'contact_ok' => 'bool',
-            'message' => 'required|max:1000'
+            'message'    => 'required|max:1000'
         ];
     }
 }

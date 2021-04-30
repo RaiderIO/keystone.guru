@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\Tag;
 
-use App\Models\Tags\TagCategory;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class APITagUpdateFormRequest extends FormRequest
 {
@@ -27,8 +25,8 @@ class APITagUpdateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'     => 'required|string',
-            'color'    => 'required|string',
+            'name'  => 'required|string',
+            'color' => 'required|string',
         ];
     }
 }

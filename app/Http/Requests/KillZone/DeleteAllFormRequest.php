@@ -3,7 +3,6 @@
 namespace App\Http\Requests\KillZone;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class DeleteAllFormRequest extends FormRequest
 {

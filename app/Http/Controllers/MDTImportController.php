@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Logic\MDT\IO\ImportString;
@@ -22,13 +23,13 @@ class MDTImportController extends Controller
 {
     /**
      * Returns some details about the passed string.
-     * @param Request $request
+     * @param ImportStringFormRequest $request
      * @param SeasonService $seasonService
      * @return array|void
      * @throws Exception
      * @throws Throwable
      */
-    public function details(Request $request, SeasonService $seasonService)
+    public function details(ImportStringFormRequest $request, SeasonService $seasonService)
     {
         $string = $request->get('import_string');
 
@@ -91,13 +92,13 @@ class MDTImportController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ImportStringFormRequest $request
      * @param SeasonService $seasonService
      * @return Factory|View|void
      * @throws Exception
      * @throws Throwable
      */
-    public function import(Request $request, SeasonService $seasonService)
+    public function import(ImportStringFormRequest $request, SeasonService $seasonService)
     {
         $user = Auth::user();
 
