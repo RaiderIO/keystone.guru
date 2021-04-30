@@ -291,10 +291,13 @@ class ImportString extends MDTBase
                             // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
                             /** @var Enemy $enemy */
                             $enemy = null;
-                            foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
-                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
-                                    $enemy = $enemyCandidate;
-                                    break;
+                            // Only if we have the npc assigned at all
+                            if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
+                                foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
+                                    if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
+                                        $enemy = $enemyCandidate;
+                                        break;
+                                    }
                                 }
                             }
 

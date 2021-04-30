@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Session;
 
 abstract class OAuthLoginController extends LoginController
 {
@@ -62,7 +63,7 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Obtain the user information from the OAuth provider.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     protected function fetchUser()
     {
@@ -73,7 +74,7 @@ abstract class OAuthLoginController extends LoginController
      * Obtain the user information from Google.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function handleProviderCallback(Request $request)
     {
@@ -99,13 +100,13 @@ abstract class OAuthLoginController extends LoginController
                     // Add it as a user
                     $existingUser->attachRole(Role::where('name', 'user')->first());
 
-                    \Session::flash('status', __('Registered successfully. Enjoy the website!'));
+                    Session::flash('status', __('Registered successfully. Enjoy the website!'));
                 } else {
-                    \Session::flash('warning', sprintf(__('There is already a user with username %s. Did you already register before?'), $existingUser->name));
+                    Session::flash('warning', sprintf(__('There is already a user with username %s. Did you already register before?'), $existingUser->name));
                     $this->redirectTo = '/';
                 }
             } else {
-                \Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $existingUser->email));
+                Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $existingUser->email));
                 $this->redirectTo = '/';
             }
         } else {
