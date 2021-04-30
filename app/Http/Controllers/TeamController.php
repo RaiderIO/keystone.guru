@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Http\Requests\TeamFormRequest;
-use App\Models\File;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
@@ -25,6 +24,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode;
@@ -215,7 +215,7 @@ class TeamController extends Controller
      * Creates a tag from the tag manager
      *
      * @param TagFormRequest $request
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function createtag(TagFormRequest $request)
     {
@@ -235,6 +235,6 @@ class TeamController extends Controller
             $error = ['tag_name_new' => __('This tag already exists')];
         }
 
-        return view('team.edit')->withErrors($error);
+        return Redirect::back()->withErrors($error);
     }
 }
