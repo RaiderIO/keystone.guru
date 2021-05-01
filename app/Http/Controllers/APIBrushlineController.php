@@ -10,7 +10,11 @@ use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\Polyline;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -23,7 +27,7 @@ class APIBrushlineController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return Brushline
-     * @throws \Exception
+     * @throws Exception
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
@@ -43,7 +47,7 @@ class APIBrushlineController extends Controller
         }
 
         if (!$brushline->save()) {
-            throw new \Exception("Unable to save brushline!");
+            throw new Exception("Unable to save brushline!");
         } else {
             // Create a new polyline and save it
             $polyline = $this->_savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
@@ -70,8 +74,8 @@ class APIBrushlineController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Brushline $brushline
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return array|ResponseFactory|Response
+     * @throws AuthorizationException
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Brushline $brushline)
     {
@@ -93,7 +97,7 @@ class APIBrushlineController extends Controller
             } else {
                 $result = response('Unable to save Brushline', Http::INTERNAL_SERVER_ERROR);
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 
