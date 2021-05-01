@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use App\Rules\SiegeOfBoralusFactionRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;

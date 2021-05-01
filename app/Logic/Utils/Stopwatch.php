@@ -33,11 +33,13 @@ class Stopwatch
         if (isset(self::$timers[$timerName]) && isset(self::$timers[$timerName]['end'])) {
             // Add the difference to the start to simulate the pause!
             self::$timers[$timerName]['start'] += (self::_getTime() - self::$timers[$timerName]['end']);
+            self::$timers[$timerName]['count']++;
+
             // Remove the pause, it's now applied to the start so it's processed.
             unset(self::$timers[$timerName]['end']);
         } // Create a new timer instead; user wants to discard what was there
         else {
-            self::$timers[$timerName] = array('start' => self::_getTime());
+            self::$timers[$timerName] = ['start' => self::_getTime(), 'count' => 1];
         }
     }
 
@@ -94,7 +96,7 @@ class Stopwatch
      */
     public static function dump($timerName = 'default'): void
     {
-        dump(self::getElapsedString($timerName));
+        dump(sprintf('%s (%sx)', self::getElapsedString($timerName), self::$timers[$timerName]['count']));
     }
 
     /**
@@ -110,7 +112,8 @@ class Stopwatch
     /**
      * @return array
      */
-    public static function getAll() : array {
+    public static function getAll(): array
+    {
         $result = [];
         foreach (self::$timers as $key => $value) {
             $result[$key] = self::getElapsedString($key);

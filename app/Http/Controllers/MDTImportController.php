@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MDT\ImportStringFormRequest;
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Logic\MDT\IO\ImportString;
-use App\Logic\MDT\IO\ImportWarning;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use App\Service\Season\SeasonService;
@@ -21,13 +23,13 @@ class MDTImportController extends Controller
 {
     /**
      * Returns some details about the passed string.
-     * @param Request $request
+     * @param ImportStringFormRequest $request
      * @param SeasonService $seasonService
      * @return array|void
      * @throws Exception
      * @throws Throwable
      */
-    public function details(Request $request, SeasonService $seasonService)
+    public function details(ImportStringFormRequest $request, SeasonService $seasonService)
     {
         $string = $request->get('import_string');
 
@@ -67,6 +69,8 @@ class MDTImportController extends Controller
             }
 
             return $result;
+        } catch (InvalidMDTString $ex) {
+            return abort(400, __('The MDT string format was not recognized.'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
@@ -75,6 +79,7 @@ class MDTImportController extends Controller
                 $message = __('Invalid MDT string');
             }
 
+            report($ex);
             Log::error($ex->getMessage(), ['string' => $string]);
             return abort(400, $message);
         } catch (Throwable $error) {
@@ -87,13 +92,13 @@ class MDTImportController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ImportStringFormRequest $request
      * @param SeasonService $seasonService
      * @return Factory|View|void
      * @throws Exception
      * @throws Throwable
      */
-    public function import(Request $request, SeasonService $seasonService)
+    public function import(ImportStringFormRequest $request, SeasonService $seasonService)
     {
         $user = Auth::user();
 
@@ -104,16 +109,18 @@ class MDTImportController extends Controller
             $importString = new ImportString($seasonService);
 
             try {
-                // @TODO improve exception handling
-                $warnings = new Collection();
-                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, $sandbox, true);
+                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
 
                 // Keep track of the import
                 $mdtImport = new MDTImport();
                 $mdtImport->dungeon_route_id = $dungeonRoute->id;
                 $mdtImport->import_string = $string;
                 $mdtImport->save();
+            } catch (InvalidMDTString $ex) {
+                return abort(400, __('The MDT string format was not recognized.'));
             } catch (Exception $ex) {
+                report($ex);
+
                 // Makes it easier to debug
                 if (env('APP_DEBUG')) {
                     throw $ex;

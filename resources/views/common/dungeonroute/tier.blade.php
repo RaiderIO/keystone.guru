@@ -5,7 +5,8 @@
 /** @var $dungeon \App\Models\Dungeon */
 /** @var $affixgroup \App\Models\AffixGroup */
 
-$tier = $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon);
+// Users may write their own tiers if they received it from a batch call for example
+$tier = $tier ?? $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon);
 $url = $url ?? null;
 ?>
 @if($tier !== null)

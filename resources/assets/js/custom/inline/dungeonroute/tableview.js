@@ -65,6 +65,8 @@ class ProfileTableView extends TableView {
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
@@ -73,6 +75,8 @@ class ProfileTableView extends TableView {
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '7%', clickable: false},
             ]
         };
@@ -97,11 +101,33 @@ class FavoritesTableView extends ProfileTableView {
     }
 }
 
-class UserProfileTableView extends ProfileTableView {
+class UserProfileTableView extends TableView {
     constructor() {
         super();
 
         this._user = null;
+
+        this._columns = {
+            list: [
+                {name: 'title', width: '15%', className: 'pt-0 pb-0'},
+                {name: 'dungeon', width: '15%'},
+                {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
+                // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
+            ],
+            biglist: [
+                {name: 'preview', width: '15%', clickable: false},
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
+            ]
+        };
     }
 
     getAjaxParameters() {
@@ -117,7 +143,6 @@ class UserProfileTableView extends ProfileTableView {
      * @param user
      */
     setUser(user) {
-        console.log('setUser', user);
         this._user = user;
     }
 }

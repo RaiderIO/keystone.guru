@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Logic\MDT\IO\ExportString;
 use App\Logic\MDT\IO\ImportString;
-use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Npc;
@@ -172,6 +173,8 @@ class AdminToolsController extends Controller
             $dungeonRoute->makeVisible(['killzones']);
 
             dd($dungeonRoute);
+        } catch (InvalidMDTString $ex) {
+            return abort(400, __('The MDT string format was not recognized.'));
         } catch (Exception $ex) {
 
             // Different message based on our deployment settings

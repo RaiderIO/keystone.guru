@@ -11,6 +11,7 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
@@ -212,8 +213,32 @@ class ExportString extends MDTBase
             'uid'        => $this->_dungeonRoute->public_key . 'xxKG',
         ];
 
+        try {
+            return $lua->call("TableToString", [$mdtObject, true]);
+        } catch (\Exception $exception) {
+            // Encoding issue - adjust the title and try again
+            if (str_contains($exception->getMessage(), "call to lua function [string &quot;line&quot;]")) {
+                $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->_dungeonRoute->title);
 
-        return $lua->call("TableToString", [$mdtObject, true]);
+                // If stripping ascii characters worked in changing the title somehow
+                if ($asciiTitle !== $this->_dungeonRoute->title) {
+                    $warnings->push(
+                        new ImportWarning(__('Title'),
+                            __('Your route title contains non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. 
+                                Your route title has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.'),
+                            ['details' => sprintf(__('Old title: %s, new title: %s'), $this->_dungeonRoute->title, $asciiTitle)]
+                        )
+                    );
+                    $this->_dungeonRoute->title = $asciiTitle;
+
+                    return $this->getEncodedString($warnings);
+                } else {
+                    throw $exception;
+                }
+            } else {
+                throw $exception;
+            }
+        }
     }
 
     /**

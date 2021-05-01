@@ -28,12 +28,12 @@ class ProfileFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'avatar' => 'image|mimes:png|max:256',
-            'name' => ['required|alpha_dash|min:3|max:24', Rule::unique('users')->ignore($this->route()->parameter('user'))],
-            'email' => 'required|email|unique:users',
-            'echo_color' => 'required|color',
+            'avatar'           => 'image|mimes:png|max:256',
+            'name'             => ['required|alpha_dash|min:3|max:24', Rule::unique('users')->ignore($this->route()->parameter('user'))],
+            'email'            => 'required|email|unique:users',
+            'echo_color'       => 'required|color',
             'current_password' => 'min:8',
-            'new_password' => 'min:8|confirmed',
+            'new_password'     => 'min:8|confirmed',
         ];
     }
 }

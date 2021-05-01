@@ -42,7 +42,7 @@
     <?php
     /** @var $warnings \Illuminate\Support\Collection */
     $warnings = $warnings->groupBy(function ($item) {
-        /** @var $item \App\Logic\MDT\IO\ImportWarning */
+        /** @var $item \App\Logic\MDT\Exception\ImportWarning */
         return $item->getCategory();
     });
 
@@ -69,7 +69,7 @@
                     <th width="15%">{{ __('Actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
-                    <?php /** @var $importWarning \App\Logic\MDT\IO\ImportWarning */
+                    <?php /** @var $importWarning \App\Logic\MDT\Exception\ImportWarning */
                     $data = ($importWarning->getData());
                     $mdtNpc = $data['mdt_npc'];
 

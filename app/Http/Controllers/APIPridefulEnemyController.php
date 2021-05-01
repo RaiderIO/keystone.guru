@@ -53,6 +53,8 @@ class APIPridefulEnemyController extends Controller
             broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
         }
 
+        $dungeonroute->touch();
+
         return $pridefulEnemy;
     }
 
@@ -72,6 +74,9 @@ class APIPridefulEnemyController extends Controller
                     broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
                 }
             }
+
+            $dungeonroute->touch();
+
             $result = response()->noContent();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

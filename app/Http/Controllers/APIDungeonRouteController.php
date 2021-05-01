@@ -21,8 +21,8 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\IO\ExportString;
-use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
@@ -660,7 +660,7 @@ class APIDungeonRouteController extends Controller
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
             Log::error($ex->getMessage(), ['dungeonroute' => $dungeonroute]);
-            return abort(400, sprintf(__('An error occurred generating your MDT string: %s %s'), $ex->getMessage(), $ex->getTraceAsString()));
+            return abort(400, sprintf(__('An error occurred generating your MDT string: %s'), $ex->getMessage()));
         } catch (Throwable $error) {
             Log::critical($error->getMessage());
 

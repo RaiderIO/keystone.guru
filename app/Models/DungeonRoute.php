@@ -22,7 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * @property $id int
@@ -993,6 +995,28 @@ class DungeonRoute extends Model
 
         return $subTitle;
     }
+
+    /**
+     * Drops any caches associated with this dungeon route
+     */
+    public function dropCaches()
+    {
+        try {
+            Cache::delete(sprintf('view:dungeonroute_card_%d', $this->id));
+        } catch (InvalidArgumentException $e) {
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function touch()
+    {
+        $this->dropCaches();
+        
+        parent::touch();
+    }
+
 
     public static function boot()
     {

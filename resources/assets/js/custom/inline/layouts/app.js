@@ -19,7 +19,19 @@ class LayoutsApp extends InlineCode {
         // Make sure selectpicker is enabled
         $('.selectpicker').selectpicker();
 
-        $('.import_mdt_string_textarea').bind('paste', this._importStringPasted);
+        // When the MDT import modal is close, reset it
+        $('#create_route_modal').on('hidden.bs.modal', this._resetMdtModal.bind(this));
+
+        this.$importStringTextArea = $('.import_mdt_string_textarea').bind('paste', this._importStringPasted.bind(this));
+        this.$root = this.$importStringTextArea.closest('.modal');
+
+        this.$loader = this.$root.find('.import_mdt_string_loader');
+        this.$details = this.$root.find('.import_mdt_string_details');
+        this.$warnings = this.$root.find('.mdt_string_warnings');
+        this.$importString = this.$root.find('.import_string');
+        this.$submitBtn = this.$root.find('input[type="submit"]');
+        this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').bind('click', this._resetMdtModal.bind(this));
+
 
         if (this.options.guest) {
             this._newPassword('#register_password');
@@ -96,24 +108,13 @@ class LayoutsApp extends InlineCode {
      * Called whenever the MDT import string has been pasted into the text area.
      **/
     _importStringPasted(typedEvent) {
+        let self = this;
         // https://stackoverflow.com/questions/686995/catch-paste-input
-        let $importStringTextArea = $(this);
-        let $root = $importStringTextArea.closest('.modal');
-
-        let $loader = $root.find('.import_mdt_string_loader');
-        let $details = $root.find('.import_mdt_string_details');
-        let $warnings = $root.find('.mdt_string_warnings');
-        let $importString = $root.find('.import_string');
-        let $submitBtn = $root.find('input[type="submit"]');
-
-        // Identify the type; sandbox or not.
-        let $type = $root.find('.hidden_sandbox');
-        $type.val($root.attr('id').includes('sandbox') ? 1 : 0);
 
         // Ugly, but needed since otherwise the field would be disabled prior to the value being actually assigned
         setTimeout(function () {
             // Can no longer edit it
-            $importStringTextArea.prop('disabled', true);
+            self.$importStringTextArea.prop('disabled', true);
         }, 10);
 
         $.ajax({
@@ -124,10 +125,10 @@ class LayoutsApp extends InlineCode {
                 'import_string': typedEvent.originalEvent.clipboardData.getData('text')
             },
             beforeSend: function () {
-                $loader.show();
+                self.$loader.show();
             },
             complete: function () {
-                $loader.hide();
+                self.$loader.hide();
             },
             success: function (responseData) {
                 let detailsTemplate = Handlebars.templates['import_string_details_template'];
@@ -153,29 +154,41 @@ class LayoutsApp extends InlineCode {
                 });
 
                 // Build the preview from the template
-                $details.html(detailsTemplate(data));
+                self.$details.html(detailsTemplate(data));
 
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
                     (new MdtStringWarnings(responseData.warnings))
-                        .render($warnings);
+                        .render(self.$warnings);
                 }
 
                 // Tooltips may be added above
                 refreshTooltips();
 
-                $importString.val($importStringTextArea.val());
-                $submitBtn.prop('disabled', false);
+                self.$importString.val(self.$importStringTextArea.val());
+                self.$submitBtn.prop('disabled', false);
+
+                self.$resetBtn.show();
             }, error: function (xhr, textStatus, errorThrown) {
-                $importStringTextArea.removeProp('disabled');
+                self._resetMdtModal();
 
-                $details.html('');
-                $warnings.html('');
-
-                $submitBtn.prop('disabled', true);
                 defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
+    }
+
+    /**
+     * Reset the MDT modal to accept pastes again
+     */
+    _resetMdtModal() {
+        console.warn('_resetMdtModal');
+
+        this.$importStringTextArea.removeAttr('disabled').val('');
+
+        this.$details.html('');
+        this.$warnings.html('');
+
+        this.$submitBtn.prop('disabled', true);
     }
 }
 
