@@ -119,7 +119,11 @@ class CacheService implements CacheServiceInterface
         $dungeonRouteIds = collect(DB::select('SELECT `id` FROM dungeon_routes'))->pluck('id')->toArray();
 
         foreach ($dungeonRouteIds as $dungeonRouteId) {
-            $this->unset(sprintf('view:dungeonroute_card_%d', $dungeonRouteId));
+            // Unset for all variants
+            $this->unset(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));
+            $this->unset(sprintf('view:dungeonroute_card_0_1_%d', $dungeonRouteId));
+            $this->unset(sprintf('view:dungeonroute_card_1_0_%d', $dungeonRouteId));
+            $this->unset(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
         }
     }
 }
