@@ -265,17 +265,19 @@ class ImportString extends MDTBase
                             // Find the matching enemy of the clones
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
-                            foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
-                                if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
-                                    // Found it
-                                    $mdtEnemy = $mdtEnemyCandidate;
+                            if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
+                                foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
+                                    if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                                        // Found it
+                                        $mdtEnemy = $mdtEnemyCandidate;
 
-                                    // Skip Emissaries (Season 3), season is over
-                                    if (in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
-                                        break 2;
+                                        // Skip Emissaries (Season 3), season is over
+                                        if (in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
+                                            break 2;
+                                        }
+
+                                        break;
                                     }
-
-                                    break;
                                 }
                             }
 
