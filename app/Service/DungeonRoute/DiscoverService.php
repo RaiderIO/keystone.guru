@@ -83,6 +83,23 @@ class DiscoverService implements DiscoverServiceInterface
     }
 
     /**
+     * Adds a penalty to the affix group count - more affixes assigned to your route will cause it to drop in popularity
+     * to prevent having routes assigned to every affix from always dominating the rankings
+     * @param Builder $builder
+     * @return Builder
+     */
+    private function applyAffixGroupCountPenalty(Builder $builder): Builder
+    {
+        return $builder;
+        // @TODO This doesn't work unfortunately - need to investigate further
+//            ->selectRaw('COUNT(dungeon_route_affix_groups.id) as affixCount')
+//            // Less affixes get a higher priority to encourage more specific routes
+//            ->reorder()
+//            // Having less affixes in your route will cause it to bubble up sooner for this specific week
+//            ->orderByRaw('(13 - affixCount) * views');
+    }
+
+    /**
      * @inheritDoc
      */
     function popular(): Collection
@@ -96,10 +113,7 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeon(): Collection
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
-
-        return $cacheService->remember('discover_routes_popular', function ()
+        return $this->_cacheService->remember('discover_routes_popular', function ()
         {
             $result = collect();
 
@@ -122,10 +136,11 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder()
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
+        return $this->applyAffixGroupCountPenalty(
+            $this->popularBuilder()
+                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+        )->get();
     }
 
     /**
@@ -133,16 +148,13 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
-
-        return $cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup)
+        return $this->_cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup)
         {
             $result = collect();
 
             $activeDungeons = Dungeon::active()->get();
             foreach ($activeDungeons as $dungeon) {
-            // Limit the amount of results of our queries to 2
+                // Limit the amount of results of our queries to 2
                 $result = $result->merge($this->withBuilder(function (Builder $builder)
                 {
                     $builder->limit(2);
@@ -168,11 +180,12 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->popularBuilder()
-            ->where('dungeon_id', $dungeon->id)
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
+        return $this->applyAffixGroupCountPenalty(
+            $this->popularBuilder()
+                ->where('dungeon_id', $dungeon->id)
+                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+        )->get();
     }
 
     /**

@@ -5,13 +5,12 @@
 /** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $tierAffixGroup \App\Models\AffixGroup|null */
 /** @var $__env array */
+/** @var $cache boolean */
 
 $showAffixes = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
-// Echo the result of this function
-echo $cacheService->remember(sprintf('view:dungeonroute_card_%d_%d_%d', (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
-    function() use ($showAffixes, $showDungeonImage, $dungeonroute, $tierAffixGroup, $__env) {
+$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $tierAffixGroup, $__env) {
 // Attempt a default value if there's only one affix set
 $tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ? $dungeonroute->affixes->first() : null;
 $enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dungeon->enemy_forces_required) * 100);
@@ -164,5 +163,16 @@ ob_start(); ?>
 
 <?php
 return ob_get_clean();
-});
+};
+
+if ($cache) {
+// Echo the result of this function
+    echo $cacheService->remember(
+        sprintf('view:dungeonroute_card_%d_%d_%d', (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
+        $cacheFn,
+        config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
+    );
+} else {
+    echo $cacheFn();
+}
 ?>

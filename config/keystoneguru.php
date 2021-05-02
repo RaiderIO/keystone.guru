@@ -195,7 +195,7 @@ return [
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
             'popular'      => [
-                'ttl' => '10 min',
+                'ttl' => '1 hour',
             ]
 
 
@@ -239,6 +239,14 @@ return [
             //                'ttl'       => '5 min',
             //                'cache_key' => 'new_by_dungeon_%d_and_affix_group_%d',
             //            ],
+        ]
+    ],
+
+    'view' => [
+        'common.dungeonroute.card' => [
+            'cache' => [
+                'ttl' => '1 hour'
+            ]
         ]
     ]
 ];
