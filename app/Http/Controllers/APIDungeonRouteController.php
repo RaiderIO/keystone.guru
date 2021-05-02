@@ -423,7 +423,7 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Response
      * @throws Exception
      */
     function delete(Request $request, DungeonRoute $dungeonroute)
@@ -434,7 +434,7 @@ class APIDungeonRouteController extends Controller
             abort(500, 'Unable to delete dungeonroute');
         }
 
-        return ['result' => 'success'];
+        return response()->noContent();
     }
 
     /**
@@ -507,6 +507,7 @@ class APIDungeonRouteController extends Controller
         }
 
         $dungeonroute->unsetRelation('ratings');
+        $dungeonroute->dropCaches();
         return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
     }
 
@@ -529,13 +530,14 @@ class APIDungeonRouteController extends Controller
         $dungeonRouteRating->delete();
 
         $dungeonroute->unsetRelation('ratings');
+        $dungeonroute->dropCaches();
         return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Response
      * @throws Exception
      */
     function favorite(Request $request, DungeonRoute $dungeonroute)
@@ -548,13 +550,13 @@ class APIDungeonRouteController extends Controller
         $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
         $dungeonRouteFavorite->save();
 
-        return ['result' => 'success'];
+        return response()->noContent();
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Response
      * @throws Exception
      */
     function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
@@ -569,7 +571,7 @@ class APIDungeonRouteController extends Controller
             ->where('user_id', $user->id);
         $dungeonRouteFavorite->delete();
 
-        return ['result' => 'success'];
+        return response()->noContent();
     }
 
     /**

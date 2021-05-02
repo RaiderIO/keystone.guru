@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Response;
 
 class APIProfileController
 {
     /**
      * @param Request $request
-     * @return array
+     * @return Response
      */
     public function legalAgree(Request $request)
     {
@@ -22,6 +23,6 @@ class APIProfileController
 
         $user->save();
 
-        return ['result' => 'success'];
+        return response()->noContent();
     }
 }
