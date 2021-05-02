@@ -45,8 +45,8 @@ class AddIndicesToVariousTables extends Migration
 
         Schema::table('map_object_to_awakened_obelisk_links', function (Blueprint $table)
         {
-            $table->index(['target_map_icon_type_id']);
-            $table->index(['target_map_icon_seasonal_index']);
+            $table->index(['target_map_icon_type_id'], 'motaol_target_map_icon_type_id');
+            $table->index(['target_map_icon_seasonal_index'], 'motaol_target_map_icon_seasonal_index');
         });
 
         Schema::table('npcs', function (Blueprint $table)
@@ -105,8 +105,8 @@ class AddIndicesToVariousTables extends Migration
 
         Schema::table('map_object_to_awakened_obelisk_links', function (Blueprint $table)
         {
-            $table->dropIndex(['target_map_icon_type_id']);
-            $table->dropIndex(['target_map_icon_seasonal_dropIndex']);
+            $table->dropIndex('motaol_target_map_icon_type_id');
+            $table->dropIndex('motaol_target_map_icon_seasonal_index');
         });
 
         Schema::table('npcs', function (Blueprint $table)
