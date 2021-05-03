@@ -87,7 +87,7 @@ class AddIndicesToVariousTables extends Migration
 
         Schema::table('enemies', function (Blueprint $table)
         {
-            $table->dropIndex(['seasonal_dropIndex']);
+            $table->dropIndex(['seasonal_index']);
             $table->dropIndex(['mdt_id']);
             $table->dropIndex(['enemy_forces_override']);
             $table->dropIndex(['enemy_forces_override_teeming']);
@@ -100,7 +100,7 @@ class AddIndicesToVariousTables extends Migration
 
         Schema::table('map_icons', function (Blueprint $table)
         {
-            $table->dropIndex(['seasonal_dropIndex']);
+            $table->dropIndex(['seasonal_index']);
         });
 
         Schema::table('map_object_to_awakened_obelisk_links', function (Blueprint $table)
