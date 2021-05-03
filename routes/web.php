@@ -269,6 +269,11 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
                 Route::get('/npcimport', [AdminToolsController::class, 'npcimport'])->name('admin.tools.npcimport');
                 Route::post('/npcimport', [AdminToolsController::class, 'npcimportsubmit'])->name('admin.tools.npcimport.submit');
 
+                // Dungeonroute
+                Route::get('/dungeonroute', [AdminToolsController::class, 'dungeonroute'])->name('admin.tools.dungeonroute.view');
+                Route::post('/dungeonroute', [AdminToolsController::class, 'dungeonroutesubmit'])->name('admin.tools.dungeonroute.view.submit');
+
+
                 // View string contents
                 Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
