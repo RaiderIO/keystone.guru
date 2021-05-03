@@ -677,9 +677,12 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
+     * @return Response
      */
-    function refreshThumbnail(Request $request, DungeonRoute $dungeonroute)
+    function refreshThumbnail(Request $request, DungeonRoute $dungeonroute): Response
     {
         $dungeonroute->queueRefreshThumbnails();
+
+        return response()->noContent();
     }
 }
