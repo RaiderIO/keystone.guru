@@ -1,0 +1,47 @@
+{
+    "id": 100,
+    "release_changelog_id": 107,
+    "version": "v4.0.6",
+    "title": "More bugfixes and changes to allow me to fix even more bugs.",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-05-03T09:10:36+00:00",
+    "updated_at": "2021-05-03T09:10:36+00:00",
+    "changelog": {
+        "id": 107,
+        "release_id": 100,
+        "description": "The past few releases have mainly been focussed on fixing bugs. I will work on new features soon - but for now getting existing features working right is important so that I don't build up massive technical debt which needs to be cleared eventually.",
+        "changes": [
+            {
+                "release_changelog_id": 107,
+                "release_changelog_category_id": 1,
+                "ticket_id": 792,
+                "change": "Further increased performance of \/routes and \/affixes pages. I'll get them to be quick eventually.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 107,
+                "release_changelog_category_id": 1,
+                "ticket_id": 806,
+                "change": "Added new admin page to allow me to debug issues with routes easier.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 107,
+                "release_changelog_category_id": 5,
+                "ticket_id": 785,
+                "change": "Copy to Clipboard functionality in Share window now works again.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

@@ -4,21 +4,31 @@
 
 @section('content')
     <h3>{{ __('Tools') }}</h3>
+    <h4>{{ __('Import') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.npcimport') }}">{{ __('Mass import NPCs') }}</a>
     </div>
+
+    <h4>{{ __('Dungeonroute') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.dungeonroute.view') }}">{{ __('View Dungeonroute details') }}</a>
+    </div>
+
+    <h4>{{ __('MDT') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.mdt.string.view') }}">{{ __('View MDT String contents') }}</a>
     </div>
     <div class="form-group">
-        <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('View MDT String as DungeonRoute') }}</a>
+        <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('View MDT String as Dungeonroute') }}</a>
     </div>
     <div class="form-group">
-        <a href="{{ route('admin.tools.mdt.dungeonroute.viewasstring') }}">{{ __('View DungeonRoute as MDT String') }}</a>
+        <a href="{{ route('admin.tools.mdt.dungeonroute.viewasstring') }}">{{ __('View Dungeonroute as MDT String') }}</a>
     </div>
     <div class="form-group">
         <a href="{{ route('admin.tools.mdt.diff') }}">{{ __('View MDT Diff') }}</a>
     </div>
+
+    <h4>{{ __('Misc') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.cache.drop') }}">{{ __('Drop dungeon caches') }}</a>
     </div>

@@ -1,7 +1,7 @@
 <?php
-$options = isset($options) ? $options : [];
-$section = isset($section) ? $section : true;
-$modal = isset($modal) ? $modal : false;
+$options = $options ?? [];
+$section = $section ?? true;
+$modal = $modal ?? false;
 
 // Wrap in section tags of the inline code, otherwise just spit it out right now
 if( $section ) { ?>

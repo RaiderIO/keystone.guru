@@ -9,6 +9,7 @@ $showMore = $showMore ?? false;
 $loadMore = $loadMore ?? false;
 $showDungeonImage = $showDungeonImage ?? false;
 $affixgroup = $affixgroup ?? null;
+$cache = $cache ?? true;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">
@@ -32,7 +33,7 @@ $affixgroup = $affixgroup ?? null;
                 </div>
             @endisset
             <div id="category_route_list">
-                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'affixgroup' => $affixgroup, 'showDungeonImage' => $showDungeonImage])
+                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'affixgroup' => $affixgroup, 'showDungeonImage' => $showDungeonImage, 'cache' => $cache])
             </div>
         </div>
     </div>

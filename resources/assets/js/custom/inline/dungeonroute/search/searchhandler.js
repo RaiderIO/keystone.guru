@@ -46,6 +46,7 @@ class SearchHandler {
                 // For some reason doing this immediately will cause the carousel to not load properly, maybe because the image is not rendered yet?
                 // This delay causes it to be rendered OK
                 (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
+                (new ThumbnailRefresh()).refreshHandlers();
 
                 // Init the affix popovers
                 $(`.${containerClass} [data-toggle="popover"]`).popover();

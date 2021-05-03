@@ -8,16 +8,22 @@ use Carbon\Carbon;
 
 class ExpansionService implements ExpansionServiceInterface
 {
-
+    /**
+     * @inheritDoc
+     */
     public function getExpansionAt(Carbon $carbon): ?Expansion
     {
-        return Expansion::where('released_at', '<', $carbon->toDateTimeString())->orderBy('id', 'desc')->limit(1)->get()->first();
+        return Expansion::where('released_at', '<', $carbon->toDateTimeString())
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
+
+    /**
+     * @inheritDoc
+     */
     public function getCurrentExpansion(): Expansion
     {
         return $this->getExpansionAt(Carbon::now());
     }
-
-
 }

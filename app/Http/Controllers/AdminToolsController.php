@@ -130,6 +130,31 @@ class AdminToolsController extends Controller
     }
 
     /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function dungeonroute()
+    {
+        return view('admin.tools.dungeonroute.view');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function dungeonroutesubmit(Request $request)
+    {
+        $dungeonRoute = DungeonRoute::with([
+            'faction', 'specializations', 'classes', 'races', 'affixes',
+            'brushlines', 'paths', 'author', 'killzones', 'pridefulenemies', 'publishedstate',
+            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team'
+        ])->where('public_key', $request->get('public_key'))->firstOrFail();
+
+        return view('admin.tools.dungeonroute.viewcontents', [
+            'dungeonroute' => $dungeonRoute
+        ]);
+    }
+
+    /**
      * @return Factory|
      */
     public function mdtview()

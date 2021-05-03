@@ -58,5 +58,6 @@
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => true,
         'showDungeonImage' => true,
+        'cache' => false,
     ])
 @endsection
