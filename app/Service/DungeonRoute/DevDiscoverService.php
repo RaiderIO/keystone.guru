@@ -6,6 +6,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Service\Expansion\ExpansionService;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -13,14 +14,26 @@ use Illuminate\Support\Collection;
 class DevDiscoverService implements DiscoverServiceInterface
 {
     /** @var Closure|null */
-    private ?Closure $_closure = null;
+    private ?Closure $closure = null;
+
+    /** @var ExpansionService  */
+    private ExpansionService $expansionService;
+
+    /**
+     * DevDiscoverService constructor.
+     * @param ExpansionService $expansionService
+     */
+    public function __construct(ExpansionService $expansionService)
+    {
+        $this->expansionService = $expansionService;
+    }
 
     /**
      * @inheritDoc
      */
     function withBuilder(Closure $closure): DiscoverServiceInterface
     {
-        $this->_closure = $closure;
+        $this->closure = $closure;
 
         return $this;
     }
@@ -33,8 +46,11 @@ class DevDiscoverService implements DiscoverServiceInterface
     private function popularBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
-            ->with(['author', 'affixes', 'ratings', 'faction', 'specializations', 'classes', 'races'])
+            ->when($this->closure !== null, $this->closure)
+            ->with(['author', 'affixes', 'ratings'])
+            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansionService->getCurrentExpansion()->id)
 //            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false);
@@ -48,8 +64,11 @@ class DevDiscoverService implements DiscoverServiceInterface
     private function newBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
-            ->with(['author', 'affixes', 'ratings', 'faction', 'specializations', 'classes', 'races'])
+            ->when($this->closure !== null, $this->closure)
+            ->with(['author', 'affixes', 'ratings'])
+            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansionService->getCurrentExpansion()->id)
 //            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)
