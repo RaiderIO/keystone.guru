@@ -50,10 +50,11 @@ class APIEnemyPatrolController extends Controller
 
             // Couple the patrol to the polyline
             $enemyPatrol->polyline_id = $polyline->id;
-            // Load the polyline so it can be echoed back to the user
-            $enemyPatrol->load(['polyline']);
 
             if ($enemyPatrol->save()) {
+
+                // Load the polyline so it can be echoed back to the user
+                $enemyPatrol->load(['polyline']);
                 if (Auth::check()) {
                     broadcast(new ModelChangedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
                 }

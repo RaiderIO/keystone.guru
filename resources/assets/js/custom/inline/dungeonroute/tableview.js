@@ -91,16 +91,6 @@ class ProfileTableView extends TableView {
     }
 }
 
-class FavoritesTableView extends ProfileTableView {
-    getAjaxParameters() {
-        return {favorites: 1};
-    }
-
-    getName() {
-        return 'favorites';
-    }
-}
-
 class UserProfileTableView extends TableView {
     constructor() {
         super();
@@ -144,6 +134,16 @@ class UserProfileTableView extends TableView {
      */
     setUser(user) {
         this._user = user;
+    }
+}
+
+class FavoritesTableView extends UserProfileTableView {
+    getAjaxParameters() {
+        return {favorites: 1};
+    }
+
+    getName() {
+        return 'favorites';
     }
 }
 

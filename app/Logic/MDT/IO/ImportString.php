@@ -534,6 +534,9 @@ class ImportString extends MDTBase
                                 $polyline->model_id = $lineOrPath->id;
                                 $polyline->model_class = get_class($lineOrPath);
                                 $polyline->save();
+
+                                $lineOrPath->polyline_id = $polyline->id;
+                                $lineOrPath->save();
                             } else {
                                 // Otherwise inject
                                 $lineOrPath->polyline = $polyline;

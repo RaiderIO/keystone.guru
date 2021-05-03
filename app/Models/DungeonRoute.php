@@ -795,10 +795,10 @@ class DungeonRoute extends Model
 
     /**
      * Clone relations of this dungeonroute into another dungeon route.
-     * @param $dungeonroute DungeonRoute The RECEIVER of the relations of THIS dungeon route.
+     * @param $dungeonroute DungeonRoute The RECEIVER of the target $relations
      * @param $relations array The relations that you want to clone.
      */
-    public function cloneRelationsInto(DungeonRoute $dungeonroute, $relations)
+    public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations)
     {
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {
@@ -829,6 +829,7 @@ class DungeonRoute extends Model
 
                     // Write the polyline back to the model
                     $model->polyline_id = $model->polyline->id;
+                    $model->save();
                 }
             }
         }
