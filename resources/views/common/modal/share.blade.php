@@ -5,6 +5,9 @@ $showEmbed = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;
 $showPublish = $show['publish'] ?? true;
 ?>
+
+@include('common.general.inline', ['path' => 'common/dungeonroute/share'])
+
 <!-- Shareable link -->
 <h3 class="card-title">{{ __('Share') }}</h3>
 
