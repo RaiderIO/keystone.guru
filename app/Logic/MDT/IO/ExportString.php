@@ -188,7 +188,7 @@ class ExportString extends MDTBase
             //
             'objects'    => $this->_extractObjects($warnings),
             // M+ level
-            'difficulty' => 10,
+            'difficulty' => $this->_dungeonRoute->level_min,
             'week'       => $this->_dungeonRoute->affixgroups->isEmpty() ? 1 :
                 Conversion::convertAffixGroupToWeek($this->_seasonService, $this->_dungeonRoute->affixes->first()),
             'value'      => [
@@ -233,7 +233,30 @@ class ExportString extends MDTBase
 
                     return $this->getEncodedString($warnings);
                 } else {
-                    throw $exception;
+                    $fixedMapIconComment = false;
+
+                    foreach ($this->_dungeonRoute->mapicons as $mapicon) {
+                        $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment);
+                        if ($asciiComment !== $mapicon->comment) {
+                            $warnings->push(
+                                new ImportWarning(__('Map icon'),
+                                    __('One of your comments on a map icon has non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. 
+                                Your map comment has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.'),
+                                    ['details' => sprintf(__('Old comment: "%s", new comment: "%s"'), $asciiComment, $mapicon->comment)]
+                                )
+                            );
+                            $mapicon->comment = $asciiComment;
+
+                            $fixedMapIconComment = true;
+                        }
+                    }
+
+                    // If we fixed something, try again with encoding
+                    if ($fixedMapIconComment) {
+                        return $this->getEncodedString($warnings);
+                    } else {
+                        throw $exception;
+                    }
                 }
             } else {
                 throw $exception;
