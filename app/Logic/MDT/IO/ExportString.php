@@ -28,6 +28,8 @@ use Illuminate\Support\Collection;
  */
 class ExportString extends MDTBase
 {
+
+
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private $_encodedString;
 
@@ -182,7 +184,7 @@ class ExportString extends MDTBase
      */
     public function getEncodedString(Collection $warnings)
     {
-        $lua = $this->_getLua();
+//        $lua = $this->_getLua();
 
         $mdtObject = [
             //
@@ -214,7 +216,7 @@ class ExportString extends MDTBase
         ];
 
         try {
-            return $lua->call("TableToString", [$mdtObject, true]);
+            return $this->encode($mdtObject);
         } catch (\Exception $exception) {
             // Encoding issue - adjust the title and try again
             if (str_contains($exception->getMessage(), "call to lua function [string &quot;line&quot;]")) {

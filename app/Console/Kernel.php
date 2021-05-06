@@ -12,6 +12,8 @@ use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Mapping\Save as MappingSave;
+use App\Console\Commands\MDT\Decode;
+use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -54,6 +56,10 @@ class Kernel extends ConsoleKernel
         MappingMerge::class,
         MappingSave::class,
         MappingRestore::class,
+
+        // MDT
+        Encode::class,
+        Decode::class,
 
         // Release
         GetCurrentRelease::class,
