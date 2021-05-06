@@ -16,13 +16,7 @@ $user = Auth::user();
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @isset($user->iconfile)
-                <img src="{{ $user->iconfile->getURL() }}" alt="{{ __('Avatar') }}"
-                     style="max-width: 26px; max-height: 26px"/>
-            @else
-                <i class="fas fa-user"></i>
-            @endisset
-            {{ $user->name }}
+            @include('common.user.name', ['user' => $user])
         </a>
         <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole('admin'))
