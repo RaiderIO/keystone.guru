@@ -369,7 +369,9 @@ class AdminToolsController extends Controller
     {
         $cacheService->dropCaches();
 
-        Session::flash('status', __('Dungeon caches dropped successfully'));
+        Artisan::call('modelCache:clear');
+
+        Session::flash('status', __('Caches dropped successfully'));
 
         return redirect()->route('admin.tools');
     }
