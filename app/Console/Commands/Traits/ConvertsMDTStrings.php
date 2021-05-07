@@ -56,7 +56,7 @@ trait ConvertsMDTStrings
         $result = null;
 
         // Save a temp file so that the parser can handle it
-        $fileName = $this->saveFile(json_encode($string));
+        $fileName = $this->saveFile($string);
 
         if ($fileName !== null) {
             $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);

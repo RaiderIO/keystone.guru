@@ -59,6 +59,6 @@ class MDTBase
     {
         Artisan::call('mdt:decode', ['string' => $string]);
 
-        return json_decode(trim(Artisan::output()));
+        return json_decode(trim(Artisan::output()), true);
     }
 }

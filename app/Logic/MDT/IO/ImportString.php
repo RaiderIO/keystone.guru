@@ -493,19 +493,19 @@ class ImportString extends MDTBase
                     $details = $object['d'];
 
                     // Get the proper index of the floor, validated for length
-                    $floorIndex = ((int)$details['3']) - 1;
+                    $floorIndex = ((int)$details[2]) - 1;
                     $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
                     /** @var Floor $floor */
                     $floor = ($floors->all())[$floorIndex];
 
                     // Only if shown/visible
-                    if ($details['4']) {
+                    if ($details[3]) {
                         // If it's a line
                         // MethodDungeonTools.lua:2529
                         if (isset($object['l'])) {
                             $line = $object['l'];
 
-                            $isFreeDrawn = isset($details['7']) && $details['7'];
+                            $isFreeDrawn = isset($details[6]) && $details[6];
                             /** @var Brushline|Path $lineOrPath */
                             $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
                             // Assign the proper ID
@@ -516,8 +516,8 @@ class ImportString extends MDTBase
 
                             // Make sure there is a pound sign in front of the value at all times, but never double up should
                             // MDT decide to suddenly place it here
-                            $polyline->color = (substr($details['5'], 0, 1) !== '#' ? '#' : '') . $details['5'];
-                            $polyline->weight = (int)$details['1'];
+                            $polyline->color = (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4];
+                            $polyline->weight = (int)$details[0];
 
                             $vertices = [];
                             for ($i = 1; $i < count($line); $i += 2) {
@@ -554,9 +554,9 @@ class ImportString extends MDTBase
                             $mapComment->floor_id = $floor->id;
                             // Bit hacky? But should work
                             $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
-                            $mapComment->comment = $details['5'];
+                            $mapComment->comment = $details[4];
 
-                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
+                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
                             $mapComment->lat = $latLng['lat'];
                             $mapComment->lng = $latLng['lng'];
 
@@ -590,8 +590,8 @@ class ImportString extends MDTBase
     {
         $lua = $this->_getLua();
         // Import it to a table
-        return $lua->call("StringToTable", [$this->_encodedString, true]);
-//        return $this->decode($this->_encodedString);
+//        return $lua->call("StringToTable", [$this->_encodedString, true]);
+        return $this->decode($this->_encodedString);
     }
 
     /**
@@ -607,8 +607,8 @@ class ImportString extends MDTBase
     {
         $lua = $this->_getLua();
         // Import it to a table
-        $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
-//        $decoded = $this->decode($this->_encodedString);
+//        $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
+        $decoded = $this->decode($this->_encodedString);
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
