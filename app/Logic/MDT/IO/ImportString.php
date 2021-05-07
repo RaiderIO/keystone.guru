@@ -591,6 +591,7 @@ class ImportString extends MDTBase
         $lua = $this->_getLua();
         // Import it to a table
         return $lua->call("StringToTable", [$this->_encodedString, true]);
+//        return $this->decode($this->_encodedString);
     }
 
     /**
@@ -607,6 +608,7 @@ class ImportString extends MDTBase
         $lua = $this->_getLua();
         // Import it to a table
         $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
+//        $decoded = $this->decode($this->_encodedString);
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
@@ -691,7 +693,7 @@ class ImportString extends MDTBase
      * @param $encodedString string The MDT encoded string.
      * @return $this
      */
-    public function setEncodedString($encodedString)
+    public function setEncodedString(string $encodedString): self
     {
         $this->_encodedString = $encodedString;
 

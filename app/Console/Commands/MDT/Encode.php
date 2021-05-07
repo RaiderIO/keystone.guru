@@ -42,6 +42,6 @@ class Encode extends Command
      */
     public function handle()
     {
-        echo $this->encode($this->argument('string'));
+        $this->info($this->encode($this->argument('string')));
     }
 }

@@ -30,3 +30,4 @@ sudo make install
 cmake --version
 
 cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git
+ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser

@@ -13,13 +13,13 @@ trait ConvertsMDTStrings
 {
 
     /** @var string The location to save files - this currently uses the memfs so it's super fast */
-    private static $TMP_FILE_BASE_DIR = '/dev/shm/keystone.guru/mdt/';
+    private static string $TMP_FILE_BASE_DIR = '/dev/shm/keystone.guru/mdt/';
 
     /** @var string */
-    private static $CLI_PARSER_ENCODE_CMD = 'cli_weakauras_parser encode %s';
+    private static string $CLI_PARSER_ENCODE_CMD = 'cli_weakauras_parser encode %s';
 
     /** @var string */
-    private static $CLI_PARSER_DECODE_CMD = 'cli_weakauras_parser decode %s';
+    private static string $CLI_PARSER_DECODE_CMD = 'cli_weakauras_parser decode %s';
 
     /**
      * @param string $string
@@ -31,8 +31,11 @@ trait ConvertsMDTStrings
 
         // Make sure the dir exists
         if (file_exists(self::$TMP_FILE_BASE_DIR) || mkdir(self::$TMP_FILE_BASE_DIR, 0777, true)) {
-            // Generate a file name
-            $fileName = sprintf('%s%d', self::$TMP_FILE_BASE_DIR, rand());
+
+            do {
+                // Generate a file name
+                $fileName = sprintf('%s%d', self::$TMP_FILE_BASE_DIR, rand());
+            } while (file_exists($fileName));
 
             // Save to disk
             if (file_put_contents($fileName, $string)) {
@@ -44,10 +47,11 @@ trait ConvertsMDTStrings
     }
 
     /**
-     * @param string $string
-     * @return string
+     * @param bool $encode True to encode, false to decode it.
+     * @param string $string The string you want to encode/decode.
+     * @return string|null
      */
-    private function encode(string $string): ?string
+    private function transform(bool $encode, string $string): ?string
     {
         $result = null;
 
@@ -55,8 +59,10 @@ trait ConvertsMDTStrings
         $fileName = $this->saveFile(json_encode($string));
 
         if ($fileName !== null) {
-            $process = new Process(explode(' ', sprintf(self::$CLI_PARSER_ENCODE_CMD, $fileName)));
+            $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
+            $process = new Process(explode(' ', $cmd));
             $process->run();
+
 
             // executes after the command finishes
             if (!$process->isSuccessful()) {
@@ -64,13 +70,28 @@ trait ConvertsMDTStrings
             }
 
             $result = $process->getOutput();
+
+            unlink($fileName);
         }
 
         return $result;
     }
 
+    /**
+     * @param string $string
+     * @return string
+     */
+    private function encode(string $string): ?string
+    {
+        return $this->transform(true, $string);
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
     private function decode(string $string): string
     {
-        return '';
+        return $this->transform(false, $string);
     }
 }

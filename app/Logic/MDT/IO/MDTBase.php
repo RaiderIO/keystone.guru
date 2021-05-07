@@ -48,9 +48,7 @@ class MDTBase
     {
         Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
 
-        dd(Artisan::output());
-
-        return Artisan::output();
+        return trim(Artisan::output());
     }
 
     /**
@@ -61,6 +59,6 @@ class MDTBase
     {
         Artisan::call('mdt:decode', ['string' => $string]);
 
-        return json_decode(Artisan::output());
+        return json_decode(trim(Artisan::output()));
     }
 }

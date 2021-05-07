@@ -42,6 +42,6 @@ class Decode extends Command
      */
     public function handle()
     {
-        echo $this->decode($this->argument('string')) ?? '';
+        $this->info($this->decode($this->argument('string')) ?? '');
     }
 }
