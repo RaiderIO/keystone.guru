@@ -71,7 +71,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
-        if (this.rowElements.length === 0) {
+        let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
+
+        if (showFloorSwitches && this.rowElements.length === 0) {
             this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
         }
 
@@ -85,7 +87,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         rowElementKillZone.refresh();
 
         // Only do this when there is actually a previous killzone
-        if (killZone.index > 1) {
+        if (showFloorSwitches && killZone.index > 1) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
 
@@ -154,23 +156,25 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Remove all from the sidebar
         $('.map_killzonessidebar_floor_switch').remove();
 
-        // Re-add them
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        /** @type KillZone */
-        let previousKillZone = null;
-        let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
-        for (let i = 0; i < sortedObjects.length; i++) {
-            let killZone = sortedObjects[i];
-            if (i === 0) {
-                this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
-            } else {
-                let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
-                if (floorDifference.length > 0) {
-                    this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+        // Re-add them only if we should
+        if (getState().getPullsSidebarFloorSwitchVisibility()) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            /** @type KillZone */
+            let previousKillZone = null;
+            let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
+            for (let i = 0; i < sortedObjects.length; i++) {
+                let killZone = sortedObjects[i];
+                if (i === 0) {
+                    this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
+                } else {
+                    let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
+                    if (floorDifference.length > 0) {
+                        this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+                    }
                 }
-            }
 
-            previousKillZone = killZone;
+                previousKillZone = killZone;
+            }
         }
     }
 
@@ -398,8 +402,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
             });
         });
 
+        // This must be the longest variable name I've ever made :)
+        $(this.options.killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector).bind('change', function () {
+            getState().setPullsSidebarFloorSwitchVisibility($(this).is(':checked'));
+        });
+
         getState().register('killzonesnumberstyle:changed', this, function () {
             self._updatePullTexts();
+        });
+
+        getState().register('pullssidebarfloorswitchvisibility:changed', this, function () {
+            self._rebuildFloorSwitches();
         });
 
 
