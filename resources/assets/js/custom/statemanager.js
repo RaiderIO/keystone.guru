@@ -278,6 +278,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets whether to show floor switches in the pull sidebar
+     * @param visible {boolean}
+     */
+    setPullsSidebarFloorSwitchVisibility(visible) {
+        Cookies.set('pulls_sidebar_floor_switch_visibility', visible ? 1 : 0);
+
+        this.signal('pullssidebarfloorswitchvisibility:changed');
+    }
+
+    /**
      * Checks if Echo is enabled for the current session.
      * @returns {boolean}
      */
@@ -536,5 +546,12 @@ class StateManager extends Signalable {
      */
     getKillZonesNumberStyle() {
         return Cookies.get('kill_zones_number_style');
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getPullsSidebarFloorSwitchVisibility() {
+        return parseInt(Cookies.get('pulls_sidebar_floor_switch_visibility')) === 1;
     }
 }
