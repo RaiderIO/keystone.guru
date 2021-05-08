@@ -25,6 +25,7 @@ use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
+use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -88,6 +89,7 @@ class Kernel extends ConsoleKernel
 
         $appType = env('APP_TYPE');
 
+        $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
         if ($appType === 'mapping') {
