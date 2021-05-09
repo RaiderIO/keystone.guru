@@ -42,7 +42,7 @@
         "dotenv": "^8.2.0",
         "geojson-utils": "^1.1.0",
         "grapick": "^0.1.9",
-        "handlebars": "^4.7.6",
+        "handlebars": "^4.7.7",
         "hull.js": "^0.2.10",
         "imports-loader": "^0.8.0",
         "intro.js": "github:Wotuu/intro.js",
