@@ -84,7 +84,8 @@ class DungeonRouteController extends Controller
         // Handle route views counting
         if( PageView::trackPageView($dungeonroute->id, get_class($dungeonroute)) ) {
             $dungeonroute->views++;
-            $dungeonroute->update(['views']);
+            $dungeonroute->popularity++;
+            $dungeonroute->update(['views', 'popularity']);
         }
 
         /** @var Floor $floor */
