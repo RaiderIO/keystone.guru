@@ -10,8 +10,8 @@ if (typeof Cookies.get('map_number_style') === 'undefined') {
 if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
     Cookies.set('kill_zones_number_style', 'percentage');
 }
-if (typeof Cookies.get('pulls_sidebar_dungeon_switch_visibility') === 'undefined') {
-    Cookies.set('pulls_sidebar_dungeon_switch_visibility', 1);
+if (typeof Cookies.get('pulls_sidebar_floor_switch_visibility') === 'undefined') {
+    Cookies.set('pulls_sidebar_floor_switch_visibility', 1);
 }
 if (typeof Cookies.get('map_unkilled_enemy_opacity') === 'undefined') {
     Cookies.set('map_unkilled_enemy_opacity', '50');
