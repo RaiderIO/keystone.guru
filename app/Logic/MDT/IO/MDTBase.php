@@ -9,6 +9,7 @@
 namespace App\Logic\MDT\IO;
 
 
+use Illuminate\Support\Facades\Artisan;
 use Lua;
 
 /**
@@ -20,6 +21,7 @@ use Lua;
  */
 class MDTBase
 {
+
     /**
      * Gets a Lua instance and load all the required files in it.
      * @return Lua
@@ -36,5 +38,27 @@ class MDTBase
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
 
         return $lua;
+    }
+
+    /**
+     * @param array $contents
+     * @return string
+     */
+    protected function encode(array $contents): string
+    {
+        Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
+
+        return trim(Artisan::output());
+    }
+
+    /**
+     * @param string $string
+     * @return array
+     */
+    protected function decode(string $string): array
+    {
+        Artisan::call('mdt:decode', ['string' => $string]);
+
+        return json_decode(trim(Artisan::output()), true);
     }
 }

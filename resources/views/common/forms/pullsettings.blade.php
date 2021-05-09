@@ -2,6 +2,7 @@
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
 
 $killZonesNumberStyleChecked = ($_COOKIE['kill_zones_number_style'] ?? 'percentage') === 'percentage';
+$pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visibility'] ?? '1') === '1';
 ?>
 <div class="pull_settings_tools container">
     <div class="form-group">
@@ -19,6 +20,22 @@ $killZonesNumberStyleChecked = ($_COOKIE['kill_zones_number_style'] ?? 'percenta
                        data-toggle="toggle" data-width="150px" data-height="20px"
                        data-onstyle="primary" data-offstyle="primary"
                        data-on="{{ __('Percentage') }}" data-off="{{ __('Enemy forces') }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                {{ __('Show floor breakdown') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                    __('This displays the visibility of the floor breakdown in the sidebar as your pulls transition across the dungeon.')
+                     }}"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                    {!! Form::checkbox('pulls_sidebar_floor_switch_visibility', 1, $pullsSidebarFloorSwitchVisibility,
+                            ['id' => 'pulls_sidebar_floor_switch_visibility', 'class' => 'form-control left_checkbox']) !!}
             </div>
         </div>
     </div>

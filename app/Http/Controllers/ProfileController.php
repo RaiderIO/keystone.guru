@@ -120,6 +120,11 @@ class ProfileController extends Controller
 
                 Session::flash('status', __('Profile updated'));
 
+                // Drop the caches for all of their routes since their profile name/icon may have changed
+                foreach ($user->dungeonroutes as $dungeonroute) {
+                    $dungeonroute->dropCaches();
+                }
+
                 try {
                     // Propagate changes to any channel the user may be in
                     foreach ($echoServerHttpApiService->getChannels() as $channel) {

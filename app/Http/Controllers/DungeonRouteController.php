@@ -81,7 +81,13 @@ class DungeonRouteController extends Controller
                 ->first();
         }
 
-        PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+        // Handle route views counting
+        if( PageView::trackPageView($dungeonroute->id, get_class($dungeonroute)) ) {
+            $dungeonroute->views++;
+            $dungeonroute->popularity++;
+            $dungeonroute->update(['views', 'popularity']);
+        }
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 

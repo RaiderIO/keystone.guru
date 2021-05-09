@@ -8,10 +8,12 @@ use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\DungeonRoute;
-use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
@@ -81,8 +83,8 @@ class APIPathController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Path $path
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return array|ResponseFactory|Response
+     * @throws AuthorizationException
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
     {

@@ -12,6 +12,8 @@ use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Mapping\Save as MappingSave;
+use App\Console\Commands\MDT\Decode;
+use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -23,6 +25,7 @@ use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
+use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +58,10 @@ class Kernel extends ConsoleKernel
         MappingSave::class,
         MappingRestore::class,
 
+        // MDT
+        Encode::class,
+        Decode::class,
+
         // Release
         GetCurrentRelease::class,
         GetReleaseBody::class,
@@ -82,6 +89,7 @@ class Kernel extends ConsoleKernel
 
         $appType = env('APP_TYPE');
 
+        $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
         if ($appType === 'mapping') {

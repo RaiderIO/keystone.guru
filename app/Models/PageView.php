@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -27,7 +26,7 @@ class PageView extends Model
      * @return bool True if this PageView is recent enough to be considered 'current', false if it is not and a new view
      * can be inserted instead.
      */
-    public function isRecent()
+    public function isRecent(): bool
     {
         // If the previous page view was created at least view_time_threshold_mins minutes ago.
         return Carbon::createFromTimeString($this->created_at)
@@ -39,9 +38,12 @@ class PageView extends Model
      * Tracks a view for this model. The view may not track if there's a recent view and we're still in the same 'session'.
      * @param $modelId int
      * @param $modelClass string
+     * @return bool True if the page view was tracked, false if it was not.
      */
-    public static function trackPageView($modelId, $modelClass)
+    public static function trackPageView(int $modelId, string $modelClass): bool
     {
+        $result = false;
+
         $userId = Auth::id() ?: -1;
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
@@ -56,31 +58,33 @@ class PageView extends Model
             $pageView->model_class = $modelClass;
             $pageView->session_id = $sessionId;
             $pageView->save();
+
+            $result = true;
         } else {
             // Keep track of when it was updated
-            $mostRecentPageView->updated_at = \Illuminate\Support\Carbon::now()->toDateTimeString();
+            $mostRecentPageView->updated_at = Carbon::now()->toDateTimeString();
             $mostRecentPageView->save();
         }
+
+        return $result;
     }
 
     /**
      * Checks if the view may be counted or if it shouldn't be counted because a previously existing view is too recent.
      * @param $modelId int
      * @param $modelClass string
-     * @return PageView The most recent page view, or null if none was found.
+     * @return PageView|null The most recent page view, or null if none was found.
      */
-    private static function getMostRecentPageView($modelId, $modelClass)
+    private static function getMostRecentPageView(int $modelId, string $modelClass): ?PageView
     {
         $userId = Auth::id();
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
 
         /** @var Collection $existingPageViews */
-        $existingPageViews = PageView::where('user_id', $userId)
+        return PageView::where('user_id', $userId)
             ->where('model_id', $modelId)
             ->where('model_class', $modelClass)
-            ->where('session_id', $sessionId)->get();
-
-        return $existingPageViews->first();
+            ->where('session_id', $sessionId)->first();
     }
 }

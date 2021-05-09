@@ -181,8 +181,6 @@ class LayoutsApp extends InlineCode {
      * Reset the MDT modal to accept pastes again
      */
     _resetMdtModal() {
-        console.warn('_resetMdtModal');
-
         this.$importStringTextArea.removeAttr('disabled').val('');
 
         this.$details.html('');

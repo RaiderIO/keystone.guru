@@ -1,11 +1,20 @@
 class EnemyVisualModifier extends EnemyVisualIcon {
     constructor(enemyvisual, index) {
         super(enemyvisual);
+        let self = this;
+
         this.index = index;
         this.enemyvisual.register('enemyvisual:builtvisual', this, this._visualBuilt.bind(this));
 
         /** @type {boolean|null} */
         this._wasVisible = null;
+
+        // Reset the _wasVisible flag so that the attribute visibility is re-considered whenever we switch back
+        // to a floor that was already loaded before. Otherwise, everything would be made visible by the DOM again
+        // but this was still showing false and the visual stayed visible when it should be hidden instead (see #749)
+        this.enemyvisual.enemy.register(['hidden'], this, function (hiddenEvent) {
+            self._wasVisible = null;
+        });
     }
 
     /**
@@ -119,7 +128,7 @@ class EnemyVisualModifier extends EnemyVisualIcon {
      */
     onVisualBuilt(element) {
         let $element = $(element);
-        let us = $element.find('.modifier_' + this.index);
+        let us = $element.find(`.modifier_${this.index}`);
         if (this._isVisible()) {
             us.show();
         } else {
@@ -130,6 +139,7 @@ class EnemyVisualModifier extends EnemyVisualIcon {
     cleanup() {
         super.cleanup();
 
+        this.enemyvisual.enemy.unregister('hidden', this);
         this.enemyvisual.unregister('enemyvisual:builtvisual', this);
     }
 }

@@ -15,6 +15,7 @@
     'killZonesPullsSettingsMapNumberStyleSelector' => '#killzones_pulls_settings_map_number_style',
     'killZonesPullsSettingsNumberStyleSelector' => '#killzones_pulls_settings_number_style',
     'killZonesPullsSettingsDeleteAllSelector' => '#killzones_pulls_settings_delete_all',
+    'killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector' => '#pulls_sidebar_floor_switch_visibility',
     'edit' => $edit
 ]])
 

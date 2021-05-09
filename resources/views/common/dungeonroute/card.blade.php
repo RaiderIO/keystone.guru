@@ -145,9 +145,7 @@ ob_start(); ?>
                 <div class="col bg-card-footer px-2 py-1">
                     <small class="text-muted">
                         {{ __('By') }}
-                        <a href="{{ route('profile.view', ['user' => $dungeonroute->author->id]) }}">
-                            {{ $dungeonroute->author->name }}
-                        </a>
+                        @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                         @if( $dungeonroute->avg_rating > 1 )
                             -
                             @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])

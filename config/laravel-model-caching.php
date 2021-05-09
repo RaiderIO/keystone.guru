@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'cache-prefix' => 'model-cache',
+    'cache-prefix' => '',
 
     'enabled' => env('MODEL_CACHE_ENABLED', true),
 

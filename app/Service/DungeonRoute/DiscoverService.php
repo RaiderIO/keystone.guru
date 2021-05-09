@@ -51,22 +51,15 @@ class DiscoverService implements DiscoverServiceInterface
             ->when($this->_closure !== null, $this->_closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
-            ->selectRaw('dungeon_routes.*, COUNT(page_views.id) as views')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->leftJoin('page_views', function (JoinClause $join)
-            {
-                $join->on('page_views.model_id', '=', 'dungeon_routes.id');
-                $join->where('page_views.model_class', DungeonRoute::class);
-            })
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
-            ->whereDate('page_views.created_at', '>', now()->subDays(config('keystoneguru.discover.service.popular_days')))
             ->groupBy('dungeon_routes.id')
-            ->orderBy('views', 'desc');
+            ->orderBy('dungeon_routes.popularity', 'desc');
     }
 
     /**

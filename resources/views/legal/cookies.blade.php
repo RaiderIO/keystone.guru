@@ -225,6 +225,14 @@
         </tr>
         <tr>
             <td>
+                pulls_sidebar_floor_switch_visibility
+            </td>
+            <td>
+                Remembers if you want to display floor breakdowns in your pulls sidebar.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 map_number_style
             </td>
             <td>

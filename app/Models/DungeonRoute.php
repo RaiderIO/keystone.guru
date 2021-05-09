@@ -51,8 +51,11 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int $rating_count
  * @property boolean $has_thumbnail
  *
- * @property $pull_gradient string
- * @property $pull_gradient_apply_always boolean
+ * @property string $pull_gradient
+ * @property boolean $pull_gradient_apply_always
+ *
+ * @property int $views
+ * @property int $popularity
  *
  * @property Carbon $thumbnail_refresh_queued_at
  * @property Carbon $thumbnail_updated_at
@@ -117,8 +120,8 @@ class DungeonRoute extends Model
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
                          'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
-                         'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at',
-                         'published_state_id', 'published_state'];
+                         'created_at', 'updated_at', 'expires_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at',
+                         'published_at', 'published_state_id', 'published_state'];
 
     protected $fillable = ['enemy_forces'];
 
@@ -795,10 +798,10 @@ class DungeonRoute extends Model
 
     /**
      * Clone relations of this dungeonroute into another dungeon route.
-     * @param $dungeonroute DungeonRoute The RECEIVER of the relations of THIS dungeon route.
+     * @param $dungeonroute DungeonRoute The RECEIVER of the target $relations
      * @param $relations array The relations that you want to clone.
      */
-    public function cloneRelationsInto(DungeonRoute $dungeonroute, $relations)
+    public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations)
     {
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {
@@ -829,6 +832,7 @@ class DungeonRoute extends Model
 
                     // Write the polyline back to the model
                     $model->polyline_id = $model->polyline->id;
+                    $model->save();
                 }
             }
         }

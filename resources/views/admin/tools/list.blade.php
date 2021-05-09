@@ -30,7 +30,7 @@
 
     <h4>{{ __('Misc') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.cache.drop') }}">{{ __('Drop dungeon caches') }}</a>
+        <a href="{{ route('admin.tools.cache.drop') }}">{{ __('Drop caches') }}</a>
     </div>
     <div class="form-group">
         <a href="{{ route('admin.tools.exception.select') }}">{{ __('Throw an exception') }}</a>
