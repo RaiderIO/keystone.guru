@@ -520,7 +520,7 @@ class ImportString extends MDTBase
                             $polyline->weight = (int)$details[0];
 
                             $vertices = [];
-                            for ($i = 1; $i < count($line); $i += 2) {
+                            for ($i = 0; $i < count($line); $i += 2) {
                                 $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
                             }
 

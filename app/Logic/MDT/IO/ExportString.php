@@ -105,8 +105,7 @@ class ExportString extends MDTBase
                 $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
             }
 
-            $result[$lineIndex] = $mdtLine;
-            $lineIndex++;
+            $result[$lineIndex++] = $mdtLine;
         }
 
         return $result;
@@ -164,14 +163,12 @@ class ExportString extends MDTBase
                 }
 
                 // For this enemy, kill this clone
-                $pull[$mdtNpcIndex][$enemyIndex] = $enemy->mdt_id;
-                $enemyIndex++;
+                $pull[$mdtNpcIndex][$enemyIndex++] = $enemy->mdt_id;
             }
 
             $pull['color'] = strpos($killZone->color, '#') === 0 ? substr($killZone->color, 1) : $killZone->color;
 
-            $result[$pullIndex] = $pull;
-            $pullIndex++;
+            $result[$pullIndex++] = $pull;
         }
         return $result;
     }
