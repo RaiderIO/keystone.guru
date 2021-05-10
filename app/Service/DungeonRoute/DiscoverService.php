@@ -10,7 +10,6 @@ use App\Models\PublishedState;
 use App\Service\Cache\CacheService;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
@@ -51,7 +50,14 @@ class DiscoverService implements DiscoverServiceInterface
             ->when($this->_closure !== null, $this->_closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
-            ->select('dungeon_routes.*')
+            // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
+                // as routes who only have say 1 or 2 affixes assigned to them.
+            ->selectRaw('dungeon_routes.*, dungeon_routes.popularity * (13 - (
+                    SELECT COUNT(*) 
+                    FROM dungeon_route_affix_groups
+                    WHERE dungeon_route_id = `dungeon_routes`.`id`
+                )) as weightedPopularity'
+            )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
@@ -89,13 +95,15 @@ class DiscoverService implements DiscoverServiceInterface
      */
     private function applyAffixGroupCountPenalty(Builder $builder): Builder
     {
-        return $builder;
-        // @TODO This doesn't work unfortunately - need to investigate further
-//            ->selectRaw('COUNT(dungeon_route_affix_groups.id) as affixCount')
-//            // Less affixes get a higher priority to encourage more specific routes
-//            ->reorder()
-//            // Having less affixes in your route will cause it to bubble up sooner for this specific week
-//            ->orderByRaw('(13 - affixCount) * views');
+        return $builder
+            ->selectRaw('dungeon_routes.*, dungeon_routes.popularity * (13 - (
+                    SELECT COUNT(*) 
+                    FROM dungeon_route_affix_groups
+                    WHERE dungeon_route_id = `dungeon_routes`.`id`
+                )) as weightedPopularity'
+            )
+            ->reorder()
+            ->orderByRaw('weightedPopularity DESC');
     }
 
     /**
