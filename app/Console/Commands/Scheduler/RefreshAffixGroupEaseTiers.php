@@ -106,8 +106,8 @@ class RefreshAffixGroupEaseTiers extends Command
         }
 
         // Clear model cache so that it will be refreshed upon next request
-        $this->call('modelCache:clear', ['--model' => 'App\Models\AffixGroupEaseTier']);
-        $this->call('modelCache:clear', ['--model' => 'App\Models\SubcreationEaseTierPull']);
+        $this->call('modelCache:clear', ['--model' => AffixGroupEaseTier::class]);
+        $this->call('modelCache:clear', ['--model' => SubcreationEaseTierPull::class]);
 
         return 0;
     }

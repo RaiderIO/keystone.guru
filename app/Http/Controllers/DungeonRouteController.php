@@ -83,6 +83,8 @@ class DungeonRouteController extends Controller
 
         // Handle route views counting
         if( PageView::trackPageView($dungeonroute->id, get_class($dungeonroute)) ) {
+            // Do not update the updated_at time - triggering a refresh of the thumbnails
+            $dungeonroute->timestamps = false;
             $dungeonroute->views++;
             $dungeonroute->popularity++;
             $dungeonroute->update(['views', 'popularity']);
