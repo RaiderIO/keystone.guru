@@ -3,10 +3,10 @@
 /**
  * Checks if a specific alert is already dismissed and thus should not be rendered anymore.
  *
- * @param $id int The ID of the alert
+ * @param $id string The ID of the alert
  * @return bool True if the user dismissed it, false if they did not yet.
  */
-function isAlertDismissed($id)
+function isAlertDismissed(string $id): bool
 {
     return isset($_COOKIE['alert-dismiss-' . $id]);
 }
@@ -37,4 +37,14 @@ function initials(string $name): string
     }
 
     return strtoupper($result);
+}
+
+/**
+ * @param string $string
+ * @return bool
+ * @link https://stackoverflow.com/a/10797086
+ */
+function isValidBase64(string $string): bool
+{
+    return base64_encode(base64_decode($string, true)) === $string;
 }
