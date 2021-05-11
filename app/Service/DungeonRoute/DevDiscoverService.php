@@ -47,6 +47,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     {
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
+            ->select('dungeon_routes.*')
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
@@ -65,6 +66,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     {
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
+            ->select('dungeon_routes.*')
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')

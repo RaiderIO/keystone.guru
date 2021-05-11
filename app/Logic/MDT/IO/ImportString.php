@@ -490,7 +490,23 @@ class ImportString extends MDTBase
                      * 6 = drawlayer
                      * 7 = smooth
                      */
-                    $details = $object['d'];
+                    // Fix a strange issue where 6 would sometimes not be set - and then the array may look like this:
+                    /** d: {
+                    1: 3,
+                    2: 1.1,
+                    3: 1,
+                    4: false,
+                    5: "fafff9",
+                    7: true
+                    } */
+                    if( !isset($object['d'][0]) ) {
+                        if( !isset($object['d'][6]) ) {
+                            $object['d'][6] = 0;
+                        }
+                        $details = array_values($object['d']);
+                    } else {
+                        $details = $object['d'];
+                    }
 
                     // Get the proper index of the floor, validated for length
                     $floorIndex = ((int)$details[2]) - 1;
