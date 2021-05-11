@@ -11,7 +11,6 @@ use App\Models\MDTImport;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -79,7 +78,11 @@ class MDTImportController extends Controller
                 $message = __('Invalid MDT string');
             }
 
-            report($ex);
+            // We're not interested if the string was 100% not an MDT string - it will never work then
+            if (isValidBase64($string)) {
+                report($ex);
+            }
+
             Log::error($ex->getMessage(), ['string' => $string]);
             return abort(400, $message);
         } catch (Throwable $error) {
@@ -119,7 +122,10 @@ class MDTImportController extends Controller
             } catch (InvalidMDTString $ex) {
                 return abort(400, __('The MDT string format was not recognized.'));
             } catch (Exception $ex) {
-                report($ex);
+                // We're not interested if the string was 100% not an MDT string - it will never work then
+                if (isValidBase64($string)) {
+                    report($ex);
+                }
 
                 // Makes it easier to debug
                 if (env('APP_DEBUG')) {
