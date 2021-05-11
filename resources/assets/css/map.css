@@ -499,6 +499,10 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+.leaflet-draw-toolbar {
+    margin-top: 0;
+}
+
 /** Fix a boatload of 404s being thrown because of missing images/spritesheet.svg */
 .leaflet-draw-toolbar a {
     background-image: none !important;

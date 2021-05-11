@@ -18,22 +18,35 @@ $echo = $echo ?? false;
 
         <div class="collapse navbar-collapse text-center text-xl-left" id="mainNavbar">
             <ul class="navbar-nav mr-auto">
+                @isset($dungeonroute)
+                    <li class="nav-item">
+                        <button class="btn btn-success h-100" data-toggle="modal"
+                                data-target="#start_live_session_modal">
+                            <i class="fas fa-play"></i> {{ __('Start') }}
+                        </button>
+                    </li>
+                    <li class="nav-item nav-item-divider">
+
+                    </li>
+                @endisset
                 <li class="nav-item">
                     <h5 class="mb-0 mr-2">
-                        <span>
-                            <span id="route_title">
+                        <div class="row no-gutters">
+                            <div id="route_title" class="col h-100 ">
                                 {{ $title }}
-                            </span>
+                            </div>
                             @auth
                                 @isset($dungeonroute)
-                                    <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                       style="display: {{ $model->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
-                                    <i id="route_not_favorited" class="far fa-star favorite_star"
-                                       style="display: {{ $model->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
-                                    {!! Form::hidden('favorite', $model->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
+                                    <div class="col-auto h-100 ml-2">
+                                        <i id="route_favorited" class="fas fa-star favorite_star favorited"
+                                           style="display: {{ $model->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
+                                        <i id="route_not_favorited" class="far fa-star favorite_star"
+                                           style="display: {{ $model->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
+                                        {!! Form::hidden('favorite', $model->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
+                                    </div>
                                 @endisset
                             @endauth
-                        </span>
+                        </div>
                     </h5>
                 </li>
             </ul>
@@ -69,3 +82,21 @@ $echo = $echo ?? false;
         </div>
     </div>
 </nav>
+
+@component('common.general.modal', ['id' => 'start_live_session_modal'])
+    <h3 class="card-title">{{ __('Start live session') }}</h3>
+
+    <p>
+        {{ __('Once you start running your route in-game you can start a live session so that Keystone.guru may aid you in completing
+        your M+ key. Your started session may be shared with anyone by simply copying the URL and sharing it. If your route is assigned
+        to a team, any team members currently viewing your route will be notified that you started a session and can join automatically.') }}
+    </p>
+
+    <div class="row">
+        <div class="col">
+            <a href="" class="btn btn-success w-100">
+                {{ __('Start live session') }}
+            </a>
+        </div>
+    </div>
+@endcomponent

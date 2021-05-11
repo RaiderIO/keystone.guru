@@ -38,6 +38,7 @@ use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\PatreonController;
@@ -433,6 +434,8 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
     Route::get('{dungeonroute}', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
     Route::get('{dungeonroute}/embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
     Route::get('{dungeonroute}/embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+    Route::get('{dungeonroute}/session/{livesession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
+    Route::get('{dungeonroute}/session/{livesession}/{floorIndex}', [LiveSessionController::class, 'viewfloor'])->name('dungeonroute.livesession.viewfloor');
     Route::get('{dungeonroute}/{floor}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
     // Preview of a route for image capturing library
     Route::get('{dungeonroute}/preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
