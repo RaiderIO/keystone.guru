@@ -6,6 +6,7 @@ use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\LiveSession;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,6 +16,25 @@ use Illuminate\Http\Request;
 
 class LiveSessionController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function create(Request $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('view', $dungeonroute);
+
+        $liveSession = LiveSession::create([
+            'dungeon_route_id' => $dungeonroute->id,
+            'user_id'          => Auth::id(),
+            'public_key'       => LiveSession::generateRandomPublicKey()
+        ]);
+
+        return redirect()->route('dungeonroute.livesession.view', ['dungeonroute' => $dungeonroute, 'livesession' => $liveSession]);
+    }
+
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute

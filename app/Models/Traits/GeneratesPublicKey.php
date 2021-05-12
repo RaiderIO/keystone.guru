@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait GeneratesPublicKey
 {
-
-
     /**
      * @param int $length
      * @param string $column

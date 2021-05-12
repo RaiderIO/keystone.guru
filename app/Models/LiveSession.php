@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\GeneratesPublicKey;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class LiveSession extends Model
 {
+    protected $fillable = [
+        'dungeon_route_id',
+        'user_id',
+        'public_key'
+    ];
+
+    use GeneratesPublicKey;
+
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'public_key';
+    }
 
     /**
      * @return BelongsTo

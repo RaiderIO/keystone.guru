@@ -431,14 +431,19 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
     Route::get('profile/{user}', [ProfileController::class, 'view'])->name('profile.view');
 
     // View any dungeon route (catch all)
-    Route::get('{dungeonroute}', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
-    Route::get('{dungeonroute}/embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
-    Route::get('{dungeonroute}/embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
-    Route::get('{dungeonroute}/session/{livesession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
-    Route::get('{dungeonroute}/session/{livesession}/{floorIndex}', [LiveSessionController::class, 'viewfloor'])->name('dungeonroute.livesession.viewfloor');
-    Route::get('{dungeonroute}/{floor}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
-    // Preview of a route for image capturing library
-    Route::get('{dungeonroute}/preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
+
+    Route::group(['prefix' => '{dungeonroute}'], function ()
+    {
+        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
+        Route::get('embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
+        Route::get('embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+        Route::get('live', [LiveSessionController::class, 'create'])->name('dungeonroute.livesession.create');
+        Route::get('live/{livesession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
+        Route::get('live/{livesession}/{floorIndex}', [LiveSessionController::class, 'viewfloor'])->name('dungeonroute.livesession.viewfloor');
+        Route::get('{floor}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
+        // Preview of a route for image capturing library
+        Route::get('preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
+    });
 });
 
 Auth::routes();

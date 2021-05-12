@@ -83,20 +83,23 @@ $echo = $echo ?? false;
     </div>
 </nav>
 
-@component('common.general.modal', ['id' => 'start_live_session_modal'])
-    <h3 class="card-title">{{ __('Start live session') }}</h3>
+@isset($dungeonroute)
+    @component('common.general.modal', ['id' => 'start_live_session_modal'])
+        <h3 class="card-title">{{ __('Start live session') }}</h3>
 
-    <p>
-        {{ __('Once you start running your route in-game you can start a live session so that Keystone.guru may aid you in completing
-        your M+ key. Your started session may be shared with anyone by simply copying the URL and sharing it. If your route is assigned
-        to a team, any team members currently viewing your route will be notified that you started a session and can join automatically.') }}
-    </p>
+        <p>
+            {{ __('Once you start running your route in-game you can create a live session so that Keystone.guru may aid you in completing
+            your M+ key. Your live session may be shared with anyone by simply copying the URL and sharing it. If your route is assigned
+            to a team, any team members currently viewing your route will be notified that you started a session and can join automatically.') }}
+        </p>
 
-    <div class="row">
-        <div class="col">
-            <a href="" class="btn btn-success w-100">
-                {{ __('Start live session') }}
-            </a>
+        <div class="row">
+            <div class="col">
+                <a href="{{ route('dungeonroute.livesession.create', ['dungeonroute' => $dungeonroute]) }}"
+                   class="btn btn-success w-100">
+                    <i class="fas fa-play"></i> {{ __('Create live session') }}
+                </a>
+            </div>
         </div>
-    </div>
-@endcomponent
+    @endcomponent
+@endisset
