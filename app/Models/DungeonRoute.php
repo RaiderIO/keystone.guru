@@ -866,7 +866,7 @@ class DungeonRoute extends Model
     public function isFavoritedByCurrentUser(): bool
     {
         // Use relationship caching instead of favorites() to save some queries
-        return Auth::check() ? $this->favorites->where('user_id', Auth::id())->isNotEmpty() : false;
+        return Auth::check() && $this->favorites()->where('user_id', Auth::id())->exists();
     }
 
     /**

@@ -238,9 +238,13 @@ function refreshTooltips($element = null) {
     if (!isMobile()) {
         $('.tooltip').remove();
         if ($element === null) {
-            $element = $('[data-toggle="tooltip"]');
+            refreshTooltips($('[data-toggle="tooltip"]'));
+            refreshTooltips($('[data-tooltip="tooltip"]'));
+        } else {
+            $element.unbind('click').bind('click', function(){
+                $(this).tooltip('hide');
+            }).tooltip('_fixTitle').tooltip({trigger: 'hover'});
         }
-        $element.tooltip('_fixTitle').tooltip();
     }
 }
 

@@ -1,36 +1,38 @@
-@extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title, 'cookieConsent' => $model->demo === 1 ? false : null ])
+@extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
 <?php
-/** @var $model \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
 
-$affixes = $model->affixes->pluck('text', 'id');
-$selectedAffixes = $model->affixes->pluck('id');
+$affixes = $dungeonroute->affixes->pluck('text', 'id');
+$selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
     $selectedAffixes = -1;
 }
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
+$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 ?>
 @section('scripts')
     @parent
 
-    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $model->affixes])
+    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
 
 @endsection
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'dungeonroute' => $model,
+            'dungeonroute' => $dungeonroute,
             'edit' => false,
             'floorId' => $floor->id,
-            'noUI' => (bool)$model->demo,
-            'gestureHandling' => (bool)$model->demo,
-            'showAttribution' => !(bool)$model->demo,
             'show' => [
+                'controls' => [
+                    'live' => true,
+                    'pulls' => true,
+                    'enemyinfo' => true,
+                ],
                 'share' => [
-                    'link' => !$model->isSandbox(),
-                    'embed' => !$model->isSandbox(),
+                    'link' => !$dungeonroute->isSandbox(),
+                    'embed' => !$dungeonroute->isSandbox(),
                     'mdt-export' => true,
                     'publish' => false,
                 ]

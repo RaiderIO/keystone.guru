@@ -1,9 +1,9 @@
 <!-- Map object group visibility -->
 <div class="row no-gutters">
-    <div class="col btn-group dropright" data-toggle="tooltip" data-placement="right"
-         title="{{ __('Show/hide map elements') }}">
+    <div class="col btn-group dropright">
         <button type="button" class="btn btn-accent dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+                aria-haspopup="true" aria-expanded="false"
+                data-tooltip="tooltip" data-placement="right" title="{{ __('Show/hide map elements') }}">
             <i class="fa fa-eye"></i>
         </button>
         <div id="map_map_object_group_visibility_dropdown" class="dropdown-menu">

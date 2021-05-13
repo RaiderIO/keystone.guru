@@ -10,7 +10,6 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
-use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -82,7 +81,7 @@ class DungeonRouteController extends Controller
         }
 
         // Handle route views counting
-        if( PageView::trackPageView($dungeonroute->id, get_class($dungeonroute)) ) {
+        if (PageView::trackPageView($dungeonroute->id, get_class($dungeonroute))) {
             // Do not update the updated_at time - triggering a refresh of the thumbnails
             $dungeonroute->timestamps = false;
             $dungeonroute->views++;
@@ -97,7 +96,7 @@ class DungeonRouteController extends Controller
             return redirect()->route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]);
         } else {
             return view('dungeonroute.view', [
-                'model'          => $dungeonroute,
+                'dungeonroute'   => $dungeonroute,
                 'current_report' => $currentReport,
                 'floor'          => $floor,
                 'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
@@ -122,9 +121,9 @@ class DungeonRouteController extends Controller
         /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
         return view('dungeonroute.preview', [
-            'model'      => $dungeonroute,
-            'floorId'    => $floor->id,
-            'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            'dungeonroute' => $dungeonroute,
+            'floorId'      => $floor->id,
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
         ]);
     }
 
@@ -241,10 +240,10 @@ class DungeonRouteController extends Controller
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
         } else {
             return view('dungeonroute.edit', [
-                'headerTitle' => __('Edit route'),
-                'model'       => $dungeonroute,
-                'floor'       => $floor,
-                'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'headerTitle'  => __('Edit route'),
+                'dungeonroute' => $dungeonroute,
+                'floor'        => $floor,
+                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
             ]);
         }
     }
@@ -268,9 +267,9 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         return view('dungeonroute.embed', [
-            'model'      => $dungeonroute,
-            'floor'      => $floor,
-            'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            'dungeonroute' => $dungeonroute,
+            'floor'        => $floor,
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
         ]);
     }
 

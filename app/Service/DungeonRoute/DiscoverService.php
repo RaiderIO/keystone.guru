@@ -66,7 +66,7 @@ class DiscoverService implements DiscoverServiceInterface
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->groupBy('dungeon_routes.id')
-            ->orderBy('dungeon_routes.popularity', 'desc');
+            ->orderBy('weightedPopularity', 'desc');
     }
 
     /**

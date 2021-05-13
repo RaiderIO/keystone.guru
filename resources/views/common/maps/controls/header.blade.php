@@ -1,4 +1,5 @@
 <?php
+/** @var $dungeonroute App\Models\DungeonRoute|null */
 $echo = $echo ?? false;
 ?>
 <nav id="map_header"
@@ -39,10 +40,10 @@ $echo = $echo ?? false;
                                 @isset($dungeonroute)
                                     <div class="col-auto h-100 ml-2">
                                         <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                           style="display: {{ $model->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
+                                           style="display: {{ $dungeonroute->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
                                         <i id="route_not_favorited" class="far fa-star favorite_star"
-                                           style="display: {{ $model->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
-                                        {!! Form::hidden('favorite', $model->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
+                                           style="display: {{ $dungeonroute->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
+                                        {!! Form::hidden('favorite', $dungeonroute->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
                                     </div>
                                 @endisset
                             @endauth

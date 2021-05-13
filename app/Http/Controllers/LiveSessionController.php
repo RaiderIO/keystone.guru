@@ -69,14 +69,15 @@ class LiveSessionController extends Controller
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.livesession.view', [
-                'dungeonroute' => $dungeonroute->public_key,
-                'livesession'  => $livesession->public_key
+                'dungeonroute' => $dungeonroute,
+                'livesession'  => $livesession,
             ]);
         } else {
             return view('dungeonroute.livesession.view', [
-                'model'      => $dungeonroute,
-                'floor'      => $floor,
-                'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'dungeonroute' => $dungeonroute,
+                'livesession'  => $livesession,
+                'floor'        => $floor,
+                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
             ]);
         }
     }
