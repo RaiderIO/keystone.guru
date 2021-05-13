@@ -99,7 +99,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute'   => $dungeonroute,
                 'current_report' => $currentReport,
                 'floor'          => $floor,
-                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties()
             ]);
         }
     }
@@ -123,7 +123,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.preview', [
             'dungeonroute' => $dungeonroute,
             'floorId'      => $floor->id,
-            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties()
         ]);
     }
 
@@ -243,7 +243,7 @@ class DungeonRouteController extends Controller
                 'headerTitle'  => __('Edit route'),
                 'dungeonroute' => $dungeonroute,
                 'floor'        => $floor,
-                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties()
             ]);
         }
     }
@@ -269,7 +269,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.embed', [
             'dungeonroute' => $dungeonroute,
             'floor'        => $floor,
-            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties()
         ]);
     }
 

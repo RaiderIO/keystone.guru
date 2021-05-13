@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Logic\MapContext\MapContextLiveSession;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\LiveSession;
@@ -77,7 +77,7 @@ class LiveSessionController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'livesession'  => $livesession,
                 'floor'        => $floor,
-                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
+                'mapContext'   => (new MapContextLiveSession($livesession, $floor))->getProperties()
             ]);
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\GeneratesPublicKey;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property string $public_key
  *
+ * @property User $user
+ * @property DungeonRoute $dungeonroute
+ *
  * @mixin Eloquent
  */
 class LiveSession extends Model
@@ -20,6 +24,11 @@ class LiveSession extends Model
         'dungeon_route_id',
         'user_id',
         'public_key'
+    ];
+
+    protected $with = [
+        'user',
+        'dungeonroute'
     ];
 
     use GeneratesPublicKey;
@@ -46,7 +55,7 @@ class LiveSession extends Model
      *
      * @return BelongsTo
      */
-    function dungeonroute(): BelongsTo
+    function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo('App\Models\DungeonRoute');
     }

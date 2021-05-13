@@ -118,6 +118,7 @@ let scripts = [
     'resources/assets/js/custom/mapcontext/mapcontext.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeon.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeonroute.js',
+    'resources/assets/js/custom/mapcontext/mapcontextlivesession.js',
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',

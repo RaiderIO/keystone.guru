@@ -34,7 +34,7 @@ class Echo extends Signalable {
         });
 
         // Keep track of the current users in this channel
-        window.Echo.join(getState().getEchoChannelName())
+        window.Echo.join(getState().getMapContext().getEchoChannelName())
             .here(users => {
                 // Join any existing users already
                 for (let index in users) {

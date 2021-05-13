@@ -91,8 +91,6 @@ if ($isAdmin) {
     @include('common.handlebars.groupsetup')
 
     @include('common.general.statemanager', [
-        // Required by echo to join the correct channels
-        'appType' => env('APP_TYPE'),
         'echo' => $echo,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,

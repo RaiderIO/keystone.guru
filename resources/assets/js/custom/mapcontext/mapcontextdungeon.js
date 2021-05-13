@@ -6,7 +6,7 @@ class MapContextDungeon extends MapContext {
 
         // Keep our list of NPCs up-to-date with whatever changes people may perform
         getState().register('echo:enabled', this, function () {
-            window.Echo.join(getState().getEchoChannelName())
+            window.Echo.join(getState().getMapContext().getEchoChannelName())
                 .listen(`.npc-changed`, (e) => {
                     // Remove any existing NPC
                     self._removeRawNpcById(e.model.id);

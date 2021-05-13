@@ -41,7 +41,7 @@ class MapObjectGroup extends Signalable {
         }
 
         if (getState().isEchoEnabled()) {
-            let presenceChannel = window.Echo.join(getState().getEchoChannelName());
+            let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
 
             for (let index in this.names) {
                 if (this.names.hasOwnProperty(index)) {

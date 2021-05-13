@@ -2,8 +2,6 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
-        // Used by Echo to join the correct channels
-        this._appType = '';
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
@@ -43,16 +41,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Set the app type (local, staging, live etc).
-     * @param appType {string}
-     */
-    setAppType(appType) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._appType = appType;
-    }
-
-    /**
      * Sets the mapContext, may either be options for a dungeonroute or options for a dungeon (admin pages)
      * @param mapContext {Object}
      */
@@ -62,6 +50,8 @@ class StateManager extends Signalable {
 
         if (mapContext.type === 'dungeonroute') {
             this._mapContext = new MapContextDungeonRoute(mapContext);
+        } else if (mapContext.type === 'livesession') {
+            this._mapContext = new MapContextLiveSession(mapContext);
         } else if (mapContext.type === 'dungeon') {
             this._mapContext = new MapContextDungeon(mapContext);
         } else {
@@ -505,23 +495,6 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._mapContext.getType() === 'dungeon';
-    }
-
-    /**
-     *
-     * @returns {*}
-     */
-    getEchoChannelName() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let channelName = '';
-
-        if (this.isMapAdmin()) {
-            channelName = `${this._appType}-dungeon-edit.${this._mapContext.getDungeon().id}`;
-        } else {
-            channelName = `${this._appType}-route-edit.${this._mapContext.getPublicKey()}`;
-        }
-
-        return channelName;
     }
 
     /**

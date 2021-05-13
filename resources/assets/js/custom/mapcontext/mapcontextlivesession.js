@@ -1,0 +1,3 @@
+class MapContextLiveSession extends MapContextDungeonRoute {
+
+}

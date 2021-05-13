@@ -272,4 +272,12 @@ class MapContext extends Signalable {
 
         return result;
     }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        return this._options.echoChannelName;
+    }
 }

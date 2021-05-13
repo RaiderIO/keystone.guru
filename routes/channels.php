@@ -18,9 +18,10 @@
 // https://laravel.com/docs/5.8/broadcasting#presence-channels
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\LiveSession;
 use App\User;
 
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?User $user, DungeonRoute $dungeonroute)
+$dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute)
 {
     $result = false;
 
@@ -56,6 +57,13 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
     }
 
     return $result;
+};
+
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), $dungeonRouteChannelCallback);
+Broadcast::channel(sprintf('%s-live-session.{livesession}', env('APP_TYPE')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback)
+{
+    // Validate live sessions the same way as a dungeon route
+    return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
 });
 
 Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (User $user, Dungeon $dungeon)
