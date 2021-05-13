@@ -51,8 +51,9 @@ class ContextEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'context_class' => get_class($this->_context),
-            'user'          => $this->_user
+            'context_route_key' => $this->_context->getRouteKey(),
+            'context_class'     => get_class($this->_context),
+            'user'              => $this->_user
         ];
     }
 }

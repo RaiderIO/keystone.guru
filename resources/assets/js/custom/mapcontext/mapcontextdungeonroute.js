@@ -1,6 +1,14 @@
 class MapContextDungeonRoute extends MapContext {
     constructor(options) {
         super(options);
+
+        // Listen for any invites to
+        getState().register('echo:enabled', this, function () {
+            window.Echo.join(getState().getMapContext().getEchoChannelName())
+                .listen(`.livesession-invite`, (e) => {
+                    console.log('received invite!');
+                });
+        });
     }
 
     /**

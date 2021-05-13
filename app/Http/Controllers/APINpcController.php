@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelDeletedEvent;
+use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\Datatables\ColumnHandler\Npc\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;

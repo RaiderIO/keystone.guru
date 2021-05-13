@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
-use App\Events\ModelDeletedEvent;
+use App\Events\Model\ModelChangedEvent;
+use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;

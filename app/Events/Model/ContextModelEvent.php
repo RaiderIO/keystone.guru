@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Model;
 
+use App\Events\ContextEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,12 +27,9 @@ class ContextModelEvent extends ContextEvent
 
     public function broadcastWith()
     {
-        return array_merge(
-            parent::broadcastWith(),
-            [
-                'model'       => $this->_model,
-                'model_class' => get_class($this->_model),
-            ]
-        );
+        return array_merge(parent::broadcastWith(), [
+            'model'       => $this->_model,
+            'model_class' => get_class($this->_model),
+        ]);
     }
 }

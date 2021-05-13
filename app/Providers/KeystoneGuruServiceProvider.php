@@ -37,7 +37,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind the interface to the actual service
-        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\DiscordApiService');
+        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Internals
         $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
@@ -132,7 +132,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'expansions'                      => Expansion::all(),
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
-                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->get()->first(),
+                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 

@@ -13,12 +13,11 @@ class MapContextDungeon extends MapContext {
 
                     // Add the new NPC
                     self._options.npcs.push(e.model);
-                    console.log(`Added new npc`, e.model);
                 }).listen(`.npc-deleted`, (e) => {
                 // Only remove the NPC
                 self._removeRawNpcById(e.model.id);
             });
-        })
+        });
     }
 
     /**

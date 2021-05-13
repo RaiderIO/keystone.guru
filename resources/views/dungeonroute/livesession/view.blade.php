@@ -1,6 +1,7 @@
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $livesession \App\Models\LiveSession */
 /** @var $floor \App\Models\Floor */
 
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
@@ -17,11 +18,18 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
     @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
 
 @endsection
+
+@include('common.general.inline', [
+    'path' => 'dungeonroute/livesession',
+    'dependencies' => ['common/maps/map']
+])
+
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $dungeonroute,
+            'livesession' => $livesession,
             'edit' => false,
             'floorId' => $floor->id,
             'show' => [

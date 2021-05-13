@@ -42,7 +42,7 @@ class SiegeOfBoralusFactionRule implements Rule
 
         $result = !empty($value);
         /** @var Dungeon $siegeOfBoralus */
-        $siegeOfBoralus = Dungeon::siegeOfBoralus()->get()->first();
+        $siegeOfBoralus = Dungeon::siegeOfBoralus()->first();
 
         if (intval($dungeonId) === $siegeOfBoralus->id) {
             $validFactions = Faction::whereIn('name', ['Alliance', 'Horde'])->get()->pluck('id')->toArray();

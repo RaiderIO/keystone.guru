@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Model;
 
+use App\Events\ContextEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,14 +32,11 @@ class ModelDeletedEvent extends ContextEvent
 
     public function broadcastWith()
     {
-        return array_merge(
-            parent::broadcastWith(),
-            [
-                // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-                'model_id'    => $this->_modelId,
-                'model_class' => $this->_modelClass,
-            ]
-        );
+        return array_merge(parent::broadcastWith(), [
+            // Cannot use ContextModelEvent as model is already deleted and serialization will fail
+            'model_id'    => $this->_modelId,
+            'model_class' => $this->_modelClass,
+        ]);
     }
 
     public function broadcastAs()
