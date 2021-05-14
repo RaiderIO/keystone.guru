@@ -16,7 +16,6 @@ class TeamEdit extends InlineCode {
         let tableView = code.getTableView();
         tableView.setIsUserModerator(this.options.userIsModerator);
 
-        // Copy to clipboard functionality
         $('#team_invite_link_copy_to_clipboard').bind('click', function () {
             copyToClipboard($('#team_members_invite_link').val());
         });

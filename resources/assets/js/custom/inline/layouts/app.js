@@ -231,6 +231,14 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
 }
 
 /**
+ *
+ * @private
+ */
+function _hideTooltips() {
+    $(this).tooltip('hide');
+}
+
+/**
  * Refreshes fancy tooltips on all elements that request for them.
  */
 function refreshTooltips($element = null) {
@@ -241,9 +249,10 @@ function refreshTooltips($element = null) {
             refreshTooltips($('[data-toggle="tooltip"]'));
             refreshTooltips($('[data-tooltip="tooltip"]'));
         } else {
-            $element.unbind('click').bind('click', function(){
-                $(this).tooltip('hide');
-            }).tooltip('_fixTitle').tooltip({trigger: 'hover'});
+            $element.unbind('click', _hideTooltips.bind(this))
+                .bind('click', _hideTooltips.bind(this))
+                .tooltip('_fixTitle')
+                .tooltip({trigger: 'hover'});
         }
     }
 }
