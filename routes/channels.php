@@ -41,7 +41,7 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
                 // https://stackoverflow.com/a/9901154/771270
                 'color'     => randomHexColor(),
                 'anonymous' => true,
-                'url'       => '#'
+                'url'       => '#',
             ];
         } else {
             $result = [

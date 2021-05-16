@@ -1,14 +1,38 @@
 <ul id="edit_route_echo_members_container" class="list-group list-group-horizontal">
+    <li class="list-group-item p-0 m-0 border-0">
+        <button type="button" class="btn btn-dark btn-sm p-1 active w-100 h-100"
+                data-toggle="button" aria-pressed="true"
+                data-tooltip="tooltip" title="{{connected_users_show_cursors_label}}">
+            <i class="fas fa-mouse-pointer"></i>
+        </button>
+    </li>
+    <li class="list-group-item separator p-2 border-0"></li>
     {{#each users}}
-        <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}"
-            data-toggle="tooltip" title="{{name}}">
-            <a class="nav-link text-center" href="{{url}}">
-                {{#ifCond avatar_url '==' null}}
-                    {{initials}}
-                {{else}}
-                    <img src="{{avatar_url}}" alt="{{initials}}"/>
-                {{/ifCond}}
-            </a>
+        <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}">
+            <div class="dropdown">
+                <a href="#" id="dropdown_user_{{id}}" class="nav-link" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false">
+                    {{#ifCond avatar_url '==' null}}
+                        {{initials}}
+                    {{else}}
+                        <img src="{{avatar_url}}" alt="{{initials}}"/>
+                    {{/ifCond}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdown_user_{{id}}">
+                    <a class="dropdown-item" href="#">
+                        {{name}}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    {{#ifCond ../type '==' 'livesession'}}
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-link"></i> {{../connected_user_follow_label}}
+                        </a>
+                    {{/ifCond}}
+                    <a class="dropdown-item" href="{{url}}">
+                        <i class="fas fa-user"></i> {{../connected_user_view_profile_label}}
+                    </a>
+                </div>
+            </div>
         </li>
     {{/each}}
 </ul>

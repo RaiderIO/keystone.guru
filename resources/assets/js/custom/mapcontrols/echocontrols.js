@@ -104,7 +104,8 @@ class EchoControls extends MapControl {
         let template = Handlebars.templates['map_controls_route_echo_connected_users_template'];
 
         let result = template($.extend({}, getHandlebarsDefaultVariables(), {
-            users: getState().getEcho().getUsers()
+            users: getState().getEcho().getUsers(),
+            type: getState().getMapContext().getType(),
         }));
 
         $('#route_echo_container').html(result);

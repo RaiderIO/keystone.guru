@@ -403,16 +403,19 @@ return [
     // 'actions_label' => 'Actions',
     'leave_label'            => 'Leave',
 
-    'delete_team_confirm_label'        => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
-    'invite_link_refreshed'            => 'Invite link refreshed.',
+    'delete_team_confirm_label'               => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
+    'invite_link_refreshed'                   => 'Invite link refreshed.',
 
     // Echo server
-    'echo_connecting_label'            => 'Connecting...',
-    'echo_connected_label'             => 'Connected',
-    'connected_users_label'            => 'Users',
-    'connecting_title_label'           => 'Connecting to route edit synchronization service...',
-    'connected_title_label'            => 'Connected to route edit synchronization service. All of your route editing actions will be live shared with any of your team members viewing this route!',
-    'members_title_label'              => 'Your route editing actions are shared with these users that are currently viewing/editing your route!',
-    'member_self_title_label'          => 'To change your color, visit your profile.',
-    'echo_object_deleted_notification' => '{object} was deleted by {user}'
+    'echo_connecting_label'                   => 'Connecting...',
+    'echo_connected_label'                    => 'Connected',
+    'connected_users_label'                   => 'Users',
+    'connecting_title_label'                  => 'Connecting to route edit synchronization service...',
+    'connected_title_label'                   => 'Connected to route edit synchronization service. All of your route editing actions will be live shared with any of your team members viewing this route!',
+    'members_title_label'                     => 'Your route editing actions are shared with these users that are currently viewing/editing your route!',
+    'member_self_title_label'                 => 'To change your color, visit your profile.',
+    'echo_object_deleted_notification'        => '{object} was deleted by {user}',
+    'connected_users_show_hide_cursors_label' => 'Show/hide cursors',
+    'connected_user_follow_label'             => 'Follow',
+    'connected_user_view_profile_label'       => 'View profile',
 ];
