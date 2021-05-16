@@ -42,7 +42,7 @@ class LiveSessionController extends Controller
         $user = Auth::user();
         if ($dungeonroute->team instanceof Team && $dungeonroute->team->isUserMember($user)) {
             try {
-                // Propagate changes to any channel the user may be in
+                // Propagate changes to the channel that the user came from
                 $channelName = sprintf('presence-%s-route-edit.%s', env('APP_TYPE'), $dungeonroute->public_key);
 
 

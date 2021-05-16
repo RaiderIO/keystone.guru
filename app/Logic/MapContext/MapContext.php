@@ -14,6 +14,7 @@ use App\Models\Spell;
 use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 abstract class MapContext
 {
@@ -105,6 +106,8 @@ abstract class MapContext
             'npcsMaxHealth'       => $npcMaxHealth,
 
             'echoChannelName' => $this->getEchoChannelName(),
+            // May be null
+            'userId'          => Auth::id()
         ];
     }
 }

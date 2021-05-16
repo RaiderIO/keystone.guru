@@ -2,11 +2,21 @@ class MapContextDungeonRoute extends MapContext {
     constructor(options) {
         super(options);
 
+        let self = this;
+
         // Listen for any invites to
         getState().register('echo:enabled', this, function () {
             window.Echo.join(getState().getMapContext().getEchoChannelName())
                 .listen(`.livesession-invite`, (e) => {
-                    console.log('received invite!');
+                    // Only if we're invited!
+                    if (e.invitees.includes(self.getUserId())) {
+                        let template = Handlebars.templates['livesession_invite_received_template'];
+
+                        showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), e)), function () {
+                            // If confirmed, redirect the user
+                            window.location.href = e.url;
+                        }, null, {closeWith: ['button']});
+                    }
                 });
         });
     }

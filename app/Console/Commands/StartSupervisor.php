@@ -14,7 +14,7 @@ class StartSupervisor extends Command
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:startsupervisor';
+    protected $signature = 'supervisor:start';
 
     /**
      * The console command description.

@@ -280,4 +280,12 @@ class MapContext extends Signalable {
     getEchoChannelName() {
         return this._options.echoChannelName;
     }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getUserId() {
+        return this._options.userId;
+    }
 }
