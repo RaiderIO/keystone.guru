@@ -40,6 +40,7 @@ class MapObjectGroup extends Signalable {
             getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
 
+        // @TODO Convert this to the new echo message system
         if (getState().isEchoEnabled()) {
             let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
 
@@ -533,7 +534,7 @@ class MapObjectGroup extends Signalable {
         let result = null;
 
         // Do not return an already saving map object which has id -1 of which multiple can exist
-        if( id > 0 ) {
+        if (id > 0) {
             for (let i = 0; i < this.objects.length; i++) {
                 let objectCandidate = this.objects[i];
                 if (objectCandidate.id === id) {

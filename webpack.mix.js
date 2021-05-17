@@ -122,8 +122,16 @@ let scripts = [
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
-    'resources/assets/js/custom/echo.js',
-    'resources/assets/js/custom/echomouselocationhandler.js',
+    'resources/assets/js/custom/echo/echo.js',
+    'resources/assets/js/custom/echo/message/messagehandler.js',
+    'resources/assets/js/custom/echo/message/listen/colorchanged.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/message/listen/npc/changed.js',
+    'resources/assets/js/custom/echo/message/listen/npc/deleted.js',
+    'resources/assets/js/custom/echo/message/whisper/whispermessagehandler.js',
+    'resources/assets/js/custom/echo/message/whisper/mouselocation.js',
+
+    // Depends on Echo
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/hotkeys.js',
 

@@ -300,7 +300,10 @@ let c = {
         },
         echo: {
             tooltipFadeOutTimeout: 3000,
-            mouseSendFrequency: 1000
+            // The amount of time that must pass before another mouse location is saved to be synced to others
+            mousePollFrequencyMs: 50,
+            // How often to send the mouse frequency
+            mouseSendFrequency: 1000,
         }
     }
 };

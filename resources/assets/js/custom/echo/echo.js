@@ -4,11 +4,18 @@ const ECHO_STATUS_DISCONNECTED = 'connecting';
 class Echo extends Signalable {
     constructor(map) {
         super();
+        console.assert(map instanceof DungeonMap, 'map is not a DungeonMap', map);
+
         this.map = map;
 
         /** List of usernames currently connected */
         this._users = [];
         this._status = ECHO_STATUS_DISCONNECTED;
+
+        this._handlers = [
+            new ColorChanged(this),
+            new MouseLocation(this),
+        ];
     }
 
     connect() {
@@ -34,7 +41,8 @@ class Echo extends Signalable {
         });
 
         // Keep track of the current users in this channel
-        window.Echo.join(getState().getMapContext().getEchoChannelName())
+        /** @type Channel */
+        let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName())
             .here(users => {
                 // Join any existing users already
                 for (let index in users) {
@@ -49,10 +57,16 @@ class Echo extends Signalable {
             })
             .leaving(user => {
                 self._removeUser(user);
-            })
-            .listen('.user-color-changed', (e) => {
-                self._setUserColorById(e.user.id, e.color);
             });
+
+        // Attach all our handlers to the presence channel
+        for (let index in this._handlers) {
+            if (this._handlers.hasOwnProperty(index)) {
+                let handler = this._handlers[index];
+
+                handler.setup(presenceChannel);
+            }
+        }
     }
 
     /**
@@ -159,9 +173,8 @@ class Echo extends Signalable {
      * Sets a user's color.
      * @param id int The user's id.
      * @param color string The new color of the user.
-     * @private
      */
-    _setUserColorById(id, color) {
+    setUserColorById(id, color) {
         // Update by reference - do not use getUserById()
         let user = null;
 

@@ -6,8 +6,9 @@ class StateManager extends Signalable {
         this._mapContext = null;
 
         // Echo handler
+        this.echoEnabled = false;
         this._echo = null;
-        this._echoMouseLocationHandler = null;
+
         /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
         // What enemy visual type we're displaying
@@ -34,10 +35,8 @@ class StateManager extends Signalable {
      */
     enableEcho() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        this._echo = new Echo(this);
-        this._echo.connect();
 
-        this.signal('echo:enabled');
+        this.echoEnabled = true;
     }
 
     /**
@@ -138,8 +137,12 @@ class StateManager extends Signalable {
             });
         }
 
+        // Set up the echo handler if we should
         if (this.isEchoEnabled()) {
-            this._echoMouseLocationHandler = new EchoMouseLocationHandler(this._map);
+            this._echo = new Echo(this._map);
+            this._echo.connect();
+
+            this.signal('echo:enabled');
         }
     }
 
@@ -284,7 +287,7 @@ class StateManager extends Signalable {
     isEchoEnabled() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._echo !== null;
+        return this.echoEnabled;
     }
 
     /**
