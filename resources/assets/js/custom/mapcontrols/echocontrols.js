@@ -145,7 +145,7 @@ class EchoControls extends MapControl {
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html(`
             .echo_user_${user.id} {
-                border: 3px ${user.color} solid !important
+                border: 3px ${getState().getEcho().getUserColor(user.id)} solid !important
             }`)
             .appendTo('head');
 

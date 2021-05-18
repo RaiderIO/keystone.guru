@@ -8,8 +8,8 @@ class Echo extends Signalable {
 
         this.map = map;
 
-        /** List of usernames currently connected */
-        this._users = [];
+        /** @type EchoUser[] List of usernames currently connected */
+        this._echoUsers = [];
         this._status = ECHO_STATUS_DISCONNECTED;
 
         this._handlers = [
@@ -43,20 +43,20 @@ class Echo extends Signalable {
         // Keep track of the current users in this channel
         /** @type Channel */
         let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName())
-            .here(users => {
+            .here(rawUsers => {
                 // Join any existing users already
-                for (let index in users) {
-                    if (users.hasOwnProperty(index)) {
-                        self._addUser(users[index]);
+                for (let index in rawUsers) {
+                    if (rawUsers.hasOwnProperty(index)) {
+                        self._addUser(rawUsers[index]);
                     }
                 }
                 self.signal('status:changed', {newStatus: ECHO_STATUS_CONNECTED});
             })
-            .joining(user => {
-                self._addUser(user);
+            .joining(rawUser => {
+                self._addUser(rawUser);
             })
-            .leaving(user => {
-                self._removeUser(user);
+            .leaving(rawUser => {
+                self._removeUser(rawUser);
             });
 
         // Attach all our handlers to the presence channel
@@ -86,21 +86,21 @@ class Echo extends Signalable {
     getUsers() {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        return this._users;
+        return this._echoUsers;
     }
 
     /**
      * Gets a user by its name.
-     * @param id int The ID of the user.
-     * @returns {null|object}
+     * @param id {Number} The ID of the user.
+     * @returns {EchoUser}
      */
     getUserById(id) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
         let result = null;
 
-        for (let i = 0; i < this._users.length; i++) {
-            if (this._users[i].id === id) {
-                result = this._users[i];
+        for (let i = 0; i < this._echoUsers.length; i++) {
+            if (this._echoUsers[i].getId() === id) {
+                result = this._echoUsers[i];
                 break;
             }
         }
@@ -110,12 +110,14 @@ class Echo extends Signalable {
 
     /**
      * Gets the color of a specific user.
-     * @param name
+     * @param id {Number}
      * @returns {string}
      */
-    getUserColor(name) {
-        let user = this.getUserByName(name);
-        return user === null || user.color.length === 0 ? '#000' : user.color;
+    getUserColor(id) {
+        let user = this.getUserById(id);
+        return user === null || user.getColor() === null ||
+            typeof user.getColor() === 'undefined' || user.getColor().length === 0 ?
+            '#000' : user.getColor();
     }
 
     /**
@@ -124,45 +126,43 @@ class Echo extends Signalable {
      */
     _clearUsers() {
         // Let everyone know we removed all users
-        for (let i = 0; i < this._users.length; i++) {
-            this.signal('user:remove', {user: this._users[i]});
+        for (let i = 0; i < this._echoUsers.length; i++) {
+            this.signal('user:remove', {user: this._echoUsers[i]});
         }
 
-        this._users = [];
+        this._echoUsers = [];
     }
 
     /**
      * Adds a user to the internal list
-     * @param user {object}
+     * @param rawUser {object}
      * @private
      */
-    _addUser(user) {
+    _addUser(rawUser) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let existingUser = this.getUserById(user.id);
-        if (existingUser === null) {
-            // May be unset when not our own user, but this confuses handlebars
-            user.self = user.id === getState().getUser().id;
-
-            this._users.push(user);
-            this.signal('user:add', {user: user});
+        let existingEchoUser = this.getUserById(rawUser.id);
+        if (existingEchoUser === null) {
+            let echoUser = new EchoUser(rawUser);
+            this._echoUsers.push(echoUser);
+            this.signal('user:add', {user: echoUser});
         }
     }
 
 
     /**
      * Removes a user from the internal list
-     * @param user {object}
+     * @param rawUser {object}
      * @private
      */
-    _removeUser(user) {
+    _removeUser(rawUser) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        for (let i = 0; i < this._users.length; i++) {
-            let userCandidate = this._users[i];
-            if (userCandidate.id === user.id) {
-                this._users.splice(i, 1);
-                this.signal('user:remove', {user: user});
+        for (let i = 0; i < this._echoUsers.length; i++) {
+            let echoUserCandidate = this._echoUsers[i];
+            if (echoUserCandidate.getId() === rawUser.id) {
+                this._echoUsers.splice(i, 1);
+                this.signal('user:remove', {user: echoUserCandidate});
                 // Remove all by the same user name
                 i--;
             }
@@ -175,17 +175,9 @@ class Echo extends Signalable {
      * @param color string The new color of the user.
      */
     setUserColorById(id, color) {
-        // Update by reference - do not use getUserById()
-        let user = null;
+        let echoUser = this.getUserById(id);
+        echoUser.setColor(color);
 
-        for (let i = 0; i < this._users.length; i++) {
-            if (this._users[i].id === id) {
-                user = this._users[i];
-                this._users[i].color = color;
-                break;
-            }
-        }
-
-        this.signal('user:colorchanged', {user: user});
+        this.signal('user:colorchanged', {user: echoUser});
     }
 }

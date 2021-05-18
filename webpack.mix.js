@@ -122,6 +122,7 @@ let scripts = [
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
+    'resources/assets/js/custom/echo/echouser.js',
     'resources/assets/js/custom/echo/echo.js',
     'resources/assets/js/custom/echo/message/messagehandler.js',
     'resources/assets/js/custom/echo/message/listen/colorchanged.js',

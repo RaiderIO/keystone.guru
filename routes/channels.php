@@ -15,7 +15,7 @@
 ////    return $dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user);
 ////});
 
-// https://laravel.com/docs/5.8/broadcasting#presence-channels
+// https://laravel.com/docs/8.x/broadcasting#presence-channels
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\LiveSession;
@@ -35,13 +35,14 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
             $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
             $result = [
-                'id'        => random_int(158402, 99999999),
-                'name'      => sprintf('Anonymous %s', $randomName),
-                'initials'  => initials($randomName),
+                'id'         => random_int(158402, 99999999),
+                'name'       => sprintf('Anonymous %s', $randomName),
+                'initials'   => initials($randomName),
                 // https://stackoverflow.com/a/9901154/771270
-                'color'     => randomHexColor(),
-                'anonymous' => true,
-                'url'       => '#',
+                'color'      => randomHexColor(),
+                'avatar_url' => null,
+                'anonymous'  => true,
+                'url'        => '#',
             ];
         } else {
             $result = [
