@@ -1,0 +1,9 @@
+<div class="user_mouse_location" style="width: calc(8px + {{width}}px); height: calc(8px + {{height}}px);">
+    <div class="container">
+        {{#ifCond avatar_url '==' null}}
+            {{initials}}
+        {{else}}
+            <img src="{{avatar_url}}" alt="{{initials}}" style="width: {{width}}px; height: {{height}}px;"/>
+        {{/ifCond}}
+    </div>
+</div>

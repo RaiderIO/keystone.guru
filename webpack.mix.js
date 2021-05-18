@@ -109,6 +109,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/killzonepathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/usermouselocationmapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -153,6 +154,7 @@ let scripts = [
     'resources/assets/js/custom/models/mapicontype.js',
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/brushline.js',
+    'resources/assets/js/custom/models/usermouseposition.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
     'resources/assets/js/custom/mapstate/editmapstate.js',

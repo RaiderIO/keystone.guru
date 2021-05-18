@@ -33,7 +33,9 @@ class MapObjectGroupManager extends Signalable {
 
         let result = null;
 
-        if (name === MAP_OBJECT_GROUP_ENEMY) {
+        if (name === MAP_OBJECT_GROUP_USER_MOUSE_LOCATION) {
+            result = new UserMouseLocationMapObjectGroup(this, getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_ENEMY) {
             result = new EnemyMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
             result = new EnemyPatrolMapObjectGroup(this, getState().isMapAdmin());

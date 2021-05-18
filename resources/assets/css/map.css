@@ -352,6 +352,7 @@ html, body, #map, #app, .wrapper {
     padding: 0 !important;
 }
 
+.user_mouse_location,
 #edit_route_echo_members_container .list-group-item:not(.separator),
 #edit_route_echo_status_container .list-group-item:not(.separator) {
     background-color: inherit;
@@ -363,6 +364,8 @@ html, body, #map, #app, .wrapper {
     font-size: 1.15rem;
 }
 
+.user_mouse_location .container,
+.user_mouse_location .container img,
 .theme #edit_route_echo_members_container .dropdown .nav-link,
 .theme #edit_route_echo_members_container .dropdown .nav-link img {
     padding: 0 !important;
