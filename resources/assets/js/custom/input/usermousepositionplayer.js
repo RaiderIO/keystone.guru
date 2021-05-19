@@ -5,7 +5,7 @@ class UserMousePositionPlayer extends Signalable {
      * @param e
      * @param previousPlayer UserMousePositionPlayer|null
      */
-    constructor(mapobject, e, previousPlayer = null) {
+    constructor(mapobject, e, previousPlayer) {
         super();
 
         this.mapobject = mapobject;
@@ -22,6 +22,8 @@ class UserMousePositionPlayer extends Signalable {
         // point was added to the screen
         this.previousPointTime = previousPlayer === null ? 0 : previousPlayer.previousPointTime;
         this.previousLatLng = mapobject.layer.getLatLng();
+
+        console.log(`Playing ${e.points.length} points`);
     }
 
     _doFrame() {
@@ -31,17 +33,34 @@ class UserMousePositionPlayer extends Signalable {
         let timeRemaining = nextPointTarget.time - this.currMS;
         let timePassed = this.currMS - this.previousPointTime;
 
-        //
-        // timePassed = timePassed > 1000 ? 0 : timePassed;
+
+        let progressFactor = timePassed / (timeRemaining + timePassed);
 
 
+        if (progressFactor >= 1) {
+            // Snap to the location we targetted
+            this.mapobject.setLocation(nextPointTarget.lat, nextPointTarget.lng);
+            // Remove first element from the array so that we move to the next array but remember it
+            this.previousLatLng = this.e.points.shift();
+            console.log('Swapping!');
+        } else {
+
+            let differenceLat = nextPointTarget.lat - this.previousLatLng.lat;
+            let differenceLng = nextPointTarget.lng - this.previousLatLng.lng;
+
+            let targetLat = this.previousLatLng.lat + (differenceLat * progressFactor);
+            let targetLng = this.previousLatLng.lng + (differenceLng * progressFactor);
+
+            this.mapobject.setLocation(targetLat, targetLng);
+            console.log(this.currMS, nextPointTarget, timeRemaining, timePassed, progressFactor, differenceLat, differenceLng);
+        }
 
 
-        this.previousLatLng = nextPointTarget;
         this.currMS += this.frameTime;
 
-
-
+        if (this.e.points.length === 0) {
+            this.stop();
+        }
 
 
         // Grab the points and schedule their execution
@@ -61,10 +80,12 @@ class UserMousePositionPlayer extends Signalable {
     }
 
     start() {
+        console.log('Starting');
         this.handle = setInterval(this._doFrame.bind(this), this.frameTime);
     }
 
     stop() {
         clearInterval(this.handle);
+        console.log('Stopping');
     }
 }

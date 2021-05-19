@@ -4,10 +4,11 @@ class MouseLocation extends WhisperMessageHandler {
         super(echo, 'mouse-location');
 
         let self = this;
+        let previousPollTime = (new Date()).getTime();
 
         this.mouseLocations = [];
+        this.previousSyncTime = previousPollTime;
 
-        let previousPollTime = (new Date()).getTime();
 
         self.echo.map.register('map:mapobjectgroupsloaded', this, function () {
             self.echo.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
@@ -16,7 +17,7 @@ class MouseLocation extends WhisperMessageHandler {
                 // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
                 if (currTime - previousPollTime > c.map.echo.mousePollFrequencyMs) {
                     self.mouseLocations.push({
-                        time: currTime,
+                        time: currTime - self.previousSyncTime,
                         lat: mouseMoveEvent.latlng.lat,
                         lng: mouseMoveEvent.latlng.lng
                     });
@@ -37,7 +38,6 @@ class MouseLocation extends WhisperMessageHandler {
         if (this.mouseLocations.length > 0) {
             this.send({
                 // The current time is important so that it can be played back properly in other clients (reference)
-                time: (new Date()).getTime(),
                 points: this.mouseLocations,
                 floor_id: getState().getCurrentFloor().id
             });
@@ -45,6 +45,9 @@ class MouseLocation extends WhisperMessageHandler {
             // Clear
             this.mouseLocations = [];
         }
+
+        // Always save this - even if we don't send anything
+        this.previousSyncTime = (new Date()).getTime();
     }
 
     onReceive(e) {
