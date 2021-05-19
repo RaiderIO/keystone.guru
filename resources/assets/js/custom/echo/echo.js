@@ -143,7 +143,7 @@ class Echo extends Signalable {
 
         let existingEchoUser = this.getUserById(rawUser.id);
         if (existingEchoUser === null) {
-            let echoUser = new EchoUser(rawUser);
+            let echoUser = new EchoUser(this.map, rawUser);
             this._echoUsers.push(echoUser);
             this.signal('user:add', {user: echoUser});
         }

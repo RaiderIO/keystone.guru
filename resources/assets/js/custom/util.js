@@ -330,6 +330,10 @@ function getMapIcons() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
 }
 
+function getUserMouseLocations() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_LOCATION);
+}
+
 /**
  * Helper functions to help debug the site.
  */
@@ -359,6 +363,10 @@ function getBrushline(id) {
 
 function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
+}
+
+function getUserMouseLocation(id) {
+    return getUserMouseLocations().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {

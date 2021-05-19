@@ -34,9 +34,9 @@ class MapObject extends Signalable {
         /** @type {Array} */
         this._cachedAttributes = null;
         this.synced = false;
-        /** @type DungeonMap */
+        /** @type {DungeonMap} */
         this.map = map;
-        /** @type L.layer|null */
+        /** @type {L.layer}|null */
         this.layer = layer;
 
         this.options = options;

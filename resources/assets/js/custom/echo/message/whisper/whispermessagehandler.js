@@ -14,7 +14,7 @@ class WhisperMessageHandler extends MessageHandler {
         // Set up the private channel so that we may communicate using it
         this.privateChannel = window.Echo.private(getState().getMapContext().getEchoChannelName())
             .listenForWhisper(this.getMessage(), (e) => {
-                console.log('received', e);
+                console.log('received whisper', e);
                 self.onReceive(e);
             });
     }

@@ -24,8 +24,32 @@ class UserMouseLocationMapObjectGroup extends MapObjectGroup {
     }
 
     _createMapObject(layer, options = {}) {
-        console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
+        console.assert(this instanceof UserMouseLocationMapObjectGroup, 'this is not a UserMouseLocationMapObjectGroup', this);
 
         return new UserMousePosition(this.manager.map, layer);
+    }
+
+    /**
+     * Creates a new user mouse location map object.
+     *
+     * @param echoUser {EchoUser}
+     * @returns {UserMousePosition}
+     */
+    createNewUserMouseLocation(echoUser) {
+        console.assert(this instanceof UserMouseLocationMapObjectGroup, 'this is not a UserMouseLocationMapObjectGroup', this);
+
+        let userMousePosition = this._loadMapObject({
+            id: echoUser.getId(),
+            initials: echoUser.getInitials(),
+            color: echoUser.getColor(),
+            avatar_url: echoUser.getAvatarUrl(), // May be null if not set
+            lat: -125,
+            lng: 200,
+            index: this.objects.length + 1,
+            local: true
+        });
+
+        this.signal('usermouseposition:new', {newUserMousePosition: userMousePosition});
+        return userMousePosition;
     }
 }

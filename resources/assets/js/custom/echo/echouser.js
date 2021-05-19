@@ -1,6 +1,14 @@
 class EchoUser extends Signalable {
-    constructor(user) {
+
+    /**
+     *
+     * @param map {DungeonMap}
+     * @param user {Object}
+     */
+    constructor(map, user) {
         super();
+
+        this.map = map;
 
         // May be unset when not our own user, but this confuses handlebars
         this.self = user.id === getState().getUser().id;
@@ -12,6 +20,11 @@ class EchoUser extends Signalable {
         this.avatar_url = user.avatar_url; // May be null if not set
         this.anonymous = user.anonymous;
         this.url = user.url;
+
+        // Create a map object for this echo user
+        /** @type UserMouseLocationMapObjectGroup */
+        let userMouseLocationMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_LOCATION);
+        this.mapobject = userMouseLocationMapObjectGroup.createNewUserMouseLocation(this);
     }
 
     /**
