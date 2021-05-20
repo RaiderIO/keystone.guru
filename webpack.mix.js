@@ -109,7 +109,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/killzonepathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/usermouselocationmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -131,7 +131,7 @@ let scripts = [
     'resources/assets/js/custom/echo/message/listen/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/npc/deleted.js',
     'resources/assets/js/custom/echo/message/whisper/whispermessagehandler.js',
-    'resources/assets/js/custom/echo/message/whisper/mouselocation.js',
+    'resources/assets/js/custom/echo/message/whisper/mouseposition.js',
 
     // Depends on Echo
     'resources/assets/js/custom/dungeonmap.js',

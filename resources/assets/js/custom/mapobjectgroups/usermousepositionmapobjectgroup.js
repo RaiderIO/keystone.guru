@@ -1,8 +1,8 @@
-class UserMouseLocationMapObjectGroup extends MapObjectGroup {
+class UserMousePositionMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_LOCATION], editable);
+        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_POSITION], editable);
 
-        this.title = 'Hide/show mouse locations of other users';
+        this.title = 'Hide/show mouse positions of other users';
         this.fa_class = 'fa-mouse-pointer';
     }
 
@@ -24,7 +24,7 @@ class UserMouseLocationMapObjectGroup extends MapObjectGroup {
     }
 
     _createMapObject(layer, options = {}) {
-        console.assert(this instanceof UserMouseLocationMapObjectGroup, 'this is not a UserMouseLocationMapObjectGroup', this);
+        console.assert(this instanceof UserMousePositionMapObjectGroup, 'this is not a UserMousePositionMapObjectGroup', this);
 
         return new UserMousePosition(this.manager.map, layer);
     }
@@ -35,8 +35,8 @@ class UserMouseLocationMapObjectGroup extends MapObjectGroup {
      * @param echoUser {EchoUser}
      * @returns {UserMousePosition}
      */
-    createNewUserMouseLocation(echoUser) {
-        console.assert(this instanceof UserMouseLocationMapObjectGroup, 'this is not a UserMouseLocationMapObjectGroup', this);
+    createNewUserMousePosition(echoUser) {
+        console.assert(this instanceof UserMousePositionMapObjectGroup, 'this is not a UserMousePositionMapObjectGroup', this);
 
         let userMousePosition = this._loadMapObject({
             id: echoUser.getId(),

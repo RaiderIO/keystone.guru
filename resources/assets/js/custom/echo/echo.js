@@ -14,7 +14,7 @@ class Echo extends Signalable {
 
         this._handlers = [
             new ColorChanged(this),
-            new MouseLocation(this),
+            new MousePosition(this),
         ];
     }
 
@@ -162,6 +162,7 @@ class Echo extends Signalable {
             let echoUserCandidate = this._echoUsers[i];
             if (echoUserCandidate.getId() === rawUser.id) {
                 this._echoUsers.splice(i, 1);
+                echoUserCandidate.cleanup();
                 this.signal('user:remove', {user: echoUserCandidate});
                 // Remove all by the same user name
                 i--;

@@ -330,8 +330,8 @@ function getMapIcons() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
 }
 
-function getUserMouseLocations() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_LOCATION);
+function getUserMousePositions() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
 }
 
 /**
@@ -365,8 +365,8 @@ function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
 }
 
-function getUserMouseLocation(id) {
-    return getUserMouseLocations().findMapObjectById(id);
+function getUserMousePosition(id) {
+    return getUserMousePositions().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {

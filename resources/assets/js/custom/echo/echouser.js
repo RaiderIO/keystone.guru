@@ -22,9 +22,9 @@ class EchoUser extends Signalable {
         this.url = user.url;
 
         // Create a map object for this echo user
-        /** @type UserMouseLocationMapObjectGroup */
-        let userMouseLocationMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_LOCATION);
-        this.mapobject = userMouseLocationMapObjectGroup.createNewUserMouseLocation(this);
+        /** @type UserMousePositionMapObjectGroup */
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+        this.mapobject = userMousePositionMapObjectGroup.createNewUserMousePosition(this);
     }
 
     /**
@@ -82,5 +82,12 @@ class EchoUser extends Signalable {
      */
     getUrl() {
         return this.url;
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        this.mapobject.localDelete();
+        this.mapobject.cleanup();
     }
 }

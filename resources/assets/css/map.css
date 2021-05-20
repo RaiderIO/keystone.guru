@@ -352,7 +352,7 @@ html, body, #map, #app, .wrapper {
     padding: 0 !important;
 }
 
-.user_mouse_location,
+.user_mouse_position,
 #edit_route_echo_members_container .list-group-item:not(.separator),
 #edit_route_echo_status_container .list-group-item:not(.separator) {
     background-color: inherit;
@@ -364,8 +364,8 @@ html, body, #map, #app, .wrapper {
     font-size: 1.15rem;
 }
 
-.user_mouse_location .container,
-.user_mouse_location .container img,
+.user_mouse_position .container,
+.user_mouse_position .container img,
 .theme #edit_route_echo_members_container .dropdown .nav-link,
 .theme #edit_route_echo_members_container .dropdown .nav-link img {
     padding: 0 !important;
@@ -606,6 +606,11 @@ html, body, #map, #app, .wrapper {
     -o-transition: all 0.2s linear;
     -ms-transition: all 0.2s linear;
     transition: all 0.2s linear;
+}
+
+.user_mouse_position .inner {
+    background-color: black;
+    border-radius: 32px;
 }
 
 .map_icon.leaflet-edit-marker-selected.leaflet-marker-icon {

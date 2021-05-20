@@ -31,7 +31,7 @@ if (typeof Cookies.get('enemy_display_type') === 'undefined') {
 
 
 // Map object groups
-const MAP_OBJECT_GROUP_USER_MOUSE_LOCATION = 'mouselocation';
+const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
@@ -44,7 +44,7 @@ const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
-    MAP_OBJECT_GROUP_USER_MOUSE_LOCATION,
+    MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
     MAP_OBJECT_GROUP_ENEMY,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
     // Depends on MAP_OBJECT_GROUP_ENEMY

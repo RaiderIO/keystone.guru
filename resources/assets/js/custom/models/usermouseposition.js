@@ -1,7 +1,7 @@
 let LeafletIconUserMousePositionUnknown = L.divIcon({
     html: '<i class="fas fa-icons"></i>',
     iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown user_mouse_location_unknown'
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown user_mouse_position_unknown'
 });
 
 let LeafletIconUserMousePositionMarker = L.Marker.extend({
@@ -14,12 +14,13 @@ let LeafletIconUserMousePositionMarker = L.Marker.extend({
  * @param userMousePosition {UserMousePosition}
  */
 function getUserMousePositionIcon(userMousePosition) {
-    let template = Handlebars.templates['map_user_mouse_location_visual_template'];
+    let template = Handlebars.templates['map_user_mouse_position_visual_template'];
 
     let width = c.map.mapicon.calculateSize(32);
     let height = c.map.mapicon.calculateSize(32);
 
     let handlebarsData = $.extend({}, {
+        user_id: userMousePosition.id,
         initials: userMousePosition.initials,
         color: userMousePosition.color,
         avatar_url: userMousePosition.avatar_url,
@@ -39,7 +40,7 @@ function getUserMousePositionIcon(userMousePosition) {
 
 L.Draw.UserMousePosition = L.Draw.Marker.extend({
     statics: {
-        TYPE: MAP_OBJECT_GROUP_USER_MOUSE_LOCATION
+        TYPE: MAP_OBJECT_GROUP_USER_MOUSE_POSITION
     },
     options: {
         icon: LeafletIconUserMousePositionUnknown
@@ -148,8 +149,8 @@ class UserMousePosition extends MapObject {
         this.floor_id = e.floor_id;
 
         // Hide/show ourselves based on the received location
-        let userMouseLocationMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_LOCATION);
-        userMouseLocationMapObjectGroup.setMapObjectVisibility(this, this.shouldBeVisible());
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+        userMousePositionMapObjectGroup.setMapObjectVisibility(this, this.shouldBeVisible());
     }
 
     isEditable() {

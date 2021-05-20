@@ -1,12 +1,12 @@
-class MouseLocation extends WhisperMessageHandler {
+class MousePosition extends WhisperMessageHandler {
 
     constructor(echo) {
-        super(echo, 'mouse-location');
+        super(echo, 'mouse-position');
 
         let self = this;
         let previousPollTime = (new Date()).getTime();
 
-        this.mouseLocations = [];
+        this.mousePositions = [];
         this.previousSyncTime = previousPollTime;
 
 
@@ -16,7 +16,7 @@ class MouseLocation extends WhisperMessageHandler {
 
                 // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
                 if (currTime - previousPollTime > c.map.echo.mousePollFrequencyMs) {
-                    self.mouseLocations.push({
+                    self.mousePositions.push({
                         time: currTime - self.previousSyncTime,
                         lat: mouseMoveEvent.latlng.lat,
                         lng: mouseMoveEvent.latlng.lng
@@ -27,23 +27,23 @@ class MouseLocation extends WhisperMessageHandler {
         });
 
         // Periodically send new mouse locations
-        setInterval(this._sendMouseLocations.bind(this), c.map.echo.mouseSendFrequencyMs);
+        setInterval(this._sendMousePositions.bind(this), c.map.echo.mouseSendFrequencyMs);
     }
 
     /**
      *
      * @private
      */
-    _sendMouseLocations() {
-        if (this.mouseLocations.length > 0) {
+    _sendMousePositions() {
+        if (this.mousePositions.length > 0) {
             this.send({
                 // The current time is important so that it can be played back properly in other clients (reference)
-                points: this.mouseLocations,
+                points: this.mousePositions,
                 floor_id: getState().getCurrentFloor().id
             });
 
             // Clear
-            this.mouseLocations = [];
+            this.mousePositions = [];
         }
 
         // Always save this - even if we don't send anything
