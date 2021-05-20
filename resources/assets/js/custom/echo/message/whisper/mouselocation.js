@@ -27,7 +27,7 @@ class MouseLocation extends WhisperMessageHandler {
         });
 
         // Periodically send new mouse locations
-        setInterval(this._sendMouseLocations.bind(this), c.map.echo.mouseSendFrequency);
+        setInterval(this._sendMouseLocations.bind(this), c.map.echo.mouseSendFrequencyMs);
     }
 
     /**

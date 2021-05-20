@@ -32,7 +32,7 @@ function getUserMousePositionIcon(userMousePosition) {
         iconSize: [width, height],
         tooltipAnchor: [0, -(height / 2)],
         popupAnchor: [0, -(height / 2)],
-        className: 'map_icon'
+        className: 'user_mouse_position'
     });
 }
 
