@@ -407,7 +407,7 @@ function getQueryParams() {
         params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
 
         // Just in case..
-        if( ++count > 100 ){
+        if (++count > 100) {
             break;
         }
     }

@@ -18,6 +18,9 @@ function getUserMousePositionIcon(userMousePosition) {
 
     let width = c.map.mapicon.calculateSize(32);
     let height = c.map.mapicon.calculateSize(32);
+    // Remove 6 for border, then 17 for 2 characters wide
+    let textWidth = width / 2;
+    textWidth -= (c.map.settings.maxZoom - getState().getMapZoomLevel());
 
     let handlebarsData = $.extend({}, {
         user_id: userMousePosition.id,
@@ -25,7 +28,8 @@ function getUserMousePositionIcon(userMousePosition) {
         color: userMousePosition.color,
         avatar_url: userMousePosition.avatar_url,
         width: width,
-        height: height
+        height: height,
+        textWidth: textWidth
     });
 
     return L.divIcon({
