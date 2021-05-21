@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Affixes')])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('Affixes')])
 <?php
 /** @var \App\Service\Season\SeasonService $seasonService */
 /** @var int $offset */
