@@ -10,11 +10,9 @@ class WhisperMessageHandler extends MessageHandler {
     setup(presenceChannel) {
         let self = this;
 
-        console.log('Listening to message ', this.getMessage());
         // Set up the private channel so that we may communicate using it
         this.privateChannel = window.Echo.private(getState().getMapContext().getEchoChannelName())
             .listenForWhisper(this.getMessage(), (e) => {
-                console.log('received whisper', e);
                 self.onReceive(e);
             });
     }
@@ -25,12 +23,14 @@ class WhisperMessageHandler extends MessageHandler {
      * @protected
      */
     send(obj) {
-        console.log('Sending message ', this.getMessage());
-        this.privateChannel.whisper(this.getMessage(), $.extend({}, {
+        let e = $.extend({}, {
             // Send some additional data with every whisper
             user: {
                 id: getState().getMapContext().getUserId()
             }
-        }, obj));
+        }, obj);
+
+        this.privateChannel.whisper(this.getMessage(), e);
+        this.signal('message:sent', e);
     }
 }

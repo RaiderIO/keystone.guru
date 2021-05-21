@@ -1,5 +1,7 @@
-class MessageHandler {
+class MessageHandler extends Signalable {
     constructor(echo, message) {
+        super();
+
         this.echo = echo;
         // Ensure the message starts with a dot
         this.message = message;
@@ -26,6 +28,6 @@ class MessageHandler {
      * @param e
      */
     onReceive(e) {
-
+        this.signal('message:received', e);
     }
 }

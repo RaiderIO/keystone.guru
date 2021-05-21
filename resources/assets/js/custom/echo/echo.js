@@ -12,9 +12,12 @@ class Echo extends Signalable {
         this._echoUsers = [];
         this._status = ECHO_STATUS_DISCONNECTED;
 
+        let mousePosition = new MousePosition(this);
+        mousePosition.register('message:received', this, this._onMousePositionReceived.bind(this));
+
         this._handlers = [
             new ColorChanged(this),
-            new MousePosition(this),
+            mousePosition,
         ];
     }
 
@@ -116,8 +119,20 @@ class Echo extends Signalable {
     getUserColor(id) {
         let user = this.getUserById(id);
         return user === null || user.getColor() === null ||
-            typeof user.getColor() === 'undefined' || user.getColor().length === 0 ?
+        typeof user.getColor() === 'undefined' || user.getColor().length === 0 ?
             '#000' : user.getColor();
+    }
+
+    /**
+     * Sets a user's color.
+     * @param id int The user's id.
+     * @param color string The new color of the user.
+     */
+    setUserColorById(id, color) {
+        let echoUser = this.getUserById(id);
+        echoUser.setColor(color);
+
+        this.signal('user:colorchanged', {user: echoUser});
     }
 
     /**
@@ -171,14 +186,11 @@ class Echo extends Signalable {
     }
 
     /**
-     * Sets a user's color.
-     * @param id int The user's id.
-     * @param color string The new color of the user.
+     *
+     * @param e {Object}
+     * @private
      */
-    setUserColorById(id, color) {
-        let echoUser = this.getUserById(id);
-        echoUser.setColor(color);
-
-        this.signal('user:colorchanged', {user: echoUser});
+    _onMousePositionReceived(e) {
+        this.signal('mouseposition:received', e.data);
     }
 }
