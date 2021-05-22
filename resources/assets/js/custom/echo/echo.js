@@ -18,6 +18,7 @@ class Echo extends Signalable {
         this._handlers = [
             new ColorChanged(this),
             mousePosition,
+            new ViewPort(this),
         ];
     }
 

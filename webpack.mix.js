@@ -131,6 +131,7 @@ let scripts = [
     'resources/assets/js/custom/echo/message/listen/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/npc/deleted.js',
     'resources/assets/js/custom/echo/message/whisper/whispermessagehandler.js',
+    'resources/assets/js/custom/echo/message/whisper/viewport.js',
     'resources/assets/js/custom/echo/message/whisper/mouseposition.js',
 
     // Depends on Echo

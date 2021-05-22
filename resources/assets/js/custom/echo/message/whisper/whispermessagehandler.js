@@ -27,7 +27,8 @@ class WhisperMessageHandler extends MessageHandler {
             // Send some additional data with every whisper
             user: {
                 id: getState().getMapContext().getUserId()
-            }
+            },
+            floor_id: getState().getCurrentFloor().id
         }, obj);
 
         this.privateChannel.whisper(this.getMessage(), e);

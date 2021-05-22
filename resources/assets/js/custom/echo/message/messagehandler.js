@@ -28,6 +28,13 @@ class MessageHandler extends Signalable {
      * @param e
      */
     onReceive(e) {
+        let echoUser = this.echo.getUserById(e.user.id);
+
+        // Floor ID is always set - so set it here
+        if( echoUser !== null ) {
+            echoUser.setFloorId(e.floor_id);
+        }
+
         this.signal('message:received', e);
     }
 }

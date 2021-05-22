@@ -39,7 +39,6 @@ class MousePosition extends WhisperMessageHandler {
             this.send({
                 // The current time is important so that it can be played back properly in other clients (reference)
                 points: this.mousePositions,
-                floor_id: getState().getCurrentFloor().id
             });
 
             // Clear

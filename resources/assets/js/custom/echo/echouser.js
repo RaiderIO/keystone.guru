@@ -21,6 +21,11 @@ class EchoUser extends Signalable {
         this.anonymous = user.anonymous;
         this.url = user.url;
 
+        // May be received from this user when available
+        this.center = null;
+        this.zoom = null;
+        this.floor_id = null;
+
         // Create a map object for this echo user
         /** @type UserMousePositionMapObjectGroup */
         let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
@@ -82,6 +87,54 @@ class EchoUser extends Signalable {
      */
     getUrl() {
         return this.url;
+    }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getCenter() {
+        return this.center;
+    }
+
+    /**
+     *
+     * @param center
+     */
+    setCenter(center) {
+        this.center = center;
+    }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getZoom() {
+        return this.zoom;
+    }
+
+    /**
+     *
+     * @param zoom {Number}
+     */
+    setZoom(zoom) {
+        this.zoom = zoom;
+    }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getFloorId() {
+        return this.floor_id;
+    }
+
+    /**
+     *
+     * @param floorId {Number}
+     */
+    setFloorId(floorId) {
+        this.floor_id = floorId;
     }
 
     cleanup() {
