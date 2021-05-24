@@ -281,6 +281,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     *
+     * @param enabled {boolean}
+     */
+    setEchoCursorsEnabled(enabled) {
+        Cookies.set('echo_cursors_enabled', enabled ? 1 : 0);
+
+        this.signal('echocursorsenabled:changed');
+    }
+
+    /**
      * Checks if Echo is enabled for the current session.
      * @returns {boolean}
      */
@@ -529,5 +539,13 @@ class StateManager extends Signalable {
      */
     getPullsSidebarFloorSwitchVisibility() {
         return parseInt(Cookies.get('pulls_sidebar_floor_switch_visibility')) === 1;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    getEchoCursorsEnabled() {
+        return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
     }
 }

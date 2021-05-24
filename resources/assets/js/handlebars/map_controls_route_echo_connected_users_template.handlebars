@@ -1,10 +1,20 @@
 <ul id="edit_route_echo_members_container" class="list-group list-group-horizontal">
     <li class="list-group-item p-0 m-0 border-0">
-        <button type="button" class="btn btn-dark btn-sm p-1 active w-100 h-100"
-                data-toggle="button" aria-pressed="true"
-                data-tooltip="tooltip" title="{{connected_users_show_cursors_label}}">
-            <i class="fas fa-mouse-pointer"></i>
-        </button>
+        {{#if cursorsActive}}
+            <button id="echo_toggle_cursors"
+                    type="button" class="btn btn-dark btn-sm p-1 w-100 h-100 active"
+                    data-toggle="button" aria-pressed="true"
+                    data-tooltip="tooltip" title="{{connected_users_hide_cursors_label}}">
+                <i class="fas fa-mouse-pointer"></i>
+            </button>
+        {{else}}
+            <button id="echo_toggle_cursors"
+                    type="button" class="btn btn-dark btn-sm p-1 w-100 h-100"
+                    data-toggle="button"
+                    data-tooltip="tooltip" title="{{connected_users_show_cursors_label}}">
+                <i class="fas fa-mouse-pointer"></i>
+            </button>
+        {{/if}}
     </li>
     <li class="list-group-item separator p-2 border-0"></li>
     {{#each users}}

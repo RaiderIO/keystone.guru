@@ -31,7 +31,6 @@ class MessageHandler extends Signalable {
         let message = new MessageFactory().create(e.__name, e);
 
         if (message !== null) {
-            console.log('Received', message);
             let echoUser = this.echo.getUserById(message.user.id);
 
             // Floor ID is always set - so set it here

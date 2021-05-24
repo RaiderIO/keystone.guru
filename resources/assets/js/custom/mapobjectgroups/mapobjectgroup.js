@@ -251,6 +251,9 @@ class MapObjectGroup extends Signalable {
 
         mapObject.loadRemoteMapObject(remoteMapObject);
 
+        // Set the map object to be the same visibility as ours by default
+        this.setMapObjectVisibility(mapObject, this._visible);
+
         // If id is not set we're creating a new Map Object from the map; at this point we should not sync
         // since the ID still needs to be generated from the server.
         // Sometimes, mapObject.id is 'undefined', for example MDT enemies. This simply means a MapObject is not dealing
@@ -479,9 +482,12 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
+        if (!this._visible && visible) {
+            // console.warn(`Unable to make map object visible - the MapObjectGroup is hidden`, mapObject);
+        }
+            // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if (mapObject.layer !== null) {
+        else if (mapObject.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(mapObject.layer)) {
                     this.layerGroup.addLayer(mapObject.layer);
