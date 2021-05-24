@@ -1,8 +1,8 @@
 class Signalable {
 
     constructor() {
-        this.signals = [];
-        this.cleanedUp = false;
+        this._signals = [];
+        this._cleanedUp = false;
     }
 
     /**
@@ -24,8 +24,8 @@ class Signalable {
 
         // Check if we're already registered, if so throw an error
         for (let i = 0; i < name.length; i++) {
-            for (let j = 0; j < this.signals.length; j++) {
-                let caller = this.signals[j];
+            for (let j = 0; j < this._signals.length; j++) {
+                let caller = this._signals[j];
 
                 if (caller.name === name[i] && caller.listener === listener && caller.callback === fn) {
                     console.error(`Already registered for '${name[i]}'! Unable to double register, aborting`, caller);
@@ -35,13 +35,13 @@ class Signalable {
         }
 
         for (let i = 0; i < name.length; i++) {
-            for (let j = 0; j < this.signals.length; j++) {
-                let signal = this.signals[j];
+            for (let j = 0; j < this._signals.length; j++) {
+                let signal = this._signals[j];
                 if (signal.name === name[i] && signal.listener === listener && signal.callback === fn) {
                     console.warn('About to hook the same signal for the 2nd time!', name[i], listener);
                 }
             }
-            this.signals.push({
+            this._signals.push({
                 name: name[i],
                 listener: listener,
                 callback: fn
@@ -67,8 +67,8 @@ class Signalable {
         for (let i = 0; i < name.length; i++) {
             let toRemove = [];
 
-            for (let j = 0; j < this.signals.length; j++) {
-                let caller = this.signals[j];
+            for (let j = 0; j < this._signals.length; j++) {
+                let caller = this._signals[j];
                 if (caller.name === name[i] && caller.listener === listener && (fn === null || caller.callback === fn)) {
                     toRemove.push(j);
                 }
@@ -79,7 +79,7 @@ class Signalable {
             // Reverse the loop, we're removing multiple indices. If we start with smallest first,
             // we're going to remove the wrong indexes after the first one. Not good. Reverse preserves the proper order.
             for (let j = toRemove.length - 1; j >= 0; j--) {
-                this.signals.splice(toRemove[j], 1);
+                this._signals.splice(toRemove[j], 1);
             }
         }
 
@@ -94,11 +94,11 @@ class Signalable {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
         let self = this;
 
-        for (let i = 0; i < this.signals.length; i++) {
-            let caller = this.signals[i];
+        for (let i = 0; i < this._signals.length; i++) {
+            let caller = this._signals[i];
 
             if (caller.name === name) {
-                if (caller.listener instanceof Signalable && caller.listener.cleanedUp) {
+                if (caller.listener instanceof Signalable && caller.listener._cleanedUp) {
                     console.error(`Unable to send signal '${caller.name}' to object because it's cleaned up and it should have unregged!`, caller);
                 } else {
                     caller.callback({name: name, context: self, data: data});
@@ -112,11 +112,11 @@ class Signalable {
      * @protected
      */
     _cleanupSignals() {
-        // Should be enough to get rid of all signals
-        this.signals = [];
+        // Should be enough to get rid of all _signals
+        this._signals = [];
     }
 
     cleanup() {
-        this.cleanedUp = true;
+        this._cleanedUp = true;
     }
 }

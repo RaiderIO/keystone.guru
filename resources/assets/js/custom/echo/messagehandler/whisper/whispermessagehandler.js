@@ -19,19 +19,14 @@ class WhisperMessageHandler extends MessageHandler {
 
     /**
      * Sends an object across the whisper channel
-     * @param obj
+     * @param message Message
      * @protected
      */
-    send(obj) {
-        let e = $.extend({}, {
-            // Send some additional data with every whisper
-            user: {
-                id: getState().getMapContext().getUserId()
-            },
-            floor_id: getState().getCurrentFloor().id
-        }, obj);
+    send(message) {
+        // Prevent sending of private properties
+        let obj = message.toObject();
 
-        this.privateChannel.whisper(this.getMessage(), e);
-        this.signal('message:sent', e);
+        this.privateChannel.whisper(this.getMessage(), obj);
+        this.signal('message:sent', obj);
     }
 }

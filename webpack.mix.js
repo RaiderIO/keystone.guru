@@ -123,16 +123,26 @@ let scripts = [
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
+
+    // Echo objects
     'resources/assets/js/custom/echo/echouser.js',
     'resources/assets/js/custom/echo/echo.js',
-    'resources/assets/js/custom/echo/message/messagehandler.js',
-    'resources/assets/js/custom/echo/message/listen/colorchanged.js',
-    'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
-    'resources/assets/js/custom/echo/message/listen/npc/changed.js',
-    'resources/assets/js/custom/echo/message/listen/npc/deleted.js',
-    'resources/assets/js/custom/echo/message/whisper/whispermessagehandler.js',
+
+    // Echo messages
+    'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/whisper/viewport.js',
     'resources/assets/js/custom/echo/message/whisper/mouseposition.js',
+    'resources/assets/js/custom/echo/message/messagefactory.js',
+
+    // Echo message handlers
+    'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/colorchanged.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/npc/changed.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/npc/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/whispermessagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/viewport.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/mouseposition.js',
 
     // Depends on Echo
     'resources/assets/js/custom/dungeonmap.js',

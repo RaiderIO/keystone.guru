@@ -1,4 +1,4 @@
-class Deleted extends MessageHandler {
+class NpcChangedHandler extends MessageHandler {
 
     constructor(echo) {
         super(echo, '.npc-changed');
@@ -11,5 +11,8 @@ class Deleted extends MessageHandler {
 
         // Remove any existing NPC
         mapContext.removeRawNpcById(e.model.id);
+
+        // Add the new NPC
+        mapContext.addRawNpc(e.model);
     }
 }

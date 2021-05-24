@@ -125,7 +125,7 @@ class UserMousePosition extends MapObject {
      * @param lat {float}
      * @param lng {float}
      */
-    setLocation(lat, lng) {
+    setPosition(lat, lng) {
         console.assert(this instanceof UserMousePosition, 'this was not a UserMousePosition', this);
         this.lat = lat;
         this.lng = lng;
@@ -134,23 +134,23 @@ class UserMousePosition extends MapObject {
     }
 
     /**
-     * @param e {Object}
+     * @param message {MousePositionMessage}
      */
-    onLocationsReceived(e) {
+    onPositionsReceived(message) {
         console.assert(this instanceof UserMousePosition, 'this was not a UserMousePosition', this);
 
         // Only perform this when we're on the same floor
-        if (e.floor_id === getState().getCurrentFloor().id) {
+        if (message.floor_id === getState().getCurrentFloor().id) {
             // Abort any existing player - if there was any
             if( this.player !== null ) {
                 this.player.stop();
             }
 
-            this.player = new UserMousePositionPlayer(this, e, this.player);
+            this.player = new UserMousePositionPlayer(this, message, this.player);
             this.player.start();
         }
 
-        this.floor_id = e.floor_id;
+        this.floor_id = message.floor_id;
 
         // Hide/show ourselves based on the received location
         let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);

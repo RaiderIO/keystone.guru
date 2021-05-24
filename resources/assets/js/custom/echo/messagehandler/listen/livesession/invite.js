@@ -1,4 +1,4 @@
-class Invite extends MessageHandler {
+class InviteHandler extends MessageHandler {
 
     constructor(echo) {
         super(echo, '.livesession-invite');

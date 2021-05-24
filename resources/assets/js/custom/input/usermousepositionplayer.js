@@ -5,15 +5,15 @@
 class UserMousePositionPlayer extends Signalable {
     /**
      *
-     * @param mapobject UserMousePosition
-     * @param e Object
-     * @param previousPlayer UserMousePositionPlayer|null
+     * @param mapobject {UserMousePosition}
+     * @param message {MousePositionMessage}
+     * @param previousPlayer {UserMousePositionPlayer|null}
      */
-    constructor(mapobject, e, previousPlayer) {
+    constructor(mapobject, message, previousPlayer) {
         super();
 
         this.mapobject = mapobject;
-        this.e = e;
+        this.message = message;
 
         this.handles = [];
     }
@@ -23,18 +23,18 @@ class UserMousePositionPlayer extends Signalable {
      * @param point
      * @private
      */
-    _setLocation(point) {
-        this.mapobject.setLocation(point.lat, point.lng);
+    _setPosition(point) {
+        this.mapobject.setPosition(point.lat, point.lng);
     }
 
     /**
      * Starts applying the received mouse positions over time.
      */
     start() {
-        for (let i = 0; i < this.e.points.length; i++) {
-            let point = this.e.points[i];
+        for (let i = 0; i < this.message.points.length; i++) {
+            let point = this.message.points[i];
 
-            this.handles.push(setTimeout(this._setLocation.bind(this, point), point.time));
+            this.handles.push(setTimeout(this._setPosition.bind(this, point), point.time));
         }
     }
 

@@ -12,13 +12,22 @@ class Echo extends Signalable {
         this._echoUsers = [];
         this._status = ECHO_STATUS_DISCONNECTED;
 
-        let mousePosition = new MousePosition(this);
+        let mousePosition = new MousePositionHandler(this);
         mousePosition.register('message:received', this, this._onMousePositionReceived.bind(this));
 
         this._handlers = [
-            new ColorChanged(this),
+            // NPC
+            new NpcChangedHandler(this),
+            new NpcDeletedHandler(this),
+
+            new ColorChangedHandler(this),
+
+            // Invite for a live session
+            new InviteHandler(this),
+
+            // Live Sessions
             mousePosition,
-            new ViewPort(this),
+            new ViewPortHandler(this),
         ];
     }
 
@@ -188,10 +197,10 @@ class Echo extends Signalable {
 
     /**
      *
-     * @param e {Object}
+     * @param mousePositionReceivedEvent {Object}
      * @private
      */
-    _onMousePositionReceived(e) {
-        this.signal('mouseposition:received', e.data);
+    _onMousePositionReceived(mousePositionReceivedEvent) {
+        this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
     }
 }
