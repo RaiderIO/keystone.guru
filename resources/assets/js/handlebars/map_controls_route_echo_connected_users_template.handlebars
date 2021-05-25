@@ -34,11 +34,11 @@
                     </a>
                     <div class="dropdown-divider"></div>
                     {{#ifCond ../type '==' 'livesession'}}
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item echo_follow_user" href="#" data-id="{{id}}">
                             <i class="fas fa-link"></i> {{../connected_user_follow_label}}
                         </a>
                     {{/ifCond}}
-                    <a class="dropdown-item" href="{{url}}">
+                    <a class="dropdown-item" href="{{url}}" target="_blank">
                         <i class="fas fa-user"></i> {{../connected_user_view_profile_label}}
                     </a>
                 </div>

@@ -23,8 +23,10 @@ $echo = $echo ?? false;
                 @isset($dungeonroute)
                     <li class="nav-item">
                         @isset($livesession)
-                            <div class="text-success" disabled>
-                                <i class="fas fa-satellite-dish"></i> {{ __('Now live') }}
+                            <div class="text-success d-flex h-100" disabled>
+                                <div class="row justify-content-center align-self-center px-2">
+                                    <i class="fas fa-satellite-dish pr-1"></i> {{ __('Now live') }}
+                                </div>
                             </div>
                         @else
                             <button class="btn btn-success btn-sm" data-toggle="modal"
@@ -37,16 +39,16 @@ $echo = $echo ?? false;
 
                     </li>
                 @endisset
-                <li class="nav-item">
-                    <div class="row no-gutters">
-                        <div id="route_title" class="col h-100 ">
+                <li class="nav-item h-100">
+                    <div class="row no-gutters justify-content-center align-self-center">
+                        <div id="route_title" class="col">
                             <h5 class="mb-0 mr-2">
                                 {{ $title }}
                             </h5>
                         </div>
                         @auth
                             @isset($dungeonroute)
-                                <div class="col-auto h-100 ml-2">
+                                <div class="col-auto ml-2">
                                     <i id="route_favorited" class="fas fa-star favorite_star favorited"
                                        style="display: {{ $dungeonroute->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
                                     <i id="route_not_favorited" class="far fa-star favorite_star"
@@ -58,7 +60,7 @@ $echo = $echo ?? false;
                     </div>
                     @if($dungeonroute && $dungeonroute->team instanceof \App\Models\Team)
                         <div class="row no-gutters">
-                            <div class="col text-success">
+                            <div class="col text-primary">
                                 @if($dungeonroute->team->isUserMember(Auth::user()))
                                     <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
                                         <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}

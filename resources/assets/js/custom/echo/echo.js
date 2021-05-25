@@ -127,6 +127,8 @@ class Echo extends Signalable {
      * @returns {string}
      */
     getUserColor(id) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
         let user = this.getUserById(id);
         return user === null || user.getColor() === null ||
         typeof user.getColor() === 'undefined' || user.getColor().length === 0 ?
@@ -135,10 +137,12 @@ class Echo extends Signalable {
 
     /**
      * Sets a user's color.
-     * @param id int The user's id.
-     * @param color string The new color of the user.
+     * @param id {Number} The user's id.
+     * @param color {string} The new color of the user.
      */
     setUserColorById(id, color) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
         let echoUser = this.getUserById(id);
         echoUser.setColor(color);
 
@@ -146,10 +150,30 @@ class Echo extends Signalable {
     }
 
     /**
+     * Starts following the user around so that you're hands free (or turn it off)
+     * @param id {Number}
+     */
+    followUserById(id) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        this.unfollowUser();
+
+    }
+
+    /**
+     *
+     */
+    unfollowUser() {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+    }
+
+    /**
      * Removes all users from the list.
      * @private
      */
     _clearUsers() {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
         // Let everyone know we removed all users
         for (let i = 0; i < this._echoUsers.length; i++) {
             this.signal('user:remove', {user: this._echoUsers[i]});

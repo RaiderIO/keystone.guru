@@ -91,6 +91,10 @@ class EchoControls extends MapControl {
             self._refreshVisual();
         });
 
+        $('.echo_follow_user').on('click', function () {
+            getState().getEcho().followUserById(parseInt($(this).data('id')));
+        });
+
         refreshTooltips();
     }
 

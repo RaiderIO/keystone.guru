@@ -10,21 +10,26 @@ class MousePositionHandler extends WhisperMessageHandler {
         this.previousSyncTime = previousPollTime;
 
 
-        self.echo.map.register('map:mapobjectgroupsloaded', this, function () {
-            self.echo.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
-                let currTime = (new Date()).getTime();
+        // Mobile does not have a mouse so we can't send anything
+        if (!isMobile()) {
+            self.echo.map.register('map:mapobjectgroupsloaded', this, function () {
+                self.echo.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
 
-                // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
-                if (currTime - previousPollTime > c.map.echo.mousePollFrequencyMs) {
-                    self.mousePositions.push({
-                        time: currTime - self.previousSyncTime,
-                        lat: mouseMoveEvent.latlng.lat,
-                        lng: mouseMoveEvent.latlng.lng
-                    });
-                    previousPollTime = currTime;
-                }
-            })
-        });
+                    console.log(mouseMoveEvent, mouseMoveEvent.latlng);
+                    let currTime = (new Date()).getTime();
+
+                    // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
+                    if (currTime - previousPollTime > c.map.echo.mousePollFrequencyMs) {
+                        self.mousePositions.push({
+                            time: currTime - self.previousSyncTime,
+                            lat: mouseMoveEvent.latlng.lat,
+                            lng: mouseMoveEvent.latlng.lng
+                        });
+                        previousPollTime = currTime;
+                    }
+                })
+            });
+        }
 
         this.register('message:received', this, this._onReceive.bind(this));
 
@@ -55,7 +60,7 @@ class MousePositionHandler extends WhisperMessageHandler {
         let message = mousePositionReceivedEvent.data.message;
 
         let echoUser = this.echo.getUserById(message.user.id);
-        if( echoUser !== null ) {
+        if (echoUser !== null) {
             echoUser.mapobject.onPositionsReceived(message);
             echoUser.mapobject.setSynced(true);
         } else {
