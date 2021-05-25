@@ -31,10 +31,14 @@ class UserMousePositionPlayer extends Signalable {
      * Starts applying the received mouse positions over time.
      */
     start() {
+        // There should always be a first point
+        let firstPoint = this.message.points[0];
+
         for (let i = 0; i < this.message.points.length; i++) {
             let point = this.message.points[i];
 
-            this.handles.push(setTimeout(this._setPosition.bind(this, point), point.time));
+            // We subtract the first point's time from all found points times so that we're a bit more responsive
+            this.handles.push(setTimeout(this._setPosition.bind(this, point), point.time - firstPoint.time));
         }
     }
 

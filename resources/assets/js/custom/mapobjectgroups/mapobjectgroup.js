@@ -251,9 +251,6 @@ class MapObjectGroup extends Signalable {
 
         mapObject.loadRemoteMapObject(remoteMapObject);
 
-        // Set the map object to be the same visibility as ours by default
-        this.setMapObjectVisibility(mapObject, this._visible);
-
         // If id is not set we're creating a new Map Object from the map; at this point we should not sync
         // since the ID still needs to be generated from the server.
         // Sometimes, mapObject.id is 'undefined', for example MDT enemies. This simply means a MapObject is not dealing
