@@ -10,6 +10,8 @@ class Echo extends Signalable {
 
         /** @type EchoUser[] List of usernames currently connected */
         this._echoUsers = [];
+        /** @type EchoUser|null The user that we're currently following, if any */
+        this._echoUserFollow = null;
         this._status = ECHO_STATUS_DISCONNECTED;
 
         let mousePosition = new MousePositionHandler(this);
@@ -155,8 +157,13 @@ class Echo extends Signalable {
      */
     followUserById(id) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
+        
+        // Unfollow the current user
         this.unfollowUser();
 
+        this._echoUserFollow = this.getUserById(id);
+
+        this.signal('user:follow', {user: this._echoUserFollow});
     }
 
     /**
@@ -165,6 +172,10 @@ class Echo extends Signalable {
     unfollowUser() {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
+        let previousEchoUserFollow = this._echoUserFollow;
+        this._echoUserFollow = null;
+
+        this.signal('user:unfollow', {user: previousEchoUserFollow});
     }
 
     /**

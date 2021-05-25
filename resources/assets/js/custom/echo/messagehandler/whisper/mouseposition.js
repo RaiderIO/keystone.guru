@@ -14,8 +14,6 @@ class MousePositionHandler extends WhisperMessageHandler {
         if (!isMobile()) {
             self.echo.map.register('map:mapobjectgroupsloaded', this, function () {
                 self.echo.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
-
-                    console.log(mouseMoveEvent, mouseMoveEvent.latlng);
                     let currTime = (new Date()).getTime();
 
                     // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate

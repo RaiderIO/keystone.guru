@@ -419,4 +419,9 @@ return [
     'connected_users_show_cursors_label' => 'Show cursors',
     'connected_user_follow_label'        => 'Follow',
     'connected_user_view_profile_label'  => 'View profile',
+    'echo_following_user_label'          => 'Now following',
+    'echo_unfollow_user_label'           => 'Unfollow',
+    'echo_following_user_stopped_label'  => 'You stopped following',
+    'echo_refollow_user_label'           => 'Refollow',
+    'echo_refollow_user_stop_label'      => 'Stop',
 ];

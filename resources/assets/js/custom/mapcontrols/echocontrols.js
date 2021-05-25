@@ -11,6 +11,8 @@ class EchoControls extends MapControl {
         echo.register('user:add', this, this._onUserAdd.bind(this));
         echo.register('user:remove', this, this._onUserRemove.bind(this));
         echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
+        echo.register('user:follow', this, this._onUserFollowed.bind(this));
+        echo.register('user:unfollow', this, this._onUserUnfollowed.bind(this));
 
         getState().register('echocursorsenabled:changed', this, this._onEchoCursorsEnabledChanged.bind(this));
 
@@ -48,6 +50,38 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
         this._applyUserColor(userRemoveEvent.data.user);
+    }
+
+    _onUserFollowed(userFollowedEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        let echoUser = userFollowedEvent.data.user;
+        let template = Handlebars.templates['map_controls_route_echo_following_user_template'];
+
+        $('#route_echo_container_follow_user').html(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
+        );
+
+        // Make sure we can unfollow the user
+        $('#route_echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+        });
+    }
+
+    _onUserUnfollowed(userUnfollowedEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        let echoUser = userUnfollowedEvent.data.user;
+        let template = Handlebars.templates['map_controls_route_echo_refollow_user_template'];
+
+        $('#route_echo_container_follow_user').html(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
+        );
+
+        // Make sure we can unfollow the user
+        $('#route_echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+        });
     }
 
     _restoreExistingEchoState() {

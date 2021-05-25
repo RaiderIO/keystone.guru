@@ -22,18 +22,22 @@ $echo = $echo ?? false;
             <ul class="navbar-nav mr-auto">
                 @isset($dungeonroute)
                     <li class="nav-item">
-                        @isset($livesession)
-                            <div class="text-success d-flex h-100" disabled>
-                                <div class="row justify-content-center align-self-center px-2">
-                                    <i class="fas fa-satellite-dish pr-1"></i> {{ __('Now live') }}
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <div class="col">
+                                    @isset($livesession)
+                                        <a href="{{ route('dungeonroute.edit', $dungeonroute) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-undo"></i> {{ __('Edit') }}
+                                        </a>
+                                    @else
+                                        <button class="btn btn-success btn-sm" data-toggle="modal"
+                                                data-target="#start_live_session_modal">
+                                            <i class="fas fa-play"></i> {{ __('Start') }}
+                                        </button>
+                                    @endisset
                                 </div>
                             </div>
-                        @else
-                            <button class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#start_live_session_modal">
-                                <i class="fas fa-play"></i> {{ __('Start') }}
-                            </button>
-                        @endisset
+                        </div>
                     </li>
                     <li class="nav-item nav-item-divider">
 
