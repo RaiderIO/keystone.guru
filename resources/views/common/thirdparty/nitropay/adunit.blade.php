@@ -89,7 +89,11 @@ if ($isMobile) {
         </script>
 @elseif( $type === 'header' )
     <!-- Top header ad unit -->
-        <div id="{{ $id }}" class="ad_block_me"></div>
+        <div id="{{ $id }}" class="ad_block_me"
+             @if(!$isMobile)
+             style="min-height: 90px;"
+            @endif
+        ></div>
         @if( $isMobile )
             <script type="text/javascript">
                 window['nitroAds'].createAd('{{ $id }}', {
@@ -130,7 +134,12 @@ if ($isMobile) {
         @endif
     @elseif( $type === 'footer' )
     <!-- Footer ad unit -->
-        <div id="{{ $id }}" class="ad_block_me"></div>
+        @php($height = isset($map) && $map ? 90 : 250)
+        <div id="{{ $id }}" class="ad_block_me"
+             @if(!$isMobile)
+             style="min-height: {{ $height }}px;"
+            @endif
+        ></div>
 
         @if( $isMobile )
             <script type="text/javascript">
@@ -160,7 +169,7 @@ if ($isMobile) {
                     "sizes": [
                         [
                             "{{ isset($map) && $map ? 728 : 970 }}",
-                            "{{ isset($map) && $map ? 90 : 250 }}"
+                            "{{ $height }}"
                         ]
                     ],
                     "report": {
