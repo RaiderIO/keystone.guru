@@ -34,9 +34,17 @@
                     </a>
                     <div class="dropdown-divider"></div>
                     {{#ifCond ../type '==' 'livesession'}}
-                        <a class="dropdown-item echo_follow_user" href="#" data-id="{{id}}">
-                            <i class="fas fa-link"></i> {{../connected_user_follow_label}}
-                        </a>
+                        {{#unless self}}
+                            {{#if following}}
+                                <a class="dropdown-item echo_unfollow_user" href="#" data-id="{{id}}">
+                                    <i class="fas fa-link"></i> {{../connected_user_unfollow_label}}
+                                </a>
+                            {{else}}
+                                <a class="dropdown-item echo_follow_user" href="#" data-id="{{id}}">
+                                    <i class="fas fa-link"></i> {{../connected_user_follow_label}}
+                                </a>
+                            {{/if}}
+                        {{/unless}}
                     {{/ifCond}}
                     <a class="dropdown-item" href="{{url}}" target="_blank">
                         <i class="fas fa-user"></i> {{../connected_user_view_profile_label}}

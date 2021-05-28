@@ -82,6 +82,14 @@ class EchoControls extends MapControl {
         $('#route_echo_unfollow_user').on('click', function () {
             getState().getEcho().unfollowUser();
         });
+
+        $('#route_echo_refollow_user').on('click', function () {
+            getState().getEcho().refollowUser();
+        });
+
+        $('#route_echo_follow_stop_user').on('click', function () {
+            $('#route_echo_container_follow_user').html('');
+        });
     }
 
     _restoreExistingEchoState() {
@@ -127,6 +135,16 @@ class EchoControls extends MapControl {
 
         $('.echo_follow_user').on('click', function () {
             getState().getEcho().followUserById(parseInt($(this).data('id')));
+
+            // Rebuild the layout so that the button switches from follow to unfollow
+            self._refreshVisual();
+        });
+
+        $('.echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+
+            // Rebuild the layout so that the button switches from unfollow to follow
+            self._refreshVisual();
         });
 
         refreshTooltips();

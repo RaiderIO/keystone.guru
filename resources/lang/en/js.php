@@ -418,6 +418,7 @@ return [
     'connected_users_hide_cursors_label' => 'Hide cursors',
     'connected_users_show_cursors_label' => 'Show cursors',
     'connected_user_follow_label'        => 'Follow',
+    'connected_user_unfollow_label'      => 'Unfollow',
     'connected_user_view_profile_label'  => 'View profile',
     'echo_following_user_label'          => 'Now following',
     'echo_unfollow_user_label'           => 'Unfollow',

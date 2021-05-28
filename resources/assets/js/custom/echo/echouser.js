@@ -21,6 +21,9 @@ class EchoUser extends Signalable {
         this.anonymous = user.anonymous;
         this.url = user.url;
 
+        // May be set if we're following this user
+        this.following = false;
+
         // May be received from this user when available
         this.center = null;
         this.zoom = null;
@@ -136,6 +139,23 @@ class EchoUser extends Signalable {
     setFloorId(floorId) {
         this.floor_id = floorId;
     }
+
+    /**
+     *
+     * @param following {Boolean}
+     */
+    setFollowing(following) {
+        this.following = following;
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getFollowing() {
+        return this.following;
+    }
+
+
 
     cleanup() {
         super.cleanup();

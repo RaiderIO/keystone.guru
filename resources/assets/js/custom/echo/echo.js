@@ -12,6 +12,8 @@ class Echo extends Signalable {
         this._echoUsers = [];
         /** @type EchoUser|null The user that we're currently following, if any */
         this._echoUserFollow = null;
+        /** @type EchoUser|null The user that we've most recently followed, even if we stopped following */
+        this._echoUserRefollow = null;
         this._status = ECHO_STATUS_DISCONNECTED;
 
         let mousePosition = new MousePositionHandler(this);
@@ -157,11 +159,14 @@ class Echo extends Signalable {
      */
     followUserById(id) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
-        
+
         // Unfollow the current user
         this.unfollowUser();
 
         this._echoUserFollow = this.getUserById(id);
+        this._echoUserFollow.setFollowing(true);
+
+        this._echoUserRefollow = this._echoUserFollow;
 
         this.signal('user:follow', {user: this._echoUserFollow});
     }
@@ -173,9 +178,24 @@ class Echo extends Signalable {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
         let previousEchoUserFollow = this._echoUserFollow;
-        this._echoUserFollow = null;
+
+        if (this._echoUserFollow !== null) {
+            this._echoUserFollow.setFollowing(false);
+            this._echoUserFollow = null;
+        }
 
         this.signal('user:unfollow', {user: previousEchoUserFollow});
+    }
+
+    /**
+     *
+     */
+    refollowUser() {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        if (this._echoUserRefollow !== null) {
+            this.followUserById(this._echoUserRefollow.getId());
+        }
     }
 
     /**
