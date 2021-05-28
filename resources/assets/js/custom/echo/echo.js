@@ -16,8 +16,11 @@ class Echo extends Signalable {
         this._echoUserRefollow = null;
         this._status = ECHO_STATUS_DISCONNECTED;
 
-        let mousePosition = new MousePositionHandler(this);
-        mousePosition.register('message:received', this, this._onMousePositionReceived.bind(this));
+        let mousePositionHandler = new MousePositionHandler(this);
+        mousePositionHandler.register('message:received', this, this._onMousePositionReceived.bind(this));
+
+        let viewPortHandler = new ViewPortHandler(this);
+        viewPortHandler.register('message:received', this, this._onViewPortReceived.bind(this));
 
         this._handlers = [
             // NPC
@@ -30,8 +33,8 @@ class Echo extends Signalable {
             new InviteHandler(this),
 
             // Live Sessions
-            mousePosition,
-            new ViewPortHandler(this),
+            mousePositionHandler,
+            viewPortHandler
         ];
     }
 
@@ -165,6 +168,8 @@ class Echo extends Signalable {
 
         this._echoUserFollow = this.getUserById(id);
         this._echoUserFollow.setFollowing(true);
+        // Adjust the initial view port
+        this._adjustViewPortToUser(this._echoUserFollow);
 
         this._echoUserRefollow = this._echoUserFollow;
 
@@ -256,6 +261,46 @@ class Echo extends Signalable {
      * @private
      */
     _onMousePositionReceived(mousePositionReceivedEvent) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
         this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
+    }
+
+    /**
+     *
+     * @param viewPortReceivedEvent {Object}
+     * @private
+     */
+    _onViewPortReceived(viewPortReceivedEvent) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        // Only if we're actively following someone
+        if (this._echoUserFollow instanceof EchoUser) {
+            this._adjustViewPortToUser(this._echoUserFollow);
+        }
+    }
+
+    /**
+     *
+     * @param echoUser {EchoUser}
+     * @private
+     */
+    _adjustViewPortToUser(echoUser) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(echoUser instanceof EchoUser, 'echoUser is not an EchoUser', echoUser);
+
+        // Only if their last center and zoom are known
+        if (echoUser.getCenter() !== null && echoUser.getZoom() !== null) {
+            let center = [echoUser.getCenter().lat, echoUser.getCenter().lng];
+
+            // If we need to change floors, do so, otherwise change immediately
+            if (echoUser.getFloorId() !== null && echoUser.getFloorId() !== getState().getCurrentFloor().id) {
+                console.log(echoUser.getFloorId(), center, echoUser.getZoom());
+                getState().setFloorId(echoUser.getFloorId(), center, echoUser.getZoom());
+            } else {
+                console.log(center, echoUser.getZoom());
+                this.map.leafletMap.setView(center, echoUser.getZoom());
+            }
+        }
     }
 }

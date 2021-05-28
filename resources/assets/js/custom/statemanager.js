@@ -210,14 +210,16 @@ class StateManager extends Signalable {
 
     /**
      * Sets the floor ID.
-     * @param floorId int
+     * @param floorId {Number}
+     * @param center {Array}
+     * @param zoom {Number}
      */
-    setFloorId(floorId) {
+    setFloorId(floorId, center = null, zoom = null) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         this._floorId = floorId;
 
         // Let everyone know it's changed
-        this.signal('floorid:changed', {floorId: this._floorId});
+        this.signal('floorid:changed', {floorId: this._floorId, center: center, zoom: zoom});
     }
 
     /**
