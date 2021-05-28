@@ -173,6 +173,8 @@ class Echo extends Signalable {
 
         this._echoUserRefollow = this._echoUserFollow;
 
+        this.map.leafletMap.on('mousedown', this.unfollowUser.bind(this));
+
         this.signal('user:follow', {user: this._echoUserFollow});
     }
 
@@ -187,9 +189,11 @@ class Echo extends Signalable {
         if (this._echoUserFollow !== null) {
             this._echoUserFollow.setFollowing(false);
             this._echoUserFollow = null;
-        }
 
-        this.signal('user:unfollow', {user: previousEchoUserFollow});
+            this.map.leafletMap.off('mousedown', this.unfollowUser);
+
+            this.signal('user:unfollow', {user: previousEchoUserFollow});
+        }
     }
 
     /**

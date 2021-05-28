@@ -38,7 +38,7 @@ class ViewPortHandler extends WhisperMessageHandler {
     cleanup() {
         super.cleanup();
 
-        this.echo.map.leafletMap.off('moveend', this._sendViewPort.bind(this));
-        this.echo.map.leafletMap.off('zoomlevelschange', this._sendViewPort.bind(this));
+        this.echo.map.leafletMap.off('moveend', this._sendViewPort);
+        this.echo.map.leafletMap.off('zoomlevelschange', this._sendViewPort);
     }
 }
