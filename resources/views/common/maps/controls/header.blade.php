@@ -26,9 +26,10 @@ $echo = $echo ?? false;
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     @isset($livesession)
-                                        <a href="{{ route('dungeonroute.edit', $dungeonroute) }}" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-undo"></i> {{ __('Edit') }}
-                                        </a>
+                                        <button class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#stop_live_session_modal">
+                                            <i class="fas fa-stop"></i> {{ __('Stop') }}
+                                        </button>
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
                                                 data-target="#start_live_session_modal">
@@ -126,6 +127,39 @@ $echo = $echo ?? false;
                    class="btn btn-success w-100">
                     <i class="fas fa-play"></i> {{ __('Create live session') }}
                 </a>
+            </div>
+        </div>
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'stop_live_session_modal'])
+        <h3 class="card-title">{{ __('Live session concluded') }}</h3>
+
+        @if($dungeonroute->getRatingByCurrentUser() === false)
+            <h5>
+                {{ __('Rate route') }}
+            </h5>
+            <select>
+                @for($i = 1; $i <= 10; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+
+            <p>
+                {{ __('Rating the route will help others discover this route if it\'s good. Thank you!') }}
+            </p>
+        @endif
+
+        <div class="row">
+            <div class="col">
+                <button data-dismiss="modal" class="btn btn-outline-info w-100">
+                    <i class="fas fa-chart-line"></i> {{ __('Review route') }}
+                </button>
+            </div>
+            <div class="col">
+                <button href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                   class="btn btn-success w-100">
+                    <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                </button>
             </div>
         </div>
     @endcomponent

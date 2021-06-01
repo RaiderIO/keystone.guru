@@ -32,8 +32,8 @@ class CommonMapsMap extends InlineCode {
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 
+            // Sidebar
             this._setupRatingSelection();
-
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
             this._setupEnemyVisualTypes();
@@ -68,6 +68,11 @@ class CommonMapsMap extends InlineCode {
 
             this._dungeonMap.leafletMap.on('move', function () {
                 $('#enemy_info_container').hide();
+            });
+
+            // Live sessions
+            $('#stop_live_session_modal select').barrating({
+                theme: 'fontawesome-stars'
             });
         }
     }
@@ -145,7 +150,7 @@ class CommonMapsMap extends InlineCode {
     _setupRatingSelection() {
         let self = this;
 
-        // Floor selection
+        // Rating
         let $mapRatingDropdown = $('#map_rating_dropdown');
         $mapRatingDropdown.find('a:not(.disabled)').bind('click', function () {
             let $this = $(this);
