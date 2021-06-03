@@ -330,24 +330,4 @@ class DungeonRouteController extends Controller
 
         return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
     }
-
-    /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @return RedirectResponse|Redirector
-     */
-    public function editLegacy(Request $request, DungeonRoute $dungeonroute)
-    {
-        return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]), StatusCode::MOVED_PERMANENTLY);
-    }
-
-    /**
-     * @param DungeonRouteFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @return RedirectResponse|Redirector
-     */
-    public function updateLegacy(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
-    {
-        return redirect(route('dungeonroute.update', ['dungeonroute' => $dungeonroute->public_key]), StatusCode::MOVED_PERMANENTLY);
-    }
 }

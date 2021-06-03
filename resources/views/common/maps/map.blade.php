@@ -139,7 +139,7 @@ if ($isAdmin) {
 @if(!$noUI)
     @include('common.maps.controls.header', [
         'title' => isset($dungeonroute) ? $dungeonroute->title : $dungeon->name,
-        'echo' => !$sandboxMode,
+        'echo' => $echo,
         'dungeonroute' => $dungeonroute,
         'livesession' => $livesession
     ])
