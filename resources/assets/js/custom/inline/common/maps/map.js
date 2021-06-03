@@ -72,7 +72,10 @@ class CommonMapsMap extends InlineCode {
 
             // Live sessions
             $('#stop_live_session_modal select').barrating({
-                theme: 'fontawesome-stars'
+                theme: 'fontawesome-stars',
+                onSelect: function (value, text, event) {
+                    self._rate(value);
+                }
             });
         }
     }

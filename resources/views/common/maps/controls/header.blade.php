@@ -134,32 +134,45 @@ $echo = $echo ?? false;
     @component('common.general.modal', ['id' => 'stop_live_session_modal'])
         <h3 class="card-title">{{ __('Live session concluded') }}</h3>
 
-        @if($dungeonroute->getRatingByCurrentUser() === false)
+        <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
+        <div class="form-group">
             <h5>
-                {{ __('Rate route') }}
+                {{ __('Rate this route') }}
             </h5>
             <select>
                 @for($i = 1; $i <= 10; $i++)
-                    <option value="{{ $i }}">{{ $i }}</option>
+                    <option
+                        value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>{{ $i }}</option>
                 @endfor
             </select>
+        </div>
 
-            <p>
-                {{ __('Rating the route will help others discover this route if it\'s good. Thank you!') }}
-            </p>
+        @if($currentRating === false)
+            <div class="form-group">
+                <p>
+                    {{ __('Rating the route will help others discover this route if it\'s good. Thank you!') }}
+                </p>
+            </div>
         @endif
 
-        <div class="row">
+        <div class="row form-group">
             <div class="col">
                 <button data-dismiss="modal" class="btn btn-outline-info w-100">
-                    <i class="fas fa-chart-line"></i> {{ __('Review route') }}
+                    <i class="fas fa-chart-line"></i> {{ __('Review live session') }}
                 </button>
             </div>
             <div class="col">
-                <button href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
-                   class="btn btn-success w-100">
-                    <i class="fas fa-edit"></i> {{ __('Edit route') }}
-                </button>
+                @if($dungeonroute->mayUserEdit(Auth::user()))
+                    <button href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                            class="btn btn-success w-100">
+                        <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                    </button>
+                @else
+                    <button href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                            class="btn btn-success w-100">
+                        <i class="fas fa-eye"></i> {{ __('View route') }}
+                    </button>
+                @endif
             </div>
         </div>
     @endcomponent

@@ -839,7 +839,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     * @return float|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
      */
     public function getRatingByCurrentUser()
     {
