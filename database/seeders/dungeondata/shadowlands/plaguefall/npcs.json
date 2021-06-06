@@ -805,7 +805,7 @@
         "npc_class_id": 1,
         "name": "Slime Tentacle",
         "base_health": 44100,
-        "enemy_forces": 0,
+        "enemy_forces": 10,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,

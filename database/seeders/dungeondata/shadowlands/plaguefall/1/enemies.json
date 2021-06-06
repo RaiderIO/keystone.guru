@@ -1052,7 +1052,7 @@
     {
         "id": 4886,
         "enemy_pack_id": 1075,
-        "npc_id": 168022,
+        "npc_id": 168907,
         "floor_id": 81,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -1067,7 +1067,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 168022
+            "id": 168907
         }
     },
     {
