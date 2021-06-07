@@ -21,4 +21,10 @@
   .table-striped tbody tr:nth-of-type(odd) {
     background-color: var(--theme-darker);
   }
+
+  .card_dungeonroute.dungeon_image {
+    .menu_actions_btn {
+      font-size: 0.9rem;
+    }
+  }
 }

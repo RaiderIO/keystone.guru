@@ -98,21 +98,6 @@ ob_start(); ?>
                         @endif
                     </div>
                 @endif
-                @auth
-                    @if(Auth::user()->hasRole('admin'))
-                        <div class="col-auto px-1 refresh_thumbnail" title="{{ __('Refresh thumbnail') }}"
-                             data-toggle="tooltip" data-publickey="{{ $dungeonroute->public_key }}">
-                            <a class="btn p-0">
-                                <span class="refresh">
-                                    <i class="fas fa-sync"></i>
-                                </span>
-                                <span class="loader" style="display: none;">
-                                    <i class="fas fa-circle-notch fa-spin"></i>
-                                </span>
-                            </a>
-                        </div>
-                    @endif
-                @endauth
             </div>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
                 <div class="col">
@@ -153,6 +138,29 @@ ob_start(); ?>
                         -
                         {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
                     </small>
+                </div>
+                <div class="col-auto bg-card-footer px-2">
+                    <button id="route_menu_button_{{ $dungeonroute->public_key }}"
+                            class="btn btn-sm menu_actions_btn py-1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v text-muted"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="route_menu_button_{{ $dungeonroute->public_key }}">
+                        <a class="dropdown-item" href="#" data-toggle="modal"
+                           data-target="#userreport_dungeonroute_modal"
+                           data-publickey="{{ $dungeonroute->public_key }}">
+                            <i class="fas fa-flag"></i> {{ __('Report') }}
+                        </a>
+                        @auth
+                            <div class="dropdown-divider"></div>
+                            @if(Auth::user()->hasRole('admin'))
+                                <a class="dropdown-item refresh_thumbnail"
+                                   data-publickey="{{ $dungeonroute->public_key }}">
+                                    <i class="fas fa-sync"></i> {{ __('Refresh thumbnail') }}
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>

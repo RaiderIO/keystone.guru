@@ -165,4 +165,8 @@ if ($timezone === null)
             'showDungeonImage' => true,
         ])
     </div>
+
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.modal.userreport.dungeonroute')
+    @endcomponent
 @endsection
