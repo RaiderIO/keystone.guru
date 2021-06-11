@@ -32,7 +32,7 @@ class WebhookController extends Controller
             throw new BadRequestException('signature has invalid format');
         }
 
-        $knownSignature = hash_hmac('sha1', $request->getContent(), env('GITHUB_WEBHOOK_SECRET'));
+        $knownSignature = hash_hmac('sha1', $request->getContent(), config('keystoneguru.webhook.github.secret'));
 
         if (!hash_equals($knownSignature, $signatureParts[1])) {
             throw new UnauthorizedException('Could not verify request signature ' . $signatureParts[1]);
@@ -119,7 +119,7 @@ class WebhookController extends Controller
                 'text'     => 'Keystone.guru Discord Bot'
             ];
 
-            $discordApiService->sendEmbeds(env('DISCORD_GITHUB_WEBHOOK'), $embeds);
+            $discordApiService->sendEmbeds(config('keystoneguru.webhook.github.url'), $embeds);
 
         }
 

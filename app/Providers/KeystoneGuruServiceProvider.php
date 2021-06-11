@@ -43,7 +43,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
 
         // Model helpers
-        if (env('APP_ENV') === 'local') {
+        if (config('app.env') === 'local') {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
         } else {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
@@ -153,7 +153,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
 
             // Set a variable that checks if the user is adfree or not
-            $view->with('adFree', env('APP_ENV') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+            $view->with('adFree', config('app.env') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view)

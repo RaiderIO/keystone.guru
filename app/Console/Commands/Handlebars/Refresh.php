@@ -43,7 +43,7 @@ class Refresh extends Command
         $this->shell([
             sprintf(
                 'handlebars %s resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js',
-                env('APP_ENV') === 'production' ? '-m' : ''
+                config('app.env') === 'production' ? '-m' : ''
             )
         ]);
 

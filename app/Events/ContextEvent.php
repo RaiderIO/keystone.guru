@@ -42,8 +42,8 @@ class ContextEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey())),
-            new PresenceChannel(sprintf('%s-dungeon-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey()))
+            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey())),
+            new PresenceChannel(sprintf('%s-dungeon-edit.%s', config('app.type'), $this->_context->getRouteKey()))
         ];
     }
 

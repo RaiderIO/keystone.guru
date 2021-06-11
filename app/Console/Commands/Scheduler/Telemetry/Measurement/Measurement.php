@@ -15,6 +15,6 @@ abstract class Measurement
 
     protected function getTags()
     {
-        return ['environment' => env('APP_ENV')];
+        return config('keystoneguru.influxdb.default_tags');
     }
 }

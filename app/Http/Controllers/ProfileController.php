@@ -131,7 +131,7 @@ class ProfileController extends Controller
                         $assoc = get_object_vars($channel);
                         $channelName = array_keys($assoc)[0];
 
-                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', env('APP_TYPE')), '', $channelName);
+                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $channelName);
 
                         $userInChannel = false;
                         // Check if the user is in this channel..

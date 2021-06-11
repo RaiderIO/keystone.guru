@@ -29,6 +29,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Type
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the "type" of application Keystone.guru this is.
+    | Can be a local environment, a staging environment, mapping environment or
+    | production. A staging+mapping environment will have an APP_ENV of production
+    | but have some different usages so we can use this switch to differentiate
+    | between then.
+    |
+    */
+    'type' => env('APP_TYPE', 'local'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |

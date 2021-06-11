@@ -89,7 +89,7 @@ if ($isAdmin) {
 
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
-        'appType' => env('APP_TYPE'),
+        'appType' => config('app.type'),
         'echo' => $echo,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
