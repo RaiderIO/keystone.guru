@@ -40,7 +40,7 @@ class StartSupervisor extends Command
      */
     public function handle()
     {
-        $appType = env('APP_TYPE');
+        $appType = config('app.type');
         // Local environments don't call it local, but empty instead
         $appType = $appType === 'local' ? '' : '-' . $appType;
 

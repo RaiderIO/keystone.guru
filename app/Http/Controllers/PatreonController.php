@@ -51,8 +51,8 @@ class PatreonController extends Controller
 
         // If session was not expired
         if (csrf_token() === $state) {
-            $client_id = env('PATREON_CLIENT_ID');
-            $client_secret = env('PATREON_CLIENT_SECRET');
+            $client_id = config('keystoneguru.patreon.oauth.client_id');
+            $client_secret = config('keystoneguru.patreon.oauth.secret');
 
             $oauth_client = new OAuth($client_id, $client_secret);
 

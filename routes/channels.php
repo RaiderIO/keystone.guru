@@ -20,7 +20,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\User;
 
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?User $user, DungeonRoute $dungeonroute)
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), function (?User $user, DungeonRoute $dungeonroute)
 {
     $result = false;
 
@@ -58,7 +58,7 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
     return $result;
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (User $user, Dungeon $dungeon)
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon)
 {
     $result = false;
     if ($user->hasRole('admin')) {
