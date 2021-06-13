@@ -187,6 +187,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
         });
 
+        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables)
+        {
+            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
+        });
+
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)
         {
             $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);

@@ -3,6 +3,7 @@
 <?php
 /** @var $cacheService \App\Service\Cache\CacheService */
 /** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $currentAffixGroup \App\Models\AffixGroup */
 /** @var $tierAffixGroup \App\Models\AffixGroup|null */
 /** @var $__env array */
 /** @var $cache boolean */
@@ -10,9 +11,24 @@
 $showAffixes = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
-$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $tierAffixGroup, $__env) {
+$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
+$isTyrannical = $dungeonroute->isTyrannical();
+$isFortified = $dungeonroute->isFortified();
+
+if (!isset($tierAffixGroup)) {
+    // Try to come up with a sensible default
+    if ($dungeonroute->affixes->count() === 1) {
+        $tierAffixGroup = $dungeonroute->affixes->first();
+    } else {
+        // If the affix list contains the current affix, we can use that to display the tier instead
+        $tierAffixGroup = $dungeonroute->affixes->filter(function (\App\Models\AffixGroup $affixGroup) use ($currentAffixGroup) {
+            return $affixGroup->id === $currentAffixGroup->id;
+        })->isNotEmpty() ? $currentAffixGroup : null;
+    }
+}
+
 // Attempt a default value if there's only one affix set
-$tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ? $dungeonroute->affixes->first() : null;
+$tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
 $enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dungeon->enemy_forces_required) * 100);
 $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 
@@ -57,8 +73,6 @@ ob_start(); ?>
                 @if( $showAffixes )
                     <div class="col-auto">
                         <?php
-                        $isTyrannical = $dungeonroute->isTyrannical();
-                        $isFortified = $dungeonroute->isFortified();
                         ob_start();
                         ?>
                         @foreach($dungeonroute->affixes as $affixgroup)

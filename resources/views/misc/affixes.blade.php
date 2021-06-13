@@ -1,7 +1,10 @@
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Affixes')])
 <?php
-/** @var \App\Service\Season\SeasonService $seasonService */
-/** @var int $offset */
+/**
+ * @var \App\Service\Season\SeasonService $seasonService
+ * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var int $offset
+ */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;
@@ -149,6 +152,7 @@ if ($timezone === null)
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.thisweek'),
+            'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
             'showMore' => true,
@@ -159,6 +163,7 @@ if ($timezone === null)
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by next affixes'),
             'link' => route('dungeonroutes.nextweek'),
+            'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $seasonService->getCurrentSeason()->getNextAffixGroup(),
             'dungeonroutes' => $dungeonroutes['nextweek'],
             'showMore' => true,
