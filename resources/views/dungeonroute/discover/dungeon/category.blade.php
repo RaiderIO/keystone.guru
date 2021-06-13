@@ -1,5 +1,6 @@
 <?php
 /**
+ * @var $currentAffixGroup \App\Models\AffixGroup
  * @var $dungeon \App\Models\Dungeon
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
@@ -20,8 +21,9 @@ $affixgroup = isset($affixgroup) ? $affixgroup : null;
         'category' => $category,
         'dungeon' => $dungeon,
         'title' => $title,
-        'dungeonroutes' => $dungeonroutes,
+        'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $affixgroup,
+        'dungeonroutes' => $dungeonroutes,
         'loadMore' => true,
     ])
 
