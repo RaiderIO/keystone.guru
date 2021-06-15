@@ -77,7 +77,12 @@ ob_start(); ?>
                         ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div class="row no-gutters">
-                                @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'showText' => false, 'dungeon' => $dungeonroute->dungeon])
+                                @include('common.affixgroup.affixgroup', [
+                                    'affixgroup' => $affixgroup,
+                                    'showText' => false,
+                                    'dungeon' => $dungeonroute->dungeon,
+                                    'highlight' => $currentAffixGroup->id === $affixgroup->id,
+                                ])
                             </div>
                         @endforeach
                         <?php $affixes = ob_get_clean(); ?>

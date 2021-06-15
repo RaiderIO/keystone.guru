@@ -4,15 +4,16 @@ $media = $media ?? 'lg';
 $showText = $showText ?? true;
 $class = $class ?? '';
 $dungeon = $dungeon ?? null;
+$highlight = $highlight ?? false;
 ?>
-<div class="row no-gutters {{ $class }}">
+<div class="row no-gutters px-1 affix_group_row {{ $highlight ? 'current' : '' }} {{ $class }}">
     <?php
     $affixIndex = 0;
     foreach($affixgroup->affixes as $affix) {
     $lastColumn = count($affixgroup->affixes) - 1 === $affixIndex;
     ?>
     <div class="col">
-        <div class="row no-gutters mt-2">
+        <div class="row no-gutters mt-2 ">
             <div
                 class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }} {{ $showText ? '' : 'mx-1' }}"
                 data-toggle="tooltip"

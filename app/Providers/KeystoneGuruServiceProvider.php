@@ -190,6 +190,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables)
         {
             $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
+            $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)

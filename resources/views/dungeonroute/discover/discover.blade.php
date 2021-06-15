@@ -49,7 +49,8 @@
     @include('dungeonroute.discover.panel', [
         'title' => __('Popular routes by next affixes'),
         'link' => route('dungeonroutes.nextweek'),
-        'currentAffixGroup' => $currentAffixGroup,
+        // The next week's affix group is current for that week
+        'currentAffixGroup' => $nextAffixGroup,
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
         'showMore' => true,

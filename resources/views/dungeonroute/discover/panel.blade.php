@@ -31,7 +31,7 @@ $cache = $cache ?? true;
                     <div class="offset-2">
                     </div>
                     <div class="col-8">
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'currentAffixGroup' => $currentAffixGroup])
+                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup])
                     </div>
                 </div>
             @endisset
