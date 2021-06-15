@@ -7,6 +7,7 @@ use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $dungeon_route_id
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property User $user
  * @property DungeonRoute $dungeonroute
+ *
+ * @property Carbon $expires_at
  *
  * @mixin Eloquent
  */

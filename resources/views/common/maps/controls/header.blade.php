@@ -1,5 +1,6 @@
 <?php
-/** @var $dungeonroute App\Models\DungeonRoute|null */
+/** @var $theme string */
+/** @var $dungeonroute \App\Models\DungeonRoute|null */
 /** @var $livesession \App\Models\LiveSession|null */
 $echo = $echo ?? false;
 ?>
@@ -26,10 +27,13 @@ $echo = $echo ?? false;
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     @isset($livesession)
-                                        <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#stop_live_session_modal">
+                                        <button id="stop_live_session" class="btn btn-danger btn-sm"
+                                                data-toggle="modal" data-target="#stop_live_session_modal">
                                             <i class="fas fa-stop"></i> {{ __('Stop') }}
                                         </button>
+                                        <span id="stop_live_session_countdown" style="display: none;">
+
+                                        </span>
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
                                                 data-target="#start_live_session_modal">
@@ -117,8 +121,8 @@ $echo = $echo ?? false;
 
         <p>
             {{ __('Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing
-            your M+ key. Your live session may be shared with anyone by simply copying the URL and sharing it. If your route is assigned
-            to a team, any team members currently viewing your route will receive an invitation to your join live session.') }}
+            your M+ key. Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.
+             If your route is assigned to a team, any team members currently viewing this route will receive an invitation to your join live session.') }}
         </p>
 
         <div class="row">
@@ -163,15 +167,15 @@ $echo = $echo ?? false;
             </div>
             <div class="col">
                 @if($dungeonroute->mayUserEdit(Auth::user()))
-                    <button href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                    <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                             class="btn btn-success w-100">
                         <i class="fas fa-edit"></i> {{ __('Edit route') }}
-                    </button>
+                    </a>
                 @else
-                    <button href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
                             class="btn btn-success w-100">
                         <i class="fas fa-eye"></i> {{ __('View route') }}
-                    </button>
+                    </a>
                 @endif
             </div>
         </div>

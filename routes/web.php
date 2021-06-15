@@ -20,6 +20,7 @@ use App\Http\Controllers\APIEnemyController;
 use App\Http\Controllers\APIEnemyPackController;
 use App\Http\Controllers\APIEnemyPatrolController;
 use App\Http\Controllers\APIKillZoneController;
+use App\Http\Controllers\APILiveSessionController;
 use App\Http\Controllers\APIMapIconController;
 use App\Http\Controllers\APINpcController;
 use App\Http\Controllers\APIPathController;
@@ -392,6 +393,8 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
+
+            Route::delete('/live/{livesession}', [APILiveSessionController::class, 'delete']);
         });
 
         // Must be logged in to perform these actions

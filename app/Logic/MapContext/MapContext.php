@@ -15,6 +15,7 @@ use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Psr\SimpleCache\InvalidArgumentException;
 
 abstract class MapContext
 {
@@ -49,6 +50,7 @@ abstract class MapContext
 
     /**
      * @return array
+     * @throws InvalidArgumentException
      */
     public function getProperties(): array
     {

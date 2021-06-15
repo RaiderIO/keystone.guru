@@ -10,37 +10,19 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;
 
 /**
- * Class InviteEvent
+ * Class StopEvent
  * @package App\Events\LiveSession
  * @author Wouter
- * @since 14/05/2021
+ * @since 15/06/2021
  *
  * @property $_context LiveSession
  */
-class InviteEvent extends ContextEvent
+class StopEvent extends ContextEvent
 {
-    /** @var array */
-    protected array $invitees;
-
-    /**
-     * Create a new event instance.
-     *
-     * @param LiveSession $liveSession
-     * @param User $user
-     * @param Collection $invitees
-     * @return void
-     */
-    public function __construct(LiveSession $liveSession, User $user, Collection $invitees)
-    {
-        parent::__construct($liveSession, $user);
-
-        $this->invitees = $invitees->toArray();
-    }
-
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel[]
      */
     public function broadcastOn()
     {
@@ -51,18 +33,14 @@ class InviteEvent extends ContextEvent
 
     public function broadcastAs()
     {
-        return 'livesession-invite';
+        return 'livesession-stop';
     }
 
     public function broadcastWith()
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'invitees' => $this->invitees,
-            'url'      => route('dungeonroute.livesession.view', [
-                'dungeonroute' => $this->_context->dungeonroute,
-                'livesession'  => $this->_context
-            ])
+            'expires_at' => $this->_context->expires_at
         ]);
     }
 

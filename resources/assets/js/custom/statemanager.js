@@ -323,7 +323,7 @@ class StateManager extends Signalable {
 
     /**
      * Get the context of the map we are editing at this point.
-     * @returns {MapContextDungeon|MapContextDungeonRoute}
+     * @returns {MapContextDungeon|MapContextDungeonRoute|MapContextLiveSession}
      */
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
