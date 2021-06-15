@@ -197,6 +197,11 @@
     left: 0;
 }
 
+.affix_group_row.current {
+    border: red 2px solid;
+    border-radius: 3px;
+}
+
 .routes_table .owl-carousel {
     width: 192px;
     height: 128px;
