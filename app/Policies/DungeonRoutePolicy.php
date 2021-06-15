@@ -32,11 +32,12 @@ class DungeonRoutePolicy
      *
      * @param User|null $user
      * @param DungeonRoute $dungeonroute
+     * @param string $secret
      * @return mixed
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
     {
-        return env('THUMBNAIL_PREVIEW_SECRET') === $secret || ($user !== null && $user->is_admin);
+        return config('keystoneguru.thumbnail.preview_secret') === $secret || ($user !== null && $user->is_admin);
     }
 
     /**

@@ -1,7 +1,10 @@
 <?php
-/** @var $title string */
-/** @var $cols int */
-/** @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection */
+/**
+ * @var $title string
+ * @var $cols int
+ * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $currentAffixGroup \App\Models\AffixGroup
+ */
 
 $dungeon = $dungeon ?? null;
 $cols = $cols ?? 2;
@@ -33,7 +36,14 @@ $cache = $cache ?? true;
                 </div>
             @endisset
             <div id="category_route_list">
-                @include('common.dungeonroute.cardlist', ['cols' => $cols, 'dungeonroutes' => $dungeonroutes, 'affixgroup' => $affixgroup, 'showDungeonImage' => $showDungeonImage, 'cache' => $cache])
+                @include('common.dungeonroute.cardlist', [
+                    'cols' => $cols,
+                    'currentAffixGroup' => $currentAffixGroup,
+                    'affixgroup' => $affixgroup,
+                    'dungeonroutes' => $dungeonroutes,
+                    'showDungeonImage' => $showDungeonImage,
+                    'cache' => $cache
+                ])
             </div>
         </div>
     </div>

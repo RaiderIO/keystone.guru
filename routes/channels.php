@@ -60,14 +60,14 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
     return $result;
 };
 
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{livesession}', env('APP_TYPE')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback)
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
+Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback)
 {
     // Validate live sessions the same way as a dungeon route
     return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (User $user, Dungeon $dungeon)
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon)
 {
     $result = false;
     if ($user->hasRole('admin')) {

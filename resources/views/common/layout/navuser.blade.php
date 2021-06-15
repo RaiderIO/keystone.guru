@@ -20,7 +20,7 @@ $user = Auth::user();
         </a>
         <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole('admin'))
-                @if( env('TELESCOPE_ENABLED'))
+                @if( config('telescope.enabled') )
                     <a class="dropdown-item"
                        href="{{ route('telescope') }}">
                         <i class="fa fa-binoculars"></i> {{__('Telescope')}}

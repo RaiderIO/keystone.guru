@@ -130,8 +130,6 @@ if ($isAdmin) {
             <ul class="leaflet-draw-actions"></ul>
         </div>
 
-
-
         </script>
     @endif
 @endsection

@@ -12,7 +12,7 @@
                         <div class="col" data-toggle="tooltip" data-placement="right"
                              title="{{ __('Edit this route') }}">
                             <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
-                               class="btn btn-info" target="_blank">
+                               class="btn btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </div>
@@ -23,7 +23,7 @@
                         <div class="col" data-toggle="tooltip" data-placement="right"
                              title="{{ __('Clone this route') }}">
                             <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $dungeonroute]) }}"
-                               class="btn btn-info" target="_blank">
+                               class="btn btn-info">
                                 <i class="fas fa-clone"></i>
                             </a>
                         </div>
@@ -33,7 +33,7 @@
                 <div class="row no-gutters">
                     <div class="col" data-toggle="tooltip" data-placement="right"
                          title="{{ isset($current_report) ? __('You have reported this route for moderation.') : __('Report for moderation') }}">
-                        <a href="#" data-toggle="modal" data-target="#userreport_dungeonroute_modal" target="_blank"
+                        <a href="#" data-toggle="modal" data-target="#userreport_dungeonroute_modal"
                            class="btn btn-info {{ isset($current_report) ? 'disabled' : '' }}">
                             <i class="fas fa-flag"></i>
                         </a>

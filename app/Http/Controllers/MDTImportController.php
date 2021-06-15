@@ -128,7 +128,7 @@ class MDTImportController extends Controller
                 }
 
                 // Makes it easier to debug
-                if (env('APP_DEBUG')) {
+                if (config('app.debug')) {
                     throw $ex;
                 } else {
                     Log::error($ex->getMessage(), ['string' => $string]);

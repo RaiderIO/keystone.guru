@@ -509,7 +509,7 @@ class DungeonRoute extends Model
                 $result = $this->mayUserEdit($user);
                 break;
             case PublishedState::TEAM:
-                $result = $this->team !== null && $this->team->isUserMember($user);
+                $result = ($this->team !== null && $this->team->isUserMember($user)) || $user->hasRole('admin');
                 break;
             case PublishedState::WORLD_WITH_LINK:
             case PublishedState::WORLD:

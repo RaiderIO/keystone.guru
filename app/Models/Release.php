@@ -172,7 +172,7 @@ class Release extends CacheModel
                 'color'       => 14641434, // '#DF691A'
                 'title'       => $this->getFormattedTitle(),
                 'description' => $discordBody,
-                'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
+                'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
                     'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',

@@ -258,7 +258,7 @@ class Team extends Model
      */
     public function isUserMember(?User $user): bool
     {
-        return $user !== null && $this->members()->where('user_id', $user->id)->count() === 1;
+        return $user !== null && $this->members()->where('user_id', $user->id)->exists();
     }
 
     /**

@@ -87,7 +87,7 @@ class Kernel extends ConsoleKernel
     {
         Log::channel('scheduler')->debug('Starting scheduler');
 
-        $appType = env('APP_TYPE');
+        $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();

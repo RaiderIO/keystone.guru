@@ -135,7 +135,7 @@ class ProfileController extends Controller
 
                         // If it's a route edit page
                         if (strpos($name, 'route-edit') !== false) {
-                            $routeKey = str_replace(sprintf('presence-%s-route-edit.', env('APP_TYPE')), '', $name);
+                            $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
                             /** @var DungeonRoute $context */
                             $context = DungeonRoute::where('public_key', $routeKey)->first();
                         } else if (strpos($name, 'live-session') !== false) {

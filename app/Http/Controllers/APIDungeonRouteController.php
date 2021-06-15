@@ -290,7 +290,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Disable some checks when we're local - otherwise we'd get no routes at all
-        $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
+        $query->when(config('app.env') !== 'local', function (Builder $builder)
         {
             $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
                 ->where('demo', 0)
