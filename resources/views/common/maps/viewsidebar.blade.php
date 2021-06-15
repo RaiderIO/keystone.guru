@@ -122,8 +122,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
                     @if($model->mayUserEdit(Auth::user()))
                         <div class="row view_dungeonroute_details_row mt-2">
                             <div class="col-12 font-weight-bold">
-                                <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
-                                   target="_blank">
+                                <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}">
                                     <button class="btn btn-info w-100">
                                         <i class="fas fa-edit"></i>
                                         {{ __('Edit this route') }}
@@ -135,8 +134,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->flo
                     @if($model->dungeon->active)
                         <div class="row view_dungeonroute_details_row mt-2">
                             <div class="col-12 font-weight-bold">
-                                <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $model->public_key]) }}"
-                                   target="_blank">
+                                <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $model->public_key]) }}">
                                     <button class="btn btn-info w-100">
                                         <i class="fa fa-clone"></i>
                                         {{ __('Clone this route') }}
