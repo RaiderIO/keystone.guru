@@ -27,12 +27,16 @@ $echo = $echo ?? false;
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     @isset($livesession)
-                                        <button id="stop_live_session" class="btn btn-danger btn-sm"
-                                                data-toggle="modal" data-target="#stop_live_session_modal">
-                                            <i class="fas fa-stop"></i> {{ __('Stop') }}
-                                        </button>
-                                        <span id="stop_live_session_countdown" style="display: none;">
-
+                                        <?php $stopped = $livesession->expires_at !== null; ?>
+                                        @if(!$stopped)
+                                            <button id="stop_live_session" class="btn btn-danger btn-sm"
+                                                    data-toggle="modal" data-target="#stop_live_session_modal">
+                                                <i class="fas fa-stop"></i> {{ __('Stop') }}
+                                            </button>
+                                        @endif
+                                        <span id="stop_live_session_countdown"
+                                              style="display: {{ $stopped ? 'inherit' : 'none' }}">
+                                            {{ $stopped ? sprintf(__('Expires in %s'), $livesession->getExpiresInHoursSeconds()) : '' }}
                                         </span>
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
@@ -168,12 +172,12 @@ $echo = $echo ?? false;
             <div class="col">
                 @if($dungeonroute->mayUserEdit(Auth::user()))
                     <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
-                            class="btn btn-success w-100">
+                       class="btn btn-success w-100">
                         <i class="fas fa-edit"></i> {{ __('Edit route') }}
                     </a>
                 @else
                     <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
-                            class="btn btn-success w-100">
+                       class="btn btn-success w-100">
                         <i class="fas fa-eye"></i> {{ __('View route') }}
                     </a>
                 @endif

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\GeneratesPublicKey;
 use App\User;
+use Carbon\CarbonInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,5 +62,30 @@ class LiveSession extends Model
     function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        return $this->expires_at !== null && Carbon::createFromTimeString($this->expires_at)->isPast();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getExpiresInSeconds(): ?int
+    {
+        return $this->expires_at === null ? null : Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now());
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExpiresInHoursSeconds(): ?string
+    {
+        return $this->expires_at === null ? null :
+            now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 }

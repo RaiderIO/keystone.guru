@@ -56,7 +56,8 @@ class MapContextLiveSession extends MapContext
     public function getProperties(): array
     {
         return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->_context->dungeonroute), [
-            'liveSessionPublicKey' => $this->_context->public_key
+            'liveSessionPublicKey' => $this->_context->public_key,
+            'expiresInSeconds'   => $this->_context->getExpiresInSeconds()
         ]);
     }
 

@@ -25,6 +25,7 @@ class LiveSessionController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
+     * @param EchoServerHttpApiServiceInterface $echoServerHttpApiService
      * @return RedirectResponse
      * @throws AuthorizationException
      */
@@ -44,7 +45,6 @@ class LiveSessionController extends Controller
             try {
                 // Propagate changes to the channel that the user came from
                 $channelName = sprintf('presence-%s-route-edit.%s', env('APP_TYPE'), $dungeonroute->public_key);
-
 
                 $invitees = collect();
                 // Check if the user is in this channel..
@@ -66,7 +66,6 @@ class LiveSessionController extends Controller
                 Log::error('Echo server is probably not running!');
             }
         }
-
 
         return redirect()->route('dungeonroute.livesession.view', ['dungeonroute' => $dungeonroute, 'livesession' => $liveSession]);
     }
@@ -95,6 +94,7 @@ class LiveSessionController extends Controller
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex)
     {
         $this->authorize('view', $dungeonroute);
+        $this->authorize('view', $livesession);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';

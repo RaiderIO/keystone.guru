@@ -6,7 +6,6 @@ use App\Events\LiveSession\StopEvent;
 use App\Models\DungeonRoute;
 use App\Models\LiveSession;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,20 +17,19 @@ class APILiveSessionController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param LiveSession $liveSession
-     * @return array|ResponseFactory|Response
-     * @throws AuthorizationException
+     * @param LiveSession $livesession
+     * @return Response|ResponseFactory
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $liveSession)
+    function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         try {
-            if ($liveSession->expires_at === null) {
+            if ($livesession->expires_at === null) {
 
-                $liveSession->expires_at = now()->addHours(config('keystoneguru.live_sessions.expires_hours'));
-                $liveSession->save();
+                $livesession->expires_at = now()->addHours(config('keystoneguru.live_sessions.expires_hours'));
+                $livesession->save();
 
                 if (Auth::check()) {
-                    broadcast(new StopEvent($liveSession, Auth::user()));
+                    broadcast(new StopEvent($livesession, Auth::user()));
                 }
             }
 

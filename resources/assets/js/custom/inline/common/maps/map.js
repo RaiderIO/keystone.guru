@@ -68,8 +68,6 @@ class CommonMapsMap extends InlineCode {
             });
 
             // Live sessions
-            $('#stop_live_session').bind('click', this._stopLiveSession.bind(this));
-
             $('#stop_live_session_modal select').barrating({
                 theme: 'fontawesome-stars',
                 onSelect: function (value, text, event) {
@@ -461,23 +459,6 @@ class CommonMapsMap extends InlineCode {
             success: function (json) {
                 // Update the new average rating
                 $('#rating').barrating('set', Math.round(json.new_avg_rating));
-            }
-        });
-    }
-
-    /**
-     *
-     * @private
-     */
-    _stopLiveSession() {
-        $.ajax({
-            type: 'DELETE',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/live/${getState().getMapContext().getLiveSessionPublicKey()}`,
-            dataType: 'json',
-            success: function (json) {
-                // Update the new average rating
-                $('#stop_live_session').hide();
-                $('#stop_live_session_countdown').html('Stopped!').show();
             }
         });
     }
