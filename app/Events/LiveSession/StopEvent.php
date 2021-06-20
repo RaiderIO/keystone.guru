@@ -4,10 +4,8 @@ namespace App\Events\LiveSession;
 
 use App\Events\ContextEvent;
 use App\Models\LiveSession;
-use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Support\Collection;
 
 /**
  * Class StopEvent
@@ -15,7 +13,7 @@ use Illuminate\Support\Collection;
  * @author Wouter
  * @since 15/06/2021
  *
- * @property $_context LiveSession
+ * @property LiveSession $_context
  */
 class StopEvent extends ContextEvent
 {
@@ -27,7 +25,7 @@ class StopEvent extends ContextEvent
     public function broadcastOn()
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
         ];
     }
 

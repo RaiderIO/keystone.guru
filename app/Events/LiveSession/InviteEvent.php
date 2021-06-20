@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
  * @author Wouter
  * @since 14/05/2021
  *
- * @property $_context LiveSession
+ * @property LiveSession $_context
  */
 class InviteEvent extends ContextEvent
 {

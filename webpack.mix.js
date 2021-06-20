@@ -138,6 +138,7 @@ let scripts = [
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/colorchanged.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/npc/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/npc/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/whisper/whispermessagehandler.js',

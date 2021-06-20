@@ -20,6 +20,7 @@ class MessageHandler extends Signalable {
      * @param presenceChannel {Channel}
      */
     setup(presenceChannel) {
+        console.log(`Listening for ${this.getMessage()}`);
         presenceChannel.listen(this.getMessage(), this.onReceive.bind(this));
     }
 

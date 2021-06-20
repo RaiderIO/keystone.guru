@@ -34,10 +34,27 @@ $echo = $echo ?? false;
                                                 <i class="fas fa-stop"></i> {{ __('Stop') }}
                                             </button>
                                         @endif
-                                        <span id="stop_live_session_countdown"
-                                              style="display: {{ $stopped ? 'inherit' : 'none' }}">
-                                            {{ $stopped ? sprintf(__('Expires in %s'), $livesession->getExpiresInHoursSeconds()) : '' }}
-                                        </span>
+                                        <div id="stopped_live_session_container" class="row"
+                                             style="display: {{ $stopped ? 'inherit' : 'none' }}">
+                                            <div class="col">
+                                                <span id="stopped_live_session_countdown">
+                                                    {{ $stopped ? sprintf(__('Expires in %s'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                                </span>
+                                            </div>
+                                            <div class="col">
+                                                @if($dungeonroute->mayUserEdit(Auth::user()))
+                                                    <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                                                       class="btn-sm btn-success w-100">
+                                                        <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                                                       class="btn-sm btn-success w-100">
+                                                        <i class="fas fa-eye"></i> {{ __('View route') }}
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
                                                 data-target="#start_live_session_modal">

@@ -31,6 +31,8 @@ class Echo extends Signalable {
 
             // Invite for a live session
             new InviteHandler(this),
+            // Whenever someone has stopped the live session
+            new StopHandler(this),
 
             // Live Sessions
             mousePositionHandler,
