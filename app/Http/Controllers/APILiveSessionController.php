@@ -24,16 +24,21 @@ class APILiveSessionController extends Controller
     {
         try {
             if ($livesession->expires_at === null) {
+                $expiresHours = config('keystoneguru.live_sessions.expires_hours');
 
-                $livesession->expires_at = now()->addHours(config('keystoneguru.live_sessions.expires_hours'));
+                $livesession->expires_at = now()->addHours($expiresHours);
                 $livesession->save();
 
                 if (Auth::check()) {
                     broadcast(new StopEvent($livesession, Auth::user()));
                 }
+
+                // Convert to seconds
+                $result = ['expires_in' => $expiresHours * 3600];
+            } else {
+                $result = ['expires_in' => $livesession->getExpiresInSeconds()];
             }
 
-            $result = response()->noContent();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

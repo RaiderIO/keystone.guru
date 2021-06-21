@@ -21,7 +21,8 @@ use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
-use App\Console\Commands\StartSupervisor;
+use App\Console\Commands\Supervisor\StartSupervisor;
+use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
@@ -41,6 +42,7 @@ class Kernel extends ConsoleKernel
         CreateGithubRelease::class,
         CreateGithubReleaseTicket::class,
         StartSupervisor::class,
+        StopSupervisor::class,
 
         // Discover
         Cache::class,

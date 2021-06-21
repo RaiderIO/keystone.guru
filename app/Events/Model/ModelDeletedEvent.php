@@ -30,7 +30,7 @@ class ModelDeletedEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
@@ -39,7 +39,7 @@ class ModelDeletedEvent extends ContextEvent
         ]);
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'model-deleted';
     }

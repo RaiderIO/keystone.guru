@@ -34,25 +34,29 @@ $echo = $echo ?? false;
                                                 <i class="fas fa-stop"></i> {{ __('Stop') }}
                                             </button>
                                         @endif
-                                        <div id="stopped_live_session_container" class="row"
+                                        <div id="stopped_live_session_container" class="row no-gutters"
                                              style="display: {{ $stopped ? 'inherit' : 'none' }}">
-                                            <div class="col">
+                                            <div class="row">
+                                                <div class="col">
                                                 <span id="stopped_live_session_countdown">
                                                     {{ $stopped ? sprintf(__('Expires in %s'), $livesession->getExpiresInHoursSeconds()) : '' }}
                                                 </span>
+                                                </div>
                                             </div>
-                                            <div class="col">
-                                                @if($dungeonroute->mayUserEdit(Auth::user()))
-                                                    <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
-                                                       class="btn-sm btn-success w-100">
-                                                        <i class="fas fa-edit"></i> {{ __('Edit route') }}
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
-                                                       class="btn-sm btn-success w-100">
-                                                        <i class="fas fa-eye"></i> {{ __('View route') }}
-                                                    </a>
-                                                @endif
+                                            <div class="row">
+                                                <div class="col">
+                                                    @if($dungeonroute->mayUserEdit(Auth::user()))
+                                                        <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                                                           class="btn-sm btn-success w-100">
+                                                            <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                                                           class="btn-sm btn-success w-100">
+                                                            <i class="fas fa-eye"></i> {{ __('View route') }}
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     @else
@@ -142,8 +146,9 @@ $echo = $echo ?? false;
 
         <p>
             {{ __('Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing
-            your M+ key. Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.
-             If your route is assigned to a team, any team members currently viewing this route will receive an invitation to your join live session.') }}
+            your M+ key. Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.') }}
+            <br><br>
+            {{ __('If your route is assigned to a team, any team members currently viewing this route will receive an invitation to your join live session.') }}
         </p>
 
         <div class="row">

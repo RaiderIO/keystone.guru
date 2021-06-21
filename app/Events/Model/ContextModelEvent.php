@@ -6,7 +6,7 @@ use App\Events\ContextEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class ContextModelEvent extends ContextEvent
+abstract class ContextModelEvent extends ContextEvent
 {
     /** @var Model $_model */
     protected Model $_model;

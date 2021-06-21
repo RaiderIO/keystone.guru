@@ -26,9 +26,9 @@ class DungeonrouteLivesession extends InlineCode {
 
         // Toggle UI state
         $('#stop_live_session').hide();
-        $('#stopped_live_session_container').show();
+        $('#stopped_live_session_container').css('display', 'inherit');
 
-        this.stopLiveSessionInterval = setInterval(function () {
+        let tick = function () {
             let minutesRemaining = Math.floor(getState().getMapContext().getExpiresInSeconds() / 60);
 
             $('#stopped_live_session_countdown').html(
@@ -37,7 +37,10 @@ class DungeonrouteLivesession extends InlineCode {
 
             // Subtract a second
             getState().getMapContext().setExpiresInSeconds(getState().getMapContext().getExpiresInSeconds() - 1);
-        }, 1000);
+        };
+
+        tick();
+        this.stopLiveSessionInterval = setInterval(tick, 1000);
     }
 
     /**
@@ -53,10 +56,7 @@ class DungeonrouteLivesession extends InlineCode {
             url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}`,
             dataType: 'json',
             success: function (json) {
-                // Update the new average rating
-                $('#stop_live_session').hide();
-                $('#stopped_live_session_countdown').html('Stopped!').show();
-
+                getState().getMapContext().setExpiresInSeconds(parseInt(json.expires_in));
                 self.startExpiresCountdown();
             }
         });

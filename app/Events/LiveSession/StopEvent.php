@@ -22,24 +22,23 @@ class StopEvent extends ContextEvent
      *
      * @return Channel[]
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
         return [
-            new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey())),
         ];
     }
 
-    public function broadcastAs()
-    {
-        return 'livesession-stop';
-    }
-
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'expires_at' => $this->_context->expires_at
+            'expires_in' => $this->_context->getExpiresInSeconds()
         ]);
     }
 
+    public function broadcastAs(): string
+    {
+        return 'livesession-stop';
+    }
 }

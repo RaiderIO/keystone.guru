@@ -5,9 +5,15 @@ class StopHandler extends MessageHandler {
     }
 
 
+    /**
+     *
+     * @param e {LiveSessionStopMessage}
+     */
     onReceive(e) {
         super.onReceive(e);
 
+        // Make sure that we set the seconds in which it expires - otherwise it spawns at 0
+        getState().getMapContext().setExpiresInSeconds(e.expires_in);
 
         /** @type {DungeonrouteLivesession} */
         let code = _inlineManager.getInlineCode('dungeonroute/livesession');

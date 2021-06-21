@@ -42,19 +42,14 @@ class InviteEvent extends ContextEvent
      *
      * @return Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
         return [
             new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
         ];
     }
 
-    public function broadcastAs()
-    {
-        return 'livesession-invite';
-    }
-
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
@@ -66,4 +61,8 @@ class InviteEvent extends ContextEvent
         ]);
     }
 
+    public function broadcastAs(): string
+    {
+        return 'livesession-invite';
+    }
 }

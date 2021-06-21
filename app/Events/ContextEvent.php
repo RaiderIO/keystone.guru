@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ContextEvent implements ShouldBroadcast
+abstract class ContextEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -39,7 +39,7 @@ class ContextEvent implements ShouldBroadcast
      *
      * @return Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
         return [
             new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey())),
@@ -48,12 +48,15 @@ class ContextEvent implements ShouldBroadcast
         ];
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
+            '__name'            => $this->broadcastAs(),
             'context_route_key' => $this->_context->getRouteKey(),
             'context_class'     => get_class($this->_context),
             'user'              => $this->_user
         ];
     }
+
+    public abstract function broadcastAs(): string;
 }
