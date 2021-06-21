@@ -23,7 +23,7 @@ class APILiveSessionController extends Controller
     function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         try {
-//            if ($livesession->expires_at === null) {
+            if ($livesession->expires_at === null) {
 
                 $livesession->expires_at = now()->addHours(config('keystoneguru.live_sessions.expires_hours'));
                 $livesession->save();
@@ -31,7 +31,7 @@ class APILiveSessionController extends Controller
                 if (Auth::check()) {
                     broadcast(new StopEvent($livesession, Auth::user()));
                 }
-//            }
+            }
 
             $result = response()->noContent();
         } catch (Exception $ex) {

@@ -19,6 +19,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Teapot\StatusCode;
 
 class LiveSessionController extends Controller
 {
@@ -94,7 +95,11 @@ class LiveSessionController extends Controller
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex)
     {
         $this->authorize('view', $dungeonroute);
-        $this->authorize('view', $livesession);
+        try {
+            $this->authorize('view', $livesession);
+        } catch (AuthorizationException $ex ) {
+            abort(StatusCode::GONE);
+        }
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
