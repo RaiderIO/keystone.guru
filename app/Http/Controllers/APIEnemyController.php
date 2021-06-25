@@ -54,6 +54,7 @@ class APIEnemyController extends Controller
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
         $enemy->unskippable = (int)$request->get('unskippable', false);
+        $enemy->skippable = (int)$request->get('skippable', false);
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = (float)$request->get('lat');

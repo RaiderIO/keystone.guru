@@ -25,7 +25,7 @@ abstract class ContextModelEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
             'model'       => $this->_model,

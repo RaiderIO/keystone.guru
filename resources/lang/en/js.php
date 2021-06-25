@@ -310,6 +310,7 @@ return [
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
     'enemy_unskippable_label'                                       => 'Unskippable',
+    'enemy_skippable_label'                                         => 'Skippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
 
     // Admin enemy pack
