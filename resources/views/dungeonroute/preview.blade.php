@@ -1,10 +1,10 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title, 'showAds' => false, 'analytics' => false])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $dungeonroute->title, 'showAds' => false, 'analytics' => false])
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute $dungeonroute */
 /** @var int $floorId */
 
 /** @var \App\Models\Dungeon $dungeon */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
+$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 $dungeon->load('floors');
 ?>
 @section('scripts')
@@ -22,7 +22,7 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
-        'dungeonroute' => $model,
+        'dungeonroute' => $dungeonroute,
         'showAds' => false,
         'edit' => false,
         'noUI' => true,
