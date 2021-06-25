@@ -1,36 +1,29 @@
-if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
-    Cookies.set('polyline_default_weight', 3);
-}
-if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
-    Cookies.set('hidden_map_object_groups', []);
-}
-if (typeof Cookies.get('map_number_style') === 'undefined') {
-    Cookies.set('map_number_style', 'enemy_forces');
-}
-if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
-    Cookies.set('kill_zones_number_style', 'percentage');
-}
-if (typeof Cookies.get('pulls_sidebar_floor_switch_visibility') === 'undefined') {
-    Cookies.set('pulls_sidebar_floor_switch_visibility', 1);
-}
-if (typeof Cookies.get('map_unkilled_enemy_opacity') === 'undefined') {
-    Cookies.set('map_unkilled_enemy_opacity', '50');
-}
-if (typeof Cookies.get('map_unkilled_important_enemy_opacity') === 'undefined') {
-    Cookies.set('map_unkilled_important_enemy_opacity', '80');
-}
-if (typeof Cookies.get('map_enemy_aggressiveness_border') === 'undefined') {
-    Cookies.set('map_enemy_aggressiveness_border', 0);
-}
-if (typeof Cookies.get('map_enemy_dangerous_border') === 'undefined') {
-    Cookies.set('map_enemy_dangerous_border', 0);
-}
-if (typeof Cookies.get('enemy_display_type') === 'undefined') {
-    Cookies.set('enemy_display_type', 'enemy_portrait');
+// @TODO: temporary solution for ensuring default values for certain cookies are set
+let cookieDefaults = {
+    polyline_default_weight: 3,
+    hidden_map_object_groups: [],
+    map_number_style: 'enemy_forces',
+    kill_zones_number_style: 'percentage',
+    pulls_sidebar_floor_switch_visibility: 1,
+    map_unkilled_enemy_opacity: '50',
+    map_unkilled_important_enemy_opacity: '80',
+    map_enemy_aggressiveness_border: 0,
+    map_enemy_dangerous_border: 0,
+    enemy_display_type: 'enemy_portrait',
+    echo_cursors_enabled: 1,
+};
+
+for (let name in cookieDefaults) {
+    if (cookieDefaults.hasOwnProperty(name)) {
+        if (typeof Cookies.get(name) === 'undefined') {
+            Cookies.set(name, cookieDefaults[name]);
+        }
+    }
 }
 
 
 // Map object groups
+const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
@@ -43,6 +36,7 @@ const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
+    MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
     MAP_OBJECT_GROUP_ENEMY,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
     // Depends on MAP_OBJECT_GROUP_ENEMY
@@ -300,7 +294,10 @@ let c = {
         },
         echo: {
             tooltipFadeOutTimeout: 3000,
-            mouseSendFrequency: 1000
+            // The amount of time that must pass before another mouse location is saved to be synced to others, in milliseconds
+            mousePollFrequencyMs: 100,
+            // How often to send the mouse frequency, in milliseconds
+            mouseSendFrequencyMs: 500,
         }
     }
 };

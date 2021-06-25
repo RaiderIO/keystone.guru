@@ -14,6 +14,8 @@ use App\Models\Spell;
 use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Psr\SimpleCache\InvalidArgumentException;
 
 abstract class MapContext
 {
@@ -22,9 +24,7 @@ abstract class MapContext
     /** @var Model */
     protected Model $_context;
 
-    /**
-     * @var Floor
-     */
+    /** @var Floor */
     private Floor $_floor;
 
     function __construct(Model $context, Floor $floor)
@@ -33,30 +33,26 @@ abstract class MapContext
         $this->_floor = $floor;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public abstract function getType(): string;
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     public abstract function isTeeming(): bool;
 
-    /**
-     * @return int
-     */
+    /** @return int */
     public abstract function getSeasonalIndex(): int;
 
-    /**
-     * @return array
-     */
+    /** @return array */
     public abstract function getEnemies(): array;
+
+    /** @return string */
+    public abstract function getEchoChannelName(): string;
 
     /**
      * @return array
+     * @throws InvalidArgumentException
      */
-    public function toArray(): array
+    public function getProperties(): array
     {
         /** @var CacheService $cacheService */
         $cacheService = App::make(CacheService::class);
@@ -110,6 +106,10 @@ abstract class MapContext
             // @TODO Probably move this? Temp fix
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
+
+            'echoChannelName' => $this->getEchoChannelName(),
+            // May be null
+            'userId'          => Auth::id()
         ];
     }
 }

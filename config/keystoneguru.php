@@ -264,6 +264,10 @@ return [
         ]
     ],
 
+    'live_sessions' => [
+        'expires_hours' => 1
+    ],
+
     'influxdb' => [
         'default_tags' => [
             'environment' => env('APP_ENV')

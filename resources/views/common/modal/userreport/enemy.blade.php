@@ -13,7 +13,7 @@
         </div>
     @endguest
     <div class="form-group">
-        {!! Form::label('enemy_report_message', sprintf(__('What\'s wrong with this enemy? (max. 1000 characters)'), $model->name)) !!}
+        {!! Form::label('enemy_report_message', __('What\'s wrong with this enemy? (max. 1000 characters)')) !!}
         {!! Form::textarea('enemy_report_message', null, ['id' => 'enemy_report_message', 'class' => 'form-control', 'cols' => '50', 'rows' => '10']) !!}
     </div>
 

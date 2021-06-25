@@ -131,7 +131,7 @@ class Team extends Model
     public function getUserRole(User $user)
     {
         /** @var TeamUser $teamUser */
-        $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();
+        $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
         return $teamUser === null ? false : $teamUser->role;
     }
 
@@ -210,7 +210,7 @@ class Team extends Model
      */
     public function changeRole(User $user, string $role): void
     {
-        $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();
+        $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
         $roles = config('keystoneguru.team_roles');
         // Only when user is part of the team, and when the role is a valid one.
         if ($teamUser !== null && isset($roles[$role])) {

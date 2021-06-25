@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Supervisor;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use Illuminate\Console\Command;
@@ -14,7 +14,7 @@ class StartSupervisor extends Command
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:startsupervisor';
+    protected $signature = 'supervisor:start';
 
     /**
      * The console command description.
@@ -40,6 +40,8 @@ class StartSupervisor extends Command
      */
     public function handle()
     {
+        $this->call('supervisor:stop');
+
         $appType = config('app.type');
         // Local environments don't call it local, but empty instead
         $appType = $appType === 'local' ? '' : '-' . $appType;
@@ -47,9 +49,7 @@ class StartSupervisor extends Command
         $this->shell([
             'sudo supervisorctl reread',
             'sudo supervisorctl update',
-            sprintf('sudo supervisorctl stop laravel-echo-server%s:*', $appType),
             sprintf('sudo supervisorctl start laravel-echo-server%s:*', $appType),
-            sprintf('sudo supervisorctl stop laravel-horizon%s:*', $appType),
             sprintf('sudo supervisorctl start laravel-horizon%s:*', $appType)
         ]);
 

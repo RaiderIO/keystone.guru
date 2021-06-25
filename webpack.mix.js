@@ -109,6 +109,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/killzonepathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -118,11 +119,35 @@ let scripts = [
     'resources/assets/js/custom/mapcontext/mapcontext.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeon.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeonroute.js',
+    'resources/assets/js/custom/mapcontext/mapcontextlivesession.js',
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
-    'resources/assets/js/custom/echo.js',
-    'resources/assets/js/custom/echomouselocationhandler.js',
+
+    // Echo objects
+    'resources/assets/js/custom/echo/echouser.js',
+    'resources/assets/js/custom/echo/echo.js',
+
+    // Echo messages
+    'resources/assets/js/custom/echo/message/message.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/message/whisper/viewport.js',
+    'resources/assets/js/custom/echo/message/whisper/mouseposition.js',
+    'resources/assets/js/custom/echo/message/messagefactory.js',
+
+    // Echo message handlers
+    'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/colorchanged.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/npc/changed.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/npc/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/whispermessagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/viewport.js',
+    'resources/assets/js/custom/echo/messagehandler/whisper/mouseposition.js',
+
+    // Depends on Echo
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/hotkeys.js',
 
@@ -143,6 +168,9 @@ let scripts = [
     'resources/assets/js/custom/models/mapicontype.js',
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/brushline.js',
+    'resources/assets/js/custom/models/usermouseposition.js',
+
+    'resources/assets/js/custom/input/usermousepositionplayer.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
     'resources/assets/js/custom/mapstate/editmapstate.js',

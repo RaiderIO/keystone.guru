@@ -17,16 +17,20 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         let data = super._getTemplateData();
 
         let displayText = this._getDisplayText();
-        let width = this._getWidth();
+        let width = this._getTextWidth();
 
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-center';
         // Slightly hacky fix to get the enemy forces to show up properly (font was changed away from Leaflet default to site default for all others)
-        data.main_visual_html = `<div 
-            id="map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_forces" 
-            class="align-middle text-center" style="display: flex; width: 100%; height: 100%; font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif; font-size: ${width}px;">
-                <div class="my-auto w-100">${displayText}</div>
-        </div>`;
+        let template = Handlebars.templates['map_enemy_visual_enemy_forces_template'];
+
+        let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
+            id: this.enemyvisual.enemy.id,
+            width: width,
+            displayText: displayText,
+        });
+
+        data.main_visual_html = template(mainVisualData);
 
         return data;
     }
@@ -55,7 +59,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
      * @returns {*}
      * @private
      */
-    _getWidth() {
+    _getTextWidth() {
         let displayText = this._getDisplayText();
         let size = this.enemyvisual.mainVisual.getSize();
         let width = size.iconSize[0];
@@ -89,10 +93,10 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     refreshSize() {
         super.refreshSize();
 
-        let width = this._getWidth();
+        let width = this._getTextWidth();
         $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_forces`)
             .css('font-size', `${width}px`)
-            // .css('line-height', `${width}px`)
+        // .css('line-height', `${width}px`)
         ;
     }
 

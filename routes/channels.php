@@ -15,12 +15,13 @@
 ////    return $dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user);
 ////});
 
-// https://laravel.com/docs/5.8/broadcasting#presence-channels
+// https://laravel.com/docs/8.x/broadcasting#presence-channels
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\LiveSession;
 use App\User;
 
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), function (?User $user, DungeonRoute $dungeonroute)
+$dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute)
 {
     $result = false;
 
@@ -34,13 +35,14 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), 
             $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
             $result = [
-                'id'        => random_int(158402, 99999999),
-                'name'      => sprintf('Anonymous %s', $randomName),
-                'initials'  => initials($randomName),
+                'id'         => random_int(158402, 99999999),
+                'name'       => sprintf('Anonymous %s', $randomName),
+                'initials'   => initials($randomName),
                 // https://stackoverflow.com/a/9901154/771270
-                'color'     => randomHexColor(),
-                'anonymous' => true,
-                'url'       => '#'
+                'color'      => randomHexColor(),
+                'avatar_url' => null,
+                'anonymous'  => true,
+                'url'        => '#',
             ];
         } else {
             $result = [
@@ -56,6 +58,13 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), 
     }
 
     return $result;
+};
+
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
+Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback)
+{
+    // Validate live sessions the same way as a dungeon route
+    return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
 });
 
 Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon)

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Model;
 
+use App\Events\ContextEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class ContextModelEvent extends ContextEvent
+abstract class ContextModelEvent extends ContextEvent
 {
     /** @var Model $_model */
     protected Model $_model;
@@ -24,14 +25,11 @@ class ContextModelEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
-        return array_merge(
-            parent::broadcastWith(),
-            [
-                'model'       => $this->_model,
-                'model_class' => get_class($this->_model),
-            ]
-        );
+        return array_merge(parent::broadcastWith(), [
+            'model'       => $this->_model,
+            'model_class' => get_class($this->_model),
+        ]);
     }
 }

@@ -155,7 +155,7 @@ ob_start(); ?>
                             @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])
                         @endif
                         -
-                        {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
+                        {{ sprintf(__('Updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
                     </small>
                 </div>
                 <div class="col-auto bg-card-footer px-2">

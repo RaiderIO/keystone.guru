@@ -1,0 +1,9 @@
+<div class="inner echo_user_{{user_id}} text-center" style="width: {{width}}px; height: {{height}}px;">
+    {{#ifCond avatar_url '==' null}}
+        <div class="w-100 h-100" style="font-size: {{textWidth}}px; padding: 2px;">
+            {{initials}}
+        </div>
+    {{else}}
+        <img src="{{avatar_url}}" alt="{{initials}}" style="width: calc({{width}}px - 6px); height: calc({{height}}px - 6px);"/>
+    {{/ifCond}}
+</div>

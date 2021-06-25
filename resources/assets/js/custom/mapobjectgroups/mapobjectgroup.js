@@ -40,8 +40,9 @@ class MapObjectGroup extends Signalable {
             getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
 
+        // @TODO Convert this to the new echo message system
         if (getState().isEchoEnabled()) {
-            let presenceChannel = window.Echo.join(getState().getEchoChannelName());
+            let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
 
             for (let index in this.names) {
                 if (this.names.hasOwnProperty(index)) {
@@ -478,9 +479,12 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
+        if (!this._visible && visible) {
+            // console.warn(`Unable to make map object visible - the MapObjectGroup is hidden`, mapObject);
+        }
+            // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if (mapObject.layer !== null) {
+        else if (mapObject.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(mapObject.layer)) {
                     this.layerGroup.addLayer(mapObject.layer);
@@ -533,7 +537,7 @@ class MapObjectGroup extends Signalable {
         let result = null;
 
         // Do not return an already saving map object which has id -1 of which multiple can exist
-        if( id > 0 ) {
+        if (id > 0) {
             for (let i = 0; i < this.objects.length; i++) {
                 let objectCandidate = this.objects[i];
                 if (objectCandidate.id === id) {

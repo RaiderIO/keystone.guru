@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
-use App\Events\ModelDeletedEvent;
+use App\Events\Model\ModelChangedEvent;
+use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\EnemyPatrol;
 use App\Models\Polyline;

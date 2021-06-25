@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model'                   => 'App\Policies\ModelPolicy',
         'App\Models\DungeonRoute'     => 'App\Policies\DungeonRoutePolicy',
+        'App\Models\LiveSession'      => 'App\Policies\LiveSessionPolicy',
         'App\Models\Tags\Tag'         => 'App\Policies\TagPolicy',
         'App\Models\Tags\TagCategory' => 'App\Policies\TagCategoryPolicy',
         'App\Models\Team'             => 'App\Policies\TeamPolicy'

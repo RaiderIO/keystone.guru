@@ -167,7 +167,8 @@
 }
 
 @media (min-width: 1200px) {
-    .discover .card_dungeonroute {
+    .discover .card_dungeonroute,
+    .discover .card_dungeonroute .col {
         max-height: 192px;
     }
 

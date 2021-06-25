@@ -40,6 +40,7 @@ let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
  * @property raid_marker_name string
  * @property dangerous bool
  * @property unskippable bool
+ * @property skippable bool
  * @property lat float
  * @property lng float
  *
@@ -225,6 +226,12 @@ class Enemy extends MapObject {
             }),
             new Attribute({
                 name: 'unskippable',
+                type: 'bool',
+                admin: true,
+                default: false
+            }),
+            new Attribute({
+                name: 'skippable',
                 type: 'bool',
                 admin: true,
                 default: false

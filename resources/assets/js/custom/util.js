@@ -330,6 +330,10 @@ function getMapIcons() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
 }
 
+function getUserMousePositions() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+}
+
 /**
  * Helper functions to help debug the site.
  */
@@ -359,6 +363,10 @@ function getBrushline(id) {
 
 function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
+}
+
+function getUserMousePosition(id) {
+    return getUserMousePositions().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {
@@ -399,7 +407,7 @@ function getQueryParams() {
         params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
 
         // Just in case..
-        if( ++count > 100 ){
+        if (++count > 100) {
             break;
         }
     }

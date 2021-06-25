@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Events\UserColorChangedEvent;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute;
+use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Service\EchoServerHttpApiService;
+use App\Service\EchoServerHttpApiServiceInterface;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,11 +73,11 @@ class ProfileController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @param EchoServerHttpApiService $echoServerHttpApiService
+     * @param EchoServerHttpApiServiceInterface $echoServerHttpApiService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function update(Request $request, User $user, EchoServerHttpApiService $echoServerHttpApiService)
+    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
     {
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -98,12 +100,12 @@ class ProfileController extends Controller
         $user->timezone = $request->get('timezone');
 
         // Check if these things already exist or not, if so notify the user that they couldn't be saved
-        $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
+        $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->count() > 0;
         if ($emailExists) {
             Session::flash('warning', __('That e-mail is already in use.'));
         }
 
-        $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->get()->count() > 0;
+        $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->count() > 0;
         if ($nameExists) {
             Session::flash('warning', __('That username is already in use.'));
         }
@@ -125,34 +127,40 @@ class ProfileController extends Controller
                     $dungeonroute->dropCaches();
                 }
 
+                // Send an event that the user's color has changed
                 try {
                     // Propagate changes to any channel the user may be in
-                    foreach ($echoServerHttpApiService->getChannels() as $channel) {
-                        $assoc = get_object_vars($channel);
-                        $channelName = array_keys($assoc)[0];
+                    foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
+                        $context = null;
 
-                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $channelName);
+                        // If it's a route edit page
+                        if (strpos($name, 'route-edit') !== false) {
+                            $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
+                            /** @var DungeonRoute $context */
+                            $context = DungeonRoute::where('public_key', $routeKey)->first();
+                        } else if (strpos($name, 'live-session') !== false) {
+                            $routeKey = str_replace(sprintf('presence-%s-live-session.', env('APP_TYPE')), '', $name);
+                            /** @var LiveSession $context */
+                            $context = LiveSession::where('public_key', $routeKey)->first();
+                        }
 
-                        $userInChannel = false;
-                        // Check if the user is in this channel..
-                        foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $users) {
+                        // Only if we could find a route
+                        if ($context instanceof Model) {
+                            // Check if the user is in this channel..
+                            foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
 
-                            foreach ($users as $channelUser) {
-                                if ($channelUser->id === $user->id) {
-                                    $userInChannel = true;
+                                if ($channelUser['id'] === $user->id) {
+                                    // Broadcast that channel that our user's color has changed
+                                    broadcast(new UserColorChangedEvent($context, $user));
+
                                     break;
                                 }
                             }
                         }
-
-                        if ($userInChannel) {
-                            /** @var DungeonRoute $dungeonRoute */
-                            $dungeonRoute = DungeonRoute::where('public_key', $routeKey)->firstOrFail();
-                            // Broadcast that channel that the user's color has changed
-                            broadcast(new UserColorChangedEvent($dungeonRoute, $user));
-                        }
                     }
                 } catch (Exception $exception) {
+                    report($exception);
+
                     Log::warning('Echo server is probably not running!');
                 }
             } else {

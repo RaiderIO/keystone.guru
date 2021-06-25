@@ -839,7 +839,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     * @return float|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
      */
     public function getRatingByCurrentUser()
     {
@@ -866,7 +866,7 @@ class DungeonRoute extends Model
     public function isFavoritedByCurrentUser(): bool
     {
         // Use relationship caching instead of favorites() to save some queries
-        return Auth::check() ? $this->favorites->where('user_id', Auth::id())->isNotEmpty() : false;
+        return Auth::check() && $this->favorites()->where('user_id', Auth::id())->exists();
     }
 
     /**

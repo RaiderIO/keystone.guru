@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
-use App\Events\ModelDeletedEvent;
+use App\Events\Model\ModelChangedEvent;
+use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
@@ -55,6 +54,7 @@ class APIEnemyController extends Controller
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
         $enemy->unskippable = (int)$request->get('unskippable', false);
+        $enemy->skippable = (int)$request->get('skippable', false);
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = (float)$request->get('lat');

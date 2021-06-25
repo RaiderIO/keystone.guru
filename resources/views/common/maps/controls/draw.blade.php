@@ -5,7 +5,7 @@
 <nav class="route_manipulation_tools left h-100 row no-gutters map_fade_out">
     <div class="bg-header">
         <!-- Draw controls are injected here through drawcontrols.js -->
-        <div id="edit_route_draw_container">
+        <div id="edit_route_draw_container" class="mb-2">
 
 
         </div>
@@ -17,7 +17,7 @@
         @endisset
 
     <!-- Draw actions are injected here through drawcontrols.js -->
-        <div id="edit_route_draw_actions_container">
+        <div id="edit_route_draw_actions_container" class="mb-2">
 
         </div>
 

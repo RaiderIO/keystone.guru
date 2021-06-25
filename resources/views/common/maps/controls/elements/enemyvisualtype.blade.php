@@ -8,10 +8,10 @@ $enemyVisualTypes = [
 ];
 ?>
 <div class="row no-gutters">
-    <div class="col btn-group dropright" data-toggle="tooltip" data-placement="right"
-         title="{{ __('Enemy visual type') }}">
+    <div class="col btn-group dropright">
         <button type="button" class="btn btn-accent dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+                aria-haspopup="true" aria-expanded="false"
+                data-tooltip="tooltip" data-placement="right" title="{{ __('Enemy visual type') }}">
             <i class="fa fa-users"></i>
         </button>
         <div id="map_enemy_visuals_dropdown" class="dropdown-menu">

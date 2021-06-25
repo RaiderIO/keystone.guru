@@ -23,7 +23,13 @@
                 'path',
                 'killzone',
                 'killzonepath'
-            ]
+            ],
+            'show' => [
+                'controls' => [
+                    'draw' => true,
+                    'enemyinfo' => true,
+                ],
+            ],
         ])
     </div>
 

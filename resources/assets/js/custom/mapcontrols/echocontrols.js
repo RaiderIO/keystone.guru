@@ -4,8 +4,6 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
-        let self = this;
-
         this._mapControl = null;
 
         let echo = getState().getEcho();
@@ -13,9 +11,13 @@ class EchoControls extends MapControl {
         echo.register('user:add', this, this._onUserAdd.bind(this));
         echo.register('user:remove', this, this._onUserRemove.bind(this));
         echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
+        echo.register('user:follow', this, this._onUserFollowed.bind(this));
+        echo.register('user:unfollow', this, this._onUserUnfollowed.bind(this));
 
+        getState().register('echocursorsenabled:changed', this, this._onEchoCursorsEnabledChanged.bind(this));
 
-        this.map.register('map:mapobjectgroupsloaded', this, this._onMapObjectGroupsFetchSuccess.bind(this));
+        // Show/hide the cursors on the map based on existing value from cookie (if any)
+        this._onEchoCursorsEnabledChanged();
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -50,10 +52,44 @@ class EchoControls extends MapControl {
         this._applyUserColor(userRemoveEvent.data.user);
     }
 
-    _onMapObjectGroupsFetchSuccess(fetchSuccessEvent) {
+    _onUserFollowed(userFollowedEvent) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        this._restoreExistingEchoState();
+        let echoUser = userFollowedEvent.data.user;
+        let template = Handlebars.templates['map_controls_route_echo_following_user_template'];
+
+        $('#route_echo_container_follow_user').html(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
+        );
+
+        // Make sure we can unfollow the user
+        $('#route_echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+        });
+    }
+
+    _onUserUnfollowed(userUnfollowedEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        let echoUser = userUnfollowedEvent.data.user;
+        let template = Handlebars.templates['map_controls_route_echo_refollow_user_template'];
+
+        $('#route_echo_container_follow_user').html(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
+        );
+
+        // Make sure we can unfollow the user
+        $('#route_echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+        });
+
+        $('#route_echo_refollow_user').on('click', function () {
+            getState().getEcho().refollowUser();
+        });
+
+        $('#route_echo_follow_stop_user').on('click', function () {
+            $('#route_echo_container_follow_user').html('');
+        });
     }
 
     _restoreExistingEchoState() {
@@ -63,11 +99,55 @@ class EchoControls extends MapControl {
         let echo = getState().getEcho();
         this._setStatus(echo.getStatus());
 
+        this._refreshVisual();
+
         // We can only add existing users at this point because that's when our control is fully built.
         let existingUsers = echo.getUsers();
         for (let i = 0; i < existingUsers.length; i++) {
-            this._addUser(existingUsers[i]);
+            this._addUser(existingUsers[i], false);
         }
+    }
+
+    /**
+     * Rebuilds the html of the header
+     * @private
+     */
+    _refreshVisual() {
+        let self = this;
+
+        let template = Handlebars.templates['map_controls_route_echo_connected_users_template'];
+
+        let result = template($.extend({}, getHandlebarsDefaultVariables(), {
+            cursorsActive: getState().getEchoCursorsEnabled(),
+            users: getState().getEcho().getUsers(),
+            type: getState().getMapContext().getType(),
+        }));
+
+        $('#route_echo_container').html(result);
+        $('#echo_toggle_cursors').on('click', function () {
+            let nowActive = !$(this).hasClass('active');
+
+            getState().setEchoCursorsEnabled(nowActive);
+
+            // Rebuild the button so that the tooltip is correct
+            self._refreshVisual();
+        });
+
+        $('.echo_follow_user').on('click', function () {
+            getState().getEcho().followUserById(parseInt($(this).data('id')));
+
+            // Rebuild the layout so that the button switches from follow to unfollow
+            self._refreshVisual();
+        });
+
+        $('.echo_unfollow_user').on('click', function () {
+            getState().getEcho().unfollowUser();
+
+            // Rebuild the layout so that the button switches from unfollow to follow
+            self._refreshVisual();
+        });
+
+        refreshTooltips();
     }
 
     /**
@@ -96,23 +176,18 @@ class EchoControls extends MapControl {
     /**
      * Adds a user to the status bar.
      * @param user Object
+     * @param refreshVisual boolean
      * @private
      */
-    _addUser(user) {
+    _addUser(user, refreshVisual = true) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let template = Handlebars.templates['map_controls_route_echo_connected_users_template'];
-
-        let result = template($.extend({}, getHandlebarsDefaultVariables(), {
-            users: getState().getEcho().getUsers()
-        }));
-
-        $('#route_echo_container').html(result);
+        if (refreshVisual) {
+            this._refreshVisual();
+        }
 
         // Update the color
         this._applyUserColor(user);
-
-        refreshTooltips();
     }
 
     /**
@@ -122,8 +197,9 @@ class EchoControls extends MapControl {
      */
     _removeUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
-        // Remove element
+        // Remove elements associated with the user
         $(`.echo_user_${user.id}`).remove();
+        $(`#style_echo_user_${user.id}`).remove();
     }
 
     /**
@@ -134,7 +210,7 @@ class EchoControls extends MapControl {
     _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let styleID = `echo_user_${user.id}`;
+        let styleID = `style_echo_user_${user.id}`;
         // Delete any previous styles
         $(`#${styleID}`).remove();
 
@@ -144,7 +220,7 @@ class EchoControls extends MapControl {
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html(`
             .echo_user_${user.id} {
-                border: 3px ${user.color} solid !important
+                border: 3px ${getState().getEcho().getUserColor(user.id)} solid !important
             }`)
             .appendTo('head');
 
@@ -157,6 +233,16 @@ class EchoControls extends MapControl {
             $user.addClass('text-dark');
             $user.removeClass('text-white');
         }
+    }
+
+    /**
+     * Called when the user decides to hide/show the cursors of others.
+     * @private
+     */
+    _onEchoCursorsEnabledChanged() {
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+
+        userMousePositionMapObjectGroup.setVisibility(getState().getEchoCursorsEnabled());
     }
 
     /**
@@ -194,8 +280,6 @@ class EchoControls extends MapControl {
         echo.unregister('user:add', this);
         echo.unregister('user:remove', this);
         echo.unregister('user:colorchanged', this);
-
-        this.map.unregister('map:mapobjectgroupsloaded', this);
 
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
     }

@@ -13,8 +13,8 @@ class DungeonMap extends Signalable {
         getState().setDungeonMap(this);
 
         // Listen for floor changes
-        getState().register('floorid:changed', this, function () {
-            self.refreshLeafletMap(false);
+        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+            self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
 
         // How many map objects have returned a success status
@@ -607,10 +607,12 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Refreshes the leaflet map so
+     * Refreshes the leaflet map
      * @param clearMapState {Boolean}
+     * @param center {Array}
+     * @param zoom {Number}
      */
-    refreshLeafletMap(clearMapState = true) {
+    refreshLeafletMap(clearMapState = true, center = [-128, 192], zoom = this.options.defaultZoom) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
@@ -627,7 +629,7 @@ class DungeonMap extends Signalable {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], this.options.defaultZoom);
+        this.leafletMap.setView(center, zoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 

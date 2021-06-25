@@ -51,8 +51,12 @@ class MapContextDungeon extends MapContext
         return $this->listEnemies($this->_context->id, true);
     }
 
+    public function getEchoChannelName(): string
+    {
+        return sprintf('%s-dungeon-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey());
+    }
 
-    public function toArray(): array
+    public function getProperties(): array
     {
         /** @var CacheService $cacheService */
         $cacheService = App::make(CacheService::class);
@@ -66,7 +70,7 @@ class MapContextDungeon extends MapContext
             })->values();
         }, config('keystoneguru.cache.npcs.ttl'));
 
-        return array_merge(parent::toArray(), [
+        return array_merge(parent::getProperties(), [
             // First should be unspecified
             'faction' => strtolower(Faction::where('name', 'Unspecified')->first()->name),
             'npcs'    => $npcs,

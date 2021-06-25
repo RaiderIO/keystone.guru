@@ -1,11 +1,11 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title, 'cookieConsent' => false])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeonroute->title, 'cookieConsent' => false])
 <?php
-/** @var $model \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion', 'floors']);
+$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 
-$affixes = $model->affixes->pluck('text', 'id');
-$selectedAffixes = $model->affixes->pluck('id');
+$affixes = $dungeonroute->affixes->pluck('text', 'id');
+$selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
     $selectedAffixes = -1;
@@ -14,7 +14,7 @@ if (count($affixes) == 0) {
 @section('scripts')
     @parent
 
-    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $model->affixes])
+    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
 @endsection
 
 @include('common.general.inline', [
@@ -34,8 +34,8 @@ if (count($affixes) == 0) {
         <div class="row no-gutters">
             <div class="col-8">
                 <h4>
-                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $model]) }}"
-                       target="_blank">{{ $model->title }}</a>
+                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                       target="_blank">{{ $dungeonroute->title }}</a>
                 </h4>
             </div>
             <div class="col-4">
@@ -49,7 +49,7 @@ if (count($affixes) == 0) {
         <div class="row no-gutters">
             <div class="col-4">
                 <div class="embed-header-subtitle">
-                    {!! $model->getSubHeaderHtml() !!}
+                    {!! $dungeonroute->getSubHeaderHtml() !!}
                 </div>
             </div>
             <div class="col-4">
@@ -69,7 +69,8 @@ if (count($affixes) == 0) {
                     'data-count-selected-text' => __('{0} affixes selected')]) !!}
             </div>
             <div class="col-1">
-                <div id="embed_copy_mdt_string" class="btn btn-primary float-right" data-toggle="tooltip" title="{{ __('Copy MDT string') }}">
+                <div id="embed_copy_mdt_string" class="btn btn-primary float-right" data-toggle="tooltip"
+                     title="{{ __('Copy MDT string') }}">
                     <i class="fas fa-file-export"></i>
                 </div>
                 <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" style="display: none;">
@@ -82,7 +83,7 @@ if (count($affixes) == 0) {
     <div class="wrapper embed_wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'dungeonroute' => $model,
+            'dungeonroute' => $dungeonroute,
             'embed' => true,
             'edit' => false,
             'echo' => false,

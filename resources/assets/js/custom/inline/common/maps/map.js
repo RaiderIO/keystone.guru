@@ -32,8 +32,8 @@ class CommonMapsMap extends InlineCode {
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 
+            // Sidebar
             this._setupRatingSelection();
-
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
             this._setupEnemyVisualTypes();
@@ -61,8 +61,18 @@ class CommonMapsMap extends InlineCode {
             // Enemy info should be set on mouseover
             getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
 
+            $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
+
             this._dungeonMap.leafletMap.on('move', function () {
                 $('#enemy_info_container').hide();
+            });
+
+            // Live sessions
+            $('#stop_live_session_modal select').barrating({
+                theme: 'fontawesome-stars',
+                onSelect: function (value, text, event) {
+                    self._rate(value);
+                }
             });
         }
     }
@@ -140,7 +150,7 @@ class CommonMapsMap extends InlineCode {
     _setupRatingSelection() {
         let self = this;
 
-        // Floor selection
+        // Rating
         let $mapRatingDropdown = $('#map_rating_dropdown');
         $mapRatingDropdown.find('a:not(.disabled)').bind('click', function () {
             let $this = $(this);
@@ -318,6 +328,39 @@ class CommonMapsMap extends InlineCode {
      *
      * @private
      */
+    _submitEnemyUserReport() {
+        let enemyId = $('#enemy_report_enemy_id').val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/enemy/${enemyId}`,
+            dataType: 'json',
+            data: {
+                category: $('#enemy_report_category').val(),
+                username: $('#enemy_report_username').val(),
+                message: $('#enemy_report_message').val(),
+                contact_ok: $('#enemy_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_enemy_modal_submit').hide();
+                $('#userreport_enemy_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_enemy_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_enemy_modal_submit').show();
+                $('#userreport_enemy_modal_saving').hide();
+            }
+        });
+    }
+
+
+    /**
+     *
+     * @private
+     */
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilityDropdown = $('#map_map_object_group_visibility_dropdown');
         if ($mapObjectGroupVisibilityDropdown.length > 0) {
@@ -405,8 +448,6 @@ class CommonMapsMap extends InlineCode {
      * @param value int
      */
     _rate(value) {
-        let self = this;
-
         let isDelete = value === '';
         $.ajax({
             type: isDelete ? 'DELETE' : 'POST',
