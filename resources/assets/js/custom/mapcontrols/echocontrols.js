@@ -73,7 +73,7 @@ class EchoControls extends MapControl {
         let self = this;
 
         let echoUser = userFollowedEvent.data.user;
-        let template = Handlebars.templates['map_controls_route_echo_following_user_template'];
+        let template = Handlebars.templates['map_controls_snackbar_echo_following_user_template'];
 
         this._refreshVisual();
         this._removeCurrentSnackbar();
@@ -105,7 +105,7 @@ class EchoControls extends MapControl {
         let self = this;
 
         let echoUser = userUnfollowedEvent.data.user;
-        let template = Handlebars.templates['map_controls_route_echo_refollow_user_template'];
+        let template = Handlebars.templates['map_controls_snackbar_echo_refollow_user_template'];
 
         this._refreshVisual();
         this._removeCurrentSnackbar();

@@ -501,7 +501,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let mapState = self.map.getMapState();
                 let newSelectedKillZone = null;
 
-                if (mapState instanceof EditKillZoneEnemySelection || mapState instanceof ViewKillZoneEnemySelection) {
+                if (mapState instanceof SelectKillZoneEnemySelectionOverpull ||
+                    mapState instanceof EditKillZoneEnemySelection ||
+                    mapState instanceof ViewKillZoneEnemySelection) {
                     if (selectNext) {
                         // Search from the first to the end
                         for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
@@ -528,10 +530,15 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                 // Only if we have one to select
                 if (newSelectedKillZone instanceof KillZone) {
-                    self.map.setMapState(
-                        self.map.options.edit ? new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState) :
-                            new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState)
-                    );
+                    let newMapState = null;
+                    if (getState().getMapContext() instanceof MapContextLiveSession) {
+                        newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, newSelectedKillZone, mapState);
+                    } else if (self.map.options.edit) {
+                        newMapState = new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
+                    } else {
+                        newMapState = new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
+                    }
+                    getState.setMapState(newMapState);
 
                     // Move the map to the killzone's center location
                     self.map.focusOnKillZone(newSelectedKillZone);

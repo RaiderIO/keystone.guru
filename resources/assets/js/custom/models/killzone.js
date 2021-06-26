@@ -809,12 +809,15 @@ class KillZone extends MapObject {
                 // We're now selecting this killzone
                 let currentMapState = self.map.getMapState();
                 let newMapState = currentMapState;
+
                 if (!(currentMapState instanceof EditMapState) &&
                     !(currentMapState instanceof DeleteMapState) &&
                     !(currentMapState instanceof RaidMarkerSelectMapState)) {
                     // If we're already being selected..
                     if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
                         newMapState = null;
+                    } else if (getState().getMapContext() instanceof MapContextLiveSession) {
+                        newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, self);
                     } else if (self.map.options.edit) {
                         newMapState = new EditKillZoneEnemySelection(self.map, self);
                     } else {

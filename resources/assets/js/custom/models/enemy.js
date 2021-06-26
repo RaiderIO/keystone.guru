@@ -67,6 +67,8 @@ class Enemy extends MapObject {
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
+        this.overpulled = false;
+        this.obsolete = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -324,11 +326,17 @@ class Enemy extends MapObject {
         if (this.npc !== null) {
             result = {info: [], custom: []};
             // @formatter:off
-            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()});
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_health_label'),
+                value: this.npc.base_health.toLocaleString()
+            });
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
             result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
-            result.info.push({key: lang.get('messages.sidebar_enemy_skippable_label'), value: this.unskippable ? 0 : 1});
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_skippable_label'),
+                value: this.unskippable ? 0 : 1
+            });
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
@@ -633,6 +641,49 @@ class Enemy extends MapObject {
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
+    }
+
+    /**
+     * Checks if this enemy is marked as overpulled or not.
+     * @returns {*}
+     */
+    isOverpulled() {
+        return this.overpulled;
+    }
+
+    /**
+     * Set this enemy to be marked as overpulled
+     * @param value boolean True or false
+     */
+    setOverpulled(value) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        if (this.overpulled !== value) {
+            this.overpulled = value;
+
+            this.signal('overpulled:changed');
+        }
+    }
+
+    /**
+     * Checks if this enemy is marked as obsolete or not.
+     * @returns {*}
+     */
+    isObsolete() {
+        return this.obsolete;
+    }
+
+    /**
+     * Set this enemy to be marked as obsolete (was part of a route, but is no longer because we determined we should no
+     * longer pull this enemy after an overpull elsewhere).
+     * @param value boolean True or false
+     */
+    setObsolete(value) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        if (this.obsolete !== value) {
+            this.obsolete = value;
+
+            this.signal('obsolete:changed');
+        }
     }
 
     /**

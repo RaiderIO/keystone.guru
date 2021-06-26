@@ -111,11 +111,15 @@ class RowElementKillZone extends RowElement {
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
                 // Same as this.options.edit, really
-                if (map.options.edit) {
-                    newMapState = new EditKillZoneEnemySelection(map, killZone);
+                if (getState().getMapContext() instanceof MapContextLiveSession) {
+                    newMapState = new SelectKillZoneEnemySelectionOverpull(map, killZone);
                 } else {
-                    // Just highlight the pull when the user clicked a pull
-                    newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                    if (map.options.edit) {
+                        newMapState = new EditKillZoneEnemySelection(map, killZone);
+                    } else {
+                        // Just highlight the pull when the user clicked a pull
+                        newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                    }
                 }
 
                 // Move the map to the killzone's center location
@@ -459,7 +463,7 @@ class RowElementKillZone extends RowElement {
                     $('#killzones_no_pulls').show();
                 }
 
-                if( typeof callback === 'function' ) {
+                if (typeof callback === 'function') {
                     callback();
                 }
             }

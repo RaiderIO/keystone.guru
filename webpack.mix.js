@@ -183,6 +183,7 @@ let scripts = [
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
