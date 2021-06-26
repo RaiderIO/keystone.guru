@@ -182,7 +182,9 @@ if ($isAdmin) {
             @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
         @else
             <footer class="fixed-bottom container p-0" style="width: 728px">
-                <div id="route_echo_container_follow_user" class="map_fade_out"></div>
+                <div id="snackbar_container">
+
+                </div>
                 @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
             </footer>
         @endif

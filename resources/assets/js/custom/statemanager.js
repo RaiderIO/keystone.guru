@@ -28,6 +28,9 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.paidTiers = [];
+
+        this.snackbarIds = [];
+        this.snackbarsAdded = 0;
     }
 
     /**
@@ -549,5 +552,42 @@ class StateManager extends Signalable {
      */
     getEchoCursorsEnabled() {
         return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
+    }
+
+    /**
+     * Adds a snackbar to be displayed on the page (only works in map view!)
+     *
+     * @param html {String}
+     * @param options {Object}
+     */
+    addSnackbar(html, options) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        // Increment and assign
+        let snackbarId = `snackbar-${++this.snackbarsAdded}`;
+        this.snackbarIds.push(snackbarId);
+
+        this.signal('snackbar:add', {
+            id: snackbarId,
+            html: html,
+            onDomAdded: options.onDomAdded
+        });
+    }
+
+    /**
+     * Removes a snackbar by its id
+     * @param snackbarId {String}
+     */
+    removeSnackbar(snackbarId) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        // Only if it exists
+        if (_.indexOf(this.snackbarIds, snackbarId) !== -1) {
+            this.signal('snackbar:remove', {
+                id: snackbarId
+            });
+
+            this.snackbarIds = _.without(this.snackbarIds, snackbarId);
+        }
     }
 }

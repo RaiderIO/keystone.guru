@@ -32,6 +32,10 @@ class CommonMapsMap extends InlineCode {
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 
+            // Snackbars
+            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
+            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
+
             // Sidebar
             this._setupRatingSelection();
             this._setupFloorSelection();
@@ -216,6 +220,11 @@ class CommonMapsMap extends InlineCode {
         for (let i in mapObjectGroups) {
             if (mapObjectGroups.hasOwnProperty(i)) {
                 let group = mapObjectGroups[i];
+
+                // Skip those groups that we don't want to give the user power over to toggle
+                if (!group.isUserToggleable()) {
+                    continue;
+                }
 
                 // If any of the names of a map object group is found in the array, hide the selection
                 let selected = true;
@@ -463,9 +472,45 @@ class CommonMapsMap extends InlineCode {
         });
     }
 
+    /**
+     *
+     * @param snackbarAddEvent
+     * @private
+     */
+    _onSnackbarAdd(snackbarAddEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        let template = Handlebars.templates['map_controls_snackbar_template'];
+
+        $('#snackbar_container').append(
+            template($.extend({}, getHandlebarsDefaultVariables(), {
+                id: snackbarAddEvent.data.id,
+                html: snackbarAddEvent.data.html
+            }))
+        );
+
+        // Fire the onDomAdded event if necessary
+        if (typeof snackbarAddEvent.data.onDomAdded === 'function') {
+            snackbarAddEvent.data.onDomAdded(snackbarAddEvent.data.id);
+        }
+    }
+
+    /**
+     *
+     * @param snackbarRemoveEvent
+     * @private
+     */
+    _onSnackbarRemove(snackbarRemoveEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        $(`#${snackbarRemoveEvent.data.id}`).remove();
+    }
+
     cleanup() {
         super.cleanup();
 
         getState().unregister('focusedenemy:changed', this);
+        getState().unregister('snackbar:add', this);
+        getState().unregister('snackbar:remove', this);
     }
 }

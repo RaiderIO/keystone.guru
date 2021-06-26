@@ -97,7 +97,7 @@ class LiveSessionController extends Controller
         $this->authorize('view', $dungeonroute);
         try {
             $this->authorize('view', $livesession);
-        } catch (AuthorizationException $ex ) {
+        } catch (AuthorizationException $ex) {
             abort(StatusCode::GONE);
         }
 
