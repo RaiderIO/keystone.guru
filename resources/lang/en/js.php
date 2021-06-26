@@ -426,4 +426,8 @@ return [
     'echo_following_user_stopped_label'  => 'You stopped following',
     'echo_refollow_user_label'           => 'Refollow',
     'echo_refollow_user_stop_label'      => 'Stop',
+
+    // Overpull
+    'overpull_select_enemy_label'        => 'Select an enemy that you overpulled',
+    'overpull_selection_finished_label'  => 'Finished'
 ];

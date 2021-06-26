@@ -559,8 +559,9 @@ class StateManager extends Signalable {
      *
      * @param html {String}
      * @param options {Object}
+     * @return {String} The created Snackbar's id.
      */
-    addSnackbar(html, options) {
+    addSnackbar(html, options = {}) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         // Increment and assign
@@ -570,8 +571,10 @@ class StateManager extends Signalable {
         this.signal('snackbar:add', {
             id: snackbarId,
             html: html,
-            onDomAdded: options.onDomAdded
+            onDomAdded: options.hasOwnProperty('onDomAdded') ? (typeof options.onDomAdded === 'function' ? options.onDomAdded : null) : null
         });
+
+        return snackbarId;
     }
 
     /**

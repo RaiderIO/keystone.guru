@@ -33,7 +33,7 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         // Build and/or destroy the visual based on visibility
-        this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
+        this.enemy.register(['shown', 'hidden', 'overpulled:changed', 'obsolete:changed'], this, function (shownHiddenEvent) {
             if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
                 if (self._divIcon === null) {
                     self.buildVisual();
@@ -385,7 +385,7 @@ class EnemyVisual extends Signalable {
                 (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
             // Set a default color which may be overridden by any visuals
-            let borderThickness = Math.max(2, getState().getMapZoomLevel());
+            let borderThickness = getState().getMapZoomLevel();
             let border = `1px solid black`;
             let hasKillZone = this.enemy.getKillZone() instanceof KillZone;
             if (hasKillZone) {
@@ -396,7 +396,11 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
-            if (this.isHighlighted() || hasKillZone) {
+            if (this.enemy.isOverpulled()) {
+                border = `${borderThickness}px dotted red`;
+            }
+
+            if (this.isHighlighted() || hasKillZone || this.enemy.isOverpulled()) {
                 data.root_style = `opacity: 100%`;
             } else if (this.enemy.isImportant()) {
                 data.root_classes += ' important';
@@ -558,7 +562,7 @@ class EnemyVisual extends Signalable {
 
         this._$mainVisualOuter[0].style.width = outerWidthStr;
         this._$mainVisualOuter[0].style.height = outerHeightStr;
-        if (this.enemy.getKillZone() instanceof KillZone) {
+        if (this.enemy.getKillZone() instanceof KillZone || this.enemy.isOverpulled()) {
             this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
         } else {
             this._$mainVisualOuter[0].style.borderWidth = `1px`;

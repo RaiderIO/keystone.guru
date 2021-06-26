@@ -378,8 +378,15 @@ class DungeonMap extends Signalable {
         let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
         let enemy = enemyClickedEvent.context;
+        console.warn('Test');
 
-        if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
+        // If we selected an enemy
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            console.warn('Test 2');
+            if (SelectKillZoneEnemySelectionOverpull.isEnemySelectable(enemy)) {
+                console.warn('Should have selected enemy', enemy);
+            }
+        } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
@@ -612,7 +619,7 @@ class DungeonMap extends Signalable {
      * @param center {Array}
      * @param zoom {Number}
      */
-    refreshLeafletMap(clearMapState = true, center = [-128, 192], zoom = this.options.defaultZoom) {
+    refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
@@ -622,14 +629,14 @@ class DungeonMap extends Signalable {
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were doing anything, we're no longer doing it
-        if( clearMapState ) {
+        if (clearMapState) {
             this.setMapState(null);
         }
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView(center, zoom);
+        this.leafletMap.setView(center ?? [-128, 192], zoom ?? this.options.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
