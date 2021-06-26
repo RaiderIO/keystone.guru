@@ -146,9 +146,16 @@ $echo = $echo ?? false;
 
         <p>
             {{ __('Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing
-            your M+ key. Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.') }}
+            your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.') }}
             <br><br>
-            {{ __('If your route is assigned to a team, any team members currently viewing this route will receive an invitation to your join live session.') }}
+            {{ __('Any participant of the live session may also select any of your existing pulls (your current pull, in-game) and then on any enemy that is
+            not part of your route to indicate an accidental pull. Keystone.guru will then attempt to correct your route by excluding any enemies that are part
+            of your current route that are potentially skippable without utilizing shroud/invisibility pots.') }}
+            <br><br>
+            {{ __('Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.') }}
+            <br><br>
+            {{ __('If your route is assigned to a team that you are a part of, any members of that team currently viewing this route will receive an
+            invitation to your join live session.') }}
         </p>
 
         <div class="row">

@@ -3,7 +3,7 @@
  */
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, names, editable = false) {
+    constructor(manager, names, editable = false, userToggleable = true) {
         super();
         // Ensure its an array
         if (typeof names === 'string') {
@@ -16,6 +16,7 @@ class MapObjectGroup extends Signalable {
         this.manager = manager;
         this.names = names;
         this.editable = editable;
+        this.userToggleable = userToggleable;
 
         // False initially when not loaded anything in yet (from server). True after the initial loading.
         this._initialized = false;
@@ -631,5 +632,15 @@ class MapObjectGroup extends Signalable {
             // When true, let objects decide for themselves, when false, hide everything
             this._updateVisibility(visible ? null : false);
         }
+    }
+
+    /**
+     * Checks if this map object group is toggleable by the user or not.
+     * @returns {boolean}
+     */
+    isUserToggleable() {
+        console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
+
+        return this.userToggleable;
     }
 }

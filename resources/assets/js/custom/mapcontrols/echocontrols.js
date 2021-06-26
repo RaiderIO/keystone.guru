@@ -16,6 +16,9 @@ class EchoControls extends MapControl {
 
         getState().register('echocursorsenabled:changed', this, this._onEchoCursorsEnabledChanged.bind(this));
 
+        // Keeps track of the current snackbar we're using to display the follow status
+        this.echoFollowSnackbarId = null;
+
         // Show/hide the cursors on the map based on existing value from cookie (if any)
         this._onEchoCursorsEnabledChanged();
 
@@ -52,44 +55,88 @@ class EchoControls extends MapControl {
         this._applyUserColor(userRemoveEvent.data.user);
     }
 
+    _removeCurrentSnackbar() {
+        if (this.echoFollowSnackbarId !== null) {
+            getState().removeSnackbar(this.echoFollowSnackbarId);
+
+            this.echoFollowSnackbarId = null;
+        }
+    }
+
+    /**
+     *
+     * @param userFollowedEvent
+     * @private
+     */
     _onUserFollowed(userFollowedEvent) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+        let self = this;
 
         let echoUser = userFollowedEvent.data.user;
         let template = Handlebars.templates['map_controls_route_echo_following_user_template'];
 
-        $('#route_echo_container_follow_user').html(
-            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
-        );
+        this._refreshVisual();
+        this._removeCurrentSnackbar();
 
-        // Make sure we can unfollow the user
-        $('#route_echo_unfollow_user').on('click', function () {
-            getState().getEcho().unfollowUser();
-        });
+        getState().addSnackbar(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser)), {
+                onDomAdded: function (snackbarId) {
+                    self.echoFollowSnackbarId = snackbarId;
+
+                    // Make sure we can unfollow the user
+                    $('#route_echo_unfollow_user').on('click', function () {
+                        getState().getEcho().unfollowUser();
+
+                        self._refreshVisual();
+                        self._removeCurrentSnackbar();
+                    });
+                },
+            }
+        );
     }
 
+    /**
+     *
+     * @param userUnfollowedEvent
+     * @private
+     */
     _onUserUnfollowed(userUnfollowedEvent) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+        let self = this;
 
         let echoUser = userUnfollowedEvent.data.user;
         let template = Handlebars.templates['map_controls_route_echo_refollow_user_template'];
 
-        $('#route_echo_container_follow_user').html(
-            template($.extend({}, getHandlebarsDefaultVariables(), echoUser))
+        this._refreshVisual();
+        this._removeCurrentSnackbar();
+
+        getState().addSnackbar(
+            template($.extend({}, getHandlebarsDefaultVariables(), echoUser)), {
+                onDomAdded: function (snackbarId) {
+                    self.echoFollowSnackbarId = snackbarId;
+
+                    // Make sure we can unfollow the user
+                    $('#route_echo_unfollow_user').on('click', function () {
+                        getState().getEcho().unfollowUser();
+
+                        self._refreshVisual();
+                        self._removeCurrentSnackbar();
+                    });
+
+                    $('#route_echo_refollow_user').on('click', function () {
+                        getState().getEcho().refollowUser();
+                        // Do not refresh visual or remove current snackbar - that'll be handled
+                    });
+
+                    $('#route_echo_follow_stop_user').on('click', function () {
+                        getState().getEcho().unfollowUser();
+
+                        self._refreshVisual();
+                        self._removeCurrentSnackbar();
+                    });
+                },
+            }
         );
-
-        // Make sure we can unfollow the user
-        $('#route_echo_unfollow_user').on('click', function () {
-            getState().getEcho().unfollowUser();
-        });
-
-        $('#route_echo_refollow_user').on('click', function () {
-            getState().getEcho().refollowUser();
-        });
-
-        $('#route_echo_follow_stop_user').on('click', function () {
-            $('#route_echo_container_follow_user').html('');
-        });
     }
 
     _restoreExistingEchoState() {
@@ -142,6 +189,9 @@ class EchoControls extends MapControl {
 
         $('.echo_unfollow_user').on('click', function () {
             getState().getEcho().unfollowUser();
+
+            getState().removeSnackbar(self.echoFollowSnackbarId);
+            self.echoFollowSnackbarId = null;
 
             // Rebuild the layout so that the button switches from unfollow to follow
             self._refreshVisual();

@@ -1,6 +1,6 @@
 class UserMousePositionMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_POSITION], editable);
+        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_POSITION], editable, false);
 
         this.title = 'Hide/show mouse positions of other users';
         this.fa_class = 'fa-mouse-pointer';
