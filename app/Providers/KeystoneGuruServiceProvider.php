@@ -50,6 +50,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
+        $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
 

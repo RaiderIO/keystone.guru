@@ -78,10 +78,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 
         super.stop();
 
-        // Save all overpulled enemies that we changed
-        for (let i = 0; i < this.changedEnemyIds.length; i++) {
-            this.saveOverpulledEnemyById(this.changedEnemyIds[i]);
-        }
+        this.saveOverpulledEnemies();
 
         this.cleanup();
     }
@@ -99,26 +96,57 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 
     /**
      *
-     * @param enemyId {Number}
      */
-    saveOverpulledEnemyById(enemyId) {
+    saveOverpulledEnemies() {
         console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
 
         /** @type MapContextLiveSession */
         let mapContext = getState().getMapContext();
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        /** @type Enemy */
-        let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+        let deletedIds = [];
+        let addedIds = [];
 
-        $.ajax({
-            type: enemy.isOverpulled() ? 'POST' : 'DELETE',
-            url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy/${enemyId}`,
-            dataType: 'json',
-            data: {
-                kill_zone_id: this.sourceMapObject.id
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let i = 0; i < this.changedEnemyIds.length; i++) {
+            let changedEnemyId = this.changedEnemyIds[i];
+
+            /** @type Enemy */
+            let enemy = enemyMapObjectGroup.findMapObjectById(changedEnemyId);
+
+            if (enemy.isOverpulled()) {
+                addedIds.push(changedEnemyId);
+            } else {
+                deletedIds.push(changedEnemyId);
             }
-        });
+        }
+
+        if (deletedIds.length > 0) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
+                dataType: 'json',
+                async: false,
+                data: {
+                    kill_zone_id: this.sourceMapObject.id,
+                    enemy_ids: deletedIds,
+                    no_result: addedIds.length > 0 ? 1 : 0
+                }
+            });
+        }
+
+        if (addedIds.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
+                dataType: 'json',
+                async: false,
+                data: {
+                    kill_zone_id: this.sourceMapObject.id,
+                    enemy_ids: addedIds
+                }
+            });
+        }
     }
 
     /**

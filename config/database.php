@@ -48,7 +48,6 @@ return [
             'password'  => env('DB_PASSWORD', ''),
             'charset'   => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix'    => '',
             'strict'    => false, // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
             'engine'    => null,
         ],
