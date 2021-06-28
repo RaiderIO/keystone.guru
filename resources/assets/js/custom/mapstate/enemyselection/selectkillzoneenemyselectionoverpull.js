@@ -3,8 +3,9 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
         super(map, sourceMapObject);
 
-
         this.currentSnackbarId = null;
+
+        this.changedEnemyIds = [];
     }
 
     getName() {
@@ -64,12 +65,19 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                 enemy.setOverpulled(
                     !enemy.isOverpulled()
                 );
+
+                self.changedEnemyIds.push(enemy.id);
             }
         });
     }
 
     stop() {
         super.stop();
+
+        // Save all overpulled enemies that we changed
+        for (let i = 0; i < this.changedEnemyIds.length; i++) {
+            this.saveOverpulledEnemyById(this.changedEnemyIds[i]);
+        }
 
         this.cleanup();
     }
@@ -81,6 +89,25 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
             getState().removeSnackbar(this.currentSnackbarId);
             this.currentSnackbarId = null;
         }
+    }
+
+    /**
+     *
+     * @param enemyId {Number}
+     */
+    saveOverpulledEnemyById(enemyId) {
+        /** @type MapContextLiveSession */
+        let mapContext = getState().getMapContext();
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        /** @type Enemy */
+        let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+
+        $.ajax({
+            type: enemy.isOverpulled() ? 'POST' : 'DELETE',
+            url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy/${enemyId}`,
+            dataType: 'json'
+        });
     }
 
     /**

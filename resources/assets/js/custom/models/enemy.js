@@ -657,6 +657,7 @@ class Enemy extends MapObject {
      */
     setOverpulled(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
         if (this.overpulled !== value) {
             this.overpulled = value;
 

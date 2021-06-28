@@ -36,6 +36,9 @@ class CommonMapsMap extends InlineCode {
             getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
             getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
 
+            // Register for external changes so that we update our dropdown
+            getState().register('floorid:changed', this, this._onFloorIdChanged.bind(this));
+
             // Sidebar
             this._setupRatingSelection();
             this._setupFloorSelection();
@@ -504,6 +507,47 @@ class CommonMapsMap extends InlineCode {
         console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
 
         $(`#${snackbarRemoveEvent.data.id}`).remove();
+    }
+
+    /**
+     *
+     * @param floorIdChangedEvent
+     * @private
+     */
+    _onFloorIdChanged(floorIdChangedEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        if (this._floorIdChangeSource === null) {
+            this._floorIdChangeSource = 'external';
+
+            $(this.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
+            this._floorIdChangeSource = null;
+        }
+
+        let pathname = window.location.pathname;
+        let pathSplit = trimEnd(pathname, '/').split('/');
+        let newUrl = window.location.protocol + '//' + window.location.host;
+
+        if (getState().isMapAdmin()) {
+            // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
+            // Strip the last two elements (<number>/mapping)
+            pathSplit.splice(-2);
+            pathname = pathSplit.join('/');
+            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
+        } else {
+            // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
+            if (isNumeric(pathSplit[pathSplit.length - 1])) {
+                // Strip the last two elements (<number>/mapping)
+                pathSplit.splice(-1);
+                pathname = pathSplit.join('/');
+            }
+            newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
+        }
+
+        history.pushState({page: 1}, newUrl, newUrl);
+
+        // Make sure that the sidebar's select picker gets updated with the newly selected value
+        refreshSelectPickers();
     }
 
     cleanup() {

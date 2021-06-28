@@ -428,6 +428,6 @@ return [
     'echo_refollow_user_stop_label'      => 'Stop',
 
     // Overpull
-    'overpull_select_enemy_label'        => 'Select an enemy that you overpulled',
+    'overpull_select_enemy_label'        => 'Select one or more enemies that you overpulled',
     'overpull_selection_finished_label'  => 'Finished'
 ];

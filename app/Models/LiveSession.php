@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
 use App\User;
 use Carbon\CarbonInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
  * @property int $dungeon_route_id
  * @property int $user_id
  * @property string $public_key
  *
  * @property User $user
  * @property DungeonRoute $dungeonroute
+ * @property Collection|OverpulledEnemy[] $overpulledenemies
  *
  * @property Carbon $expires_at
  *
@@ -65,6 +70,14 @@ class LiveSession extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function overpulledenemies()
+    {
+        return $this->hasMany('App\Models\Enemies\OverpulledEnemy');
+    }
+
+    /**
      * @return bool
      */
     public function isExpired(): bool
@@ -87,5 +100,17 @@ class LiveSession extends Model
     {
         return $this->expires_at === null ? null :
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete route properly if it gets deleted
+        static::deleting(function (LiveSession $item)
+        {
+            $item->overpulledenemies()->delete();
+        });
     }
 }

@@ -23,6 +23,7 @@ use App\Http\Controllers\APIKillZoneController;
 use App\Http\Controllers\APILiveSessionController;
 use App\Http\Controllers\APIMapIconController;
 use App\Http\Controllers\APINpcController;
+use App\Http\Controllers\APIOverpulledEnemyController;
 use App\Http\Controllers\APIPathController;
 use App\Http\Controllers\APIPridefulEnemyController;
 use App\Http\Controllers\APIProfileController;
@@ -33,7 +34,6 @@ use App\Http\Controllers\APIUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
@@ -393,14 +393,11 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
-
-            Route::delete('/live/{livesession}', [APILiveSessionController::class, 'delete']);
         });
 
         // Must be logged in to perform these actions
         Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
         {
-
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
                 Route::patch('/', [APIDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
@@ -414,6 +411,14 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
                 Route::post('/rate', [APIDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
                 Route::delete('/rate', [APIDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
+
+                Route::group(['prefix' => '/live/{livesession}'], function ()
+                {
+                    Route::delete('/', [APILiveSessionController::class, 'delete']);
+
+                    Route::post('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'store']);
+                    Route::delete('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'delete']);
+                });
             });
 
             Route::group(['prefix' => 'echo'], function ()

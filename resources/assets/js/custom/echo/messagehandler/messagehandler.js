@@ -1,10 +1,14 @@
+/**
+ * @property {Echo} echo
+ * @property {String} message
+ */
 class MessageHandler extends Signalable {
     constructor(echo, message) {
         super();
 
         this.echo = echo;
         // Ensure the message starts with a dot
-        this.message = message;
+        this.message = message[0] !== '.' ? `.${message}` : message;
     }
 
     /**

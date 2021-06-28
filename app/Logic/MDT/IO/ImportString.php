@@ -26,7 +26,7 @@ use App\Models\MapIconType;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
-use App\Models\PridefulEnemy;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
 use App\User;

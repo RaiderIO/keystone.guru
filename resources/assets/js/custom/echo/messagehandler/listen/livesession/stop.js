@@ -1,7 +1,7 @@
 class StopHandler extends MessageHandler {
 
     constructor(echo) {
-        super(echo, '.livesession-stop');
+        super(echo, LiveSessionStopMessage.getName());
     }
 
 

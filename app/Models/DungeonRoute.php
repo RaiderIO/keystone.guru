@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\Enemies\OverpulledEnemy;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
@@ -89,6 +91,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Path[] $paths
  * @property Collection|KillZone[] $killzones
  * @property Collection|PridefulEnemy[] $pridefulenemies
+ * @property Collection|OverpulledEnemy[] $overpulledenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
  * @property Collection|MapIcon[] $mapicons
@@ -261,7 +264,7 @@ class DungeonRoute extends Model
      */
     public function pridefulenemies()
     {
-        return $this->hasMany('App\Models\PridefulEnemy');
+        return $this->hasMany('App\Models\Enemies\PridefulEnemy');
     }
 
     /**

@@ -3,10 +3,12 @@
 
 namespace App\Models\Traits;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 trait Reportable
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function userreports()
     {

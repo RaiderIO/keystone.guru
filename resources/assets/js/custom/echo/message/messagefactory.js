@@ -17,6 +17,15 @@ class MessageFactory {
                 result = new LiveSessionStopMessage(props);
                 break;
 
+            // Overpulled enemies
+            case OverpulledEnemyChangedMessage.getName():
+                result = new OverpulledEnemyChangedMessage(props);
+                break;
+            case OverpulledEnemyDeletedMessage.getName():
+                result = new OverpulledEnemyDeletedMessage(props);
+                break;
+
+
             // Whisper
             case MousePositionMessage.getName():
                 result = new MousePositionMessage(props);
