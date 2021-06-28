@@ -78,7 +78,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 
         super.stop();
 
-        this.saveOverpulledEnemies();
+        this._saveOverpulledEnemies();
 
         this.cleanup();
     }
@@ -97,8 +97,10 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     /**
      *
      */
-    saveOverpulledEnemies() {
+    _saveOverpulledEnemies() {
         console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
+        let self = this;
 
         /** @type MapContextLiveSession */
         let mapContext = getState().getMapContext();
@@ -121,6 +123,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
             }
         }
 
+        // Prevent having these two requests running at the same time and causing race conditions and wrong results
         if (deletedIds.length > 0) {
             $.ajax({
                 type: 'DELETE',
@@ -131,21 +134,61 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                     kill_zone_id: this.sourceMapObject.id,
                     enemy_ids: deletedIds,
                     no_result: addedIds.length > 0 ? 1 : 0
-                }
-            });
-        }
+                },
+                success: function (json) {
+                    self._applyObsoleteEnemies.bind(self);
 
-        if (addedIds.length > 0) {
-            $.ajax({
-                type: 'POST',
-                url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
-                dataType: 'json',
-                async: false,
-                data: {
-                    kill_zone_id: this.sourceMapObject.id,
-                    enemy_ids: addedIds
+                    if (addedIds.length > 0) {
+                        self._addNewOverpulledEnemies(addedIds);
+                    }
                 }
             });
+        } else {
+            this._addNewOverpulledEnemies(addedIds);
+        }
+    }
+
+    /**
+     *
+     * @param enemyIds {Array}
+     * @private
+     */
+    _addNewOverpulledEnemies(enemyIds) {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
+        /** @type MapContextLiveSession */
+        let mapContext = getState().getMapContext();
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
+            dataType: 'json',
+            async: false,
+            data: {
+                kill_zone_id: this.sourceMapObject.id,
+                enemy_ids: enemyIds
+            },
+            success: this._applyObsoleteEnemies.bind(this)
+        });
+    }
+
+    /**
+     *
+     * @param json {object}
+     * @private
+     */
+    _applyObsoleteEnemies(json) {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
+        // Override the enemy forces with a new value
+        this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+
+            // Set all enemies to be obsolete or not
+            enemy.setObsolete(json.obsolete_enemy_ids.includes(enemy.id));
         }
     }
 

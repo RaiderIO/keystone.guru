@@ -184,7 +184,7 @@ class EnemyPack extends MapObject {
         super.bindTooltip();
 
         if (this.layer !== null) {
-            let displayText = `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.getEnemyForcesRequired())}%`;
+            let displayText = `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.enemyForcesManager.getEnemyForcesRequired())}%`;
 
             this.layer.bindTooltip(displayText, {
                 sticky: true,

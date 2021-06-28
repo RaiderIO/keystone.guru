@@ -51,7 +51,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     _getDisplayText() {
         return getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES ?
             this.enemyvisual.enemy.getEnemyForces() :
-            `${getFormattedPercentage(this.enemyvisual.enemy.getEnemyForces(), this.enemyvisual.map.getEnemyForcesRequired())}`;
+            `${getFormattedPercentage(this.enemyvisual.enemy.getEnemyForces(), this.enemyvisual.map.enemyForcesManager.getEnemyForcesRequired())}`;
     }
 
     /**
