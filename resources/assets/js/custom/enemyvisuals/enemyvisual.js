@@ -33,7 +33,7 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         // Build and/or destroy the visual based on visibility
-        this.enemy.register(['shown', 'hidden', 'overpulled:changed', 'obsolete:changed'], this, function (shownHiddenEvent) {
+        this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
             if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
                 if (self._divIcon === null) {
                     self.buildVisual();
@@ -44,6 +44,13 @@ class EnemyVisual extends Signalable {
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
+            }
+        });
+
+        // Rebuild whenever these infrequently fired events are received
+        this.enemy.register(['overpulled:changed', 'obsolete:changed'], this, function (changedEvent) {
+            if (enemy.shouldBeVisible()) {
+                self.buildVisual();
             }
         });
 

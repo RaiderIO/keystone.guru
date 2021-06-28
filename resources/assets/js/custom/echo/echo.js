@@ -1,6 +1,9 @@
 const ECHO_STATUS_CONNECTED = 'connected';
 const ECHO_STATUS_DISCONNECTED = 'connecting';
 
+/**
+ * @property {DungeonMap} map
+ */
 class Echo extends Signalable {
     constructor(map) {
         super();
@@ -34,7 +37,11 @@ class Echo extends Signalable {
             // Whenever someone has stopped the live session
             new StopHandler(this),
 
-            // Live Sessions
+            // Overpulled enemies
+            new OverpulledEnemyChangedHandler(this),
+            new OverpulledEnemyDeletedHandler(this),
+
+            // Whisper handlers
             mousePositionHandler,
             viewPortHandler
         ];

@@ -34,7 +34,6 @@ use App\Http\Controllers\APIUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
@@ -385,9 +384,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             Route::post('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'store']);
             Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);
 
-            Route::post('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'store']);
-            Route::delete('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'delete']);
-
             Route::post('/path', [APIPathController::class, 'store']);
             Route::delete('/path/{path}', [APIPathController::class, 'delete']);
 
@@ -397,8 +393,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
-
-            Route::delete('/live/{livesession}', [APILiveSessionController::class, 'delete']);
         });
 
         // Must be logged in to perform these actions
@@ -417,6 +411,14 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
 
                 Route::post('/rate', [APIDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
                 Route::delete('/rate', [APIDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
+
+                Route::group(['prefix' => '/live/{livesession}'], function ()
+                {
+                    Route::delete('/', [APILiveSessionController::class, 'delete']);
+
+                    Route::post('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'store']);
+                    Route::delete('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'delete']);
+                });
             });
 
             Route::group(['prefix' => 'echo'], function ()

@@ -60,7 +60,7 @@ class APIPridefulEnemyController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Enemy $enemy
-     * @return array|ResponseFactory|Response
+     * @return Response|ResponseFactory
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {

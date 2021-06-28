@@ -2,6 +2,9 @@
 
 namespace App\Events;
 
+use App\Models\Dungeon;
+use App\Models\DungeonRoute;
+use App\Models\LiveSession;
 use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -41,11 +44,17 @@ abstract class ContextEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey())),
-            new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey())),
-            new PresenceChannel(sprintf('%s-dungeon-edit.%s', config('app.type'), $this->_context->getRouteKey()))
-        ];
+        $result = [];
+
+        if ($this->_context instanceof DungeonRoute) {
+            $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey()));
+        } else if ($this->_context instanceof LiveSession) {
+            $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey()));
+        } else if ($this->_context instanceof Dungeon) {
+            $result[] = new PresenceChannel(sprintf('%s-dungeon-edit.%s', config('app.type'), $this->_context->getRouteKey()));
+        }
+
+        return $result;
     }
 
     public function broadcastWith(): array

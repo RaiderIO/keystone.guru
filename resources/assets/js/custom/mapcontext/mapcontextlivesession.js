@@ -23,4 +23,11 @@ class MapContextLiveSession extends MapContextDungeonRoute {
     setExpiresInSeconds(seconds) {
         this._options.expiresInSeconds = seconds;
     }
+
+    /**
+     * @returns {[]}
+     */
+    getOverpulledEnemies() {
+        return this._options.overpulledenemies;
+    }
 }

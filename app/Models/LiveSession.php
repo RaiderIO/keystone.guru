@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
 use App\User;
 use Carbon\CarbonInterface;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -19,6 +21,7 @@ use Illuminate\Support\Carbon;
  *
  * @property User $user
  * @property DungeonRoute $dungeonroute
+ * @property Collection|OverpulledEnemy[] $overpulledenemies
  *
  * @property Carbon $expires_at
  *

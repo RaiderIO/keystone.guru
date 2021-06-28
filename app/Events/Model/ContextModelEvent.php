@@ -16,12 +16,12 @@ abstract class ContextModelEvent extends ContextEvent
      *
      * @param $context Model
      * @param $user User
-     * @param $model Model
+     * @param $overpulledEnemy Model
      * @return void
      */
-    public function __construct(Model $context, User $user, Model $model)
+    public function __construct(Model $context, User $user, Model $overpulledEnemy)
     {
-        $this->_model = $model;
+        $this->_model = $overpulledEnemy;
         parent::__construct($context, $user);
     }
 

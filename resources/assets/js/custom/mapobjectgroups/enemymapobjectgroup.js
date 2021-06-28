@@ -131,6 +131,22 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 enemy.register('pridefulenemy:assigned', this, this._onPridefulEnemyAssigned.bind(this));
                 enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
             }
+
+            // Assign overpulled enemies from cache
+            if (getState().getMapContext() instanceof MapContextLiveSession) {
+                let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
+                for (let i = 0; i < overpulledEnemiesData.length; i++) {
+                    let overpulledEnemyData = overpulledEnemiesData[i];
+
+                    // If we have a match..
+                    if (overpulledEnemyData.enemy_id === enemy.id) {
+                        enemy.setOverpulled(true);
+
+                        // May stop now
+                        break;
+                    }
+                }
+            }
         }
     }
 

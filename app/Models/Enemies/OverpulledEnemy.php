@@ -30,6 +30,8 @@ class OverpulledEnemy extends Model
 
     protected $visible = ['enemy_id'];
 
+    public $timestamps = false;
+
     /**
      * @return BelongsTo
      */

@@ -1,10 +1,13 @@
 class InviteHandler extends MessageHandler {
 
     constructor(echo) {
-        super(echo, '.livesession-invite');
+        super(echo, LiveSessionInviteMessage.getName());
     }
 
-
+    /**
+     *
+     * @param e {LiveSessionInviteMessage}
+     */
     onReceive(e) {
         super.onReceive(e);
 

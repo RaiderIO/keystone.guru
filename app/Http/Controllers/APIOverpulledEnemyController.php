@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Model\ModelChangedEvent;
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
+use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Models\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,20 +20,22 @@ class APIOverpulledEnemyController extends Controller
 {
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @param LiveSession $livesession
      * @param Enemy $enemy
      * @return OverpulledEnemy
-     * @throws Exception
+     * @throws AuthorizationException
      */
-    function store(Request $request, LiveSession $livesession, Enemy $enemy)
+    function store(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
     {
+        $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);
 
         /** @var OverpulledEnemy $overpulledEnemy */
         $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
             ->where('enemy_id', $enemy->id)->firstOrNew([
                 'live_session_id' => $livesession->id,
-                'enemy_id'        => (int)$request->get('enemy_id')
+                'enemy_id'        => $enemy->id
             ]);
 
         if (!$overpulledEnemy->save()) {
@@ -39,7 +43,7 @@ class APIOverpulledEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($livesession->dungeonroute, Auth::getUser(), $overpulledEnemy));
+            broadcast(new OverpulledEnemyChangedEvent($livesession, Auth::getUser(), $overpulledEnemy));
         }
 
         return $overpulledEnemy;
@@ -47,19 +51,24 @@ class APIOverpulledEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @param LiveSession $livesession
      * @param Enemy $enemy
      * @return array|ResponseFactory|Response
+     * @throws AuthorizationException
      */
-    function delete(Request $request, LiveSession $livesession, Enemy $enemy)
+    function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
     {
+        $this->authorize('view', $dungeonroute);
+        $this->authorize('view', $livesession);
+
         try {
             /** @var OverpulledEnemy $overpulledEnemy */
             $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
                 ->where('enemy_id', $enemy->id)->first();
 
             if ($overpulledEnemy->delete() && Auth::check()) {
-                broadcast(new ModelDeletedEvent($livesession->dungeonroute, Auth::getUser(), $overpulledEnemy));
+                broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
             }
 
             $result = response()->noContent();
