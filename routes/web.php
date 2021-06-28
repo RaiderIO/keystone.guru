@@ -23,6 +23,7 @@ use App\Http\Controllers\APIKillZoneController;
 use App\Http\Controllers\APILiveSessionController;
 use App\Http\Controllers\APIMapIconController;
 use App\Http\Controllers\APINpcController;
+use App\Http\Controllers\APIOverpulledEnemyController;
 use App\Http\Controllers\APIPathController;
 use App\Http\Controllers\APIPridefulEnemyController;
 use App\Http\Controllers\APIProfileController;
@@ -384,6 +385,9 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
             Route::post('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'store']);
             Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);
 
+            Route::post('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'store']);
+            Route::delete('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'delete']);
+
             Route::post('/path', [APIPathController::class, 'store']);
             Route::delete('/path/{path}', [APIPathController::class, 'delete']);
 
@@ -400,7 +404,6 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
         // Must be logged in to perform these actions
         Route::group(['middleware' => ['auth', 'role:user|admin']], function ()
         {
-
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
                 Route::patch('/', [APIDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
