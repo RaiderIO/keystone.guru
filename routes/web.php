@@ -416,8 +416,8 @@ Route::group(['middleware' => ['viewcachebuster']], function ()
                 {
                     Route::delete('/', [APILiveSessionController::class, 'delete']);
 
-                    Route::post('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'store']);
-                    Route::delete('/overpulledenemy/{enemy}', [APIOverpulledEnemyController::class, 'delete']);
+                    Route::post('/overpulledenemy', [APIOverpulledEnemyController::class, 'store']);
+                    Route::delete('/overpulledenemy', [APIOverpulledEnemyController::class, 'delete']);
                 });
             });
 

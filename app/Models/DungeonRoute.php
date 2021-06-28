@@ -468,8 +468,7 @@ class DungeonRoute extends Model
                                           )
                                   )
                                ), 0
-                       ) AS SIGNED)                  as enemy_forces,
-                   count(distinct dungeon_routes.id) as aggregate
+                       ) AS SIGNED) as enemy_forces
             from `dungeon_routes`
                      left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
                      left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
@@ -484,6 +483,14 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEnemyForcesTooMuch(): int
+    {
+        return max(0, $this->enemy_forces - ($this->teeming ? $this->dungeon->enemy_forces_required_teeming : $this->dungeon->enemy_forces_required));
     }
 
     /**

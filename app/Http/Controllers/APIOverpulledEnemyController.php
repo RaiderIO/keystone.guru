@@ -7,12 +7,11 @@ use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
-use App\Models\Enemy;
 use App\Models\LiveSession;
+use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -20,60 +19,70 @@ use Teapot\StatusCode\Http;
 class APIOverpulledEnemyController extends Controller
 {
     /**
+     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
      * @param OverpulledEnemyFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param LiveSession $livesession
-     * @param Enemy $enemy
-     * @return OverpulledEnemy
+     * @return array
      * @throws AuthorizationException
      */
-    function store(OverpulledEnemyFormRequest $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
+    function store(
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        OverpulledEnemyFormRequest $request,
+        DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);
 
-        /** @var OverpulledEnemy $overpulledEnemy */
-        $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
-            ->where('enemy_id', $enemy->id)->firstOrNew([
-                'live_session_id' => $livesession->id,
-                'kill_zone_id'    => (int)$request->get('kill_zone_id'),
-                'enemy_id'        => $enemy->id
-            ]);
+        foreach ($request->get('enemy_ids', []) as $enemyId) {
+            /** @var OverpulledEnemy $overpulledEnemy */
+            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                ->where('enemy_id', $enemyId)->firstOrNew([
+                    'live_session_id' => $livesession->id,
+                    'kill_zone_id'    => (int)$request->get('kill_zone_id'),
+                    'enemy_id'        => $enemyId
+                ]);
 
-        if (!$overpulledEnemy->save()) {
-            throw new Exception('Unable to save overpulled enemy!');
+            if (!$overpulledEnemy->save()) {
+                throw new Exception('Unable to save overpulled enemy!');
+            }
+
+            if (Auth::check()) {
+                broadcast(new OverpulledEnemyChangedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+            }
         }
 
-        if (Auth::check()) {
-            broadcast(new OverpulledEnemyChangedEvent($livesession, Auth::getUser(), $overpulledEnemy));
-        }
-
-        return $overpulledEnemy;
+        return $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
     }
 
     /**
-     * @param Request $request
+     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
+     * @param OverpulledEnemyFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param LiveSession $livesession
-     * @param Enemy $enemy
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
+    function delete(
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        OverpulledEnemyFormRequest $request, DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);
 
         try {
-            /** @var OverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
-                ->where('enemy_id', $enemy->id)->first();
+            foreach ($request->get('enemy_ids', []) as $enemyId) {
+                /** @var OverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                    ->where('enemy_id', $enemyId)->first();
 
-            if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                }
+
+                // Optionally don't calculate the return value
+                $result = $request->get('no_result', false) ? response()->noContent() : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
-
-            $result = response()->noContent();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

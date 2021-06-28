@@ -4,7 +4,7 @@ namespace App\Http\Requests\OverpulledEnemy;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OverpulledEnemyFormRequest extends FormRequest
+class OverpulledEnemyDeletedFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class OverpulledEnemyFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'kill_zone_id' => 'required|int',
-            'enemy_ids'    => 'required|array',
-            'enemy_ids.*'  => 'numeric',
+            'enemy_ids'   => 'required|array',
+            'enemy_ids.*' => 'numeric',
+            'no_result'   => 'nullable|int'
         ];
     }
 }
