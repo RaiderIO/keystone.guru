@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $live_session_id
+ * @property int $kill_zone_id
  * @property int $enemy_id
  *
  * @property LiveSession $livesession
@@ -25,6 +26,7 @@ class OverpulledEnemy extends Model
 {
     protected $fillable = [
         'live_session_id',
+        'kill_zone_id',
         'enemy_id'
     ];
 
@@ -38,6 +40,14 @@ class OverpulledEnemy extends Model
     function livesession()
     {
         return $this->belongsTo('App\Models\LiveSession');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    function killzone()
+    {
+        return $this->belongsTo('App\Models\KillZone');
     }
 
     /**

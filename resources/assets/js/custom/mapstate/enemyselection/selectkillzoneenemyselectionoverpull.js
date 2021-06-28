@@ -37,6 +37,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     }
 
     start() {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
         super.start();
 
         let self = this;
@@ -72,6 +74,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     }
 
     stop() {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
         super.stop();
 
         // Save all overpulled enemies that we changed
@@ -83,6 +87,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     }
 
     cleanup() {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
         super.cleanup();
 
         if (this.currentSnackbarId !== null) {
@@ -96,6 +102,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
      * @param enemyId {Number}
      */
     saveOverpulledEnemyById(enemyId) {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
         /** @type MapContextLiveSession */
         let mapContext = getState().getMapContext();
 
@@ -106,7 +114,10 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
         $.ajax({
             type: enemy.isOverpulled() ? 'POST' : 'DELETE',
             url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy/${enemyId}`,
-            dataType: 'json'
+            dataType: 'json',
+            data: {
+                kill_zone_id: this.sourceMapObject.id
+            }
         });
     }
 
