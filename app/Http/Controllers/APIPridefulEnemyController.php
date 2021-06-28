@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
-use App\Models\Enemy;
 use App\Models\Enemies\PridefulEnemy;
+use App\Models\Enemy;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -67,7 +66,7 @@ class APIPridefulEnemyController extends Controller
         try {
             /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
-            if ($pridefulEnemy->delete() && Auth::check()) {
+            if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
                 broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
             }
 

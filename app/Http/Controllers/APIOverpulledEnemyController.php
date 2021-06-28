@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
@@ -19,14 +20,14 @@ use Teapot\StatusCode\Http;
 class APIOverpulledEnemyController extends Controller
 {
     /**
-     * @param Request $request
+     * @param OverpulledEnemyFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param LiveSession $livesession
      * @param Enemy $enemy
      * @return OverpulledEnemy
      * @throws AuthorizationException
      */
-    function store(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
+    function store(OverpulledEnemyFormRequest $request, DungeonRoute $dungeonroute, LiveSession $livesession, Enemy $enemy)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);
@@ -35,6 +36,7 @@ class APIOverpulledEnemyController extends Controller
         $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
             ->where('enemy_id', $enemy->id)->firstOrNew([
                 'live_session_id' => $livesession->id,
+                'kill_zone_id'    => (int)$request->get('kill_zone_id'),
                 'enemy_id'        => $enemy->id
             ]);
 
@@ -67,7 +69,7 @@ class APIOverpulledEnemyController extends Controller
             $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
                 ->where('enemy_id', $enemy->id)->first();
 
-            if ($overpulledEnemy->delete() && Auth::check()) {
+            if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
                 broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
             }
 
