@@ -53,8 +53,8 @@ class DungeonRouteCorrection
     public function toArray(): array
     {
         return [
-            'obsolete_enemies' => $this->obsoleteEnemies,
-            'enemy_forces'     => $this->enemyForces,
+            'obsolete_enemy_ids' => $this->obsoleteEnemies,
+            'enemy_forces'       => $this->enemyForces,
         ];
     }
 }

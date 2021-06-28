@@ -184,15 +184,15 @@ class RowElementKillZone extends RowElement {
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
 
         if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
-            let enemyForcesCumulativePercent = getFormattedPercentage(this.killZone.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
-            let enemyForcesPercent = getFormattedPercentage(killZoneEnemyForces, this.map.getEnemyForcesRequired());
+            let enemyForcesCumulativePercent = getFormattedPercentage(this.killZone.getEnemyForcesCumulative(), this.map.enemyForcesManager.getEnemyForcesRequired());
+            let enemyForcesPercent = getFormattedPercentage(killZoneEnemyForces, this.map.enemyForcesManager.getEnemyForcesRequired());
 
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
                 .text(`${enemyForcesCumulativePercent}%`)
                 .attr('title', `+${enemyForcesPercent}%`);
         } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
-                .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`)
+                .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.enemyForcesManager.getEnemyForcesRequired()}`)
                 .attr('title', `+${killZoneEnemyForces}`);
         }
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
@@ -295,7 +295,7 @@ class RowElementKillZone extends RowElement {
                     'id': index,
                     'pull_color': obj.enemy.getKillZone().color,
                     'enemy_forces': obj.enemy_forces,
-                    'enemy_forces_percent': getFormattedPercentage(obj.enemy_forces, this.map.getEnemyForcesRequired()),
+                    'enemy_forces_percent': getFormattedPercentage(obj.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
                     'count': obj.count,
                     'name': obj.name,
                     'awakened': obj.awakened,

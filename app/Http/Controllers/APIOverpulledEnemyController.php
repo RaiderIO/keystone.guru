@@ -71,17 +71,22 @@ class APIOverpulledEnemyController extends Controller
         $this->authorize('view', $livesession);
 
         try {
-            foreach ($request->get('enemy_ids', []) as $enemyId) {
-                /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
-                    ->where('enemy_id', $enemyId)->first();
+            $enemyIds = $request->get('enemy_ids', []);
+            if (!empty($enemyIds)) {
+                foreach ($enemyIds as $enemyId) {
+                    /** @var OverpulledEnemy $overpulledEnemy */
+                    $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                        ->where('enemy_id', $enemyId)->first();
 
-                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
+                        broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    }
+
+                    // Optionally don't calculate the return value
+                    $result = $request->get('no_result', false) ? response()->noContent() : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
                 }
-
-                // Optionally don't calculate the return value
-                $result = $request->get('no_result', false) ? response()->noContent() : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+            } else {
+                $result = response()->noContent();
             }
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

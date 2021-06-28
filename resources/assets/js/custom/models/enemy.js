@@ -277,7 +277,7 @@ class Enemy extends MapObject {
     _getPercentageString(enemyForces) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places
-        return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
+        return '(' + (Math.round((enemyForces / this.map.enemyForcesManager.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
     _onObjectChanged(syncedEvent) {

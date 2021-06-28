@@ -894,10 +894,10 @@ class KillZone extends MapObject {
 
                 if (getState().getMapZoomLevel() > c.map.killzone.percentage_display_zoom) {
                     if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
-                        let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.getEnemyForcesRequired());
+                        let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.enemyForcesManager.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;
                     } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
-                        tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`;
+                        tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.enemyForcesManager.getEnemyForcesRequired()}`;
                     }
                 }
 

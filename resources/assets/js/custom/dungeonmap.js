@@ -24,6 +24,7 @@ class DungeonMap extends Signalable {
             self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
+        this.enemyForcesManager = new EnemyForcesManager(this);
 
         // Pather instance
         this.pather = null;
@@ -595,21 +596,6 @@ class DungeonMap extends Signalable {
                 break;
             }
         }
-        return result;
-    }
-
-    /**
-     * Get the amount of enemy forces that are required to complete this dungeon.
-     * @returns {*}
-     */
-    getEnemyForcesRequired() {
-        let dungeonData = getState().getMapContext().getDungeon();
-        let result = dungeonData.enemy_forces_required;
-
-        if (getState().getMapContext().getTeeming() && dungeonData.enemy_forces_required_teeming > 0) {
-            result = dungeonData.enemy_forces_required_teeming;
-        }
-
         return result;
     }
 
