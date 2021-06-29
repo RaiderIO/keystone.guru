@@ -162,142 +162,142 @@ class AddIndexesToForeignKeys extends Migration
     public function down()
     {
         Schema::table('affix_group_couplings', function (Blueprint $table) {
-            $table->dropIndex('affix_id');
-            $table->dropIndex('affix_group_id');
+            $table->dropIndex(['affix_id']);
+            $table->dropIndex(['affix_group_id']);
         });
         Schema::table('affixes', function (Blueprint $table) {
-            $table->dropIndex('icon_file_id');
+            $table->dropIndex(['icon_file_id']);
         });
         Schema::table('character_class_specializations', function (Blueprint $table) {
-            $table->dropIndex('character_class_id');
-            $table->dropIndex('icon_file_id');
+            $table->dropIndex(['character_class_id']);
+            $table->dropIndex(['icon_file_id']);
         });
         Schema::table('character_classes', function (Blueprint $table) {
-            $table->dropIndex('icon_file_id');
+            $table->dropIndex(['icon_file_id']);
         });
         Schema::table('character_race_class_couplings', function (Blueprint $table) {
-            $table->dropIndex('character_race_id');
-            $table->dropIndex('character_class_id');
+            $table->dropIndex(['character_race_id']);
+            $table->dropIndex(['character_class_id']);
         });
         Schema::table('character_races', function (Blueprint $table) {
-            $table->dropIndex('faction_id');
+            $table->dropIndex(['faction_id']);
         });
         Schema::table('dungeon_floor_switch_markers', function (Blueprint $table) {
-            $table->dropIndex('floor_id');
-            $table->dropIndex('target_floor_id');
+            $table->dropIndex(['floor_id']);
+            $table->dropIndex(['target_floor_id']);
         });
         Schema::table('dungeon_route_affix_groups', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('affix_group_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['affix_group_id']);
         });
         Schema::table('dungeon_route_enemy_raid_markers', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('enemy_id');
-            $table->dropIndex('raid_marker_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['enemy_id']);
+            $table->dropIndex(['raid_marker_id']);
         });
         Schema::table('dungeon_route_favorites', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('user_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['user_id']);
         });
         Schema::table('dungeon_route_player_classes', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('character_class_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['character_class_id']);
         });
         Schema::table('dungeon_route_player_races', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('character_race_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['character_race_id']);
         });
         Schema::table('dungeon_route_player_specializations', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('character_class_specialization_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['character_class_specialization_id']);
         });
         Schema::table('dungeon_route_ratings', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('user_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['user_id']);
         });
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->dropIndex('author_id');
-            $table->dropIndex('dungeon_id');
-            $table->dropIndex('faction_id');
+            $table->dropIndex(['author_id']);
+            $table->dropIndex(['dungeon_id']);
+            $table->dropIndex(['faction_id']);
         });
         Schema::table('dungeon_start_markers', function (Blueprint $table) {
-            $table->dropIndex('floor_id');
+            $table->dropIndex(['floor_id']);
         });
         Schema::table('dungeons', function (Blueprint $table) {
-            $table->dropIndex('expansion_id');
+            $table->dropIndex(['expansion_id']);
         });
         Schema::table('enemies', function (Blueprint $table) {
-            $table->dropIndex('enemy_pack_id');
-            $table->dropIndex('npc_id');
-            $table->dropIndex('floor_id');
+            $table->dropIndex(['enemy_pack_id']);
+            $table->dropIndex(['npc_id']);
+            $table->dropIndex(['floor_id']);
         });
         Schema::table('enemy_pack_vertices', function (Blueprint $table) {
-            $table->dropIndex('enemy_pack_id');
+            $table->dropIndex(['enemy_pack_id']);
         });
         Schema::table('enemy_packs', function (Blueprint $table) {
-            $table->dropIndex('floor_id');
+            $table->dropIndex(['floor_id']);
         });
         Schema::table('enemy_patrol_vertices', function (Blueprint $table) {
-            $table->dropIndex('enemy_patrol_id');
+            $table->dropIndex(['enemy_patrol_id']);
         });
         Schema::table('enemy_patrols', function (Blueprint $table) {
-            $table->dropIndex('floor_id');
-            $table->dropIndex('enemy_id');
+            $table->dropIndex(['floor_id']);
+            $table->dropIndex(['enemy_id']);
         });
         Schema::table('expansions', function (Blueprint $table) {
-            $table->dropIndex('icon_file_id');
+            $table->dropIndex(['icon_file_id']);
         });
         Schema::table('factions', function (Blueprint $table) {
-            $table->dropIndex('icon_file_id');
+            $table->dropIndex(['icon_file_id']);
         });
         Schema::table('files', function (Blueprint $table) {
-            $table->dropIndex('model_id');
+            $table->dropIndex(['model_id']);
         });
         Schema::table('floor_couplings', function (Blueprint $table) {
-            $table->dropIndex('floor1_id');
-            $table->dropIndex('floor2_id');
+            $table->dropIndex(['floor1_id']);
+            $table->dropIndex(['floor2_id']);
         });
         Schema::table('floors', function (Blueprint $table) {
-            $table->dropIndex('dungeon_id');
+            $table->dropIndex(['dungeon_id']);
         });
         Schema::table('game_icon', function (Blueprint $table) {
-            $table->dropIndex('file_id');
+            $table->dropIndex(['file_id']);
         });
         Schema::table('kill_zone_enemies', function (Blueprint $table) {
-            $table->dropIndex('kill_zone_id');
+            $table->dropIndex(['kill_zone_id']);
         });
         Schema::table('kill_zones', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('floor_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['floor_id']);
         });
         Schema::table('map_comments', function (Blueprint $table) {
-            $table->dropIndex('floor_id');
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('game_icon_id');
+            $table->dropIndex(['floor_id']);
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['game_icon_id']);
         });
         Schema::table('npcs', function (Blueprint $table) {
-            $table->dropIndex('dungeon_id');
-            $table->dropIndex('classification_id');
+            $table->dropIndex(['dungeon_id']);
+            $table->dropIndex(['classification_id']);
         });
         Schema::table('patreon_data', function (Blueprint $table) {
-            $table->dropIndex('user_id');
+            $table->dropIndex(['user_id']);
         });
         Schema::table('patreon_tiers', function (Blueprint $table) {
-            $table->dropIndex('patreon_data_id');
-            $table->dropIndex('paid_tier_id');
+            $table->dropIndex(['patreon_data_id']);
+            $table->dropIndex(['paid_tier_id']);
         });
         Schema::table('route_vertices', function (Blueprint $table) {
-            $table->dropIndex('route_id');
+            $table->dropIndex(['route_id']);
         });
         Schema::table('routes', function (Blueprint $table) {
-            $table->dropIndex('dungeon_route_id');
-            $table->dropIndex('floor_id');
+            $table->dropIndex(['dungeon_route_id']);
+            $table->dropIndex(['floor_id']);
         });
         Schema::table('user_reports', function (Blueprint $table) {
-            $table->dropIndex('author_id');
+            $table->dropIndex(['author_id']);
         });
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex('patreon_data_id');
+            $table->dropIndex(['patreon_data_id']);
         });
     }
 }

@@ -33,7 +33,7 @@ class AddIndicesToTables extends Migration
     public function down()
     {
         Schema::table('enemy_patrols', function (Blueprint $table) {
-            $table->dropIndex('polyline_id');
+            $table->dropIndex(['polyline_id']);
         });
         Schema::table('kill_zones', function (Blueprint $table) {
             $table->dropIndex(['dungeon_route_id', 'floor_id']);
