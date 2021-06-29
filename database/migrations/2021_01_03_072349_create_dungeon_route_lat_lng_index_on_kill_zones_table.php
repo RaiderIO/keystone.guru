@@ -26,6 +26,9 @@ class CreateDungeonRouteLatLngIndexOnKillZonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dungeon_route_lat_lng_index_on_kill_zones');
+        Schema::table('kill_zones', function (Blueprint $table)
+        {
+            $table->dropIndex(['dungeon_route_id', 'lat', 'lng']);
+        });
     }
 }

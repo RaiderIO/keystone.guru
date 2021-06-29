@@ -27,7 +27,7 @@ class AddIndicesToBrushlinesTable extends Migration
     public function down()
     {
         Schema::table('brushlines', function (Blueprint $table) {
-            $table->dropIndex('polyline_id');
+            $table->dropIndex(['polyline_id']);
             $table->dropIndex(['dungeon_route_id', 'floor_id']);
         });
     }

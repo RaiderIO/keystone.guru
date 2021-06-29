@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\PublishedState;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +21,8 @@ class AddPublishedAtColumnToDungeonRoutesTable extends Migration
         DB::update(
             sprintf(
                 'UPDATE `dungeon_routes` SET `published_at` = `updated_at` WHERE published_state_id = %s',
-                PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id
+                4
+//                PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id
             )
         );
     }
