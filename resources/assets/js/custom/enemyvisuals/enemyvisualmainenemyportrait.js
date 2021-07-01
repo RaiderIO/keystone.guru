@@ -20,8 +20,17 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_portrait text-white text-center';
 
         let npcId = this.enemyvisual.enemy.npc === null ? 'unknown' : this.enemyvisual.enemy.npc.id;
-        // #040C1F is the same blue as the background color of portraits
-        data.main_visual_html = `<div style="width:100%; height: 100%; background-image: url('/images/enemyportraits/${npcId}.png'); background-size: contain; background-color: #040C1F; border-radius: 100%;">&nbsp;</div>`;
+        let template = Handlebars.templates['map_enemy_visual_enemy_portrait_template'];
+
+        let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
+            id: this.enemyvisual.enemy.id,
+            npcId: npcId,
+            // Expensive calculation - only do it when we're going to use it
+            width: this.enemyvisual.enemy.isObsolete() ? this._getTextWidth() : 0,
+            obsolete: this.enemyvisual.enemy.isObsolete()
+        });
+
+        data.main_visual_html = template(mainVisualData);
 
         return data;
     }
@@ -32,5 +41,17 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     _refreshNpc() {
         // Re-draw the visual
         this.setIcon(this.iconName);
+    }
+
+    /**
+     *
+     */
+    refreshSize() {
+        super.refreshSize();
+
+        let width = this._getTextWidth();
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.obsolete`)
+            .css('font-size', `${width}px`)
+        ;
     }
 }

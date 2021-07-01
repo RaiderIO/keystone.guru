@@ -683,6 +683,7 @@ class Enemy extends MapObject {
         if (this.obsolete !== value) {
             this.obsolete = value;
 
+            console.warn(`Obsolete changed for enemy ${this.id}: ${this.obsolete}`);
             this.signal('obsolete:changed');
         }
     }

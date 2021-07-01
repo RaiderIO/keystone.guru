@@ -216,10 +216,19 @@ class KillZone extends MapObject {
 
     /**
      * Called whenever a prideful enemy has changed (moved its position, is deleted etc.)
-     * @param objectChangedEvent
+     * @param objectChangedEvent {Object}
      * @private
      */
     _pridefulEnemyChanged(objectChangedEvent) {
+        this.redrawConnectionsToEnemies();
+    }
+
+    /**
+     * Called whenever the obsolete state of an enemy has changed
+     * @param enemyObsoleteChangedEvent {Object}
+     * @private
+     */
+    _enemyObsoleteChanged(enemyObsoleteChangedEvent) {
         this.redrawConnectionsToEnemies();
     }
 
@@ -246,6 +255,7 @@ class KillZone extends MapObject {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 // This enemy left us, no longer interested in it
+                enemy.unregister('obsolete:changed', this);
                 enemy.unregister('killzone:detached', this);
                 if (enemy.isPridefulNpc()) {
                     enemy.unregister('object:changed', this);
@@ -296,6 +306,7 @@ class KillZone extends MapObject {
             if (enemy.isPridefulNpc()) {
                 enemy.register('object:changed', this, this._pridefulEnemyChanged.bind(this));
             }
+            enemy.register('obsolete:changed', this, this._enemyObsoleteChanged.bind(this));
             this.signal('killzone:enemyadded', {enemy: enemy});
         }
 
@@ -497,19 +508,22 @@ class KillZone extends MapObject {
         let otherFloorsWithEnemies = [];
         let currentFloorId = getState().getCurrentFloor().id;
         $.each(this.enemies, function (i, id) {
+            /** @type {Enemy} */
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
-                if (enemy.floor_id === currentFloorId) {
-                    let latLng = enemy.layer.getLatLng();
-                    latLngs.push([latLng.lat, latLng.lng]);
-                }
-                // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
-                else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {
-                    otherFloorsWithEnemies.push(enemy.floor_id);
+                if (!enemy.isObsolete()) {
+                    if (enemy.floor_id === currentFloorId) {
+                        let latLng = enemy.layer.getLatLng();
+                        latLngs.push([latLng.lat, latLng.lng]);
+                    }
+                    // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
+                    else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {
+                        otherFloorsWithEnemies.push(enemy.floor_id);
+                    }
                 }
             } else {
-                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
+                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'cannot draw connection, this enemy was probably removed during a migration?');
             }
         });

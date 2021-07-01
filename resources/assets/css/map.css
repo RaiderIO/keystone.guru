@@ -757,6 +757,22 @@ html, body, #map, #app, .wrapper {
     background-color: #15c415 !important;
 }
 
+.enemy_icon_npc_enemy_forces_inner {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/** #040C1F is the same blue as the background color of portraits */
+.enemy_icon_npc_enemy_portrait_inner {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-color: #040C1F;
+    border-radius: 100%;
+}
+
 .enemy_icon_npc_enemy_portrait.awakened,
 .enemy_icon_npc_enemy_forces.awakened,
 .enemy_icon_npc_class.awakened,
