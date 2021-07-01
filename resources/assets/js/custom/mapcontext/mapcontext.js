@@ -253,7 +253,7 @@ class MapContext extends Signalable {
      * @returns {[]}
      */
     getAuras() {
-        return this._options.auras;
+        return this._options.dungeon.auras;
     }
 
     /**
@@ -263,9 +263,9 @@ class MapContext extends Signalable {
     findAuraById(auraId) {
         let result = null;
 
-        for (let i = 0; i < this._options.auras.length; i++) {
-            if (this._options.auras[i].id === auraId) {
-                result = this._options.auras[i];
+        for (let i = 0; i < this._options.dungeon.auras.length; i++) {
+            if (this._options.dungeon.auras[i].id === auraId) {
+                result = this._options.dungeon.auras[i];
                 break;
             }
         }

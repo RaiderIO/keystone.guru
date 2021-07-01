@@ -28,6 +28,20 @@ class MapContextLiveSession extends MapContextDungeonRoute {
      * @returns {[]}
      */
     getOverpulledEnemies() {
-        return this._options.overpulledenemies;
+        return this._options.overpulledEnemies;
+    }
+
+    /**
+     * @returns {[]}
+     */
+    getObsoleteEnemies() {
+        return this._options.obsoleteEnemies;
+    }
+
+    /**
+     * @returns {Number}
+     */
+    getEnemyForcesOverride() {
+        return this._options.enemyForcesOverride;
     }
 }

@@ -100,7 +100,6 @@ abstract class MapContext
             'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,
             'static'              => $static,
-            'auras'               => Spell::where('aura', true)->get(),
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             // @TODO Probably move this? Temp fix

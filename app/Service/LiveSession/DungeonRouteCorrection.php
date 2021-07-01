@@ -24,6 +24,14 @@ class DungeonRouteCorrection
     }
 
     /**
+     * @return Collection
+     */
+    public function getObsoleteEnemies(): Collection
+    {
+        return $this->obsoleteEnemies;
+    }
+
+    /**
      * @param int $enemyId
      */
     public function addObsoleteEnemy(int $enemyId)
@@ -38,6 +46,15 @@ class DungeonRouteCorrection
     {
         $this->obsoleteEnemies = $this->obsoleteEnemies->merge($enemies);
     }
+
+    /**
+     * @return int
+     */
+    public function getEnemyForces(): int
+    {
+        return $this->enemyForces;
+    }
+
 
     /**
      * @param int $enemyForces
