@@ -129,14 +129,13 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                 type: 'DELETE',
                 url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
                 dataType: 'json',
-                async: false,
                 data: {
                     kill_zone_id: this.sourceMapObject.id,
                     enemy_ids: deletedIds,
                     no_result: addedIds.length > 0 ? 1 : 0
                 },
                 success: function (json) {
-                    self._applyObsoleteEnemies.bind(self);
+                    self._applyObsoleteEnemies(json);
 
                     if (addedIds.length > 0) {
                         self._addNewOverpulledEnemies(addedIds);
@@ -163,7 +162,6 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
             type: 'POST',
             url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/overpulledenemy`,
             dataType: 'json',
-            async: false,
             data: {
                 kill_zone_id: this.sourceMapObject.id,
                 enemy_ids: enemyIds
@@ -179,6 +177,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
      */
     _applyObsoleteEnemies(json) {
         console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+
+        console.warn(json);
 
         // Override the enemy forces with a new value
         this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
