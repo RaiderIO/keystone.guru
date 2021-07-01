@@ -146,6 +146,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         break;
                     }
                 }
+
+                // Assign obsolete enemies from cache
+                let obsoleteEnemiesData = getState().getMapContext().getObsoleteEnemies();
+                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
             }
         }
     }
