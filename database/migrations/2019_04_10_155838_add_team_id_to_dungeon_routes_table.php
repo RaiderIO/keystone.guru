@@ -30,7 +30,7 @@ class AddTeamIdToDungeonRoutesTable extends Migration
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->removeColumn('team_id');
 
-            $table->dropIndex('team_id');
+            $table->dropIndex(['team_id']);
         });
     }
 }

@@ -13,7 +13,8 @@ class AddPublicKeyIndices extends Migration
      */
     public function up()
     {
-        Schema::table('teams', function (Blueprint $table) {
+        Schema::table('teams', function (Blueprint $table)
+        {
             $table->index('public_key');
             $table->index('invite_code');
         });
@@ -26,9 +27,10 @@ class AddPublicKeyIndices extends Migration
      */
     public function down()
     {
-        Schema::table('teams', function (Blueprint $table) {
-            $table->removeColumn('public_key');
-            $table->removeColumn('invite_code');
+        Schema::table('teams', function (Blueprint $table)
+        {
+            $table->dropIndex(['public_key']);
+            $table->dropIndex(['invite_code']);
         });
     }
 }

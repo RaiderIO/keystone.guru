@@ -13,10 +13,15 @@ class RemoveUnlistedAndPublishedColumnsFromDungeonRoutesTable extends Migration
      */
     public function up()
     {
-        Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->dropColumn('unlisted');
-            $table->dropColumn('published');
-        });
+        try {
+            Schema::table('dungeon_routes', function (Blueprint $table)
+            {
+                $table->dropColumn('unlisted');
+                $table->dropColumn('published');
+            });
+        } catch (Exception $ex) {
+            logger()->warning('Unable to find unlisted/published columns - this is probably OK');
+        }
     }
 
     /**

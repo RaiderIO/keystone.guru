@@ -30,7 +30,7 @@ class AddTeamIdToMapIconsTable extends Migration
         Schema::table('map_icons', function (Blueprint $table) {
             $table->removeColumn('team_id');
 
-            $table->dropIndex('team_id');
+            $table->dropIndex(['team_id']);
         });
     }
 }
