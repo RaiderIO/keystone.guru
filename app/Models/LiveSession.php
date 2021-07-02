@@ -46,7 +46,7 @@ class LiveSession extends Model
      * https://stackoverflow.com/a/34485411/771270
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'public_key';
     }
@@ -60,19 +60,19 @@ class LiveSession extends Model
     }
 
     /**
-     * Get the dungeon route that this killzone is attached to.
+     * Get the dungeon route that this live session is attached to.
      *
      * @return BelongsTo
      */
-    function dungeonRoute(): BelongsTo
+    public function dungeonroute()
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo('App\Models\DungeonRoute', 'dungeon_route_id');
     }
 
     /**
      * @return HasMany
      */
-    public function overpulledenemies()
+    public function overpulledenemies(): HasMany
     {
         return $this->hasMany('App\Models\Enemies\OverpulledEnemy');
     }

@@ -18,7 +18,7 @@ class OverpulledEnemyChangedHandler extends MessageHandler {
         let enemy = enemyMapObjectGroup.findMapObjectById(e.enemy_id);
 
         if (enemy !== null) {
-            enemy.setOverpulled(true);
+            enemy.setOverpulledKillZoneId(e.kill_zone_id);
         } else {
             console.warn(`Unable to find overpulled enemy ${e.enemy_id}`);
         }

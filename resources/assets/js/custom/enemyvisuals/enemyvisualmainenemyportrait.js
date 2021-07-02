@@ -26,8 +26,9 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
             id: this.enemyvisual.enemy.id,
             npcId: npcId,
             // Expensive calculation - only do it when we're going to use it
-            width: this.enemyvisual.enemy.isObsolete() ? this._getTextWidth() : 0,
-            obsolete: this.enemyvisual.enemy.isObsolete()
+            width: this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null ? this._getTextWidth() : 0,
+            obsolete: this.enemyvisual.enemy.isObsolete(),
+            overpulled: this.enemyvisual.enemy.getOverpulledKillZoneId() !== null
         });
 
         data.main_visual_html = template(mainVisualData);
@@ -50,7 +51,7 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         super.refreshSize();
 
         let width = this._getTextWidth();
-        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.obsolete`)
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.obsolete,#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.overpulled`)
             .css('font-size', `${width}px`)
         ;
     }

@@ -12,6 +12,9 @@ class OverpulledEnemyChangedEvent extends ContextEvent
     /** @var int */
     protected int $enemy_id;
 
+    /** @var int */
+    protected int $kill_zone_id;
+
     /**
      * Create a new event instance.
      *
@@ -23,6 +26,7 @@ class OverpulledEnemyChangedEvent extends ContextEvent
     public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy)
     {
         $this->enemy_id = $overpulledEnemy->enemy_id;
+        $this->kill_zone_id = $overpulledEnemy->kill_zone_id;
         parent::__construct($context, $user);
     }
 
@@ -30,7 +34,8 @@ class OverpulledEnemyChangedEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'enemy_id' => $this->enemy_id,
+            'enemy_id'     => $this->enemy_id,
+            'kill_zone_id' => $this->kill_zone_id,
         ]);
     }
 

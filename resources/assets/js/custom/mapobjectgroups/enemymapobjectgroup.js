@@ -140,7 +140,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                     // If we have a match..
                     if (overpulledEnemyData.enemy_id === enemy.id) {
-                        enemy.setOverpulled(true);
+                        enemy.setOverpulledKillZoneId(overpulledEnemyData.kill_zone_id);
 
                         // May stop now
                         break;

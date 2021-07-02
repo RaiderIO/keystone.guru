@@ -3,7 +3,7 @@
         <div class="col-6">
             {{key}}:
         </div>
-        <div class="col-6">
+        <div class="col-4">
             {{#ifCond value '===' 1}}
                 <span class="text-success"><i class="fas fa-check-circle"></i></span>
             {{else}}
@@ -13,6 +13,11 @@
                     {{{value}}}
                 {{/ifCond}}
             {{/ifCond}}
+        </div>
+        <div class="col-2 text-right" data-toggle="tooltip" title="{{ info }}">
+            {{#if info}}
+                <i class="fas fa-info-circle"></i>
+            {{/if}}
         </div>
     </div>
 {{/each}}

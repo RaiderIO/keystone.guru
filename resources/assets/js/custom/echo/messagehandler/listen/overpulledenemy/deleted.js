@@ -18,7 +18,7 @@ class OverpulledEnemyDeletedHandler extends MessageHandler {
         let enemy = enemyMapObjectGroup.findMapObjectById(e.enemy_id);
 
         if (enemy !== null) {
-            enemy.setOverpulled(false);
+            enemy.setOverpulledKillZoneId(null);
         } else {
             console.warn(`Unable to find overpulled enemy ${e.enemy_id}`);
         }
