@@ -64,8 +64,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                 let enemy = packEnemies[i];
 
                 // Toggle being overpulled or not
-                enemy.setOverpulled(
-                    !enemy.isOverpulled()
+                enemy.setOverpulledKillZoneId(
+                    enemy.getOverpulledKillZoneId() === null ? self.sourceMapObject.id : null
                 );
 
                 self.changedEnemyIds.push(enemy.id);
@@ -116,7 +116,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
             /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(changedEnemyId);
 
-            if (enemy.isOverpulled()) {
+            if (enemy.getOverpulledKillZoneId() !== null) {
                 addedIds.push(changedEnemyId);
             } else {
                 deletedIds.push(changedEnemyId);
@@ -142,7 +142,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                     }
                 }
             });
-        } else {
+        } else if (addedIds.length > 0) {
             this._addNewOverpulledEnemies(addedIds);
         }
     }

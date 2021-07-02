@@ -2,8 +2,14 @@
      class="enemy_icon_npc_enemy_portrait_inner"
      style="background-image: url('/images/enemyportraits/{{npcId}}.png');">
     {{#if obsolete}}
-        <span class="obsolete text-danger" style="font-size: {{width}}px; background-color: black; border-radius: 100px">
+        <span class="obsolete text-danger"
+              style="font-size: {{width}}px; background-color: black; border-radius: 100px">
             <i class="fa fa-times-circle"></i>
+        </span>
+    {{else if overpulled}}
+        <span class="overpulled text-success"
+              style="font-size: {{width}}px; background-color: black; border-radius: 100px">
+            <i class="fa fa-check-circle"></i>
         </span>
     {{else}}
         &nbsp;

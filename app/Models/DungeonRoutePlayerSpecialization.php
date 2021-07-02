@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property $id int
@@ -10,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $character_class_specialization_id int
  * @property $index int
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class DungeonRoutePlayerSpecialization extends Model
 {
@@ -19,15 +22,15 @@ class DungeonRoutePlayerSpecialization extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function dungeonroute()
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo('App\Models\DungeonRoute', 'dungeon_route_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function characterclassspecialization()
     {
@@ -35,7 +38,7 @@ class DungeonRoutePlayerSpecialization extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function specializations()
     {

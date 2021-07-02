@@ -67,7 +67,7 @@ class Enemy extends MapObject {
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
-        this.overpulled = false;
+        this.overpulledKillZoneId = null;
         this.obsolete = false;
 
         let self = this;
@@ -333,9 +333,16 @@ class Enemy extends MapObject {
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
             result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+            // Unskippable means that you MUST kill this enemy, otherwise you cannot complete the dungeon
+            // result.info.push({
+            //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+            //     value: this.unskippable ? 0 : 1
+            // });
+            // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
             result.info.push({
                 key: lang.get('messages.sidebar_enemy_skippable_label'),
-                value: this.unskippable ? 0 : 1
+                value: this.skippable ? 1 : 0,
+                info: lang.get('messages.sidebar_enemy_skippable_info_label')
             });
             // @formatter:on
 
@@ -645,21 +652,21 @@ class Enemy extends MapObject {
 
     /**
      * Checks if this enemy is marked as overpulled or not.
-     * @returns {*}
+     * @returns {Number|null}
      */
-    isOverpulled() {
-        return this.overpulled;
+    getOverpulledKillZoneId() {
+        return this.overpulledKillZoneId;
     }
 
     /**
      * Set this enemy to be marked as overpulled
-     * @param value boolean True or false
+     * @param killZoneId {Number|null} The kill zone ID that this enemy was overpulled in or after
      */
-    setOverpulled(value) {
+    setOverpulledKillZoneId(killZoneId) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.overpulled !== value) {
-            this.overpulled = value;
+        if (this.overpulledKillZoneId !== killZoneId) {
+            this.overpulledKillZoneId = killZoneId;
 
             this.signal('overpulled:changed');
         }

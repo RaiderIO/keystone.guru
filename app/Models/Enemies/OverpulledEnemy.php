@@ -30,7 +30,7 @@ class OverpulledEnemy extends Model
         'enemy_id'
     ];
 
-    protected $visible = ['enemy_id'];
+    protected $visible = ['enemy_id', 'kill_zone_id'];
 
     public $timestamps = false;
 
