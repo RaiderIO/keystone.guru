@@ -223,8 +223,13 @@ return [
     'intro_draw_edit'   => 'You can use the edit button to adjust your created elements such as icons or drawn lines.',
     'intro_draw_remove' => 'You can use the delete button to remove elements you have created. Click it once, then select the highlighted elements you wish to delete. Deleting happens in a preview mode, you have to confirm your delete by pressing the \'Finish\' button, or hit the \'Cancel\' button to undo them. If you confirm the deletion, there is no turning back!',
 
-    'intro_map_enemy_forces_numbers'                                => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
-    'intro_new_pull'                                                => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
+    'intro_map_enemy_forces_numbers' => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
+    'intro_new_pull'                 => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
+
+    'enemy_forces_not_all_unskippables_killed_label'                => 'Warning: this route does not kill all unskippable enemies',
+    'enemy_forces_too_much_label'                                   => 'Warning: your route has too much enemy forces',
+    'enemy_forces_too_little_label'                                 => 'Warning: this route does not have enough enemy forces!',
+    'enemy_forces_overridden_label'                                 => 'Your route\'s enemy forces may have been corrected due to overpulled enemies which caused automatic alterations in your route',
 
     // Sidebar
     'sidebar_expand'                                                => 'Expand the sidebar',
@@ -430,5 +435,5 @@ return [
 
     // Overpull
     'overpull_select_enemy_label'        => 'Select one or more enemies that you overpulled',
-    'overpull_selection_finished_label'  => 'Finished'
+    'overpull_selection_finished_label'  => 'Finished',
 ];
