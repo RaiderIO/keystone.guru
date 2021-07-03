@@ -8,6 +8,11 @@ class EnemyForcesManager extends Signalable {
         this.enemyForces = 0;
         this.enemyForcesOverride = null;
 
+        let mapContext = getState().getMapContext();
+        if (mapContext instanceof MapContextLiveSession && mapContext.getEnemyForcesOverride() !== mapContext.getEnemyForces()) {
+            this.enemyForcesOverride = mapContext.getEnemyForcesOverride();
+        }
+
         // On route load, this will also fill the enemy forces to the value they should be as the route is loaded
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {

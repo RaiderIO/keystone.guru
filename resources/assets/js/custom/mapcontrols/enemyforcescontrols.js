@@ -75,25 +75,26 @@ class EnemyForcesControls extends MapControl {
 
         $numbers.removeClass('map_enemy_forces_too_much_warning');
         $numbers.removeClass('map_enemy_forces_ok');
-        $enemyForces.removeAttr('title');
+        $numbers.removeAttr('title');
 
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         if (!killZoneMapObjectGroup.hasKilledAllUnskippables()) {
-            $enemyForces.attr('title', 'Warning: this route does not kill all unskippable enemies!');
-            $numbers.addClass('map_enemy_forces_too_little_warning');
+            $numbers.attr('title', lang.get('messages.enemy_forces_not_all_unskippables_killed_label'))
+                .addClass('map_enemy_forces_too_little_warning');
+
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();
         } else if (currentEnemyForces >= enemyForcesRequired) {
             // When editing the route..
             if (this.map.options.edit) {
                 if (enemyForcesPercent > 110) {
-                    $enemyForces.attr('title', 'Warning: your route has too much enemy forces.');
-                    $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $numbers.attr('title', lang.get('messages.enemy_forces_too_much_label'))
+                        .addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
                 } else if (enemyForcesPercent >= 100) {
-                    $enemyForces.attr('title', '');
-                    $numbers.addClass('map_enemy_forces_ok');
+                    $numbers.attr('title', '')
+                        .addClass('map_enemy_forces_ok');
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
                 }
@@ -101,19 +102,19 @@ class EnemyForcesControls extends MapControl {
             // Only when viewing a route with less than 100% enemy forces
             else {
                 if (enemyForcesPercent > 110) {
-                    $enemyForces.attr('title', 'Warning: this route has too much enemy forces.');
-                    $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $numbers.attr('title', lang.get('messages.enemy_forces_too_much_label'))
+                        .addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
                 } else if (enemyForcesPercent >= 100) {
-                    $enemyForces.attr('title', '');
-                    $numbers.addClass('map_enemy_forces_ok');
+                    $numbers.attr('title', '')
+                        .addClass('map_enemy_forces_ok');
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
                 }
             }
         } else if (enemyForcesPercent < 100) {
-            $enemyForces.attr('title', 'Warning: this route does not have enough enemy forces!');
+            $numbers.attr('title', lang.get('messages.enemy_forces_too_little_label'));
             $numbers.addClass('map_enemy_forces_too_little_warning');
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();
@@ -122,8 +123,9 @@ class EnemyForcesControls extends MapControl {
         $('#map_enemy_forces_count').html(currentEnemyForces);
         $('#map_enemy_forces_count_total').html(enemyForcesRequired);
         $('#map_enemy_forces_percent').html(Math.round(enemyForcesPercent * 10) / 10);
+        $('#map_enemy_forces_override_warning').toggle(this.map.enemyForcesManager.getEnemyForcesOverride() !== null);
 
-        $enemyForces.refreshTooltips();
+        $numbers.refreshTooltips();
     }
 
     /**
