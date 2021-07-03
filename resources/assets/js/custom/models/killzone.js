@@ -47,11 +47,14 @@ class KillZone extends MapObject {
         this.indexLabelDirection = 'center';
         // List of IDs of selected enemies
         this.enemies = [];
+        // List of IDs of enemies that
+        this.overpulledEnemies = [];
         // Temporary list of enemies when we received them from the server
         this.remoteEnemies = [];
         this.enemyConnectionsLayerGroup = null;
         // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
         this.enemiesLayer = null;
+        this.overpulledEnemiesLayer = null;
 
         this.setSynced(false);
 
@@ -233,8 +236,43 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @param enemyOverpulledChangedEvent {Object}
+     * @private
+     */
+    _enemyOverpulledChanged(enemyOverpulledChangedEvent) {
+
+        /** @type {Enemy} */
+        let enemy = enemyOverpulledChangedEvent.context;
+
+        if (enemy.getOverpulledKillZoneId() !== this.id) {
+            this.removeOverpulledEnemy(enemy);
+        }
+
+        this.redrawConnectionsToEnemies();
+    }
+
+    /**
+     *
+     * @param enemy {Enemy}
+     */
+    removeOverpulledEnemy(enemy) {
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        let index = $.inArray(enemy.id, this.overpulledEnemies);
+        if (index !== -1) {
+            // Remove it
+            let deleted = this.overpulledEnemies.splice(index, 1);
+            if (deleted.length === 1) {
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
+                enemy.unregister('overpulled:changed', this);
+            }
+        }
+    }
+
+    /**
      * Removes an enemy from this killzone.
-     * @param enemy Object The enemy object to remove.
+     * @param enemy {Enemy} The enemy object to remove.
      * @private
      */
     _removeEnemy(enemy) {
@@ -253,6 +291,7 @@ class KillZone extends MapObject {
             let deleted = this.enemies.splice(index, 1);
             if (deleted.length === 1) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                /** @type {Enemy} */
                 let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 // This enemy left us, no longer interested in it
                 enemy.unregister('obsolete:changed', this);
@@ -269,6 +308,7 @@ class KillZone extends MapObject {
             // If we're detaching this awakened enemy from a pull, show the other
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
+                /** @type {Enemy} */
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
                 let finalBoss = enemyMapObjectGroup.getFinalBoss();
@@ -288,8 +328,22 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Adds an enemy to this killzone.
-     * @param enemy Object The enemy object to add.
+     *
+     * @param enemy {Enemy}
+     */
+    addOverpulledEnemy(enemy) {
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        if (!this.overpulledEnemies.includes(enemy.id)) {
+            this.overpulledEnemies.push(enemy.id);
+
+            enemy.register('overpulled:changed', this, this._enemyOverpulledChanged.bind(this));
+        }
+    }
+
+    /**
+     * Adds an enemy to this kill zone.
+     * @param enemy {Enemy} The enemy object to add.
      * @private
      */
     _addEnemy(enemy) {
@@ -362,60 +416,74 @@ class KillZone extends MapObject {
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
-        // Only when
-        if (this.id > 0) {
-            let index = $.inArray(enemy.id, this.enemies);
-            // Already exists, user wants to deselect the enemy
-            let removed = index >= 0;
+        // Only when we're saved
+        if (this.id === 0) {
+            console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
+            return;
+        }
 
-            // Keep track of the killzone it may have been attached to, we need to refresh it ourselves here since then
-            // the actions only get done once. If the previous enemy was part of a pack of 10 enemies, which were part of
-            // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
-            // logic. By removing that there and adding it here, we get one clean save message.
-            let previousKillZone = enemy.getKillZone();
+        let index = $.inArray(enemy.id, this.enemies);
+        // Already exists, user wants to deselect the enemy
+        let removed = index >= 0;
+        let isOverpulledEnemy = enemySelectedEvent.context instanceof SelectKillZoneEnemySelectionOverpull;
 
-            // If the enemy was part of a pack..
-            if (enemy.enemy_pack_id > 0 && !ignorePackBuddies) {
-                let packBuddies = enemy.getPackBuddies();
-                packBuddies.push(enemy);
-                for (let i = 0; i < packBuddies.length; i++) {
-                    let packBuddy = packBuddies[i];
-                    // If we should couple the enemy in addition to our own..
-                    if (packBuddy.enemy_pack_id === enemy.enemy_pack_id) {
-                        // Remove it too if we should
-                        if (removed) {
-                            this._removeEnemy(packBuddy);
-                        }
-                        // Or add it too if we need
-                        else {
-                            this._addEnemy(packBuddy);
-                        }
-                    }
+        // Keep track of the killzone it may have been attached to, we need to refresh it ourselves here since then
+        // the actions only get done once. If the previous enemy was part of a pack of 10 enemies, which were part of
+        // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
+        // logic. By removing that there and adding it here, we get one clean save message.
+        let previousKillZone = enemy.getKillZone();
+
+        // If the enemy was part of a pack..
+        if (enemy.enemy_pack_id > 0 && !ignorePackBuddies) {
+            let packBuddies = enemy.getPackBuddies();
+            packBuddies.push(enemy);
+            // Add all enemies in the pack to this killzone as well
+            for (let i = 0; i < packBuddies.length; i++) {
+                let packBuddy = packBuddies[i];
+                // If we should couple the enemy in addition to our own..
+                if (packBuddy.enemy_pack_id === enemy.enemy_pack_id) {
+                    // Remove it too if we should
+                    this._addOrRemoveEnemy(packBuddy, removed, isOverpulledEnemy);
                 }
-            } else {
-                if (removed) {
-                    this._removeEnemy(enemy);
-                } else {
-                    this._addEnemy(enemy);
-                }
-            }
-
-            this.redrawConnectionsToEnemies();
-            // this.save();
-
-            // The previous killzone lost a member, we have to notify it and save it
-            if (previousKillZone !== null && previousKillZone.id !== this.id) {
-                previousKillZone.redrawConnectionsToEnemies();
-                // previousKillZone.save();
             }
         } else {
-            console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
+            this._addOrRemoveEnemy(enemy, removed, isOverpulledEnemy);
+        }
+
+        this.redrawConnectionsToEnemies();
+
+        // The previous killzone lost a member, we have to notify it and save it
+        if (previousKillZone !== null && previousKillZone.id !== this.id) {
+            previousKillZone.redrawConnectionsToEnemies();
+        }
+    }
+
+    /**
+     *
+     * @param enemy
+     * @param removed
+     * @param isOverpulled
+     * @private
+     */
+    _addOrRemoveEnemy(enemy, removed, isOverpulled) {
+        if (removed) {
+            if (isOverpulled) {
+                this.removeOverpulledEnemy(enemy);
+            } else {
+                this._removeEnemy(enemy);
+            }
+        } else {
+            if (isOverpulled) {
+                this.addOverpulledEnemy(enemy);
+            } else {
+                this._addEnemy(enemy);
+            }
         }
     }
 
     /**
      * Called when enemy selection for this killzone has changed (started/finished)
-     * @param mapStateChangedEvent
+     * @param mapStateChangedEvent {Object}
      * @private
      */
     _mapStateChanged(mapStateChangedEvent) {
@@ -427,7 +495,8 @@ class KillZone extends MapObject {
             // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
-            if (this.map.options.edit) {
+            // If live session, we should still do this - we want to know when we've selected an enemy to be overpulled
+            if (this.map.options.edit || getState().getMapContext() instanceof MapContextLiveSession) {
                 if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
                     // Unreg if we were listening
                     previousState.unregister('enemyselection:enemyselected', this);
@@ -443,7 +512,7 @@ class KillZone extends MapObject {
 
     /**
      *
-     * @param mapZoomLevelChangedEvent
+     * @param mapZoomLevelChangedEvent {Object}
      * @private
      */
     _mapZoomLevelChanged(mapZoomLevelChangedEvent) {
@@ -495,10 +564,11 @@ class KillZone extends MapObject {
 
     /**
      * Get the LatLngs of all enemies that are visible on the current floor.
+     * @param enemyIds {Array}
      * @returns {[]}
      * @private
      */
-    _getVisibleEntitiesLatLngs() {
+    _getVisibleEntitiesLatLngs(enemyIds) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         let self = this;
 
@@ -507,7 +577,7 @@ class KillZone extends MapObject {
         let latLngs = [];
         let otherFloorsWithEnemies = [];
         let currentFloorId = getState().getCurrentFloor().id;
-        $.each(this.enemies, function (i, id) {
+        $.each(enemyIds, function (i, id) {
             /** @type {Enemy} */
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
@@ -759,9 +829,16 @@ class KillZone extends MapObject {
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            // Remove layers we no longer need from the layer group
             if (this.enemiesLayer !== null) {
                 this.enemyConnectionsLayerGroup.removeLayer(this.enemiesLayer);
+                this.enemiesLayer = null;
             }
+            if (this.overpulledEnemiesLayer !== null) {
+                this.enemyConnectionsLayerGroup.removeLayer(this.overpulledEnemiesLayer);
+                this.overpulledEnemiesLayer = null;
+            }
+            // And finally remove the layer group from the KZ layer group
             killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
         }
     }
@@ -778,16 +855,15 @@ class KillZone extends MapObject {
 
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
-        // Unset the previous layer
-        this.enemiesLayer = null;
 
         let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
-        let latLngs = this._getVisibleEntitiesLatLngs();
+        let latLngs = this._getVisibleEntitiesLatLngs(this.enemies);
 
         let p = hull(latLngs, 100);
+        let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
 
         // Only if we can actually make an offset
         if (latLngs.length > 1 && p.length > 1) {
@@ -798,7 +874,6 @@ class KillZone extends MapObject {
                 console.warn(`Vertices overlap!`, p);
             }
 
-            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
 
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
@@ -846,6 +921,32 @@ class KillZone extends MapObject {
                 }
             });
         }
+
+        // Add connections from each enemy to our location
+        let overpulledEnemyLatLngs = this._getVisibleEntitiesLatLngs(this.overpulledEnemies);
+
+        if (overpulledEnemyLatLngs.length > 0) {
+            this.centeroid = this.getLayerCenteroid();
+            this.overpulledEnemiesLayer = new L.LayerGroup();
+
+            for (let index in overpulledEnemyLatLngs) {
+                if (overpulledEnemyLatLngs.hasOwnProperty(index)) {
+                    let overpulledEnemyLatLng = overpulledEnemyLatLngs[index];
+
+                    this.overpulledEnemiesLayer.addLayer(
+                        L.polyline([
+                            [this.centeroid.lat, this.centeroid.lng],
+                            overpulledEnemyLatLng
+                        ], opts)
+                    );
+                }
+            }
+
+            // do not prevent clicking on anything else
+            this.enemyConnectionsLayerGroup.setZIndex(-1000);
+
+            this.enemyConnectionsLayerGroup.addLayer(this.overpulledEnemiesLayer);
+        }
     }
 
     /**
@@ -853,7 +954,7 @@ class KillZone extends MapObject {
      * @returns {L.latLng}
      */
     getLayerCenteroid() {
-        return getCenteroid(this._getVisibleEntitiesLatLngs());
+        return getCenteroid(this._getVisibleEntitiesLatLngs(this.enemies));
     }
 
     /**
@@ -880,7 +981,7 @@ class KillZone extends MapObject {
      */
     isVisible() {
         // Visible is not tied to having a layer here; we are visible if we're on the same floor
-        return this._getVisibleEntitiesLatLngs().length > 0;
+        return this._getVisibleEntitiesLatLngs(this.enemies).length > 0;
     }
 
     /**

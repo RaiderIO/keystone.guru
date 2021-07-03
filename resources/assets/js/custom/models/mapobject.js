@@ -36,7 +36,7 @@ class MapObject extends Signalable {
         this.synced = false;
         /** @type {DungeonMap} */
         this.map = map;
-        /** @type {L.layer}|null */
+        /** @type {L.layer|null} */
         this.layer = layer;
 
         this.options = options;

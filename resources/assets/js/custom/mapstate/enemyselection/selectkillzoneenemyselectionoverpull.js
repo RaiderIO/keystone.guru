@@ -178,8 +178,6 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     _applyObsoleteEnemies(json) {
         console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
 
-        console.warn(json);
-
         // Override the enemy forces with a new value
         this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
 

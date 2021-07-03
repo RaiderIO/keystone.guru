@@ -403,9 +403,9 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
-            if (this.enemy.getOverpulledKillZoneId() !== null) {
-                border = `${borderThickness}px dashed red`;
-            }
+            // if (this.enemy.getOverpulledKillZoneId() !== null) {
+            //     border = `${borderThickness}px dashed red`;
+            // }
 
             if (this.isHighlighted() || hasKillZone || this.enemy.getOverpulledKillZoneId() !== null) {
                 data.root_style = `opacity: 100%`;
