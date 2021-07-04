@@ -256,58 +256,101 @@ class RowElementKillZone extends RowElement {
 
         // Fill the enemy list
         let npcs = [];
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < this.killZone.enemies.length; i++) {
-            let enemyId = this.killZone.enemies[i];
-            for (let j = 0; j < enemyMapObjectGroup.objects.length; j++) {
-                let enemy = enemyMapObjectGroup.objects[j];
-                // If enemy found and said enemy has an npc
-                if (enemy.id === enemyId && enemy.npc !== null) {
-                    // If not in our array, add it
-                    if (!npcs.hasOwnProperty(enemy.npc.id)) {
-                        npcs[enemy.npc.id] = {
-                            name: enemy.npc.name,
-                            awakened: enemy.isAwakenedNpc(),
-                            prideful: enemy.isPridefulNpc(),
-                            inspiring: false, // Will be set below
-                            enemy: enemy,
-                            count: 0,
-                            enemy_forces: 0
-                        };
-                    }
+        let obsoleteNpcs = [];
+        let overpulledNpcs = [];
 
-                    npcs[enemy.npc.id].count++;
-                    npcs[enemy.npc.id].enemy_forces += enemy.getEnemyForces();
-                    npcs[enemy.npc.id].inspiring = npcs[enemy.npc.id].inspiring || enemy.isInspiring()
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        let addEnemyToNpcList = (function (enemyId) {
+            /** @type {Enemy} */
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+
+            // If enemy found and said enemy has an npc
+            if (enemy !== null && enemy.npc !== null) {
+                // Put the enemy in the correct bucket
+                let npcArr = (enemy.getOverpulledKillZoneId() !== null ? overpulledNpcs : (enemy.isObsolete() ? obsoleteNpcs : npcs));
+                // If not in our array, add it
+                if (!npcArr.hasOwnProperty(enemy.npc.id)) {
+                    npcArr[enemy.npc.id] = {
+                        name: enemy.npc.name,
+                        awakened: enemy.isAwakenedNpc(),
+                        prideful: enemy.isPridefulNpc(),
+                        inspiring: false, // Will be set below
+                        obsolete: enemy.isObsolete(),
+                        overpulled: enemy.getOverpulledKillZoneId() !== null,
+                        enemy: enemy,
+                        count: 0,
+                        enemy_forces: 0
+                    };
                 }
+
+                npcArr[enemy.npc.id].count++;
+                npcArr[enemy.npc.id].enemy_forces += enemy.getEnemyForces();
+                npcArr[enemy.npc.id].inspiring = npcArr[enemy.npc.id].inspiring || enemy.isInspiring();
             }
+        }).bind(this);
+
+        // Add both overpulled enemies and regular enemies to their respective lists
+        for (let i = 0; i < this.killZone.overpulledEnemies.length; i++) {
+            addEnemyToNpcList(this.killZone.overpulledEnemies[i]);
+        }
+
+        for (let i = 0; i < this.killZone.enemies.length; i++) {
+            addEnemyToNpcList(this.killZone.enemies[i]);
         }
 
         let $enemyList = $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_list`);
         $enemyList.children().remove();
-        for (let index in npcs) {
-            if (npcs.hasOwnProperty(index)) {
-                let obj = npcs[index];
 
-                let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_template'];
+        let addNpcToUI = (function (index, npc) {
+            let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_template'];
 
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    'id': index,
-                    'pull_color': obj.enemy.getKillZone().color,
-                    'enemy_forces': obj.enemy_forces,
-                    'enemy_forces_percent': getFormattedPercentage(obj.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
-                    'count': obj.count,
-                    'name': obj.name,
-                    'awakened': obj.awakened,
-                    'prideful': obj.prideful,
-                    'inspiring': obj.inspiring,
-                    'boss': obj.enemy.isBossNpc(),
-                    'dangerous': obj.enemy.npc.dangerous === 1
-                });
+            let killZone = npc.enemy.getKillZone() ?? npc.enemy.getOverpulledKillZone();
 
-                $enemyList.append($(template(data)));
+            console.log(npc.enemy.getKillZone(), npc.enemy.getOverpulledKillZone());
+
+            let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                'id': index,
+                'pull_color': killZone.color,
+                'enemy_forces': npc.enemy_forces,
+                'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
+                'count': npc.count,
+                'name': npc.name,
+                'awakened': npc.awakened,
+                'prideful': npc.prideful,
+                'inspiring': npc.inspiring,
+                'overpulled': npc.overpulled,
+                'obsolete': npc.obsolete,
+                'boss': npc.enemy.isBossNpc(),
+                'dangerous': npc.enemy.npc.dangerous === 1
+            });
+
+            $enemyList.append($(template(data)));
+        }).bind(this);
+
+        // Rebuild the npc lists
+        for (let index in overpulledNpcs) {
+            if (overpulledNpcs.hasOwnProperty(index)) {
+                addNpcToUI(index, overpulledNpcs[index]);
             }
         }
+
+        for (let index in obsoleteNpcs) {
+            if (obsoleteNpcs.hasOwnProperty(index)) {
+                addNpcToUI(index, obsoleteNpcs[index]);
+            }
+        }
+
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                addNpcToUI(index, npcs[index]);
+            }
+        }
+
+        // Toggle the row color based on overpulled or obsolete npcs
+        let $row = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
+        $row.toggleClass('bg-success', overpulledNpcs.length > 0);
+        $row.toggleClass('bg-danger', obsoleteNpcs.length > 0);
 
         if (this.killZonesSidebar.options.edit) {
             /**

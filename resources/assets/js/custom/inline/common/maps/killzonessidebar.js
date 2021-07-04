@@ -180,22 +180,34 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     /**
      * Should be called whenever something's changed in the killzone that warrants a UI update
-     * @param killZone
+     * @param killZone {KillZone}
+     * @param cascadeRefresh {Boolean} True to cascade refreshes to all subsequent killzones, false to just update their pull texts instead
      * @private
      */
-    _refreshKillZone(killZone) {
+    _refreshKillZone(killZone, cascadeRefresh = false) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-
-        // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
-        this._updatePullTexts(killZone.getIndex());
+        let self = this;
 
         // Update this particular row element to refresh enemy lists etc
         let rowElement = this._getRowElementKillZone(killZone);
         rowElement.refresh();
+
+        if (cascadeRefresh) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            $.each(killZoneMapObjectGroup.objects, function (index, futureKillZone) {
+                // Do not update pull texts for killzones that do not have
+                if (futureKillZone.id > 0 && futureKillZone.getIndex() >= killZone.index) {
+                    self._getRowElementKillZone(futureKillZone).refresh();
+                }
+            });
+        } else {
+            // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
+            this._updatePullTexts(killZone.getIndex());
+        }
     }
 
     /**
-     * @param minIndex int
+     * @param minIndex {Number}
      * @private
      */
     _updatePullTexts(minIndex = 0) {
@@ -454,6 +466,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
         });
 
+        killZoneMapObjectGroup.register(['killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this, function (overpulledEnemyChangedEvent) {
+            console.log(overpulledEnemyChangedEvent.name, overpulledEnemyChangedEvent.data.killzone);
+            self._refreshKillZone(overpulledEnemyChangedEvent.data.killzone);
+        });
+
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
 
         $('#killzones_loading').hide();
@@ -556,7 +573,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this.map.unregister('map:mapstatechanged', this);
         // this.map.unregister('map:beforerefresh', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
+        killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new', 'killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this);
 
         getState().unregister('killzonesnumberstyle:changed', this);
     }
