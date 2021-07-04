@@ -60,6 +60,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         mapObject.register('killzone:enemyremoved', this, this._onKillZoneEnemyRemoved.bind(this));
         mapObject.register('killzone:enemyadded', this, this._onKillZoneEnemyAdded.bind(this));
+        mapObject.register('killzone:overpulledenemyremoved', this, this._onKillZoneOverpulledEnemyRemoved.bind(this));
+        mapObject.register('killzone:overpulledenemyadded', this, this._onKillZoneOverpulledEnemyAdded.bind(this));
 
         return mapObject;
     }
@@ -80,6 +82,22 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
     }
 
+    _onKillZoneOverpulledEnemyRemoved(killZoneEnemyRemovedEvent) {
+        this.signal('killzone:overpulledenemyremoved', {
+            killzone: killZoneEnemyRemovedEvent.context,
+            enemy: killZoneEnemyRemovedEvent.data.enemy
+        });
+        this.signal('killzone:changed', {killzone: killZoneEnemyRemovedEvent.context});
+    }
+
+    _onKillZoneOverpulledEnemyAdded(killZoneEnemyAddedEvent) {
+        this.signal('killzone:overpulledenemyadded', {
+            killzone: killZoneEnemyAddedEvent.context,
+            enemy: killZoneEnemyAddedEvent.data.enemy
+        });
+        this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
+    }
+
     _onObjectChanged(objectChangedEvent) {
         super._onObjectChanged(objectChangedEvent);
 
@@ -90,19 +108,21 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         super.load();
 
         // Load overpulled enemies in our kill zone
-        let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
-        let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
+            let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-        for (let index in overpulledEnemiesData) {
-            if (overpulledEnemiesData.hasOwnProperty(index)) {
-                let overpulledEnemyData = overpulledEnemiesData[index];
+            for (let index in overpulledEnemiesData) {
+                if (overpulledEnemiesData.hasOwnProperty(index)) {
+                    let overpulledEnemyData = overpulledEnemiesData[index];
 
-                /** @type {KillZone} */
-                let killZone = this.findMapObjectById(overpulledEnemyData.kill_zone_id);
-                /** @type {Enemy} */
-                let enemy = enemyMapObjectGroup.findMapObjectById(overpulledEnemyData.enemy_id);
-                if (killZone !== null && enemy !== null) {
-                    killZone.addOverpulledEnemy(enemy);
+                    /** @type {KillZone} */
+                    let killZone = this.findMapObjectById(overpulledEnemyData.kill_zone_id);
+                    /** @type {Enemy} */
+                    let enemy = enemyMapObjectGroup.findMapObjectById(overpulledEnemyData.enemy_id);
+                    if (killZone !== null && enemy !== null) {
+                        killZone.addOverpulledEnemy(enemy);
+                    }
                 }
             }
         }
@@ -245,14 +265,15 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     /**
      * Checks if a specific enemy is killed by any kill zone.
-     * @param enemyId {number}
+     * @param enemyId {Number}
      * @returns {boolean}
      */
     isEnemyKilled(enemyId) {
         let result = false;
 
         for (let i = 0; i < this.objects.length; i++) {
-            if (this.objects[i].enemies.includes(enemyId)) {
+            let killZone = this.objects[i];
+            if (killZone.enemies.concat(killZone.overpulledEnemies).includes(enemyId)) {
                 result = true;
                 break;
             }
@@ -291,7 +312,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     * Deletes all killzones in this route
+     * Deletes all kill zones in this route
      * @param callback Callable
      */
     deleteAll(callback = null) {
@@ -299,7 +320,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/killzone`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${MAP_OBJECT_GROUP_KILLZONE}`,
             dataType: 'json',
             data: {
                 _method: 'DELETE',

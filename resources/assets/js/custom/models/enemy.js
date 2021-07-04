@@ -651,10 +651,26 @@ class Enemy extends MapObject {
     }
 
     /**
+     * @returns {KillZone|null}
+     */
+    getOverpulledKillZone() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let result = null;
+
+        if (this.overpulledKillZoneId !== null) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            result = killZoneMapObjectGroup.findMapObjectById(this.overpulledKillZoneId);
+        }
+
+        return result;
+    }
+
+    /**
      * Checks if this enemy is marked as overpulled or not.
      * @returns {Number|null}
      */
     getOverpulledKillZoneId() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.overpulledKillZoneId;
     }
 
@@ -664,6 +680,8 @@ class Enemy extends MapObject {
      */
     setOverpulledKillZoneId(killZoneId) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        console.log(`set overpulled killzone id to ${killZoneId} for enemy ${this.id}`);
 
         if (this.overpulledKillZoneId !== killZoneId) {
             this.overpulledKillZoneId = killZoneId;

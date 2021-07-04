@@ -266,6 +266,8 @@ class KillZone extends MapObject {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 enemy.unregister('overpulled:changed', this);
+
+                this.signal('killzone:overpulledenemyremoved', {enemy: enemy});
             }
         }
     }
@@ -338,6 +340,7 @@ class KillZone extends MapObject {
             this.overpulledEnemies.push(enemy.id);
 
             enemy.register('overpulled:changed', this, this._enemyOverpulledChanged.bind(this));
+            this.signal('killzone:overpulledenemyadded', {enemy: enemy});
         }
     }
 
@@ -754,9 +757,14 @@ class KillZone extends MapObject {
         let result = 0;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < this.enemies.length; i++) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
-            if (enemy !== null) {
+
+        // We must consider overpulled enemies part of our enemy forces as well - even though they may technically not be part of the current pull
+        let allEnemies = this.enemies.concat(this.overpulledEnemies);
+        for (let i = 0; i < allEnemies.length; i++) {
+            /** @type {Enemy} */
+            let enemy = enemyMapObjectGroup.findMapObjectById(allEnemies[i]);
+            // Unless this enemy is obsolete - then we don't consider it anymore for this pull
+            if (enemy !== null && !enemy.isObsolete()) {
                 result += enemy.getEnemyForces();
             }
         }

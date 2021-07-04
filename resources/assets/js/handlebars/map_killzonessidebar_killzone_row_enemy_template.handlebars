@@ -1,8 +1,24 @@
 <div class="col-auto" data-toggle="tooltip" title="{{name}} (+{{enemy_forces}}/+{{enemy_forces_percent}}%)">
     <div class="row no-gutters">
         <div class="col">
-            <img src="/images/enemyportraits/{{id}}.png" style="height: 37px; width: 37px; border-radius: 30px; border: 2px solid {{pull_color}}"/>
-            <div class="text-center text-white" style="position: relative; margin-top: -23px; text-shadow: black 1px 1px;">
+            <img src="/images/enemyportraits/{{id}}.png"
+                 style="height: 37px; width: 37px; border-radius: 30px; border: 2px solid {{pull_color}}"/>
+            {{#if overpulled}}
+                <div class="text-center text-success" style="position: relative; margin-top: -37px;">
+                    <span style="font-size: 24px; background-color: black; border-radius: 100px">
+                        <i class="fa fa-plus-circle"></i>
+                    </span>
+                </div>
+            {{/if}}
+            {{#if obsolete}}
+                <div class="text-center text-danger" style="position: relative; margin-top: -37px;">
+                    <span style="font-size: 24px; background-color: black; border-radius: 100px">
+                        <i class="fa fa-times-circle"></i>
+                    </span>
+                </div>
+            {{/if}}
+            <div class="text-center text-white"
+                 style="position: relative; margin-top: -23px; text-shadow: black 1px 1px;">
                 {{count}}x
             </div>
         </div>
