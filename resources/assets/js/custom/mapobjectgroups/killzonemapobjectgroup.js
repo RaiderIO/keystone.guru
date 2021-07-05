@@ -62,6 +62,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         mapObject.register('killzone:enemyadded', this, this._onKillZoneEnemyAdded.bind(this));
         mapObject.register('killzone:overpulledenemyremoved', this, this._onKillZoneOverpulledEnemyRemoved.bind(this));
         mapObject.register('killzone:overpulledenemyadded', this, this._onKillZoneOverpulledEnemyAdded.bind(this));
+        mapObject.register('killzone:obsoleteenemychanged', this, this._onKillZoneObsoleteEnemyChanged.bind(this));
 
         return mapObject;
     }
@@ -96,6 +97,14 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             enemy: killZoneEnemyAddedEvent.data.enemy
         });
         this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
+    }
+
+    _onKillZoneObsoleteEnemyChanged(killZoneObsoleteEnemyChangedEvent) {
+        this.signal('killzone:obsoleteenemychanged', {
+            killzone: killZoneObsoleteEnemyChangedEvent.context,
+            enemy: killZoneObsoleteEnemyChangedEvent.data.enemy
+        });
+        this.signal('killzone:changed', {killzone: killZoneObsoleteEnemyChangedEvent.context});
     }
 
     _onObjectChanged(objectChangedEvent) {

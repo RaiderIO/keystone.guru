@@ -32,7 +32,7 @@ class EnemyForcesManager extends Signalable {
      * @private
      */
     _onKillZoneChanged(objectChangedEvent) {
-        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
+        console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
         if (typeof objectChangedEvent.data.enemy_forces !== 'undefined') {
             this._setEnemyForces(objectChangedEvent.data.enemy_forces);

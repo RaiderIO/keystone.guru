@@ -305,13 +305,9 @@ class RowElementKillZone extends RowElement {
         let addNpcToUI = (function (index, npc) {
             let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_template'];
 
-            let killZone = npc.enemy.getKillZone() ?? npc.enemy.getOverpulledKillZone();
-
-            console.log(npc.enemy.getKillZone(), npc.enemy.getOverpulledKillZone());
-
             let data = $.extend({}, getHandlebarsDefaultVariables(), {
                 'id': index,
-                'pull_color': killZone.color,
+                'pull_color': this.killZone.color,
                 'enemy_forces': npc.enemy_forces,
                 'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
                 'count': npc.count,

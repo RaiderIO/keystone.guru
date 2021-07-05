@@ -681,8 +681,6 @@ class Enemy extends MapObject {
     setOverpulledKillZoneId(killZoneId) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        console.log(`set overpulled killzone id to ${killZoneId} for enemy ${this.id}`);
-
         if (this.overpulledKillZoneId !== killZoneId) {
             this.overpulledKillZoneId = killZoneId;
 

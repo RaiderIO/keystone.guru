@@ -135,10 +135,11 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                     no_result: addedIds.length > 0 ? 1 : 0
                 },
                 success: function (json) {
-                    self._applyObsoleteEnemies(json);
-
+                    // Obsolete enemies will be added when the overpulled enemies are pushed instead
                     if (addedIds.length > 0) {
                         self._addNewOverpulledEnemies(addedIds);
+                    } else {
+                        self._applyObsoleteEnemies(json);
                     }
                 }
             });
