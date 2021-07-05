@@ -15,15 +15,18 @@ class EnemyForcesManager extends Signalable {
 
         // On route load, this will also fill the enemy forces to the value they should be as the route is loaded
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
-            self._setEnemyForces(self.enemyForces + addEvent.data.enemy.getEnemyForces());
-        });
-        killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
-            self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
-        });
-        killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
-            addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
-        });
+        // May be null in admin setting where there's no kill zones
+        if (killZoneMapObjectGroup !== false) {
+            killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
+                self._setEnemyForces(self.enemyForces + addEvent.data.enemy.getEnemyForces());
+            });
+            killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
+                self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
+            });
+            killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
+                addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
+            });
+        }
     }
 
     /**
