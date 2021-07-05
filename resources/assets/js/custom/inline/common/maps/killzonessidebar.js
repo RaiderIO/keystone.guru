@@ -200,10 +200,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     self._getRowElementKillZone(futureKillZone).refresh();
                 }
             });
-        } else {
-            // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
-            this._updatePullTexts(killZone.getIndex());
         }
+
+        // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
+        this._updatePullTexts(killZone.getIndex());
     }
 
     /**
@@ -434,6 +434,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
             if (previousMapState instanceof EnemySelection) {
                 self._selectKillZone(previousMapState.getMapObject(), false);
             }
+
+            // Refresh all killzones when we finished selecting overpulled enemies
+            if (previousMapState instanceof SelectKillZoneEnemySelectionOverpull) {
+                self._refreshKillZone(previousMapState.getMapObject(), true);
+            }
+
             let newMapState = mapStateChangedEvent.data.newMapState;
             if (newMapState instanceof EnemySelection) {
                 self._selectKillZone(newMapState.getMapObject(), true);
@@ -466,8 +472,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
         });
 
-        killZoneMapObjectGroup.register(['killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this, function (overpulledEnemyChangedEvent) {
-            console.log(overpulledEnemyChangedEvent.name, overpulledEnemyChangedEvent.data.killzone);
+        killZoneMapObjectGroup.register([
+            'killzone:obsoleteenemychanged'
+        ], this, function (overpulledEnemyChangedEvent) {
             self._refreshKillZone(overpulledEnemyChangedEvent.data.killzone);
         });
 

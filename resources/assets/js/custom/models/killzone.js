@@ -233,6 +233,8 @@ class KillZone extends MapObject {
      */
     _enemyObsoleteChanged(enemyObsoleteChangedEvent) {
         this.redrawConnectionsToEnemies();
+
+        this.signal('killzone:obsoleteenemychanged', {enemy: enemyObsoleteChangedEvent.context});
     }
 
     /**
