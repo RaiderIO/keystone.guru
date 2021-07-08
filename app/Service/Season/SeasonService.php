@@ -3,18 +3,16 @@
 namespace App\Service\Season;
 
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\Season;
 use App\Service\Cache\CacheService;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * This service provides functionality for reading the current laravel echo service and parsing its contents.
- * @package App\Service
+ * @package App\Service\Season
  * @author Wouter
  * @since 17/06/2019
  */
@@ -66,12 +64,13 @@ class SeasonService implements SeasonServiceInterface
     {
         // Find the
         $seasons = $this->getSeasons()->reverse();
-        /** @var Season $season */
-        $season = $seasons->first();
+        /** @var Season $season By default get the first season - which is the last in the reversed collection */
+        $season = $seasons->last();
+
         foreach ($seasons as $seasonCandidate) {
             /** @var Season $seasonCandidate */
             // Get the season that's the most recent
-            if ($date->lt($seasonCandidate->start())) {
+            if ($date->gt($seasonCandidate->start())) {
                 $season = $seasonCandidate;
                 break;
             }
@@ -175,7 +174,7 @@ class SeasonService implements SeasonServiceInterface
                 ]);
 
                 // Add another week and continue..
-                $firstSeasonStart->addWeek();
+                $firstSeasonStart = $firstSeasonStart->addWeek();
             }
 
             // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
