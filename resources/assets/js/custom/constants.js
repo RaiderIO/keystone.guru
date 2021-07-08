@@ -98,6 +98,7 @@ let c = {
             awakened_display_zoom: 3,
             prideful_display_zoom: 3,
             inspiring_display_zoom: 3,
+            tormented_display_zoom: 3,
             active_aura_display_zoom: 3,
             colors: [
                 /*'#C000F0',
