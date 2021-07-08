@@ -24,6 +24,7 @@ class AffixGroup extends CacheModel
     public $timestamps = false;
     public $with = ['affixes'];
     public $hidden = ['pivot'];
+    public $fillable = ['season_id', 'seasonal_index'];
     protected $appends = ['text'];
 
     /**
