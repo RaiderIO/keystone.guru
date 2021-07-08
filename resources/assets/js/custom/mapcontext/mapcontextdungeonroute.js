@@ -5,6 +5,15 @@ class MapContextDungeonRoute extends MapContext {
 
     /**
      *
+     * @param {String} affix
+     * @returns {Boolean}
+     */
+    hasAffix(affix) {
+        return this._options.uniqueAffixes.includes(affix);
+    }
+
+    /**
+     *
      * @returns {String}
      */
     getPublicKey() {

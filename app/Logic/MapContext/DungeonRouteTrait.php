@@ -3,6 +3,7 @@
 
 namespace App\Logic\MapContext;
 
+use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
 
 /**
@@ -33,6 +34,11 @@ trait DungeonRouteTrait
             'paths'                   => $dungeonRoute->paths,
             'brushlines'              => $dungeonRoute->brushlines,
             'pridefulenemies'         => $dungeonRoute->pridefulenemies,
+            // A list of affixes that this route has (not to be confused with AffixGroups)
+            'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup)
+            {
+                return $affixGroup->affixes;
+            })->collapse()->unique()->pluck(['name'])
         ];
     }
 }
