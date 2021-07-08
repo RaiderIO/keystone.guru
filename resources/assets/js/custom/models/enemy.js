@@ -598,6 +598,16 @@ class Enemy extends MapObject {
             }
         }
 
+        let mapContext = getState().getMapContext();
+        if (mapContext instanceof MapContextDungeonRoute) {
+            // If we are tormented, but the route has no tormented enemies..
+            if (this.hasOwnProperty('seasonal_type') && this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED &&
+                !mapContext.hasAffix(AFFIX_TORMENTED)) {
+                // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
+                return false;
+            }
+        }
+
         // Hide MDT enemies
         if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
             return false;
@@ -727,8 +737,7 @@ class Enemy extends MapObject {
      */
     isAwakenedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null &&
-            (this.npc.id === 161124 || this.npc.id === 161241 || this.npc.id === 161244 || this.npc.id === 161243);
+        return this.npc !== null && [161124, 161241, 161244, 161243].includes(this.npc.id);
     }
 
     /**
@@ -753,9 +762,18 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isTormented() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc();
+        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc() || this.isTormented();
     }
 
     /**

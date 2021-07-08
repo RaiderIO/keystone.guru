@@ -529,7 +529,7 @@ class MapObject extends Signalable {
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        if( remoteMapObject === null ) {
+        if (remoteMapObject === null) {
             console.warn('Unable to parse empty remoteMapObject');
             return;
         }

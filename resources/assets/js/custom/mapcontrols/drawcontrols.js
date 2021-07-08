@@ -124,7 +124,7 @@ class DrawControls extends MapControl {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
         let self = this;
 
-        return [{
+        let hotkeys = [{
             hotkey: '1',
             cssClass: 'leaflet-draw-draw-path',
         }, {
@@ -134,19 +134,26 @@ class DrawControls extends MapControl {
             hotkey: '3',
             cssClass: 'leaflet-draw-draw-brushline',
         }, {
-            hotkey: '4',
-            cssClass: 'leaflet-draw-draw-pridefulenemy',
-            enabled: function () {
-                let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                return c.map.pridefulenemy.isEnabled() && enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.pridefulenemy.max;
-            }
-        }, {
             hotkey: '5',
             cssClass: 'leaflet-draw-edit-edit',
         }, {
             hotkey: '6',
             cssClass: 'leaflet-draw-edit-remove',
         }];
+
+        // Only when the route has a prideful affix
+        if (getState().getMapContext().hasAffix(AFFIX_PRIDEFUL)) {
+            hotkeys.push({
+                hotkey: '4',
+                cssClass: 'leaflet-draw-draw-pridefulenemy',
+                enabled: function () {
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    return c.map.pridefulenemy.isEnabled() && enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.pridefulenemy.max;
+                }
+            });
+        }
+
+        return hotkeys;
     }
 
     _findHotkeyByCssClass(cssClass) {
@@ -259,13 +266,13 @@ class DrawControls extends MapControl {
                     cssClass: 'd-none',
                     faClass: 'fa-icons'
                 },
-                pridefulenemy: {
+                pridefulenemy: getState().getMapContext().hasAffix(AFFIX_PRIDEFUL) ? {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-user',
                     title: lang.get('messages.pridefulenemy_title'),
                     hotkey: this._findHotkeyByCssClass('pridefulenemy')
-                },
+                } : false,
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this
                 // brushline: {
@@ -416,7 +423,12 @@ class DrawControls extends MapControl {
             }
         });
 
-        $brushlineButton.insertBefore('.leaflet-draw-draw-pridefulenemy');
+        // Depends on whether the prideful button was added or not
+        if (getState().getMapContext().hasAffix(AFFIX_PRIDEFUL)) {
+            $brushlineButton.insertBefore('.leaflet-draw-draw-pridefulenemy');
+        } else {
+            $brushlineButton.insertAfter('.leaflet-draw-draw-mapicon');
+        }
 
 
         // Cancel button container

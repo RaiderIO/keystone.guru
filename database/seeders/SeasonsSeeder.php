@@ -40,6 +40,10 @@ class SeasonsSeeder extends Seeder
                 'seasonal_affix_id' => 22,
                 'start'             => '2020-12-08 00:00:00',
                 'presets'           => 0,
+            ]), new Season([
+                'seasonal_affix_id' => 23,
+                'start'             => '2021-07-06 00:00:00',
+                'presets'           => 0,
             ]),
         ];
 

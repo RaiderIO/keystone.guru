@@ -17,12 +17,22 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this._updateVisibility();
     }
 
+    /**
+     *
+     * @param assignedEvent {Object}
+     * @private
+     */
     _onPridefulEnemyAssigned(assignedEvent) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         this.signal('pridefulenemy:assigned', {pridefulenemy: assignedEvent.context});
     }
 
+    /**
+     *
+     * @param unassignedEvent {Object}
+     * @private
+     */
     _onPridefulEnemyUnassigned(unassignedEvent) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
@@ -93,8 +103,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     load() {
         super.load();
 
+        let isRoutePrideful = getState().getMapContext().hasAffix(AFFIX_PRIDEFUL);
+
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
+            /** @type {Enemy} */
             let enemy = this.objects[i];
 
             // Check only those Awakened mobs that are not part of the final boss pack
@@ -115,7 +128,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             }
 
             // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
-            if (enemy instanceof PridefulEnemy) {
+            if (isRoutePrideful && enemy instanceof PridefulEnemy) {
                 let pridefulEnemiesData = getState().getMapContext().getPridefulEnemies();
                 for (let i = 0; i < pridefulEnemiesData.length; i++) {
                     let pridefulEnemyData = pridefulEnemiesData[i];
@@ -194,7 +207,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     /**
      * Get the amount of free prideful enemies.
-     * @returns {number}
+     * @returns {Number}
      */
     getAssignedPridefulEnemies() {
         let result = 0;

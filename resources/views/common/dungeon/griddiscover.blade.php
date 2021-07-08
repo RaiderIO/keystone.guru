@@ -57,12 +57,14 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 {{ __('This week ') }}
                             </a>
                             <?php ob_start() ?>
+                            @if($tiers->has($currentAffixGroup->id))
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $currentAffixGroup,
                                 'url' => $url,
                                 'tier' => $tiers->get($currentAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
                             ])
+                            @endif
                             {!! ($thisWeekTier = ob_get_clean()) !!}
 
                             &middot;
@@ -72,12 +74,14 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 {{ __('Next week ') }}
                             </a>
                             <?php ob_start() ?>
+                            @if($tiers->has($nextAffixGroup->id))
                             @include('common.dungeonroute.tier', [
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $nextAffixGroup,
                                 'url' => $url,
                                 'tier' => $tiers->get($nextAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
                             ])
+                            @endif
                             {!! ($nextWeekTier = ob_get_clean()) !!}
 
                             &middot;
