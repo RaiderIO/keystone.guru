@@ -49,6 +49,8 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Storming', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically summon damaging whirlwinds.']),
 
             new Affix(['name' => 'Prideful', 'icon_file_id' => -1, 'description' => 'Players overflow with pride as they defeat non-boss enemies, eventually forming a Manifestation of Pride. Defeating this Manifestation greatly empowers players.']),
+            new Affix(['name' => 'Tormented', 'icon_file_id' => -1, 'description' => 'Servants of the Jailer can be found throughout the dungeon and grant powerful boons when defeated. If a servant is not dealt with, they empower the final boss.']),
+            new Affix(['name' => 'Unknown', 'icon_file_id' => -1, 'description' => 'The affixes for this week are not known yet.']),
         ];
 
         foreach ($affixes as $affix) {
@@ -132,21 +134,34 @@ class AffixSeeder extends Seeder
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Raging', 'Quaking', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Prideful']],
             ['season_id' => 5, 'affixes' => ['Tyrannical', 'Bolstering', 'Storming', 'Prideful']],
+
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
         ];
 
         foreach ($groups as $groupArr) {
-            $group = new AffixGroup();
-            $group->season_id = $groupArr['season_id'];
-            $group->seasonal_index = isset($groupArr['seasonal_index']) ? $groupArr['seasonal_index'] : null;
-            $group->save();
+            $group = AffixGroup::create([
+                'season_id'      => $groupArr['season_id'],
+                'seasonal_index' => $groupArr['seasonal_index'] ?? null
+            ]);
 
             foreach ($groupArr['affixes'] as $affixName) {
                 $affix = $this->_findAffix($affixes, $affixName);
 
-                $groupCoupling = new AffixGroupCoupling();
-                $groupCoupling->affix_id = $affix->id;
-                $groupCoupling->affix_group_id = $group->id;
-                $groupCoupling->save();
+                AffixGroupCoupling::create([
+                    'affix_id'       => $affix->id,
+                    'affix_group_id' => $group->id
+                ]);
             }
         }
     }
