@@ -70,7 +70,7 @@ class SeasonService implements SeasonServiceInterface
         foreach ($seasons as $seasonCandidate) {
             /** @var Season $seasonCandidate */
             // Get the season that's the most recent
-            if ($date->gt($seasonCandidate->start())) {
+            if ($date->gte($seasonCandidate->start())) {
                 $season = $seasonCandidate;
                 break;
             }
@@ -174,7 +174,7 @@ class SeasonService implements SeasonServiceInterface
                 ]);
 
                 // Add another week and continue..
-                $firstSeasonStart = $firstSeasonStart->addWeek();
+                $firstSeasonStart->addWeek();
             }
 
             // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
