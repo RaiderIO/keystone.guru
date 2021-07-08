@@ -27,6 +27,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
+let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 
 /**
  * @property floor_id int
@@ -177,7 +178,8 @@ class Enemy extends MapObject {
                 values: [
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
-                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'}
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value;

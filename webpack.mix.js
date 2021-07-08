@@ -208,6 +208,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierprideful.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierteeming.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifiertormented.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifiertruesight.js',
 
     'resources/assets/js/custom/mapcontrols/mapcontrol.js',

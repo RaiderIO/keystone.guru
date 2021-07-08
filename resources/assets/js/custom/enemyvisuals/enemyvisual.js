@@ -204,6 +204,10 @@ class EnemyVisual extends Signalable {
             else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
                 modifiers.push(new EnemyVisualModifierInspiring(this, 3));
             }
+            // Tormented marker
+            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED) {
+                modifiers.push(new EnemyVisualModifierTormented(this, 3));
+            }
         }
 
         if (this.enemy.teeming === 'visible') {

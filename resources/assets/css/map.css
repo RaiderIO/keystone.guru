@@ -871,6 +871,12 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
+.modifier_tormented {
+    background: white url('/images/enemymodifiers/tormented.png') repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
 
 /*.enemy_icon_npc_type.beguiling {*/
 /*    border: #7f2480 2px solid !important;*/
