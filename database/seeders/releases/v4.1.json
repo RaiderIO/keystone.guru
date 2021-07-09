@@ -1,0 +1,57 @@
+{
+    "id": 103,
+    "release_changelog_id": 110,
+    "version": "v4.1",
+    "title": "Tormented affix support, synchronized route editing additions and live sessions!",
+    "silent": 0,
+    "spotlight": 1,
+    "created_at": "2021-07-09T18:30:21+00:00",
+    "updated_at": "2021-07-09T18:30:21+00:00",
+    "changelog": {
+        "id": 110,
+        "release_id": 103,
+        "description": "The Tormented affix and its lieutenants are now available when your route targets the Tormented affix! This update furthermore greatly improves the synchronized route editing experience with synchronized mouse cursors and a lot of  under the hood changes. Live sessions allows Keystone.guru to help you while doing a dungeon and correcting for overpulled enemies and suggesting enemies to skip.",
+        "changes": [
+            {
+                "release_changelog_id": 110,
+                "release_changelog_category_id": 3,
+                "ticket_id": 804,
+                "change": "You can now start live sessions! A live session will allow you and your group to join a common room designed to help you while doing your key in-game.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 110,
+                "release_changelog_category_id": 3,
+                "ticket_id": 826,
+                "change": "Once you have started a live session from either the route overview or route edit page, you can select a pull and then enemies that you have overpulled. Keystone.guru will then suggest enemies to skip further on in your route (if any), while still landing you as close to 100% enemy forces as possible.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 110,
+                "release_changelog_category_id": 3,
+                "ticket_id": 805,
+                "change": "While in a live session, you can also follow another person's map movements around - you can let the dps you like the least handle the map scrolling while the tank can focus on doing what they do best.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 110,
+                "release_changelog_category_id": 4,
+                "ticket_id": 829,
+                "change": "Added Tormented affix support across the site.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
