@@ -103,7 +103,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     load() {
         super.load();
 
-        let isRoutePrideful = getState().getMapContext().hasAffix(AFFIX_PRIDEFUL);
+        let mapContext = getState().getMapContext();
+        let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
@@ -129,7 +130,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
             // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
             if (isRoutePrideful && enemy instanceof PridefulEnemy) {
-                let pridefulEnemiesData = getState().getMapContext().getPridefulEnemies();
+                let pridefulEnemiesData = mapContext.getPridefulEnemies();
                 for (let i = 0; i < pridefulEnemiesData.length; i++) {
                     let pridefulEnemyData = pridefulEnemiesData[i];
 
@@ -146,8 +147,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             }
 
             // Assign overpulled enemies from cache
-            if (getState().getMapContext() instanceof MapContextLiveSession) {
-                let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
+            if (mapContext instanceof MapContextLiveSession) {
+                let overpulledEnemiesData = mapContext.getOverpulledEnemies();
                 for (let i = 0; i < overpulledEnemiesData.length; i++) {
                     let overpulledEnemyData = overpulledEnemiesData[i];
 
