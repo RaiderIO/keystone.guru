@@ -54,11 +54,11 @@
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
-        "skippable": 1,
+        "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -167.12,
-        "lng": 165.38,
+        "lat": -165.40625,
+        "lng": 166.3125,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
@@ -76,11 +76,11 @@
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
-        "skippable": 1,
+        "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -168.81,
-        "lng": 168.5,
+        "lat": -166.6875,
+        "lng": 169.59375,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
@@ -679,6 +679,50 @@
         "enemyactiveauras": [],
         "npc": {
             "id": 168718
+        }
+    },
+    {
+        "id": 5903,
+        "enemy_pack_id": -1,
+        "npc_id": 179890,
+        "floor_id": 87,
+        "mdt_id": -1,
+        "seasonal_type": "tormented",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -171.6875,
+        "lng": 162.34375,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 179890
+        }
+    },
+    {
+        "id": 5904,
+        "enemy_pack_id": -1,
+        "npc_id": 179891,
+        "floor_id": 87,
+        "mdt_id": -1,
+        "seasonal_type": "tormented",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -139.16172726274,
+        "lng": 180.93866512718,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 179891
         }
     }
 ]
