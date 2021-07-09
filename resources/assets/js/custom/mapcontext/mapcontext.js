@@ -21,6 +21,15 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Always return false in a context where affixes are not known
+     * @param affix {String}
+     * @returns {boolean}
+     */
+    hasAffix(affix) {
+        return false;
+    }
+
+    /**
      *
      * @returns {[]}
      */
