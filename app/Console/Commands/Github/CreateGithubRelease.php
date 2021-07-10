@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Release;
@@ -8,9 +8,9 @@ use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
-use Illuminate\Console\Command;
+use Throwable;
 
-class CreateGithubRelease extends Command
+class CreateGithubRelease extends GithubReleaseCommand
 {
     use ExecutesShellCommands;
 
@@ -43,21 +43,12 @@ class CreateGithubRelease extends Command
      *
      * @return void
      * @throws MissingArgumentException
+     * @throws Throwable
      */
     public function handle()
     {
         $version = $this->argument('version');
-
-        if ($version === null) {
-            $release = Release::latest()->first();
-        } else {
-            if (substr($version, 0, 1) !== 'v') {
-                $version = 'v' . $version;
-            }
-
-            /** @var Release $release */
-            $release = Release::where('version', $version)->first();
-        }
+        $release = $this->findReleaseByVersion($version);
 
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));
@@ -70,7 +61,7 @@ class CreateGithubRelease extends Command
             // May throw an exception if it doesn't exist
             foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
                 if ($githubRelease['name'] === $release->version) {
-                    $this->error(sprintf('Unable to create release for %s; already exists!', $release->version));
+                    $this->error(sprintf('OK Unable to create release for %s; already exists!', $release->version));
                     return;
                 }
             }
@@ -93,7 +84,7 @@ class CreateGithubRelease extends Command
 
             $this->info(sprintf('OK Creating Github release for %s', $release->version));
         } else {
-            $this->error(sprintf('Unable to find release %s', $version));
+            $this->error(sprintf('OK Unable to find release %s', $version));
         }
     }
 }

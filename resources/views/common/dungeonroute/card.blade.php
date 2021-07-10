@@ -12,8 +12,8 @@ $showAffixes = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
 $cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
-$isTyrannical = $dungeonroute->isTyrannical();
-$isFortified = $dungeonroute->isFortified();
+$isTyrannical = $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL);
+$isFortified = $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED);
 
 if (!isset($tierAffixGroup)) {
     // Try to come up with a sensible default

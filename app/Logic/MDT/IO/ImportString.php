@@ -13,10 +13,12 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Models\Affix;
 use App\Models\AffixGroup;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\KillZone;
@@ -26,7 +28,6 @@ use App\Models\MapIconType;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
-use App\Models\Enemies\PridefulEnemy;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
 use App\User;
@@ -44,14 +45,11 @@ use Illuminate\Support\Facades\Auth;
  */
 class ImportString extends MDTBase
 {
-    /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private $_encodedString;
-
-    /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
-    private $_dungeonRoute;
+    /** @var string $_encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    private string $_encodedString;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private $_seasonService;
+    private SeasonService $_seasonService;
 
 
     function __construct(SeasonService $seasonService)
@@ -65,7 +63,7 @@ class ImportString extends MDTBase
      * @param DungeonRoute $dungeonRoute
      * @param boolean $save
      */
-    private function _parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save)
+    private function _parseRiftOffsets(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
         // Build an array with a structure that makes more sense
         $rifts = [];
@@ -187,10 +185,10 @@ class ImportString extends MDTBase
     /**
      * Parse the $decoded['value']['pulls'] value and put it in the $dungeonRoute object, optionally $save'ing the
      * values to the database.
-     * @param $warnings Collection A Collection of Warnings that this parsing may produce.
-     * @param $decoded array
-     * @param $dungeonRoute DungeonRoute
-     * @param $save boolean
+     * @param Collection $warnings A Collection of Warnings that this parsing may produce.
+     * @param array $decoded
+     * @param DungeonRoute $dungeonRoute
+     * @param boolean $save
      * @throws Exception
      */
     private function _parseValuePulls(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save): void
@@ -198,6 +196,9 @@ class ImportString extends MDTBase
         $floors = $dungeonRoute->dungeon->floors;
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+
+        // We only need to take the prideful enemies into account if the route is prideful
+        $isRoutePrideful = $dungeonRoute->hasUniqueAffix(Affix::AFFIX_PRIDEFUL);
         // Keep a list of prideful enemies to assign
         $pridefulEnemies = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
         $pridefulEnemyCount = config('keystoneguru.prideful.count');
@@ -335,7 +336,7 @@ class ImportString extends MDTBase
                                 $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
 
                                 // No point doing this if we're not saving
-                                if ($save) {
+                                if ($save && $isRoutePrideful) {
                                     // Do not add more than 5 regardless of circumstance
                                     if ($dungeonRoute->pridefulenemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
                                         // If we should add a prideful enemy in this pull ..
@@ -492,15 +493,15 @@ class ImportString extends MDTBase
                      */
                     // Fix a strange issue where 6 would sometimes not be set - and then the array may look like this:
                     /** d: {
-                    1: 3,
-                    2: 1.1,
-                    3: 1,
-                    4: false,
-                    5: "fafff9",
-                    7: true
-                    } */
-                    if( !isset($object['d'][0]) ) {
-                        if( !isset($object['d'][6]) ) {
+                     * 1: 3,
+                     * 2: 1.1,
+                     * 3: 1,
+                     * 4: false,
+                     * 5: "fafff9",
+                     * 7: true
+                     * } */
+                    if (!isset($object['d'][0])) {
+                        if (!isset($object['d'][6])) {
                             $object['d'][6] = 0;
                         }
                         $details = array_values($object['d']);
@@ -663,11 +664,11 @@ class ImportString extends MDTBase
         $affixGroup = Conversion::convertWeekToAffixGroup($this->_seasonService, $decoded['week']);
         if ($affixGroup instanceof AffixGroup) {
             if ($save) {
-                // Something we can save to the database
-                $dungeonAffixGroup = new DungeonRouteAffixGroup();
-                $dungeonAffixGroup->affix_group_id = $affixGroup->id;
-                $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
-                $dungeonAffixGroup->save();
+                // Something we can save to the
+                DungeonRouteAffixGroup::create([
+                    'affix_group_id'   => $affixGroup->id,
+                    'dungeon_route_id' => $dungeonRoute->id,
+                ]);
             } else {
                 // Something we can just return and have the user read
                 $dungeonRoute->affixes->push($affixGroup);

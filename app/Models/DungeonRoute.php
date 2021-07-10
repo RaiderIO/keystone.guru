@@ -519,7 +519,7 @@ class DungeonRoute extends Model
                 $result = $this->mayUserEdit($user);
                 break;
             case PublishedState::TEAM:
-                $result = ($this->team !== null && $this->team->isUserMember($user)) || $user->hasRole('admin');
+                $result = ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole('admin'));
                 break;
             case PublishedState::WORLD_WITH_LINK:
             case PublishedState::WORLD:
@@ -720,7 +720,7 @@ class DungeonRoute extends Model
                     $affixGroup = AffixGroup::findOrNew($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
-                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming())) {
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
                         continue;
                     }
 
@@ -960,24 +960,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param string $affix
      * @return bool
      */
-    public function isTyrannical(): bool
+    public function hasUniqueAffix(string $affix): bool
     {
-        return $this->affixes->filter(function (AffixGroup $affixGroup)
+        return $this->affixes->filter(function (AffixGroup $affixGroup) use ($affix)
         {
-            return $affixGroup->isTyrannical();
-        })->isNotEmpty();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFortified(): bool
-    {
-        return $this->affixes->filter(function (AffixGroup $affixGroup)
-        {
-            return $affixGroup->isFortified();
+            return $affixGroup->hasAffix($affix);
         })->isNotEmpty();
     }
 
@@ -985,7 +975,7 @@ class DungeonRoute extends Model
      * Bit of an ugly way of making a generic function for the subtext, I don't have time to figure out a better solution now
      * @return string
      */
-    public function getSubHeaderHtml()
+    public function getSubHeaderHtml(): string
     {
         // Only add the 'clone of' when the user cloned it from someone else as a form of credit
         if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {

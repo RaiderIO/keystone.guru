@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\Release;
 use Github\Api\Issue;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
-use Illuminate\Console\Command;
 
-class CreateGithubReleaseTicket extends Command
+class CreateGithubReleaseTicket extends GithubReleaseCommand
 {
     use ExecutesShellCommands;
 
@@ -48,17 +46,7 @@ class CreateGithubReleaseTicket extends Command
         $result = 0;
 
         $version = $this->argument('version');
-
-        if ($version === null) {
-            $release = Release::latest()->first();
-        } else {
-            if (substr($version, 0, 1) !== 'v') {
-                $version = 'v' . $version;
-            }
-
-            /** @var Release $release */
-            $release = Release::where('version', $version)->first();
-        }
+        $release = $this->findReleaseByVersion($version);
 
         $this->info(sprintf('>> Creating Github ticket for %s', $version));
 

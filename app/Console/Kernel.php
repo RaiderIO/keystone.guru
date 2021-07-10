@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CreateGithubRelease;
-use App\Console\Commands\CreateGithubReleaseTicket;
+use App\Console\Commands\Github\CreateGithubRelease;
+use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Discover\Cache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
