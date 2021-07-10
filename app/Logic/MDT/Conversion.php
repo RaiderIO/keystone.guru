@@ -136,25 +136,25 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      * @param SeasonService $seasonService
-     * @param $mdtWeek int
+     * @param int $mdtWeek
      * @return AffixGroup
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, int $mdtWeek): AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
         $weekMapping = [
-            1  => 11,
-            2  => 12,
-            3  => 1,
-            4  => 2,
-            5  => 3,
-            6  => 4,
-            7  => 5,
-            8  => 6,
-            9  => 7,
-            10 => 8,
-            11 => 9,
-            12 => 10
+            1  => 4,
+            2  => 5,
+            3  => 6,
+            4  => 7,
+            5  => 8,
+            6  => 9,
+            7  => 10,
+            8  => 11,
+            9  => 12,
+            10 => 1,
+            11 => 2,
+            12 => 3
         ];
         return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
     }
@@ -171,18 +171,18 @@ class Conversion
 
         // KG to MDT
         $weekMapping = [
-            0  => 2,
-            1  => 3,
-            2  => 4,
-            3  => 5,
-            4  => 6,
-            5  => 7,
-            6  => 8,
-            7  => 9,
-            8  => 10,
-            9  => 11,
-            10 => 12,
-            11 => 1
+            3  => 11,
+            4  => 12,
+            5  => 1,
+            6  => 2,
+            7  => 3,
+            8  => 4,
+            9  => 5,
+            10  => 6,
+            11  => 7,
+            12  => 8,
+            1 => 9,
+            2 => 10
         ];
 
         return $weekMapping[$weekIndex];
