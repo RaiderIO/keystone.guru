@@ -1,5 +1,7 @@
 <?php
-$show = isset($show) ? $show : [];
+/** @var $dungeonroute App\Models\DungeonRoute|null */
+
+$show = $show ?? [];
 $showLink = $show['link'] ?? true;
 $showEmbed = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;
@@ -41,7 +43,7 @@ $showPublish = $show['publish'] ?? true;
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
+                {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $dungeonroute]),
                 ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
@@ -61,7 +63,7 @@ $showPublish = $show['publish'] ?? true;
         <div class="row">
             <div class="col input-group">
                 {!! Form::text('map_embedable_link',
-                sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeonroute' => $model])),
+                sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeonroute' => $dungeonroute])),
                 ['id' => 'map_embedable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"

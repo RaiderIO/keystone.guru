@@ -2,11 +2,11 @@
 /** @var \Illuminate\Support\Collection $floors */
 ?>
 <div class="row no-gutters">
-    <div class="col btn-group dropright" data-toggle="tooltip" data-placement="right"
-         title="{{ __('Switch floors') }}">
+    <div class="col btn-group dropright">
         <button type="button"
                 class="btn btn-accent dropdown-toggle {{ $floors->count() > 1 ? '' : 'disabled' }}"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                data-tooltip="tooltip" data-placement="right" title="{{ __('Switch floors') }}">
             <i class="fa fa-dungeon"></i>
         </button>
         <div id="map_floor_selection_dropdown" class="dropdown-menu">

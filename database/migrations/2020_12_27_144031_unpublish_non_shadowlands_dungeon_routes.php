@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class UnpublishNonShadowlandsDungeonRoutes extends Migration
 {
@@ -13,7 +11,11 @@ class UnpublishNonShadowlandsDungeonRoutes extends Migration
      */
     public function up()
     {
-        DB::table('dungeon_routes')->where('dungeon_id', '<', 28)->update(['published' => 0]);
+        try {
+            DB::table('dungeon_routes')->where('dungeon_id', '<', 28)->update(['published' => 0]);
+        } catch (Exception $ex) {
+            logger()->warning('Unable to find published column - this is probably OK');
+        }
     }
 
     /**

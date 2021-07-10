@@ -180,22 +180,34 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     /**
      * Should be called whenever something's changed in the killzone that warrants a UI update
-     * @param killZone
+     * @param killZone {KillZone}
+     * @param cascadeRefresh {Boolean} True to cascade refreshes to all subsequent killzones, false to just update their pull texts instead
      * @private
      */
-    _refreshKillZone(killZone) {
+    _refreshKillZone(killZone, cascadeRefresh = false) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-
-        // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
-        this._updatePullTexts(killZone.getIndex());
+        let self = this;
 
         // Update this particular row element to refresh enemy lists etc
         let rowElement = this._getRowElementKillZone(killZone);
         rowElement.refresh();
+
+        if (cascadeRefresh) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            $.each(killZoneMapObjectGroup.objects, function (index, futureKillZone) {
+                // Do not update pull texts for killzones that do not have
+                if (futureKillZone.id > 0 && futureKillZone.getIndex() >= killZone.index) {
+                    self._getRowElementKillZone(futureKillZone).refresh();
+                }
+            });
+        }
+
+        // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
+        this._updatePullTexts(killZone.getIndex());
     }
 
     /**
-     * @param minIndex int
+     * @param minIndex {Number}
      * @private
      */
     _updatePullTexts(minIndex = 0) {
@@ -422,6 +434,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
             if (previousMapState instanceof EnemySelection) {
                 self._selectKillZone(previousMapState.getMapObject(), false);
             }
+
+            // Refresh all killzones when we finished selecting overpulled enemies
+            if (previousMapState instanceof SelectKillZoneEnemySelectionOverpull) {
+                self._refreshKillZone(previousMapState.getMapObject(), true);
+            }
+
             let newMapState = mapStateChangedEvent.data.newMapState;
             if (newMapState instanceof EnemySelection) {
                 self._selectKillZone(newMapState.getMapObject(), true);
@@ -452,6 +470,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
+        });
+
+        killZoneMapObjectGroup.register([
+            'killzone:obsoleteenemychanged'
+        ], this, function (overpulledEnemyChangedEvent) {
+            self._refreshKillZone(overpulledEnemyChangedEvent.data.killzone);
         });
 
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
@@ -501,7 +525,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let mapState = self.map.getMapState();
                 let newSelectedKillZone = null;
 
-                if (mapState instanceof EditKillZoneEnemySelection || mapState instanceof ViewKillZoneEnemySelection) {
+                if (mapState instanceof SelectKillZoneEnemySelectionOverpull ||
+                    mapState instanceof EditKillZoneEnemySelection ||
+                    mapState instanceof ViewKillZoneEnemySelection) {
                     if (selectNext) {
                         // Search from the first to the end
                         for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
@@ -528,10 +554,15 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                 // Only if we have one to select
                 if (newSelectedKillZone instanceof KillZone) {
-                    self.map.setMapState(
-                        self.map.options.edit ? new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState) :
-                            new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState)
-                    );
+                    let newMapState = null;
+                    if (getState().getMapContext() instanceof MapContextLiveSession) {
+                        newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, newSelectedKillZone, mapState);
+                    } else if (self.map.options.edit) {
+                        newMapState = new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
+                    } else {
+                        newMapState = new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
+                    }
+                    getState.setMapState(newMapState);
 
                     // Move the map to the killzone's center location
                     self.map.focusOnKillZone(newSelectedKillZone);
@@ -549,7 +580,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this.map.unregister('map:mapstatechanged', this);
         // this.map.unregister('map:beforerefresh', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
+        killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new', 'killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this);
 
         getState().unregister('killzonesnumberstyle:changed', this);
     }

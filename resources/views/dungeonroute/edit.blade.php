@@ -1,11 +1,11 @@
 <?php
-/** @var $model \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = $model->dungeon->load(['expansion', 'floors']);
+$dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 
-$sandbox = $model->isSandbox();
+$sandbox = $dungeonroute->isSandbox();
 ?>
-@extends('layouts.map', ['title' => sprintf(__('Edit %s'), $model->title)])
+@extends('layouts.map', ['title' => sprintf(__('Edit %s'), $dungeonroute->title)])
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
@@ -16,11 +16,16 @@ $sandbox = $model->isSandbox();
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'dungeonroute' => $model,
+            'dungeonroute' => $dungeonroute,
             'edit' => true,
             'sandboxMode' => $sandbox,
             'floorId' => $floor->id,
             'show' => [
+                'controls' => [
+                    'draw' => true,
+                    'pulls' => true,
+                    'enemyinfo' => true,
+                ],
                 'share' => [
                     'link' => !$sandbox,
                     'embed' => !$sandbox,
@@ -32,12 +37,5 @@ $sandbox = $model->isSandbox();
                 'killzonepath'
             ],
         ])
-
-{{--        @include('common.maps.killzonessidebar', [--}}
-{{--            'edit' => true,--}}
-{{--            'show' => [--}}
-{{--                'route-settings' => !$sandbox,--}}
-{{--            ],--}}
-{{--        ])--}}
     </div>
 @endsection

@@ -10,6 +10,7 @@
         "teeming": null,
         "faction": "any",
         "unskippable": 1,
+        "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -153.76,

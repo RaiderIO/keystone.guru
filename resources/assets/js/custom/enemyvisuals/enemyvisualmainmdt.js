@@ -37,7 +37,15 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
             data.main_visual_inner_classes += ' coupled';
         }
         data.main_visual_outer_classes += ' enemy_icon_npc_mdt text-black text-center';
-        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + text + '</div>';
+
+        let template = Handlebars.templates['map_enemy_visual_enemy_mdt_template'];
+
+        let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
+            width: width,
+            text: text
+        });
+
+        data.main_visual_html = template(mainVisualData);
 
         return data;
     }

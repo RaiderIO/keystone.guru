@@ -235,7 +235,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                 <a class="btn patreon-color text-white" href="{{
                         'https://patreon.com/oauth2/authorize?' . http_build_query(
                             ['response_type' => 'code',
-                            'client_id' => env('PATREON_CLIENT_ID'),
+                            'client_id' => config('keystoneguru.patreon.oauth.client_id'),
                             'redirect_uri' => route('patreon.link'),
                             'state' => csrf_token()
                             ])

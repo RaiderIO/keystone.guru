@@ -17,12 +17,22 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this._updateVisibility();
     }
 
+    /**
+     *
+     * @param assignedEvent {Object}
+     * @private
+     */
     _onPridefulEnemyAssigned(assignedEvent) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         this.signal('pridefulenemy:assigned', {pridefulenemy: assignedEvent.context});
     }
 
+    /**
+     *
+     * @param unassignedEvent {Object}
+     * @private
+     */
     _onPridefulEnemyUnassigned(unassignedEvent) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
@@ -93,8 +103,12 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     load() {
         super.load();
 
+        let mapContext = getState().getMapContext();
+        let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
+
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
+            /** @type {Enemy} */
             let enemy = this.objects[i];
 
             // Check only those Awakened mobs that are not part of the final boss pack
@@ -115,8 +129,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             }
 
             // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
-            if (enemy instanceof PridefulEnemy) {
-                let pridefulEnemiesData = getState().getMapContext().getPridefulEnemies();
+            if (isRoutePrideful && enemy instanceof PridefulEnemy) {
+                let pridefulEnemiesData = mapContext.getPridefulEnemies();
                 for (let i = 0; i < pridefulEnemiesData.length; i++) {
                     let pridefulEnemyData = pridefulEnemiesData[i];
 
@@ -130,6 +144,26 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                 enemy.register('pridefulenemy:assigned', this, this._onPridefulEnemyAssigned.bind(this));
                 enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
+            }
+
+            // Assign overpulled enemies from cache
+            if (mapContext instanceof MapContextLiveSession) {
+                let overpulledEnemiesData = mapContext.getOverpulledEnemies();
+                for (let i = 0; i < overpulledEnemiesData.length; i++) {
+                    let overpulledEnemyData = overpulledEnemiesData[i];
+
+                    // If we have a match..
+                    if (overpulledEnemyData.enemy_id === enemy.id) {
+                        enemy.setOverpulledKillZoneId(overpulledEnemyData.kill_zone_id);
+
+                        // May stop now
+                        break;
+                    }
+                }
+
+                // Assign obsolete enemies from cache
+                let obsoleteEnemiesData = getState().getMapContext().getObsoleteEnemies();
+                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
             }
         }
     }
@@ -174,7 +208,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     /**
      * Get the amount of free prideful enemies.
-     * @returns {number}
+     * @returns {Number}
      */
     getAssignedPridefulEnemies() {
         let result = 0;

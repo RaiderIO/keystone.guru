@@ -14,44 +14,6 @@ class SidebarNavigation extends Sidebar {
 
         let self = this;
 
-        // Register for external changes so that we update our dropdown
-        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
-            if (self._floorIdChangeSource === null) {
-                self._floorIdChangeSource = 'external';
-
-                $(self.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
-                self._floorIdChangeSource = null;
-            }
-
-            let pathname = window.location.pathname;
-            let pathSplit = trimEnd(pathname, '/').split('/');
-            let newUrl = window.location.protocol + '//' + window.location.host;
-
-            if (getState().isMapAdmin()) {
-                // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
-                // Strip the last two elements (<number>/mapping)
-                pathSplit.splice(-2);
-                pathname = pathSplit.join('/');
-                newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
-            } else {
-                // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
-                if (isNumeric(pathSplit[pathSplit.length - 1])) {
-                    // Strip the last two elements (<number>/mapping)
-                    pathSplit.splice(-1);
-                    pathname = pathSplit.join('/');
-                }
-                newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
-            }
-
-
-            history.pushState({page: 1},
-                newUrl,
-                newUrl);
-
-            // Make sure that the sidebar's select picker gets updated with the newly selected value
-            refreshSelectPickers();
-        });
-
         $(this.options.switchDungeonFloorSelect).change(function () {
             if (self._floorIdChangeSource === null) {
                 self._floorIdChangeSource = 'select';

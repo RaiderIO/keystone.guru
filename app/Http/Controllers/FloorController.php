@@ -123,7 +123,7 @@ class FloorController extends Controller
         return view('admin.floor.mapping', [
             'floor'       => $floor,
             'headerTitle' => __('Edit floor'),
-            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->toArray(),
+            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->getProperties(),
         ]);
     }
 

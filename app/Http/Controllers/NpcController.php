@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
+use App\Events\Model\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Dungeon;

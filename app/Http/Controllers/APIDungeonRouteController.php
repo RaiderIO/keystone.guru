@@ -32,6 +32,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -201,9 +202,10 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteSearchFormRequest $request
+     * @param SeasonServiceInterface $seasonService
      * @return string
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request): string
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request, SeasonServiceInterface $seasonService): string
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -290,7 +292,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Disable some checks when we're local - otherwise we'd get no routes at all
-        $query->when(env('APP_ENV') !== 'local', function (Builder $builder)
+        $query->when(config('app.env') !== 'local', function (Builder $builder)
         {
             $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
                 ->where('demo', 0)
@@ -301,9 +303,10 @@ class APIDungeonRouteController extends Controller
 
 
         return view('common.dungeonroute.cardlist', [
-            'dungeonroutes'    => $query->get(),
-            'showAffixes'      => true,
-            'showDungeonImage' => true,
+            'currentAffixGroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+            'dungeonroutes'     => $query->get(),
+            'showAffixes'       => true,
+            'showDungeonImage'  => true,
         ])->render();
     }
 

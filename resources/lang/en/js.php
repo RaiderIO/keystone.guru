@@ -223,8 +223,13 @@ return [
     'intro_draw_edit'   => 'You can use the edit button to adjust your created elements such as icons or drawn lines.',
     'intro_draw_remove' => 'You can use the delete button to remove elements you have created. Click it once, then select the highlighted elements you wish to delete. Deleting happens in a preview mode, you have to confirm your delete by pressing the \'Finish\' button, or hit the \'Cancel\' button to undo them. If you confirm the deletion, there is no turning back!',
 
-    'intro_map_enemy_forces_numbers'                                => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
-    'intro_new_pull'                                                => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
+    'intro_map_enemy_forces_numbers' => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
+    'intro_new_pull'                 => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
+
+    'enemy_forces_not_all_unskippables_killed_label'                => 'Warning: this route does not kill all unskippable enemies',
+    'enemy_forces_too_much_label'                                   => 'Warning: your route has too much enemy forces',
+    'enemy_forces_too_little_label'                                 => 'Warning: this route does not have enough enemy forces!',
+    'enemy_forces_overridden_label'                                 => 'Your route\'s enemy forces may have been corrected due to overpulled enemies which caused automatic alterations in your route',
 
     // Sidebar
     'sidebar_expand'                                                => 'Expand the sidebar',
@@ -237,6 +242,7 @@ return [
     'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only',
     'sidebar_enemy_spell_label'                                     => 'Spells',
     'sidebar_enemy_skippable_label'                                 => 'Skippable',
+    'sidebar_enemy_skippable_info_label'                            => 'A skippable enemy is an enemy that can be skipped without using invisibility potions or Rogue Shroud. These enemies may be excluded from your routes once you mark enemies as overpulled during a live session.',
     'user_report_enemy_success'                                     => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
     'dungeonroute_report_enemy_success'                             => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
     'tag_delete_success'                                            => 'Tag removed successfully',
@@ -310,6 +316,7 @@ return [
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
     'enemy_unskippable_label'                                       => 'Unskippable',
+    'enemy_skippable_label'                                         => 'Skippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
 
     // Admin enemy pack
@@ -403,16 +410,30 @@ return [
     // 'actions_label' => 'Actions',
     'leave_label'            => 'Leave',
 
-    'delete_team_confirm_label'        => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
-    'invite_link_refreshed'            => 'Invite link refreshed.',
+    'delete_team_confirm_label'          => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
+    'invite_link_refreshed'              => 'Invite link refreshed.',
 
     // Echo server
-    'echo_connecting_label'            => 'Connecting...',
-    'echo_connected_label'             => 'Connected',
-    'connected_users_label'            => 'Users',
-    'connecting_title_label'           => 'Connecting to route edit synchronization service...',
-    'connected_title_label'            => 'Connected to route edit synchronization service. All of your route editing actions will be live shared with any of your team members viewing this route!',
-    'members_title_label'              => 'Your route editing actions are shared with these users that are currently viewing/editing your route!',
-    'member_self_title_label'          => 'To change your color, visit your profile.',
-    'echo_object_deleted_notification' => '{object} was deleted by {user}'
+    'echo_connecting_label'              => 'Connecting...',
+    'echo_connected_label'               => 'Connected',
+    'connected_users_label'              => 'Users',
+    'connecting_title_label'             => 'Connecting to route edit synchronization service...',
+    'connected_title_label'              => 'Connected to route edit synchronization service. All of your route editing actions will be live shared with any of your team members viewing this route!',
+    'members_title_label'                => 'Your route editing actions are shared with these users that are currently viewing/editing your route!',
+    'member_self_title_label'            => 'To change your color, visit your profile.',
+    'echo_object_deleted_notification'   => '{object} was deleted by {user}',
+    'connected_users_hide_cursors_label' => 'Hide cursors',
+    'connected_users_show_cursors_label' => 'Show cursors',
+    'connected_user_follow_label'        => 'Follow',
+    'connected_user_unfollow_label'      => 'Unfollow',
+    'connected_user_view_profile_label'  => 'View profile',
+    'echo_following_user_label'          => 'Now following',
+    'echo_unfollow_user_label'           => 'Unfollow',
+    'echo_following_user_stopped_label'  => 'You stopped following',
+    'echo_refollow_user_label'           => 'Refollow',
+    'echo_refollow_user_stop_label'      => 'Stop',
+
+    // Overpull
+    'overpull_select_enemy_label'        => 'Select one or more enemies that you overpulled',
+    'overpull_selection_finished_label'  => 'Finished',
 ];

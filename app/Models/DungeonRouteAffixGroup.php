@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $id int
  * @property $dungeon_route_id int
  * @property $affix_group_id int
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class DungeonRouteAffixGroup extends Model
 {
@@ -18,18 +20,18 @@ class DungeonRouteAffixGroup extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function dungeonroute()
     {
-        return $this->belongsTo('App\DungeonRoute');
+        return $this->belongsTo('App\Models\DungeonRoute');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function affixgroup()
     {
-        return $this->belongsTo('App\AffixGroup');
+        return $this->belongsTo('App\Models\AffixGroup');
     }
 }

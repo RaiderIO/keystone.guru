@@ -1,7 +1,11 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Affixes')])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('Affixes')])
 <?php
-/** @var \App\Service\Season\SeasonService $seasonService */
-/** @var int $offset */
+/**
+ * @var $seasonService \App\Service\Season\SeasonService
+ * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup
+ * @var $offset int
+ */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;
@@ -137,10 +141,11 @@ if ($timezone === null)
 
         <div class="mt-4 text-center">
             <p>
-                {{ __('Last updated at 2021/Feb/02.') }}
+                {{ __('Updated at 2021/Jul/10.') }}
                 {{ __('For more information about affixes and M+, please visit') }}
-                <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">https://mythicpl.us/ <i
-                        class="fas fa-external-link-alt"></i></a>
+                <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
+                    https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
+                </a>
             </p>
         </div>
     </div>
@@ -149,6 +154,7 @@ if ($timezone === null)
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by current affixes'),
             'link' => route('dungeonroutes.thisweek'),
+            'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
             'showMore' => true,
@@ -159,10 +165,16 @@ if ($timezone === null)
         @include('dungeonroute.discover.panel', [
             'title' => __('Popular routes by next affixes'),
             'link' => route('dungeonroutes.nextweek'),
-            'affixgroup' => $seasonService->getCurrentSeason()->getNextAffixGroup(),
+            // The next week's affix group is current for that week
+            'currentAffixGroup' => $nextAffixGroup,
+            'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
             'showMore' => true,
             'showDungeonImage' => true,
         ])
     </div>
+
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.modal.userreport.dungeonroute')
+    @endcomponent
 @endsection

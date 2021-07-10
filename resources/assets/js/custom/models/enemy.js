@@ -27,6 +27,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
+let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 
 /**
  * @property floor_id int
@@ -40,6 +41,7 @@ let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
  * @property raid_marker_name string
  * @property dangerous bool
  * @property unskippable bool
+ * @property skippable bool
  * @property lat float
  * @property lng float
  *
@@ -66,6 +68,8 @@ class Enemy extends MapObject {
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
+        this.overpulledKillZoneId = null;
+        this.obsolete = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -174,7 +178,8 @@ class Enemy extends MapObject {
                 values: [
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
-                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'}
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value;
@@ -230,6 +235,12 @@ class Enemy extends MapObject {
                 default: false
             }),
             new Attribute({
+                name: 'skippable',
+                type: 'bool',
+                admin: true,
+                default: false
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
@@ -268,7 +279,7 @@ class Enemy extends MapObject {
     _getPercentageString(enemyForces) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places
-        return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
+        return '(' + (Math.round((enemyForces / this.map.enemyForcesManager.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
     _onObjectChanged(syncedEvent) {
@@ -317,11 +328,24 @@ class Enemy extends MapObject {
         if (this.npc !== null) {
             result = {info: [], custom: []};
             // @formatter:off
-            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()});
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_health_label'),
+                value: this.npc.base_health.toLocaleString()
+            });
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
             result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
-            result.info.push({key: lang.get('messages.sidebar_enemy_skippable_label'), value: this.unskippable ? 0 : 1});
+            // Unskippable means that you MUST kill this enemy, otherwise you cannot complete the dungeon
+            // result.info.push({
+            //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+            //     value: this.unskippable ? 0 : 1
+            // });
+            // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_skippable_label'),
+                value: this.skippable ? 1 : 0,
+                info: lang.get('messages.sidebar_enemy_skippable_info_label')
+            });
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
@@ -574,6 +598,16 @@ class Enemy extends MapObject {
             }
         }
 
+        let mapContext = getState().getMapContext();
+        if (mapContext instanceof MapContextDungeonRoute) {
+            // If we are tormented, but the route has no tormented enemies..
+            if (this.hasOwnProperty('seasonal_type') && this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED &&
+                !mapContext.hasAffix(AFFIX_TORMENTED)) {
+                // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
+                return false;
+            }
+        }
+
         // Hide MDT enemies
         if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
             return false;
@@ -629,6 +663,66 @@ class Enemy extends MapObject {
     }
 
     /**
+     * @returns {KillZone|null}
+     */
+    getOverpulledKillZone() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let result = null;
+
+        if (this.overpulledKillZoneId !== null) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            result = killZoneMapObjectGroup.findMapObjectById(this.overpulledKillZoneId);
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if this enemy is marked as overpulled or not.
+     * @returns {Number|null}
+     */
+    getOverpulledKillZoneId() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.overpulledKillZoneId;
+    }
+
+    /**
+     * Set this enemy to be marked as overpulled
+     * @param killZoneId {Number|null} The kill zone ID that this enemy was overpulled in or after
+     */
+    setOverpulledKillZoneId(killZoneId) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.overpulledKillZoneId !== killZoneId) {
+            this.overpulledKillZoneId = killZoneId;
+
+            this.signal('overpulled:changed');
+        }
+    }
+
+    /**
+     * Checks if this enemy is marked as obsolete or not.
+     * @returns {*}
+     */
+    isObsolete() {
+        return this.obsolete;
+    }
+
+    /**
+     * Set this enemy to be marked as obsolete (was part of a route, but is no longer because we determined we should no
+     * longer pull this enemy after an overpull elsewhere).
+     * @param value boolean True or false
+     */
+    setObsolete(value) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        if (this.obsolete !== value) {
+            this.obsolete = value;
+
+            this.signal('obsolete:changed');
+        }
+    }
+
+    /**
      *
      * @returns {boolean}
      */
@@ -643,8 +737,7 @@ class Enemy extends MapObject {
      */
     isAwakenedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null &&
-            (this.npc.id === 161124 || this.npc.id === 161241 || this.npc.id === 161244 || this.npc.id === 161243);
+        return this.npc !== null && [161124, 161241, 161244, 161243].includes(this.npc.id);
     }
 
     /**
@@ -669,9 +762,18 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isTormented() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc();
+        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc() || this.isTormented();
     }
 
     /**

@@ -51,6 +51,38 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
     }
 
+    /**
+     * @param textLength {Number}
+     * @returns {*}
+     * @protected
+     */
+    _getTextWidth(textLength = 1) {
+        let size = this.enemyvisual.mainVisual.getSize();
+        let width = size.iconSize[0];
+
+        width -= c.map.enemy.calculateMargin(width);
+
+        // More characters to display..
+        if (textLength >= 4) {
+            width -= 22;
+        } else if (textLength === 3) {
+            width -= 17;
+        } else if (textLength === 2) {
+            width -= 14;
+        } else {
+            width -= 10;
+        }
+        // Dangerous = less space
+        if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
+            width -= 2;
+        }
+
+        // Inverse zoom
+        width += (c.map.settings.maxZoom - getState().getMapZoomLevel());
+
+        return width;
+    }
+
     getSize() {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 

@@ -13,8 +13,8 @@ class DungeonMap extends Signalable {
         getState().setDungeonMap(this);
 
         // Listen for floor changes
-        getState().register('floorid:changed', this, function () {
-            self.refreshLeafletMap(false);
+        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+            self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
 
         // How many map objects have returned a success status
@@ -24,6 +24,7 @@ class DungeonMap extends Signalable {
             self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
+        this.enemyForcesManager = new EnemyForcesManager(this);
 
         // Pather instance
         this.pather = null;
@@ -378,8 +379,15 @@ class DungeonMap extends Signalable {
         let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
         let enemy = enemyClickedEvent.context;
+        console.warn('Test');
 
-        if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
+        // If we selected an enemy
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            console.warn('Test 2');
+            if (SelectKillZoneEnemySelectionOverpull.isEnemySelectable(enemy)) {
+                console.warn('Should have selected enemy', enemy);
+            }
+        } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
@@ -592,25 +600,12 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Get the amount of enemy forces that are required to complete this dungeon.
-     * @returns {*}
-     */
-    getEnemyForcesRequired() {
-        let dungeonData = getState().getMapContext().getDungeon();
-        let result = dungeonData.enemy_forces_required;
-
-        if (getState().getMapContext().getTeeming() && dungeonData.enemy_forces_required_teeming > 0) {
-            result = dungeonData.enemy_forces_required_teeming;
-        }
-
-        return result;
-    }
-
-    /**
-     * Refreshes the leaflet map so
+     * Refreshes the leaflet map
      * @param clearMapState {Boolean}
+     * @param center {Array}
+     * @param zoom {Number}
      */
-    refreshLeafletMap(clearMapState = true) {
+    refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
@@ -620,14 +615,14 @@ class DungeonMap extends Signalable {
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were doing anything, we're no longer doing it
-        if( clearMapState ) {
+        if (clearMapState) {
             this.setMapState(null);
         }
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], this.options.defaultZoom);
+        this.leafletMap.setView(center ?? [-128, 192], zoom ?? this.options.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 

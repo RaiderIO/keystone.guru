@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
  * @property string $teeming
  * @property string $faction
  * @property boolean $unskippable
+ * @property boolean $skippable
  * @property string $enemy_forces_override
  * @property string $enemy_forces_override_teeming
  * @property double $lat

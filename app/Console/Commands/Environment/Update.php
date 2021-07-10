@@ -88,7 +88,7 @@ class Update extends Command
         }
         $this->call('config:clear');
         $this->call('queue:restart');
-        $this->call('keystoneguru:startsupervisor');
+        $this->call('supervisor:start');
 
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');

@@ -135,17 +135,17 @@ foreach ($team->teamusers as $teamuser) {
         <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col">
                         <h4>
                             {{ __('Route list') }}
                         </h4>
                     </div>
-                    <div class="col-4">
+                    <div class="col-auto">
                         @if($userIsModerator)
-                            <button id="add_route_btn" class="btn btn-success float-right">
+                            <button id="add_route_btn" class="btn btn-success">
                                 <i class="fas fa-plus"></i> {{ __('Add route') }}
                             </button>
-                            <button id="view_existing_routes" class="btn btn-warning float-right"
+                            <button id="view_existing_routes" class="btn btn-warning"
                                     style="display: none;">
                                 <i class="fas fa-backward"></i> {{ __('Stop adding routes') }}
                             </button>

@@ -59,7 +59,7 @@ class ReportRelease extends Command
         }
 
         if (!$release->silent &&
-            (env('APP_TYPE') === 'local' ||
+            (config('app.type') === 'local' ||
                 ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->doesntExist())) {
             switch ($platform) {
                 case 'reddit':
@@ -70,7 +70,7 @@ class ReportRelease extends Command
                     );
                     break;
                 case 'discord':
-                    $result = $discordApiService->sendEmbeds(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->getDiscordEmbeds());
+                    $result = $discordApiService->sendEmbeds(config('keystoneguru.webhook.discord.new_release.url'), $release->getDiscordEmbeds());
                     break;
                 default:
                     throw new \Exception(sprintf('Unsupported platform %s', $platform));

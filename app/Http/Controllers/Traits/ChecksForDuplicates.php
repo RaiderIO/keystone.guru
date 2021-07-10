@@ -37,7 +37,7 @@ trait ChecksForDuplicates
             }
         }
 
-        $count = $query->get()->count();
+        $count = $query->count();
 
         // Assume duplicate
         $result = true;

@@ -32,8 +32,15 @@ class CommonMapsMap extends InlineCode {
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 
-            this._setupRatingSelection();
+            // Snackbars
+            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
+            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
 
+            // Register for external changes so that we update our dropdown
+            getState().register('floorid:changed', this, this._onFloorIdChanged.bind(this));
+
+            // Sidebar
+            this._setupRatingSelection();
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
             this._setupEnemyVisualTypes();
@@ -58,14 +65,21 @@ class CommonMapsMap extends InlineCode {
                 // refreshTooltips();
             });
 
-            // Make the user report modal actually do something
-            $('#userreport_dungeonroute_modal_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
-
             // Enemy info should be set on mouseover
             getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
 
+            $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
+
             this._dungeonMap.leafletMap.on('move', function () {
                 $('#enemy_info_container').hide();
+            });
+
+            // Live sessions
+            $('#stop_live_session_modal select').barrating({
+                theme: 'fontawesome-stars',
+                onSelect: function (value, text, event) {
+                    self._rate(value);
+                }
             });
         }
     }
@@ -143,7 +157,7 @@ class CommonMapsMap extends InlineCode {
     _setupRatingSelection() {
         let self = this;
 
-        // Floor selection
+        // Rating
         let $mapRatingDropdown = $('#map_rating_dropdown');
         $mapRatingDropdown.find('a:not(.disabled)').bind('click', function () {
             let $this = $(this);
@@ -209,6 +223,11 @@ class CommonMapsMap extends InlineCode {
         for (let i in mapObjectGroups) {
             if (mapObjectGroups.hasOwnProperty(i)) {
                 let group = mapObjectGroups[i];
+
+                // Skip those groups that we don't want to give the user power over to toggle
+                if (!group.isUserToggleable()) {
+                    continue;
+                }
 
                 // If any of the names of a map object group is found in the array, hide the selection
                 let selected = true;
@@ -321,6 +340,39 @@ class CommonMapsMap extends InlineCode {
      *
      * @private
      */
+    _submitEnemyUserReport() {
+        let enemyId = $('#enemy_report_enemy_id').val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/enemy/${enemyId}`,
+            dataType: 'json',
+            data: {
+                category: $('#enemy_report_category').val(),
+                username: $('#enemy_report_username').val(),
+                message: $('#enemy_report_message').val(),
+                contact_ok: $('#enemy_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_enemy_modal_submit').hide();
+                $('#userreport_enemy_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_enemy_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_enemy_modal_submit').show();
+                $('#userreport_enemy_modal_saving').hide();
+            }
+        });
+    }
+
+
+    /**
+     *
+     * @private
+     */
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilityDropdown = $('#map_map_object_group_visibility_dropdown');
         if ($mapObjectGroupVisibilityDropdown.length > 0) {
@@ -408,8 +460,6 @@ class CommonMapsMap extends InlineCode {
      * @param value int
      */
     _rate(value) {
-        let self = this;
-
         let isDelete = value === '';
         $.ajax({
             type: isDelete ? 'DELETE' : 'POST',
@@ -427,37 +477,84 @@ class CommonMapsMap extends InlineCode {
 
     /**
      *
+     * @param snackbarAddEvent
      * @private
      */
-    _submitDungeonRouteUserReport() {
-        $.ajax({
-            type: 'POST',
-            url: `/ajax/userreport/dungeonroute/${getState().getMapContext().getPublicKey()}`,
-            dataType: 'json',
-            data: {
-                category: $('#dungeonroute_report_category').val(),
-                username: $('#dungeonroute_report_username').val(),
-                message: $('#dungeonroute_report_message').val(),
-                contact_ok: $('#dungeonroute_report_contact_ok').is(':checked') ? 1 : 0
-            },
-            beforeSend: function () {
-                $('#userreport_dungeonroute_modal_submit').hide();
-                $('#userreport_dungeonroute_modal_saving').show();
-            },
-            success: function (json) {
-                $('#userreport_dungeonroute_modal').modal('hide');
-                showSuccessNotification(lang.get('messages.dungeonroute_report_enemy_success'));
-            },
-            complete: function () {
-                $('#userreport_dungeonroute_modal_submit').show();
-                $('#userreport_dungeonroute_modal_saving').hide();
+    _onSnackbarAdd(snackbarAddEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        let template = Handlebars.templates['map_controls_snackbar_template'];
+
+        $('#snackbar_container').append(
+            template($.extend({}, getHandlebarsDefaultVariables(), {
+                id: snackbarAddEvent.data.id,
+                html: snackbarAddEvent.data.html
+            }))
+        );
+
+        // Fire the onDomAdded event if necessary
+        if (typeof snackbarAddEvent.data.onDomAdded === 'function') {
+            snackbarAddEvent.data.onDomAdded(snackbarAddEvent.data.id);
+        }
+    }
+
+    /**
+     *
+     * @param snackbarRemoveEvent
+     * @private
+     */
+    _onSnackbarRemove(snackbarRemoveEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        $(`#${snackbarRemoveEvent.data.id}`).remove();
+    }
+
+    /**
+     *
+     * @param floorIdChangedEvent
+     * @private
+     */
+    _onFloorIdChanged(floorIdChangedEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        if (this._floorIdChangeSource === null) {
+            this._floorIdChangeSource = 'external';
+
+            $(this.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
+            this._floorIdChangeSource = null;
+        }
+
+        let pathname = window.location.pathname;
+        let pathSplit = trimEnd(pathname, '/').split('/');
+        let newUrl = window.location.protocol + '//' + window.location.host;
+
+        if (getState().isMapAdmin()) {
+            // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
+            // Strip the last two elements (<number>/mapping)
+            pathSplit.splice(-2);
+            pathname = pathSplit.join('/');
+            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
+        } else {
+            // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
+            if (isNumeric(pathSplit[pathSplit.length - 1])) {
+                // Strip the last two elements (<number>/mapping)
+                pathSplit.splice(-1);
+                pathname = pathSplit.join('/');
             }
-        });
+            newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
+        }
+
+        history.pushState({page: 1}, newUrl, newUrl);
+
+        // Make sure that the sidebar's select picker gets updated with the newly selected value
+        refreshSelectPickers();
     }
 
     cleanup() {
         super.cleanup();
 
         getState().unregister('focusedenemy:changed', this);
+        getState().unregister('snackbar:add', this);
+        getState().unregister('snackbar:remove', this);
     }
 }

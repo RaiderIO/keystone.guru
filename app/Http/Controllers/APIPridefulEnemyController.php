@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
-use App\Events\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Events\Model\ModelChangedEvent;
+use App\Events\Model\ModelDeletedEvent;
 use App\Models\DungeonRoute;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
-use App\Models\PridefulEnemy;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -17,8 +16,6 @@ use Teapot\StatusCode\Http;
 
 class APIPridefulEnemyController extends Controller
 {
-    use PublicKeyDungeonRoute;
-
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
@@ -62,17 +59,15 @@ class APIPridefulEnemyController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Enemy $enemy
-     * @return array|ResponseFactory|Response
+     * @return Response|ResponseFactory
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
         try {
             /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
-            if ($pridefulEnemy->delete()) {
-                if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
-                }
+            if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
+                broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
             }
 
             $dungeonroute->touch();

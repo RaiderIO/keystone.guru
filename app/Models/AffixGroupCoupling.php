@@ -12,7 +12,8 @@ namespace App\Models;
 class AffixGroupCoupling extends CacheModel
 {
     public $timestamps = false;
-    
+    protected $fillable = ['affix_id', 'affix_group_id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

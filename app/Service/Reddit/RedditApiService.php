@@ -14,10 +14,14 @@ class RedditApiService implements RedditApiServiceInterface
             CURLOPT_POST       => true,
             CURLOPT_POSTFIELDS => http_build_query([
                 'grant_type'    => 'refresh_token',
-                'refresh_token' => env('REDDIT_REFRESH_TOKEN')
+                'refresh_token' => config('keystoneguru.reddit.api.refresh_token')
             ]),
             CURLOPT_HTTPHEADER => [
-                sprintf('Authorization: Basic %s', base64_encode(sprintf('%s:%s', env('REDDIT_CLIENT_ID'), env('REDDIT_SECRET_KEY')))),
+                sprintf('Authorization: Basic %s',
+                    base64_encode(
+                        sprintf('%s:%s', config('keystoneguru.reddit.oauth.client_id'), config('keystoneguru.reddit.oauth.secret'))
+                    )
+                ),
                 'Content-Type: application/x-www-form-urlencoded',
                 'User-Agent: keystone.guru/v3.3'
             ],

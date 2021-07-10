@@ -3,7 +3,6 @@
     let _stateManager;
     // Init it right away
     _stateManager = new StateManager();
-    _stateManager.setAppType('{!! $appType !!}');
     _stateManager.setMapContext({!! new \Illuminate\Support\Collection($mapContext) !!});
     _stateManager.setPaidTiers({!! $paidTiers !!});
     @isset($userData)

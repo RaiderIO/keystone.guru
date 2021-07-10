@@ -4,18 +4,15 @@ namespace App\Events;
 
 class UserColorChangedEvent extends ContextEvent
 {
-    public function broadcastAs()
+    public function broadcastWith(): array
     {
-        return 'user-color-changed';
+        return array_merge(parent::broadcastWith(), [
+            'color' => $this->_user->echo_color
+        ]);
     }
 
-    public function broadcastWith()
+    public function broadcastAs(): string
     {
-        return array_merge(
-            parent::broadcastWith(),
-            [
-                'color' => $this->_user->echo_color
-            ]
-        );
+        return 'user-color-changed';
     }
 }

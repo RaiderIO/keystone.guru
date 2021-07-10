@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\Enemies\OverpulledEnemy;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
@@ -89,6 +91,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Path[] $paths
  * @property Collection|KillZone[] $killzones
  * @property Collection|PridefulEnemy[] $pridefulenemies
+ * @property Collection|OverpulledEnemy[] $overpulledenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
  * @property Collection|MapIcon[] $mapicons
@@ -261,7 +264,7 @@ class DungeonRoute extends Model
      */
     public function pridefulenemies()
     {
-        return $this->hasMany('App\Models\PridefulEnemy');
+        return $this->hasMany('App\Models\Enemies\PridefulEnemy');
     }
 
     /**
@@ -465,8 +468,7 @@ class DungeonRoute extends Model
                                           )
                                   )
                                ), 0
-                       ) AS SIGNED)                  as enemy_forces,
-                   count(distinct dungeon_routes.id) as aggregate
+                       ) AS SIGNED) as enemy_forces
             from `dungeon_routes`
                      left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
                      left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
@@ -481,6 +483,14 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEnemyForcesTooMuch(): int
+    {
+        return max(0, $this->enemy_forces - ($this->teeming ? $this->dungeon->enemy_forces_required_teeming : $this->dungeon->enemy_forces_required));
     }
 
     /**
@@ -509,7 +519,7 @@ class DungeonRoute extends Model
                 $result = $this->mayUserEdit($user);
                 break;
             case PublishedState::TEAM:
-                $result = $this->team !== null && $this->team->isUserMember($user);
+                $result = ($this->team !== null && $this->team->isUserMember($user)) || $user->hasRole('admin');
                 break;
             case PublishedState::WORLD_WITH_LINK:
             case PublishedState::WORLD:
@@ -839,7 +849,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     * @return float|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
      */
     public function getRatingByCurrentUser()
     {
@@ -866,7 +876,7 @@ class DungeonRoute extends Model
     public function isFavoritedByCurrentUser(): bool
     {
         // Use relationship caching instead of favorites() to save some queries
-        return Auth::check() ? $this->favorites->where('user_id', Auth::id())->isNotEmpty() : false;
+        return Auth::check() && $this->favorites()->where('user_id', Auth::id())->exists();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Service\EchoServerHttpApiServiceInterface;
 use Illuminate\Console\Command;
 
 class Test extends Command
@@ -35,8 +36,13 @@ class Test extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(EchoServerHttpApiServiceInterface $echoServerHttpApiService)
     {
+        // 'presence-local-route-edit.E2mXPo3'
+//        dd($echoServerHttpApiService->getStatus());
+        dd($echoServerHttpApiService->getChannelInfo('presence-local-route-edit.E2mXPo3'));
+        dd($echoServerHttpApiService->getChannelUsers('presence-local-route-edit.E2mXPo3'));
+        dd($echoServerHttpApiService->getChannels());
 
         return 0;
     }

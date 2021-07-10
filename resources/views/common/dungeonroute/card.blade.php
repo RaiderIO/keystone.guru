@@ -3,6 +3,7 @@
 <?php
 /** @var $cacheService \App\Service\Cache\CacheService */
 /** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $currentAffixGroup \App\Models\AffixGroup */
 /** @var $tierAffixGroup \App\Models\AffixGroup|null */
 /** @var $__env array */
 /** @var $cache boolean */
@@ -10,9 +11,24 @@
 $showAffixes = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
-$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $tierAffixGroup, $__env) {
+$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
+$isTyrannical = $dungeonroute->isTyrannical();
+$isFortified = $dungeonroute->isFortified();
+
+if (!isset($tierAffixGroup)) {
+    // Try to come up with a sensible default
+    if ($dungeonroute->affixes->count() === 1) {
+        $tierAffixGroup = $dungeonroute->affixes->first();
+    } else {
+        // If the affix list contains the current affix, we can use that to display the tier instead
+        $tierAffixGroup = $dungeonroute->affixes->filter(function (\App\Models\AffixGroup $affixGroup) use ($currentAffixGroup) {
+            return $affixGroup->id === $currentAffixGroup->id;
+        })->isNotEmpty() ? $currentAffixGroup : null;
+    }
+}
+
 // Attempt a default value if there's only one affix set
-$tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ? $dungeonroute->affixes->first() : null;
+$tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
 $enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dungeon->enemy_forces_required) * 100);
 $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 
@@ -57,13 +73,16 @@ ob_start(); ?>
                 @if( $showAffixes )
                     <div class="col-auto">
                         <?php
-                        $isTyrannical = $dungeonroute->isTyrannical();
-                        $isFortified = $dungeonroute->isFortified();
                         ob_start();
                         ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div class="row no-gutters">
-                                @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'showText' => false, 'dungeon' => $dungeonroute->dungeon])
+                                @include('common.affixgroup.affixgroup', [
+                                    'affixgroup' => $affixgroup,
+                                    'showText' => false,
+                                    'dungeon' => $dungeonroute->dungeon,
+                                    'highlight' => $currentAffixGroup->id === $affixgroup->id,
+                                ])
                             </div>
                         @endforeach
                         <?php $affixes = ob_get_clean(); ?>
@@ -98,21 +117,6 @@ ob_start(); ?>
                         @endif
                     </div>
                 @endif
-                @auth
-                    @if(Auth::user()->hasRole('admin'))
-                        <div class="col-auto px-1 refresh_thumbnail" title="{{ __('Refresh thumbnail') }}"
-                             data-toggle="tooltip" data-publickey="{{ $dungeonroute->public_key }}">
-                            <a class="btn p-0">
-                                <span class="refresh">
-                                    <i class="fas fa-sync"></i>
-                                </span>
-                                <span class="loader" style="display: none;">
-                                    <i class="fas fa-circle-notch fa-spin"></i>
-                                </span>
-                            </a>
-                        </div>
-                    @endif
-                @endauth
             </div>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
                 <div class="col">
@@ -151,8 +155,31 @@ ob_start(); ?>
                             @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])
                         @endif
                         -
-                        {{ sprintf(__('Last updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
+                        {{ sprintf(__('Updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
                     </small>
+                </div>
+                <div class="col-auto bg-card-footer px-2">
+                    <button id="route_menu_button_{{ $dungeonroute->public_key }}"
+                            class="btn btn-sm menu_actions_btn py-1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v text-muted"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="route_menu_button_{{ $dungeonroute->public_key }}">
+                        <a class="dropdown-item" href="#" data-toggle="modal"
+                           data-target="#userreport_dungeonroute_modal"
+                           data-publickey="{{ $dungeonroute->public_key }}">
+                            <i class="fas fa-flag"></i> {{ __('Report') }}
+                        </a>
+                        @auth
+                            <div class="dropdown-divider"></div>
+                            @if(Auth::user()->hasRole('admin'))
+                                <a class="dropdown-item refresh_thumbnail"
+                                   data-publickey="{{ $dungeonroute->public_key }}">
+                                    <i class="fas fa-sync"></i> {{ __('Refresh thumbnail') }}
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>

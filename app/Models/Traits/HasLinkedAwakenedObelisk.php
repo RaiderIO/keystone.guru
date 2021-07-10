@@ -40,7 +40,7 @@ trait HasLinkedAwakenedObelisk
             $mapIcon = MapIcon::where('floor_id', $this->floor_id)
                 ->where('map_icon_type_id', $linkedAwakenedObelisk->target_map_icon_type_id)
                 ->where('seasonal_index', $linkedAwakenedObelisk->target_map_icon_seasonal_index)
-                ->get()->first();
+                ->first();
             if ($mapIcon !== null) {
                 $result = $mapIcon->id;
             }

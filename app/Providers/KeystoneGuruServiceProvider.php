@@ -37,19 +37,20 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind the interface to the actual service
-        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\DiscordApiService');
+        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Internals
         $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
 
         // Model helpers
-        if (env('APP_ENV') === 'local') {
+        if (config('app.env') === 'local') {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
         } else {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
         $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
+        $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
 
@@ -132,7 +133,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'expansions'                      => Expansion::all(),
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
-                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->get()->first(),
+                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -153,7 +154,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
 
             // Set a variable that checks if the user is adfree or not
-            $view->with('adFree', env('APP_ENV') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
+            $view->with('adFree', config('app.env') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view)
@@ -185,6 +186,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.layout.navuser', function (View $view)
         {
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
+        });
+
+        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables)
+        {
+            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
+            $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)

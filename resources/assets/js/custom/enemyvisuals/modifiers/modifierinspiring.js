@@ -44,7 +44,7 @@ class EnemyVisualModifierInspiring extends EnemyVisualModifier {
      * @inheritDoc
      */
     _getTemplateData(width, height, margin) {
-        console.assert(this instanceof EnemyVisualModifierInspiring, 'this is not an EnemyVisualModifierAwakened!', this);
+        console.assert(this instanceof EnemyVisualModifierInspiring, 'this is not an EnemyVisualModifierInspiring!', this);
 
         return $.extend({}, super._getTemplateData(width, height, margin), this._getLocation(width, height, margin), {
             classes: 'modifier_external modifier_' + this.iconName,

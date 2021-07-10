@@ -47,6 +47,13 @@ class EnemyVisual extends Signalable {
             }
         });
 
+        // Rebuild whenever these infrequently fired events are received
+        this.enemy.register(['overpulled:changed', 'obsolete:changed'], this, function (changedEvent) {
+            if (enemy.shouldBeVisible()) {
+                self.buildVisual();
+            }
+        });
+
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
@@ -196,6 +203,10 @@ class EnemyVisual extends Signalable {
             // Inspiring marker
             else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
                 modifiers.push(new EnemyVisualModifierInspiring(this, 3));
+            }
+            // Tormented marker
+            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED) {
+                modifiers.push(new EnemyVisualModifierTormented(this, 3));
             }
         }
 
@@ -385,7 +396,7 @@ class EnemyVisual extends Signalable {
                 (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
             // Set a default color which may be overridden by any visuals
-            let borderThickness = Math.max(2, getState().getMapZoomLevel());
+            let borderThickness = getState().getMapZoomLevel();
             let border = `1px solid black`;
             let hasKillZone = this.enemy.getKillZone() instanceof KillZone;
             if (hasKillZone) {
@@ -396,7 +407,11 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
-            if (this.isHighlighted() || hasKillZone) {
+            // if (this.enemy.getOverpulledKillZoneId() !== null) {
+            //     border = `${borderThickness}px dashed red`;
+            // }
+
+            if (this.isHighlighted() || hasKillZone || this.enemy.getOverpulledKillZoneId() !== null) {
                 data.root_style = `opacity: 100%`;
             } else if (this.enemy.isImportant()) {
                 data.root_classes += ' important';
@@ -558,7 +573,7 @@ class EnemyVisual extends Signalable {
 
         this._$mainVisualOuter[0].style.width = outerWidthStr;
         this._$mainVisualOuter[0].style.height = outerHeightStr;
-        if (this.enemy.getKillZone() instanceof KillZone) {
+        if (this.enemy.getKillZone() instanceof KillZone || this.enemy.getOverpulledKillZoneId() !== null) {
             this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
         } else {
             this._$mainVisualOuter[0].style.borderWidth = `1px`;

@@ -61,6 +61,13 @@ class DungeonFloorSwitchMarker extends Icon {
             // Rebuild the popup so that we have proper
             self._assignPopup();
         });
+
+        if (getState().isEchoEnabled()) {
+            getState().getEcho().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
+        }
+
+        // Whenever we have to display which users are on this floor, these users are on here
+        this.usersOnThisFloor = [];
     }
 
     /**
@@ -145,6 +152,39 @@ class DungeonFloorSwitchMarker extends Icon {
     }
 
     /**
+     *
+     * @param e
+     * @private
+     */
+    _mousePositionReceived(e) {
+        let mousePosition = e.data;
+
+        let changed = false;
+
+        // If the user is on this floor..
+        if (mousePosition.floor_id === this.target_floor_id) {
+            // Add the user to this floor
+            if (!this.usersOnThisFloor.includes(mousePosition.user.id)) {
+                this.usersOnThisFloor.push(mousePosition.user.id);
+
+                changed = true;
+            }
+        } else {
+            // Remove it from the list
+            let index = this.usersOnThisFloor.indexOf(mousePosition.user.id);
+            if (index !== -1) {
+                this.usersOnThisFloor.splice(index, 1);
+
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            this.rebindTooltip();
+        }
+    }
+
+    /**
      * @inheritDoc
      */
     onLayerInit() {
@@ -162,11 +202,34 @@ class DungeonFloorSwitchMarker extends Icon {
     }
 
     /**
+     *
+     * @returns {{}}
+     */
+    getTooltipOptions() {
+        return {
+            permanent: this.usersOnThisFloor.length > 0
+        };
+    }
+
+    /**
      * Return the text that is displayed on the label of this Map Icon.
      * @returns {string}
      */
     getDisplayText() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
+
+        if (this.usersOnThisFloor.length > 0) {
+            let echo = getState().getEcho();
+            let usernames = [];
+            for (let i = 0; i < this.usersOnThisFloor.length; i++) {
+                let echoUser = echo.getUserById(this.usersOnThisFloor[i]);
+                if (echoUser !== null) {
+                    usernames.push(echoUser.getName());
+                }
+            }
+
+            return usernames.join(', ');
+        }
 
         let targetFloor = this.map.getFloorById(this.target_floor_id);
 
@@ -185,5 +248,9 @@ class DungeonFloorSwitchMarker extends Icon {
         super.cleanup();
 
         getState().unregister('floorid:changed', this);
+
+        if (getState().isEchoEnabled()) {
+            getState().getEcho().unregister('mouseposition:received', this);
+        }
     }
 }

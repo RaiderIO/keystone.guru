@@ -34,7 +34,7 @@ php artisan config:clear
 # Restart queue processors
 php artisan queue:restart
 # Start supervisor related tasks
-php artisan keystoneguru:startsupervisor
+php artisan supervisor:start
 
 # All done!
 php artisan up

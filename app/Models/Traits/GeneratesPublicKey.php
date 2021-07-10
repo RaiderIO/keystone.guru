@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait GeneratesPublicKey
 {
-
-
     /**
      * @param int $length
      * @param string $column
@@ -22,7 +20,6 @@ trait GeneratesPublicKey
      */
     public static function generateRandomPublicKey(int $length = 7, string $column = 'public_key'): string
     {
-        $all = static::all();
         do {
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
@@ -30,7 +27,7 @@ trait GeneratesPublicKey
             for ($i = 0; $i < $length; $i++) {
                 $newKey .= $characters[rand(0, $charactersLength - 1)];
             }
-        } while ($all->where($column, $newKey)->count() > 0);
+        } while (static::where($column, $newKey)->count() > 0);
 
         return $newKey;
     }

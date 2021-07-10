@@ -21,6 +21,15 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Always return false in a context where affixes are not known
+     * @param affix {String}
+     * @returns {boolean}
+     */
+    hasAffix(affix) {
+        return false;
+    }
+
+    /**
      *
      * @returns {[]}
      */
@@ -253,7 +262,7 @@ class MapContext extends Signalable {
      * @returns {[]}
      */
     getAuras() {
-        return this._options.auras;
+        return this._options.dungeon.auras;
     }
 
     /**
@@ -263,13 +272,29 @@ class MapContext extends Signalable {
     findAuraById(auraId) {
         let result = null;
 
-        for (let i = 0; i < this._options.auras.length; i++) {
-            if (this._options.auras[i].id === auraId) {
-                result = this._options.auras[i];
+        for (let i = 0; i < this._options.dungeon.auras.length; i++) {
+            if (this._options.dungeon.auras[i].id === auraId) {
+                result = this._options.dungeon.auras[i];
                 break;
             }
         }
 
         return result;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        return this._options.echoChannelName;
+    }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getUserId() {
+        return this._options.userId;
     }
 }

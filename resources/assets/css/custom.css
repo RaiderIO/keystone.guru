@@ -167,7 +167,8 @@
 }
 
 @media (min-width: 1200px) {
-    .discover .card_dungeonroute {
+    .discover .card_dungeonroute,
+    .discover .card_dungeonroute .col {
         max-height: 192px;
     }
 
@@ -195,6 +196,11 @@
     bottom: 0;
     right: 0;
     left: 0;
+}
+
+.affix_group_row.current {
+    border: red 2px solid;
+    border-radius: 3px;
 }
 
 .routes_table .owl-carousel {

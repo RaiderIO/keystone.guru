@@ -46,7 +46,7 @@ class Season extends CacheModel
      * @return Carbon Get a date of now with the timezone set properly.
      * @todo This is a copy of the service function
      */
-    private function _getNow()
+    private function _getNow(): Carbon
     {
         return Carbon::now($this->_getUserTimezone());
     }
@@ -54,7 +54,7 @@ class Season extends CacheModel
     /**
      * @return HasMany
      */
-    public function affixgroups()
+    public function affixgroups(): HasMany
     {
         return $this->hasMany('App\Models\AffixGroup');
     }
@@ -76,7 +76,7 @@ class Season extends CacheModel
     /**
      * @return Carbon The start date of this season.
      */
-    public function start()
+    public function start(): Carbon
     {
         $start = Carbon::createFromTimeString($this->start, 'UTC');
 
@@ -95,7 +95,7 @@ class Season extends CacheModel
      * @param Carbon $date
      * @return int
      */
-    public function getWeeksSinceStartAt($date)
+    public function getWeeksSinceStartAt(Carbon $date): int
     {
         $start = $this->start();
 
@@ -109,8 +109,9 @@ class Season extends CacheModel
     /**
      * Get the amount of full iterations of the entire list of affix groups that this season has done, since the start
      * of the season.
+     * @return int
      */
-    public function getAffixGroupIterations()
+    public function getAffixGroupIterations(): int
     {
         return $this->getAffixGroupIterationsAt($this->_getNow());
     }
@@ -118,10 +119,10 @@ class Season extends CacheModel
     /**
      * Get the amount of full iterations of the entire list of affix groups
      *
-     * @param $date
+     * @param Carbon $date
      * @return int
      */
-    public function getAffixGroupIterationsAt($date)
+    public function getAffixGroupIterationsAt(Carbon $date): int
     {
         $weeksSinceStart = $this->getWeeksSinceStartAt($date);
 
@@ -132,7 +133,7 @@ class Season extends CacheModel
     /**
      * Get the affix group that is currently active in the user's timezone (if user timezone was set).
      *
-     * @return AffixGroup
+     * @return AffixGroup|boolean
      */
     public function getCurrentAffixGroup()
     {
@@ -148,7 +149,7 @@ class Season extends CacheModel
     /**
      * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
      *
-     * @return AffixGroup
+     * @return AffixGroup|boolean
      */
     public function getNextAffixGroup()
     {
@@ -169,7 +170,7 @@ class Season extends CacheModel
      * @return AffixGroup The affix group that is active at that point in time for your passed timezone.
      * @throws Exception
      */
-    public function getAffixGroupAtTime($date)
+    public function getAffixGroupAtTime(Carbon $date): AffixGroup
     {
         /** @var SeasonService $seasonService */
         $start = $this->start();
@@ -190,7 +191,7 @@ class Season extends CacheModel
      * @param Carbon $date
      * @return int The preset at the passed date.
      */
-    public function getPresetAt(Carbon $date)
+    public function getPresetAt(Carbon $date): int
     {
         // Only if the current season has presets do we calculate, otherwise return 0
         return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;

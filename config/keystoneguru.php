@@ -45,6 +45,13 @@ return [
     ],
 
     'echo'                              => [
+        'url'    => env('LARAVEL_ECHO_SERVER_URL'),
+        'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
+        'client' => [
+            'app_id' => env('LARAVEL_ECHO_SERVER_CLIENT_APP_ID'),
+            'key'    => env('LARAVEL_ECHO_SERVER_CLIENT_KEY'),
+        ],
+
         'randomsuffixes' => [
             // Basilisks
             'Stonegazer',
@@ -117,40 +124,47 @@ return [
      */
     'aggressiveness'                    => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
 
-    'aggressiveness_pretty'               => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
+    'aggressiveness_pretty'              => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
 
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
-    'dungeonroute_difficulty'             => ['Casual', 'Dedicated', 'Hardcore'],
+    'dungeonroute_difficulty'            => ['Casual', 'Dedicated', 'Hardcore'],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit'  => 999,
+    'registered_user_dungeonroute_limit' => 999,
 
 
     /**
      * How many affix groups are in an iteration of a season.
      */
-    'season_iteration_affix_group_count'  => 12,
+    'season_iteration_affix_group_count' => 12,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins'            => 30,
+    'view_time_threshold_mins'           => 30,
 
-    /**
-     * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
-     */
-    'thumbnail_refresh_min'               => 30,
+    'thumbnail'                           => [
+        /**
+         * A secret key that must be provided to get access to the preview routes (no other auth available)
+         */
+        'preview_secret'       => env('THUMBNAIL_PREVIEW_SECRET'),
 
-    /**
-     * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
-     */
-    'thumbnail_refresh_anyways_days'      => 30,
+        /**
+         * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
+         */
+        'refresh_min'          => 30,
+
+        /**
+         * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
+         */
+        'refresh_anyways_days' => 30,
+    ],
 
     /**
      * The amount of hours it takes before a dungeon route that is created through the 'sandbox' functionality expires and
@@ -248,5 +262,46 @@ return [
                 'ttl' => '1 hour'
             ]
         ]
+    ],
+
+    'live_sessions' => [
+        'expires_hours' => 1
+    ],
+
+    'influxdb' => [
+        'default_tags' => [
+            'environment' => env('APP_ENV')
+        ]
+    ],
+
+    'webhook' => [
+        'github' => [
+            'url'    => env('DISCORD_GITHUB_WEBHOOK'),
+            'secret' => env('GITHUB_WEBHOOK_SECRET')
+        ],
+
+        'discord' => [
+            'new_release' => [
+                'url' => env('DISCORD_NEW_RELEASE_WEBHOOK')
+            ]
+        ]
+    ],
+
+    'patreon' => [
+        'oauth' => [
+            'client_id' => env('PATREON_CLIENT_ID'),
+            'secret'    => env('PATREON_CLIENT_SECRET'),
+        ]
+    ],
+
+    'reddit' => [
+        'oauth' => [
+            'client_id' => env('REDDIT_CLIENT_ID'),
+            'secret'    => env('REDDIT_SECRET_KEY'),
+        ],
+        // Used for creating release posts under the Keystoneguru user
+        'api'   => [
+            'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
+        ],
     ]
 ];

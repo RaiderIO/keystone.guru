@@ -33,9 +33,9 @@ abstract class OAuthLoginController extends LoginController
      * @param $username string The username to check.
      * @return bool True if the user exists, false if it does not.
      */
-    protected function userExistsByUsername($username)
+    protected function userExistsByUsername($username): bool
     {
-        return User::where('name', $username)->get()->first() !== null;
+        return User::where('name', $username)->first() !== null;
     }
 
     /**
@@ -43,9 +43,9 @@ abstract class OAuthLoginController extends LoginController
      * @param $email string The e-mail address to check.
      * @return bool True if the user exists, false if it does not.
      */
-    protected function userExistsByEmail($email)
+    protected function userExistsByEmail($email): bool
     {
-        return User::where('email', $email)->get()->first() !== null;
+        return User::where('email', $email)->first() !== null;
     }
 
     /**

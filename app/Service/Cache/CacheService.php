@@ -45,7 +45,7 @@ class CacheService implements CacheServiceInterface
             }
 
             // Only write it to cache when we're not local
-            if (env('APP_ENV') !== 'local') {
+            if (config('app.env') !== 'local') {
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }

@@ -3,53 +3,58 @@
 
 namespace App\Service;
 
+use Exception;
 use GuzzleHttp\Client;
+use InvalidArgumentException;
+use Log;
 use Teapot\StatusCode;
 
-class EchoServerHttpApiService implements EchoServerHttpApiInterface
+class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
 {
 
     /** @var Client Guzzle client; used for communicating with the echo server API. */
-    private $_client;
+    private Client $_client;
 
-    /**
-     * EchoServerHttpApiService constructor.
-     * @throws \Exception
-     */
     public function __construct()
     {
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim(env('LARAVEL_ECHO_SERVER_URL'), '/');
+        $appUrl = trim(config('keystoneguru.echo.url'), '/');
 
         try {
             $this->_client = new Client([
                 // Base URI is used with relative requests
-                'base_uri' => sprintf('%s:%s', $appUrl, env('LARAVEL_ECHO_SERVER_PORT')),
+                'base_uri' => sprintf('%s:%s', $appUrl, config('keystoneguru.echo.port')),
                 // You can set any number of default request options.
-                'timeout' => 2.0
+                'timeout'  => 2.0
             ]);
-        } catch( \InvalidArgumentException $ex ) {
-            \Log::error('Unable to connect to echo server service!');
+        } catch (InvalidArgumentException $ex) {
+            report($ex);
+
+            Log::error('Unable to connect to echo server service!');
+
+            throw $ex;
         }
     }
 
     /**
      * @param $uri
-     * @return bool|mixed
-     * @throws \Exception
+     * @return array
+     * @throws Exception
      */
-    private function _doRequest($uri)
+    private function _doRequest($uri): array
     {
-        $result = false;
+        $result = [];
 
-        if( $this->_client !== null ) {
+        if ($this->_client !== null) {
             // Perform the API request with the correct auth key
             $response = $this->_client->get(
-                sprintf('apps/%s/%s', env('LARAVEL_ECHO_SERVER_CLIENT_APP_ID'), $uri),
-                ['query' => ['auth_key' => env('LARAVEL_ECHO_SERVER_CLIENT_KEY')]]
+                sprintf('apps/%s/%s', config('keystoneguru.echo.client.app_id'), $uri),
+                ['query' => ['auth_key' => config('keystoneguru.echo.client.key')]]
             );
             if ($response->getStatusCode() === StatusCode::OK) {
-                $result = json_decode((string)$response->getBody());
+                $result = json_decode((string)$response->getBody(), true);
+            } else {
+                throw new Exception(sprintf('Unable to perform request to %s, retrieved status code %s', $uri, $response->getStatusCode()));
             }
         }
 
@@ -57,41 +62,35 @@ class EchoServerHttpApiService implements EchoServerHttpApiInterface
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getStatus()
+     * @inheritDoc
+     **/
+    public function getStatus(): array
     {
         return $this->_doRequest('status');
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getChannels()
+     * @inheritDoc
+     **/
+    public function getChannels(): array
     {
-        return $this->_doRequest('channels');
+        return $this->_doRequest('channels')['channels'];
     }
 
     /**
-     * @param $channelName
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getChannelInfo($channelName)
+     * @inheritDoc
+     **/
+    public function getChannelInfo($channelName): array
     {
         return $this->_doRequest(sprintf('channels/%s', $channelName));
     }
 
     /**
-     * @param $channelName
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getChannelUsers($channelName)
+     * @inheritDoc
+     **/
+    public function getChannelUsers($channelName): array
     {
-        return $this->_doRequest(sprintf('channels/%s/users', $channelName));
+        return $this->_doRequest(sprintf('channels/%s/users', $channelName))['users'];
     }
 
 }

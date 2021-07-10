@@ -2,14 +2,13 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
-        // Used by Echo to join the correct channels
-        this._appType = '';
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
         // Echo handler
+        this.echoEnabled = false;
         this._echo = null;
-        this._echoMouseLocationHandler = null;
+
         /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
         // What enemy visual type we're displaying
@@ -29,6 +28,9 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.paidTiers = [];
+
+        this.snackbarIds = [];
+        this.snackbarsAdded = 0;
     }
 
     /**
@@ -36,20 +38,8 @@ class StateManager extends Signalable {
      */
     enableEcho() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        this._echo = new Echo(this);
-        this._echo.connect();
 
-        this.signal('echo:enabled');
-    }
-
-    /**
-     * Set the app type (local, staging, live etc).
-     * @param appType {string}
-     */
-    setAppType(appType) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._appType = appType;
+        this.echoEnabled = true;
     }
 
     /**
@@ -62,6 +52,8 @@ class StateManager extends Signalable {
 
         if (mapContext.type === 'dungeonroute') {
             this._mapContext = new MapContextDungeonRoute(mapContext);
+        } else if (mapContext.type === 'livesession') {
+            this._mapContext = new MapContextLiveSession(mapContext);
         } else if (mapContext.type === 'dungeon') {
             this._mapContext = new MapContextDungeon(mapContext);
         } else {
@@ -148,8 +140,12 @@ class StateManager extends Signalable {
             });
         }
 
+        // Set up the echo handler if we should
         if (this.isEchoEnabled()) {
-            this._echoMouseLocationHandler = new EchoMouseLocationHandler(this._map);
+            this._echo = new Echo(this._map);
+            this._echo.connect();
+
+            this.signal('echo:enabled');
         }
     }
 
@@ -217,14 +213,16 @@ class StateManager extends Signalable {
 
     /**
      * Sets the floor ID.
-     * @param floorId int
+     * @param floorId {Number}
+     * @param center {Array}
+     * @param zoom {Number}
      */
-    setFloorId(floorId) {
+    setFloorId(floorId, center = null, zoom = null) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         this._floorId = floorId;
 
         // Let everyone know it's changed
-        this.signal('floorid:changed', {floorId: this._floorId});
+        this.signal('floorid:changed', {floorId: this._floorId, center: center, zoom: zoom});
     }
 
     /**
@@ -288,13 +286,23 @@ class StateManager extends Signalable {
     }
 
     /**
+     *
+     * @param enabled {boolean}
+     */
+    setEchoCursorsEnabled(enabled) {
+        Cookies.set('echo_cursors_enabled', enabled ? 1 : 0);
+
+        this.signal('echocursorsenabled:changed');
+    }
+
+    /**
      * Checks if Echo is enabled for the current session.
      * @returns {boolean}
      */
     isEchoEnabled() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._echo !== null;
+        return this.echoEnabled;
     }
 
     /**
@@ -318,7 +326,7 @@ class StateManager extends Signalable {
 
     /**
      * Get the context of the map we are editing at this point.
-     * @returns {MapContextDungeon|MapContextDungeonRoute}
+     * @returns {MapContextDungeon|MapContextDungeonRoute|MapContextLiveSession}
      */
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -508,23 +516,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     *
-     * @returns {*}
-     */
-    getEchoChannelName() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let channelName = '';
-
-        if (this.isMapAdmin()) {
-            channelName = `${this._appType}-dungeon-edit.${this._mapContext.getDungeon().id}`;
-        } else {
-            channelName = `${this._appType}-route-edit.${this._mapContext.getPublicKey()}`;
-        }
-
-        return channelName;
-    }
-
-    /**
      * Gets the currently logged in user's name, or null if not logged in.
      * @returns {*|null}
      */
@@ -553,5 +544,53 @@ class StateManager extends Signalable {
      */
     getPullsSidebarFloorSwitchVisibility() {
         return parseInt(Cookies.get('pulls_sidebar_floor_switch_visibility')) === 1;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    getEchoCursorsEnabled() {
+        return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
+    }
+
+    /**
+     * Adds a snackbar to be displayed on the page (only works in map view!)
+     *
+     * @param html {String}
+     * @param options {Object}
+     * @return {String} The created Snackbar's id.
+     */
+    addSnackbar(html, options = {}) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        // Increment and assign
+        let snackbarId = `snackbar-${++this.snackbarsAdded}`;
+        this.snackbarIds.push(snackbarId);
+
+        this.signal('snackbar:add', {
+            id: snackbarId,
+            html: html,
+            onDomAdded: options.hasOwnProperty('onDomAdded') ? (typeof options.onDomAdded === 'function' ? options.onDomAdded : null) : null
+        });
+
+        return snackbarId;
+    }
+
+    /**
+     * Removes a snackbar by its id
+     * @param snackbarId {String}
+     */
+    removeSnackbar(snackbarId) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        // Only if it exists
+        if (_.indexOf(this.snackbarIds, snackbarId) !== -1) {
+            this.signal('snackbar:remove', {
+                id: snackbarId
+            });
+
+            this.snackbarIds = _.without(this.snackbarIds, snackbarId);
+        }
     }
 }

@@ -1,6 +1,8 @@
 <?php
 /** @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection */
 /** @var $affixgroup \App\Models\AffixGroup|null */
+/** @var $currentAffixGroup \App\Models\AffixGroup */
+
 
 $cols = $cols ?? 1;
 $showDungeonImage = $showDungeonImage ?? false;
@@ -16,7 +18,13 @@ for ($i = 0; $i < (int)ceil($count / $cols); $i++) { ?>
     ?>
     <div class="col-xl">
         @if($dungeonroute !== null)
-            @include('common.dungeonroute.card', ['dungeonroute' => $dungeonroute, 'tierAffixGroup' => $affixgroup, 'showDungeonImage' => $showDungeonImage, 'cache' => $cache])
+            @include('common.dungeonroute.card', [
+                'dungeonroute' => $dungeonroute,
+                'currentAffixGroup' => $currentAffixGroup,
+                'tierAffixGroup' => $affixgroup,
+                'showDungeonImage' => $showDungeonImage,
+                'cache' => $cache
+            ])
         @endif
     </div>
     <?php } ?>
