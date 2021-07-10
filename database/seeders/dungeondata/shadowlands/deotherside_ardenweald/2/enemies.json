@@ -510,7 +510,7 @@
         "enemy_pack_id": -1,
         "npc_id": 179891,
         "floor_id": 74,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_type": "tormented",
         "seasonal_index": null,
         "teeming": null,

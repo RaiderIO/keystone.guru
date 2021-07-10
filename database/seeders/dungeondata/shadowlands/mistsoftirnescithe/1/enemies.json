@@ -1036,9 +1036,9 @@
     {
         "id": 5069,
         "enemy_pack_id": 1034,
-        "npc_id": 171772,
+        "npc_id": 164920,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 8,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1052,15 +1052,15 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 171772
+            "id": 164920
         }
     },
     {
         "id": 5070,
         "enemy_pack_id": 1034,
-        "npc_id": 171772,
+        "npc_id": 164920,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 6,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1074,7 +1074,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 171772
+            "id": 164920
         }
     },
     {
@@ -4162,7 +4162,7 @@
         "enemy_pack_id": -1,
         "npc_id": 179446,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_type": "tormented",
         "seasonal_index": null,
         "teeming": null,
@@ -4184,7 +4184,7 @@
         "enemy_pack_id": -1,
         "npc_id": 179892,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_type": "tormented",
         "seasonal_index": null,
         "teeming": null,
@@ -4206,7 +4206,7 @@
         "enemy_pack_id": -1,
         "npc_id": 179890,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_type": "tormented",
         "seasonal_index": null,
         "teeming": null,
@@ -4228,7 +4228,7 @@
         "enemy_pack_id": -1,
         "npc_id": 179891,
         "floor_id": 80,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_type": "tormented",
         "seasonal_index": null,
         "teeming": null,
