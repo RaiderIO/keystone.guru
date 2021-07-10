@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f1d032598791c38ad24ccbfbad8eb88",
+    "content-hash": "1cafd17121fccdd582d11300d6230b5f",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -4406,11 +4406,11 @@
         },
         {
             "name": "nnoggie/mythicdungeontools",
-            "version": "3.5.6",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nnoggie/MythicDungeonTools.git",
-                "reference": "e8d4d9ee7d51b2fa2e823d0f9da3e23066495f62"
+                "reference": "ac15645241b468d5ae67343cce43aba0da2a7376"
             },
             "type": "library"
         },
