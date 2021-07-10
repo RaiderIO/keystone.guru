@@ -16,6 +16,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DungeonRouteAffixGroup extends Model
 {
     public $hidden = ['id'];
+    public $fillable = [
+        'dungeon_route_id',
+        'affix_group_id',
+    ];
 
     public $timestamps = false;
 

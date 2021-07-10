@@ -28,9 +28,10 @@ $id = $id ?? 'affixes';
 
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
+            <?php $isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING); ?>
             <div
-                class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-                {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
+                class="row affix_list_row {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+                {{ $isTeeming ? 'style="display: none;"' : '' }}
                 data-id="{{ $affixGroup->id }}">
                 <?php
                 /** @var \App\Models\AffixGroup $affixGroup */

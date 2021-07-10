@@ -73,34 +73,34 @@ class AffixGroup extends CacheModel
         return $result;
     }
 
-    /**
-     * @return bool Checks if this group contains the Teeming affix.
-     */
-    public function isTeeming(): bool
-    {
-        return $this->hasAffix('Teeming');
-    }
-
-    /**
-     * @return bool Checks if this group contains the Tyrannical affix.
-     */
-    public function isTyrannical(): bool
-    {
-        return $this->hasAffix('Tyrannical');
-    }
-
-    /**
-     * @return bool Checks if this group contains the Fortified affix.
-     */
-    public function isFortified(): bool
-    {
-        return $this->hasAffix('Fortified');
-    }
+//    /**
+//     * @return bool Checks if this group contains the Teeming affix.
+//     */
+//    public function isTeeming(): bool
+//    {
+//        return $this->hasAffix('Teeming');
+//    }
+//
+//    /**
+//     * @return bool Checks if this group contains the Tyrannical affix.
+//     */
+//    public function isTyrannical(): bool
+//    {
+//        return $this->hasAffix('Tyrannical');
+//    }
+//
+//    /**
+//     * @return bool Checks if this group contains the Fortified affix.
+//     */
+//    public function isFortified(): bool
+//    {
+//        return $this->hasAffix('Fortified');
+//    }
 
     /**
      * @return string|null
      */
-    public function getSeasonalIndexAsLetter()
+    public function getSeasonalIndexAsLetter(): ?string
     {
         $result = null;
 
@@ -116,7 +116,7 @@ class AffixGroup extends CacheModel
      * @param string $name
      * @return bool
      */
-    private function hasAffix(string $name): bool
+    public function hasAffix(string $name): bool
     {
         $result = false;
 

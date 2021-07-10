@@ -3,7 +3,7 @@
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 /** @var \App\Service\Season\SeasonService $seasonService */
 $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
-$teeming = old('teeming') ?? $currentAffixGroup->isTeeming();
+$teeming = old('teeming') ?? $currentAffixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 
 // Make sure $model exists

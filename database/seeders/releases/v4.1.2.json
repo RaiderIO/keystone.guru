@@ -1,0 +1,27 @@
+{
+    "id": 105,
+    "release_changelog_id": 112,
+    "version": "v4.1.2",
+    "title": "",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2021-07-10T13:03:01+00:00",
+    "updated_at": "2021-07-10T13:03:01+00:00",
+    "changelog": {
+        "id": 112,
+        "release_id": 105,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 112,
+                "release_changelog_category_id": 6,
+                "ticket_id": 836,
+                "change": "Importing MDT routes no longer incorrectly places Prideful enemies when the route is not for the Prideful seasonal affix.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}
