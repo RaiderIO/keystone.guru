@@ -15,14 +15,14 @@ abstract class GithubReleaseCommand extends Command
     public function findReleaseByVersion(?string $version): ?Release
     {
         if ($version === null) {
-            $release = Release::latest()->first();
+            $release = Release::latest()->disableCache()->first();
         } else {
             if (substr($version, 0, 1) !== 'v') {
                 $version = 'v' . $version;
             }
 
             /** @var Release $release */
-            $release = Release::where('version', $version)->first();
+            $release = Release::where('version', $version)->disableCache()->first();
         }
 
         return $release;

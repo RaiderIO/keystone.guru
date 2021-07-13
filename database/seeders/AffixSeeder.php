@@ -140,7 +140,7 @@ class AffixSeeder extends Seeder
             ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Tormented']],
             ['season_id' => 6, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Tormented']],
-            ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'affixes' => ['Fortified', 'Inspiring', 'Grievous', 'Tormented']],
             ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],

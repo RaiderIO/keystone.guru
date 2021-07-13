@@ -141,7 +141,7 @@ if ($timezone === null)
 
         <div class="mt-4 text-center">
             <p>
-                {{ __('Updated at 2021/Jul/10.') }}
+                {{ __('Updated at 2021/Jul/13.') }}
                 {{ __('For more information about affixes and M+, please visit') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
