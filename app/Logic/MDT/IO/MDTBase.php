@@ -53,9 +53,9 @@ class MDTBase
 
     /**
      * @param string $string
-     * @return array
+     * @return array|null Null if the string could not be decoded
      */
-    protected function decode(string $string): array
+    protected function decode(string $string): ?array
     {
         Artisan::call('mdt:decode', ['string' => $string]);
 
