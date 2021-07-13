@@ -19,6 +19,7 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -92,7 +93,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $currentExpansion = $expansionService->getCurrentExpansion();
             /** @var Release $latestRelease */
             $latestRelease = Release::latest()->first();
-            $latestReleaseSpotlight = Release::where('spotlight', true)->latest()->first();
+            $latestReleaseSpotlight = Release::where('spotlight', true)
+                ->whereDate('created_at', '>',
+                    Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))
+                )->latest()->first();
 
             return [
                 'isProduction'                    => config('app.env') === 'production',

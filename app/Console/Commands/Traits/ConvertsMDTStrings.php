@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Traits;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -20,6 +19,19 @@ trait ConvertsMDTStrings
 
     /** @var string */
     private static string $CLI_PARSER_DECODE_CMD = 'cli_weakauras_parser decode %s';
+
+    /**
+     * Checks if we should log a string to the error logger should it fail parsing
+     *
+     * @param string $string
+     * @return bool
+     * @see https://stackoverflow.com/a/34982057/771270
+     */
+    private function shouldErrorLog(string $string): bool
+    {
+        // Check if it's a base64 encoded string - ish
+        return (bool)preg_match('%^![a-zA-Z0-9/+()]*={0,2}$%', $string);
+    }
 
     /**
      * @param string $string
@@ -56,22 +68,39 @@ trait ConvertsMDTStrings
         $result = null;
 
         // Save a temp file so that the parser can handle it
-        $fileName = $this->saveFile($string);
+        try {
+            $fileName = $this->saveFile($string);
 
-        if ($fileName !== null) {
-            $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
-            $process = new Process(explode(' ', $cmd));
-            $process->run();
+            if ($fileName !== null) {
+                $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
+                $process = new Process(explode(' ', $cmd));
+                $process->run();
 
 
-            // executes after the command finishes
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+                // executes after the command finishes
+                if (!$process->isSuccessful()) {
+                    $errorOutput = trim($process->getErrorOutput());
+
+                    // Give output to the artisan command
+                    $this->error($errorOutput);
+
+                    // Only interested in decode - we're really only interested if it was a encoded, which would indicate some issue
+                    // with either the string or a new format the tool I use can't handle. We don't care for things that aren't
+                    // MDT strings - they should be ignored
+                    if (!$encode && $this->shouldErrorLog($string)) {
+                        logger()->error($errorOutput, [
+                            'string' => $string
+                        ]);
+                    }
+                }
+
+                $result = $process->getOutput();
             }
 
-            $result = $process->getOutput();
-
-            unlink($fileName);
+        } finally {
+            if ($fileName !== null) {
+                unlink($fileName);
+            }
         }
 
         return $result;

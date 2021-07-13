@@ -268,6 +268,10 @@ return [
         'expires_hours' => 1
     ],
 
+    'releases' => [
+        'spotlight_show_days' => 7
+    ],
+
     'influxdb' => [
         'default_tags' => [
             'environment' => env('APP_ENV')
