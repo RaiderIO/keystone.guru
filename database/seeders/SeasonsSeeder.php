@@ -43,7 +43,7 @@ class SeasonsSeeder extends Seeder
             ]), new Season([
                 'seasonal_affix_id' => 23,
                 'start'             => '2021-07-06 00:00:00',
-                'presets'           => 0,
+                'presets'           => 2,
             ]),
         ];
 
