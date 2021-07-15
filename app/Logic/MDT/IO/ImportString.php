@@ -9,6 +9,7 @@
 namespace App\Logic\MDT\IO;
 
 
+use App;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
@@ -30,6 +31,7 @@ use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -601,7 +603,7 @@ class ImportString extends MDTBase
 
     /**
      * Gets an array that represents the currently set MDT string.
-     * @return mixed
+     * @return array|null
      */
     public function getDecoded()
     {
@@ -620,7 +622,7 @@ class ImportString extends MDTBase
      * @throws InvalidMDTString
      * @throws Exception
      */
-    public function getDungeonRoute(Collection $warnings, $sandbox = false, $save = false): DungeonRoute
+    public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false): DungeonRoute
     {
         $lua = $this->_getLua();
         // Import it to a table
@@ -673,6 +675,7 @@ class ImportString extends MDTBase
                 // Something we can just return and have the user read
                 $dungeonRoute->affixes->push($affixGroup);
             }
+
             // Apply the seasonal index to the route
             $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
         } else {

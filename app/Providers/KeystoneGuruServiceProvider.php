@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Affix;
+use App\Models\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
@@ -98,6 +99,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))
                 )->latest()->first();
 
+            $currentSeason = $seasonService->getCurrentSeason();
+
             return [
                 'isProduction'                    => config('app.env') === 'production',
                 'demoRoutes'                      => $demoRoutes,
@@ -118,8 +121,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 // Discover routes
                 'currentExpansion'                => $currentExpansion,
                 'currentExpansionActiveDungeons'  => $currentExpansion->dungeons,
-                'currentAffixGroup'               => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
-                'nextAffixGroup'                  => $seasonService->getCurrentSeason()->getNextAffixGroup(),
+                'currentAffixGroup'               => $currentSeason->getCurrentAffixGroup(),
+                'nextAffixGroup'                  => $currentSeason->getNextAffixGroup(),
 
                 // Find routes
 
@@ -138,6 +141,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
                 'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
+
+                // Season
+                'currentSeason'                   => $currentSeason,
+                'isAwakened'                      => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_AWAKENED)->first()->id,
+                'isPrideful'                      => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_PRIDEFUL)->first()->id,
+                'isTormented'                     => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_TORMENTED)->first()->id,
+                'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
+                    ->with(['affixes:affixes.id,affixes.name,affixes.description'])
+                    ->get(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -228,6 +240,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables)
         {
             $view->with('affixes', $globalViewVariables['affixes']);
+            $view->with('isAwakened', $globalViewVariables['isAwakened']);
+            $view->with('isPrideful', $globalViewVariables['isPrideful']);
+            $view->with('isTormented', $globalViewVariables['isTormented']);
+            $view->with('affixGroups', $globalViewVariables['currentSeasonAffixGroups']);
         });
 
         // Displaying a release

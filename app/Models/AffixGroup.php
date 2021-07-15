@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property $id int The ID of this Affix.
  * @property $season_id int
  * @property $seasonal_index int
+ * @property $seasonal_index_in_season int Only set in in rare case - not a database column! See KeystoneGuruServiceProvider.php
  *
  * @property Collection|AffixGroupEaseTier[] $easetiers
  * @property Collection|Affix[] $affixes
@@ -30,7 +32,7 @@ class AffixGroup extends CacheModel
     /**
      * @return BelongsTo
      */
-    public function season()
+    public function season(): BelongsTo
     {
         return $this->belongsTo('App\Models\Season');
     }
@@ -38,7 +40,7 @@ class AffixGroup extends CacheModel
     /**
      * @return BelongsToMany
      */
-    public function affixes()
+    public function affixes(): BelongsToMany
     {
         // I don't know why this suddenly needs an order by. After adding indexes to the database somehow the order of this was done by affix_id
         // rather than the normal id. This caused affixes to be misplaced in the Affixes page. But not elsewhere, so it's double strange.
@@ -49,7 +51,7 @@ class AffixGroup extends CacheModel
     /**
      * @return HasMany
      */
-    public function easetiers()
+    public function easetiers(): HasMany
     {
         return $this->hasMany('App\Models\AffixGroupEaseTier');
     }
@@ -57,7 +59,7 @@ class AffixGroup extends CacheModel
     /**
      * @return string The text representation of this affix group.
      */
-    public function getTextAttribute()
+    public function getTextAttribute(): string
     {
         $result = [];
         foreach ($this->affixes as $affix) {
@@ -67,46 +69,7 @@ class AffixGroup extends CacheModel
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {
-            $result .= sprintf(' (%s)', $this->getSeasonalIndexAsLetter());
-        }
-
-        return $result;
-    }
-
-//    /**
-//     * @return bool Checks if this group contains the Teeming affix.
-//     */
-//    public function isTeeming(): bool
-//    {
-//        return $this->hasAffix('Teeming');
-//    }
-//
-//    /**
-//     * @return bool Checks if this group contains the Tyrannical affix.
-//     */
-//    public function isTyrannical(): bool
-//    {
-//        return $this->hasAffix('Tyrannical');
-//    }
-//
-//    /**
-//     * @return bool Checks if this group contains the Fortified affix.
-//     */
-//    public function isFortified(): bool
-//    {
-//        return $this->hasAffix('Fortified');
-//    }
-
-    /**
-     * @return string|null
-     */
-    public function getSeasonalIndexAsLetter(): ?string
-    {
-        $result = null;
-
-        if ($this->seasonal_index !== null) {
-            $seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
-            $result = $seasonalIndices[$this->seasonal_index];
+            $result .= sprintf(' preset %s', $this->seasonal_index + 1);
         }
 
         return $result;

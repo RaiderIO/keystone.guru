@@ -108,7 +108,7 @@ class CommonGroupAffixes extends InlineCode {
                     selectedSeasonalIndices[affixGroup.seasonal_index]++;
 
                     $child.addClass('affix_list_row_selected');
-                    $child.find('.check').show();
+                    $child.find('.check').css('visibility', 'visible');
                     found = true;
                     break;
                 }
@@ -116,7 +116,8 @@ class CommonGroupAffixes extends InlineCode {
 
             if (!found) {
                 $child.removeClass('affix_list_row_selected');
-                $child.find('.check').hide();
+                // Keep space by using visibility
+                $child.find('.check').css('visibility', 'hidden');
             }
         });
 
