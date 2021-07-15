@@ -187,28 +187,31 @@ class Season extends CacheModel
     }
 
     /**
+     * @param AffixGroup $affixGroup
+     * @return int
+     * @throws Exception
+     */
+    public function getPresetForAffixGroup(AffixGroup $affixGroup): int
+    {
+        $startIndex = $this->affixgroups->search(
+            $this->getAffixGroupAtTime($this->start())
+        );
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup)
+        {
+            return $affixGroupCandidate->id === $affixGroup->id;
+        })->first());
+
+        return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
+    }
+
+    /**
      * Get the current preset (if any) at a specific date.
      * @param Carbon $date
      * @return int The preset at the passed date.
      */
-    public function getPresetAt(Carbon $date): int
+    public function getPresetAtDate(Carbon $date): int
     {
         // Only if the current season has presets do we calculate, otherwise return 0
-        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSeasonalIndexesAsLetters(): array
-    {
-        $seasonalIndexLetters = [];
-        foreach ($this->affixgroups as $affixGroup) {
-            $seasonalIndexLetter = $affixGroup->getSeasonalIndexAsLetter();
-            if ($seasonalIndexLetter !== null) {
-                $seasonalIndexLetters[] = $seasonalIndexLetter;
-            }
-        }
-        return array_values(array_unique($seasonalIndexLetters));
+        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets: 0;
     }
 }

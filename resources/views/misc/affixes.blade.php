@@ -96,12 +96,9 @@ if ($timezone === null)
                                     <div class="col d-lg-block d-none pl-1">
                                         {{ $affix->name }}
                                         @if($lastColumn)
-                                            @if($affixGroup->season->presets > 0 )
-                                                {{ sprintf(__('preset %s'), $affixGroup->season->getPresetAt($startDate)) }}
+                                            @if($affixGroup->seasonal_index !== null )
+                                                {{ sprintf(__('preset %s'), $affixGroup->seasonal_index + 1) }}
                                             @endif
-                                            @isset($affixGroup->seasonal_index)
-                                                {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
-                                            @endisset
                                         @endif
                                     </div>
                                 </div>
