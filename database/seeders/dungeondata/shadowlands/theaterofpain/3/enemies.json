@@ -1084,7 +1084,7 @@
         "floor_id": 94,
         "mdt_id": 1,
         "seasonal_type": "tormented",
-        "seasonal_index": null,
+        "seasonal_index": 0,
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
