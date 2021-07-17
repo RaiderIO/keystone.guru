@@ -563,7 +563,7 @@ class KillZone extends MapObject {
         // Refresh percentages of killzone text should the need arise
         if (killZoneChangedEvent.data.killzone.index < this.index &&
             getState().getMapZoomLevel() >= c.map.killzone.percentage_display_zoom) {
-            this.redrawConnectionsToEnemies();
+            this.bindTooltip();
         }
     }
 
