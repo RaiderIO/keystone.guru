@@ -284,7 +284,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 // Don't perform this when mass-saving - that is handled already and causes a big slowdown
                 let isMassSave = killZoneChangedEvent.data.hasOwnProperty('mass_save') && killZoneChangedEvent.data.mass_save;
 
-                if (!isMassSave || (killZoneChangedEvent.name === 'object:changed')) {
+                if (!isMassSave) {
                     self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
                 }
             });
@@ -326,6 +326,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
         if (this._dragHasSwitchedOrder) {
+            /** @type KillZoneMapObjectGroup */
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
             let $killZonesContainerChildren = $('#killzones_container').children('.map_killzonessidebar_killzone');
@@ -358,7 +359,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 killZoneMapObjectGroup.applyPullGradient();
             }
 
-            killZoneMapObjectGroup.massSave(['index', 'color']);
+            killZoneMapObjectGroup.massSave(['index', 'color'], function () {
+
+            });
         }
         this._dragHasSwitchedOrder = false;
     }

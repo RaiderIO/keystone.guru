@@ -337,12 +337,12 @@ class EnemyVisual extends Signalable {
         let id = self.enemy.id;
         let $enemyDiv = $(`#map_enemy_visual_${id}`).find('.enemy_icon');
 
-        // Clear any stray tooltips
-        refreshTooltips();
-
         let shouldCleanUp = self._circleMenu !== null;
 
         if (shouldCleanUp) {
+            // Clear any stray tooltips
+            refreshTooltips();
+
             // Delay it by 500 ms so the animations have a chance to complete
             let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
             let cleanupFn = function () {
