@@ -40,9 +40,9 @@ class Test extends Command
     {
         // 'presence-local-route-edit.E2mXPo3'
 //        dd($echoServerHttpApiService->getStatus());
-        dd($echoServerHttpApiService->getChannelInfo('presence-local-route-edit.E2mXPo3'));
-        dd($echoServerHttpApiService->getChannelUsers('presence-local-route-edit.E2mXPo3'));
-        dd($echoServerHttpApiService->getChannels());
+//        dd($echoServerHttpApiService->getChannelInfo('presence-local-route-edit.E2mXPo3'));
+//        dd($echoServerHttpApiService->getChannelUsers('presence-local-route-edit.E2mXPo3'));
+//        dd($echoServerHttpApiService->getChannels());
 
         return 0;
     }
