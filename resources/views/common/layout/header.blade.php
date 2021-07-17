@@ -5,7 +5,7 @@ $navs = [
         'text' => __('Search')
     ],
     route('dungeonroutes') => [
-        'text' => __('Discover')
+        'text' => __('Routes')
     ],
     route('misc.affixes') => [
         'text' => __('Affixes')

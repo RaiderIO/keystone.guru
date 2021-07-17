@@ -265,6 +265,20 @@ $.fn.refreshTooltips = function () {
 }
 
 /**
+ *
+ * @param condition {Boolean}
+ * @param closure {Function}
+ * @returns {$}
+ */
+$.fn.if = function(condition, closure) {
+    if( condition ) {
+        closure();
+    }
+
+    return this;
+}
+
+/**
  * Refreshes all select pickers on-screen
  **/
 function refreshSelectPickers() {

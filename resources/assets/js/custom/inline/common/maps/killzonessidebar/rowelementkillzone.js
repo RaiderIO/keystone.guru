@@ -189,16 +189,18 @@ class RowElementKillZone extends RowElement {
 
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
                 .text(`${enemyForcesCumulativePercent}%`)
-                .attr('title', `+${enemyForcesPercent}%`);
+                .attr('title', `+${enemyForcesPercent}%`)
+                .refreshTooltips();
         } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
                 .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.enemyForcesManager.getEnemyForcesRequired()}`)
-                .attr('title', `+${killZoneEnemyForces}`);
+                .attr('title', `+${killZoneEnemyForces}`)
+                .refreshTooltips();
         }
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
         // Show boss icon or not
-        let hasBoss, hasAwakened, hasPrideful, hasInspiring = false;
+        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.killZone.enemies.length; i++) {
@@ -221,25 +223,10 @@ class RowElementKillZone extends RowElement {
         }
 
         // Reset any previous states
-        let $hasBoss = $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`).hide();
-        let $hasAwakened = $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).hide();
-        let $hasPrideful = $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).hide();
-        let $hasInspiring = $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_inspiring:not(.draggable--original)`).hide();
-
-        // Apply new state - but only one
-        if (hasBoss) {
-            $hasBoss.show();
-        } else if (hasAwakened) {
-            $hasAwakened.show()
-        } else if (hasPrideful) {
-            $hasPrideful.show();
-        } else if (hasInspiring) {
-            $hasInspiring.show();
-        }
-
-        if (hasBoss || hasAwakened || hasPrideful || hasInspiring) {
-            refreshTooltips();
-        }
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).toggle(hasPrideful);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_inspiring:not(.draggable--original)`).toggle(hasInspiring);
 
         // $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);

@@ -692,10 +692,10 @@ class MapObject extends Signalable {
                 }
             }
 
-            if (this.hasOwnProperty('seasonal_index')) {
+            if (this.hasOwnProperty('seasonal_index') && this.seasonal_index !== null) {
                 // Ignore seasonal type if not set, but if it's set it must be awakened to hide the enemies based on seasonal_index
-                if ((!this.hasOwnProperty('seasonal_type') || this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) &&
-                    this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
+                if ((!this.hasOwnProperty('seasonal_type') || this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED || this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED) &&
+                    mapContext.getSeasonalIndex() !== this.seasonal_index) {
                     // console.warn(`Hiding enemy due to seasonal_index ${this.id}`);
                     return false;
                 }

@@ -270,7 +270,7 @@
         "floor_id": 78,
         "mdt_id": 1,
         "seasonal_type": "tormented",
-        "seasonal_index": null,
+        "seasonal_index": 0,
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
@@ -292,7 +292,7 @@
         "floor_id": 78,
         "mdt_id": 1,
         "seasonal_type": "tormented",
-        "seasonal_index": null,
+        "seasonal_index": 0,
         "teeming": null,
         "faction": "any",
         "unskippable": 0,
@@ -305,6 +305,50 @@
         "enemyactiveauras": [],
         "npc": {
             "id": 179891
+        }
+    },
+    {
+        "id": 5956,
+        "enemy_pack_id": -1,
+        "npc_id": 179446,
+        "floor_id": 78,
+        "mdt_id": -1,
+        "seasonal_type": "tormented",
+        "seasonal_index": 1,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -134.54129482903,
+        "lng": 276.69271625991,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 179446
+        }
+    },
+    {
+        "id": 5957,
+        "enemy_pack_id": -1,
+        "npc_id": 179892,
+        "floor_id": 78,
+        "mdt_id": -1,
+        "seasonal_type": "tormented",
+        "seasonal_index": 1,
+        "teeming": null,
+        "faction": "any",
+        "unskippable": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -143.730881669,
+        "lng": 142.65397696119,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 179892
         }
     }
 ]

@@ -37,7 +37,7 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getSeasons(): Collection
     {

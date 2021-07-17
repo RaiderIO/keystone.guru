@@ -6,12 +6,15 @@
 
 /** @var \Illuminate\Support\Collection|\App\Models\AffixGroup[] $affixGroups */
 $currentSeason = $seasonService->getCurrentSeason();
-$seasonalIndexLetters = $currentSeason->getSeasonalIndexesAsLetters();
-$affixGroups = $currentSeason->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
-$defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
+$defaultSelected = $defaultSelected ?? [];
 $teemingSelector = $teemingSelector ?? null;
 $names = $names ?? true;
 $id = $id ?? 'affixes';
+
+$presets = [];
+for ($i = 0; $i < $currentSeason->presets; $i++) {
+    $presets[$i] = sprintf('Preset %s', $i + 1);
+}
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -38,9 +41,8 @@ $id = $id ?? 'affixes';
                 $count = 0;
                 foreach($affixGroup->affixes as $affix){
                 $last = count($affixGroup->affixes) - 1 === $count;
-                $number = $last ? '2' : '3'
                 ?>
-                <div class="col col-md-{{ $number }} affix_row">
+                <div class="col col-md pr-0 affix_row">
                     <div class="row no-gutters">
                         <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
                              data-toggle="tooltip"
@@ -51,9 +53,9 @@ $id = $id ?? 'affixes';
                             <div class="col d-md-block d-none pl-1">
                                 {{ $affix->name }}
                                 @if($last)
-                                    @isset($affixGroup->seasonal_index)
-                                        {{ sprintf(__('(%s)'), $affixGroup->getSeasonalIndexAsLetter()) }}
-                                    @endisset
+                                    @if( $affixGroup->seasonal_index !== null )
+                                        {{ sprintf(__('preset %s'), $affixGroup->seasonal_index + 1) }}
+                                    @endif
                                 @endif
                             </div>
                         @endif
@@ -61,8 +63,8 @@ $id = $id ?? 'affixes';
                 </div>
                 <?php $count++;
                 } ?>
-                <span class="col col-md-1 text-right pl-0">
-                    <span class="check" style="display: none;">
+                <span class="col col-md-auto text-right pl-0">
+                    <span class="check" style="visibility: hidden;">
                         <i class="fas fa-check"></i>
                     </span>
                 </span>
@@ -71,7 +73,7 @@ $id = $id ?? 'affixes';
     </div>
 </div>
 
-@if(!empty($seasonalIndexLetters))
+@if($isAwakened)
     <div class="form-group">
         {!! Form::label('seasonal_index', __('Awakened enemy set')) !!} <span class="form-required">*</span>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
@@ -79,7 +81,21 @@ $id = $id ?? 'affixes';
     You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map.
     You can always adjust your selection from the Route Settings menu later.')
      }}"></i>
-        {!! Form::select('seasonal_index', $seasonalIndexLetters, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
+        {!! Form::select('seasonal_index', $presets, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
+            ['id' => 'seasonal_index', 'class' => 'form-control selectpicker']) !!}
+    </div>
+@endif
+
+@if($isTormented)
+    <div class="form-group">
+        {!! Form::label('seasonal_index', __('Tormented preset')) !!} <span class="form-required">*</span>
+        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    sprintf(__('Tormented enemies for M+ levels 10 and higher come in %s presets.
+    You may attach multiple affixes to your route whom can contain any combination of presets. Choose here which preset will be displayed on the map.
+    You can always adjust your selection from the Route Settings menu later.'), $currentSeason->presets)
+     }}"></i>
+        {!! Form::select('seasonal_index', $presets,
+            isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
             ['id' => 'seasonal_index', 'class' => 'form-control selectpicker']) !!}
     </div>
 @endif
