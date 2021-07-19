@@ -166,41 +166,41 @@ return [
     'classification_label' => 'Classification',
     'edit_label'           => 'Edit',
 
-    'make_user_label'                                           => 'Make user',
-    'make_admin_label'                                          => 'Make admin',
-    'delete_user_label'                                         => 'Delete user',
+    'make_user_label'                                                => 'Make user',
+    'make_admin_label'                                               => 'Make admin',
+    'delete_user_label'                                              => 'Delete user',
 
     // Home page
-    'warnings_label'                                            => 'Warnings',
-    'category_label'                                            => 'Category',
-    'message_label'                                             => 'Message',
+    'warnings_label'                                                 => 'Warnings',
+    'category_label'                                                 => 'Category',
+    'message_label'                                                  => 'Message',
 
     // Profile edit
-    'save_tag_success'                                          => 'Tag updated successfully',
-    'delete_tag_success'                                        => 'Tag deleted successfully',
+    'save_tag_success'                                               => 'Tag updated successfully',
+    'delete_tag_success'                                             => 'Tag deleted successfully',
 
     // Dungeonroute edit
-    'settings_saved'                                            => 'Settings saved successfully',
-    'pull_gradient_settings_saved'                              => 'Pull gradient settings saved successfully',
-    'route_published_state_changed'                             => 'Route sharing settings updated successfully',
-    'datatable_no_routes_in_table'                              => 'No routes found',
-    'cannot_change_sharing_settings_not_all_unkillables_killed' => 'Unable to change sharing settings: not all unskippable enemies have been killed',
+    'settings_saved'                                                 => 'Settings saved successfully',
+    'pull_gradient_settings_saved'                                   => 'Pull gradient settings saved successfully',
+    'route_published_state_changed'                                  => 'Route sharing settings updated successfully',
+    'datatable_no_routes_in_table'                                   => 'No routes found',
+    'cannot_change_sharing_settings_not_all_required_enemies_killed' => 'Unable to change sharing settings: not all required enemies have been killed',
 
     // Dungeonroute table
-    'vote'                                                      => 'vote',
-    'votes'                                                     => 'votes',
-    'route_delete_confirm'                                      => 'Are you sure you wish to delete this route?',
-    'route_delete_successful'                                   => 'Route deleted successfully',
-    'route_clone_successful'                                    => 'Route cloned successfully',
-    'sharing_label'                                             => 'Sharing',
-    'route_table_published_state_unpublished'                   => 'This route is unpublished',
-    'route_table_published_state_team'                          => 'This route is visible for all members of teams you are in',
-    'route_table_published_state_world'                         => 'This route is visible for everyone',
-    'route_table_published_state_world_with_link'               => 'This route is visible for everyone that has the link',
+    'vote'                                                           => 'vote',
+    'votes'                                                          => 'votes',
+    'route_delete_confirm'                                           => 'Are you sure you wish to delete this route?',
+    'route_delete_successful'                                        => 'Route deleted successfully',
+    'route_clone_successful'                                         => 'Route cloned successfully',
+    'sharing_label'                                                  => 'Sharing',
+    'route_table_published_state_unpublished'                        => 'This route is unpublished',
+    'route_table_published_state_team'                               => 'This route is visible for all members of teams you are in',
+    'route_table_published_state_world'                              => 'This route is visible for everyone',
+    'route_table_published_state_world_with_link'                    => 'This route is visible for everyone that has the link',
 
     // Map
-    'intro_sidebar'                                             => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_sidebar_toggle'                                      => 'You can use this button to hide or show the sidebar.',
+    'intro_sidebar'                                                  => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_sidebar_toggle'                                           => 'You can use this button to hide or show the sidebar.',
 
     'intro_visibility_tools'                          => 'Here you can select different visualization options.',
     'intro_map_enemy_visuals'                         => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
@@ -226,7 +226,7 @@ return [
     'intro_map_enemy_forces_numbers' => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
     'intro_new_pull'                 => 'You can use this button to create a new pull. Alternatively, you can click any enemy on the map to start a pull as well.',
 
-    'enemy_forces_not_all_unskippables_killed_label'                => 'Warning: this route does not kill all unskippable enemies',
+    'enemy_forces_not_all_required_enemies_killed_label'            => 'Warning: this route does not kill all required enemies',
     'enemy_forces_too_much_label'                                   => 'Warning: your route has too much enemy forces',
     'enemy_forces_too_little_label'                                 => 'Warning: this route does not have enough enemy forces!',
     'enemy_forces_overridden_label'                                 => 'Your route\'s enemy forces may have been corrected due to overpulled enemies which caused automatic alterations in your route',
@@ -315,7 +315,7 @@ return [
     'enemy_active_auras_select_default_label'                       => 'Not set',
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
-    'enemy_unskippable_label'                                       => 'Unskippable',
+    'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
 

@@ -40,7 +40,7 @@ let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
  * @property enemy_forces_override_teeming int
  * @property raid_marker_name string
  * @property dangerous bool
- * @property unskippable bool
+ * @property required bool
  * @property skippable bool
  * @property lat float
  * @property lng float
@@ -229,7 +229,7 @@ class Enemy extends MapObject {
                 default: -1
             }),
             new Attribute({
-                name: 'unskippable',
+                name: 'required',
                 type: 'bool',
                 admin: true,
                 default: false
@@ -335,10 +335,10 @@ class Enemy extends MapObject {
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
             result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
-            // Unskippable means that you MUST kill this enemy, otherwise you cannot complete the dungeon
+            // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
             // result.info.push({
             //     key: lang.get('messages.sidebar_enemy_skippable_label'),
-            //     value: this.unskippable ? 0 : 1
+            //     value: this.required ? 0 : 1
             // });
             // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
             result.info.push({

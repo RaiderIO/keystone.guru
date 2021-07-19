@@ -134,7 +134,7 @@ class DungeonRoute extends Model
      * https://stackoverflow.com/a/34485411/771270
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'public_key';
     }
@@ -142,7 +142,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeon()
+    public function dungeon(): BelongsTo
     {
         return $this->belongsTo('App\Models\Dungeon');
     }
@@ -150,7 +150,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function brushlines()
+    public function brushlines(): HasMany
     {
         return $this->hasMany('App\Models\Brushline');
     }
@@ -158,7 +158,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function paths()
+    public function paths(): HasMany
     {
         return $this->hasMany('App\Models\Path');
     }
@@ -166,7 +166,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    public function faction()
+    public function faction(): BelongsTo
     {
         return $this->belongsTo('App\Models\Faction');
     }
@@ -174,7 +174,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    public function author()
+    public function author(): BelongsTo
     {
         return $this->belongsTo('App\User');
     }
@@ -182,7 +182,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function specializations()
+    public function specializations(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\CharacterClassSpecialization', 'dungeon_route_player_specializations');
     }
@@ -190,7 +190,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function playerspecializations()
+    public function playerspecializations(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerSpecialization');
     }
@@ -198,7 +198,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function routeattributesraw()
+    public function routeattributesraw(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteAttribute');
     }
@@ -206,7 +206,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function classes()
+    public function classes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\CharacterClass', 'dungeon_route_player_classes');
     }
@@ -214,7 +214,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function playerclasses()
+    public function playerclasses(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerClass');
     }
@@ -222,7 +222,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function races()
+    public function races(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
     }
@@ -230,7 +230,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function playerraces()
+    public function playerraces(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerRace');
     }
@@ -238,7 +238,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function affixgroups()
+    public function affixgroups(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteAffixGroup');
     }
@@ -246,7 +246,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function affixes()
+    public function affixes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\AffixGroup', 'dungeon_route_affix_groups');
     }
@@ -254,7 +254,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function killzones()
+    public function killzones(): HasMany
     {
         return $this->hasMany('App\Models\KillZone')->orderBy('index');
     }
@@ -262,7 +262,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function pridefulenemies()
+    public function pridefulenemies(): HasMany
     {
         return $this->hasMany('App\Models\Enemies\PridefulEnemy');
     }
@@ -270,7 +270,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    public function publishedstate()
+    public function publishedstate(): BelongsTo
     {
         return $this->belongsTo('App\Models\PublishedState', 'published_state_id');
     }
@@ -278,7 +278,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function ratings()
+    public function ratings(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteRating');
     }
@@ -286,7 +286,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function favorites()
+    public function favorites(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteFavorite');
     }
@@ -294,7 +294,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function enemyraidmarkers()
+    public function enemyraidmarkers(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteEnemyRaidMarker');
     }
@@ -302,7 +302,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function mapicons()
+    public function mapicons(): HasMany
     {
         return $this->hasMany('App\Models\MapIcon');
     }
@@ -310,7 +310,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function routeattributes()
+    public function routeattributes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\RouteAttribute', 'dungeon_route_attributes');
     }
@@ -318,7 +318,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function pageviews()
+    public function pageviews(): HasMany
     {
         return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
     }
@@ -326,7 +326,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function mdtImport()
+    public function mdtImport(): HasMany
     {
         // Only set if the route was imported through an MDT string
         return $this->hasMany('App\Models\MDTImport');
@@ -335,7 +335,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    function team()
+    function team(): BelongsTo
     {
         return $this->belongsTo('App\Models\Team');
     }
@@ -343,7 +343,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function tagsteam()
+    public function tagsteam(): HasMany
     {
         return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM));
     }
@@ -351,7 +351,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function tagspersonal()
+    public function tagspersonal(): HasMany
     {
         return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL));
     }
@@ -362,9 +362,9 @@ class DungeonRoute extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeIsSandbox($query)
+    public function scopeIsSandbox(Builder $query): Builder
     {
-        return $query->where('expires_at', '!=', null);
+        return $query->whereNotNull('expires_at');
     }
 
     /**
@@ -373,7 +373,7 @@ class DungeonRoute extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeVisible($query)
+    public function scopeVisible($query): Builder
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', function ($dungeon)
@@ -442,6 +442,7 @@ class DungeonRoute extends Model
     /**
      * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
      * @return int
+     * @noinspection UnknownColumnInspection
      */
     public function getEnemyForces(): int
     {
@@ -608,10 +609,9 @@ class DungeonRoute extends Model
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
-     * @param SeasonService $seasonService
      * @return bool
      */
-    public function saveFromRequest(Request $request, SeasonService $seasonService): bool
+    public function saveFromRequest(Request $request): bool
     {
         $result = false;
 
@@ -657,7 +657,7 @@ class DungeonRoute extends Model
             if (!empty($newAttributes)) {
                 // Remove old attributes
                 $this->routeattributesraw()->delete();
-                foreach ($newAttributes as $key => $value) {
+                foreach ($newAttributes as $value) {
                     // Only if they exist
                     if (RouteAttribute::where('id', $value)->exists()) {
                         $drAttribute = new DungeonRouteAttribute();
@@ -672,7 +672,7 @@ class DungeonRoute extends Model
             if (!empty($newSpecs)) {
                 // Remove old specializations
                 $this->playerspecializations()->delete();
-                foreach ($newSpecs as $key => $value) {
+                foreach ($newSpecs as $value) {
                     // Only if they exist
                     if (CharacterClassSpecialization::where('id', $value)->exists()) {
                         $drpSpec = new DungeonRoutePlayerSpecialization();
@@ -687,7 +687,7 @@ class DungeonRoute extends Model
             if (!empty($newClasses)) {
                 // Remove old classes
                 $this->playerclasses()->delete();
-                foreach ($newClasses as $key => $value) {
+                foreach ($newClasses as $value) {
                     if (CharacterClass::where('id', $value)->exists()) {
                         $drpClass = new DungeonRoutePlayerClass();
                         $drpClass->character_class_id = (int)$value;
@@ -703,7 +703,7 @@ class DungeonRoute extends Model
                 $this->playerraces()->delete();
 
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
-                foreach ($newRaces as $key => $value) {
+                foreach ($newRaces as $value) {
                     $drpRace = new DungeonRoutePlayerRace();
                     $drpRace->character_race_id = (int)$value;
                     $drpRace->dungeon_route_id = $this->id;
@@ -715,7 +715,7 @@ class DungeonRoute extends Model
             if (!empty($newAffixes)) {
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
-                foreach ($newAffixes as $key => $value) {
+                foreach ($newAffixes as $value) {
                     /** @var AffixGroup $affixGroup */
                     $affixGroup = AffixGroup::findOrNew($value);
 
@@ -787,6 +787,8 @@ class DungeonRoute extends Model
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming = $this->teeming;
         $dungeonroute->enemy_forces = $this->enemy_forces;
+        $dungeonroute->level_min = $this->level_min;
+        $dungeonroute->level_max = $this->level_max;
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.
@@ -903,7 +905,7 @@ class DungeonRoute extends Model
      * @param null $user
      * @return bool
      */
-    public function isOwnedByUser($user = null)
+    public function isOwnedByUser($user = null): bool
     {
         // Can't have a function as a default value
         if ($user === null) {
@@ -919,7 +921,7 @@ class DungeonRoute extends Model
      * @param int $enemyId
      * @return bool
      */
-    public function isEnemyKilled(int $enemyId)
+    public function isEnemyKilled(int $enemyId): bool
     {
         $result = false;
 
@@ -937,16 +939,16 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Checks if this route has killed all unskippable enemies.
+     * Checks if this route has killed all required enemies.
      *
      * @return bool
      */
-    public function hasKilledAllUnskippables()
+    public function hasKilledAllRequiredEnemies(): bool
     {
         $result = true;
 
         foreach ($this->dungeon->enemies as $enemy) {
-            if ($enemy->unskippable &&
+            if ($enemy->required &&
                 ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
 
                 if (!$this->isEnemyKilled($enemy->id)) {
@@ -984,9 +986,9 @@ class DungeonRoute extends Model
             );
         } else if ($this->demo) {
             if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
-                $subTitle = sprintf(__('Used with Dratnos\' permission'));
+                $subTitle = __('Used with Dratnos\' permission');
             } else if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
-                $subTitle = sprintf(__('Used with Petko\'s permission'));
+                $subTitle = __('Used with Petko\'s permission');
             } else {
                 // You made this? I made this.jpg
                 $subTitle = '';
