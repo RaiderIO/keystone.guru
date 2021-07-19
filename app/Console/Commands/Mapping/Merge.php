@@ -66,6 +66,8 @@ class Merge extends Command
         $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name']);
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
+        } else if ($changedDungeonNames->isEmpty()) {
+            $prTitle = 'Mapping update for no dungeons';
         } else {
             $prTitle = sprintf('Mapping update for %s', $changedDungeonNames->implode(', '));
         }
