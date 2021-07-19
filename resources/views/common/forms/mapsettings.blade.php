@@ -59,7 +59,7 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 <label for="map_settings_unkilled_important_enemy_opacity">
                     {{ __('Unkilled important enemy opacity') }} <i class="fas fa-info-circle" data-toggle="tooltip"
                                                                     title="{{
-                    __('Important enemies are those that are either Prideful, marked as Inspiring or are marked as unskippable.
+                    __('Important enemies are those that are either Prideful, marked as Inspiring or are marked as required.
                     These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.')
                      }}"></i>
                 </label>
