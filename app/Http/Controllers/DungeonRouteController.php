@@ -20,8 +20,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
-use Teapot\StatusCode;
 
 class DungeonRouteController extends Controller
 {
@@ -47,6 +47,7 @@ class DungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
@@ -60,6 +61,7 @@ class DungeonRouteController extends Controller
      * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
@@ -109,6 +111,8 @@ class DungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @param string $floorindex
      * @return Factory|View
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, string $floorindex)
     {
@@ -129,18 +133,17 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
-     * @param SeasonService $seasonService
      * @param DungeonRoute|null $dungeonroute
-     * @return mixed
+     * @return DungeonRoute
      */
-    public function store(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
+    public function store(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveFromRequest($request)) {
             abort(500, __('Unable to save route'));
         }
 
@@ -150,9 +153,9 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonService $seasonService
-     * @return mixed
+     * @return DungeonRoute
      */
-    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): DungeonRoute
     {
         $dungeonroute = new DungeonRoute();
 
@@ -210,6 +213,7 @@ class DungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
@@ -224,6 +228,7 @@ class DungeonRouteController extends Controller
      * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
@@ -254,6 +259,7 @@ class DungeonRouteController extends Controller
      * @param string $floorIndex
      * @return Application|Factory|View
      * @throws AuthorizationException
+     * @throws InvalidArgumentException
      */
     public function embed(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
     {

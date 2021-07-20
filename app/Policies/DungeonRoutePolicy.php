@@ -70,8 +70,8 @@ class DungeonRoutePolicy
      */
     public function publish(User $user, DungeonRoute $dungeonroute)
     {
-        if (!$dungeonroute->hasKilledAllUnskippables()) {
-            return $this->deny('Unable to change sharing settings: not all unskippable enemies have been killed');
+        if (!$dungeonroute->hasKilledAllRequiredEnemies()) {
+            return $this->deny('Unable to change sharing settings: not all required enemies have been killed');
         }
         // Only authors or if the user is an admin
         return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin'));

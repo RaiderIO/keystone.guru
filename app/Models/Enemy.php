@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Traits\Reportable;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -22,7 +21,7 @@ use Illuminate\Support\Collection;
  * @property bool $is_mdt Only used for temp MDT enemies (not saved in DB)
  * @property string $teeming
  * @property string $faction
- * @property boolean $unskippable
+ * @property boolean $required
  * @property boolean $skippable
  * @property string $enemy_forces_override
  * @property string $enemy_forces_override_teeming
@@ -49,10 +48,11 @@ class Enemy extends CacheModel
     /**
      * @return array
      */
-    function getActiveAurasAttribute(){
+    function getActiveAurasAttribute(): array
+    {
         $result = [];
 
-        foreach($this->enemyactiveauras as $activeaura){
+        foreach ($this->enemyactiveauras as $activeaura) {
             $result[] = $activeaura->spell_id;
         }
 
@@ -62,7 +62,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function pack()
+    function pack(): BelongsTo
     {
         return $this->belongsTo('App\Models\EnemyPack');
     }
@@ -70,7 +70,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function floor()
+    function floor(): BelongsTo
     {
         return $this->belongsTo('App\Models\Floor');
     }
@@ -78,7 +78,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function npc()
+    function npc(): BelongsTo
     {
         return $this->belongsTo('App\Models\Npc');
     }
@@ -86,7 +86,7 @@ class Enemy extends CacheModel
     /**
      * @return HasMany
      */
-    function enemyactiveauras()
+    function enemyactiveauras(): HasMany
     {
         return $this->hasMany('App\Models\EnemyActiveAura');
     }

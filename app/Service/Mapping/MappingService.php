@@ -11,7 +11,10 @@ use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
 {
-    function shouldSynchronizeMapping(): bool
+    /**
+     * @return bool
+     */
+    public function shouldSynchronizeMapping(): bool
     {
         /** @var MappingChangeLog $mostRecentMappingChangeLog */
         $mostRecentMappingChangeLog = MappingChangeLog::latest()->first();
@@ -24,21 +27,15 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param bool $ignoreMostRecentCommit
      * @return Collection|MappingChangeLog[]
      */
-    function getUnsynchronizedMappingChanges(bool $ignoreMostRecentCommit = false): Collection
+    public function getUnmergedMappingChanges(): Collection
     {
-        /** @var MappingCommitLog $mostRecentMappingCommitLog */
-        if ($ignoreMostRecentCommit) {
-            $allCommits = MappingCommitLog::all();
-            $mostRecentMappingCommitLog = $allCommits->count() > 1 ? $allCommits->get($allCommits->count() - 2) : null;
-        } else {
-            $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
-        }
+        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
 
-        if ($mostRecentMappingCommitLog !== null) {
-            $result = MappingChangeLog::where('created_at', '>', $mostRecentMappingCommitLog->created_at->toDateTimeString())->get();
+        if ($mostRecentlyMergedMappingCommitLog !== null) {
+            // Get all changes that have been done right after the most recently merged commit
+            $result = MappingChangeLog::where('created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())->get();
         } else {
             $result = MappingChangeLog::all();
         }
@@ -47,15 +44,14 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param bool $ignoreMostRecentCommit
      * @return Collection|Dungeon[]
      */
-    function getRecentlyChangedDungeons(bool $ignoreMostRecentCommit = false): Collection
+    public function getRecentlyChangedDungeons(): Collection
     {
         /** @var Collection|Dungeon[] $result */
         $result = collect();
 
-        $mostRecentMappingChanges = $this->getUnsynchronizedMappingChanges($ignoreMostRecentCommit);
+        $mostRecentMappingChanges = $this->getUnmergedMappingChanges();
 
         foreach ($mostRecentMappingChanges as $mappingChange) {
             // Decode the latest known value

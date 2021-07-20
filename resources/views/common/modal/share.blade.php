@@ -22,7 +22,7 @@ $showPublish = $show['publish'] ?? true;
         <div class="row">
             <div id="map_route_publish_container" class="col"
                  {{--                                 data-toggle="tooltip"--}}
-                 {{--                                 title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"--}}
+                 {{--                                 title="{{ __('Kill enough enemy forces and kill all required enemies to publish your route') }}"--}}
                  style="display: block">
                 @include('common.dungeonroute.publish', ['dungeonroute' => $dungeonroute])
             </div>

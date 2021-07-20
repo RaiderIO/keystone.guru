@@ -20,12 +20,12 @@ class DungeonrouteEdit extends InlineCode {
 
         // Remove disabled from the
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        let hasKilledAllUnskippables = killZoneMapObjectGroup.hasKilledAllUnskippables();
-        $mapRoutePublish.attr('disabled', !hasKilledAllUnskippables);
+        let hasKilledAllRequiredEnemies = killZoneMapObjectGroup.hasKilledAllRequiredEnemies();
+        $mapRoutePublish.attr('disabled', !hasKilledAllRequiredEnemies);
 
         $('#map_route_publish_container')
             .attr('data-toggle', 'tooltip')
-            .attr('title', hasKilledAllUnskippables ? '' : lang.get('messages.cannot_change_sharing_settings_not_all_unkillables_killed'))
+            .attr('title', hasKilledAllRequiredEnemies ? '' : lang.get('messages.cannot_change_sharing_settings_not_all_required_enemies_killed'))
             .refreshTooltips();
     }
 

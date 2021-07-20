@@ -3,8 +3,9 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\Dungeon;
+use App\Models\Mapping\MappingCommitLog;
 use App\Service\Mapping\MappingService;
+use Carbon\Carbon;
 use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
@@ -46,49 +47,56 @@ class Merge extends Command
         /** @var PullRequest $githubPrClient */
         $githubPrClient = GitHub::pr();
 
-        $mrList = $githubPrClient->all($username, $repository, [
+        $prList = $githubPrClient->all($username, $repository, [
             'state' => 'open',
             'head'  => $head,
             'base'  => $base
         ]);
 
-        $existingMrId = 0;
-        foreach ($mrList as $mr) {
-            if ($mr['head']['ref'] === $head && $mr['base']['ref'] === $base) {
-                $this->warn('Merge request already exists; not creating a duplicate (which is not possible)');
-                $existingMrId = $mr['number'];
+        $existingPrId = 0;
+        foreach ($prList as $pr) {
+            if ($pr['head']['ref'] === $head && $pr['base']['ref'] === $base) {
+                $this->warn('Pull request already exists; not creating a duplicate (which is not possible)');
+                $existingPrId = $pr['number'];
                 break;
             }
         }
 
+        // Build the title for the pull request
+        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name']);
+        if ($changedDungeonNames->count() > 4) {
+            $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
+        } else if ($changedDungeonNames->isEmpty()) {
+            $prTitle = 'Mapping update for no dungeons';
+        } else {
+            $prTitle = sprintf('Mapping update for %s', $changedDungeonNames->implode(', '));
+        }
 
-        $changedDungeons = $mappingService->getRecentlyChangedDungeons(true);
-
-        $changedDungeonNames = $changedDungeons->map(function (Dungeon $dungeon)
-        {
-            return $dungeon->name;
-        })->toArray();
-
-        $prTitle = sprintf('Mapping update for %s', implode(', ', $changedDungeonNames));
-
-        if (empty($existingMrId)) {
+        if (empty($existingPrId)) {
             try {
                 $githubPrClient->create($username, $repository, [
-                    'title' => $prTitle,
-                    'head'  => $head,
-                    'base'  => $base,
-                    'body'  => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
+                    'title'  => $prTitle,
+                    'head'   => $head,
+                    'base'   => $base,
+                    'body'   => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
+                    'labels' => [
+                        'mapping'
+                    ],
                 ]);
-                $this->info('Merge request created!');
+                $this->info('Pull request created!');
+
+                // If we're creating a new merge request, everything before this has been merged - except the most recent commit
+                // (since that's what we're making this MR for in the first place) which we'll filter out
+                MappingCommitLog::whereDate('created_at', '<', Carbon::now()->subMinutes(3))->update(['merged' => 1]);
             } catch (ValidationFailedException $ex) {
-                $this->warn('Merge request not created - no changes between branches!');
+                $this->warn('Pull request not created - no changes between branches!');
             }
         } else {
             // Title may be changed
-            $githubPrClient->update($username, $repository, $existingMrId, [
+            $githubPrClient->update($username, $repository, $existingPrId, [
                 'title' => $prTitle
             ]);
-            $this->info('Merge request updated!');
+            $this->info('Pull request updated!');
         }
 
 
