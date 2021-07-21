@@ -284,17 +284,16 @@ class DungeonRouteController extends Controller
      * Override to give the type hint which is required.
      *
      * @param DungeonRouteFormRequest $request
-     * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws Exception
      */
-    public function update(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $seasonService, $dungeonroute);
+        $dungeonroute = $this->store($request);
 
         // Message to the user
         Session::flash('status', __('Dungeonroute updated'));
@@ -305,14 +304,13 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
-     * @param SeasonService $seasonService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonService $seasonService)
+    public function savenew(DungeonRouteFormRequest $request)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService);
+        $dungeonroute = $this->store($request);
 
         // Message to the user
         Session::flash('status', __('Route created'));

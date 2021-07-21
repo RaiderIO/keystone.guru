@@ -137,16 +137,16 @@ class AffixSeeder extends Seeder
 
             ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Bursting', 'Storming', 'Tormented']],
             ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Tormented']],
             ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Inspiring', 'Grievous', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Spiteful', 'Necrotic', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Spiteful', 'Necrotic', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
             ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
-            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Unknown', 'Unknown', 'Tormented']],
+            ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Unknown', 'Unknown', 'Tormented']],
         ];
 
         foreach ($groups as $groupArr) {
