@@ -4,8 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cafd17121fccdd582d11300d6230b5f",
+    "content-hash": "c17d56492d60b4555cbf84d54fae119f",
     "packages": [
+        {
+            "name": "akaunting/laravel-language",
+            "version": "1.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akaunting/laravel-language.git",
+                "reference": "19fc3e12ce8e5c052eda5ca6ecd3ae2b0f9952d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akaunting/laravel-language/zipball/19fc3e12ce8e5c052eda5ca6ecd3ae2b0f9952d3",
+                "reference": "19fc3e12ce8e5c052eda5ca6ecd3ae2b0f9952d3",
+                "shasum": ""
+            },
+            "require": {
+                "jenssegers/agent": "2.6.*",
+                "laravel/framework": ">=5.4.0",
+                "php": ">=5.6.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Akaunting\\Language\\Provider"
+                    ],
+                    "aliases": {
+                        "Language": "Akaunting\\Language\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Akaunting\\Language\\": "./src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Denis Duliçi",
+                    "email": "info@akaunting.com",
+                    "homepage": "https://akaunting.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Language switcher package for Laravel",
+            "keywords": [
+                "language",
+                "laravel",
+                "switcher"
+            ],
+            "support": {
+                "issues": "https://github.com/akaunting/laravel-language/issues",
+                "source": "https://github.com/akaunting/laravel-language/tree/1.0.18"
+            },
+            "time": "2021-03-05T11:15:14+00:00"
+        },
         {
             "name": "art4/json-api-client",
             "version": "0.9.1",

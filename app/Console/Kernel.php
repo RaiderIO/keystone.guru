@@ -8,6 +8,7 @@ use App\Console\Commands\Discover\Cache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
+use App\Console\Commands\Localization\LocalizationSync;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
@@ -53,6 +54,9 @@ class Kernel extends ConsoleKernel
 
         // Handlebars
         HandlebarsRefresh::class,
+
+        // Localization
+        LocalizationSync::class,
 
         // Mapping
         MappingCommit::class,
