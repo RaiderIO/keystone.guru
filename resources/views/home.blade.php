@@ -36,7 +36,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
                     <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
-                        <strong>{{ __('M+ routes made easy') }}</strong>
+                        <strong>{{ __('views/admin.M+ routes made easy') }}</strong>
                     </h1>
 
                     <p class="mbr-text mbr-fonts-style display-7">

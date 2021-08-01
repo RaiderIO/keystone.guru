@@ -71,6 +71,7 @@ echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
 php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
+php artisan vendor:publish --tag=language
 
 # Generate encryption key
 #tput setaf 2;
