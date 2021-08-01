@@ -1,5 +1,5 @@
 @if( isset($map) && $map )
-    <div>
+    <div style="height: 24px">
         <div id="{{ $id }}-remove-ads" class="text-right nitropay-style float-left" style="display: none;">
             <a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">
                 {{ __('Remove ads') }}
