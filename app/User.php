@@ -29,6 +29,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string $name
  * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string $email
+ * @property string $locale
  * @property string $theme
  * @property string $echo_color
  * @property boolean $echo_anonymous
