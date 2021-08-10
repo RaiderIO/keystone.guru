@@ -1004,14 +1004,15 @@ class DungeonRoute extends Model
 
     /**
      * Drops any caches associated with this dungeon route
+     * @param int $dungeonRouteId
      */
-    public function dropCaches()
+    public static function dropCaches(int $dungeonRouteId)
     {
         try {
-            Cache::delete(sprintf('view:dungeonroute_card_0_0_%d', $this->id));
-            Cache::delete(sprintf('view:dungeonroute_card_0_1_%d', $this->id));
-            Cache::delete(sprintf('view:dungeonroute_card_1_0_%d', $this->id));
-            Cache::delete(sprintf('view:dungeonroute_card_1_1_%d', $this->id));
+            Cache::delete(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));
+            Cache::delete(sprintf('view:dungeonroute_card_0_1_%d', $dungeonRouteId));
+            Cache::delete(sprintf('view:dungeonroute_card_1_0_%d', $dungeonRouteId));
+            Cache::delete(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
         } catch (InvalidArgumentException $e) {
         }
     }
@@ -1021,7 +1022,7 @@ class DungeonRoute extends Model
      */
     public function touch()
     {
-        $this->dropCaches();
+        DungeonRoute::dropCaches($this->id);
 
         parent::touch();
     }
