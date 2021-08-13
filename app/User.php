@@ -10,6 +10,7 @@ use App\Models\PatreonData;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\UserReport;
 use Eloquent;
@@ -24,6 +25,7 @@ use Laratrust\Traits\LaratrustUserTrait;
 
 /**
  * @property int $id
+ * @property string $public_key
  * @property int $game_server_region_id
  * @property string $timezone
  * @property string $name
@@ -55,6 +57,7 @@ class User extends Authenticatable
     use HasIconFile;
     use LaratrustUserTrait;
     use Notifiable;
+    use GeneratesPublicKey;
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
@@ -76,7 +79,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'id', 'name', 'echo_color'
+        'id', 'public_key', 'name', 'echo_color'
     ];
 
     protected $appends = [

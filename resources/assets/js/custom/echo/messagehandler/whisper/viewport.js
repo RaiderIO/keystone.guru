@@ -25,13 +25,13 @@ class ViewPortHandler extends WhisperMessageHandler {
     onReceive(e) {
         super.onReceive(e);
 
-        let echoUser = this.echo.getUserById(e.user.id);
+        let echoUser = this.echo.getUserByPublicKey(e.user.public_key);
         if (echoUser !== null) {
             // Keep track of all user's most recent zoom location
             echoUser.setCenter(e.center);
             echoUser.setZoom(e.zoom);
         } else {
-            console.warn(`Unable to find echo user ${e.user.id}!`);
+            console.warn(`Unable to find echo user ${e.user.public_key}!`);
         }
     }
 

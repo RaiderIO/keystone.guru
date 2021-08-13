@@ -35,7 +35,7 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
             $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
             $result = [
-                'id'         => random_int(158402, 99999999),
+                'public_key' => $user->public_key,
                 'name'       => sprintf('Anonymous %s', $randomName),
                 'initials'   => initials($randomName),
                 // https://stackoverflow.com/a/9901154/771270
@@ -46,7 +46,7 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
             ];
         } else {
             $result = [
-                'id'         => $user->id,
+                'public_key' => $user->public_key,
                 'name'       => $user->name,
                 'initials'   => $user->initials,
                 'color'      => $user->echo_color,
@@ -72,7 +72,7 @@ Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), fun
     $result = false;
     if ($user->hasRole('admin')) {
         $result = [
-            'id'         => $user->id,
+            'public_key' => $user->public_key,
             'name'       => $user->name,
             'initials'   => $user->initials,
             'color'      => $user->echo_color,

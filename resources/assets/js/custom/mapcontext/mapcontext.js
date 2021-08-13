@@ -294,7 +294,7 @@ class MapContext extends Signalable {
      *
      * @returns {Number|null}
      */
-    getUserId() {
-        return this._options.userId;
+    getUserPublicKey() {
+        return this._options.userPublicKey;
     }
 }
