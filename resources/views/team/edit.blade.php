@@ -145,11 +145,16 @@ foreach ($team->teamusers as $teamuser) {
                             <button id="add_route_btn" class="btn btn-success">
                                 <i class="fas fa-plus"></i> {{ __('Add route') }}
                             </button>
-                            <button id="view_existing_routes" class="btn btn-warning"
-                                    style="display: none;">
-                                <i class="fas fa-backward"></i> {{ __('Stop adding routes') }}
+                        @else
+                            <button id="add_route_btn" class="btn btn-success" disabled
+                                data-toggle="tooltip" title="{{ __('You must be a Moderator of this team to add routes') }}">
+                                <i class="fas fa-plus"></i> {{ __('Add route') }}
                             </button>
                         @endif
+                        <button id="view_existing_routes" class="btn btn-warning"
+                                style="display: none;">
+                            <i class="fas fa-backward"></i> {{ __('Stop adding routes') }}
+                        </button>
                     </div>
                 </div>
 
@@ -189,7 +194,7 @@ foreach ($team->teamusers as $teamuser) {
                                         data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
-                                @if($team->isUserModerator(\App\User::findOrFail(Auth::id())))
+                                @if($isUserModerator)
                                     <button id="team_invite_link_refresh" class="btn btn-info"
                                             data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
                                         <i class="fa fa-sync"></i>

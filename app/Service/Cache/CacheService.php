@@ -4,6 +4,7 @@
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
@@ -119,11 +120,7 @@ class CacheService implements CacheServiceInterface
         $dungeonRouteIds = collect(DB::select('SELECT `id` FROM dungeon_routes'))->pluck('id')->toArray();
 
         foreach ($dungeonRouteIds as $dungeonRouteId) {
-            // Unset for all variants
-            $this->unset(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_0_1_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_1_0_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
+            DungeonRoute::dropCaches($dungeonRouteId);
         }
     }
 }

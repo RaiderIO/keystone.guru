@@ -27,10 +27,11 @@ class APIKillZoneController extends Controller
     /**
      * @param DungeonRoute $dungeonroute
      * @param array $data
+     * @param bool $recalculateEnemyForces
      * @return KillZone
      * @throws \Exception
      */
-    private function _saveKillZone(DungeonRoute $dungeonroute, array $data)
+    private function _saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true)
     {
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($data['id']);
@@ -72,10 +73,12 @@ class APIKillZoneController extends Controller
             // Refresh the enemies that may or may not have been set
             $killZone->load(['killzoneenemies']);
 
-            // Update the enemy forces
-            $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
-            // Touch the route so that the thumbnail gets updated
-            $dungeonroute->touch();
+            if( $recalculateEnemyForces ) {
+                // Update the enemy forces
+                $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
+            }
 
             if (Auth::check()) {
                 // Something's updated; broadcast it
@@ -134,9 +137,6 @@ class APIKillZoneController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
-        // We're deliberately overwriting the $result constantly, we're only interested in the last result
-        $result = null;
-
         // Update killzones
         $killZones = new Collection();
         foreach ($request->get('killzones', []) as $killZoneData) {
@@ -144,7 +144,8 @@ class APIKillZoneController extends Controller
                 // Unset the enemies since we're quicker to update that in bulk here
                 $kzDataWithoutEnemies = $killZoneData;
                 unset($kzDataWithoutEnemies['enemies']);
-                $killZones->push($this->_saveKillZone($dungeonroute, $kzDataWithoutEnemies));
+                // Do not save the enemy forces - we save it one time down below
+                $killZones->push($this->_saveKillZone($dungeonroute, $kzDataWithoutEnemies, false));
             } catch (Exception $ex) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }

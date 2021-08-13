@@ -512,7 +512,7 @@ class APIDungeonRouteController extends Controller
         }
 
         $dungeonroute->unsetRelation('ratings');
-        $dungeonroute->dropCaches();
+        DungeonRoute::dropCaches($dungeonroute->id);
         return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
     }
 
@@ -535,7 +535,7 @@ class APIDungeonRouteController extends Controller
         $dungeonRouteRating->delete();
 
         $dungeonroute->unsetRelation('ratings');
-        $dungeonroute->dropCaches();
+        DungeonRoute::dropCaches($dungeonroute->id);
         return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
     }
 
