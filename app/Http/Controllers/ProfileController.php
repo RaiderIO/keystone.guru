@@ -124,7 +124,7 @@ class ProfileController extends Controller
 
                 // Drop the caches for all of their routes since their profile name/icon may have changed
                 foreach ($user->dungeonroutes as $dungeonroute) {
-                    $dungeonroute->dropCaches();
+                    $dungeonroute->dropCaches($dungeonroute->id);
                 }
 
                 // Send an event that the user's color has changed

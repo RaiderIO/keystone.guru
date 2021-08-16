@@ -36,10 +36,10 @@ class EchoUser extends Signalable {
     }
 
     /**
-     * @returns {Number}
+     * @returns {string}
      */
-    getId() {
-        return this.id;
+    getPublicKey() {
+        return this.public_key;
     }
 
     /**

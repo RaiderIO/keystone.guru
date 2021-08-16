@@ -78,6 +78,7 @@ class RegisterController extends Controller
 
         /** @var User $user */
         $user = User::create([
+            'public_key'            => User::generateRandomPublicKey(),
             'name'                  => $data['name'],
             'email'                 => $data['email'],
             'echo_color'            => randomHexColor(),
