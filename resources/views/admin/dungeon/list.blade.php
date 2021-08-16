@@ -1,7 +1,7 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Dungeon listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('list.views/admin.dungeon.list.title')])
 
 @section('header-title')
-    {{ __('View dungeons') }}
+    {{ __('views/admin.dungeon.list.header') }}
 @endsection
 {{--Disabled since dungeons should only be created through seeders--}}
 {{--@section('header-addition')--}}
@@ -35,13 +35,13 @@
     <table id="admin_dungeon_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="50px">{{ __('Active') }}</th>
-            <th width="50px">{{ __('Exp.') }}</th>
-            <th width="45%">{{ __('Name') }}</th>
-            <th width="10%">{{ __('Enemy Forces') }}</th>
-            <th width="10%">{{ __('Teeming EF') }}</th>
-            <th width="10%">{{ __('Timer') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="50px">{{ __('views/admin.dungeon.list.table_header_active') }}</th>
+            <th width="50px">{{ __('views/admin.dungeon.list.table_header_expansion') }}</th>
+            <th width="45%">{{ __('views/admin.dungeon.list.table_header_name') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces_teeming') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_timer') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
@@ -70,7 +70,7 @@
                 <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->slug]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.list.edit') }}
                     </a>
                 </td>
             </tr>

@@ -1,13 +1,13 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Expansion listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('admin.expansion.list.title')])
 
 @section('header-title')
     <div class="row">
         <div class="col-lg">
-            <h4>{{ __('View expansions') }}</h4>
+            <h4>{{ __('views/admin.expansion.list.header') }}</h4>
         </div>
         <div class="ml-auto">
             <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
-                <i class="fas fa-plus"></i> {{ __('Create expansion') }}
+                <i class="fas fa-plus"></i> {{ __('views/admin.expansion.list.create_expansion') }}
             </a>
         </div>
     </div>
@@ -26,11 +26,11 @@
     <table id="admin_expansion_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="10%">{{ __('Icon') }}</th>
-            <th width="10%">{{ __('Id') }}</th>
-            <th width="50%">{{ __('Name') }}</th>
-            <th width="20%">{{ __('Color') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.table_header_icon') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.table_header_id') }}</th>
+            <th width="50%">{{ __('views/admin.expansion.list.table_header_name') }}</th>
+            <th width="20%">{{ __('views/admin.expansion.list.table_header_color') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.actions') }}</th>
         </tr>
         </thead>
 
@@ -43,7 +43,7 @@
                 <td>{{ $expansion->color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['expansion' => $expansion->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.expansion.list.edit') }}
                     </a>
                 </td>
             </tr>
