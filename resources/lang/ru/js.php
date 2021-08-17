@@ -162,6 +162,7 @@ return [
     'datatable_no_npcs_in_table'             => '@todo ru: .datatable_no_npcs_in_table',
     'user_report_handled_success'            => '@todo ru: .user_report_handled_success',
     'dungeonroute_refresh_thumbnail_success' => '@todo ru: .dungeonroute_refresh_thumbnail_success',
+    'updated_paid_tiers_successfully_label'  => '@todo ru: .updated_paid_tiers_successfully_label',
 
     'classification_label' => '@todo ru: .classification_label',
     'edit_label'           => '@todo ru: .edit_label',

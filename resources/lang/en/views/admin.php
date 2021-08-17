@@ -106,23 +106,64 @@ return [
             'save_as_new_npc'                => 'Save as new npc'
         ],
         'list' => [
-
+            'title'                       => 'Npc listing',
+            'header'                      => 'View NPCs',
+            'create_npc'                  => 'Create NPC',
+            'table_header_id'             => 'Id',
+            'table_header_name'           => 'Name',
+            'table_header_dungeon'        => 'Dungeon',
+            'table_header_enemy_forces'   => 'Enemy forces',
+            'table_header_classification' => 'Classification',
+            'table_header_actions'        => 'Action',
         ]
     ],
     'release'    => [
         'edit' => [
-
+            'header'      => 'New release',
+            'version'     => 'Version',
+            'title'       => 'Title',
+            'silent'      => 'Silent',
+            'spotlight'   => 'Spotlight',
+            'changelog'   => 'Changelog',
+            'description' => 'Description',
+            'ticket_nr'   => 'Ticket nr.',
+            'change'      => 'Change',
+            'add_change'  => 'Add change',
+            'edit'        => 'Edit',
+            'submit'      => 'Submit',
         ],
         'list' => [
-
+            'title'                => 'Release listing',
+            'view_releases'        => 'View releases',
+            'create_release'       => 'Create release',
+            'table_header_id'      => 'Id',
+            'table_header_version' => 'Version',
+            'table_header_title'   => 'Title',
+            'table_header_actions' => 'Actions',
+            'edit'                 => 'Edit'
         ]
     ],
     'spell'      => [
         'edit' => [
-
+            'title'             => 'Edit spell',
+            'game_id'           => 'Game ID',
+            'name'              => 'Name',
+            'icon_name'         => 'Icon name',
+            'dispel_type'       => 'Dispel type',
+            'schools'           => 'Schools',
+            'aura'              => 'Aura',
+            'submit'            => 'Submit',
+            'save_as_new_spell' => 'Save as new spell',
         ],
         'list' => [
-
+            'title'                => 'Spell listing',
+            'header'               => 'View spells',
+            'create_spell'         => 'Create spell',
+            'table_header_icon'    => 'Icon',
+            'table_header_id'      => 'Id',
+            'table_header_name'    => 'Name',
+            'table_header_actions' => 'Actions',
+            'edit'                 => 'Edit'
         ]
     ],
     'tools'      => [
@@ -130,12 +171,30 @@ return [
     ],
     'user'       => [
         'list' => [
-
+            'title'                   => 'User list',
+            'header'                  => 'View users',
+            'table_header_id'         => 'Id',
+            'table_header_name'       => 'Name',
+            'table_header_email'      => 'Email',
+            'table_header_routes'     => 'Routes',
+            'table_header_roles'      => 'Roles',
+            'table_header_registered' => 'Registered',
+            'table_header_actions'    => 'Actions',
+            'table_header_patreons'   => 'Patreon',
         ]
     ],
     'userreport' => [
         'list' => [
-
+            'title'                    => 'User reports',
+            'header'                   => 'View user reports',
+            'table_header_id'          => 'Id',
+            'table_header_author_name' => 'Author name',
+            'table_header_category'    => 'Category',
+            'table_header_message'     => 'Message',
+            'table_header_contact_at'  => 'Contact at',
+            'table_header_create_at'   => 'Created at',
+            'table_header_actions'     => 'Actions',
+            'handled'                  => 'Handled'
         ]
     ]
 ];
