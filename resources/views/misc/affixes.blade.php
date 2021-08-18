@@ -88,17 +88,18 @@ if ($timezone === null)
                             <div class="affix_row {{ $class }}">
                                 <div class="row no-gutters">
                                     <div
-                                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
+                                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
                                         data-toggle="tooltip"
-                                        title="{{ $affix->description }}"
+                                        title="{{ __($affix->description) }}"
                                         style="height: 24px;">
                                     </div>
                                     <div class="col d-lg-block d-none pl-1">
-                                        {{ $affix->name }}
                                         @if($lastColumn)
                                             @if($affixGroup->seasonal_index !== null )
-                                                {{ sprintf(__('preset %s'), $affixGroup->seasonal_index + 1) }}
+                                                {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
                                             @endif
+                                        @else
+                                        {{ __($affix->name) }}
                                         @endif
                                     </div>
                                 </div>

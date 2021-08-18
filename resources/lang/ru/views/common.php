@@ -1,5 +1,9 @@
 <?php
 
 return [
-
+    'affixgroup' => [
+        'affixgroup' => [
+            ''
+        ]
+    ]
 ];

@@ -71,9 +71,9 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
                     <div class="row mt-2 pl-2">
                         @foreach($affixRow as $affix)
                             <div class="col px-xl-1">
-                                <div class="select_icon class_icon affix_icon_{{ strtolower($affix->name) }} selectable"
+                                <div class="select_icon class_icon affix_icon_{{ strtolower($affix->key) }} selectable"
                                      data-toggle="tooltip" data-id="{{ $affix->id }}"
-                                     title="{{ $affix->description }}"
+                                     title="{{ __($affix->description) }}"
                                      style="height: 24px;">
                                 </div>
                             </div>

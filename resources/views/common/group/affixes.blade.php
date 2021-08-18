@@ -44,18 +44,19 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
                 ?>
                 <div class="col col-md pr-0 affix_row">
                     <div class="row no-gutters">
-                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
+                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
                              data-toggle="tooltip"
-                             title="{{ $affix->description }}"
+                             title="{{ __($affix->description) }}"
                              style="height: 24px;">
                         </div>
                         @if($names)
                             <div class="col d-md-block d-none pl-1">
-                                {{ $affix->name }}
                                 @if($last)
                                     @if( $affixGroup->seasonal_index !== null )
-                                        {{ sprintf(__('preset %s'), $affixGroup->seasonal_index + 1) }}
+                                        {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
                                     @endif
+                                @else
+                                {{ __($affix->name) }}
                                 @endif
                             </div>
                         @endif

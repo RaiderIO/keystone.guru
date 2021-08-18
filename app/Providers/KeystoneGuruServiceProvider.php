@@ -144,9 +144,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
                 // Season
                 'currentSeason'                   => $currentSeason,
-                'isAwakened'                      => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_AWAKENED)->first()->id,
-                'isPrideful'                      => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_PRIDEFUL)->first()->id,
-                'isTormented'                     => $currentSeason->seasonal_affix_id === Affix::where('name', Affix::AFFIX_TORMENTED)->first()->id,
+                'isAwakened'                      => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id,
+                'isPrideful'                      => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id,
+                'isTormented'                     => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id,
                 'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
                     ->with(['affixes:affixes.id,affixes.name,affixes.description'])
                     ->get(),

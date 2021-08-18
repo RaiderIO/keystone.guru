@@ -1,5 +1,5 @@
 @if(!empty($commit['removed']))
-    **{{ __('Removed') }}**:
+    **{{ __('views/app.commit.removed.removed') }}**:
     @foreach($commit['removed'] as $removed)
         - {{ $removed }}
     @endforeach

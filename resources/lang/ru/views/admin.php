@@ -185,7 +185,16 @@ return [
     ],
     'userreport' => [
         'list' => [
-
+            'title'                    => '@todo ru: .userreport.list.title',
+            'header'                   => '@todo ru: .userreport.list.header',
+            'table_header_id'          => '@todo ru: .userreport.list.table_header_id',
+            'table_header_author_name' => '@todo ru: .userreport.list.table_header_author_name',
+            'table_header_category'    => '@todo ru: .userreport.list.table_header_category',
+            'table_header_message'     => '@todo ru: .userreport.list.table_header_message',
+            'table_header_contact_at'  => '@todo ru: .userreport.list.table_header_contact_at',
+            'table_header_create_at'   => '@todo ru: .userreport.list.table_header_create_at',
+            'table_header_actions'     => '@todo ru: .userreport.list.table_header_actions',
+            'handled'                  => '@todo ru: .userreport.list.handled'
         ]
     ]
 ];
