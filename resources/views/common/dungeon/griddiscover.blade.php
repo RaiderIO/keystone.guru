@@ -47,14 +47,14 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                     <div class="d-xl-inline d-none">
                         <p class="card-text text-center">
                             <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('Popular') }}
+                                {{ __('views/common.dungeon.griddiscover.popular') }}
                             </a>
 
                             &middot;
 
                             <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->slug]); ?>
                             <a href="{{ $url }}">
-                                {{ __('This week ') }}
+                                {{ __('views/common.dungeon.griddiscover.this_week') }}
                             </a>
                             <?php ob_start() ?>
                             @if($tiers->has($currentAffixGroup->id))
@@ -71,7 +71,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
 
                             <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->slug]); ?>
                             <a href="{{ $url }}">
-                                {{ __('Next week ') }}
+                                {{ __('views/common.dungeon.griddiscover.next_week') }}
                             </a>
                             <?php ob_start() ?>
                             @if($tiers->has($nextAffixGroup->id))
@@ -87,7 +87,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                             &middot;
 
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('New') }}
+                                {{ __('views/common.dungeon.griddiscover.new') }}
                             </a>
                         </p>
                     </div>
@@ -96,24 +96,24 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                     <div class="row no-gutters card-text text-center d-xl-none">
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('Popular') }}
+                                {{ __('views/common.dungeon.griddiscover.popular') }}
                             </a>
                         </div>
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('This week') }}
+                                {{ __('views/common.dungeon.griddiscover.this_week') }}
                             </a>
                             {!! $thisWeekTier !!}
                         </div>
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('Next week') }}
+                                {{ __('views/common.dungeon.griddiscover.next_week') }}
                             </a>
                             {!! $nextWeekTier !!}
                         </div>
                         <div class="col-xl">
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon->slug]) }}">
-                                {{ __('New') }}
+                                {{ __('views/common.dungeon.griddiscover.new') }}
                             </a>
                         </div>
                     </div>

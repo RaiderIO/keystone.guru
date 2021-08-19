@@ -4,13 +4,13 @@
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $siegeOfBoralus \App\Models\Dungeon */
 
-$id = isset($id) ? $id : 'dungeon_id_select';
-$name = isset($name) ? $name : 'dungeon_id';
-$label = isset($label) ? $label : __('Dungeon');
-$required = isset($required) ? $required : true;
-$showAll = isset($showAll) ? $showAll : true;
-$activeOnly = isset($activeOnly) ? $activeOnly : true;
-$showSiegeWarning = isset($showSiegeWarning) ? $showSiegeWarning : false;
+$id = $id ?? 'dungeon_id_select';
+$name = $name ?? 'dungeon_id';
+$label = $label ?? __('Dungeon');
+$required = $required ?? true;
+$showAll = !isset($showAll) || $showAll;
+$activeOnly = $activeOnly ?? true;
+$showSiegeWarning = $showSiegeWarning ?? false;
 
 $dungeonsSelect = [];
 if ($showAll)
@@ -59,7 +59,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons)
     {!! Form::select($name, $dungeonsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
+            <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}
         </div>
     @endif
 
