@@ -23,14 +23,14 @@ if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } elseif (Auth::check()) {
     $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
-    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
+    $searchTags = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
 } else {
     $searchTags = collect();
 }
 
 $autocompleteTags = collect();
 
-if( Auth::check() ) {
+if (Auth::check()) {
     if ($team === null) {
         $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL))->get();
     } else {
@@ -90,7 +90,7 @@ if( Auth::check() ) {
             'class' => 'form-control affixselect selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('{0} affixes selected')]) !!}
+            'data-count-selected-text' => __('views/common.dungeonroute.table.affixes_selected')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
@@ -98,11 +98,11 @@ if( Auth::check() ) {
         'showNoAttributes' => true])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
+        {!! Form::label('dungeonroute_requirements_select', __('views/common.dungeonroute.table.requirements')) !!}
         <?php
-        $requirements = ['enough_enemy_forces' => __('Enough enemy forces')];
+        $requirements = ['enough_enemy_forces' => __('views/common.dungeonroute.table.enemy_enemy_forces')];
         if (Auth::check() && $view !== 'favorites') {
-            $requirements['favorite'] = __('Favorite');
+            $requirements['favorite'] = __('views/common.dungeonroute.table.favorite');
         }
         ?>
         {!! Form::select('dungeon_id', $requirements, 0, [

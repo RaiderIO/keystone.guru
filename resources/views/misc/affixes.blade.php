@@ -9,12 +9,10 @@
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;
-if (Auth::check())
-{
+if (Auth::check()) {
     $timezone = Auth::user()->timezone;
 }
-if ($timezone === null)
-{
+if ($timezone === null) {
     $timezone = config('app.timezone');
 }
 ?>
@@ -94,12 +92,10 @@ if ($timezone === null)
                                         style="height: 24px;">
                                     </div>
                                     <div class="col d-lg-block d-none pl-1">
-                                        @if($lastColumn)
-                                            @if($affixGroup->seasonal_index !== null )
-                                                {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
-                                            @endif
+                                        @if($lastColumn && $affixGroup->seasonal_index !== null)
+                                            {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
                                         @else
-                                        {{ __($affix->name) }}
+                                            {{ __($affix->name) }}
                                         @endif
                                     </div>
                                 </div>

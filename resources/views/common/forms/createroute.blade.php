@@ -20,9 +20,9 @@ $dungeonroute = $dungeonroute ?? null;
 
     <div class="form-group">
         <label for="dungeon_route_title">
-            {{ __('Title') }}
+            {{ __('views/common.forms.createroute.title') }}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.')
+            __('views/common.forms.createroute.title_title')
              }}"></i>
         </label>
         {!! Form::text('dungeon_route_title', optional($dungeonroute)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
@@ -31,19 +31,18 @@ $dungeonroute = $dungeonroute ?? null;
     @isset($dungeonroute)
         <div class="form-group">
             <label for="dungeon_route_description">
-                {{ __('Description') }}
+                {{ __('views/common.forms.createroute.description') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.')
+            __('views/common.forms.createroute.description_title')
              }}"></i>
             </label>
             {!! Form::textarea('dungeon_route_description', $dungeonroute->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             <label for="dungeon_route_level">
-                {{ __('Key levels') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('Indicate for which key levels your route is suited. This can help others find your route more easily.')
-             }}"></i>
+                {{ __('views/common.forms.createroute.key_levels') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip"
+                   title="{{ __('views/common.forms.createroute.key_levels_title') }}"></i>
             </label>
             {!! Form::text('dungeon_route_level', sprintf('%s;%s', $dungeonroute->level_min, $dungeonroute->level_max) ?? '',
                 ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
@@ -58,7 +57,7 @@ $dungeonroute = $dungeonroute ?? null;
                         <a href="#" class="btn btn-link" data-toggle="collapse"
                            data-target="#create_route_advanced_collapse"
                            aria-expanded="false" aria-controls="create_route_advanced_collapse">
-                            {{ __('Advanced options') }}
+                            {{ __('views/common.forms.createroute.advanced_options') }}
                         </a>
                     </h5>
                 </div>
@@ -67,7 +66,7 @@ $dungeonroute = $dungeonroute ?? null;
                      data-parent="#create_route">
                     <div class="card-body">
 
-                        <p>{{ __('Affixes') }} <span class="form-required">*</span></p>
+                        <p>{{ __('views/common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
 
                         @include('common.group.affixes', [
                             'dungeonroute'     => $dungeonroute ?? null,
@@ -78,7 +77,7 @@ $dungeonroute = $dungeonroute ?? null;
 
                         @include('common.dungeonroute.attributes')
 
-                        <p>{{ __('Group composition') }}</p>
+                        <p>{{ __('views/common.forms.createroute.group_composition') }}</p>
                         <div class="form-group">
                             @include('common.group.composition', [
                                 'collapseSelector' => '#createRouteAdvancedCollapse',
@@ -88,10 +87,10 @@ $dungeonroute = $dungeonroute ?? null;
 
                         @if(Auth::check() && Auth::user()->hasRole('admin'))
                             <h3>
-                                {{ __('Admin') }}
+                                {{ __('views/common.forms.createroute.admin') }}
                             </h3>
                             <div class="form-group">
-                                {!! Form::label('demo', __('Demo route')) !!}
+                                {!! Form::label('demo', __('views/common.forms.createroute.demo_route')) !!}
                                 {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
                             </div>
                         @endif
@@ -104,7 +103,7 @@ $dungeonroute = $dungeonroute ?? null;
     @if(!isset($dungeonroute))
         <div class="col-lg-12">
             <div class="form-group">
-                {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
+                {!! Form::submit(__('views/common.forms.createroute.create_route'), ['class' => 'btn btn-info col-md-auto']) !!}
             </div>
         </div>
     @endif
@@ -115,7 +114,7 @@ $dungeonroute = $dungeonroute ?? null;
 @else
     <div class="form-group">
         <div id="save_route_settings" class="offset-xl-5 col-xl-2 btn btn-success">
-            <i class="fas fa-save"></i> {{ __('Save settings') }}
+            <i class="fas fa-save"></i> {{ __('views/common.forms.createroute.save_settings') }}
         </div>
         <div id="save_route_settings_saving" class="offset-xl-5 col-xl-2 btn btn-success disabled"
              style="display: none;">

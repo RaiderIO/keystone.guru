@@ -1,11 +1,11 @@
 <?php
-$modal = isset($modal) ? $modal : false;
+$modal = $modal ?? false;
 $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
-$redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::getPathInfo());
+$redirect = $redirect ?? Request::get('redirect', Request::getPathInfo());
 // May be set if the user failed his initial registration and needs another passthrough of redirect
 $redirect = old('redirect', $redirect);
-$errors = isset($errors) ? $errors : collect();
+$errors = $errors ?? collect();
 ?>
 
 @section('scripts')
@@ -27,13 +27,14 @@ $errors = isset($errors) ? $errors : collect();
               action="{{ route('register', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
             <h3>
-                {{ __('Register') }}
+                {{ __('views/common.register.register') }}
             </h3>
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_name" class="control-label">
-                    {{ __('Username') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{__('Your username may be visible if you choose to publish any routes you make.')}}"></i>
+                    {{ __('views/common.register.username') }} <span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{__('views/common.register.username_title')}}"></i>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -44,8 +45,11 @@ $errors = isset($errors) ? $errors : collect();
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_email" class="control-label">
-                    {{ __('E-mail address') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{__('Your e-mail address will be required upon login. Your e-mail address will not be validated - but it will be used if you ever forget your password to e-mail you a password reset link.')}}"></i>
+                    {{ __('views/common.register.email_address') }} <span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{__('views/common.register.email_address_title')}}">
+
+                    </i>
                 </label>
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_email" type="email" class="form-control" name="email"
@@ -59,7 +63,7 @@ $errors = isset($errors) ? $errors : collect();
 
                 <div class="col-md-{{ $width }}">
                     {!! Form::select('region', array_merge(
-                    ['-1' => __('Select region')],
+                    ['-1' => __('views/common.register.select_region')],
                     \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()
                     ), null, ['class' => 'form-control']) !!}
                 </div>
@@ -67,7 +71,7 @@ $errors = isset($errors) ? $errors : collect();
 
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_password" class="control-label">
-                    {{ __('Password') }} <span class="form-required">*</span>
+                    {{ __('views/common.register.password') }} <span class="form-required">*</span>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -79,7 +83,7 @@ $errors = isset($errors) ? $errors : collect();
             <div class="form-group">
                 <label for="{{ $modalClass }}register_password-confirm"
                        class="control-label">
-                    {{ __('Confirm password') }} <span class="form-required">*</span>
+                    {{ __('views/common.register.confirm_password') }} <span class="form-required">*</span>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -90,10 +94,10 @@ $errors = isset($errors) ? $errors : collect();
 
             <div class="form-group">
                 <label for="{{ $modalClass }}legal_agreed" class="control-label">
-                    {!! sprintf(__('I have read and agree with the %s, %s and the %s.'),
-                     '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
-                     '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
-                     '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')
+                    {!! sprintf(__('views/common.register.legal_agree'),
+                     '<a href="' . route('legal.terms') . '">' . __('views/common.register.terms_of_service') . '</a>',
+                     '<a href="' . route('legal.privacy') . '">' . __('views/common.register.privacy_policy') . '</a>',
+                     '<a href="' . route('legal.cookies') . '">' . __('views/common.register.cookie_policy') . '</a>')
                      !!}
                 </label>
                 {!! Form::checkbox('legal_agreed', 1, 0, ['id' => $modalClass . 'legal_agreed', 'class' => 'form-control left_checkbox']) !!}
@@ -103,7 +107,7 @@ $errors = isset($errors) ? $errors : collect();
             <div class="form-group">
                 <div class="col-md-12">
                     <button type="submit" class="btn btn-primary">
-                        {{ __('Register') }}
+                        {{ __('views/common.register.register') }}
                     </button>
                 </div>
             </div>
@@ -111,10 +115,10 @@ $errors = isset($errors) ? $errors : collect();
     </div>
     <div class="col border-left border-white">
         <h3>
-            {{ __('Register through OAuth2') }}
+            {{ __('views/common.register.register_through_oauth2') }}
         </h3>
         <p>
-            {!! sprintf(__('By registering through OAuth2, you declare that you have read and agree with the %s, %s and the %s.'),
+            {!! sprintf(__('views/common.register.legal_agree_oauth2'),
              '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
              '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
              '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')

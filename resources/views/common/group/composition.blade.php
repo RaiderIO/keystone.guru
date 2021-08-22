@@ -20,7 +20,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                               {
+        .{{ strtolower($faction->name) }}                                {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -83,11 +83,11 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
             /** If collapseSelector is set, only load this when we're actually opening the collapseSelector to speed up loading. */
             if( isset($collapseSelector) ){ ?>
             $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
-            <?php } ?>
-            let composition = _inlineManager.getInlineCode('common/group/composition');
-            composition._loadDungeonRouteDefaults();
+                <?php } ?>
+                let composition = _inlineManager.getInlineCode('common/group/composition');
+                composition._loadDungeonRouteDefaults();
 
-            <?php if( isset($collapseSelector) ){ ?>
+                <?php if( isset($collapseSelector) ){ ?>
             });
             <?php } ?>
 
@@ -102,7 +102,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="form-group">
-            {!! Form::label('faction_id', __('Faction')) !!}
+            {!! Form::label('faction_id', __('views/common.group.composition.faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
             {!! Form::select('faction_id', $factions->pluck('name', 'id'), old('faction_id'), ['class' => 'form-control selectpicker']) !!}
         </div>
@@ -111,7 +111,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
         <div class="col-md-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
-                    <i class="fas fa-undo"></i> {{ __('Undo') }}
+                    <i class="fas fa-undo"></i> {{ __('views/common.group.composition.undo') }}
                 </button>
             </div>
         </div>
@@ -122,7 +122,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
-            {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
+            {!! Form::label('specialization[]', sprintf(__('views/common.group.composition.party_member_nr'), $i)) !!}
             <select data-live-search="true" name="specialization[]"
                     class="form-control selectpicker specializationselect" data-id="{{$i}}">
 
