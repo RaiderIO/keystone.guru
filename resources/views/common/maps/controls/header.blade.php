@@ -8,14 +8,14 @@ $echo = $echo ?? false;
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}"
+            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Keystone.guru') }}"
                  height="44px;" width="200px;">
         </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('Toggle navigation') }}">
+                aria-label="{{ __('views/common.maps.controls.header.toggle_navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -31,7 +31,7 @@ $echo = $echo ?? false;
                                         @if(!$stopped)
                                             <button id="stop_live_session" class="btn btn-danger btn-sm"
                                                     data-toggle="modal" data-target="#stop_live_session_modal">
-                                                <i class="fas fa-stop"></i> {{ __('Stop') }}
+                                                <i class="fas fa-stop"></i> {{ __('views/common.maps.controls.header.stop') }}
                                             </button>
                                         @endif
                                         <div id="stopped_live_session_container" class="row no-gutters"
@@ -39,7 +39,7 @@ $echo = $echo ?? false;
                                             <div class="row">
                                                 <div class="col">
                                                 <span id="stopped_live_session_countdown">
-                                                    {{ $stopped ? sprintf(__('Expires in %s'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                                    {{ $stopped ? sprintf(__('views/common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
                                                 </span>
                                                 </div>
                                             </div>
@@ -48,12 +48,12 @@ $echo = $echo ?? false;
                                                     @if($dungeonroute->mayUserEdit(Auth::user()))
                                                         <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                                                            class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                                                            <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
                                                         </a>
                                                     @else
                                                         <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
                                                            class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-eye"></i> {{ __('View route') }}
+                                                            <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
                                                         </a>
                                                     @endif
                                                 </div>
@@ -62,7 +62,7 @@ $echo = $echo ?? false;
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
                                                 data-target="#start_live_session_modal">
-                                            <i class="fas fa-play"></i> {{ __('Start') }}
+                                            <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.start') }}
                                         </button>
                                     @endisset
                                 </div>
@@ -119,7 +119,7 @@ $echo = $echo ?? false;
                         <li class="nav-item mr-2">
                             <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $dungeonroute]) }}">
                                 <button class="btn btn-success h-100">
-                                    <i class="fas fa-save"></i> {{ __('Save to profile') }}
+                                    <i class="fas fa-save"></i> {{ __('views/common.maps.controls.header.save_to_profile') }}
                                 </button>
                             </a>
                         </li>
@@ -127,7 +127,7 @@ $echo = $echo ?? false;
                 @endauth
                 <li class="nav-item">
                     <button class="btn btn-info h-100" data-toggle="modal" data-target="#share_modal">
-                        <i class="fas fa-share"></i> {{ __('Share') }}
+                        <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
                     </button>
                 </li>
                 <li class="nav-item nav-item-divider">
@@ -142,44 +142,42 @@ $echo = $echo ?? false;
 
 @isset($dungeonroute)
     @component('common.general.modal', ['id' => 'start_live_session_modal'])
-        <h3 class="card-title">{{ __('Start live session') }}</h3>
+        <h3 class="card-title">{{ __('views/common.maps.controls.header.start_live_session') }}</h3>
 
         <p>
-            {{ __('Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing
-            your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.') }}
+            {{ __('views/common.maps.controls.header.start_live_session_paragraph_1') }}
             <br><br>
-            {{ __('Any participant of the live session may also select any of your existing pulls (your current pull, in-game) and then on any enemy that is
-            not part of your route to indicate an accidental pull. Keystone.guru will then attempt to correct your route by excluding any enemies that are part
-            of your current route that are potentially skippable without utilizing shroud/invisibility pots.') }}
+            {{ __('views/common.maps.controls.header.start_live_session_paragraph_2') }}
             <br><br>
-            {{ __('Your live session may be shared with anyone by simply copying the URL. They will be able to join once they are logged into Keystone.guru.') }}
+            {{ __('views/common.maps.controls.header.start_live_session_paragraph_3') }}
             <br><br>
-            {{ __('If your route is assigned to a team that you are a part of, any members of that team currently viewing this route will receive an
-            invitation to your join live session.') }}
+            {{ __('views/common.maps.controls.header.start_live_session_paragraph_4') }}
         </p>
 
         <div class="row">
             <div class="col">
                 <a href="{{ route('dungeonroute.livesession.create', ['dungeonroute' => $dungeonroute]) }}"
                    class="btn btn-success w-100">
-                    <i class="fas fa-play"></i> {{ __('Create live session') }}
+                    <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.create_live_session') }}
                 </a>
             </div>
         </div>
     @endcomponent
 
     @component('common.general.modal', ['id' => 'stop_live_session_modal'])
-        <h3 class="card-title">{{ __('Live session concluded') }}</h3>
+        <h3 class="card-title">{{ __('views/common.maps.controls.header.live_session_concluded') }}</h3>
 
         <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
         <div class="form-group">
             <h5>
-                {{ __('Rate this route') }}
+                {{ __('views/common.maps.controls.header.rate_this_route') }}
             </h5>
             <select>
                 @for($i = 1; $i <= 10; $i++)
                     <option
-                        value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>{{ $i }}</option>
+                        value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                        {{ $i }}
+                    </option>
                 @endfor
             </select>
         </div>
@@ -187,7 +185,7 @@ $echo = $echo ?? false;
         @if($currentRating === false)
             <div class="form-group">
                 <p>
-                    {{ __('Rating the route will help others discover this route if it\'s good. Thank you!') }}
+                    {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}
                 </p>
             </div>
         @endif
@@ -195,19 +193,19 @@ $echo = $echo ?? false;
         <div class="row form-group">
             <div class="col">
                 <button data-dismiss="modal" class="btn btn-outline-info w-100">
-                    <i class="fas fa-chart-line"></i> {{ __('Review live session') }}
+                    <i class="fas fa-chart-line"></i> {{ __('views/common.maps.controls.header.review_live_session') }}
                 </button>
             </div>
             <div class="col">
                 @if($dungeonroute->mayUserEdit(Auth::user()))
                     <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                        class="btn btn-success w-100">
-                        <i class="fas fa-edit"></i> {{ __('Edit route') }}
+                        <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
                     </a>
                 @else
                     <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
                        class="btn btn-success w-100">
-                        <i class="fas fa-eye"></i> {{ __('View route') }}
+                        <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
                     </a>
                 @endif
             </div>

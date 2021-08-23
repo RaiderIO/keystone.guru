@@ -5,7 +5,8 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
 <!-- Rating -->
 <div class="row no-gutters">
 
-    <div class="col btn-group dropright" data-toggle="tooltip" title="{{ __('Rate this route') }}" data-placement="right">
+    <div class="col btn-group dropright" data-toggle="tooltip" title="{{ __('Rate this route') }}"
+         data-placement="right">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="{{ $currentUserRating !== false ? 'fas' : 'far' }} fa-star"></i>
@@ -13,11 +14,11 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
         <div id="map_rating_dropdown" class="dropdown-menu">
             @if( $dungeonroute->isOwnedByUser())
                 <a class="dropdown-item disabled">
-                    {{ __('You cannot rate your own route') }}
+                    {{ __('views/common.maps.controls.elements.rating.unable_to_rate_own_route') }}
                 </a>
             @else
                 <a class="dropdown-item disabled">
-                    {{ __('Your rating') }}
+                    {{ __('views/common.maps.controls.elements.rating.your_rating') }}
                 </a>
                 @for($i = 1; $i <= 10; $i++)
                     <a class="dropdown-item {{ $currentUserRating === $i ? 'active' : '' }}" data-rating="{{ $i }}">

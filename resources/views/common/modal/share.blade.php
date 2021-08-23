@@ -11,13 +11,13 @@ $showPublish = $show['publish'] ?? true;
 @include('common.general.inline', ['path' => 'common/dungeonroute/share'])
 
 <!-- Shareable link -->
-<h3 class="card-title">{{ __('Share') }}</h3>
+<h3 class="card-title">{{ __('views/common.modal.share.share') }}</h3>
 
 @if($showPublish)
     <!-- Published state -->
     <div class="form-group">
         <label for="map_route_publish">
-            {{ __('Publish') }}
+            {{ __('views/common.modal.share.publish') }}
         </label>
         <div class="row">
             <div id="map_route_publish_container" class="col"
@@ -29,8 +29,8 @@ $showPublish = $show['publish'] ?? true;
         </div>
         <div class="row">
             <div class="col">
-                {!! sprintf(__('Review your %s before publishing your route'),
-                    sprintf('<a href="#" data-toggle="modal" data-target="#route_settings_modal">%s</a>', __('route settings'))
+                {!! sprintf(__('views/common.modal.share.review_route_settings'),
+                    sprintf('<a href="#" data-toggle="modal" data-target="#route_settings_modal">%s</a>', __('views/common.modal.share.route_settings'))
                 ) !!}
             </div>
         </div>
@@ -39,7 +39,7 @@ $showPublish = $show['publish'] ?? true;
 @if($showLink)
     <div class="form-group">
         <label for="map_shareable_link">
-            {{ __('Link') }}
+            {{ __('views/common.modal.share.link') }}
         </label>
         <div class="row">
             <div class="col input-group">
@@ -47,7 +47,8 @@ $showPublish = $show['publish'] ?? true;
                 ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip" title="{{ __('Copy shareable link to clipboard') }}">
+                            data-toggle="tooltip"
+                            title="{{ __('views/common.modal.share.copy_shareable_link_to_clipboard') }}">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -58,7 +59,7 @@ $showPublish = $show['publish'] ?? true;
 @if($showEmbed)
     <div class="form-group">
         <label for="map_embedable_link">
-            {{ __('Embed') }}
+            {{ __('views/common.modal.share.embed') }}
         </label>
         <div class="row">
             <div class="col input-group">
@@ -67,7 +68,8 @@ $showPublish = $show['publish'] ?? true;
                 ['id' => 'map_embedable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip" title="{{ __('Copy embed code to clipboard') }}">
+                            data-toggle="tooltip"
+                            title="{{ __('views/common.modal.share.copy_embed_code_to_clipboard') }}">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -78,14 +80,14 @@ $showPublish = $show['publish'] ?? true;
 @if($showMdtExport)
     <div class="form-group">
         <label for="map_mdt_export">
-            {{ __('MDT String') }}
+            {{ __('views/common.modal.share.mdt_string') }}
         </label>
 
         <div class="form-group">
             <div class="mdt_export_loader_container">
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+                        <span class="sr-only">{{ __('views/common.modal.share.loading') }}</span>
                     </div>
                 </div>
             </div>
@@ -96,7 +98,7 @@ $showPublish = $show['publish'] ?? true;
         <div class="form-group">
             <div class="mdt_export_result_container" style="display: none;">
                 <div class="btn btn-info copy_mdt_string_to_clipboard w-100">
-                    <i class="far fa-copy"></i> {{ __('Copy to clipboard') }}
+                    <i class="far fa-copy"></i> {{ __('views/common.modal.share.copy_to_clipboard') }}
                 </div>
             </div>
         </div>

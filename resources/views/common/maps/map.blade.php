@@ -49,15 +49,15 @@ if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
-            ['key' => '', 'description' => __('Always visible')],
-            ['key' => 'visible', 'description' => __('Visible when Teeming only')],
-            ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],
+            ['key' => '', 'description' => __('views/common.maps.map.no_teeming')],
+            ['key' => 'visible', 'description' => __('views/common.maps.map.visible_teeming')],
+            ['key' => 'hidden', 'description' => __('views/common.maps.map.hidden_teeming')],
         ],
         // Display options for changing Faction status for map objects
-        'factions' => [
-            ['key' => 'any', 'description' => __('Any')],
-            ['key' => 'alliance', 'description' => __('Alliance')],
-            ['key' => 'horde', 'description' => __('Horde')],
+        'factions'       => [
+            ['key' => 'any', 'description' => __('views/common.maps.map.any')],
+            ['key' => 'alliance', 'description' => __('views/common.maps.map.alliance')],
+            ['key' => 'horde', 'description' => __('views/common.maps.map.horde')],
         ],
     ];
 }
@@ -129,6 +129,7 @@ if ($isAdmin) {
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
+
 
         </script>
     @endif
@@ -218,7 +219,7 @@ if ($isAdmin) {
                     <li class="nav-item">
                         <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
                            aria-controls="edit_route" aria-selected="true">
-                            {{ __('Route') }}
+                            {{ __('views/common.maps.map.route') }}
                         </a>
                     </li>
                 @endisset
@@ -226,14 +227,14 @@ if ($isAdmin) {
                     <a class="nav-link {{ $hasRouteSettings ? '' : 'active' }}"
                        id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
                        aria-controls="edit_route_map_settings" aria-selected="false">
-                        {{ __('Map settings') }}
+                        {{ __('views/common.maps.map.map_settings') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="edit_route_pull_settings_tab" data-toggle="tab" href="#pull-settings"
                        role="tab"
                        aria-controls="edit_route_pull_settings" aria-selected="false">
-                        {{ __('Pull settings') }}
+                        {{ __('views/common.maps.map.pull_settings') }}
                     </a>
                 </li>
             </ul>

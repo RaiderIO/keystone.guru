@@ -29,7 +29,8 @@
         @if($edit)
             <div class="p-1">
                 <div class="row pr-2 mb-2 no-gutters">
-                    <div class="col-auto" data-toggle="tooltip" title="{{ __('Settings') }}">
+                    <div class="col-auto" data-toggle="tooltip"
+                         title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
                         <button class="btn btn-info w-100" data-toggle="modal"
                                 data-target="#route_settings_modal">
                             <i class='fas fa-cog'></i>
@@ -37,10 +38,11 @@
                     </div>
                     <div class="col pl-2 pr-2">
                         <div id="killzones_new_pull" class="btn btn-success w-100">
-                            <i class="fas fa-plus"></i> {{__('New pull')}}
+                            <i class="fas fa-plus"></i> {{__('views/common.maps.controls.pulls.new_pull')}}
                         </div>
                     </div>
-                    <div class="col-auto" data-toggle="tooltip" title="{{ __('Delete all pulls') }}">
+                    <div class="col-auto" data-toggle="tooltip"
+                         title="{{ __('views/common.maps.controls.pulls.delete_all_pulls_title') }}">
                         <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -50,38 +52,39 @@
         @endif
 
         @if($edit)
-        <div class="">
-            <div id="edit_route_enemy_forces_container"></div>
-        </div>
-        @else
-        <div class="row pr-2 mb-2 no-gutters">
-            <div class="col-auto" data-toggle="tooltip" title="{{ __('Settings') }}">
-                <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
-                    <i class='fas fa-cog'></i>
-                </button>
+            <div class="">
+                <div id="edit_route_enemy_forces_container"></div>
             </div>
-            <div class="col">
-                <div id="edit_route_enemy_forces_container" class="pt-1">
+        @else
+            <div class="row pr-2 mb-2 no-gutters">
+                <div class="col-auto" data-toggle="tooltip"
+                     title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
+                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
+                        <i class='fas fa-cog'></i>
+                    </button>
+                </div>
+                <div class="col">
+                    <div id="edit_route_enemy_forces_container" class="pt-1">
 
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
 
         <div class="pulls_container" data-simplebar>
 
             <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">
-                    <h5>{{ __('Loading...') }}</h5>
+                    <h5>{{ __('views/common.maps.controls.pulls.loading') }}</h5>
                 </div>
             </div>
             <div id="killzones_no_pulls" class="row no-gutters" style="display: none;">
                 <div class="col text-center">
                     <h5>
                         @if($edit)
-                            {{ __('No pulls created. Click on the button above or on an enemy to add them to your first pull.') }}
+                            {{ __('views/common.maps.controls.pulls.no_pulls_created_edit') }}
                         @else
-                            {{ __('No pulls created.') }}
+                            {{ __('views/common.maps.controls.pulls.no_pulls_created_view') }}
                         @endif
                     </h5>
                 </div>
