@@ -5,29 +5,29 @@
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
-    ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
-    ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
-    ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
+    ['icon' => 'fa-user', 'text' => __('views/profile.edit.profile'), 'target' => '#profile'],
+    ['icon' => 'fa-cog', 'text' => __('views/profile.edit.account'), 'target' => '#account'],
+    ['icon' => 'fab fa-patreon', 'text' => __('views/profile.edit.patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
 if (!$isOAuth) {
-    $menuItems[] = ['icon' => 'fa-key', 'text' => __('Change password'), 'target' => '#change-password'];
+    $menuItems[] = ['icon' => 'fa-key', 'text' => __('views/profile.edit.change_password'), 'target' => '#change-password'];
 }
-$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('Privacy'), 'target' => '#privacy'];
-$menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#reports'];
+$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('views/profile.edit.privacy'), 'target' => '#privacy'];
+$menuItems[] = ['icon' => 'fa-flag', 'text' => __('views/profile.edit.reports'), 'target' => '#reports'];
 
-$menuTitle = sprintf(__('%s\'s profile'), $user->name);
+$menuTitle = sprintf(__('views/profile.edit.menu_title'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
 @extends('layouts.sitepage', ['wide' => true,
-    'title' => __('Profile'),
+    'title' => __('views/profile.edit.title'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
     'menuModelEdit' => $user
 ])
 
 @include('common.general.inline', ['path' => 'profile/edit', 'options' => [
-    'test' => 'test'
+
 ]])
 
 @section('scripts')
@@ -54,23 +54,23 @@ $deleteConsequences = $user->getDeleteConsequences();
             </h4>
 
             <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-                {!! Form::label('avatar', __('Avatar')) !!}
+                {!! Form::label('avatar', __('views/profile.edit.avatar')) !!}
                 {!! Form::file('avatar', ['class' => 'form-control']) !!}
             </div>
 
             @if(isset($user->iconfile))
                 <div class="form-group">
-                    {{__('Avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
-                                           alt="{{ __('User avatar') }}" style="max-width: 48px"/>
+                    {{__('views/profile.edit.avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
+                                           alt="{{ __('views/profile.edit.avatar_title') }}" style="max-width: 48px"/>
                 </div>
             @endif
 
             @if($isOAuth && !$user->changed_username)
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">
-                        {{ __('Username') }}
+                        {{ __('views/profile.edit.username') }}
                         <i class="fas fa-info-circle" data-toggle="tooltip"
-                           title="{{ __('Since you logged in using an external Authentication service, you may change your username once.') }}"></i>
+                           title="{{ __('views/profile.edit.username_title') }}"></i>
                     </label>
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'name'])
@@ -83,14 +83,14 @@ $deleteConsequences = $user->getDeleteConsequences();
             {{--            </div>--}}
             @if(!$isOAuth)
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                    {!! Form::label('email', __('Email')) !!}
+                    {!! Form::label('email', __('views/profile.edit.email')) !!}
                     {!! Form::text('email', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'email'])
                 </div>
             @endif
             <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
-                {!! Form::label('game_server_region_id', __('Region')) !!}
-                {!! Form::select('game_server_region_id', array_merge(['-1' => __('Select region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
+                {!! Form::label('game_server_region_id', __('views/profile.edit.region')) !!}
+                {!! Form::select('game_server_region_id', array_merge(['-1' => __('views/profile.edit.select_region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
                 @include('common.forms.form-error', ['key' => 'game_server_region_id'])
             </div>
             <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
@@ -98,18 +98,17 @@ $deleteConsequences = $user->getDeleteConsequences();
             </div>
             <div class="form-group{{ $errors->has('echo_anonymous') ? ' has-error' : '' }}">
                 <label for="echo_anonymous">
-                    {{ __('Show as Anonymous') }}
+                    {{ __('views/profile.edit.show_as_anonymous') }}
                     <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{ __('Enabling this option will show you as \'Anonymous\' when viewing routes that are not part of any teams you are a part of.
-                            For your own routes and for routes part of your teams, your name will always be visible.') }}"></i>
+                       title="{{ __('views/profile.edit.show_as_anonymous_title') }}"></i>
                 </label>
                 {!! Form::checkbox('echo_anonymous', 1, $user->echo_anonymous, ['class' => 'form-control left_checkbox']) !!}
             </div>
             <div class="form-group{{ $errors->has('echo_color') ? ' has-error' : '' }}">
                 <label for="echo_color">
-                    {{ __('Synchronized route edit color') }}
+                    {{ __('views/profile.edit.echo_color') }}
                     <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{ __('When editing a route cooperatively with a team member, this color will uniquely identify you.') }}"></i>
+                       title="{{ __('views/profile.edit.echo_color_title') }}"></i>
                 </label>
                 {!! Form::color('echo_color', null, ['id' => 'echo_color', 'class' => 'form-control']) !!}
 
@@ -133,25 +132,25 @@ $deleteConsequences = $user->getDeleteConsequences();
                 ?>
             </div>
 
-            {!! Form::submit(__('Save'), ['class' => 'btn btn-info']) !!}
+            {!! Form::submit(__('views/profile.edit.save'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>
 
         <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
             <h4>
-                {{ __('Account') }}
+                {{ __('views/profile.edit.account') }}
             </h4>
             <div class="form-group">
-                {{ __('If you delete your Keystone.guru account the following will happen:') }}
+                {{ __('views/profile.edit.account_delete_consequences') }}:
             </div>
             @if( !empty($deleteConsequences['dungeonroutes']) && $deleteConsequences['dungeonroutes']['delete_count'] > 0 )
                 <div class="form-group">
                     <h5>
-                        {{ __('Routes') }}
+                        {{ __('views/profile.edit.account_delete_consequence_routes') }}
                     </h5>
                     <ul>
                         <li>
-                            {{ sprintf(__('Your %s route(s) will be deleted.'), $deleteConsequences['dungeonroutes']['delete_count']) }}
+                            {{ sprintf(__('views/profile.edit.account_delete_consequence_routes_delete'), $deleteConsequences['dungeonroutes']['delete_count']) }}
                         </li>
                     </ul>
                 </div>
@@ -159,7 +158,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             @if( !empty($deleteConsequences['teams']) )
                 <div class="form-group">
                     <h5>
-                        {{ __('Teams') }}
+                        {{ __('views/profile.edit.account_delete_consequence_teams') }}
                     </h5>
                     <ul>
                         <?php foreach($deleteConsequences['teams'] as $teamName => $consequence) { ?>
@@ -168,16 +167,16 @@ $deleteConsequences = $user->getDeleteConsequences();
                             $consequenceText = '';
                             if ($consequence['result'] === 'new_owner') {
                             if ($consequence['new_owner'] === null) {
-                            $consequenceText = __('You will be removed from this team.');
+                            $consequenceText = __('views/profile.edit.account_delete_consequence_teams_you_are_removed');
                             } else {
-                            $consequenceText = sprintf(__('%s will be appointed Admin of this team.'),
+                            $consequenceText = sprintf(__('views/profile.edit.account_delete_consequence_teams_new_admin'),
                             $consequence['new_owner']->name);
                             }
                             } elseif ($consequence['result'] === 'deleted') {
-                            $consequenceText = __('This team will be deleted (you are the only user in this team).');
+                            $consequenceText = __('views/profile.edit.account_delete_consequence_teams_team_deleted');
                             }
                             ?>
-                            {{ sprintf(__('%s: %s'), $teamName, $consequenceText) }}
+                            {{ sprintf('%s: %s', $teamName, $consequenceText) }}
                         </li>
                         <?php } ?>
                     </ul>
@@ -186,12 +185,11 @@ $deleteConsequences = $user->getDeleteConsequences();
             @if( !empty($deleteConsequences['patreon']) && $deleteConsequences['patreon']['unlinked'] )
                 <div class="form-group">
                     <h5>
-                        {{ __('Patreon') }}
+                        {{ __('views/profile.edit.patreon') }}
                     </h5>
                     <ul>
                         <li>
-                            {{ __('The connection between Patreon and Keystone.guru will be terminated. You will no longer receive
-                            Patreon rewards.') }}
+                            {{ __('views/profile.edit.account_delete_consequence_patreon') }}
                         </li>
                     </ul>
                 </div>
