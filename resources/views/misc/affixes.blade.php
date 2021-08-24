@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('Affixes')])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('views/misc.about.title')])
 <?php
 /**
  * @var $seasonService \App\Service\Season\SeasonService
@@ -22,13 +22,15 @@ if ($timezone === null) {
     <div class="discover_panel">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title text-center"> {{ sprintf(__('Weekly affixes in %s'), $region->name) }}</h5>
+                <h5 class="card-title text-center">
+                    {{ sprintf(__('views/misc.affixes.header'), $region->name) }}
+                </h5>
 
                 <table class="affixes_overview_table table-striped bg-secondary" width="100%">
                     <thead>
                     <tr>
                         <th width="20%">
-                            {{ __('Start date') . sprintf(' (%s)', $timezone) }}
+                            {{ sprintf(__('views/misc.affixes.start_date'), $timezone) }}
                         </th>
                         <th width="20%">
                             {{ __('+2') }}
@@ -40,7 +42,7 @@ if ($timezone === null) {
                             {{ __('+7') }}
                         </th>
                         <th width="20%">
-                            {{ __('+10 (Seasonal)') }}
+                            {{ __('views/misc.affixes.10_seasonal') }}
                         </th>
                     </tr>
                     </thead>
@@ -118,12 +120,12 @@ if ($timezone === null) {
                         <ul class="pagination" role="navigation">
                             <li class="page-item">
                                 <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
-                                    ‹ {{ __('Previous') }}
+                                    ‹ {{ __('views/misc.affixes.previous') }}
                                 </a>
                             </li>
                             <li class="page-item">
                                 <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
-                                    {{ __('Next') }} ›
+                                    {{ __('views/misc.affixes.next') }} ›
                                 </a>
                             </li>
                         </ul>
@@ -135,8 +137,7 @@ if ($timezone === null) {
 
         <div class="mt-4 text-center">
             <p>
-                {{ __('Updated at 2021/Jul/13.') }}
-                {{ __('For more information about affixes and M+, please visit') }}
+                {{ __('views/misc.affixes.updated_at') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
                 </a>
@@ -146,7 +147,7 @@ if ($timezone === null) {
 
     <div class="discover">
         @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by current affixes'),
+            'title' => __('views/misc.affixes.popular_routes_by_current_affixes'),
             'link' => route('dungeonroutes.thisweek'),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
@@ -157,7 +158,7 @@ if ($timezone === null) {
 
 
         @include('dungeonroute.discover.panel', [
-            'title' => __('Popular routes by next affixes'),
+            'title' => __('views/misc.affixes.popular_routes_by_next_affixes'),
             'link' => route('dungeonroutes.nextweek'),
             // The next week's affix group is current for that week
             'currentAffixGroup' => $nextAffixGroup,

@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Terms of Service')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.terms.title')])
 
-@section('header-title', __('Terms and Conditions'))
+@section('header-title', __('views/legal.terms.header'))
 
 @section('content')
 <h5>Welcome to Keystone Guru</h5>

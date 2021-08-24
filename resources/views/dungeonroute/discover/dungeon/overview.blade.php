@@ -19,7 +19,7 @@
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('Popular'),
+        'title' => __('views/dungeonroute.discover.dungeon.overview.popular'),
         'link' => route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
@@ -27,7 +27,7 @@
     ])
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('Popular routes by current affixes'),
+        'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
         'link' => route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,
@@ -42,7 +42,7 @@
     @endif
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('Popular routes by next affixes'),
+        'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
         'link' => route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $nextAffixGroup,
@@ -50,7 +50,7 @@
         'showMore' => true,
     ])
     @include('dungeonroute.discover.panel', [
-        'title' => __('Newly published routes'),
+        'title' => __('views/dungeonroute.discover.dungeon.overview.newly_published_routes'),
         'link' => route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],

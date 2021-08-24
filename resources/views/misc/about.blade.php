@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('About')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.about.title')])
 
-@section('header-title', __('About Keystone.guru'))
+@section('header-title', __('views/misc.about.header'))
 
 @section('content')
     <h5>

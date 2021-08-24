@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['wide' => false, 'title' => __('Create temporary route')])
+@extends('layouts.sitepage', ['wide' => false, 'title' => __('views/dungeonroute.newtemporary.title')])
 @section('header-title', $headerTitle)
 
 @section('content')

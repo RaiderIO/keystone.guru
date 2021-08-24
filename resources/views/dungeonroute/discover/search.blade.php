@@ -1,9 +1,9 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover', 'title' => __('Search routes')])
+@extends('layouts.sitepage', ['rootClass' => 'discover', 'title' => __('views/dungeonroute.discover.search.page_title')])
 
 @inject('seasonService', 'App\Service\Season\SeasonService')
 
 @section('header-title')
-    {{ __('Search routes') }}
+    {{ __('views/dungeonroute.discover.search.header') }}
 @endsection
 <?php
 /** @var $seasonService \App\Service\Season\SeasonService */
@@ -42,8 +42,8 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
     </div>
     <div class="row">
         <div class="col-xl-3">
-            @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('Title')])
-                {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('Filter by title'), 'autocomplete' => 'off']) !!}
+            @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('.views/dungeonroute.discover.search.title')])
+                {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('views/dungeonroute.discover.search.title_placeholder'), 'autocomplete' => 'off']) !!}
             @endcomponent
             {{--            @component('common.dungeonroute.search.filter', ['key' => 'complexity', 'text' => __('Difficulty')])--}}
             {{--                <input id="difficulty" type="checkbox"--}}
@@ -52,19 +52,19 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
             {{--                       data-onstyle="primary" data-offstyle="primary"--}}
             {{--                       data-on="{{ __('Simple') }}" data-off="{{ __('Complex') }}">--}}
             {{--            @endcomponent--}}
-            @component('common.dungeonroute.search.filter', ['key' => 'level', 'text' => __('Key level')])
+            @component('common.dungeonroute.search.filter', ['key' => 'level', 'text' => __('views/dungeonroute.discover.search.key_level')])
                 <input id="level" type="text" name="level" value="{{ old('level') }}" style="display: none;"/>
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'affixes', 'text' => __('Affixes')])
+            @component('common.dungeonroute.search.filter', ['key' => 'affixes', 'text' => __('affixes.views/dungeonroute.discover.search.affixes')])
                 <div class="row">
                     <div class="col">
                         {!! Form::select('filter_affixes[]', $affixgroups->pluck('text', 'id'), [],
                             ['id' => 'filter_affixes',
                             'class' => 'form-control affixselect selectpicker',
                             'multiple' => 'multiple',
-                            'title' => __('Select affixes'),
+                            'title' => __('views/dungeonroute.discover.search.affixes_title'),
                             'data-selected-text-format' => 'count > 1',
-                            'data-count-selected-text' => __('{0} affixes selected')]) !!}
+                            'data-count-selected-text' => __('views/dungeonroute.discover.search.affixes_selected')]) !!}
                     </div>
                 </div>
                 @foreach($featuredAffixes as $affixRow)
@@ -86,13 +86,14 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
                        checked="checked"
                        data-toggle="toggle" data-width="100%" data-height="20px"
                        data-onstyle="success" data-offstyle="warning"
-                       data-on="{{ __('Complete') }}" data-off="{{ __('Incomplete') }}">
+                       data-on="{{ __('views/dungeonroute.discover.search.enemy_forces_complete') }}"
+                       data-off="{{ __('views/dungeonroute.discover.search.enemy_forces_incomplete') }}">
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'rating', 'text' => __('Rating')])
+            @component('common.dungeonroute.search.filter', ['key' => 'rating', 'text' => __('views/dungeonroute.discover.search.rating)])
                 <input id="rating" type="text" name="level" value="{{ old('rating') }}" style="display: none;"/>
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'user', 'text' => __('User'), 'expanded' => false])
-                {!! Form::text('user', request('user'), ['id' => 'user', 'class' => 'form-control', 'placeholder' => __('Filter by user'), 'autocomplete' => 'off']) !!}
+            @component('common.dungeonroute.search.filter', ['key' => 'user', 'text' => __('.views/dungeonroute.discover.search.user'), 'expanded' => false])
+                {!! Form::text('user', request('user'), ['id' => 'user', 'class' => 'form-control', 'placeholder' => __('views/dungeonroute.discover.search.user_placeholder'), 'autocomplete' => 'off']) !!}
             @endcomponent
         </div>
         <div class="col-xl-9">

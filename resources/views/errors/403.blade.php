@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('403 Forbidden'),
+    'title' => __('views/errors.403.title'),
     'code' => 403,
-    'message' => __($exception->getMessage() ?: 'Sorry, you are forbidden from accessing this page.')
+    'message' => $exception->getMessage() ?: __('views/errors.403.message')
     ])

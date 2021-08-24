@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('410 Page Expired'),
+    'title' => __('views/errors.410.title'),
     'code' => 410,
-    'message' => __('Sorry, the page you are looking for has expired.')
+    'message' => __('views/errors.410.message')
     ])
