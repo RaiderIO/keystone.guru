@@ -197,37 +197,37 @@ $deleteConsequences = $user->getDeleteConsequences();
             @if( !empty($deleteConsequences['reports']))
                 <div class="form-group">
                     <h5>
-                        {{ __('Reports') }}
+                        {{ __('views/profile.edit.reports') }}
                     </h5>
                     <ul>
                         <li>
-                            {{ sprintf(__('Your %s unresolved report(s) will be deleted'), $deleteConsequences['reports']['delete_count']) }}
+                            {{ sprintf(__('views/profile.edit.account_delete_consequence_reports_unresolved'), $deleteConsequences['reports']['delete_count']) }}
                         </li>
                     </ul>
                 </div>
             @endif
             <div class="text-danger font-weight-bold">
-                {{ __('Your account will be permanently deleted. There is no turning back.') }}
+                {{ __('account_delete_warning') }}
             </div>
             {{ Form::open(['route' => 'profile.delete']) }}
             {!! Form::hidden('_method', 'delete') !!}
-            {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
+            {!! Form::submit(__('views/profile.edit.account_delete_confirm'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
             {!! Form::close() !!}
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
             <h4>
-                {{ __('Patreon') }}
+                {{ __('views/profile.edit.patreon') }}
             </h4>
             @isset($user->patreondata)
                 <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank"
                    rel="noopener noreferrer">
-                    {{ __('Unlink from Patreon') }}
+                    {{ __('views/profile.edit.unlink_from_patreon') }}
                 </a>
 
                 <p class="mt-2">
                     <span class="text-info"><i class="fa fa-check-circle"></i></span>
-                    {{ __('Your account is linked to Patreon. Thank you!') }}
+                    {{ __('views/profile.edit.link_to_patreon_success') }}
                 </p>
             @else
                 <a class="btn patreon-color text-white" href="{{
@@ -238,48 +238,48 @@ $deleteConsequences = $user->getDeleteConsequences();
                             'state' => csrf_token()
                             ])
                         }}" target="_blank" rel="noopener noreferrer">
-                    {{ __('Link to Patreon') }}
+                    {{ __('views/profile.edit.link_to_patreon') }}
                 </a>
 
                 <p class="mt-2">
                     <span class="text-info"><i class="fa fa-info-circle"></i></span>
-                    {{ __('In order to claim your Patreon rewards, you need to link your Patreon account') }}
+                    {{ __('views/profile.edit.link_to_patreon_description') }}
                 </p>
             @endisset
             <p class="text-warning mt-2">
                 <i class="fa fa-exclamation-triangle"></i>
-                {{ __('Patreon implementation is experimental. If your rewards are not available after linking with your Patreon, please contact me directly on Discord or Patreon and I will fix it for you.') }}
+                {{ __('views/profile.edit.link_to_patreon_experimental') }}
             </p>
         </div>
 
         @if(!$isOAuth)
             <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
                 <h4>
-                    {{ __('Change password') }}
+                    {{ __('views/profile.edit.change_password') }}
                 </h4>
                 {{--$user->email is intended, since that is the actual username--}}
                 {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
                 {!! Form::hidden('username', $user->email) !!}
                 <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
-                    {!! Form::label('current_password', __('Current password')) !!}
+                    {!! Form::label('current_password', __('views/profile.edit.current_password')) !!}
                     {!! Form::password('current_password', ['class' => 'form-control', 'autocomplete' => 'current-password']) !!}
                     @include('common.forms.form-error', ['key' => 'current_password'])
                 </div>
 
                 <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
-                    {!! Form::label('new_password', __('New password')) !!}
+                    {!! Form::label('new_password', __('views/profile.edit.new_password')) !!}
                     {!! Form::password('new_password', ['id' => 'new_password', 'class' => 'form-control', 'autocomplete' => 'new-password']) !!}
                     @include('common.forms.form-error', ['key' => 'new_password'])
                 </div>
 
 
                 <div class="form-group{{ $errors->has('new_password-confirm') ? ' has-error' : '' }}">
-                    {!! Form::label('new_password-confirm', __('New password (confirm)')) !!}
+                    {!! Form::label('new_password-confirm', __('views/profile.edit.new_password_confirm')) !!}
                     {!! Form::password('new_password-confirm', ['class' => 'form-control', 'autocomplete' => 'new-password']) !!}
                     @include('common.forms.form-error', ['key' => 'new_password-confirm'])
                 </div>
 
-                {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+                {!! Form::submit(__('views/profile.edit.submit'), ['class' => 'btn btn-info']) !!}
 
                 {!! Form::close() !!}
             </div>
@@ -287,33 +287,33 @@ $deleteConsequences = $user->getDeleteConsequences();
 
         <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
             <h4>
-                {{ __('Privacy') }}
+                {{ __('views/profile.edit.privacy') }}
             </h4>
             {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}
             <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
-                {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}
+                {!! Form::label('analytics_cookie_opt_out', __('views/profile.edit.ga_cookies_opt_out')) !!}
                 {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
             </div>
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            {!! Form::submit(__('views/profile.edit.submit'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
         </div>
 
         <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
             <h4>
-                {{ __('Reports') }}
+                {{ __('views/profile.edit.reports') }}
             </h4>
             <p>
-                {{ __('All routes, enemies and other reports you have made on the site will be listed here.') }}
+                {{ __('views/profile.edit.reports_description') }}
             </p>
 
             <table id="user_reports_table" class="tablesorter default_table table-striped">
                 <thead>
                 <tr>
-                    <th width="5%">{{ __('Id') }}</th>
-                    <th width="10%">{{ __('Category') }}</th>
-                    <th width="60%">{{ __('Message') }}</th>
-                    <th width="15%">{{ __('Created at') }}</th>
-                    <th width="10%">{{ __('Status') }}</th>
+                    <th width="5%">{{ __('views/profile.edit.reports_table_header_id') }}</th>
+                    <th width="10%">{{ __('views/profile.edit.reports_table_header_category') }}</th>
+                    <th width="60%">{{ __('views/profile.edit.reports_table_header_message') }}</th>
+                    <th width="15%">{{ __('views/profile.edit.reports_table_header_created_at') }}</th>
+                    <th width="10%">{{ __('views/profile.edit.reports_table_header_status') }}</th>
                 </tr>
                 </thead>
 
@@ -328,7 +328,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                         <td>{{ $report->created_at }}</td>
                         <td>
                             <button class="btn btn-success mark_as_handled_btn" data-id="{{$report->id}}">
-                                <i class="fas fa-check-circle"></i> {{ __('Handled') }}
+                                <i class="fas fa-check-circle"></i> {{ __('views/profile.edit.reports_table_action_handled') }}
                             </button>
                         </td>
                     </tr>
