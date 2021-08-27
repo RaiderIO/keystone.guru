@@ -57,10 +57,11 @@ return [
         'become_a_patreon'          => 'Become a %s Patron!',
     ],
     'new'            => [
-        'title' => 'New route',
+        'title'          => 'New route',
     ],
     'newtemporary'   => [
-        'title' => 'Create temporary route',
+        'title'  => 'Create temporary route',
+        'header' => 'New temporary route',
     ],
     'sandboxclaimed' => [
         'title'               => 'Route already claimed',

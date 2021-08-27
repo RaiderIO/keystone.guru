@@ -58,7 +58,9 @@ $errors = $errors ?? collect();
             </div>
 
             <div class="form-group{{ $errors->has('region') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_region" class="control-label">{{ __('Region') }}</label>
+                <label for="{{ $modalClass }}register_region" class="control-label">
+                    {{ __('views/common.forms.register.region') }}
+                </label>
 
 
                 <div class="col-md-{{ $width }}">
@@ -119,9 +121,9 @@ $errors = $errors ?? collect();
         </h3>
         <p>
             {!! sprintf(__('views/common.register.legal_agree_oauth2'),
-             '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
-             '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
-             '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')
+             '<a href="' . route('legal.terms') . '">' . __('views/common.forms.register.terms_of_service') . '</a>',
+             '<a href="' . route('legal.privacy') . '">' . __('views/common.forms.register.privacy_policy') . '</a>',
+             '<a href="' . route('legal.cookies') . '">' . __('views/common.forms.register.cookie_policy') . '</a>')
              !!}
         </p>
         <hr>

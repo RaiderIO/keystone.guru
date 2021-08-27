@@ -39,7 +39,7 @@ class DungeonRouteController extends Controller
      */
     public function newtemporary()
     {
-        return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New temporary route')]);
+        return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all()]);
     }
 
     /**
@@ -144,7 +144,7 @@ class DungeonRouteController extends Controller
 
         // May fail
         if (!$dungeonroute->saveFromRequest($request)) {
-            abort(500, __('Unable to save route'));
+            abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
         return $dungeonroute;
@@ -161,7 +161,7 @@ class DungeonRouteController extends Controller
 
         // May fail
         if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService)) {
-            abort(500, __('Unable to save route'));
+            abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
         return $dungeonroute;
@@ -186,7 +186,7 @@ class DungeonRouteController extends Controller
 //            if (!Auth::user()->hasPaidTier('unlimited-routes')) {
 //                Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
 //            } else {
-            Session::flash('status', __('Route cloned successfully'));
+            Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
 //            }
 
             return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
@@ -245,7 +245,6 @@ class DungeonRouteController extends Controller
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
         } else {
             return view('dungeonroute.edit', [
-                'headerTitle'  => __('Edit route'),
                 'dungeonroute' => $dungeonroute,
                 'floor'        => $floor,
                 'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties()
@@ -296,7 +295,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Dungeonroute updated'));
+        Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeonroute);
@@ -313,7 +312,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Route created'));
+        Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
         return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
     }
@@ -330,7 +329,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->storetemporary($request, $seasonService);
 
         // Message to the user
-        Session::flash('status', __('Route created'));
+        Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
         return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
     }

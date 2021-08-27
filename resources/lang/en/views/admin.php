@@ -58,7 +58,16 @@ return [
         ]
     ],
     'floor'      => [
+        'flash'   => [
+            'invalid_floor_id' => 'Floor %s is not a part of dungeon %s',
+            'floor_updated'    => 'Floor updated',
+            'floor_created'    => 'Floor created',
+        ],
         'edit'    => [
+            'title_new'              => 'New Floor - %s',
+            'header_new'             => 'New Floor - %s',
+            'title_edit'             => 'Edit Floor - %s',
+            'header_edit'            => 'Edit Floor - %s',
             'index'                  => 'Index',
             'floor_name'             => 'Floor name',
             'min_enemy_size'         => 'Minimum enemy size (empty for default (%s))',
@@ -79,12 +88,20 @@ return [
             'submit'                 => 'Submit',
         ],
         'mapping' => [
-
+            'title'  => 'Edit Mapping - %s',
+            'header' => 'Edit Mapping - %s',
         ]
     ],
     'npc'        => [
-        'edit' => [
-            'title'                          => 'Edit Npc',
+        'flash' => [
+            'npc_updated' => 'Npc updated',
+            'npc_created' => 'Npc %s created',
+        ],
+        'edit'  => [
+            'title_new'                      => 'New NPC',
+            'header_new'                     => 'New NPC',
+            'title_edit'                     => 'Edit NPC',
+            'header_edit'                    => 'Edit NPC',
             'name'                           => 'Name',
             'game_id'                        => 'Game ID',
             'classification'                 => 'Classification',
@@ -103,9 +120,11 @@ return [
             'spells'                         => 'Spells',
             'spells_count'                   => '{0} Spells',
             'submit'                         => 'Submit',
-            'save_as_new_npc'                => 'Save as new npc'
+            'save_as_new_npc'                => 'Save as new npc',
+            'all_npcs'                       => 'All npcs',
+            'all_dungeons'                   => 'All dungeons',
         ],
-        'list' => [
+        'list'  => [
             'title'                       => 'Npc listing',
             'header'                      => 'View NPCs',
             'create_npc'                  => 'Create NPC',

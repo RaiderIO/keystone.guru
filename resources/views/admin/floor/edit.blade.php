@@ -7,9 +7,16 @@ if (isset($floor)) {
     $connectedFloorCandidates = $connectedFloorCandidates->except(optional($floor)->id);
 }
 ?>
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$dungeon, $floor ?? null], 'showAds' => false, 'title' => $headerTitle])
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$dungeon, $floor ?? null],
+    'showAds' => false,
+    'title' => sprintf(
+        $npc === null ? __('views/admin.floor.edit.title_new') : __('views/admin.floor.edit.title_edit'),
+        $dungeon->name
+    )]
+)])
 @section('header-title')
-    {{ $headerTitle }}
+    {{ sprintf($npc === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), $dungeon->name) }}
 @endsection
 <?php
 /**

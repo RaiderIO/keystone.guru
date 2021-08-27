@@ -37,10 +37,10 @@ return [
         'accept_the_invitation'       => 'Accept the invitation to join the team!',
         'login_or_register_to_accept' => 'Login or register on Keystone.guru to join the team, it\'s free!',
 
-        'return_to_team' => 'Return to team',
+        'return_to_team'    => 'Return to team',
         'accept_invitation' => 'Accept invitation',
-        'login' => 'Login',
-        'register' => 'Register',
+        'login'             => 'Login',
+        'register'          => 'Register',
 
         'invite_not_found' => 'This team could not be found. Perhaps the invite link has been changed or the team has been deleted.',
         'back_to_homepage' => 'Back to the home page',

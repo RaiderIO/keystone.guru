@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$npc ?? null], 'showAds' => false, 'title' => __('views/admin.npc.edit.title')])
+@extends('layouts.sitepage', ['breadcrumbsParams' => [$npc ?? null], 'showAds' => false, 'title' => $npc === null ? __('views/admin.npc.edit.title_new') : __('views/admin.npc.edit.title_edit')])
 @section('header-title')
-    {{ $headerTitle }}
+    {{ $npc === null ? __('views/admin.npc.edit.header_new') : __('views/admin.npc.edit.header_edit') }}
 @endsection
 <?php
 /**
