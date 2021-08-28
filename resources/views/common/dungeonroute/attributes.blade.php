@@ -1,16 +1,16 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-$showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
+$showNoAttributes = $showNoAttributes ?? false;
 ?>
 
 <div class="form-group">
     @if($showNoAttributes)
         <label for="attributes" data-toggle="tooltip"
                title="{{ __('views/common.dungeonroute.attributes.no_attributes_title') }}">
-            {{ __('views/common.dungeonroute.attributes') }}
+            {{ __('views/common.dungeonroute.attributes.attributes') }}
         </label>
     @else
-        <label for="attributes">{{ __('views/common.dungeonroute.attributes') }}</label>
+        <label for="attributes">{{ __('views/common.dungeonroute.attributes.attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
         __('views/common.dungeonroute.attributes.select_attributes_title')
          }}"></i>

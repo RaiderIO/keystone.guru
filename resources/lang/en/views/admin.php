@@ -3,6 +3,8 @@
 return [
     'dungeon'    => [
         'edit' => [
+            'header_new'                    => 'New dungeon',
+            'header_edit'                   => 'Edit dungeon',
             'active'                        => 'Active',
             'zone_id'                       => 'Zone ID',
             'mdt_id'                        => 'MDT ID',

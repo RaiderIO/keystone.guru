@@ -44,5 +44,17 @@ return [
 
         'invite_not_found' => 'This team could not be found. Perhaps the invite link has been changed or the team has been deleted.',
         'back_to_homepage' => 'Back to the home page',
-    ]
+    ],
+    'list'   => [
+        'title'                => 'My teams',
+        'header'               => 'My teams',
+        'create_team'          => 'Create team',
+        'table_header_team'    => 'Team',
+        'table_header_members' => 'Members',
+        'table_header_routes'  => 'Routes',
+    ],
+    'new'    => [
+        'title'  => 'New team',
+        'header' => 'New team',
+    ],
 ];

@@ -1,5 +1,76 @@
 <?php
 
 return [
+    'edit'      => [
+        'title'                   => '@todo ru: .edit.title',
+        'profile'                 => '@todo ru: .edit.profile',
+        'account'                 => '@todo ru: .edit.account',
+        'patreon'                 => '@todo ru: .edit.patreon',
+        'change_password'         => '@todo ru: .edit.change_password',
+        'privacy'                 => '@todo ru: .edit.privacy',
+        'reports'                 => '@todo ru: .edit.reports',
+        'menu_title'              => '@todo ru: .edit.menu_title',
+        'avatar'                  => '@todo ru: .edit.avatar',
+        'avatar_title'            => '@todo ru: .edit.avatar_title',
+        'username'                => '@todo ru: .edit.username',
+        'username_title'          => '@todo ru: .edit.username_title',
+        'email'                   => '@todo ru: .edit.email',
+        'region'                  => '@todo ru: .edit.region',
+        'select_region'           => '@todo ru: .edit.select_region',
+        'show_as_anonymous'       => '@todo ru: .edit.show_as_anonymous',
+        'show_as_anonymous_title' => '@todo ru: .edit.show_as_anonymous_title',
+        'echo_color'              => '@todo ru: .edit.echo_color',
+        'echo_color_title'        => '@todo ru: .edit.echo_color_title',
+        'save'                    => '@todo ru: .edit.save',
 
+        'account_delete_consequences'                      => '@todo ru: .edit.account_delete_consequences',
+        'account_delete_consequence_routes'                => '@todo ru: .edit.account_delete_consequence_routes',
+        'account_delete_consequence_routes_delete'         => '@todo ru: .edit.account_delete_consequence_routes_delete',
+        'account_delete_consequence_teams'                 => '@todo ru: .edit.account_delete_consequence_teams',
+        'account_delete_consequence_teams_you_are_removed' => '@todo ru: .edit.account_delete_consequence_teams_you_are_removed',
+        'account_delete_consequence_teams_new_admin'       => '@todo ru: .edit.account_delete_consequence_teams_new_admin',
+        'account_delete_consequence_teams_team_deleted'    => '@todo ru: .edit.account_delete_consequence_teams_team_deleted',
+        'account_delete_consequence_patreon'               => '@todo ru: .edit.account_delete_consequence_patreon',
+        'account_delete_consequence_reports'               => '@todo ru: .edit.account_delete_consequence_reports',
+        'account_delete_consequence_reports_unresolved'    => '@todo ru: .edit.account_delete_consequence_reports_unresolved',
+        'account_delete_warning'                           => '@todo ru: .edit.account_delete_warning',
+        'account_delete_confirm'                           => '@todo ru: .edit.account_delete_confirm',
+
+        'unlink_from_patreon'          => '@todo ru: .edit.unlink_from_patreon',
+        'link_to_patreon_success'      => '@todo ru: .edit.link_to_patreon_success',
+        'link_to_patreon'              => '@todo ru: .edit.link_to_patreon',
+        'link_to_patreon_description'  => '@todo ru: .edit.link_to_patreon_description',
+        'link_to_patreon_experimental' => '@todo ru: .edit.link_to_patreon_experimental',
+
+        'current_password'     => '@todo ru: .edit.current_password',
+        'new_password'         => '@todo ru: .edit.new_password',
+        'new_password_confirm' => '@todo ru: .edit.new_password_confirm',
+        'submit'               => '@todo ru: .edit.submit',
+
+        'ga_cookies_opt_out'  => '@todo ru: .edit.ga_cookies_opt_out',
+        'reports_description' => '@todo ru: .edit.reports_description',
+
+        'reports_table_header_id'         => '@todo ru: .edit.reports_table_header_id',
+        'reports_table_header_category'   => '@todo ru: .edit.reports_table_header_category',
+        'reports_table_header_message'    => '@todo ru: .edit.reports_table_header_message',
+        'reports_table_header_created_at' => '@todo ru: .edit.reports_table_header_created_at',
+        'reports_table_header_status'     => '@todo ru: .edit.reports_table_header_status',
+        'reports_table_action_handled'    => '@todo ru: .edit.reports_table_action_handled',
+    ],
+    'favorites' => [
+        'title' => '@todo ru: .favorites.title',
+    ],
+    'routes'    => [
+        'title' => '@todo ru: .routes.title',
+    ],
+    'tags'      => [
+        'title'                             => '@todo ru: .tags.title',
+        'header'                            => '@todo ru: .tags.header',
+        'description'                       => '@todo ru: .tags.description',
+        'link_your_personal_route_overview' => '@todo ru: .tags.link_your_personal_route_overview',
+    ],
+    'view'      => [
+        'title'  => '@todo ru: .view.title',
+        'header' => '@todo ru: .view.header',
+    ],
 ];

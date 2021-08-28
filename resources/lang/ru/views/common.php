@@ -96,7 +96,7 @@ return [
             'default_line_weight'                    => '@todo ru: .forms.mapsettings.default_line_weight',
             'default_line_weight_title'              => '@todo ru: .forms.mapsettings.default_line_weight_title',
         ],
-        'mdtimport'         => [
+        'mdtimport'            => [
             'paste_mdt_export_string'                => '@todo ru: .forms.mdtimport.paste_mdt_export_string',
             'reset_title'                            => '@todo ru: .forms.mdtimport.reset_title',
             'unregistered_user_all_routes_temporary' => '@todo ru: .forms.mdtimport.unregistered_user_all_routes_temporary',
@@ -183,6 +183,9 @@ return [
         'header'  => [
             'toggle_navigation_title' => '@todo ru: .layout.header.toggle_navigation_title',
             'create_route'            => '@todo ru: .layout.header.create_route',
+            'search'                  => '@todo ru: .layout.header.search',
+            'routes'                  => '@todo ru: .layout.header.routes',
+            'affixes'                 => '@todo ru: .layout.header.affixes',
             'new'                     => '@todo ru: .layout.header.new',
         ],
         'navuser' => [
@@ -364,8 +367,8 @@ return [
             'disband_team'    => '@todo ru: .team.details.disband_team',
         ],
     ],
-    'thirdparty' => [
-        'nitropay' => [
+    'thirdparty'   => [
+        'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => '@todo ru: .thirdparty.nitropay.adcontrols.remove_ads',
             ]
@@ -374,7 +377,7 @@ return [
             'learn_more' => '@todo ru: .thirdparty.cookieconsent.learn_more'
         ],
     ],
-    'user' => [
+    'user'         => [
         'name' => [
             'avatar_title' => '@todo ru: .user.name.avatar_title',
         ],

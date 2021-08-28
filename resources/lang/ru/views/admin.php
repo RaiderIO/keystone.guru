@@ -3,6 +3,8 @@
 return [
     'dungeon'    => [
         'edit' => [
+            'header_new'                    => '@todo ru: .dungeon.edit.header_new',
+            'header_edit'                   => '@todo ru: .dungeon.edit.header_edit',
             'active'                        => '@todo ru: .dungeon.edit.active',
             'zone_id'                       => '@todo ru: .dungeon.edit.zone_id',
             'mdt_id'                        => '@todo ru: .dungeon.edit.mdt_id',
@@ -58,7 +60,16 @@ return [
         ]
     ],
     'floor'      => [
+        'flash'   => [
+            'invalid_floor_id' => '@todo ru: .floor.flash.invalid_floor_id',
+            'floor_updated'    => '@todo ru: .floor.flash.floor_updated',
+            'floor_created'    => '@todo ru: .floor.flash.floor_created',
+        ],
         'edit'    => [
+            'title_new'              => '@todo ru: .floor.edit.title_new',
+            'header_new'             => '@todo ru: .floor.edit.header_new',
+            'title_edit'             => '@todo ru: .floor.edit.title_edit',
+            'header_edit'            => '@todo ru: .floor.edit.header_edit',
             'index'                  => '@todo ru: .floor.edit.index',
             'floor_name'             => '@todo ru: .floor.edit.floor_name',
             'min_enemy_size'         => '@todo ru: .floor.edit.min_enemy_size',
@@ -79,12 +90,20 @@ return [
             'submit'                 => '@todo ru: .floor.edit.submit',
         ],
         'mapping' => [
-
+            'title'  => '@todo ru: .floor.mapping.title',
+            'header' => '@todo ru: .floor.mapping.header',
         ]
     ],
     'npc'        => [
-        'edit' => [
-            'title'                          => '@todo ru: .npc.edit.title',
+        'flash' => [
+            'npc_updated' => '@todo ru: .npc.flash.npc_updated',
+            'npc_created' => '@todo ru: .npc.flash.npc_created',
+        ],
+        'edit'  => [
+            'title_new'                      => '@todo ru: .npc.edit.title_new',
+            'header_new'                     => '@todo ru: .npc.edit.header_new',
+            'title_edit'                     => '@todo ru: .npc.edit.title_edit',
+            'header_edit'                    => '@todo ru: .npc.edit.header_edit',
             'name'                           => '@todo ru: .npc.edit.name',
             'game_id'                        => '@todo ru: .npc.edit.game_id',
             'classification'                 => '@todo ru: .npc.edit.classification',
@@ -103,9 +122,11 @@ return [
             'spells'                         => '@todo ru: .npc.edit.spells',
             'spells_count'                   => '@todo ru: .npc.edit.spells_count',
             'submit'                         => '@todo ru: .npc.edit.submit',
-            'save_as_new_npc'                => '@todo ru: .npc.edit.save_as_new_npc'
+            'save_as_new_npc'                => '@todo ru: .npc.edit.save_as_new_npc',
+            'all_npcs'                       => '@todo ru: .npc.edit.all_npcs',
+            'all_dungeons'                   => '@todo ru: .npc.edit.all_dungeons',
         ],
-        'list' => [
+        'list'  => [
             'title'                       => '@todo ru: .npc.list.title',
             'header'                      => '@todo ru: .npc.list.header',
             'create_npc'                  => '@todo ru: .npc.list.create_npc',

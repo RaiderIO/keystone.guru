@@ -23,7 +23,7 @@
     </div>
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('discover.views/dungeonroute.discover.dungeon.overview.popular'),
+        'title' => __('views/dungeonroute.discover.dungeon.overview.popular'),
         'link' => route('dungeonroutes.popular'),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
@@ -31,7 +31,7 @@
         'showDungeonImage' => true,
     ])
     @include('dungeonroute.discover.panel', [
-        'title' => __('discover.views/dungeonroute.discover.dungeon.overview.popular.popular_by_current_affixes'),
+        'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
         'link' => route('dungeonroutes.thisweek'),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,

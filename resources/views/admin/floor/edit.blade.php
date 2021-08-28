@@ -11,12 +11,12 @@ if (isset($floor)) {
     'breadcrumbsParams' => [$dungeon, $floor ?? null],
     'showAds' => false,
     'title' => sprintf(
-        $npc === null ? __('views/admin.floor.edit.title_new') : __('views/admin.floor.edit.title_edit'),
+        $floor === null ? __('views/admin.floor.edit.title_new') : __('views/admin.floor.edit.title_edit'),
         $dungeon->name
     )]
 )])
 @section('header-title')
-    {{ sprintf($npc === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), $dungeon->name) }}
+    {{ sprintf($floor === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), $dungeon->name) }}
 @endsection
 <?php
 /**

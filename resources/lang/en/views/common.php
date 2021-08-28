@@ -96,7 +96,7 @@ return [
             'default_line_weight'                    => 'Default line weight',
             'default_line_weight_title'              => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
         ],
-        'mdtimport'         => [
+        'mdtimport'            => [
             'paste_mdt_export_string'                => 'Paste your Mythic Dungeon Tools export string',
             'reset_title'                            => 'Reset',
             'unregistered_user_all_routes_temporary' => 'As an unregistered user, all imported routes will be temporary routes which expire after %s hours.',
@@ -183,6 +183,9 @@ return [
         'header'  => [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
+            'search'                  => 'Search',
+            'routes'                  => 'Routes',
+            'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],
         'navuser' => [
@@ -364,8 +367,8 @@ return [
             'disband_team'    => 'Disband team',
         ],
     ],
-    'thirdparty' => [
-        'nitropay' => [
+    'thirdparty'   => [
+        'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
             ]
@@ -374,7 +377,7 @@ return [
             'learn_more' => 'Learn more'
         ],
     ],
-    'user' => [
+    'user'         => [
         'name' => [
             'avatar_title' => 'Avatar',
         ],

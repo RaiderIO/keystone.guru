@@ -667,12 +667,12 @@ class APIDungeonRouteController extends Controller
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonroute]);
-            return abort(400, sprintf(__('An error occurred generating your MDT string: %s'), $ex->getMessage()));
+            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Throwable $error) {
             Log::critical($error->getMessage());
 
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.apidungeonroute.mdt_generate_no_lua'));
             }
 
             throw $error;

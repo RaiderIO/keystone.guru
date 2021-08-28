@@ -1,6 +1,11 @@
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$dungeon ?? null], 'showAds' => false, 'title' => __('Edit dungeon')])
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$dungeon ?? null],
+    'showAds' => false,
+    'title' => $dungeon ? __('views/admin.dungeon.edit.title_edit') : __('views/admin.dungeon.edit.title_new')
+    ])
+
 @section('header-title')
-    {{ $headerTitle }}
+    {{ $dungeon ? __('views/admin.dungeon.edit.header_edit') : __('views/admin.dungeon.edit.header_new') }}
 @endsection
 <?php
 /**

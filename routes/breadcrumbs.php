@@ -19,7 +19,7 @@ use Diglactic\Breadcrumbs\Generator;
  */
 Breadcrumbs::for('home', function (Generator $trail)
 {
-    $trail->push(__('Keystone.guru'), route('home'));
+    $trail->push(__('breadcrumbs.home.keystone_guru'), route('home'));
 });
 
 /**
@@ -28,15 +28,13 @@ Breadcrumbs::for('home', function (Generator $trail)
 Breadcrumbs::for('misc.affixes', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('Affixes'), route('misc.affixes'));
+    $trail->push(__('breadcrumbs.home.affixes'), route('misc.affixes'));
 });
 Breadcrumbs::for('misc.changelog', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('Changelog'), route('misc.changelog'));
+    $trail->push(__('breadcrumbs.home.changelog'), route('misc.changelog'));
 });
-
-
 
 
 /**
@@ -45,12 +43,12 @@ Breadcrumbs::for('misc.changelog', function (Generator $trail)
 Breadcrumbs::for('dungeonroutes', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('Routes'), route('dungeonroutes'));
+    $trail->push(__('breadcrumbs.home.routes'), route('dungeonroutes'));
 });
 Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail)
 {
     $trail->parent('dungeonroutes');
-    $trail->push(__('Search'), route('dungeonroutes.search'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeonroutes.search'));
 });
 
 /**
@@ -59,25 +57,25 @@ Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail)
 Breadcrumbs::for('dungeonroutes.popular', function (Generator $trail)
 {
     $trail->parent('dungeonroutes');
-    $trail->push(__('Popular'), route('dungeonroutes.popular'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.popular'));
 });
 
 Breadcrumbs::for('dungeonroutes.nextweek', function (Generator $trail)
 {
     $trail->parent('dungeonroutes');
-    $trail->push(__('Next week\'s affixes'), route('dungeonroutes.nextweek'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.nextweek'));
 });
 
 Breadcrumbs::for('dungeonroutes.thisweek', function (Generator $trail)
 {
     $trail->parent('dungeonroutes');
-    $trail->push(__('This week\'s affixes'), route('dungeonroutes.thisweek'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.thisweek'));
 });
 
 Breadcrumbs::for('dungeonroutes.new', function (Generator $trail)
 {
     $trail->parent('dungeonroutes');
-    $trail->push(__('New'), route('dungeonroutes.new'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new'));
 });
 
 
@@ -87,7 +85,7 @@ Breadcrumbs::for('dungeonroutes.new', function (Generator $trail)
 Breadcrumbs::for('dungeonroutes.discoverdungeon', function (Generator $trail, Dungeon $dungeon)
 {
     $trail->parent('dungeonroutes');
-    $trail->push($dungeon->name, route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon]));
+    $trail->push(__($dungeon->name), route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon]));
 });
 
 /**
@@ -96,25 +94,25 @@ Breadcrumbs::for('dungeonroutes.discoverdungeon', function (Generator $trail, Du
 Breadcrumbs::for('dungeonroutes.discoverdungeon.popular', function (Generator $trail, Dungeon $dungeon)
 {
     $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('Popular'), route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.discoverdungeon.popular', ['dungeon' => $dungeon]));
 });
 
 Breadcrumbs::for('dungeonroutes.discoverdungeon.nextweek', function (Generator $trail, Dungeon $dungeon)
 {
     $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('Next week\'s affixes'), route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.discoverdungeon.nextweek', ['dungeon' => $dungeon]));
 });
 
 Breadcrumbs::for('dungeonroutes.discoverdungeon.thisweek', function (Generator $trail, Dungeon $dungeon)
 {
     $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('This week\'s affixes'), route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.discoverdungeon.thisweek', ['dungeon' => $dungeon]));
 });
 
 Breadcrumbs::for('dungeonroutes.discoverdungeon.new', function (Generator $trail, Dungeon $dungeon)
 {
     $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('New'), route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.discoverdungeon.new', ['dungeon' => $dungeon]));
 });
 
 /**
@@ -123,19 +121,19 @@ Breadcrumbs::for('dungeonroutes.discoverdungeon.new', function (Generator $trail
 Breadcrumbs::for('profile.edit', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('My profile'), route('profile.edit'));
+    $trail->push(__('breadcrumbs.home.my_profile'), route('profile.edit'));
 });
 
 Breadcrumbs::for('profile.routes', function (Generator $trail)
 {
     $trail->parent('profile.edit');
-    $trail->push(__('My routes'), route('profile.routes'));
+    $trail->push(__('breadcrumbs.home.my_routes'), route('profile.routes'));
 });
 
 Breadcrumbs::for('profile.tags', function (Generator $trail)
 {
     $trail->parent('profile.edit');
-    $trail->push(__('My tags'), route('profile.tags'));
+    $trail->push(__('breadcrumbs.home.my_tags'), route('profile.tags'));
 });
 
 /**
@@ -144,27 +142,24 @@ Breadcrumbs::for('profile.tags', function (Generator $trail)
 Breadcrumbs::for('team.list', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('My teams'), route('team.list'));
+    $trail->push(__('breadcrumbs.home.my_teams'), route('team.list'));
 });
 
 Breadcrumbs::for('team.edit', function (Generator $trail, Team $team)
 {
     $trail->parent('team.list');
     if ($team === null) {
-        $trail->push(__('New team'), route('team.new'));
+        $trail->push(__('breadcrumbs.home.new_team'), route('team.new'));
     } else {
-        $trail->push(__('Edit team'), route('team.edit', $team));
+        $trail->push(__('breadcrumbs.home.edit_team'), route('team.edit', $team));
     }
 });
 
 Breadcrumbs::for('team.invite', function (Generator $trail, Team $team)
 {
     $trail->parent('team.list');
-    $trail->push(__('Join team'), route('team.invite', $team));
+    $trail->push(__('breadcrumbs.home.join_team'), route('team.invite', $team));
 });
-
-
-
 
 
 /**
@@ -173,7 +168,7 @@ Breadcrumbs::for('team.invite', function (Generator $trail, Team $team)
 Breadcrumbs::for('admin', function (Generator $trail)
 {
     $trail->parent('home');
-    $trail->push(__('Admin'));
+    $trail->push(__('breadcrumbs.home.admin.admin'));
 });
 
 // Tools
@@ -185,47 +180,47 @@ Breadcrumbs::for('admin.tools.list', function (Generator $trail)
 Breadcrumbs::for('admin.tools.datadump.viewexporteddungeondata', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('View exported dungeondata'), route('admin.tools.datadump.exportdungeondata'));
+    $trail->push(__('breadcrumbs.home.admin.tools.view_exported_dungeondata'), route('admin.tools.datadump.exportdungeondata'));
 });
 Breadcrumbs::for('admin.tools.datadump.viewexportedrelease', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('View exported releases'), route('admin.tools.datadump.exportreleases'));
+    $trail->push(__('breadcrumbs.home.admin.tools.view_exported_releases'), route('admin.tools.datadump.exportreleases'));
 });
 Breadcrumbs::for('admin.tools.exception.select', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('Select exception'), route('admin.tools.exception.select'));
+    $trail->push(__('breadcrumbs.home.admin.tools.select_exception'), route('admin.tools.exception.select'));
 });
 Breadcrumbs::for('admin.tools.mdt.diff', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('MDT diff'), route('admin.tools.mdt.diff'));
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_diff'), route('admin.tools.mdt.diff'));
 });
 Breadcrumbs::for('admin.tools.mdt.string', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('View MDT string contents'), route('admin.tools.mdt.dungeonroute.viewasstring'));
+    $trail->push(__('breadcrumbs.home.admin.tools.view_mdt_string_contents'), route('admin.tools.mdt.dungeonroute.viewasstring'));
 });
 Breadcrumbs::for('admin.tools.npcimport.import', function (Generator $trail)
 {
     $trail->parent('admin.tools.list');
-    $trail->push(__('Import NPCs'), route('admin.tools.npcimport'));
+    $trail->push(__('breadcrumbs.home.admin.tools.import_npcs'), route('admin.tools.npcimport'));
 });
 
 // Releases
 Breadcrumbs::for('admin.release.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Releases'), route('admin.releases'));
+    $trail->push(__('breadcrumbs.home.admin.releases'), route('admin.releases'));
 });
 Breadcrumbs::for('admin.release.edit', function (Generator $trail, ?Release $release)
 {
     $trail->parent('admin.release.list');
     if ($release === null) {
-        $trail->push(__('New release'), route('admin.release.new'));
+        $trail->push(__('breadcrumbs.home.admin.new_release'), route('admin.release.new'));
     } else {
-        $trail->push(__('Edit release'), route('admin.release.edit', $release));
+        $trail->push(__('breadcrumbs.home.admin.edit_release'), route('admin.release.edit', $release));
     }
 });
 
@@ -233,15 +228,15 @@ Breadcrumbs::for('admin.release.edit', function (Generator $trail, ?Release $rel
 Breadcrumbs::for('admin.expansion.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Expansions'), route('admin.expansions'));
+    $trail->push(__('breadcrumbs.home.admin.expansions.expansions'), route('admin.expansions'));
 });
 Breadcrumbs::for('admin.expansion.edit', function (Generator $trail, ?Expansion $expansion)
 {
     $trail->parent('admin.expansion.list');
     if ($expansion === null) {
-        $trail->push(__('New expansion'), route('admin.expansion.new'));
+        $trail->push(__('breadcrumbs.home.admin.expansions.new_expansion'), route('admin.expansion.new'));
     } else {
-        $trail->push(__('Edit expansion'), route('admin.expansion.edit', $expansion));
+        $trail->push(__('breadcrumbs.home.admin.expansions.edit_expansion'), route('admin.expansion.edit', $expansion));
     }
 });
 
@@ -249,24 +244,24 @@ Breadcrumbs::for('admin.expansion.edit', function (Generator $trail, ?Expansion 
 Breadcrumbs::for('admin.dungeon.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Dungeons'), route('admin.dungeons'));
+    $trail->push(__('breadcrumbs.home.admin.dungeons.dungeons'), route('admin.dungeons'));
 });
 Breadcrumbs::for('admin.dungeon.edit', function (Generator $trail, ?Dungeon $dungeon)
 {
     $trail->parent('admin.dungeon.list');
     if ($dungeon === null) {
-        $trail->push(__('New dungeon'), route('admin.dungeon.new'));
+        $trail->push(__('breadcrumbs.home.admin.dungeons.new_dungeon'), route('admin.dungeon.new'));
     } else {
-        $trail->push(__('Edit dungeon'), route('admin.dungeon.edit', $dungeon));
+        $trail->push(__('breadcrumbs.home.admin.dungeons.edit_dungeon'), route('admin.dungeon.edit', $dungeon));
     }
 });
 Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeon, ?Floor $floor)
 {
     $trail->parent('admin.dungeon.edit', $dungeon);
     if ($floor === null) {
-        $trail->push(__('New floor'), route('admin.floor.new', ['dungeon' => $dungeon]));
+        $trail->push(__('breadcrumbs.home.admin.floors.new_floor'), route('admin.floor.new', ['dungeon' => $dungeon]));
     } else {
-        $trail->push(__('Edit floor'), route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]));
+        $trail->push(__('breadcrumbs.home.admin.floors.edit_floor'), route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]));
     }
 });
 
@@ -275,15 +270,15 @@ Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeo
 Breadcrumbs::for('admin.npc.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Npcs'), route('admin.npcs'));
+    $trail->push(__('breadcrumbs.home.admin.npcs.npcs'), route('admin.npcs'));
 });
 Breadcrumbs::for('admin.npc.edit', function (Generator $trail, ?Npc $npc)
 {
     $trail->parent('admin.npc.list');
     if ($npc === null) {
-        $trail->push(__('New npc'), route('admin.npc.new'));
+        $trail->push(__('breadcrumbs.home.admin.npcs.new_npc'), route('admin.npc.new'));
     } else {
-        $trail->push(__('Edit npc'), route('admin.npc.edit', $npc));
+        $trail->push(__('breadcrumbs.home.admin.npcs.edit_npc'), route('admin.npc.edit', $npc));
     }
 });
 
@@ -291,15 +286,15 @@ Breadcrumbs::for('admin.npc.edit', function (Generator $trail, ?Npc $npc)
 Breadcrumbs::for('admin.spell.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Spells'), route('admin.spells'));
+    $trail->push(__('breadcrumbs.home.admin.spells.spells'), route('admin.spells'));
 });
 Breadcrumbs::for('admin.spell.edit', function (Generator $trail, ?Spell $spell)
 {
     $trail->parent('admin.spell.list');
     if ($spell === null) {
-        $trail->push(__('New spell'), route('admin.spell.new'));
+        $trail->push(__('breadcrumbs.home.admin.spells.new_spell'), route('admin.spell.new'));
     } else {
-        $trail->push(__('Edit spell'), route('admin.spell.edit', $spell));
+        $trail->push(__('breadcrumbs.home.admin.spells.edit_spell'), route('admin.spell.edit', $spell));
     }
 });
 
@@ -307,12 +302,12 @@ Breadcrumbs::for('admin.spell.edit', function (Generator $trail, ?Spell $spell)
 Breadcrumbs::for('admin.user.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Users'), route('admin.users'));
+    $trail->push(__('breadcrumbs.home.admin.users.users'), route('admin.users'));
 });
 
 // User reports
 Breadcrumbs::for('admin.userreport.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('User reports'), route('admin.userreports'));
+    $trail->push(__('breadcrumbs.home.admin.user_reports.user_reports'), route('admin.userreports'));
 });
