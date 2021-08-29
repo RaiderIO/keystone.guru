@@ -6,7 +6,7 @@
 
 $id = $id ?? 'dungeon_id_select';
 $name = $name ?? 'dungeon_id';
-$label = $label ?? __('Dungeon');
+$label = $label ?? __('views/common.dungeon.select.dungeon');
 $required = $required ?? true;
 $showAll = !isset($showAll) || $showAll;
 $activeOnly = $activeOnly ?? true;
@@ -15,7 +15,7 @@ $showSiegeWarning = $showSiegeWarning ?? false;
 $dungeonsSelect = [];
 if ($showAll)
 {
-    $dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
+    $dungeonsSelect = ['All' => [-1 => __('views/common.dungeon.select.all_dungeons')]];
 }
 
 // If the user didn't pass us any dungeons, resort to some defaults we may have set

@@ -239,7 +239,7 @@ class Dungeon extends CacheModel
      */
     public function isSiegeOfBoralus()
     {
-        return $this->name === 'Siege of Boralus';
+        return $this->key === 'siegeofboralus';
     }
 
     /**
@@ -249,7 +249,7 @@ class Dungeon extends CacheModel
      */
     public function isTolDagor()
     {
-        return $this->name === 'Tol Dagor';
+        return $this->key === 'toldagor';
     }
 
     public function getTimerUpgradePlusTwoSeconds()

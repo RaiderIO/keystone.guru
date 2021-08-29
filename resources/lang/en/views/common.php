@@ -14,6 +14,8 @@ return [
             'new'       => 'New',
         ],
         'select'       => [
+            'dungeon'                  => 'Dungeon',
+            'all_dungeons'             => 'All dungeons',
             'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.'
         ]
     ],
