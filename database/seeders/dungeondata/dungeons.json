@@ -5,8 +5,8 @@
         "zone_id": 7855,
         "mdt_id": 12,
         "key": "arcway",
-        "name": "Arcway",
-        "slug": "arcway",
+        "name": "dungeons.legion.arcway.name",
+        "slug": "dungeonslegionarcwayname",
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": 466,
         "timer_max_seconds": 0,
@@ -28,8 +28,8 @@
         "zone_id": 7805,
         "mdt_id": 1,
         "key": "blackrookhold",
-        "name": "Black Rook Hold",
-        "slug": "black-rook-hold",
+        "name": "dungeons.legion.black_rook_hold.name",
+        "slug": "dungeonslegionblack-rook-holdname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -96,8 +96,8 @@
         "zone_id": 8527,
         "mdt_id": 2,
         "key": "cathedralofeternalnight",
-        "name": "Cathedral of Eternal Night",
-        "slug": "cathedral-of-eternal-night",
+        "name": "dungeons.legion.cathedral_of_eternal_night.name",
+        "slug": "dungeonslegioncathedral-of-eternal-nightname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -155,8 +155,8 @@
         "zone_id": 8079,
         "mdt_id": 3,
         "key": "courtofstars",
-        "name": "Court of Stars",
-        "slug": "court-of-stars",
+        "name": "dungeons.legion.court_of_stars.name",
+        "slug": "dungeonslegioncourt-of-starsname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 60,
@@ -178,8 +178,8 @@
         "zone_id": 7673,
         "mdt_id": 4,
         "key": "darkheartthicket",
-        "name": "Darkheart Thicket",
-        "slug": "darkheart-thicket",
+        "name": "dungeons.legion.darkheart_thicket.name",
+        "slug": "dungeonslegiondarkheart-thicketname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -201,8 +201,8 @@
         "zone_id": 8040,
         "mdt_id": 5,
         "key": "eyeofazshara",
-        "name": "Eye of Azshara",
-        "slug": "eye-of-azshara",
+        "name": "dungeons.legion.eye_of_aszhara.name",
+        "slug": "dungeonslegioneye-of-aszharaname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -224,8 +224,8 @@
         "zone_id": 7672,
         "mdt_id": 6,
         "key": "hallsofvalor",
-        "name": "Halls of Valor",
-        "slug": "halls-of-valor",
+        "name": "dungeons.legion.halls_of_valor.name",
+        "slug": "dungeonslegionhalls-of-valorname",
         "enemy_forces_required": 115,
         "enemy_forces_required_teeming": 151,
         "timer_max_seconds": 0,
@@ -292,8 +292,8 @@
         "zone_id": 8443,
         "mdt_id": 9,
         "key": "lowerkarazhan",
-        "name": "Lower Karazhan",
-        "slug": "lower-karazhan",
+        "name": "dungeons.legion.lower_karazhan.name",
+        "slug": "dungeonslegionlower-karazhanname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -360,8 +360,8 @@
         "zone_id": 7812,
         "mdt_id": 7,
         "key": "mawofsouls",
-        "name": "Maw of Souls",
-        "slug": "maw-of-souls",
+        "name": "dungeons.legion.maw_of_souls.name",
+        "slug": "dungeonslegionmaw-of-soulsname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -401,8 +401,8 @@
         "zone_id": 7546,
         "mdt_id": 8,
         "key": "neltharionslair",
-        "name": "Neltharion's Lair",
-        "slug": "neltharions-lair",
+        "name": "dungeons.legion.neltharions_lair.name",
+        "slug": "dungeonslegionneltharions-lairname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -424,8 +424,8 @@
         "zone_id": 8443,
         "mdt_id": 10,
         "key": "upperkarazhan",
-        "name": "Upper Karazhan",
-        "slug": "upper-karazhan",
+        "name": "dungeons.legion.upper_karazhan.name",
+        "slug": "dungeonslegionupper-karazhanname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -510,8 +510,8 @@
         "zone_id": 8910,
         "mdt_id": 11,
         "key": "theseatofthetriumvirate",
-        "name": "The Seat of the Triumvirate",
-        "slug": "the-seat-of-the-triumvirate",
+        "name": "dungeons.legion.the_seat_of_the_triumvirate.name",
+        "slug": "dungeonslegionthe-seat-of-the-triumviratename",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -533,8 +533,8 @@
         "zone_id": 7787,
         "mdt_id": 13,
         "key": "vaultofthewardens",
-        "name": "Vault of the Wardens",
-        "slug": "vault-of-the-wardens",
+        "name": "dungeons.legion.vault_of_the_wardens.name",
+        "slug": "dungeonslegionvault-of-the-wardensname",
         "enemy_forces_required": 210,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -574,8 +574,8 @@
         "zone_id": 9028,
         "mdt_id": 15,
         "key": "ataldazar",
-        "name": "Atal'Dazar",
-        "slug": "ataldazar",
+        "name": "dungeons.bfa.atal_dazar.name",
+        "slug": "dungeonsbfaatal-dazarname",
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
         "timer_max_seconds": 1800,
@@ -620,8 +620,8 @@
         "zone_id": 9164,
         "mdt_id": 16,
         "key": "freehold",
-        "name": "Freehold",
-        "slug": "freehold",
+        "name": "dungeons.bfa.freehold.name",
+        "slug": "dungeonsbfafreeholdname",
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
         "timer_max_seconds": 1980,
@@ -643,8 +643,8 @@
         "zone_id": 9526,
         "mdt_id": 17,
         "key": "kingsrest",
-        "name": "Kings' Rest",
-        "slug": "kings-rest",
+        "name": "dungeons.bfa.kings_rest.name",
+        "slug": "dungeonsbfakings-restname",
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
         "timer_max_seconds": 2520,
@@ -666,8 +666,8 @@
         "zone_id": 9525,
         "mdt_id": 18,
         "key": "shrineofthestorm",
-        "name": "Shrine of the Storm",
-        "slug": "shrine-of-the-storm",
+        "name": "dungeons.bfa.shrine_of_the_storm.name",
+        "slug": "dungeonsbfashrine-of-the-stormname",
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
         "timer_max_seconds": 2520,
@@ -712,8 +712,8 @@
         "zone_id": 9354,
         "mdt_id": 19,
         "key": "siegeofboralus",
-        "name": "Siege of Boralus",
-        "slug": "siege-of-boralus",
+        "name": "dungeons.bfa.siege_of_boralus.name",
+        "slug": "dungeonsbfasiege-of-boralusname",
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
         "timer_max_seconds": 2160,
@@ -735,8 +735,8 @@
         "zone_id": 9527,
         "mdt_id": 20,
         "key": "templeofsethraliss",
-        "name": "Temple of Sethraliss",
-        "slug": "temple-of-sethraliss",
+        "name": "dungeons.bfa.temple_of_sethraliss.name",
+        "slug": "dungeonsbfatemple-of-sethralissname",
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
         "timer_max_seconds": 2160,
@@ -781,8 +781,8 @@
         "zone_id": 8064,
         "mdt_id": 21,
         "key": "themotherlode",
-        "name": "The MOTHERLODE!!",
-        "slug": "the-motherlode",
+        "name": "dungeons.bfa.the_motherlode.name",
+        "slug": "dungeonsbfathe-motherlodename",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
         "timer_max_seconds": 2340,
@@ -804,8 +804,8 @@
         "zone_id": 9391,
         "mdt_id": 22,
         "key": "theunderrot",
-        "name": "The Underrot",
-        "slug": "the-underrot",
+        "name": "dungeons.bfa.the_underrot.name",
+        "slug": "dungeonsbfathe-underrotname",
         "enemy_forces_required": 252,
         "enemy_forces_required_teeming": 286,
         "timer_max_seconds": 1980,
@@ -850,8 +850,8 @@
         "zone_id": 9327,
         "mdt_id": 23,
         "key": "toldagor",
-        "name": "Tol Dagor",
-        "slug": "tol-dagor",
+        "name": "dungeons.bfa.tol_dagor.name",
+        "slug": "dungeonsbfatol-dagorname",
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
         "timer_max_seconds": 2160,
@@ -1006,8 +1006,8 @@
         "zone_id": 9424,
         "mdt_id": 24,
         "key": "waycrestmanor",
-        "name": "Waycrest Manor",
-        "slug": "waycrest-manor",
+        "name": "dungeons.bfa.waycrest_manor.name",
+        "slug": "dungeonsbfawaycrest-manorname",
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
         "timer_max_seconds": 2340,
@@ -1118,8 +1118,8 @@
         "zone_id": 10225,
         "mdt_id": 0,
         "key": "mechagonjunkyard",
-        "name": "Mechagon: Junkyard",
-        "slug": "mechagon-junkyard",
+        "name": "dungeons.bfa.mechagon_junkyard.name",
+        "slug": "dungeonsbfamechagon-junkyardname",
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
         "timer_max_seconds": 2280,
@@ -1164,8 +1164,8 @@
         "zone_id": 10225,
         "mdt_id": 0,
         "key": "mechagonworkshop",
-        "name": "Mechagon: Workshop",
-        "slug": "mechagon-workshop",
+        "name": "dungeons.bfa.mechagon_workshop.name",
+        "slug": "dungeonsbfamechagon-workshopname",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
         "timer_max_seconds": 1920,
@@ -1232,8 +1232,8 @@
         "zone_id": 0,
         "mdt_id": 0,
         "key": "orgrimmarhorrificvision",
-        "name": "Orgrimmar (Horrific Vision)",
-        "slug": "orgrimmar-horrific-vision",
+        "name": "dungeons.bfa.orgrimmar_horrific_vision.name",
+        "slug": "dungeonsbfaorgrimmar-horrific-visionname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -1278,8 +1278,8 @@
         "zone_id": 0,
         "mdt_id": 0,
         "key": "stormwindcityhorrificvision",
-        "name": "Stormwind City (Horrific Vision)",
-        "slug": "stormwind-city-horrific-vision",
+        "name": "dungeons.bfa.stormwind_horrific_vision.name",
+        "slug": "dungeonsbfastormwind-horrific-visionname",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
@@ -1301,8 +1301,8 @@
         "zone_id": 13309,
         "mdt_id": 29,
         "key": "deotherside_ardenweald",
-        "name": "De Other Side",
-        "slug": "de-other-side",
+        "name": "dungeons.shadowlands.de_other_side.name",
+        "slug": "dungeonsshadowlandsde-other-side",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2580,
@@ -1310,25 +1310,25 @@
             {
                 "id": 73,
                 "index": 1,
-                "name": "De Other Side",
+                "name": "dungeons.shadowlands.de_other_side.floors.de_other_side",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 41,
+                        "id": 120,
                         "floor1_id": 73,
                         "floor2_id": 74,
                         "direction": "down"
                     },
                     {
-                        "id": 43,
+                        "id": 121,
                         "floor1_id": 73,
                         "floor2_id": 75,
                         "direction": "left"
                     },
                     {
-                        "id": 45,
+                        "id": 122,
                         "floor1_id": 73,
                         "floor2_id": 76,
                         "direction": "right"
@@ -1338,13 +1338,13 @@
             {
                 "id": 74,
                 "index": 2,
-                "name": "Mechagon",
+                "name": "dungeons.shadowlands.de_other_side.floors.mechagon",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 42,
+                        "id": 123,
                         "floor1_id": 74,
                         "floor2_id": 73,
                         "direction": "up"
@@ -1354,13 +1354,13 @@
             {
                 "id": 75,
                 "index": 3,
-                "name": "Zul'Gurub",
+                "name": "dungeons.shadowlands.de_other_side.floors.zul_gurub",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 44,
+                        "id": 124,
                         "floor1_id": 75,
                         "floor2_id": 73,
                         "direction": "right"
@@ -1370,13 +1370,13 @@
             {
                 "id": 76,
                 "index": 4,
-                "name": "Ardenweald",
+                "name": "dungeons.shadowlands.de_other_side.floors.ardenweald",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 46,
+                        "id": 125,
                         "floor1_id": 76,
                         "floor2_id": 73,
                         "direction": "left"
@@ -1391,8 +1391,8 @@
         "zone_id": 12831,
         "mdt_id": 30,
         "key": "hallsofatonement_a",
-        "name": "Halls of Atonement",
-        "slug": "halls-of-atonement",
+        "name": "dungeons.shadowlands.halls_of_atonement.name",
+        "slug": "dungeonsshadowlandshalls-of-atonementname",
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 1860,
@@ -1400,13 +1400,13 @@
             {
                 "id": 77,
                 "index": 1,
-                "name": "Halls of Atonement",
+                "name": "dungeons.shadowlands.halls_of_atonement.floors.halls_of_atonement",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 47,
+                        "id": 126,
                         "floor1_id": 77,
                         "floor2_id": 78,
                         "direction": "left"
@@ -1416,19 +1416,19 @@
             {
                 "id": 78,
                 "index": 2,
-                "name": "The Nave of Pain",
+                "name": "dungeons.shadowlands.halls_of_atonement.floors.the_nave_of_pain",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 48,
+                        "id": 127,
                         "floor1_id": 78,
                         "floor2_id": 77,
                         "direction": "right"
                     },
                     {
-                        "id": 49,
+                        "id": 128,
                         "floor1_id": 78,
                         "floor2_id": 79,
                         "direction": "up"
@@ -1438,13 +1438,13 @@
             {
                 "id": 79,
                 "index": 3,
-                "name": "The Sanctuary of Souls",
+                "name": "dungeons.shadowlands.halls_of_atonement.floors.the_sanctuary_of_souls",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 107,
+                        "id": 129,
                         "floor1_id": 79,
                         "floor2_id": 78,
                         "direction": "down"
@@ -1459,8 +1459,8 @@
         "zone_id": 13334,
         "mdt_id": 31,
         "key": "mistsoftirnescithe",
-        "name": "Mists of Tirna Scithe",
-        "slug": "mists-of-tirna-scithe",
+        "name": "dungeons.shadowlands.mists_of_tirna_scithe.name",
+        "slug": "dungeonsshadowlandsmists-of-tirna-scithename",
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 1800,
@@ -1468,7 +1468,7 @@
             {
                 "id": 80,
                 "index": 1,
-                "name": "Mists of Tirna Scithe",
+                "name": "dungeons.shadowlands.mists_of_tirna_scithe.floors.mists_of_tirna_scithe",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1482,8 +1482,8 @@
         "zone_id": 13228,
         "mdt_id": 32,
         "key": "plaguefall",
-        "name": "Plaguefall",
-        "slug": "plaguefall",
+        "name": "dungeons.shadowlands.plaguefall.name",
+        "slug": "dungeonsshadowlandsplaguefallname",
         "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2280,
@@ -1491,13 +1491,13 @@
             {
                 "id": 81,
                 "index": 1,
-                "name": "Plaguefall",
+                "name": "dungeons.shadowlands.plaguefall.floors.plaguefall",
                 "default": 1,
                 "min_enemy_size": 8,
                 "max_enemy_size": 22,
                 "floorcouplings": [
                     {
-                        "id": 111,
+                        "id": 130,
                         "floor1_id": 81,
                         "floor2_id": 82,
                         "direction": "down"
@@ -1507,13 +1507,13 @@
             {
                 "id": 82,
                 "index": 2,
-                "name": "The Festering Sanctum",
+                "name": "dungeons.shadowlands.plaguefall.floors.the_festering_sanctum",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 52,
+                        "id": 131,
                         "floor1_id": 82,
                         "floor2_id": 81,
                         "direction": "up"
@@ -1528,8 +1528,8 @@
         "zone_id": 12842,
         "mdt_id": 33,
         "key": "sanguinedepths_a",
-        "name": "Sanguine Depths",
-        "slug": "sanguine-depths",
+        "name": "dungeons.shadowlands.sanguine_depths.name",
+        "slug": "dungeonsshadowlandssanguine-depthsname",
         "enemy_forces_required": 364,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2460,
@@ -1537,13 +1537,13 @@
             {
                 "id": 83,
                 "index": 1,
-                "name": "Depths of Despair",
+                "name": "dungeons.shadowlands.sanguine_depths.floors.depths_of_despair",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 106,
+                        "id": 132,
                         "floor1_id": 83,
                         "floor2_id": 84,
                         "direction": "down"
@@ -1553,13 +1553,13 @@
             {
                 "id": 84,
                 "index": 2,
-                "name": "Amphitheater of Sorrow",
+                "name": "dungeons.shadowlands.sanguine_depths.floors.amphitheater_of_sorrow",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 74,
+                        "id": 133,
                         "floor1_id": 84,
                         "floor2_id": 83,
                         "direction": "up"
@@ -1574,8 +1574,8 @@
         "zone_id": 12837,
         "mdt_id": 34,
         "key": "spiresofascension_a",
-        "name": "Spires of Ascension",
-        "slug": "spires-of-ascension",
+        "name": "dungeons.shadowlands.spires_of_ascension.name",
+        "slug": "dungeonsshadowlandsspires-of-ascensionname",
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2340,
@@ -1583,13 +1583,13 @@
             {
                 "id": 85,
                 "index": 1,
-                "name": "Honor's Ascent",
+                "name": "dungeons.shadowlands.spires_of_ascension.floors.honors_ascent",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 108,
+                        "id": 134,
                         "floor1_id": 85,
                         "floor2_id": 86,
                         "direction": "up"
@@ -1599,19 +1599,19 @@
             {
                 "id": 86,
                 "index": 2,
-                "name": "Gardens of Repose",
+                "name": "dungeons.shadowlands.spires_of_ascension.floors.gardens_of_repose",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 109,
+                        "id": 135,
                         "floor1_id": 86,
                         "floor2_id": 85,
                         "direction": "down"
                     },
                     {
-                        "id": 110,
+                        "id": 136,
                         "floor1_id": 86,
                         "floor2_id": 87,
                         "direction": "up"
@@ -1621,19 +1621,19 @@
             {
                 "id": 87,
                 "index": 3,
-                "name": "Font of Fealty",
+                "name": "dungeons.shadowlands.spires_of_ascension.floors.font_of_fealty",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 82,
+                        "id": 137,
                         "floor1_id": 87,
                         "floor2_id": 86,
                         "direction": "down"
                     },
                     {
-                        "id": 83,
+                        "id": 138,
                         "floor1_id": 87,
                         "floor2_id": 88,
                         "direction": "up"
@@ -1643,13 +1643,13 @@
             {
                 "id": 88,
                 "index": 4,
-                "name": "Seat of the Archon",
+                "name": "dungeons.shadowlands.spires_of_ascension.floors.seat_of_the_archon",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 84,
+                        "id": 139,
                         "floor1_id": 88,
                         "floor2_id": 87,
                         "direction": "down"
@@ -1664,8 +1664,8 @@
         "zone_id": 12916,
         "mdt_id": 35,
         "key": "necroticwake_a",
-        "name": "The Necrotic Wake",
-        "slug": "the-necrotic-wake",
+        "name": "dungeons.shadowlands.the_necrotic_wake.name",
+        "slug": "dungeonsshadowlandsthe-necrotic-wakename",
         "enemy_forces_required": 283,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2160,
@@ -1673,13 +1673,13 @@
             {
                 "id": 89,
                 "index": 1,
-                "name": "The Necrotic Wake",
+                "name": "dungeons.shadowlands.the_necrotic_wake.floors.the_necrotic_wake",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 61,
+                        "id": 140,
                         "floor1_id": 89,
                         "floor2_id": 90,
                         "direction": "up"
@@ -1689,19 +1689,19 @@
             {
                 "id": 90,
                 "index": 2,
-                "name": "Stitchwerks",
+                "name": "dungeons.shadowlands.the_necrotic_wake.floors.stitchwerks",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 62,
+                        "id": 141,
                         "floor1_id": 90,
                         "floor2_id": 89,
                         "direction": "down"
                     },
                     {
-                        "id": 63,
+                        "id": 142,
                         "floor1_id": 90,
                         "floor2_id": 91,
                         "direction": "up"
@@ -1711,13 +1711,13 @@
             {
                 "id": 91,
                 "index": 3,
-                "name": "Zolramus",
+                "name": "dungeons.shadowlands.the_necrotic_wake.floors.zolramus",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 64,
+                        "id": 143,
                         "floor1_id": 91,
                         "floor2_id": 90,
                         "direction": "down"
@@ -1732,8 +1732,8 @@
         "zone_id": 12841,
         "mdt_id": 36,
         "key": "theaterofpain",
-        "name": "Theater of Pain",
-        "slug": "theater-of-pain",
+        "name": "dungeons.shadowlands.theater_of_pain.name",
+        "slug": "dungeonsshadowlandstheater-of-painname",
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2220,
@@ -1741,13 +1741,13 @@
             {
                 "id": 92,
                 "index": 1,
-                "name": "Theater of Pain",
+                "name": "dungeons.shadowlands.theater_of_pain.floors.theater_of_pain",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 89,
+                        "id": 144,
                         "floor1_id": 92,
                         "floor2_id": 93,
                         "direction": "down"
@@ -1757,25 +1757,25 @@
             {
                 "id": 93,
                 "index": 2,
-                "name": "Chamber of Conquest",
+                "name": "dungeons.shadowlands.theater_of_pain.floors.chamber_of_conquest",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 93,
+                        "id": 145,
                         "floor1_id": 93,
                         "floor2_id": 92,
                         "direction": "up"
                     },
                     {
-                        "id": 94,
+                        "id": 146,
                         "floor1_id": 93,
                         "floor2_id": 94,
                         "direction": "up"
                     },
                     {
-                        "id": 95,
+                        "id": 147,
                         "floor1_id": 93,
                         "floor2_id": 96,
                         "direction": "left"
@@ -1785,13 +1785,13 @@
             {
                 "id": 94,
                 "index": 3,
-                "name": "Altars of Agony",
+                "name": "dungeons.shadowlands.theater_of_pain.floors.altars_of_agony",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 85,
+                        "id": 148,
                         "floor1_id": 94,
                         "floor2_id": 93,
                         "direction": "down"
@@ -1801,19 +1801,19 @@
             {
                 "id": 96,
                 "index": 4,
-                "name": "Upper Barrow of Carnage",
+                "name": "dungeons.shadowlands.theater_of_pain.floors.upper_barrow_of_carnage",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 118,
+                        "id": 151,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 119,
+                        "id": 152,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
@@ -1823,19 +1823,19 @@
             {
                 "id": 95,
                 "index": 5,
-                "name": "Lower Barrow of Carnage",
+                "name": "dungeons.shadowlands.theater_of_pain.floors.lower_barrow_of_carnage",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 116,
+                        "id": 149,
                         "floor1_id": 95,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 117,
+                        "id": 150,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
