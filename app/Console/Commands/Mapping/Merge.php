@@ -63,7 +63,9 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name']);
+        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name'])->map(function(string $name){
+            return __($name);
+        });
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
         } else if ($changedDungeonNames->isEmpty()) {
