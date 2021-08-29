@@ -108,7 +108,7 @@ abstract class MapContext
 
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null
-            'userPublicKey'   => Auth::user()->public_key
+            'userPublicKey'   => optional(Auth::user())->public_key,
         ];
     }
 }

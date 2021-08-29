@@ -38,7 +38,9 @@ trait DungeonRouteTrait
             'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup)
             {
                 return $affixGroup->affixes;
-            })->collapse()->unique()->pluck(['name'])
+            })->collapse()->unique()->pluck(['name'])->map(function(string $name){
+                return __($name);
+            })
         ];
     }
 }
