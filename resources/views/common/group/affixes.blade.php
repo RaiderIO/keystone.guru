@@ -44,18 +44,17 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
                 ?>
                 <div class="col col-md pr-0 affix_row">
                     <div class="row no-gutters">
-                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
+                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
                              data-toggle="tooltip"
-                             title="{{ $affix->description }}"
+                             title="{{ __($affix->description) }}"
                              style="height: 24px;">
                         </div>
                         @if($names)
                             <div class="col d-md-block d-none pl-1">
-                                {{ $affix->name }}
-                                @if($last)
-                                    @if( $affixGroup->seasonal_index !== null )
-                                        {{ sprintf(__('preset %s'), $affixGroup->seasonal_index + 1) }}
-                                    @endif
+                                @if($last && $affixGroup->seasonal_index !== null)
+                                    {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
+                                @else
+                                    {{ __($affix->name) }}
                                 @endif
                             </div>
                         @endif
@@ -75,11 +74,9 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
 
 @if($isAwakened)
     <div class="form-group">
-        {!! Form::label('seasonal_index', __('Awakened enemy set')) !!} <span class="form-required">*</span>
+        {!! Form::label('seasonal_index', __('views/common.group.affixes.awakened_enemy_set')) !!} <span class="form-required">*</span>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-    __('Awakened enemies (pillar bosses) for M+ levels 10 and higher come in two sets. Each set of affixes is marked either A or B.
-    You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map.
-    You can always adjust your selection from the Route Settings menu later.')
+    __('views/common.group.affixes.awakened_enemy_set_title')
      }}"></i>
         {!! Form::select('seasonal_index', $presets, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
             ['id' => 'seasonal_index', 'class' => 'form-control selectpicker']) !!}
@@ -88,11 +85,9 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
 
 @if($isTormented)
     <div class="form-group">
-        {!! Form::label('seasonal_index', __('Tormented preset')) !!} <span class="form-required">*</span>
+        {!! Form::label('seasonal_index', __('views/common.group.affixes.tormented_preset')) !!} <span class="form-required">*</span>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-    sprintf(__('Tormented enemies for M+ levels 10 and higher come in %s presets.
-    You may attach multiple affixes to your route whom can contain any combination of presets. Choose here which preset will be displayed on the map.
-    You can always adjust your selection from the Route Settings menu later.'), $currentSeason->presets)
+    sprintf(__('views/common.group.affixes.tormented_preset_title'), $currentSeason->presets)
      }}"></i>
         {!! Form::select('seasonal_index', $presets,
             isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,

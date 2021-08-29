@@ -8,6 +8,6 @@ class ColorChangedHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
 
-        this.echo.setUserColorById(e.user.id, e.color);
+        this.echo.setUserColorByPublicKey(e.user.public_key, e.color);
     }
 }

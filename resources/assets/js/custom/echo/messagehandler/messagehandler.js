@@ -36,7 +36,7 @@ class MessageHandler extends Signalable {
         let message = new MessageFactory().create(e.__name, e);
 
         if (message !== null) {
-            let echoUser = this.echo.getUserById(message.user.id);
+            let echoUser = this.echo.getUserByPublicKey(message.user.public_key);
 
             // Floor ID is always set - so set it here
             if (echoUser !== null) {

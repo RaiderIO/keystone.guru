@@ -7,7 +7,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['ex
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes = [-1 => 'Any'];
+    $affixes = [-1 => __('views/dungeonroute.embed.any')];
     $selectedAffixes = -1;
 }
 ?>
@@ -41,7 +41,7 @@ if (count($affixes) == 0) {
             <div class="col-4">
                 <a href="{{ route('home') }}">
                     <h4 class="text-right">
-                        {{ __('Keystone.guru') }}
+                        {{ config('app.name') }}
                     </h4>
                 </a>
             </div>
@@ -55,7 +55,7 @@ if (count($affixes) == 0) {
             <div class="col-4">
                 <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
                 @if($dungeon->floors()->count() > 1)
-                    {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                    {!! Form::select('map_floor_selection', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
                 @endif
             </div>
             <div class="col-3">
@@ -63,14 +63,14 @@ if (count($affixes) == 0) {
                     ['id' => 'affixes',
                     'class' => 'form-control affixselect selectpicker',
                     'multiple' => 'multiple',
-                    'title' => __('Affixes'),
+                    'title' => __('views/dungeonroute.embed.affixes_title'),
                     'readonly' => 'readonly',
                     'data-selected-text-format' => 'count > 1',
-                    'data-count-selected-text' => __('{0} affixes selected')]) !!}
+                    'data-count-selected-text' => __('views/dungeonroute.embed.affixes_selected')]) !!}
             </div>
             <div class="col-1">
                 <div id="embed_copy_mdt_string" class="btn btn-primary float-right" data-toggle="tooltip"
-                     title="{{ __('Copy MDT string') }}">
+                     title="{{ __('views/dungeonroute.embed.copy_mdt_string') }}">
                     <i class="fas fa-file-export"></i>
                 </div>
                 <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" style="display: none;">

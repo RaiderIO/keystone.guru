@@ -137,7 +137,7 @@ class NpcController extends Controller
                     ->mapWithKeys(function ($value, $key)
                     {
                         // Halls of Valor => [npcs]
-                        $dungeonName = $key === -1 ? __('All dungeons') : Dungeon::find($key)->name;
+                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : Dungeon::find($key)->name;
                         return [$dungeonName => $value->pluck('name', 'id')
                             ->map(function ($value, $key)
                             {
@@ -147,7 +147,6 @@ class NpcController extends Controller
                         ];
                     })
                     ->toArray(),
-            'headerTitle'     => __('New npc')
         ]);
     }
 
@@ -163,7 +162,7 @@ class NpcController extends Controller
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
-                [-1 => __('All npcs')] +
+                [-1 => __('views/admin.npc.edit.all_npcs')] +
                 Npc::where('dungeon_id', $npc->dungeon_id)
                     ->orWhere('dungeon_id', -1)
                     ->orderByRaw('dungeon_id, name')
@@ -173,7 +172,6 @@ class NpcController extends Controller
                         return sprintf('%s (%s)', $value, $key);
                     })
                     ->toArray(),
-            'headerTitle'     => __('Edit npc')
         ]);
     }
 
@@ -193,7 +191,7 @@ class NpcController extends Controller
             $npc = $this->store($request, $npc);
 
             // Message to the user
-            Session::flash('status', __('Npc updated'));
+            Session::flash('status', __('views/admin.npc.flash.npc_updated'));
 
             // Display the edit page
             return $this->edit($request, $npc);
@@ -211,7 +209,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
+        Session::flash('status', sprintf(__('views/admin.npc.flash.npc_created'), $npc->name));
 
         return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }

@@ -1,16 +1,16 @@
 <?php
-$selected = isset($selected) ? $selected : '';
+$selected = $selected ?? '';
 
 // https://gist.github.com/Xeoncross/1204255
 $regions = array(
-    'Africa' => DateTimeZone::AFRICA,
-    'America' => DateTimeZone::AMERICA,
-    'Antarctica' => DateTimeZone::ANTARCTICA,
-    'Asia' => DateTimeZone::ASIA,
-    'Atlantic' => DateTimeZone::ATLANTIC,
-    'Europe' => DateTimeZone::EUROPE,
-    'Indian' => DateTimeZone::INDIAN,
-    'Pacific' => DateTimeZone::PACIFIC
+    __('views/common.timezoneselect.africa') => DateTimeZone::AFRICA,
+    __('views/common.timezoneselect.america') => DateTimeZone::AMERICA,
+    __('views/common.timezoneselect.antarctica') => DateTimeZone::ANTARCTICA,
+    __('views/common.timezoneselect.asia') => DateTimeZone::ASIA,
+    __('views/common.timezoneselect.atlantic') => DateTimeZone::ATLANTIC,
+    __('views/common.timezoneselect.europe') => DateTimeZone::EUROPE,
+    __('views/common.timezoneselect.indian') => DateTimeZone::INDIAN,
+    __('views/common.timezoneselect.pacific') => DateTimeZone::PACIFIC
 );
 $timezones = array();
 foreach ($regions as $name => $mask) {
@@ -27,14 +27,15 @@ foreach ($regions as $name => $mask) {
 // View
 ?>
 <label for="timezone">
-    {{ __('Timezone') }}
+    {{ __('views/common.timezoneselect.timezone') }}
 </label>
 <select id="timezone" name="timezone" class="form-control">
     @foreach ($timezones as $region => $list)
         <optgroup label="{{ $region }}">
             @foreach ($list as $timezone => $name)
                 @php($selectedStr = $timezone === $selected ? 'selected="selected"' : '')
-                <option name="{{ $timezone }}" value="{{ $timezone }}" {{ $selectedStr }}>{{ str_replace('_', ' ', $name) }}</option>
+                <option name="{{ $timezone }}"
+                        value="{{ $timezone }}" {{ $selectedStr }}>{{ str_replace('_', ' ', $name) }}</option>
             @endforeach
         </optgroup>
     @endforeach

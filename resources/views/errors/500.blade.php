@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('500 Internal Server Error'),
+    'title' => __('views/errors.500.title'),
     'code' => 500,
-    'message' => __('Whoops, something went wrong on our servers.')
+    'message' => __('views/errors.500.message')
     ])

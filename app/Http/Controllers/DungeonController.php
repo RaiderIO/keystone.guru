@@ -60,10 +60,7 @@ class DungeonController extends Controller
      */
     public function new()
     {
-        return view('admin.dungeon.edit', [
-            'expansions'  => Expansion::all()->pluck('name', 'id'),
-            'headerTitle' => __('New dungeon')
-        ]);
+        return view('admin.dungeon.edit', ['expansions'  => Expansion::all()->pluck('name', 'id')]);
     }
 
     /**
@@ -76,7 +73,6 @@ class DungeonController extends Controller
         return view('admin.dungeon.edit', [
             'expansions'  => Expansion::all()->pluck('name', 'id'),
             'dungeon'     => $dungeon,
-            'headerTitle' => __('Edit dungeon')
         ]);
     }
 
@@ -92,7 +88,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request, $dungeon);
 
         // Message to the user
-        Session::flash('status', __('Dungeon updated'));
+        Session::flash('status', __('controller.dungeon.flash.dungeon_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon);
@@ -109,7 +105,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Dungeon created'));
+        Session::flash('status', __('controller.dungeon.flash.dungeon_created'));
 
         return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
     }

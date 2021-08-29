@@ -57,12 +57,12 @@ class MousePositionHandler extends WhisperMessageHandler {
         /** @type MousePositionMessage */
         let message = mousePositionReceivedEvent.data.message;
 
-        let echoUser = this.echo.getUserById(message.user.id);
+        let echoUser = this.echo.getUserByPublicKey(message.user.public_key);
         if (echoUser !== null) {
             echoUser.mapobject.onPositionsReceived(message);
             echoUser.mapobject.setSynced(true);
         } else {
-            console.warn(`Unable to find echo user ${message.user.id}!`);
+            console.warn(`Unable to find echo user ${message.user.public_key}!`);
         }
     }
 }

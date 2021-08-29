@@ -100,13 +100,13 @@ abstract class OAuthLoginController extends LoginController
                     // Add it as a user
                     $existingUser->attachRole(Role::where('name', 'user')->first());
 
-                    Session::flash('status', __('Registered successfully. Enjoy the website!'));
+                    Session::flash('status', __('controller.oauthlogin.flash.registered_successfully'));
                 } else {
-                    Session::flash('warning', sprintf(__('There is already a user with username %s. Did you already register before?'), $existingUser->name));
+                    Session::flash('warning', sprintf(__('controller.oauthlogin.flash.user_exists'), $existingUser->name));
                     $this->redirectTo = '/';
                 }
             } else {
-                Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $existingUser->email));
+                Session::flash('warning', sprintf(__('controller.oauthlogin.flash.email_exists'), $existingUser->email));
                 $this->redirectTo = '/';
             }
         } else {

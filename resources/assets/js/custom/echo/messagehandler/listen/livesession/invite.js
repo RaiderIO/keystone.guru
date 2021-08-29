@@ -12,7 +12,7 @@ class InviteHandler extends MessageHandler {
         super.onReceive(e);
 
         // Only if we're invited!
-        if (e.invitees.includes(getState().getMapContext().getUserId())) {
+        if (e.invitees.includes(getState().getMapContext().getUserPublicKey())) {
             let template = Handlebars.templates['livesession_invite_received_template'];
 
             showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), e)), function () {

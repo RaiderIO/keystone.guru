@@ -82,7 +82,6 @@ class FloorController extends Controller
     public function new(Request $request, Dungeon $dungeon)
     {
         return view('admin.floor.edit', [
-            'headerTitle' => __('New floor'),
             'dungeon'     => $dungeon
         ]);
     }
@@ -99,13 +98,12 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'headerTitle'    => sprintf(__('%s - Edit floor'), $dungeon->name),
                 'dungeon'        => $dungeon,
                 'floor'          => $floor,
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
             ]);
         } else {
-            Session::flash('warning', sprintf('Floor %s is not a part of dungeon %s', $floor->name, $dungeon->name));
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }
@@ -122,7 +120,6 @@ class FloorController extends Controller
 
         return view('admin.floor.mapping', [
             'floor'       => $floor,
-            'headerTitle' => __('Edit floor'),
             'mapContext'  => (new MapContextDungeon($dungeon, $floor))->getProperties(),
         ]);
     }
@@ -140,7 +137,7 @@ class FloorController extends Controller
         $floor = $this->store($request, $floor);
 
         // Message to the user
-        Session::flash('status', __('Floor updated'));
+        Session::flash('status', __('views/admin.floor.flash.floor_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon, $floor);
@@ -158,7 +155,7 @@ class FloorController extends Controller
         $floor = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Floor created'));
+        Session::flash('status', __('views/admin.floor.flash.floor_created'));
 
         return redirect()->route('admin.floor.edit.mapping', [
             'dungeon' => $request->get('dungeon'),

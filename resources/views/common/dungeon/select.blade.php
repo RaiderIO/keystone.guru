@@ -4,18 +4,18 @@
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $siegeOfBoralus \App\Models\Dungeon */
 
-$id = isset($id) ? $id : 'dungeon_id_select';
-$name = isset($name) ? $name : 'dungeon_id';
-$label = isset($label) ? $label : __('Dungeon');
-$required = isset($required) ? $required : true;
-$showAll = isset($showAll) ? $showAll : true;
-$activeOnly = isset($activeOnly) ? $activeOnly : true;
-$showSiegeWarning = isset($showSiegeWarning) ? $showSiegeWarning : false;
+$id = $id ?? 'dungeon_id_select';
+$name = $name ?? 'dungeon_id';
+$label = $label ?? __('views/common.dungeon.select.dungeon');
+$required = $required ?? true;
+$showAll = !isset($showAll) || $showAll;
+$activeOnly = $activeOnly ?? true;
+$showSiegeWarning = $showSiegeWarning ?? false;
 
 $dungeonsSelect = [];
 if ($showAll)
 {
-    $dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
+    $dungeonsSelect = ['All' => [-1 => __('views/common.dungeon.select.all_dungeons')]];
 }
 
 // If the user didn't pass us any dungeons, resort to some defaults we may have set
@@ -28,11 +28,13 @@ $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 // Group the dungeons by expansion
 foreach ($dungeonsByExpansion as $expansionId => $dungeons)
 {
-    $dungeonsSelect[$allExpansions->where('id', $expansionId)->first()->name] = $dungeons->pluck('name', 'id')->toArray();
+    $dungeonsSelect[$allExpansions->where('id', $expansionId)->first()->name] = $dungeons->pluck('name', 'id')->mapWithKeys(function($name, $id){
+        return [$id => __($name)];
+    })->toArray();
 }
 ?>
 
-@if($showSiegeWarning)
+@if($showSiegeWarning && $siegeOfBoralus)
 @section('scripts')
     @parent
 
@@ -59,7 +61,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons)
     {!! Form::select($name, $dungeonsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
+            <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}
         </div>
     @endif
 

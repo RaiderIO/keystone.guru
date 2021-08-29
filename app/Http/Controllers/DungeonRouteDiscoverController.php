@@ -83,7 +83,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.category', [
             'category'      => 'popular',
-            'title'         => __('Popular routes'),
+            'title'         => __('controller.dungeonroutediscover.popular'),
             'breadcrumbs'   => 'dungeonroutes.popular',
             'dungeonroutes' => $discoverService->withBuilder($closure)->popular(),
         ]);
@@ -103,7 +103,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.category', [
             'category'      => 'thisweek',
-            'title'         => __('This week\'s affixes'),
+            'title'         => __('controller.dungeonroutediscover.this_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.thisweek',
             'dungeonroutes' => $discoverService->withBuilder($closure)->popularByAffixGroup(
                 $seasonService->getCurrentSeason()->getCurrentAffixGroup()
@@ -127,7 +127,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.category', [
             'category'      => 'nextweek',
-            'title'         => __('Next week\'s affixes'),
+            'title'         => __('controller.dungeonroutediscover.next_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.nextweek',
             'dungeonroutes' => $discoverService->withBuilder($closure)->popularByAffixGroup(
                 $seasonService->getCurrentSeason()->getNextAffixGroup()
@@ -149,7 +149,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.category', [
             'category'      => 'new',
-            'title'         => __('New routes'),
+            'title'         => __('controller.dungeonroutediscover.new'),
             'breadcrumbs'   => 'dungeonroutes.new',
             'dungeonroutes' => $discoverService->withBuilder($closure)->new(),
         ]);
@@ -170,7 +170,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'category'      => 'popular',
-            'title'         => sprintf(__('%s popular routes'), $dungeon->name),
+            'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.popular'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService->withBuilder($closure)->popularByDungeon($dungeon),
@@ -192,7 +192,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'category'      => 'thisweek',
-            'title'         => sprintf(__('%s this week'), $dungeon->name),
+            'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup(
@@ -219,7 +219,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'category'      => 'nextweek',
-            'title'         => sprintf(__('%s next week'), $dungeon->name),
+            'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup(
@@ -244,7 +244,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'category'      => 'new',
-            'title'         => sprintf(__('%s new routes'), $dungeon->name),
+            'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService->withBuilder($closure)->newByDungeon($dungeon),

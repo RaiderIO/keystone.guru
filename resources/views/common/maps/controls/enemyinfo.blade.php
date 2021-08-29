@@ -4,12 +4,14 @@
         <div class="card-body p-3">
             <div class="row">
                 <div class="col">
-                    <h5 class="card-title">{{ __('Enemy info') }}</h5>
+                    <h5 class="card-title">{{ __('views/common.maps.controls.enemyinfo.enemy_info') }}</h5>
                 </div>
                 <div class="col-auto">
                     <a href="#" data-toggle="modal"
                        data-target="#userreport_enemy_modal">
-                        <button class="btn btn-warning btn-sm w-100" data-toggle="tooltip" title="{{ __('Report an issue') }}">
+                        <button class="btn btn-warning btn-sm w-100"
+                                data-toggle="tooltip"
+                                title="{{ __('views/common.maps.controls.enemyinfo.report_an_issue') }}">
                             <i class="fa fa-bug"></i>
                         </button>
                     </a>

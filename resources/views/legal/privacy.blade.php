@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Privacy')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.privacy.title')])
 
-@section('header-title', __('Privacy Policy'))
+@section('header-title', __('views/legal.privacy.header'))
 
 @section('content')
     <p>Effective date: August 07, 2018</p>

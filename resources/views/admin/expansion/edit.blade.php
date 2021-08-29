@@ -9,37 +9,39 @@
     @endisset
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('Name')) !!}
+        {!! Form::label('name', __('views/admin.expansion.edit.name')) !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('shortname', __('Shortname')) !!}
+        {!! Form::label('shortname', __('views/admin.expansion.edit.shortname')) !!}
         {!! Form::text('shortname', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'shortname'])
     </div>
 
     <div class="form-group{{ $errors->has('icon') ? ' has-error' : '' }}">
-        {!! Form::label('icon', __('Icon')) !!}
+        {!! Form::label('icon', __('views/admin.expansion.edit.icon')) !!}
         {!! Form::file('icon', ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'icon'])
     </div>
 
     @isset($expansion)
         <div class="form-group">
-            {{__('Current image:')}} <img src="{{ $expansion->iconfile->getUrl() }}"
+            {{ __('views/admin.expansion.edit.current_image') }}: <img src="{{ $expansion->iconfile->getUrl() }}"
                                           style="width: 32px; height: 32px;"/>
         </div>
     @endisset
 
     <div class="form-group{{ $errors->has('color') ? ' has-error' : '' }}">
-        {!! Form::label('color', __('Color')) !!}
+        {!! Form::label('color', __('views/admin.expansion.edit.color')) !!}
         {!! Form::color('color', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'color'])
     </div>
 
-    {!! Form::submit(isset($expansion) ? __('Edit') : __('Submit'), ['class' => 'btn btn-info']) !!}
+    {!! Form::submit(isset($expansion) ?
+        __('views/admin.expansion.edit.edit') :
+        __('views/admin.expansion.edit.submit'), ['class' => 'btn btn-info']) !!}
 
     {!! Form::close() !!}
 @endsection

@@ -1,19 +1,18 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-$showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
+$showNoAttributes = $showNoAttributes ?? false;
 ?>
 
 <div class="form-group">
     @if($showNoAttributes)
         <label for="attributes" data-toggle="tooltip"
-               title="{{ __('Select the attributes that your group is comfortable with handling.') }}">
-            {{ __('Attributes') }}
+               title="{{ __('views/common.dungeonroute.attributes.no_attributes_title') }}">
+            {{ __('views/common.dungeonroute.attributes.attributes') }}
         </label>
     @else
-        <label for="attributes">{{ __('Attributes') }}</label>
+        <label for="attributes">{{ __('views/common.dungeonroute.attributes.attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-        __('Attributes describe what features your route has that others may not be able to complete due to composition ' .
-            'differences or skill. Marking attributes properly enables others to find routes that fit them more easily.')
+        __('views/common.dungeonroute.attributes.select_attributes_title')
          }}"></i>
     @endif
     <?php
@@ -37,7 +36,7 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
     ?>
     <select multiple name="attributes[]" id="attributes" class="form-control selectpicker"
             size="{{ $allAttributeCount + $attributes->count() }}"
-            data-selected-text-format="count > 1" data-count-selected-text="{{__('{0} attributes')}}">
+            data-selected-text-format="count > 1" data-count-selected-text="{{__('views/common.dungeonroute.attributes.attributes_selected')}}">
         @foreach ($attributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
                 @foreach ($categoryAttributes as $attribute) {

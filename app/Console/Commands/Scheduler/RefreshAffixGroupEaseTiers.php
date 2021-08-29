@@ -142,7 +142,7 @@ class RefreshAffixGroupEaseTiers extends Command
                     // Loop over the affixes of the affix group and empty the list
                     $notFoundAffixes = $affixGroup->affixes->filter(function (Affix $affix) use ($affixes)
                     {
-                        return $affixes->search($affix->name) === false;
+                        return $affixes->search($affix->key) === false;
                     });
 
                     // If we have found the match, we're done

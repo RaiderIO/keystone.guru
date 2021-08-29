@@ -8,9 +8,12 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
     <div class="form-group">
         <div class="row">
             <div class="col">
-                {{ __('Pull number style') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('This controls how the pulls sidebar displays numbers.')
-                     }}"></i>
+                {{ __('views/common.forms.pullsettings.pull_number_style') }}
+                <i class="fas fa-info-circle"
+                   data-toggle="tooltip"
+                   title="{{ __('views/common.forms.pullsettings.pull_number_style_title') }}">
+
+                </i>
             </div>
         </div>
         <div class="row">
@@ -19,7 +22,8 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
                        {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
                        data-toggle="toggle" data-width="150px" data-height="20px"
                        data-onstyle="primary" data-offstyle="primary"
-                       data-on="{{ __('Percentage') }}" data-off="{{ __('Enemy forces') }}">
+                       data-on="{{ __('views/common.forms.pullsettings.pull_number_style_percentage') }}"
+                       data-off="{{ __('views/common.forms.pullsettings.pull_number_style_enemy_forces') }}">
             </div>
         </div>
     </div>
@@ -27,15 +31,16 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
     <div class="form-group">
         <div class="row">
             <div class="col">
-                {{ __('Show floor breakdown') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('This displays the visibility of the floor breakdown in the sidebar as your pulls transition across the dungeon.')
-                     }}"></i>
+                {{ __('views/common.forms.pullsettings.show_floor_breakdown') }}
+                <i class="fas fa-info-circle"
+                   data-toggle="tooltip"
+                   title="{{ __('views/common.forms.pullsettings.show_floor_breakdown_title') }}"></i>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                    {!! Form::checkbox('pulls_sidebar_floor_switch_visibility', 1, $pullsSidebarFloorSwitchVisibility,
-                            ['id' => 'pulls_sidebar_floor_switch_visibility', 'class' => 'form-control left_checkbox']) !!}
+                {!! Form::checkbox('pulls_sidebar_floor_switch_visibility', 1, $pullsSidebarFloorSwitchVisibility,
+                        ['id' => 'pulls_sidebar_floor_switch_visibility', 'class' => 'form-control left_checkbox']) !!}
             </div>
         </div>
     </div>
@@ -44,10 +49,12 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
         <div class="form-group">
             <div class="row view_dungeonroute_details_row mt-2">
                 <div class="col">
-                    {{ __('Pull color gradient') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('Setting a pull gradient will allow Keystone.guru to automatically color your pulls along a gradient.
-                    Using this feature you can more easily see which pull belongs to which part of the route, useful for non-linear routes alike. This setting is unique per route.')
-                     }}"></i>
+                    {{ __('views/common.forms.pullsettings.pull_color_gradient') }}
+                    <i class="fas fa-info-circle"
+                       data-toggle="tooltip"
+                       title="{{ __('views/common.forms.pullsettings.pull_color_gradient_title') }}">
+
+                    </i>
                 </div>
             </div>
             <div class="row view_dungeonroute_details_row mt-3">
@@ -55,9 +62,11 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
 
                 </div>
                 <div class="col-2">
-                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-success"
-                            data-toggle="tooltip" title="{{ __('Apply to current pulls') }}">
-                        {{ __('Apply now') }}
+                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls"
+                            class="btn btn-success"
+                            data-toggle="tooltip"
+                            title="{{ __('views/common.forms.pullsettings.apply_now_title') }}">
+                        {{ __('views/common.forms.pullsettings.apply_now_title') }}
                     </button>
                     <button id="edit_route_freedraw_options_gradient_apply_to_pulls_saving"
                             class="btn btn-success disabled"
@@ -72,10 +81,12 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             <div class="row no-gutters view_dungeonroute_details_row">
                 <div class="col pr-2">
                     <label for="pull_gradient_apply_always">
-                        {{ __('Always apply when I change pulls') }} <i class="fas fa-info-circle" data-toggle="tooltip"
-                                                                        title="{{
-                    __('Enabling this setting will update your pull\'s colors as you edit your pulls based on the pull gradient configured above. This setting is unique per route.')
-                     }}"></i>
+                        {{ __('views/common.forms.pullsettings.always_apply_on_pull_change') }}
+                        <i class="fas fa-info-circle"
+                           data-toggle="tooltip"
+                           title="{{ __('views/common.forms.pullsettings.always_apply_on_pull_change_title') }}">
+
+                        </i>
                     </label>
                 </div>
             </div>

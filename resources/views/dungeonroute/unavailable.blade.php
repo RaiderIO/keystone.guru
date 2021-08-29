@@ -1,9 +1,9 @@
-@extends('layouts.sitepage', ['title' => __('Unpublished route')])
+@extends('layouts.sitepage', ['title' => __('views/dungeonroute.unavailable.title')])
 @section('header-title', $headerTitle)
 
 @section('content')
     <div class="text-center">
-        {{ __('You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.') }}
+        {{ __('views/dungeonroute.unavailable.unavailable_description') }}
     </div>
 @endsection
 

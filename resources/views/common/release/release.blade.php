@@ -12,7 +12,7 @@ $showHeader = $showHeader ?? true;
                     {{ sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')) }}
                 </a>
                 @if(!isset($_COOKIE['changelog_release']) || (isset($_COOKIE['changelog_release']) && $_COOKIE['changelog_release'] < $release->id))
-                    <sup class="text-success">{{ __('NEW') }}</sup>
+                    <sup class="text-success">{{ __('views/common.release.release.new') }}</sup>
                 @endif
             </h4>
         </div>

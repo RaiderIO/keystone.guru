@@ -39,7 +39,7 @@ class UserMousePositionMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof UserMousePositionMapObjectGroup, 'this is not a UserMousePositionMapObjectGroup', this);
 
         let userMousePosition = this._loadMapObject({
-            id: echoUser.getId(),
+            public_key: echoUser.getPublicKey(),
             initials: echoUser.getInitials(),
             color: echoUser.getColor(),
             avatar_url: echoUser.getAvatarUrl(), // May be null if not set

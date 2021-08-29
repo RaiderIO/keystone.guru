@@ -98,9 +98,9 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
         @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
-                {{ __('Warning! You are currently on the staging environment of Keystone.guru. This is NOT the main site.') }}
+                {{ __('views/layouts.sitepage.staging_banner_description') }}
                 <br>
-                <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
+                <a href="https://keystone.guru/">{{ __('views/layouts.sitepage.staging_banner_take_me_away') }}</a>
             </div>
         @endif
 

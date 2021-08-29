@@ -64,28 +64,28 @@ class AffixGroup extends CacheModel
         $result = [];
         foreach ($this->affixes as $affix) {
             /** @var $affix Affix */
-            $result[] = $affix->name;
+            $result[] = __($affix->name);
         }
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {
-            $result .= sprintf(' preset %s', $this->seasonal_index + 1);
+            $result = sprintf(__('affixes.seasonal_index_preset'),$result, $this->seasonal_index + 1);
         }
 
         return $result;
     }
 
     /**
-     * @param string $name
+     * @param string $key
      * @return bool
      */
-    public function hasAffix(string $name): bool
+    public function hasAffix(string $key): bool
     {
         $result = false;
 
         foreach ($this->affixes as $affix) {
             /** @var $affix Affix */
-            if ($result = ($affix->name === $name)) {
+            if ($result = ($affix->key === $key)) {
                 break;
             }
         }

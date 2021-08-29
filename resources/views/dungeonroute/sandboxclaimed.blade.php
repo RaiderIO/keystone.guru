@@ -1,9 +1,9 @@
-@extends('layouts.sitepage', ['title' => __('Route already claimed')])
-@section('header-title', __('Route already claimed'))
+@extends('layouts.sitepage', ['title' => __('views/dungeonroute.sandboxclaimed.title')])
+@section('header-title', __('views/dungeonroute.sandboxclaimed.header'))
 
 @section('content')
     <div class="mt-2 text-center">
-        {{ __('This route has already been claimed by someone (or you used the back button in your browser to navigate here).') }}
+        {{ __('views/dungeonroute.sandboxclaimed.claimed_description') }}
     </div>
 @endsection
 

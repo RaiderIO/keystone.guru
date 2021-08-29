@@ -11,9 +11,9 @@ class EchoUser extends Signalable {
         this.map = map;
 
         // May be unset when not our own user, but this confuses handlebars
-        this.self = user.id === getState().getUser().id;
+        this.self = user.public_key === getState().getUser().public_key;
 
-        this.id = user.id;
+        this.public_key = user.public_key;
         this.name = user.name;
         this.initials = user.initials;
         this.color = user.color;
@@ -36,10 +36,10 @@ class EchoUser extends Signalable {
     }
 
     /**
-     * @returns {Number}
+     * @returns {string}
      */
-    getId() {
-        return this.id;
+    getPublicKey() {
+        return this.public_key;
     }
 
     /**

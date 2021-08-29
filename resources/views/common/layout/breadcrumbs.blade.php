@@ -1,5 +1,5 @@
 <?php
-$breadcrumbsParams = isset($breadcrumbsParams) ? $breadcrumbsParams : [];
+$breadcrumbsParams = $breadcrumbsParams ?? [];
 ?>
 @if(Diglactic\Breadcrumbs\Breadcrumbs::exists($breadcrumbs))
     <div class="row">

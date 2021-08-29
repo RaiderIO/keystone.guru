@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['title' => __('Demo routes')])
+@extends('layouts.sitepage', ['title' => __('views/misc.demo.title')])
 
-@section('header-title', __('Demo routes'))
+@section('header-title', __('views/misc.demo.header'))
 
 @section('content')
     @include('common.dungeon.demoroutesgrid', [

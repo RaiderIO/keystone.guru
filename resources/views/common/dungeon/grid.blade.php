@@ -24,7 +24,7 @@ $selectable = $selectable ?? false;
         <div class="card-img-caption">
             @if($names)
                 <h5 class="card-text text-white pr-2">
-                    {{ $dungeon->name }}
+                    {{ __($dungeon->name) }}
                 </h5>
             @endif
 

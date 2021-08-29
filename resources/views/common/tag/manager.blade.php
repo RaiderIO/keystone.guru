@@ -21,16 +21,16 @@ $isDarkTheme = $theme === 'darkly';
         </h5>
         <div class="row">
             <div class="col-6 col-lg-3 font-weight-bold">
-                {{ __('Name') }}
+                {{ __('views/common.tag.manager.name') }}
             </div>
             <div class="col-4 col-lg-3 font-weight-bold">
-                {{ __('Color') }}
+                {{ __('views/common.tag.manager.color') }}
             </div>
             <div class="col-lg-4 d-none d-lg-block font-weight-bold">
-                {{ __('Usage') }}
+                {{ __('views/common.tag.manager.usage') }}
             </div>
             <div class="col-2 col-lg-2 font-weight-bold">
-                {{ __('Actions') }}
+                {{ __('views/common.tag.manager.actions') }}
             </div>
         </div>
         @foreach($categoryTags as $categoryTag)
@@ -47,11 +47,11 @@ $isDarkTheme = $theme === 'darkly';
                 <div class="col-2 col-lg-3">
                     <div class="btn btn-primary tag_save" data-id="{{ $categoryTag->id }}">
                         <i class="fas fa-save"></i>
-                        <span class="d-none d-xl-inline"> {{ __('Save') }} </span>
+                        <span class="d-none d-xl-inline"> {{ __('views/common.tag.manager.save') }} </span>
                     </div>
                     <div class="btn btn-danger tag_delete" data-id="{{ $categoryTag->id }}">
                         <i class="fas fa-trash"></i>
-                        <span class="d-none d-xl-inline"> {{ __('Delete all') }} </span>
+                        <span class="d-none d-xl-inline"> {{ __('views/common.tag.manager.delete_all') }} </span>
                     </div>
                 </div>
             </div>
@@ -60,9 +60,9 @@ $isDarkTheme = $theme === 'darkly';
 @endforeach
 {{ Form::model(Auth::user(), ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
-    {!! Form::label('tag_name_new', __('Create tag')) !!}
+    {!! Form::label('tag_name_new', __('views/common.tag.manager.create_tag')) !!}
     {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
     @include('common.forms.form-error', ['key' => 'tag_name_new'])
 </div>
-{!! Form::submit(__('Create new tag'), ['class' => 'btn btn-info']) !!}
+{!! Form::submit(__('views/common.tag.manager.create_new_tag'), ['class' => 'btn btn-info']) !!}
 {!! Form::close() !!}

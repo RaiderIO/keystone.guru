@@ -5,7 +5,7 @@ $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 
 $sandbox = $dungeonroute->isSandbox();
 ?>
-@extends('layouts.map', ['title' => sprintf(__('Edit %s'), $dungeonroute->title)])
+@extends('layouts.map', ['title' => sprintf(__('views/dungeonroute.edit.title'), $dungeonroute->title)])
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',

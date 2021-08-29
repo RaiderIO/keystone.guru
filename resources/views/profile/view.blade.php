@@ -1,6 +1,7 @@
 <?php
 /** @var $user \App\User */
-$title = sprintf(__('%s\'s routes'), $user->name);
+$title = sprintf(__('views/profile.view.title'), $user->name);
+$header = sprintf(__('views/profile.view.header'), $user->name);
 ?>
 @extends('layouts.sitepage', ['wide' => true, 'title' => $title])
 
@@ -10,7 +11,7 @@ $title = sprintf(__('%s\'s routes'), $user->name);
 ]])
 
 @section('header-title')
-    {{ $title }}
+    {{ $header }}
 @endsection
 
 @section('content')

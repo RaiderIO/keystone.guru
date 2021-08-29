@@ -113,7 +113,7 @@ class Save extends Command
     {
 
         foreach (Dungeon::all() as $dungeon) {
-            $this->info(sprintf('- Saving dungeon %s', $dungeon->name));
+            $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
             /** @var $dungeon Dungeon */
             // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
 //            if( $dungeon->getKeyAttribute() !== 'hallsofvalor' ){
@@ -208,7 +208,7 @@ class Save extends Command
 
             /** @var Dungeon $dungeon */
             foreach ($dungeon->floors as $floor) {
-                $this->info(sprintf('-- Saving floor %s', $floor->name));
+                $this->info(sprintf('-- Saving floor %s', __($floor->name)));
                 /** @var Floor $floor */
                 // Only export NPC->id, no need to store the full npc in the enemy
                 $enemies = Enemy::where('floor_id', $floor->id)->without(['npc', 'type'])->with('npc:id')->get()->values();

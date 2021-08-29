@@ -9,6 +9,7 @@ class SearchFilterDungeons extends SearchFilterImageSelect {
     }
 
     getFilterHeaderText() {
-        return `Dungeons: ${this.getValue().length} selected`;
+        return lang.get('messages.filter_image_select_dungeons_header')
+            .replace(':number', '' + this.getValue().length);
     }
 }

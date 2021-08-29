@@ -15,6 +15,10 @@ class SearchFilterImageSelect extends SearchFilter {
         });
     }
 
+    /**
+     *
+     * @returns {Array}
+     */
     getValue() {
         let ids = [];
 
@@ -25,6 +29,10 @@ class SearchFilterImageSelect extends SearchFilter {
         return ids;
     }
 
+    /**
+     *
+     * @param value {string}
+     */
     setValue(value) {
         $(`${this.options.selector}`).removeClass('selected');
 
