@@ -15,6 +15,7 @@ class SearchFilterAffixGroups extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return `Affix groups: ${this.getValue().length} selected`;
+        return lang.get('messages.filter_input_affix_group_header')
+            .replace(':number', '' + this.getValue().length);
     }
 }

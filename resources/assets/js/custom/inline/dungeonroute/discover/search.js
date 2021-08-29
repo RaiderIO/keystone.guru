@@ -92,7 +92,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         }
 
         $('#route_list_current_filters').html(
-            `<span class="mr-2">Filters:</span>${html}`
+            `<span class="mr-2">${lang.get('messages.filters')}:</span>${html}`
         )
     }
 

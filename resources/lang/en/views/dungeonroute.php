@@ -28,7 +28,7 @@ return [
             'affixes'                 => 'Affixes',
             'affixes_title'           => 'Select affixes',
             'affixes_selected'        => '{0} affixes selected',
-            'enemy_forces' => 'Enemy forces',
+            'enemy_forces'            => 'Enemy forces',
             'enemy_forces_complete'   => 'Complete',
             'enemy_forces_incomplete' => 'Incomplete',
             'rating'                  => 'Rating',
@@ -58,7 +58,7 @@ return [
         'become_a_patreon'          => 'Become a %s Patron!',
     ],
     'new'            => [
-        'title'          => 'New route',
+        'title' => 'New route',
     ],
     'newtemporary'   => [
         'title'  => 'Create temporary route',
