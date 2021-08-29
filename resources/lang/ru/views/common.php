@@ -14,6 +14,8 @@ return [
             'new'       => '@todo ru: .dungeon.griddiscover.new',
         ],
         'select'       => [
+            'dungeon'                  => '@todo ru: .dungeon.select.dungeon',
+            'all_dungeons'             => '@todo ru: .dungeon.select.all_dungeons',
             'siege_of_boralus_warning' => '@todo ru: .dungeon.select.siege_of_boralus_warning'
         ]
     ],

@@ -12,11 +12,11 @@ if (isset($floor)) {
     'showAds' => false,
     'title' => sprintf(
         $floor === null ? __('views/admin.floor.edit.title_new') : __('views/admin.floor.edit.title_edit'),
-        $dungeon->name
+        __($dungeon->name)
     )]
 )])
 @section('header-title')
-    {{ sprintf($floor === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), $dungeon->name) }}
+    {{ sprintf($floor === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), __($dungeon->name)) }}
 @endsection
 <?php
 /**

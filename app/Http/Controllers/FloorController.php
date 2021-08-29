@@ -103,7 +103,7 @@ class FloorController extends Controller
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
             ]);
         } else {
-            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), $floor->name, $dungeon->name));
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }

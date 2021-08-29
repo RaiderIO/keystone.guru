@@ -28,7 +28,7 @@ return [
             'affixes'                 => '@todo ru: .discover.search.affixes',
             'affixes_title'           => '@todo ru: .discover.search.affixes_title',
             'affixes_selected'        => '@todo ru: .discover.search.affixes_selected',
-            'enemy_forces' => '@todo ru: .discover.search.enemy_forces',
+            'enemy_forces'            => '@todo ru: .discover.search.enemy_forces',
             'enemy_forces_complete'   => '@todo ru: .discover.search.enemy_forces_complete',
             'enemy_forces_incomplete' => '@todo ru: .discover.search.enemy_forces_incomplete',
             'rating'                  => '@todo ru: .discover.search.rating',
@@ -58,7 +58,7 @@ return [
         'become_a_patreon'          => '@todo ru: .limitreached.become_a_patreon',
     ],
     'new'            => [
-        'title'          => '@todo ru: .new.title',
+        'title' => '@todo ru: .new.title',
     ],
     'newtemporary'   => [
         'title'  => '@todo ru: .newtemporary.title',

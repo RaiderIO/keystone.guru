@@ -112,7 +112,7 @@
             <tr>
                 <td>{{ $floor->id }}</td>
                 <td>{{ $floor->index }}</td>
-                <td>{{ $floor->name }}</td>
+                <td>{{ __($floor->name) }}</td>
                 <td>
                     <a class="btn btn-primary"
                        href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">

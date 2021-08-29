@@ -99,9 +99,9 @@ class AdminToolsController extends Controller
                 }
 
                 if ($npcCandidate->exists) {
-                    $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
+                    $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                 } else {
-                    $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
+                    $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                 }
 
                 $npcCandidate->id = $npcData['id'];
@@ -278,7 +278,7 @@ class AdminToolsController extends Controller
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
-            $mdtNpcs = (new MDTDungeon($dungeon->name))->getMDTNPCs();
+            $mdtNpcs = (new MDTDungeon(__($dungeon->name)))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

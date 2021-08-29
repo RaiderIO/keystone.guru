@@ -34,7 +34,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
             <div class="card-img-caption">
                 <a href="{{ route('dungeonroutes.discoverdungeon', ['dungeon' => $dungeon->slug]) }}">
                     <h5 class="card-text text-white">
-                        {{ $dungeon->name }}
+                        {{ __($dungeon->name) }}
                     </h5>
                     <img class="card-img-top"
                          src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"

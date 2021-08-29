@@ -64,7 +64,7 @@
                          data-toggle="tooltip"
                          style="width: 32px; height: 32px;"/>
                 </td>
-                <td>{{ $dungeon->name }}</td>
+                <td>{{ __($dungeon->name) }}</td>
                 <td>{{ $dungeon->enemy_forces_required }}</td>
                 <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
                 <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>

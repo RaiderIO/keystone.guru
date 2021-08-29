@@ -16,7 +16,7 @@
             </a>
             @foreach($floors as $floor)
                 <a class="dropdown-item {{ $floor->id === $selectedFloorId ? 'active' : '' }}"
-                   data-value="{{ $floor->id }}">{{ $floor->name }}</a>
+                   data-value="{{ $floor->id }}">{{ __($floor->name) }}</a>
             @endforeach
         </div>
     </div>

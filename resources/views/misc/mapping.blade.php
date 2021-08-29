@@ -22,7 +22,7 @@
         <?php /** @var $dungeon \App\Models\Dungeon */ ?>
         <div class="row">
             <div class="col-lg-2">
-                {{ $dungeon->name }}
+                {{ __($dungeon->name) }}
             </div>
             <div class="col-lg-4">
                 <div class="progress">
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="col-lg-2">
-                {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
+                {!! Form::checkbox($dungeon->key . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
             </div>
         </div>
     @endforeach
