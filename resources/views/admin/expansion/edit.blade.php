@@ -1,5 +1,9 @@
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$expansion ?? null], 'showAds' => false, 'title' => $headerTitle])
-@section('header-title', $headerTitle)
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$expansion ?? null],
+    'showAds' => false,
+    'title' => $expansion ? __('views/admin.expansion.edit.title_edit') : __('views/admin.expansion.edit.title_new')
+    ])
+@section('header-title', $expansion ? __('views/admin.expansion.edit.header_edit') : __('views/admin.expansion.edit.header_new'))
 
 @section('content')
     @isset($expansion)

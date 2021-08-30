@@ -43,12 +43,12 @@ class UserController extends Controller
                 $user->attachRole('admin');
 
                 // Message to the user
-                Session::flash('status', sprintf(__('User %s is now an admin'), $user->name));
+                Session::flash('status', sprintf(__('controller.user.flash.user_is_now_an_admin'), $user->name));
             } else {
                 $user->detachRole('admin');
 
                 // Message to the user
-                Session::flash('status', sprintf(__('User %s is no longer an admin'), $user->name));
+                Session::flash('status', sprintf(__('controller.user.flash.user_is_no_longer_an_admin'), $user->name));
             }
         }
 
@@ -69,7 +69,7 @@ class UserController extends Controller
             $user->attachRole('user');
 
             // Message to the user
-            Session::flash('status', sprintf(__('User %s is now a user'), $user->name));
+            Session::flash('status', sprintf(__('controller.user.flash.user_is_now_a_user'), $user->name));
         }
 
         return redirect()->route('admin.users');
@@ -84,9 +84,9 @@ class UserController extends Controller
     {
         try {
             $user->delete();
-            Session::flash('status', __('Account deleted successfully.'));
+            Session::flash('status', __('controller.user.flash.account_deleted_successfully'));
         } catch (Exception $e) {
-            Session::flash('warning', __('An error occurred. Please try again.'));
+            Session::flash('warning', __('controller.user.flash.account_deletion_error'));
         }
 
         return redirect()->route('admin.users');
@@ -115,7 +115,7 @@ class UserController extends Controller
 
             return response()->noContent();
         } else {
-            return response('This user is not a Patron', Http::BAD_REQUEST);
+            return response(__('controller.user.flash.user_is_not_a_patron'), Http::BAD_REQUEST);
         }
     }
 }

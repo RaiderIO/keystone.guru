@@ -39,6 +39,10 @@ return [
     ],
     'expansion'  => [
         'edit' => [
+            'title_new'     => 'New expansion',
+            'header_new'    => 'New expansion',
+            'title_edit'    => 'Edit expansion',
+            'header_edit'   => 'Edit expansion',
             'name'          => 'Name',
             'shortname'     => 'Shortname',
             'icon'          => 'Icon',

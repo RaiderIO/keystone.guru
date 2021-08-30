@@ -132,7 +132,7 @@ class TeamController extends Controller
         $teamModel = $this->store($request, $team);
 
         // Message to the user
-        Session::flash('status', __('Team updated'));
+        Session::flash('status', __('controller.team.flash.team_updated'));
 
         // Display the edit page
         return $this->edit($request, $team);
@@ -149,7 +149,7 @@ class TeamController extends Controller
         $team = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Team created'));
+        Session::flash('status', __('controller.team.flash.team_created'));
 
         return redirect()->route('team.edit', ['team' => $team]);
     }
@@ -183,7 +183,7 @@ class TeamController extends Controller
                 $result = view('team.invite', ['team' => $team]);
             }
         } else {
-            abort(StatusCode::NOT_FOUND, 'Unable to find a team associated with this invite code');
+            abort(StatusCode::NOT_FOUND, __('controller.team.flash.unable_to_find_team_for_invite_code'));
         }
 
         return $result;
@@ -204,7 +204,7 @@ class TeamController extends Controller
         } else {
             $team->addMember(Auth::getUser(), 'member');
 
-            Session::flash('status', sprintf(__('Success! You are now a member of team %s.'), $team->name));
+            Session::flash('status', sprintf(__('controller.team.flash.invite_accept_success'), $team->name));
             $result = redirect()->route('team.edit', ['team' => $team]);
         }
 
@@ -230,9 +230,9 @@ class TeamController extends Controller
 
             Tag::saveFromRequest($request, $tagCategoryId);
 
-            Session::flash('status', __('Tag created successfully'));
+            Session::flash('status', __('controller.team.flash.tag_created_successfully'));
         } else {
-            $error = ['tag_name_new' => __('This tag already exists')];
+            $error = ['tag_name_new' => __('controller.team.flash.tag_already_exists')];
         }
 
         return Redirect::back()->withErrors($error);

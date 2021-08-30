@@ -1,5 +1,5 @@
-@extends('layouts.sitepage', ['title' => __('Limit reached')])
-@section('header-title', __('Limit reached'))
+@extends('layouts.sitepage', ['title' => __('views/dungeonroute.limitreached.title')])
+@section('header-title', __('views/dungeonroute.limitreached.header'))
 
 @section('content')
     <div class="mt-2 text-center">

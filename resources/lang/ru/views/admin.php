@@ -39,6 +39,10 @@ return [
     ],
     'expansion'  => [
         'edit' => [
+            'title_new'     => '@todo ru: .expansion.edit.title_new',
+            'header_new'    => '@todo ru: .expansion.edit.header_new',
+            'title_edit'    => '@todo ru: .expansion.edit.title_edit',
+            'header_edit'   => '@todo ru: .expansion.edit.header_edit',
             'name'          => '@todo ru: .expansion.edit.name',
             'shortname'     => '@todo ru: .expansion.edit.shortname',
             'icon'          => '@todo ru: .expansion.edit.icon',
