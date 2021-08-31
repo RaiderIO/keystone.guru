@@ -2,6 +2,17 @@
 
 
 return [
+    'admintools'           => [
+        'error' => [
+            'mdt_string_format_not_recognized' => 'The MDT string format was not recognized.',
+            'invalid_mdt_string'               => 'Invalid MDT string',
+            'invalid_mdt_string_exception'     => 'Invalid MDT string: %s',
+            'mdt_importer_not_configured'      => 'MDT importer is not configured properly. Please contact the admin about this issue.',
+        ],
+        'flash' => [
+
+        ],
+    ],
     'apidungeonroute'      => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
@@ -53,7 +64,7 @@ return [
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
     ],
-    'release' => [
+    'release'              => [
         'error' => [
             'unable_to_save_release' => 'Unable to save release',
         ],

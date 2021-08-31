@@ -199,19 +199,19 @@ class AdminToolsController extends Controller
 
             dd($dungeonRoute);
         } catch (InvalidMDTString $ex) {
-            return abort(400, __('The MDT string format was not recognized.'));
+            return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
 
             // Different message based on our deployment settings
             if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+                $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
             } else {
-                $message = __('Invalid MDT string');
+                $message = __('controller.admintools.error.invalid_mdt_string');
             }
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -253,14 +253,14 @@ class AdminToolsController extends Controller
 
             // Different message based on our deployment settings
             if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+                $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
             } else {
-                $message = __('Invalid MDT string');
+                $message = __('controller.admintools.error.invalid_mdt_string');
             }
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -278,7 +278,7 @@ class AdminToolsController extends Controller
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
-            $mdtNpcs = (new MDTDungeon(__($dungeon->name)))->getMDTNPCs();
+            $mdtNpcs = (new MDTDungeon(__($dungeon->name, [], 'en')))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

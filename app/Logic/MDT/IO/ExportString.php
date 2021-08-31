@@ -28,10 +28,8 @@ use Illuminate\Support\Collection;
  */
 class ExportString extends MDTBase
 {
-
-
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private $_encodedString;
+    private string $_encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $_dungeonRoute;
@@ -120,7 +118,7 @@ class ExportString extends MDTBase
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        $mdtEnemies = (new MDTDungeon($this->_dungeonRoute->dungeon->name))
+        $mdtEnemies = (new MDTDungeon(__($this->_dungeonRoute->dungeon->name, [], 'en')))
             ->getClonesAsEnemies($this->_dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based
@@ -151,9 +149,8 @@ class ExportString extends MDTBase
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
-                        sprintf(__('Unable to find MDT equivalent for Keystone.guru enemy with NPC %s (enemy_id: %s, npc_id: %s).'), $enemy->npc->name, $enemy->id, $enemy->npc_id),
-                        ['details' => __('This indicates that your route kills an enemy of which its NPC is known to MDT, 
-                        but Keystone.guru hasn\'t coupled that enemy to an MDT equivalent yet (or it does not exist in MDT).')]
+                        sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->npc_id),
+                        ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                     ));
                 }
 
@@ -178,8 +175,9 @@ class ExportString extends MDTBase
      * Gets the MDT encoded string based on the currently set DungeonRoute.
      * @param Collection $warnings
      * @return string
+     * @throws \Exception
      */
-    public function getEncodedString(Collection $warnings)
+    public function getEncodedString(Collection $warnings): string
     {
 //        $lua = $this->_getLua();
 
@@ -222,10 +220,9 @@ class ExportString extends MDTBase
                 // If stripping ascii characters worked in changing the title somehow
                 if ($asciiTitle !== $this->_dungeonRoute->title) {
                     $warnings->push(
-                        new ImportWarning(__('Title'),
-                            __('Your route title contains non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. 
-                                Your route title has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.'),
-                            ['details' => sprintf(__('Old title: %s, new title: %s'), $this->_dungeonRoute->title, $asciiTitle)]
+                        new ImportWarning(__('logic.mdt.io.export_string.category.title'),
+                            __('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
+                            ['details' => sprintf(__('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->_dungeonRoute->title, $asciiTitle)]
                         )
                     );
                     $this->_dungeonRoute->title = $asciiTitle;
@@ -238,10 +235,9 @@ class ExportString extends MDTBase
                         $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment);
                         if ($asciiComment !== $mapicon->comment) {
                             $warnings->push(
-                                new ImportWarning(__('Map icon'),
-                                    __('One of your comments on a map icon has non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. 
-                                Your map comment has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.'),
-                                    ['details' => sprintf(__('Old comment: "%s", new comment: "%s"'), $asciiComment, $mapicon->comment)]
+                                new ImportWarning(__('logic.mdt.io.export_string.category.map_icon'),
+                                    __('logic.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
+                                    ['details' => sprintf(__('logic.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
                                 )
                             );
                             $mapicon->comment = $asciiComment;

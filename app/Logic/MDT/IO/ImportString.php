@@ -31,7 +31,6 @@ use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
-use App\Service\Season\SeasonServiceInterface;
 use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -208,7 +207,7 @@ class ImportString extends MDTBase
         $enemiesByNpcId = $enemies->groupBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon(__($dungeonRoute->dungeon->name, [], 'en')))->getClonesAsEnemies($floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 
@@ -285,9 +284,9 @@ class ImportString extends MDTBase
                             }
 
                             if ($mdtEnemy === null) {
-                                $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
-                                    sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
-                                    ['details' => __('This indicates MDT has mapped an enemy that is not known in Keystone.guru yet.')]
+                                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                    sprintf(__('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index'), $cloneIndex, $npcIndex),
+                                    ['details' => __('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index_details')]
                                 ));
                                 continue;
                             }
@@ -307,9 +306,9 @@ class ImportString extends MDTBase
                             }
 
                             if ($enemy === null) {
-                                $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
-                                    sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC %s (id: %s).'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
-                                    ['details' => __('This indicates that your route kills an enemy of which its NPC is known to Keystone.guru, but Keystone.guru doesn\'t have that enemy mapped yet.')]
+                                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                    sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
+                                    ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
                                 ));
                                 continue;
                             }
@@ -428,9 +427,9 @@ class ImportString extends MDTBase
                                         $kzEnemy->save();
                                     }
                                 } else {
-                                    throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
-                                        sprintf(__('Unable to find Awakened Enemy %s (%s) at the final boss in %s.'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, $dungeonRoute->dungeon->name),
-                                        ['details' => __('This indicates Keystone.guru has a mapping error that will need to be correct. Send the above warning to me and I\'ll correct it.')]
+                                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                        sprintf(__('unable_to_find_awakened_enemy_for_final_boss'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, __($dungeonRoute->dungeon->name)),
+                                        ['details' => __('logic.mdt.io.import_string.unable_to_find_awakened_enemy_for_final_boss_details')]
                                     );
                                 }
                             }
@@ -450,9 +449,9 @@ class ImportString extends MDTBase
                     if ($save) {
                         $killZone->delete();
                     }
-                    throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
-                        __('Failure to find enemies resulted in a pull being skipped.'),
-                        ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                        __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
+                        ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
                     );
                 }
             } catch (ImportWarning $warning) {

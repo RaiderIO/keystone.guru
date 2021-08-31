@@ -2,6 +2,17 @@
 
 
 return [
+    'admintools'           => [
+        'error' => [
+            'mdt_string_format_not_recognized' => '@todo ru: .admintools.error.mdt_string_format_not_recognized',
+            'invalid_mdt_string'               => '@todo ru: .admintools.error.invalid_mdt_string',
+            'invalid_mdt_string_exception'     => '@todo ru: .admintools.error.invalid_mdt_string_exception',
+            'mdt_importer_not_configured'      => '@todo ru: .admintools.error.mdt_importer_not_configured',
+        ],
+        'flash' => [
+
+        ],
+    ],
     'apidungeonroute'      => [
         'mdt_generate_error'  => '@todo ru: .apidungeonroute.mdt_generate_error',
         'mdt_generate_no_lua' => '@todo ru: .apidungeonroute.mdt_generate_no_lua',
@@ -52,6 +63,15 @@ return [
         ],
         'legal_agreed_required' => '@todo ru: .register.legal_agreed_required',
         'legal_agreed_accepted' => '@todo ru: .register.legal_agreed_accepted',
+    ],
+    'release'              => [
+        'error' => [
+            'unable_to_save_release' => '@todo ru: .release.error.unable_to_save_release',
+        ],
+        'flash' => [
+            'release_updated' => '@todo ru: .release.flash.release_updated',
+            'release_created' => '@todo ru: .release.flash.release_created',
+        ]
     ],
     'profile'              => [
         'flash' => [

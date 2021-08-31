@@ -38,7 +38,7 @@ class DungeonController extends Controller
         $dungeon->zone_id = $request->get('zone_id');
         $dungeon->mdt_id = $request->get('mdt_id');
         $dungeon->name = $request->get('name');
-        $dungeon->slug = Str::slug($dungeon->name);
+        $dungeon->slug = $request->get('slug');
         $dungeon->key = $request->get('key');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');

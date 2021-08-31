@@ -10,6 +10,7 @@ return [
             'mdt_id'                        => 'MDT ID',
             'dungeon_name'                  => 'Dungeon name',
             'key'                           => 'Key',
+            'slug'                          => 'Slug',
             'enemy_forces_required'         => 'Enemy forces required',
             'enemy_forces_required_teeming' => 'Enemy forces required (teeming)',
             'timer_max_seconds'             => 'Timer (seconds)',

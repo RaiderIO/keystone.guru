@@ -590,7 +590,7 @@ class DungeonRoute extends Model
         $this->pull_gradient = '';
         $this->pull_gradient_apply_always = 0;
 
-        $this->title = sprintf('%s Sandbox', $this->dungeon->name);
+        $this->title = sprintf('%s Sandbox', __($this->dungeon->name));
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
         $saveResult = $this->save();
@@ -640,7 +640,7 @@ class DungeonRoute extends Model
         $this->title = $request->get('dungeon_route_title', $this->title);
         $this->description = $request->get('dungeon_route_description', $this->description) ?? '';
         if (empty($this->title)) {
-            $this->title = $this->dungeon->name;
+            $this->title = __($this->dungeon->name);
         }
 
         $this->level_min = $request->get('level_min', config('keystoneguru.levels.min'));

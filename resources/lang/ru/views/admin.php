@@ -10,6 +10,7 @@ return [
             'mdt_id'                        => '@todo ru: .dungeon.edit.mdt_id',
             'dungeon_name'                  => '@todo ru: .dungeon.edit.dungeon_name',
             'key'                           => '@todo ru: .dungeon.edit.key',
+            'slug'                          => '@todo ru: .dungeon.edit.slug',
             'enemy_forces_required'         => '@todo ru: .dungeon.edit.enemy_forces_required',
             'enemy_forces_required_teeming' => '@todo ru: .dungeon.edit.enemy_forces_required_teeming',
             'timer_max_seconds'             => '@todo ru: .dungeon.edit.timer_max_seconds',
@@ -144,7 +145,10 @@ return [
     ],
     'release'    => [
         'edit' => [
-            'header'      => '@todo ru: .release.edit.header',
+            'title_new'   => '@todo ru: .release.edit.title_new',
+            'header_new'  => '@todo ru: .release.edit.header_new',
+            'title_edit'  => '@todo ru: .release.edit.title_edit',
+            'header_edit' => '@todo ru: .release.edit.header_edit',
             'version'     => '@todo ru: .release.edit.version',
             'title'       => '@todo ru: .release.edit.title',
             'silent'      => '@todo ru: .release.edit.silent',

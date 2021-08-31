@@ -1,6 +1,6 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => sprintf(__('views/admin.floor.mapping.title'), $floor->dungeon->name)])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => sprintf(__('views/admin.floor.mapping.title'), __($floor->dungeon->name))])
 @section('header-title')
-    {{ sprintf(__('views/admin.floor.mapping.header'), $floor->dungeon->name) }}
+    {{ sprintf(__('views/admin.floor.mapping.header'), __($floor->dungeon->name)) }}
 @endsection
 <?php
 /**

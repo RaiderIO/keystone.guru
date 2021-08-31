@@ -66,6 +66,12 @@
             @include('common.forms.form-error', ['key' => 'key'])
         </div>
 
+        <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
+            {!! Form::label('slug', __('views/admin.dungeon.edit.slug')) !!}
+            {!! Form::text('slug', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'slug'])
+        </div>
+
         <div class="form-group{{ $errors->has('enemy_forces_required') ? ' has-error' : '' }}">
             {!! Form::label('enemy_forces_required', __('views/admin.dungeon.edit.enemy_forces_required')) !!}
             {!! Form::number('enemy_forces_required', null, ['class' => 'form-control']) !!}
