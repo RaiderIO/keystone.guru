@@ -3,8 +3,12 @@
 $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChangelog();
 ?>
 
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$release ?? null], 'showAds' => false, 'title' => $headerTitle])
-@section('header-title', __('views/admin.release.edit.header'))
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$release ?? null],
+    'showAds' => false,
+    'title' => $release ? __('views/admin.release.edit.title_edit') : __('views/admin.release.edit.title_new'))
+    ])
+@section('header-title', $release ? __('views/admin.release.edit.header_edit') : __('views/admin.release.edit.header_new'))
 @include('common.general.inline', ['path' => 'admin/release/edit', 'options' => ['changelog' => $changelog, 'categories' => $categories]])
 
 @section('content')

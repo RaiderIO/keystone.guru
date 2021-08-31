@@ -144,7 +144,10 @@ return [
     ],
     'release'    => [
         'edit' => [
-            'header'      => 'New release',
+            'title_new'   => 'New release',
+            'header_new'  => 'New release',
+            'title_edit'  => 'Edit release',
+            'header_edit' => 'Edit release',
             'version'     => 'Version',
             'title'       => 'Title',
             'silent'      => 'Silent',

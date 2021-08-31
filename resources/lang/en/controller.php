@@ -53,6 +53,15 @@ return [
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
     ],
+    'release' => [
+        'error' => [
+            'unable_to_save_release' => 'Unable to save release',
+        ],
+        'flash' => [
+            'release_updated' => 'Release updated',
+            'release_created' => 'Release created',
+        ]
+    ],
     'profile'              => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',

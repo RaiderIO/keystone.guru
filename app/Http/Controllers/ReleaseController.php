@@ -77,7 +77,7 @@ class ReleaseController extends Controller
             }
         } // Something went wrong with saving
         else {
-            abort(500, 'Unable to save release');
+            abort(500, __('controller.release.error.unable_to_save_release'));
         }
 
         return $release;
@@ -91,7 +91,6 @@ class ReleaseController extends Controller
     public function new()
     {
         return view('admin.release.edit', [
-            'headerTitle' => __('New release'),
             'categories'  => ReleaseChangelogCategory::all()
         ]);
     }
@@ -105,7 +104,6 @@ class ReleaseController extends Controller
     {
         return view('admin.release.edit', [
             'release'     => $release,
-            'headerTitle' => __('Edit release'),
             'categories'  => ReleaseChangelogCategory::all()
         ]);
     }
@@ -122,7 +120,7 @@ class ReleaseController extends Controller
         $release = $this->store($request, $release);
 
         // Message to the user
-        Session::flash('status', __('Release updated'));
+        Session::flash('status', __('controller.release.flash.release_updated'));
 
         // Display the edit page
         return $this->edit($request, $release);
@@ -139,7 +137,7 @@ class ReleaseController extends Controller
         $release = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Release created'));
+        Session::flash('status', __('controller.release.flash.release_created'));
 
         return redirect()->route('admin.release.edit', ['release' => $release]);
     }
