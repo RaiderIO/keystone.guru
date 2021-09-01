@@ -3,12 +3,6 @@
 @section('header-title')
     {{ __('views/admin.dungeon.list.header') }}
 @endsection
-{{--Disabled since dungeons should only be created through seeders--}}
-{{--@section('header-addition')--}}
-{{--    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">--}}
-{{--        <i class="fas fa-plus"></i> {{ __('Create dungeon') }}--}}
-{{--    </a>--}}
-{{--@endsection--}}
 <?php
 /**
  * @var $models \App\Models\Dungeon

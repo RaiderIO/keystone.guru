@@ -1,7 +1,7 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Exported!')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.datadump.viewexporteddungeondata.title')])
 
-@section('header-title', __('Dumped dungeon data'))
+@section('header-title', __('views/admin.tools.datadump.viewexporteddungeondata.header'))
 
 @section('content')
-    Exported!
+    {{ __('views/admin.tools.datadump.viewexporteddungeondata.content') }}
 @endsection

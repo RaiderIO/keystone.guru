@@ -29,6 +29,12 @@ return [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
     ],
+    'apiuserreport'        => [
+        'error' => [
+            'unable_to_update_user_report' => 'Unable to update user report',
+            'unable_to_save_report'        => 'Unable to save report',
+        ],
+    ],
     'dungeon'              => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
@@ -114,10 +120,10 @@ return [
         ],
     ],
     'spell'                => [
-        'error'       => [
+        'error' => [
             'unable_to_save_spell' => 'Unable to save spell',
         ],
-        'flash'       => [
+        'flash' => [
             'spell_updated' => 'Spell updated',
             'spell_created' => 'Spell created',
         ],
