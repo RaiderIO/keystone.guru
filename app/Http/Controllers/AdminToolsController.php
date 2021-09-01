@@ -51,7 +51,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|View
+     * @return void
      */
     public function npcimportsubmit(Request $request)
     {
@@ -295,7 +295,7 @@ class AdminToolsController extends Controller
                 if ($npc === null) {
                     $warnings->push(
                         new ImportWarning('missing_npc',
-                            sprintf(__('Unable to find npc for id %s'), $mdtNpc->getId()),
+                            sprintf(__('controller.admintools.error.mdt_unable_to_find_npc_for_id'), $mdtNpc->getId()),
                             ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                         )
                     );
@@ -306,7 +306,7 @@ class AdminToolsController extends Controller
                     if ($npc->base_health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
-                                sprintf(__('NPC %s has mismatched health values, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
@@ -316,7 +316,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('NPC %s has mismatched enemy forces, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
@@ -326,7 +326,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
-                                sprintf(__('NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
@@ -336,7 +336,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemies->count() !== count($mdtNpc->getClones())) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_count',
-                                sprintf(__('NPC %s has mismatched enemy count, MDT: %s, KG: %s'),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_count'),
                                     $mdtNpc->getId(), count($mdtNpc->getClones()), $npc->enemies === null ? 0 : $npc->enemies->count()),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                             )
@@ -347,7 +347,7 @@ class AdminToolsController extends Controller
                     if ($npc->type->type !== $mdtNpc->getCreatureType()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_type',
-                                sprintf(__('NPC %s has mismatched enemy type, MDT: %s, KG: %s'),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_type'),
                                     $mdtNpc->getId(), $mdtNpc->getCreatureType(), $npc->type->type),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
                             )
@@ -371,7 +371,7 @@ class AdminToolsController extends Controller
 
         Artisan::call('modelCache:clear');
 
-        Session::flash('status', __('Caches dropped successfully'));
+        Session::flash('status', __('controller.admintools.flash.caches_dropped_successfully'));
 
         return redirect()->route('admin.tools');
     }
@@ -408,7 +408,7 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             default:
-                abort(500, 'Invalid category');
+                abort(500, __('controller.admintools.error.mdt_invalid_category'));
                 break;
         }
 
@@ -418,12 +418,13 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exportreleases(Request $request)
     {
         Artisan::call('release:save');
 
-        Session::flash('status', __('Releases exported'));
+        Session::flash('status', __('controller.admintools.flash.releases_exported'));
 
         return view('admin.tools.list');
     }
@@ -442,6 +443,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exceptionselect(Request $request)
     {
@@ -456,9 +458,9 @@ class AdminToolsController extends Controller
     {
         switch ($request->get('exception')) {
             case 'TokenMismatchException':
-                throw new TokenMismatchException('Exception thrown in admin panel');
+                throw new TokenMismatchException(__('controller.admintools.flash.exception.token_mismatch'));
             case 'InternalServerError':
-                throw new Exception('Exception thrown in admin panel');
+                throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
         }
     }
 }

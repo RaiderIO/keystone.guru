@@ -1,6 +1,10 @@
-@extends('layouts.sitepage', ['breadcrumbsParams' => [$spell ?? null], 'showAds' => false, 'title' => __('views/admin.spell.edit.title')])
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$spell ?? null],
+    'showAds' => false,
+    'title' => $spell ? __('views/admin.spell.edit.title_edit') : __('views/admin.spell.edit.title_new')
+    ])
 @section('header-title')
-    {{ $headerTitle }}
+    {{ $spell ? __('views/admin.spell.edit.header_edit') : __('views/admin.spell.edit.header_new') }}
 @endsection
 <?php
 /**
@@ -36,7 +40,7 @@
 
     <div class="form-group{{ $errors->has('dispel_type') ? ' has-error' : '' }}">
         {!! Form::label('dispel_type', __('views/admin.spell.edit.dispel_type') . '<span class="form-required">*</span>', [], false) !!}
-        @php($dispelTypes = array_merge(['None'], $dispelTypes))
+        <?php $dispelTypes = array_merge(['None'], $dispelTypes); ?>
         {!! Form::select('dispel_type', array_combine($dispelTypes, $dispelTypes), null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'dispel_type'])
     </div>

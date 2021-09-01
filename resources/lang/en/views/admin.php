@@ -174,7 +174,10 @@ return [
     ],
     'spell'      => [
         'edit' => [
-            'title'             => 'Edit spell',
+            'title_new'         => 'New spell',
+            'header_new'        => 'New spell',
+            'title_edit'        => 'Edit spell',
+            'header_edit'       => 'Edit spell',
             'game_id'           => 'Game ID',
             'name'              => 'Name',
             'icon_name'         => 'Icon name',
@@ -196,7 +199,14 @@ return [
         ]
     ],
     'tools'      => [
-
+        'mdt' => [
+            'string' => [
+                'title'                        => 'View MDT String Contents',
+                'header'                       => 'View MDT String Contents',
+                'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
+                'submit'                       => 'Submit',
+            ]
+        ]
     ],
     'user'       => [
         'list' => [

@@ -80,8 +80,7 @@ class SpellController extends Controller
     {
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'     => Spell::ALL_SCHOOLS,
-            'headerTitle' => __('New spell')
+            'schools'     => Spell::ALL_SCHOOLS
         ]);
     }
 
@@ -95,8 +94,7 @@ class SpellController extends Controller
         return view('admin.spell.edit', [
             'spell'       => $spell,
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'     => Spell::ALL_SCHOOLS,
-            'headerTitle' => __('Edit spell')
+            'schools'     => Spell::ALL_SCHOOLS
         ]);
     }
 
@@ -117,7 +115,7 @@ class SpellController extends Controller
             $spell = $this->store($request, $spell);
 
             // Message to the user
-            Session::flash('status', __('Spell updated'));
+            Session::flash('status', __('controller.spell.flash.spell_updated'));
 
             // Display the edit page
             return $this->edit($request, $spell);
@@ -135,7 +133,7 @@ class SpellController extends Controller
         $spell = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('Spell %s created'), $spell->name));
+        Session::flash('status', sprintf(__('controller.spell.flash.spell_created'), $spell->name));
 
         return redirect()->route('admin.spell.edit', ['spell' => $spell->id]);
     }

@@ -4,13 +4,25 @@
 return [
     'admintools'           => [
         'error' => [
-            'mdt_string_format_not_recognized' => 'The MDT string format was not recognized.',
-            'invalid_mdt_string'               => 'Invalid MDT string',
-            'invalid_mdt_string_exception'     => 'Invalid MDT string: %s',
-            'mdt_importer_not_configured'      => 'MDT importer is not configured properly. Please contact the admin about this issue.',
+            'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
+            'invalid_mdt_string'                  => 'Invalid MDT string',
+            'invalid_mdt_string_exception'        => 'Invalid MDT string: %s',
+            'mdt_importer_not_configured'         => 'MDT importer is not configured properly. Please contact the admin about this issue.',
+            'mdt_unable_to_find_npc_for_id'       => 'Unable to find NPC for id %d',
+            'mdt_mismatched_health'               => 'NPC %s has mismatched health values, MDT: %s, KG: %s',
+            'mdt_mismatched_enemy_forces'         => 'NPC %s has mismatched enemy forces, MDT: %s, KG: %s',
+            'mdt_mismatched_enemy_forces_teeming' => 'NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s',
+            'mdt_mismatched_enemy_count'          => 'NPC %s has mismatched enemy count, MDT: %s, KG: %s',
+            'mdt_mismatched_enemy_type'           => 'NPC %s has mismatched enemy type, MDT: %s, KG: %s',
+            'mdt_invalid_category'                => 'Invalid category'
         ],
         'flash' => [
-
+            'caches_dropped_successfully' => 'Caches dropped successfully',
+            'releases_exported'           => 'Releases exported',
+            'exception'                   => [
+                'token_mismatch'        => '',
+                'internal_server_error' => 'Exception thrown in admin panel',
+            ]
         ],
     ],
     'apidungeonroute'      => [
@@ -73,6 +85,16 @@ return [
             'release_created' => 'Release created',
         ]
     ],
+    'mdtimport'            => [
+        'unknown_dungeon' => 'Unknown dungeon',
+        'error'           => [
+            'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
+            'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
+            'invalid_mdt_string'                    => 'Invalid MDT string',
+            'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
+            'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
+        ]
+    ],
     'profile'              => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',
@@ -89,6 +111,15 @@ return [
             'admins_cannot_delete_themselves'  => 'Admins cannot delete themselves!',
             'account_deleted_successfully'     => 'Account deleted successfully.',
             'error_deleting_account'           => 'An error occurred. Please try again.',
+        ],
+    ],
+    'spell'                => [
+        'error'       => [
+            'unable_to_save_spell' => 'Unable to save spell',
+        ],
+        'flash'       => [
+            'spell_updated' => 'Spell updated',
+            'spell_created' => 'Spell created',
         ],
     ],
     'team'                 => [
