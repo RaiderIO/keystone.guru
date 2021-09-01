@@ -148,7 +148,7 @@ class ExportString extends MDTBase
 
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
-                    $warnings->push(new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                    $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                         sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->npc_id),
                         ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                     ));

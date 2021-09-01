@@ -199,14 +199,44 @@ return [
         ]
     ],
     'tools'      => [
-        'mdt' => [
+        'datadump'     => [
+            'viewexporteddungeondata' => [
+                'title'   => 'Exported!',
+                'header'  => 'Dumped dungeon data',
+                'content' => 'Exported!',
+            ],
+            'viewexportedrelease'     => [
+                'title'   => 'Exported!',
+                'header'  => 'Dumped dungeon data',
+                'content' => 'Exported!',
+            ],
+        ],
+        'dungeonroute' => [
+            'view'         => [
+                'title'      => 'View dungeonroute',
+                'header'     => 'View dungeonroute',
+                'public_key' => 'Dungeonroute public key',
+                'submit'     => 'Submit',
+            ],
+            'viewcontents' => [
+                'title'  => 'View contents for :dungeonRouteTitle',
+                'header' => 'View contents for %s',
+            ]
+        ],
+        'exception'    => [
+
+        ],
+        'mdt'          => [
             'string' => [
                 'title'                        => 'View MDT String Contents',
                 'header'                       => 'View MDT String Contents',
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
                 'submit'                       => 'Submit',
             ]
-        ]
+        ],
+        'npcimport'    => [
+
+        ],
     ],
     'user'       => [
         'list' => [

@@ -5,6 +5,7 @@ return [
         'io' => [
             'export_string' => [
                 'category'                                        => [
+                    'pull'     => 'Pull %d',
                     'title'    => 'Title',
                     'map_icon' => 'Map icon',
                 ],

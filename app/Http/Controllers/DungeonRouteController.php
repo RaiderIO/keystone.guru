@@ -183,11 +183,7 @@ class DungeonRouteController extends Controller
 
             $newRoute = $dungeonroute->cloneRoute();
 
-//            if (!Auth::user()->hasPaidTier('unlimited-routes')) {
-//                Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
-//            } else {
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
-//            }
 
             return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
         } else {

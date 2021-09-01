@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['title' => __('Login'), 'showAds' => false])
+@extends('layouts.sitepage', ['title' => __('views/auth.login.title'), 'showAds' => false])
 
 @section('content')
     @include('common.forms.login')

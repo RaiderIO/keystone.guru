@@ -590,7 +590,7 @@ class DungeonRoute extends Model
         $this->pull_gradient = '';
         $this->pull_gradient_apply_always = 0;
 
-        $this->title = sprintf('%s Sandbox', __($this->dungeon->name));
+        $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
         $saveResult = $this->save();
@@ -783,7 +783,7 @@ class DungeonRoute extends Model
             $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
         // $dungeonroute->team_id = $this->team_id;
-        $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
+        $dungeonroute->title = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming = $this->teeming;
         $dungeonroute->enemy_forces = $this->enemy_forces;
@@ -981,22 +981,26 @@ class DungeonRoute extends Model
     {
         // Only add the 'clone of' when the user cloned it from someone else as a form of credit
         if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
-            $subTitle = sprintf('%s %s', __('Clone of'),
-                ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $this->clone_of]) . '">' . $this->clone_of . '</a>'
-            );
+            $subTitle = __('models.dungeonroute.subtitle_clone_of', [
+                'routeLink' => sprintf(
+                    ' <a href="%s">%s</a>',
+                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of]),
+                    $this->clone_of
+                )
+            ]);
         } else if ($this->demo) {
             if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
-                $subTitle = __('Used with Dratnos\' permission');
+                $subTitle = __('models.dungeonroute.permission_dratnos');
             } else if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
-                $subTitle = __('Used with Petko\'s permission');
+                $subTitle = __('models.dungeonroute.permission_petko');
             } else {
                 // You made this? I made this.jpg
                 $subTitle = '';
             }
         } else if ($this->isSandbox()) {
-            $subTitle = __('Sandbox route');
+            $subTitle = __('models.dungeonroute.subtitle_temporary_route');
         } else {
-            $subTitle = sprintf(__('By %s'), $this->author->name);
+            $subTitle = sprintf(__('models.dungeonroute.subtitle_author'), $this->author->name);
         }
 
         return $subTitle;

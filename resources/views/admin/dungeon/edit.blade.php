@@ -36,12 +36,6 @@
             @include('common.forms.form-error', ['key' => 'active'])
         </div>
 
-        {{--<div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">--}}
-        {{--    {!! Form::label('expansion_id', __('Expansion')) !!}--}}
-        {{--    {!! Form::select('expansion_id', $expansions, null, ['class' => 'form-control']) !!}--}}
-        {{--    @include('common.forms.form-error', ['key' => 'expansion_id'])--}}
-        {{--</div>--}}
-
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
             {!! Form::label('zone_id', __('views/admin.dungeon.edit.zone_id')) !!}
             {!! Form::number('zone_id', null, ['class' => 'form-control']) !!}
