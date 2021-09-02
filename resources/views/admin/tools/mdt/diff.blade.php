@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('MDT Diff')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.mdt.diff.title')])
 
-@section('header-title', __('MDT Diff'))
+@section('header-title', __('views/admin.tools.mdt.diff.header'))
 
 @section('scripts')
     @parent
@@ -41,18 +41,19 @@
 @section('content')
     <?php
     /** @var $warnings \Illuminate\Support\Collection */
-    $warnings = $warnings->groupBy(function ($item) {
+    $warnings = $warnings->groupBy(function ($item)
+    {
         /** @var $item \App\Logic\MDT\Exception\ImportWarning */
         return $item->getCategory();
     });
 
     $headers = [
-        'mismatched_health' => __('Mismatched health'),
-        'mismatched_enemy_count' => __('Mismatched enemy count'),
-        'mismatched_enemy_type' => __('Mismatched enemy type'),
-        'missing_npc' => __('Missing NPC'),
-        'mismatched_enemy_forces' => __('Mismatched enemy forces'),
-        'mismatched_enemy_forces_teeming' => __('Mismatched enemy forces (teeming)'),
+        'mismatched_health'               => __('views/admin.tools.mdt.diff.headers.mismatched_health'),
+        'mismatched_enemy_count'          => __('views/admin.tools.mdt.diff.headers.mismatched_enemy_count'),
+        'mismatched_enemy_type'           => __('views/admin.tools.mdt.diff.headers.mismatched_enemy_type'),
+        'missing_npc'                     => __('views/admin.tools.mdt.diff.headers.missing_npc'),
+        'mismatched_enemy_forces'         => __('views/admin.tools.mdt.diff.headers.mismatched_enemy_forces'),
+        'mismatched_enemy_forces_teeming' => __('views/admin.tools.mdt.diff.headers.mismatched_enemy_forces_teeming'),
     ]
     ?>
 
@@ -63,27 +64,33 @@
             </h1>
             <table class="w-100">
                 <tr>
-                    <th width="15%">{{ __('Dungeon') }}</th>
-                    <th width="20%">{{ __('NPC') }}</th>
-                    <th width="30%">{{ __('Message') }}</th>
-                    <th width="15%">{{ __('Actions') }}</th>
+                    <th width="15%">{{ __('views/admin.tools.mdt.diff.table_header_dungeon') }}</th>
+                    <th width="20%">{{ __('views/admin.tools.mdt.diff.table_header_npc') }}</th>
+                    <th width="30%">{{ __('views/admin.tools.mdt.diff.table_header_message') }}</th>
+                    <th width="15%">{{ __('views/admin.tools.mdt.diff.table_header_actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
                     <?php /** @var $importWarning \App\Logic\MDT\Exception\ImportWarning */
                     $data = ($importWarning->getData());
                     $mdtNpc = $data['mdt_npc'];
 
-                    $old = isset($data['old']) ? $data['old'] : '';
-                    $new = isset($data['new']) ? $data['new'] : '';
+                    $old = $data['old'] ?? '';
+                    $new = $data['new'] ?? '';
                     $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : 'No dungeon name found';
+                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('');
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
                             {{ $dungeonName }}
                         </td>
                         <td>
-                            {{ sprintf( '%s (%s, %s usages)', $mdtNpc->name ?? 'No NPC name found', $mdtNpc->id, $count) }}
+                            {{
+                            __('views/admin.tools.mdt.diff.npc_message', [
+                                'npcName' => $mdtNpc->name ?? __('views/admin.tools.mdt.diff.no_npc_name_found'),
+                                'npcId' => $mdtNpc->id,
+                                'count' => $count]
+                                )
+                             }}
                         </td>
                         <td>
                             {{ $importWarning->getMessage() }}
@@ -93,7 +100,7 @@
                                 <button class="btn btn-primary apply_btn"
                                         data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
                                         data-new="{{ $new }}">
-                                    {{ __('Apply (MDT -> KG)') }}
+                                    {{ __('views/admin.tools.mdt.diff.apply_mdt_kg') }}
                                 </button>
                             @endif
                         </td>
