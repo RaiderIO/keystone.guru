@@ -224,10 +224,41 @@ return [
             ]
         ],
         'exception'    => [
-
+            'select' => [
+                'title'                     => 'Throw an exception',
+                'header'                    => 'Throw an exception',
+                'select_exception_to_throw' => 'Select exception to throw',
+                'submit'                    => 'Submit',
+            ]
         ],
         'mdt'          => [
-            'string' => [
+            'diff'         => [
+                'title'                 => 'MDT Diff',
+                'header'                => 'MDT Diff',
+                'headers'               => [
+                    'mismatched_health'               => 'Mismatched health',
+                    'mismatched_enemy_count'          => 'Mismatched enemy count',
+                    'mismatched_enemy_type'           => 'Mismatched enemy type',
+                    'missing_npc'                     => 'Missing NPC',
+                    'mismatched_enemy_forces'         => 'Mismatched enemy forces',
+                    'mismatched_enemy_forces_teeming' => 'Mismatched enemy forces (teeming)',
+                ],
+                'table_header_dungeon'  => 'Dungeon',
+                'table_header_npc'      => 'NPC',
+                'table_header_message'  => 'Message',
+                'table_header_actions'  => 'Actions',
+                'no_dungeon_name_found' => 'No dungeon name found',
+                'no_npc_name_found'     => 'No NPC name found',
+                'npc_message'           => ':npcName (:npcId, :count usages)',
+                'apply_mdt_kg'          => 'Apply (MDT -> KG)',
+            ],
+            'dungeonroute' => [
+                'title'      => 'View dungeonroute as MDT String',
+                'header'     => 'View dungeonroute as MDT String',
+                'public_key' => 'Dungeonroute public key',
+                'submit'     => 'Submit',
+            ],
+            'string'       => [
                 'title'                        => 'View MDT String Contents',
                 'header'                       => 'View MDT String Contents',
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
