@@ -21,7 +21,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
 if ($team !== null) {
     $searchTags = $team->getAvailableTags();
-} elseif (Auth::check()) {
+} else if (Auth::check()) {
     $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
     $searchTags = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
 } else {
@@ -76,7 +76,7 @@ if (Auth::check()) {
 <div class="row no-gutters">
     @if($team instanceof \App\Models\Team)
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('team_name', __('Team')) !!}
+            {!! Form::label('team_name', __('views/common.dungeonroute.table.team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
         </div>
     @endisset
@@ -84,7 +84,7 @@ if (Auth::check()) {
         @include('common.dungeon.select', ['id' => 'dungeonroute_search_dungeon_id', 'showAll' => true, 'required' => false])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('affixes[]', __('Affixes')) !!}
+        {!! Form::label('affixes[]', __('views/common.dungeonroute.table.affixes')) !!}
         {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
             ['id' => 'affixes',
             'class' => 'form-control affixselect selectpicker',
@@ -110,20 +110,20 @@ if (Auth::check()) {
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('{0} requirements')
+            'data-count-selected-text' => __('views/common.dungeonroute.table.requirements_selected')
         ]) !!}
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('dungeonroute_tags_select[]', __('Tags')) !!}
+            {!! Form::label('dungeonroute_tags_select[]', __('views/common.dungeonroute.table.tags')) !!}
             {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,
                 ['id' => 'dungeonroute_tags_select',
                 'class' => 'form-control selectpicker',
                 'multiple' => 'multiple',
                 // Change the original text
-                'title' => $searchTags->isEmpty() ? __('No tags available') : false,
+                'title' => $searchTags->isEmpty() ? __('views/common.dungeonroute.table.tags_title') : false,
                 'data-selected-text-format' => 'count > 1',
-                'data-count-selected-text' => __('{0} tags selected')]) !!}
+                'data-count-selected-text' => __('views/common.dungeonroute.table.tags_selected')]) !!}
         </div>
     @endif
     <div class="col-lg pl-1 pr-1">
@@ -131,7 +131,7 @@ if (Auth::check()) {
             &nbsp;
         </div>
         <button id="dungeonroute_filter" class="btn btn-info col-lg">
-            <i class="fas fa-filter"></i> {{ __('Filter') }}
+            <i class="fas fa-filter"></i> {{ __('views/common.dungeonroute.table.filter') }}
         </button>
     </div>
     <div class="col-lg pl-1 pr-1">

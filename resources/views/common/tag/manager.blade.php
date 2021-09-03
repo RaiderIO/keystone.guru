@@ -4,8 +4,8 @@
 /** @var string $theme */
 
 $tagCategoryNameMapping = [
-    1 => __('Route'),
-    2 => __('Route')
+    1 => __('views/common.tag.manager.route_personal'),
+    2 => __('views/common.tag.manager.route_team')
 ];
 
 $tagCategory = \App\Models\Tags\TagCategory::fromName($category);

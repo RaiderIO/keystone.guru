@@ -10,7 +10,7 @@ ob_start();
         </div>
     </div>
     <div class="row no-gutters">
-        <div class="col pl-2" data-toggle="tooltip" title="{{ sprintf(__('+2: %s, +3: %s'),
+        <div class="col pl-2" data-toggle="tooltip" title="{{ sprintf(__('views/common.maps.controls.elements.dungeonrouteinfo.timer_title'),
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusTwoSeconds()),
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusThreeSeconds()))
                         }}">

@@ -9,6 +9,9 @@ return [
         'title'                             => 'Affixes',
         'header'                            => 'Weekly affixes in %s',
         'start_date'                        => 'Start date (%s)',
+        '2'                                 => '+2',
+        '4'                                 => '+4',
+        '7'                                 => '+7',
         '10_seasonal'                       => '+10 (Seasonal)',
         'previous'                          => 'Previous',
         'next'                              => 'Next',
@@ -21,8 +24,11 @@ return [
         'header' => 'Changelog',
     ],
     'credits'   => [
-        'title'  => 'Credits',
-        'header' => 'Credits',
+        'title'            => 'Credits',
+        'header'           => 'Credits',
+        'header_people'    => 'People',
+        'header_libraries' => 'Libraries',
+        'header_images'    => 'Images',
     ],
     'demo'      => [
         'title'  => 'Demo routes',
@@ -43,9 +49,9 @@ return [
         'enemy_forces'                  => 'Enemy forces',
         'npcs_assigned'                 => 'NPCs assigned',
     ],
-    'status' => [
-        'title' => 'Status',
-        'header' => 'Status',
+    'status'    => [
+        'title'       => 'Status',
+        'header'      => 'Status',
         'description' => 'We\'re up, yay!',
     ]
 ];

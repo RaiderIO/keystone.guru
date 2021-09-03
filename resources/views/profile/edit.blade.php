@@ -76,11 +76,6 @@ $deleteConsequences = $user->getDeleteConsequences();
                     @include('common.forms.form-error', ['key' => 'name'])
                 </div>
             @endif
-            {{--            <div class="form-group{{ $errors->has('theme') ? ' has-error' : '' }}">--}}
-            {{--                {!! Form::label('theme', __('Theme')) !!}--}}
-            {{--                {!! Form::select('theme', config('keystoneguru.themes'), null, ['class' => 'form-control']) !!}--}}
-            {{--                @include('common.forms.form-error', ['key' => 'theme'])--}}
-            {{--            </div>--}}
             @if(!$isOAuth)
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     {!! Form::label('email', __('views/profile.edit.email')) !!}

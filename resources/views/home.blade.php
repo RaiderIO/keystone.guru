@@ -97,10 +97,11 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('Create your own routes') }}"
+                        <img class="lux_image"
+                             src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>

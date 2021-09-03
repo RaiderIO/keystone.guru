@@ -175,7 +175,7 @@ Breadcrumbs::for('admin', function (Generator $trail)
 Breadcrumbs::for('admin.tools.list', function (Generator $trail)
 {
     $trail->parent('admin');
-    $trail->push(__('Admin tools'), route('admin.tools'));
+    $trail->push(__('breadcrumbs.home.admin.tools.admin_tools'), route('admin.tools'));
 });
 Breadcrumbs::for('admin.tools.datadump.viewexporteddungeondata', function (Generator $trail)
 {
