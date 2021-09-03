@@ -266,7 +266,33 @@ return [
             ]
         ],
         'npcimport'    => [
+            'title'                   => 'Mass import NPCs',
+            'header'                  => 'Mass import NPCs',
+            'paste_npc_import_string' => 'Paste the NPC import string',
+            'submit'                  => 'Submit',
+        ],
+        'list'         => [
+            'title'            => 'Admin tools',
+            'header'           => 'Admin tools',
+            'header_tools'     => 'Tools',
+            'subheader_import' => 'Import',
+            'mass_import_npcs' => 'Mass import NPCs',
 
+            'subheader_dungeonroute'    => 'Dungeonroute',
+            'view_dungeonroute_details' => 'View Dungeonroute details',
+
+            'subheader_mdt'                   => 'MDT',
+            'view_mdt_string_as_dungeonroute' => 'View MDT String as Dungeonroute',
+            'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
+            'view_mdt_diff'                   => 'View MDT Diff',
+
+            'subheader_misc'     => 'Misc',
+            'drop_caches'        => 'Drop caches',
+            'throw_an_exception' => 'Throw an exception',
+
+            'subheader_actions'   => 'Actions',
+            'export_dungeon_data' => 'Export dungeon data',
+            'export_releases'     => 'Export releases',
         ],
     ],
     'user'       => [

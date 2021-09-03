@@ -6,7 +6,7 @@ $mapEnemyAggressivenessBorder = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0
 $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 ?>
 <div class="draw_settings_tools container">
-    <h4>{{ __('Enemies') }}</h4>
+    <h4>{{ __('views/common.forms.mapsettings.enemies') }}</h4>
 
     <!-- Enemy number style -->
     <div class="form-group">
@@ -124,7 +124,7 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     @if($edit)
-        <h4 class="mt-4">{{ __('Drawing') }}</h4>
+        <h4 class="mt-4">{{ __('views/common.forms.mapsettings.drawing') }}</h4>
         <!-- Default line weight -->
         <div class="form-group">
             <div class="row">
@@ -148,14 +148,4 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             </div>
         </div>
     @endif
-
-    {{--    <div class="form-group mb-0">--}}
-    {{--        <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">--}}
-    {{--            <i class="fas fa-save"></i> {{ __('Save settings') }}--}}
-    {{--        </button>--}}
-    {{--        <button id="save_map_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"--}}
-    {{--                style="display: none;">--}}
-    {{--            <i class="fas fa-circle-notch fa-spin"></i>--}}
-    {{--        </button>--}}
-    {{--    </div>--}}
 </div>

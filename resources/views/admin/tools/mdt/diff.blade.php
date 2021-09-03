@@ -77,7 +77,7 @@
                     $old = $data['old'] ?? '';
                     $new = $data['new'] ?? '';
                     $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('');
+                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('views/admin.tools.mdt.diff.no_dungeon_name_found');
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>

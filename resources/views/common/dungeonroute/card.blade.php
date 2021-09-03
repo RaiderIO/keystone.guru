@@ -133,7 +133,7 @@ ob_start(); ?>
                         <span class="text-success"> <i class="fas fa-check-circle"></i> </span>
                     @endif
                     {{ sprintf(
-                        __('%s/%s (%s%%)'),
+                        '%s/%s (%s%%)',
                         $dungeonroute->enemy_forces,
                         $dungeonroute->dungeon->enemy_forces_required,
                         $enemyForcesPercentage

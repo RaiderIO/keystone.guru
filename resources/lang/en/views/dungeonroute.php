@@ -11,6 +11,7 @@ return [
             ],
         ],
         'discover' => [
+            'title'                      => 'Routes',
             'popular'                    => 'Popular routes',
             'popular_by_current_affixes' => 'Popular routes by current affixes',
             'popular_by_next_affixes'    => 'Popular routes by next affixes',
@@ -45,6 +46,7 @@ return [
         'title' => 'Edit %s',
     ],
     'embed'          => [
+        'title'            => 'Embed :routeTitle',
         'any'              => 'Any',
         'select_floor'     => 'Select floor',
         'affixes_title'    => 'Affixes',

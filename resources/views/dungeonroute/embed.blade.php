@@ -1,4 +1,11 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeonroute->title, 'cookieConsent' => false])
+@extends('layouts.map', [
+    'showAds' => false,
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => __('views/dungeonroute.embed.title', ['routeTitle' => $dungeonroute->title]),
+    'cookieConsent' => false
+])
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */

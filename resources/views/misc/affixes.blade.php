@@ -33,13 +33,13 @@ if ($timezone === null) {
                             {{ sprintf(__('views/misc.affixes.start_date'), $timezone) }}
                         </th>
                         <th width="20%">
-                            {{ __('+2') }}
+                            {{ __('views/misc.affixes.2') }}
                         </th>
                         <th width="20%">
-                            {{ __('+4') }}
+                            {{ __('views/misc.affixes.4') }}
                         </th>
                         <th width="20%">
-                            {{ __('+7') }}
+                            {{ __('views/misc.affixes.7') }}
                         </th>
                         <th width="20%">
                             {{ __('views/misc.affixes.10_seasonal') }}

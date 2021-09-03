@@ -1,4 +1,9 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'breadcrumbs' => 'dungeonroutes', 'title' => __('Routes')])
+@extends('layouts.sitepage', [
+    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'breadcrumbs' =>
+    'dungeonroutes',
+    'title' => __('views/dungeonroute.discover.discover.title')
+])
 
 <?php
 /**
@@ -23,7 +28,7 @@
     </div>
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('views/dungeonroute.discover.dungeon.overview.popular'),
+        'title' => __('views/dungeonroute.discover.discover.popular'),
         'link' => route('dungeonroutes.popular'),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
@@ -47,7 +52,7 @@
     @endif
 
     @include('dungeonroute.discover.panel', [
-        'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
+        'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
         'link' => route('dungeonroutes.nextweek'),
         // The next week's affix group is current for that week
         'currentAffixGroup' => $nextAffixGroup,

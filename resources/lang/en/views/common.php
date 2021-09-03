@@ -42,10 +42,17 @@ return [
             'nr_of_votes' => '%s vote(s)'
         ],
         'table'      => [
-            'affixes_selected'   => '{0} affixes selected',
-            'requirements'       => 'Requirements',
-            'enemy_enemy_forces' => 'Enough enemy forces',
-            'favorite'           => 'Favorite'
+            'team'                  => 'Team',
+            'affixes'               => 'Affixes',
+            'affixes_selected'      => '{0} affixes selected',
+            'requirements'          => 'Requirements',
+            'enemy_enemy_forces'    => 'Enough enemy forces',
+            'favorite'              => 'Favorite',
+            'requirements_selected' => '{0} requirements',
+            'tags'                  => 'Tags',
+            'tags_title'            => 'No tags available',
+            'tags_selected'         => '{0} tags selected',
+            'filter'                => 'Filter',
         ],
         'tier'       => [
             'data_by_subcreation' => '%s - data by https://mplus.subcreation.net',
@@ -215,6 +222,7 @@ return [
             'elements'  => [
                 'dungeonrouteinfo'         => [
                     'timer'            => 'Timer',
+                    'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Group setup',
                     'affixes'          => 'Affixes',
                     'route_info_title' => 'Route info',
@@ -238,6 +246,7 @@ return [
                     'mdt' => 'MDT',
                 ],
                 'rating'                   => [
+                    'rate_this_route'          => 'Rate this route',
                     'unable_to_rate_own_route' => 'You cannot rate your own route',
                     'your_rating'              => 'Your rating',
                 ]
@@ -347,6 +356,8 @@ return [
     ],
     'tag'          => [
         'manager' => [
+            'route_personal' => 'Route',
+            'route_team'     => 'Route',
             'name'           => 'Name',
             'color'          => 'Color',
             'usage'          => 'Usage',

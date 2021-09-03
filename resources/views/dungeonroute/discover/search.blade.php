@@ -45,13 +45,6 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
             @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('views/dungeonroute.discover.search.title')])
                 {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('views/dungeonroute.discover.search.title_placeholder'), 'autocomplete' => 'off']) !!}
             @endcomponent
-            {{--            @component('common.dungeonroute.search.filter', ['key' => 'complexity', 'text' => __('Difficulty')])--}}
-            {{--                <input id="difficulty" type="checkbox"--}}
-            {{--                       checked="checked"--}}
-            {{--                       data-toggle="toggle" data-width="100%" data-height="20px"--}}
-            {{--                       data-onstyle="primary" data-offstyle="primary"--}}
-            {{--                       data-on="{{ __('Simple') }}" data-off="{{ __('Complex') }}">--}}
-            {{--            @endcomponent--}}
             @component('common.dungeonroute.search.filter', ['key' => 'level', 'text' => __('views/dungeonroute.discover.search.key_level')])
                 <input id="level" type="text" name="level" value="{{ old('level') }}" style="display: none;"/>
             @endcomponent
