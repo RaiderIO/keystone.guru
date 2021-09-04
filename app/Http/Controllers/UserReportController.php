@@ -16,7 +16,7 @@ class UserReportController extends Controller
     {
         $userReports = UserReport::where('status', 0)->get();
         // Ugly way of loading this relationship, eager loading with dynamic relations don't work!
-        foreach($userReports as $userReport){
+        foreach ($userReports as $userReport) {
             $userReport->model;
         }
         return view('admin.userreport.list', ['models' => $userReports]);

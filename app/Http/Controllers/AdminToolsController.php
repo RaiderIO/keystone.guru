@@ -82,7 +82,7 @@ class AdminToolsController extends Controller
         $aggressivenessMapping = [
             -1 => 'aggressive',
             0  => 'neutral',
-            1  => 'friendly'
+            1  => 'friendly',
         ];
 
         try {
@@ -104,12 +104,12 @@ class AdminToolsController extends Controller
                     $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                 }
 
-                $npcCandidate->id = $npcData['id'];
+                $npcCandidate->id                = $npcData['id'];
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
-                $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
+                $npcCandidate->npc_type_id       = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
                 $npcCandidate->dungeon_id = count($npcData['location']) >= 8 ? -1 : $dungeon->id;
-                $npcCandidate->name = $npcData['name'];
+                $npcCandidate->name       = $npcData['name'];
                 // Do not overwrite health if it was set already
                 if ($npcCandidate->base_health <= 0) {
                     $npcCandidate->base_health = 12345;
@@ -146,11 +146,11 @@ class AdminToolsController extends Controller
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
             'brushlines', 'paths', 'author', 'killzones', 'pridefulenemies', 'publishedstate',
-            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team'
+            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
         ])->where('public_key', $request->get('public_key'))->firstOrFail();
 
         return view('admin.tools.dungeonroute.viewcontents', [
-            'dungeonroute' => $dungeonRoute
+            'dungeonroute' => $dungeonRoute,
         ]);
     }
 
@@ -274,7 +274,7 @@ class AdminToolsController extends Controller
     public function mdtdiff()
     {
         $warnings = new Collection();
-        $npcs = Npc::with(['enemies', 'type'])->get();
+        $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
@@ -383,8 +383,8 @@ class AdminToolsController extends Controller
     public function applychange(Request $request)
     {
         $category = $request->get('category');
-        $npcId = $request->get('npc_id');
-        $value = $request->get('value');
+        $npcId    = $request->get('npc_id');
+        $value    = $request->get('value');
 
         /** @var Npc $npc */
         $npc = Npc::find($npcId);
@@ -403,7 +403,7 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             case 'mismatched_enemy_type':
-                $npcType = NpcType::where('type', $value)->first();
+                $npcType          = NpcType::where('type', $value)->first();
                 $npc->npc_type_id = $npcType->id;
                 $npc->save();
                 break;

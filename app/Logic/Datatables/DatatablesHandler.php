@@ -34,7 +34,7 @@ abstract class DatatablesHandler
 
     public function __construct(Request $request)
     {
-        $this->_request = $request;
+        $this->_request        = $request;
         $this->_columnHandlers = [];
     }
 
@@ -129,7 +129,7 @@ abstract class DatatablesHandler
         $data = $this->_builder->get();
 
         $recordsTotal = $this->calculateRecordsTotal();
-        $result = [
+        $result       = [
             'draw'            => (int)$this->_request->get('draw'),
             // Initial amount of records
             'recordsTotal'    => $recordsTotal,
@@ -140,7 +140,7 @@ abstract class DatatablesHandler
             // Only show this info in dev instance
             'input'           => $isDev ? $this->_request->toArray() : [],
             // Debug sql queries for optimization
-            'queries'         => $isDev ? DB::getQueryLog() : []
+            'queries'         => $isDev ? DB::getQueryLog() : [],
         ];
 
         if ($isDev) {

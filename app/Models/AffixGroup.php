@@ -69,7 +69,7 @@ class AffixGroup extends CacheModel
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {
-            $result = sprintf(__('affixes.seasonal_index_preset'),$result, $this->seasonal_index + 1);
+            $result = sprintf(__('affixes.seasonal_index_preset'), $result, $this->seasonal_index + 1);
         }
 
         return $result;

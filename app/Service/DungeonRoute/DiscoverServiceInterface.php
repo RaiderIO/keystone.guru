@@ -6,7 +6,6 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 interface DiscoverServiceInterface

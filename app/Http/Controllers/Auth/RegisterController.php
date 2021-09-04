@@ -58,10 +58,10 @@ class RegisterController extends Controller
             'email'                 => 'required|email|max:255|unique:users',
             'game_server_region_id' => 'nullable|int',
             'password'              => 'required|min:8|confirmed',
-            'legal_agreed'          => 'required|accepted'
+            'legal_agreed'          => 'required|accepted',
         ], [
             'legal_agreed.required' => __('controller.register.legal_agreed_required'),
-            'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted')
+            'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted'),
         ]);
     }
 
@@ -85,7 +85,7 @@ class RegisterController extends Controller
             'game_server_region_id' => $data['region'],
             'password'              => bcrypt($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
-            'legal_agreed_ms'       => intval($data['legal_agreed_ms'])
+            'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
         $user->attachRole($userRole);

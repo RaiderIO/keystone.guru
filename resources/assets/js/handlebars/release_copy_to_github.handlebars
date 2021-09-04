@@ -1,11 +1,11 @@
 {{#ifCond description '!=' null}}
-{{description}}
+    {{description}}
 
 {{/ifCond}}
 {{#each categories }}
-{{category}}:
-{{#each changes}}
-* {{#ifCond ticket_id '>' 0 }}#{{ticket_id}} {{/ifCond}}{{change}}
-{{/each}}
+    {{category}}:
+    {{#each changes}}
+        * {{#ifCond ticket_id '>' 0 }}#{{ticket_id}} {{/ifCond}}{{change}}
+    {{/each}}
 
 {{/each}}

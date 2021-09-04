@@ -19,10 +19,10 @@ class TeamCount extends Measurement
                 null,
                 $this->getTags(),
                 [
-                    'all' => Team::count()
+                    'all' => Team::count(),
                 ],
                 time()
-            )
+            ),
         ];
     }
 }

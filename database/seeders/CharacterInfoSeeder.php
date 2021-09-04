@@ -24,7 +24,7 @@ class CharacterInfoSeeder extends Seeder
         $this->command->info('Adding known races');
 
         $alliance_id = Faction::where('name', '=', 'Alliance')->first()->id;
-        $horde_id = Faction::where('name', '=', 'Horde')->first()->id;
+        $horde_id    = Faction::where('name', '=', 'Horde')->first()->id;
 
         if ($alliance_id === 0 || $horde_id === 0) {
             throw new \Exception('Unable to find factions');
@@ -90,12 +90,12 @@ class CharacterInfoSeeder extends Seeder
             /** @var $race Model */
             $class->save();
 
-            $iconName = strtolower(str_replace(' ', '', $class->name));
-            $icon = new File();
-            $icon->model_id = $class->id;
+            $iconName          = strtolower(str_replace(' ', '', $class->name));
+            $icon              = new File();
+            $icon->model_id    = $class->id;
             $icon->model_class = get_class($class);
-            $icon->disk = 'public';
-            $icon->path = sprintf('images/classes/%s.png', $iconName);
+            $icon->disk        = 'public';
+            $icon->path        = sprintf('images/classes/%s.png', $iconName);
             $icon->save();
 
             $class->icon_file_id = $icon->id;
@@ -106,44 +106,44 @@ class CharacterInfoSeeder extends Seeder
         // In order of the way $classes is structured
         // @formatter:off
         $raceClassMatrix = [
-            'Human' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
-            'Dwarf' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
-            'Night Elf' =>              ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x'],
-            'Gnome' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Draenei' =>                ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' '],
-            'Worgen' =>                 ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' '],
-            'Void Elf' =>               ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Lightforged Draenei' =>    ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
-            'Dark Iron Dwarf' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
+            'Human'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
+            'Dwarf'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
+            'Night Elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x'],
+            'Gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'Draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' '],
+            'Worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' '],
+            'Void Elf'            => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'Lightforged Draenei' => ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
+            'Dark Iron Dwarf'     => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
 
-            'PandarenAlliance' =>       ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'PandarenHorde' =>          ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'PandarenAlliance' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'PandarenHorde'    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-            'Orc' =>                    ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
-            'Undead' =>                 ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Tauren' =>                 ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' '],
-            'Troll' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
-            'Blood Elf' =>              ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
-            'Goblin' =>                 ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
-            'Nightborne' =>             ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Highmountain Tauren' =>    ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
-            'Mag\'har Orc' =>           ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'Orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'Undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'Tauren'              => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' '],
+            'Troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
+            'Blood Elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
+            'Goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
+            'Nightborne'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'Highmountain Tauren' => ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
+            'Mag\'har Orc'        => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-            'Kul Tiran Human' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
-            'Zandalari Troll' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
+            'Kul Tiran Human' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'Zandalari Troll' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
         ];
         // @formatter:on
 
         foreach ($raceClassMatrix as $raceStr => $raceClasses) {
             $race = $races[$raceStr];
-            $i = 0;
+            $i    = 0;
             foreach ($raceClasses as $raceClass) {
                 if ($raceClass === 'x') {
-                    $keys = array_keys($classes);
+                    $keys  = array_keys($classes);
                     $class = $classes[$keys[$i]];
 
-                    $raceClassCoupling = new CharacterRaceClassCoupling();
-                    $raceClassCoupling->character_race_id = $race->id;
+                    $raceClassCoupling                     = new CharacterRaceClassCoupling();
+                    $raceClassCoupling->character_race_id  = $race->id;
                     $raceClassCoupling->character_class_id = $class->id;
 
                     $raceClassCoupling->save();
@@ -156,18 +156,18 @@ class CharacterInfoSeeder extends Seeder
         $this->command->info('Adding known class/specialization combinations');
         // @formatter:off
         $classSpecializationMatrix = [
-            'Death Knight'  => ['Blood', 'Frost', 'Unholy'],
-            'Demon Hunter'  => ['Havoc', 'Vengeance'],
-            'Druid'         => ['Balance', 'Feral', 'Guardian', 'Restoration'],
-            'Hunter'        => ['Beast Mastery', 'Marksman', 'Survival'],
-            'Mage'          => ['Arcane', 'Fire', 'Frost'],
-            'Monk'          => ['Brewmaster', 'Mistweaver', 'Windwalker'],
-            'Paladin'       => ['Holy', 'Protection', 'Retribution'],
-            'Priest'        => ['Discipline', 'Holy', 'Shadow'],
-            'Rogue'         => ['Assassination', 'Outlaw', 'Subtlety'],
-            'Shaman'        => ['Elemental', 'Enhancement', 'Restoration'],
-            'Warlock'       => ['Affliction', 'Demonology', 'Destruction'],
-            'Warrior'       => ['Arms', 'Fury', 'Protection'],
+            'Death Knight' => ['Blood', 'Frost', 'Unholy'],
+            'Demon Hunter' => ['Havoc', 'Vengeance'],
+            'Druid'        => ['Balance', 'Feral', 'Guardian', 'Restoration'],
+            'Hunter'       => ['Beast Mastery', 'Marksman', 'Survival'],
+            'Mage'         => ['Arcane', 'Fire', 'Frost'],
+            'Monk'         => ['Brewmaster', 'Mistweaver', 'Windwalker'],
+            'Paladin'      => ['Holy', 'Protection', 'Retribution'],
+            'Priest'       => ['Discipline', 'Holy', 'Shadow'],
+            'Rogue'        => ['Assassination', 'Outlaw', 'Subtlety'],
+            'Shaman'       => ['Elemental', 'Enhancement', 'Restoration'],
+            'Warlock'      => ['Affliction', 'Demonology', 'Destruction'],
+            'Warrior'      => ['Arms', 'Fury', 'Protection'],
         ];
         // @formatter:on
 
@@ -177,22 +177,22 @@ class CharacterInfoSeeder extends Seeder
             $class = $classes[$classStr];
             // For each of their specs
             foreach ($specializations as $specialization) {
-                $characterClassSpecialization = new CharacterClassSpecialization();
+                $characterClassSpecialization                     = new CharacterClassSpecialization();
                 $characterClassSpecialization->character_class_id = $class->id;
-                $characterClassSpecialization->name = $specialization;
+                $characterClassSpecialization->name               = $specialization;
                 // Dummy file ID
                 $characterClassSpecialization->icon_file_id = -1;
 
                 $characterClassSpecialization->save();
 
                 $classKey = strtolower(str_replace(' ', '', $class->name));
-                $specKey = strtolower(str_replace(' ', '', $specialization));
+                $specKey  = strtolower(str_replace(' ', '', $specialization));
 
-                $icon = new File();
-                $icon->model_id = $characterClassSpecialization->id;
+                $icon              = new File();
+                $icon->model_id    = $characterClassSpecialization->id;
                 $icon->model_class = get_class($characterClassSpecialization);
-                $icon->disk = 'public';
-                $icon->path = sprintf('images/specializations/%s/%s_%s.png', $classKey, $classKey, $specKey);
+                $icon->disk        = 'public';
+                $icon->path        = sprintf('images/specializations/%s/%s_%s.png', $classKey, $classKey, $specKey);
                 $icon->save();
 
                 $characterClassSpecialization->icon_file_id = $icon->id;

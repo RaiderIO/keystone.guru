@@ -33,8 +33,8 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function __construct(DungeonRoute $dungeonRoute, int $floorIndex)
     {
-        $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
-        $this->model = $dungeonRoute;
+        $this->queue      = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
+        $this->model      = $dungeonRoute;
         $this->floorIndex = $floorIndex;
     }
 
@@ -71,9 +71,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 
         $filename = self::_getFilename($this->model, $this->floorIndex);
 
-        $tmpFile = sprintf('/tmp/%s', $filename);
+        $tmpFile    = sprintf('/tmp/%s', $filename);
         $publicPath = public_path('images/route_thumbnails/');
-        $target = self::_getTargetFilePath($this->model, $this->floorIndex);
+        $target     = self::_getTargetFilePath($this->model, $this->floorIndex);
 
         // puppeteer chromium-browser
         $process = new Process([
@@ -84,10 +84,10 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             route('dungeonroute.preview', [
                 'dungeonroute' => $this->model->public_key,
                 'floorindex'   => $this->floorIndex,
-                'secret'       => config('keystoneguru.thumbnail.preview_secret')
+                'secret'       => config('keystoneguru.thumbnail.preview_secret'),
             ]),
             // Second argument; where to save the resulting image
-            $tmpFile
+            $tmpFile,
         ]);
 
         Log::channel('scheduler')->info($process->getCommandLine());

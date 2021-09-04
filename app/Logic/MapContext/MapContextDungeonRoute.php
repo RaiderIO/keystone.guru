@@ -3,7 +3,6 @@
 
 namespace App\Logic\MapContext;
 
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 

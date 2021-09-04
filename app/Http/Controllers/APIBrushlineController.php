@@ -38,7 +38,7 @@ class APIBrushlineController extends Controller
         $brushline = Brushline::findOrNew($request->get('id'));
 
         $brushline->dungeon_route_id = $dungeonroute->id;
-        $brushline->floor_id = (int) $request->get('floor_id');
+        $brushline->floor_id         = (int)$request->get('floor_id');
 
         // Init to a default value if new
         if (!$brushline->exists) {

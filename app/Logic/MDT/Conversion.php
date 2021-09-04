@@ -154,7 +154,7 @@ class Conversion
             9  => 12,
             10 => 1,
             11 => 2,
-            12 => 3
+            12 => 3,
         ];
         return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
     }
@@ -182,7 +182,7 @@ class Conversion
             11 => 7,
             0  => 8,
             1  => 9,
-            2  => 10
+            2  => 10,
         ];
 
         return $weekMapping[$weekIndex];

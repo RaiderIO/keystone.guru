@@ -55,15 +55,15 @@ class DungeonRoutePathsRelationParser implements RelationParser
             $path->save();
 
             $polyline['model_class'] = get_class($path);
-            $polyline['model_id'] = $path->id;
+            $polyline['model_id']    = $path->id;
 
             // Insert polyline, while capturing the result and coupling to the path
             $path->polyline_id = Polyline::insertGetId($polyline);
             $path->save();
 
             // Restore awakened obelisk data
-            foreach($awakenedObeliskLinkData as $data ){
-                $data['source_map_object_id'] = $path->id;
+            foreach ($awakenedObeliskLinkData as $data) {
+                $data['source_map_object_id']         = $path->id;
                 $data['source_map_object_class_name'] = get_class($path);
                 MapObjectToAwakenedObeliskLink::insert($data);
             }

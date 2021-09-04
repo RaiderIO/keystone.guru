@@ -47,7 +47,7 @@ class Telemetry extends Command
             new DungeonRouteCount(),
 
             // Machine
-            new MachineStats()
+            new MachineStats(),
         ];
     }
 

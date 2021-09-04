@@ -85,7 +85,7 @@ class ProfileController extends Controller
             if ($request->has('name') && !$user->changed_username) {
                 // Only when the user's name has actually changed
                 if ($user->name !== $request->get('name')) {
-                    $user->name = $request->get('name');
+                    $user->name             = $request->get('name');
                     $user->changed_username = true;
                 }
             }
@@ -93,11 +93,11 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
-        $user->theme = $request->get('theme');
-        $user->echo_color = $request->get('echo_color', randomHexColor());
-        $user->echo_anonymous = $request->get('echo_anonymous', false);
+        $user->theme                 = $request->get('theme');
+        $user->echo_color            = $request->get('echo_color', randomHexColor());
+        $user->echo_anonymous        = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
-        $user->timezone = $request->get('timezone');
+        $user->timezone              = $request->get('timezone');
 
         // Check if these things already exist or not, if so notify the user that they couldn't be saved
         $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->count() > 0;
@@ -195,8 +195,8 @@ class ProfileController extends Controller
      */
     public function changepassword(Request $request)
     {
-        $currentPw = $request->get('current_password');
-        $newPassword = $request->get('new_password');
+        $currentPw          = $request->get('current_password');
+        $newPassword        = $request->get('new_password');
         $newPasswordConfirm = $request->get('new_password-confirm');
 
         $user = Auth::getUser();

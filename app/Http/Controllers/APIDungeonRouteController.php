@@ -64,10 +64,10 @@ class APIDungeonRouteController extends Controller
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
-        $userId = (int)$request->get('user_id', 0);
+        $userId        = (int)$request->get('user_id', 0);
         // Check if we should load the team's tags or the personal tags
         $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
-        $tagCategory = TagCategory::fromName($tagCategoryName);
+        $tagCategory     = TagCategory::fromName($tagCategoryName);
 
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
@@ -79,8 +79,7 @@ class APIDungeonRouteController extends Controller
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query)
-            {
+            ->where(function ($query) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -100,7 +99,7 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
         }
 
@@ -128,8 +127,7 @@ class APIDungeonRouteController extends Controller
 
             // Handle favorites
             if (array_search('favorite', $requirements) !== false || $request->get('favorites', false)) {
-                $routes = $routes->whereHas('favorites', function ($query) use (&$user)
-                {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
@@ -196,7 +194,7 @@ class APIDungeonRouteController extends Controller
             // Allow sorting by views
             new ViewsColumnHandler($dtHandler),
             // Allow sorting by rating
-            new RatingColumnHandler($dtHandler)
+            new RatingColumnHandler($dtHandler),
         ])->applyRequestToBuilder()->getResult();
     }
 
@@ -216,8 +214,7 @@ class APIDungeonRouteController extends Controller
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query)
-            {
+            ->where(function ($query) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -238,14 +235,12 @@ class APIDungeonRouteController extends Controller
         if ($request->has('level')) {
             $split = explode(';', $request->get('level'));
             if (count($split) === 2) {
-                $query->where(function (Builder $query) use ($split)
-                {
+                $query->where(function (Builder $query) use ($split) {
                     $query->where('level_min', '>=', (int)$split[0])
                         ->where('level_min', '<=', (int)$split[1]);
                 });
 
-                $query->where(function (Builder $query) use ($split)
-                {
+                $query->where(function (Builder $query) use ($split) {
                     $query->where('level_max', '>=', (int)$split[0])
                         ->where('level_max', '<=', (int)$split[1]);
                 });
@@ -254,7 +249,7 @@ class APIDungeonRouteController extends Controller
 
         // Affixes
         $hasAffixGroups = $request->has('affixgroups');
-        $hasAffixes = $request->has('affixes');
+        $hasAffixes     = $request->has('affixes');
         if ($hasAffixGroups || $hasAffixes) {
             $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
 
@@ -274,7 +269,7 @@ class APIDungeonRouteController extends Controller
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
-            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming, 
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
         }
 
@@ -292,8 +287,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Disable some checks when we're local - otherwise we'd get no routes at all
-        $query->when(config('app.env') !== 'local', function (Builder $builder)
-        {
+        $query->when(config('app.env') !== 'local', function (Builder $builder) {
             $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
                 ->where('demo', 0)
                 ->where('dungeons.active', 1);
@@ -322,16 +316,15 @@ class APIDungeonRouteController extends Controller
         $result = collect();
 
         // Prevent jokesters from playing around
-        $offset = max($request->get('offset', 10), 0);
-        $limit = min($request->get('limit', 10), 20);
+        $offset    = max($request->get('offset', 10), 0);
+        $limit     = min($request->get('limit', 10), 20);
         $dungeonId = (int)$request->get('dungeon');
 
         // Fetch the dungeon if it was set, and only if it is active
         $dungeon = $dungeonId !== null ? Dungeon::active()->where('id', $dungeonId)->first() : null;
 
         // Apply an offset and a limit by default for all subsequent queries
-        $closure = function (Builder $builder) use ($offset, $limit)
-        {
+        $closure         = function (Builder $builder) use ($offset, $limit) {
             $builder->offset($offset)->limit($limit);
         };
         $discoverService = $discoverService->withBuilder($closure);
@@ -414,7 +407,7 @@ class APIDungeonRouteController extends Controller
     {
         $this->authorize('edit', $dungeonroute);
 
-        $dungeonroute->pull_gradient = $request->get('pull_gradient', '');
+        $dungeonroute->pull_gradient              = $request->get('pull_gradient', '');
         $dungeonroute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
 
         // Update or insert it
@@ -506,7 +499,7 @@ class APIDungeonRouteController extends Controller
             $user = Auth::user();
 
             /** @var DungeonRouteRating $dungeonRouteRating */
-            $dungeonRouteRating = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating         = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
             $dungeonRouteRating->rating = max(1, min(10, $value));
             $dungeonRouteRating->save();
         }
@@ -593,10 +586,10 @@ class APIDungeonRouteController extends Controller
 
         // Show enemies or raw data when fetching enemy packs
         $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;
-        $teeming = (int)$request->get('teeming', false) === 1;
+        $teeming          = (int)$request->get('teeming', false) === 1;
 
         // Start parsing
-        $result = [];
+        $result       = [];
         $dungeonRoute = $publickey === 'admin' ? null : DungeonRoute::findOrFail($publickey);
         if ($dungeonRoute !== null) {
             // Fetch dungeon route specific properties
@@ -654,7 +647,7 @@ class APIDungeonRouteController extends Controller
 
         try {
             // @TODO improve exception handling
-            $warnings = new Collection();
+            $warnings     = new Collection();
             $dungeonRoute = $exportString->setDungeonRoute($dungeonroute)
                 ->getEncodedString($warnings);
 

@@ -20,7 +20,8 @@
     {{#each users}}
         <li class="list-group-item p-0 m-0 echo_user echo_user_{{public_key}}">
             <div class="dropdown">
-                <a href="#" id="dropdown_user_{{public_key}}" class="nav-link" data-toggle="dropdown" aria-haspopup="true"
+                <a href="#" id="dropdown_user_{{public_key}}" class="nav-link" data-toggle="dropdown"
+                   aria-haspopup="true"
                    aria-expanded="false">
                     {{#ifCond avatar_url '==' null}}
                         {{initials}}

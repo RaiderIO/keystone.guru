@@ -37,11 +37,11 @@ class APIKillZoneController extends Controller
         $killZone = KillZone::findOrNew($data['id']);
 
         $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id = (int)((isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id);
-        $killZone->color = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
-        $killZone->lat = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
-        $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
-        $killZone->index = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
+        $killZone->floor_id         = (int)((isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id);
+        $killZone->color            = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
+        $killZone->lat              = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
+        $killZone->lng              = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
+        $killZone->index            = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
 
         if ($killZone->save()) {
             // Only when the enemies are actually set
@@ -53,7 +53,7 @@ class APIKillZoneController extends Controller
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $killZoneEnemies = [];
-                $enemyModels = Enemy::with('floor')->whereIn('id', $enemyIds)->get();
+                $enemyModels     = Enemy::with('floor')->whereIn('id', $enemyIds)->get();
                 foreach ($enemyIds as $enemyId) {
                     /** @var Enemy $enemy */
                     $enemy = $enemyModels->where('id', $enemyId)->first();
@@ -61,7 +61,7 @@ class APIKillZoneController extends Controller
                         // Assign kill zone to each passed enemy
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZone->id,
-                            'enemy_id'     => $enemyId
+                            'enemy_id'     => $enemyId,
                         ];
                     }
                 }
@@ -73,7 +73,7 @@ class APIKillZoneController extends Controller
             // Refresh the enemies that may or may not have been set
             $killZone->load(['killzoneenemies']);
 
-            if( $recalculateEnemyForces ) {
+            if ($recalculateEnemyForces) {
                 // Update the enemy forces
                 $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
@@ -153,15 +153,14 @@ class APIKillZoneController extends Controller
 
         // Save enemy data at once and not one by one - it's slow
         $killZoneEnemies = [];
-        $enemyIds = Enemy::select('id')->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())->get()->pluck('id')->toArray();
+        $enemyIds        = Enemy::select('id')->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())->get()->pluck('id')->toArray();
 
         // Insert new enemies based on what was sent
         foreach ($request->get('killzones', []) as $killZoneData) {
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($enemyIds)
-                    {
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($enemyIds) {
                         return in_array($item, $enemyIds);
                     });
 
@@ -169,7 +168,7 @@ class APIKillZoneController extends Controller
                     foreach ($killZoneDataEnemies as $killZoneDataEnemy) {
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZoneData['id'],
-                            'enemy_id'     => $killZoneDataEnemy
+                            'enemy_id'     => $killZoneDataEnemy,
                         ];
                     }
                 }
@@ -248,7 +247,7 @@ class APIKillZoneController extends Controller
 
         if ($request->get('confirm') === 'yes') {
             try {
-                $killZones = $dungeonroute->killzones;
+                $killZones       = $dungeonroute->killzones;
                 $pridefulEnemies = $dungeonroute->pridefulenemies;
 
                 $dungeonroute->killzones()->delete();

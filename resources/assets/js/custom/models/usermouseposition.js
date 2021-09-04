@@ -142,7 +142,7 @@ class UserMousePosition extends MapObject {
         // Only perform this when we're on the same floor
         if (message.floor_id === getState().getCurrentFloor().id) {
             // Abort any existing player - if there was any
-            if( this.player !== null ) {
+            if (this.player !== null) {
                 this.player.stop();
             }
 

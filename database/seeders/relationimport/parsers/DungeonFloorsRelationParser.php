@@ -5,8 +5,6 @@ namespace Database\Seeders\RelationImport\Parsers;
 
 use App\Models\Floor;
 use App\Models\FloorCoupling;
-use App\Models\NpcBolsteringWhitelist;
-use App\Models\NpcSpell;
 
 class DungeonFloorsRelationParser implements RelationParser
 {
@@ -41,7 +39,7 @@ class DungeonFloorsRelationParser implements RelationParser
         foreach ($value as $floor) {
             $floor['dungeon_id'] = $modelData['id'];
 
-            foreach($floor['floorcouplings'] as $floorcoupling ){
+            foreach ($floor['floorcouplings'] as $floorcoupling) {
                 FloorCoupling::insert($floorcoupling);
             }
 

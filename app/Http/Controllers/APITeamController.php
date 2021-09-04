@@ -34,7 +34,7 @@ class APITeamController extends Controller
         $user = Auth::user();
         /** @var User $targetUser */
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
-        $role = $request->get('role');
+        $role       = $request->get('role');
 
         // Only if the current user may do such a thing
         if ($team->canChangeRole($user, $targetUser, $role)) {

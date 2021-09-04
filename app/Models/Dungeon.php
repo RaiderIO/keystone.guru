@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Mockery\Exception;
 
 /**
@@ -77,7 +76,7 @@ class Dungeon extends CacheModel
     public function getEnemyForcesMappedStatusAttribute()
     {
         $result = [];
-        $npcs = [];
+        $npcs   = [];
 
         try {
             // Loop through all floors
@@ -100,11 +99,11 @@ class Dungeon extends CacheModel
             }
         }
 
-        $total = count($npcs);
-        $result['npcs'] = $npcs;
+        $total              = count($npcs);
+        $result['npcs']     = $npcs;
         $result['unmapped'] = $unmappedCount;
-        $result['total'] = $total;
-        $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
+        $result['total']    = $total;
+        $result['percent']  = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
     }
@@ -268,8 +267,7 @@ class Dungeon extends CacheModel
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

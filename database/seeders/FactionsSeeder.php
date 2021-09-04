@@ -23,19 +23,19 @@ class FactionsSeeder extends Seeder
         $factions = [
             new Faction(['name' => 'Unspecified', 'icon_file_id' => -1, 'color' => 'gray']),
             new Faction(['name' => 'Horde', 'icon_file_id' => -1, 'color' => 'red']),
-            new Faction(['name' => 'Alliance', 'icon_file_id' => -1, 'color' => 'blue'])
+            new Faction(['name' => 'Alliance', 'icon_file_id' => -1, 'color' => 'blue']),
         ];
 
         foreach ($factions as $faction) {
             /** @var $faction Model */
             $faction->save();
 
-            $iconName = strtolower(str_replace(' ', '', $faction->name));
-            $icon = new File();
-            $icon->model_id = $faction->id;
+            $iconName          = strtolower(str_replace(' ', '', $faction->name));
+            $icon              = new File();
+            $icon->model_id    = $faction->id;
             $icon->model_class = get_class($faction);
-            $icon->disk = 'public';
-            $icon->path = sprintf('images/factions/%s.png', $iconName);
+            $icon->disk        = 'public';
+            $icon->path        = sprintf('images/factions/%s.png', $iconName);
             $icon->save();
 
             $faction->icon_file_id = $icon->id;

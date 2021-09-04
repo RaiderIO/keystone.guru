@@ -25,7 +25,7 @@ class EnemyVisualModifierTormented extends EnemyVisualModifier {
     /**
      * @inheritDoc
      */
-    _getVisibleAtZoomLevel(){
+    _getVisibleAtZoomLevel() {
         return c.map.enemy.tormented_display_zoom;
     }
 

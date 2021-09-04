@@ -25,7 +25,7 @@ class EnemyVisualModifierInspiring extends EnemyVisualModifier {
     /**
      * @inheritDoc
      */
-    _getVisibleAtZoomLevel(){
+    _getVisibleAtZoomLevel() {
         return c.map.enemy.inspiring_display_zoom;
     }
 

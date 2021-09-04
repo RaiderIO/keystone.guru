@@ -132,8 +132,7 @@ class KillZone extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item KillZone */
             $item->deleteEnemies();
         });

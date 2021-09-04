@@ -52,22 +52,22 @@ class NpcController extends Controller
 
         $npcBefore = clone $npc;
 
-        $npc->id = $request->get('id');
-        $npc->dungeon_id = $request->get('dungeon_id');
+        $npc->id                = $request->get('id');
+        $npc->dungeon_id        = $request->get('dungeon_id');
         $npc->classification_id = $request->get('classification_id');
-        $npc->npc_class_id = $request->get('npc_class_id');
-        $npc->name = $request->get('name');
+        $npc->npc_class_id      = $request->get('npc_class_id');
+        $npc->name              = $request->get('name');
         // Remove commas or dots in the name; we want the integer value
-        $npc->base_health = str_replace(',', '', $request->get('base_health'));
-        $npc->base_health = str_replace('.', '', $npc->base_health);
-        $npc->enemy_forces = $request->get('enemy_forces');
+        $npc->base_health          = str_replace(',', '', $request->get('base_health'));
+        $npc->base_health          = str_replace('.', '', $npc->base_health);
+        $npc->enemy_forces         = $request->get('enemy_forces');
         $npc->enemy_forces_teeming = $request->get('enemy_forces_teeming', -1);
-        $npc->aggressiveness = $request->get('aggressiveness');
-        $npc->dangerous = $request->get('dangerous', 0);
-        $npc->truesight = $request->get('truesight', 0);
-        $npc->bursting = $request->get('bursting', 0);
-        $npc->bolstering = $request->get('bolstering', 0);
-        $npc->sanguine = $request->get('sanguine', 0);
+        $npc->aggressiveness       = $request->get('aggressiveness');
+        $npc->dangerous            = $request->get('dangerous', 0);
+        $npc->truesight            = $request->get('truesight', 0);
+        $npc->bursting             = $request->get('bursting', 0);
+        $npc->bolstering           = $request->get('bolstering', 0);
+        $npc->sanguine             = $request->get('sanguine', 0);
 
         if ($npc->save()) {
 
@@ -78,7 +78,7 @@ class NpcController extends Controller
             foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
                 NpcBolsteringWhitelist::insert([
                     'npc_id'           => $npc->id,
-                    'whitelist_npc_id' => $whitelistNpcId
+                    'whitelist_npc_id' => $whitelistNpcId,
                 ]);
             }
 
@@ -89,7 +89,7 @@ class NpcController extends Controller
             foreach ($spells as $spellId) {
                 NpcSpell::insert([
                     'npc_id'   => $npc->id,
-                    'spell_id' => $spellId
+                    'spell_id' => $spellId,
                 ]);
             }
 
@@ -134,16 +134,14 @@ class NpcController extends Controller
                 Npc::orderByRaw('dungeon_id, name')
                     ->get()
                     ->groupBy('dungeon_id')
-                    ->mapWithKeys(function ($value, $key)
-                    {
+                    ->mapWithKeys(function ($value, $key) {
                         // Halls of Valor => [npcs]
                         $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : Dungeon::find($key)->name;
                         return [$dungeonName => $value->pluck('name', 'id')
-                            ->map(function ($value, $key)
-                            {
+                            ->map(function ($value, $key) {
                                 // Make sure the value is formatted as 'Hymdal (123456)'
                                 return sprintf('%s (%s)', $value, $key);
-                            })
+                            }),
                         ];
                     })
                     ->toArray(),
@@ -158,7 +156,7 @@ class NpcController extends Controller
     public function edit(Request $request, Npc $npc)
     {
         return view('admin.npc.edit', [
-            'npc'           => $npc,
+            'npc'             => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
@@ -167,8 +165,7 @@ class NpcController extends Controller
                     ->orWhere('dungeon_id', -1)
                     ->orderByRaw('dungeon_id, name')
                     ->pluck('name', 'id')
-                    ->map(function ($value, $key)
-                    {
+                    ->map(function ($value, $key) {
                         return sprintf('%s (%s)', $value, $key);
                     })
                     ->toArray(),

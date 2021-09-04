@@ -119,8 +119,7 @@ class SiteController extends Controller
      */
     public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
         };
 
@@ -130,7 +129,7 @@ class SiteController extends Controller
             'dungeonroutes' => [
                 'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
                 'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
-            ]
+            ],
         ]);
     }
 

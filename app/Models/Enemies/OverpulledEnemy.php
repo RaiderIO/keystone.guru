@@ -2,11 +2,8 @@
 
 namespace App\Models\Enemies;
 
-use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\Floor;
 use App\Models\LiveSession;
-use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +24,7 @@ class OverpulledEnemy extends Model
     protected $fillable = [
         'live_session_id',
         'kill_zone_id',
-        'enemy_id'
+        'enemy_id',
     ];
 
     protected $visible = ['enemy_id', 'kill_zone_id'];

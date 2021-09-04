@@ -8,7 +8,7 @@ class Stopwatch
     /**
      * @var $timers array The start times of the StopWatches
      */
-    private static array $timers = array();
+    private static array $timers = [];
 
     /**
      * @return mixed
@@ -67,7 +67,7 @@ class Stopwatch
     public static function elapsed($timerName = 'default'): float
     {
         // We've now ended, grab time asap
-        $now = self::_getTime();
+        $now        = self::_getTime();
         $timerStart = $now;
         // If timer is not set just return 0
         if (isset(self::$timers[$timerName])) {

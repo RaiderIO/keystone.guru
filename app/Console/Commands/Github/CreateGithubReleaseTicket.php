@@ -51,14 +51,14 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
         $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
         if ($release !== null) {
-            $username = config('keystoneguru.github_username');
+            $username   = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
             /** @var Issue $githubIssueClient */
             $githubIssueClient = GitHub::issues();
             // May throw an exception if it doesn't exist
             $existingIssueId = 0;
-            $issueTitle = sprintf('Release %s', $release->version);
+            $issueTitle      = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
             foreach ($githubIssueClient->all($username, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
@@ -75,11 +75,11 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
                 'title'     => $issueTitle,
                 'body'      => $release->github_body,
                 'labels'    => [
-                    'release'
+                    'release',
                 ],
                 'assignees' => [
-                    $username
-                ]
+                    $username,
+                ],
             ];
 
             if ($existingIssueId === 0) {

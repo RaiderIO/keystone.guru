@@ -45,7 +45,7 @@ trait ListsEnemies
                 group by `enemies`.`id`;
                 ', $params = [
             'routeId'   => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'dungeonId' => $dungeonId
+            'dungeonId' => $dungeonId,
         ]);
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
@@ -61,7 +61,7 @@ trait ListsEnemies
         $filteredEnemies = [];
         if ($showMdtEnemies) {
             try {
-                $dungeon = Dungeon::findOrFail($dungeonId);
+                $dungeon    = Dungeon::findOrFail($dungeonId);
                 $mdtEnemies = (new MDTDungeon(__($dungeon->name, [], 'en')))->getClonesAsEnemies($dungeon->floors);
 
                 foreach ($mdtEnemies as $mdtEnemy) {
@@ -79,13 +79,12 @@ trait ListsEnemies
 
         // Post process enemies
         foreach ($result as $enemy) {
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy)
-            {
+            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
             })->first();
 
             if ($enemy->npc !== null) {
-                $enemy->npc->type = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
+                $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
                 $enemy->npc->class = $npcClasses->get($enemy->npc->npc_class_id - 1);
             }
 

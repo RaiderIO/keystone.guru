@@ -79,9 +79,8 @@ class ImportString extends MDTBase
 
             if (!empty($rifts)) {
                 // Loaded for the comment import
-                $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
-                $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute)
-                {
+                $floorIds           = $dungeonRoute->dungeon->floors->pluck('id');
+                $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute) {
                     $query->whereNull('seasonal_index')
                         ->orWhere('seasonal_index', $dungeonRoute->seasonal_index);
                 };
@@ -142,13 +141,13 @@ class ImportString extends MDTBase
                             'vertices_json'  => json_encode([
                                 [
                                     'lat' => $obeliskMapIcon->lat,
-                                    'lng' => $obeliskMapIcon->lng
+                                    'lng' => $obeliskMapIcon->lng,
                                 ],
                                 [
                                     'lat' => $mapIconEnd->lat,
-                                    'lng' => $mapIconEnd->lng
-                                ]
-                            ])
+                                    'lng' => $mapIconEnd->lng,
+                                ],
+                            ]),
                         ]);
 
                         if ($save) {
@@ -158,7 +157,7 @@ class ImportString extends MDTBase
                         $path = new Path([
                             'floor_id'         => $enemy->floor_id,
                             'dungeon_route_id' => $dungeonRoute->id,
-                            'polyline_id'      => $polyLine->id
+                            'polyline_id'      => $polyLine->id,
                         ]);
 
                         if ($save) {
@@ -201,7 +200,7 @@ class ImportString extends MDTBase
         // We only need to take the prideful enemies into account if the route is prideful
         $isRoutePrideful = $dungeonRoute->hasUniqueAffix(Affix::AFFIX_PRIDEFUL);
         // Keep a list of prideful enemies to assign
-        $pridefulEnemies = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
+        $pridefulEnemies    = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
         $pridefulEnemyCount = config('keystoneguru.prideful.count');
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $enemiesByNpcId = $enemies->groupBy('npc_id');
@@ -218,7 +217,7 @@ class ImportString extends MDTBase
         $newPullIndex = 1;
         foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
             // Create a killzone
-            $killZone = new KillZone();
+            $killZone        = new KillZone();
             $killZone->index = $newPullIndex;
             if ($save) {
                 $killZone->dungeon_route_id = $dungeonRoute->id;
@@ -244,7 +243,7 @@ class ImportString extends MDTBase
                 foreach ($pull as $pullKey => $pullValue) {
                     // Numeric means it's an index of the dungeon's NPCs
                     if (is_numeric($pullKey)) {
-                        $npcIndex = (int)$pullKey;
+                        $npcIndex  = (int)$pullKey;
                         $mdtClones = $pullValue;
 
                         $totalEnemiesSelected += count($mdtClones);
@@ -320,8 +319,8 @@ class ImportString extends MDTBase
 
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
-                                $kzEnemy = new KillZoneEnemy();
-                                $kzEnemy->enemy_id = $enemy->id;
+                                $kzEnemy               = new KillZoneEnemy();
+                                $kzEnemy->enemy_id     = $enemy->id;
                                 $kzEnemy->kill_zone_id = $killZone->id;
 
                                 // Couple the KillZoneEnemy to its KillZone
@@ -387,8 +386,8 @@ class ImportString extends MDTBase
                         $dungeonRoute->pridefulenemies->push($pridefulEnemy);
 
                         // Couple the prideful enemy to this pull
-                        $kzEnemy = new KillZoneEnemy();
-                        $kzEnemy->enemy_id = $pridefulEnemy->enemy_id;
+                        $kzEnemy               = new KillZoneEnemy();
+                        $kzEnemy->enemy_id     = $pridefulEnemy->enemy_id;
                         $kzEnemy->kill_zone_id = $killZone->id;
 
                         // Couple the KillZoneEnemy to its KillZone
@@ -527,14 +526,14 @@ class ImportString extends MDTBase
                             /** @var Brushline|Path $lineOrPath */
                             $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
                             // Assign the proper ID
-                            $lineOrPath->floor_id = $floor->id;
+                            $lineOrPath->floor_id    = $floor->id;
                             $lineOrPath->polyline_id = -1;
 
                             $polyline = new Polyline();
 
                             // Make sure there is a pound sign in front of the value at all times, but never double up should
                             // MDT decide to suddenly place it here
-                            $polyline->color = (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4];
+                            $polyline->color  = (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4];
                             $polyline->weight = (int)$details[0];
 
                             $vertices = [];
@@ -549,7 +548,7 @@ class ImportString extends MDTBase
                                 $lineOrPath->dungeon_route_id = $dungeonRoute->id;
                                 $lineOrPath->save();
 
-                                $polyline->model_id = $lineOrPath->id;
+                                $polyline->model_id    = $lineOrPath->id;
                                 $polyline->model_class = get_class($lineOrPath);
                                 $polyline->save();
 
@@ -568,13 +567,13 @@ class ImportString extends MDTBase
                         // Map comment (n = note)
                         // MethodDungeonTools.lua:2523
                         else if (isset($object['n']) && $object['n']) {
-                            $mapComment = new MapIcon();
+                            $mapComment           = new MapIcon();
                             $mapComment->floor_id = $floor->id;
                             // Bit hacky? But should work
                             $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
-                            $mapComment->comment = $details[4];
+                            $mapComment->comment          = $details[4];
 
-                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
+                            $latLng          = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
                             $mapComment->lat = $latLng['lat'];
                             $mapComment->lng = $latLng['lng'];
 
@@ -635,16 +634,16 @@ class ImportString extends MDTBase
         }
 
         // Create a dungeon route
-        $dungeonRoute = new DungeonRoute();
-        $dungeonRoute->author_id = $sandbox ? -1 : Auth::id();
+        $dungeonRoute             = new DungeonRoute();
+        $dungeonRoute->author_id  = $sandbox ? -1 : Auth::id();
         $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
         // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
-        $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
+        $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
         $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
-        $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-        $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
-        $dungeonRoute->title = $decoded['text'];
-        $dungeonRoute->difficulty = 'Casual';
+        $dungeonRoute->public_key         = DungeonRoute::generateRandomPublicKey();
+        $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
+        $dungeonRoute->title              = $decoded['text'];
+        $dungeonRoute->difficulty         = 'Casual';
         // Must expire if we're trying
         if ($sandbox) {
             $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
@@ -654,11 +653,11 @@ class ImportString extends MDTBase
             // Pre-emptively save the route
             $dungeonRoute->save();
         } else {
-            $dungeonRoute->killzones = new Collection();
+            $dungeonRoute->killzones  = new Collection();
             $dungeonRoute->brushlines = new Collection();
-            $dungeonRoute->mapicons = new Collection();
-            $dungeonRoute->paths = new Collection();
-            $dungeonRoute->affixes = new Collection();
+            $dungeonRoute->mapicons   = new Collection();
+            $dungeonRoute->paths      = new Collection();
+            $dungeonRoute->affixes    = new Collection();
         }
 
         // Set the affix for this route

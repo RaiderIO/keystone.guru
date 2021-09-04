@@ -26,7 +26,7 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
         return [
             'offset' => 'integer|required',
             'limit'  => 'integer|required',
-            'title'  => 'string'
+            'title'  => 'string',
         ];
     }
 }

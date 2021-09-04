@@ -35,8 +35,8 @@ class APIEnemyPatrolController extends Controller
         $enemyPatrolBefore = clone $enemyPatrol;
 
         $enemyPatrol->floor_id = $request->get('floor_id');
-        $enemyPatrol->teeming = $request->get('teeming');
-        $enemyPatrol->faction = $request->get('faction', 'any');
+        $enemyPatrol->teeming  = $request->get('teeming');
+        $enemyPatrol->faction  = $request->get('faction', 'any');
 
         // Init to a default value if new
         if (!$enemyPatrol->exists) {

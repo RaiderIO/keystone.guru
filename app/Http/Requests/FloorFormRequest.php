@@ -25,7 +25,7 @@ class FloorFormRequest extends FormRequest
     {
         return [
             'name'  => ['required'],
-            'index' => ['required']
+            'index' => ['required'],
         ];
     }
 }

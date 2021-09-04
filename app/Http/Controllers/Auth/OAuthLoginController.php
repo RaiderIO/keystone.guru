@@ -80,7 +80,7 @@ abstract class OAuthLoginController extends LoginController
     {
         /** @var \SocialiteProviders\Manager\OAuth2\User $oauthUser */
         $oauthUser = $this->fetchUser();
-        $success = false;
+        $success   = false;
 
         $oAuthId = $this->getOAuthId($oauthUser->id);
         /** @var User $existingUser */

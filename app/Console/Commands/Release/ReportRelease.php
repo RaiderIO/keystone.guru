@@ -44,8 +44,8 @@ class ReportRelease extends Command
      */
     public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
     {
-        $result = false;
-        $version = $this->argument('version');
+        $result   = false;
+        $version  = $this->argument('version');
         $platform = $this->argument('platform');
 
         /** @var Release $release */

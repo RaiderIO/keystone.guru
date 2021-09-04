@@ -56,8 +56,8 @@ class InviteEvent extends ContextEvent
             'invitees' => $this->invitees,
             'url'      => route('dungeonroute.livesession.view', [
                 'dungeonroute' => $this->_context->dungeonroute,
-                'livesession'  => $this->_context
-            ])
+                'livesession'  => $this->_context,
+            ]),
         ]);
     }
 

@@ -102,8 +102,8 @@ class MapIconTypesSeeder extends Seeder
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {
-            $mapIconTypeModel = new MapIconType();
-            $mapIconTypeModel->key = $key;
+            $mapIconTypeModel       = new MapIconType();
+            $mapIconTypeModel->key  = $key;
             $mapIconTypeModel->name = $mapIconType['name'];
 
             // Just in case it doesn't exist
@@ -127,8 +127,8 @@ class MapIconTypesSeeder extends Seeder
                     $imageSize[1] = $mapIconType['height'];
                 }
             }
-            $mapIconTypeModel->width = $imageSize[0];
-            $mapIconTypeModel->height = $imageSize[1];
+            $mapIconTypeModel->width      = $imageSize[0];
+            $mapIconTypeModel->height     = $imageSize[1];
             $mapIconTypeModel->admin_only = isset($mapIconType['admin_only']) ? $mapIconType['admin_only'] : 0;
             $mapIconTypeModel->save();
         }

@@ -62,10 +62,8 @@ class MapContextDungeon extends MapContext
         $cacheService = App::make(CacheService::class);
 
         // Get or set the NPCs
-        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->_context->id), function ()
-        {
-            return Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
-            {
+        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->_context->id), function () {
+            return Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc) {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values();
         }, config('keystoneguru.cache.npcs.ttl'));

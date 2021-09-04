@@ -10,10 +10,10 @@ class UpdatePrepare extends Command
     use ExecutesShellCommands;
 
     const NO_DEV = [
-        'live'     => true,
-        'local'    => false,
-        'mapping'  => true,
-        'staging'  => true,
+        'live'    => true,
+        'local'   => false,
+        'mapping' => true,
+        'staging' => true,
     ];
 
     /**
@@ -54,7 +54,7 @@ class UpdatePrepare extends Command
         $this->shell([
             // Prevent root warning from blocking the entire thing; only install dev dependencies in local
             sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', (self::NO_DEV[$environment] ? '--no-dev' : '')),
-            'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload'
+            'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload',
         ]);
 
         return 0;

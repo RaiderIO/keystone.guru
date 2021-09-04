@@ -39,10 +39,10 @@ class Merge extends Command
      */
     public function handle(MappingService $mappingService)
     {
-        $username = config('keystoneguru.github_username');
+        $username   = config('keystoneguru.github_username');
         $repository = config('keystoneguru.github_repository');
-        $head = 'mapping';
-        $base = 'development';
+        $head       = 'mapping';
+        $base       = 'development';
 
         /** @var PullRequest $githubPrClient */
         $githubPrClient = GitHub::pr();
@@ -50,7 +50,7 @@ class Merge extends Command
         $prList = $githubPrClient->all($username, $repository, [
             'state' => 'open',
             'head'  => $head,
-            'base'  => $base
+            'base'  => $base,
         ]);
 
         $existingPrId = 0;
@@ -63,7 +63,7 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name'])->map(function(string $name){
+        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name'])->map(function (string $name) {
             return __($name);
         });
         if ($changedDungeonNames->count() > 4) {
@@ -82,7 +82,7 @@ class Merge extends Command
                     'base'   => $base,
                     'body'   => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
                     'labels' => [
-                        'mapping'
+                        'mapping',
                     ],
                 ]);
                 $this->info('Pull request created!');
@@ -96,7 +96,7 @@ class Merge extends Command
         } else {
             // Title may be changed
             $githubPrClient->update($username, $repository, $existingPrId, [
-                'title' => $prTitle
+                'title' => $prTitle,
             ]);
             $this->info('Pull request updated!');
         }

@@ -18,7 +18,7 @@ class SearchFilterEnemyForces extends SearchFilter {
     }
 
     setValue(value) {
-        if( value ) {
+        if (value) {
             $(this.options.selector).attr('checked', 'checked');
         } else {
             $(this.options.selector).removeAttr('checked');

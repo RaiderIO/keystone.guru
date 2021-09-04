@@ -2,9 +2,6 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\MapIcon;
-use App\Models\MapObjectToAwakenedObeliskLink;
-
 class DungeonRoutePridefulEnemiesRelationParser implements RelationParser
 {
     /**

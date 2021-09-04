@@ -9,8 +9,6 @@ use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\EnemyPack;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -33,10 +31,10 @@ class APIEnemyPackController extends Controller
 
         $beforeEnemyPack = clone $enemyPack;
 
-        $enemyPack->teeming = $request->get('teeming');
-        $enemyPack->faction = $request->get('faction', 'any');
-        $enemyPack->label = $request->get('label');
-        $enemyPack->floor_id = (int)$request->get('floor_id');
+        $enemyPack->teeming       = $request->get('teeming');
+        $enemyPack->faction       = $request->get('faction', 'any');
+        $enemyPack->label         = $request->get('label');
+        $enemyPack->floor_id      = (int)$request->get('floor_id');
         $enemyPack->vertices_json = json_encode($request->get('vertices'));
 
         // Upon successful save!

@@ -24,8 +24,7 @@ class RouteAttribute extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

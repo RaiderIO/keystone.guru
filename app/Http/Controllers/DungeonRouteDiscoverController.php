@@ -29,8 +29,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discover(DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
 
@@ -41,7 +40,7 @@ class DungeonRouteDiscoverController extends Controller
                 'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
                 'new'      => $discoverService->withBuilder($closure)->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
-            ]
+            ],
         ]);
     }
 
@@ -53,8 +52,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeon(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
 
@@ -66,7 +64,7 @@ class DungeonRouteDiscoverController extends Controller
                 'nextweek' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup($dungeon, $seasonService->getCurrentSeason()->getNextAffixGroup()),
                 'new'      => $discoverService->withBuilder($closure)->newByDungeon($dungeon),
                 'popular'  => $discoverService->withBuilder($closure)->popularByDungeon($dungeon),
-            ]
+            ],
         ]);
     }
 
@@ -76,8 +74,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverpopular(DiscoverServiceInterface $discoverService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -96,8 +93,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverthisweek(DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -120,8 +116,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discovernextweek(DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -142,8 +137,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discovernew(DiscoverServiceInterface $discoverService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -163,8 +157,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonpopular(Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -185,8 +178,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonthisweek(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -212,8 +204,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonnextweek(Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 
@@ -237,8 +228,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonnew(Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        $closure = function (Builder $builder)
-        {
+        $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
 

@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace App\Service\Subcreation;
 
 interface SubcreationApiServiceInterface

@@ -19,12 +19,12 @@ use Eloquent;
 class Spell extends CacheModel
 {
     const SCHOOL_PHYSICAL = 1;
-    const SCHOOL_HOLY = 2;
-    const SCHOOL_FIRE = 4;
-    const SCHOOL_NATURE = 8;
-    const SCHOOL_FROST = 16;
-    const SCHOOL_SHADOW = 32;
-    const SCHOOL_ARCANE = 64;
+    const SCHOOL_HOLY     = 2;
+    const SCHOOL_FIRE     = 4;
+    const SCHOOL_NATURE   = 8;
+    const SCHOOL_FROST    = 16;
+    const SCHOOL_SHADOW   = 32;
+    const SCHOOL_ARCANE   = 64;
 
     const ALL_SCHOOLS = [
         'Physical' => self::SCHOOL_PHYSICAL,
@@ -36,10 +36,10 @@ class Spell extends CacheModel
         'Arcane'   => self::SCHOOL_ARCANE,
     ];
 
-    const DISPEL_TYPE_MAGIC = 'Magic';
+    const DISPEL_TYPE_MAGIC   = 'Magic';
     const DISPEL_TYPE_DISEASE = 'Disease';
-    const DISPEL_TYPE_POISON = 'Poison';
-    const DISPEL_TYPE_CURSE = 'Curse';
+    const DISPEL_TYPE_POISON  = 'Poison';
+    const DISPEL_TYPE_CURSE   = 'Curse';
 
     const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
@@ -65,7 +65,8 @@ class Spell extends CacheModel
         return $result;
     }
 
-    public function getIconUrlAttribute(){
+    public function getIconUrlAttribute()
+    {
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
     }
 }

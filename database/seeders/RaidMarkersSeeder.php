@@ -25,11 +25,11 @@ class RaidMarkersSeeder extends Seeder
             'moon',
             'square',
             'cross',
-            'skull'
+            'skull',
         ];
 
         foreach ($raidMarkerData as $raidMarkerObj) {
-            $raidMarker = new RaidMarker();
+            $raidMarker       = new RaidMarker();
             $raidMarker->name = $raidMarkerObj;
             $raidMarker->save();
         }

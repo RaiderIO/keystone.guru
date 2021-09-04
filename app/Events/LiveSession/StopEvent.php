@@ -33,7 +33,7 @@ class StopEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'expires_in' => $this->_context->getExpiresInSeconds()
+            'expires_in' => $this->_context->getExpiresInSeconds(),
         ]);
     }
 

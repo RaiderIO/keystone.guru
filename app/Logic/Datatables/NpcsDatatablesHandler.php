@@ -18,17 +18,17 @@ class NpcsDatatablesHandler extends DatatablesHandler
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *'));
 
-        $havings = $query->havings;
+        $havings        = $query->havings;
         $query->havings = null;
-        $query->orders = null;
-        $countResults = $query->get();
+        $query->orders  = null;
+        $countResults   = $query->get();
         // Restore
         $query->havings = $havings;
 
         $foundRows = DB::select(DB::raw('SELECT FOUND_ROWS() as count'));
         return $foundRows[0]->count;
     }
-    
+
     protected function calculateRecordsFiltered(): ?int
     {
         return null;

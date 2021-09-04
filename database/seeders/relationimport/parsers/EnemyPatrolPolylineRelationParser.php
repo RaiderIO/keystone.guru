@@ -34,7 +34,7 @@ class EnemyPatrolPolylineRelationParser implements RelationParser
     {
         // Make sure the polyline's relation with the model is restored.
         $value['model_class'] = $modelClassName;
-        $value['model_id'] = $modelData['id'];
+        $value['model_id']    = $modelData['id'];
 
         $modelData['polyline_id'] = \App\Models\Polyline::insertGetId($value);
 

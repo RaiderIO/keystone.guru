@@ -1,12 +1,15 @@
 <div class="{{root_classes}}" style="position: relative; {{root_style}}">
     {{#each modifiers}}
-    <div id="map_enemy_visual_attribute_{{name}}_{{id}}" class="modifier {{classes}}" style="left: {{left}}px; top: {{top}}px;">
-        {{{html}}}
-    </div>
+        <div id="map_enemy_visual_attribute_{{name}}_{{id}}" class="modifier {{classes}}"
+             style="left: {{left}}px; top: {{top}}px;">
+            {{{html}}}
+        </div>
     {{/each}}
     <div id="map_enemy_visual_{{id}}" class="{{selection_classes_base}} {{selection_classes}}">
-        <div id="map_enemy_visual_{{id}}_outer" class="outer {{main_visual_outer_classes}}" style="border: {{outer_border}};">
-            <div id="map_enemy_visual_{{id}}_inner" class="inner {{main_visual_inner_classes}}" style="margin: {{margin}}px;">
+        <div id="map_enemy_visual_{{id}}_outer" class="outer {{main_visual_outer_classes}}"
+             style="border: {{outer_border}};">
+            <div id="map_enemy_visual_{{id}}_inner" class="inner {{main_visual_inner_classes}}"
+                 style="margin: {{margin}}px;">
                 {{{main_visual_html}}}
             </div>
         </div>

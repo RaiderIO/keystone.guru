@@ -24,7 +24,7 @@ class ImportWarning extends \Exception
         parent::__construct($message);
 
         $this->_category = $category;
-        $this->_data = $data;
+        $this->_data     = $data;
     }
 
     /**
@@ -51,8 +51,8 @@ class ImportWarning extends \Exception
     {
         return [
             'category' => $this->_category,
-            'message' => $this->getMessage(),
-            'data' => $this->_data
+            'message'  => $this->getMessage(),
+            'data'     => $this->_data,
         ];
     }
 }

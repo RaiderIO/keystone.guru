@@ -72,13 +72,13 @@ class Release extends CacheModel
      */
     public function getDiscordBodyAttribute()
     {
-        $body = trim(view('app.release.discord', [
+        $body       = trim(view('app.release.discord', [
             'model'   => $this,
             'mention' => $this->isMajorUpgrade(),
         ])->render());
         $bodyLength = strlen($body);
 
-        $footer = trim(view('app.release.discord_footer', [
+        $footer       = trim(view('app.release.discord_footer', [
             'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl'   => route('misc.affixes'),
@@ -88,7 +88,7 @@ class Release extends CacheModel
         $footerLength = strlen($footer);
 
         // 2000 is the limit, but give it some additional padding just in case
-        $truncatedBody = substr($body, 0, 1990 - $footerLength);
+        $truncatedBody       = substr($body, 0, 1990 - $footerLength);
         $truncatedBodyLength = strlen($truncatedBody);
 
         if ($bodyLength !== $truncatedBodyLength) {
@@ -112,10 +112,11 @@ class Release extends CacheModel
     /**
      * Get the title formatted with the current date etc.
      */
-    public function getFormattedTitle() : string {
+    public function getFormattedTitle(): string
+    {
         return sprintf('Release %s (%s)%s',
-                    $this->version, now()->format('Y/m/d'),
-                    empty($this->title) ? '' : sprintf(' - %s', $this->title));
+            $this->version, now()->format('Y/m/d'),
+            empty($this->title) ? '' : sprintf(' - %s', $this->title));
     }
 
     /**
@@ -160,7 +161,7 @@ class Release extends CacheModel
 
         // Quick fix to get the release body to always show up in the #a
         // https://discord.com/developers/docs/resources/channel#embed-limits limit is 2048 characters
-        $discordBody = $this->discord_body;
+        $discordBody          = $this->discord_body;
         $truncatedDiscordBody = substr($discordBody, 0, 2000);
 
         if (strlen($discordBody) !== strlen($truncatedDiscordBody)) {
@@ -176,9 +177,9 @@ class Release extends CacheModel
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
                     'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                    'text'     => 'Keystone.guru Discord Bot'
+                    'text'     => 'Keystone.guru Discord Bot',
                 ],
-            ]
+            ],
         ];
     }
 

@@ -49,8 +49,8 @@ class WebhookController extends Controller
         $this->validateGithubWebhook($request);
 
         $commits = $request->get('commits');
-        $ref = $request->get('ref');
-        $branch = str_replace('refs/heads/', '', $ref);
+        $ref     = $request->get('ref');
+        $branch  = str_replace('refs/heads/', '', $ref);
 
         // We don't need duplicate messages in Discord since mapping is automatically managed
         if ($branch !== 'mapping') {
@@ -62,7 +62,7 @@ class WebhookController extends Controller
                     !$commit['distinct'] ||
                     // Skip merge commits
                     strpos($commit['message'], 'Merge remote-tracking branch') === 0
-                    ) {
+                ) {
                     continue;
                 }
 
@@ -86,7 +86,7 @@ class WebhookController extends Controller
                         'color'       => 2328118, // #238636
                         'description' => substr(trim(view('app.commit.added', [
                             'commit' => $commit,
-                        ])->render()), 0, 2000)
+                        ])->render()), 0, 2000),
                     ];
                 }
 
@@ -95,7 +95,7 @@ class WebhookController extends Controller
                         'color'       => 25284, // #0062C4
                         'description' => substr(trim(view('app.commit.modified', [
                             'commit' => $commit,
-                        ])->render()), 0, 2000)
+                        ])->render()), 0, 2000),
                     ];
                 }
 
@@ -104,19 +104,19 @@ class WebhookController extends Controller
                         'color'       => 14300723, // #DA3633
                         'description' => substr(trim(view('app.commit.removed', [
                             'commit' => $commit,
-                        ])->render()), 0, 2000)
+                        ])->render()), 0, 2000),
                     ];
                 }
 
-                $lastKey = array_key_last($embeds);
+                $lastKey                       = array_key_last($embeds);
                 $embeds[$lastKey]['timestamp'] = $commit['timestamp'];
             }
 
             // Add footer to the last embed
-            $lastKey = array_key_last($embeds);
+            $lastKey                    = array_key_last($embeds);
             $embeds[$lastKey]['footer'] = [
                 'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                'text'     => 'Keystone.guru Discord Bot'
+                'text'     => 'Keystone.guru Discord Bot',
             ];
 
             $discordApiService->sendEmbeds(config('keystoneguru.webhook.github.url'), $embeds);

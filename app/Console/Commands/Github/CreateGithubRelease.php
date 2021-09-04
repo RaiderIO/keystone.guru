@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\Release;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
@@ -53,7 +52,7 @@ class CreateGithubRelease extends GithubReleaseCommand
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));
 
-            $username = config('keystoneguru.github_username');
+            $username   = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
             /** @var Repo $githubRepoClient */
@@ -72,7 +71,7 @@ class CreateGithubRelease extends GithubReleaseCommand
                 $githubRepoClient->releases()->create($username, $repository, [
                     'tag_name' => $release->version,
                     'name'     => $release->version,
-                    'body'     => $body
+                    'body'     => $body,
                 ]);
                 $this->info(sprintf('Successfully created GitHub release %s', $release->version));
 
