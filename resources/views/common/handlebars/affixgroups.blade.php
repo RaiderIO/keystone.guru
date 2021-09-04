@@ -33,7 +33,7 @@
                         affixes.push({
                             title: affix.name,
                             name: affix.name,
-                            class: affix.name.toLowerCase()
+                            class: affix.key.toLowerCase()
                         });
                     }
                 }

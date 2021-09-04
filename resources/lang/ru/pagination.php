@@ -14,6 +14,6 @@ return [
     */
 
     'previous' => '@todo ru: .previous',
-    'next' => '@todo ru: .next',
+    'next'     => '@todo ru: .next',
 
 ];

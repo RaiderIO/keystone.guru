@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => '@todo ru: .failed',
+    'failed'   => '@todo ru: .failed',
     'throttle' => '@todo ru: .throttle',
 
 ];

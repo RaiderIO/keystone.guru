@@ -11,6 +11,7 @@ return [
             ],
         ],
         'discover' => [
+            'title'                      => '@todo ru: .discover.discover.title',
             'popular'                    => '@todo ru: .discover.discover.popular',
             'popular_by_current_affixes' => '@todo ru: .discover.discover.popular_by_current_affixes',
             'popular_by_next_affixes'    => '@todo ru: .discover.discover.popular_by_next_affixes',
@@ -34,17 +35,18 @@ return [
             'rating'                  => '@todo ru: .discover.search.rating',
             'user'                    => '@todo ru: .discover.search.user',
             'user_placeholder'        => '@todo ru: .discover.search.user_placeholder',
-        ]
+        ],
     ],
     'livesession'    => [
         'view' => [
             'any' => '@todo ru: .livesession.view.any',
-        ]
+        ],
     ],
     'edit'           => [
         'title' => '@todo ru: .edit.title',
     ],
     'embed'          => [
+        'title'            => '@todo ru: .embed.title',
         'any'              => '@todo ru: .embed.any',
         'select_floor'     => '@todo ru: .embed.select_floor',
         'affixes_title'    => '@todo ru: .embed.affixes_title',

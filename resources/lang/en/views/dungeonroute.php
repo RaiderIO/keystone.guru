@@ -35,12 +35,12 @@ return [
             'rating'                  => 'Rating',
             'user'                    => 'User',
             'user_placeholder'        => 'Filter by user',
-        ]
+        ],
     ],
     'livesession'    => [
         'view' => [
             'any' => 'Any',
-        ]
+        ],
     ],
     'edit'           => [
         'title' => 'Edit %s',

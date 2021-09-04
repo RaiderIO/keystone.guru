@@ -4,7 +4,7 @@ return [
     'affixgroup'   => [
         'affixgroup' => [
 
-        ]
+        ],
     ],
     'dungeon'      => [
         'griddiscover' => [
@@ -15,41 +15,49 @@ return [
         ],
         'select'       => [
             'dungeon'                  => '@todo ru: .dungeon.select.dungeon',
+            'all'                      => '@todo ru: .dungeon.select.all',
             'all_dungeons'             => '@todo ru: .dungeon.select.all_dungeons',
-            'siege_of_boralus_warning' => '@todo ru: .dungeon.select.siege_of_boralus_warning'
-        ]
+            'siege_of_boralus_warning' => '@todo ru: .dungeon.select.siege_of_boralus_warning',
+        ],
     ],
     'dungeonroute' => [
         'search'     => [
             'loadmore' => [
                 'loading' => '@todo ru: .dungeonroute.search.loadmore.loading',
-            ]
+            ],
         ],
         'attributes' => [
             'attributes'              => '@todo ru: .dungeonroute.attributes.attributes',
             'no_attributes_title'     => '@todo ru: .dungeonroute.attributes.no_attributes_title',
             'select_attributes_title' => '@todo ru: .dungeonroute.attributes.select_attributes_title',
-            'attributes_selected'     => '@todo ru: .dungeonroute.attributes.attributes_selected'
+            'attributes_selected'     => '@todo ru: .dungeonroute.attributes.attributes_selected',
         ],
         'card'       => [
             'no_description'    => '@todo ru: .dungeonroute.card.no_description',
             'by_author'         => '@todo ru: .dungeonroute.card.by_author',
             'updated_at'        => '@todo ru: .dungeonroute.card.updated_at',
             'report'            => '@todo ru: .dungeonroute.card.report',
-            'refresh_thumbnail' => '@todo ru: .dungeonroute.card.refresh_thumbnail'
+            'refresh_thumbnail' => '@todo ru: .dungeonroute.card.refresh_thumbnail',
         ],
         'rating'     => [
-            'nr_of_votes' => '@todo ru: .dungeonroute.rating.nr_of_votes'
+            'nr_of_votes' => '@todo ru: .dungeonroute.rating.nr_of_votes',
         ],
         'table'      => [
-            'affixes_selected'   => '@todo ru: .dungeonroute.table.affixes_selected',
-            'requirements'       => '@todo ru: .dungeonroute.table.requirements',
-            'enemy_enemy_forces' => '@todo ru: .dungeonroute.table.enemy_enemy_forces',
-            'favorite'           => '@todo ru: .dungeonroute.table.favorite'
+            'team'                  => '@todo ru: .dungeonroute.table.team',
+            'affixes'               => '@todo ru: .dungeonroute.table.affixes',
+            'affixes_selected'      => '@todo ru: .dungeonroute.table.affixes_selected',
+            'requirements'          => '@todo ru: .dungeonroute.table.requirements',
+            'enemy_enemy_forces'    => '@todo ru: .dungeonroute.table.enemy_enemy_forces',
+            'favorite'              => '@todo ru: .dungeonroute.table.favorite',
+            'requirements_selected' => '@todo ru: .dungeonroute.table.requirements_selected',
+            'tags'                  => '@todo ru: .dungeonroute.table.tags',
+            'tags_title'            => '@todo ru: .dungeonroute.table.tags_title',
+            'tags_selected'         => '@todo ru: .dungeonroute.table.tags_selected',
+            'filter'                => '@todo ru: .dungeonroute.table.filter',
         ],
         'tier'       => [
             'data_by_subcreation' => '@todo ru: .dungeonroute.tier.data_by_subcreation',
-        ]
+        ],
     ],
     'forms'        => [
         'createroute'          => [
@@ -152,16 +160,17 @@ return [
     ],
     'group'        => [
         'affixes'     => [
+            'seasonal_index_preset'    => '@todo ru: .group.affixes.seasonal_index_preset',
             'awakened_enemy_set'       => '@todo ru: .group.affixes.awakened_enemy_set',
             'awakened_enemy_set_title' => '@todo ru: .group.affixes.awakened_enemy_set_title',
             'tormented_preset'         => '@todo ru: .group.affixes.tormented_preset',
-            'tormented_preset_title'   => '@todo ru: .group.affixes.tormented_preset_title'
+            'tormented_preset_title'   => '@todo ru: .group.affixes.tormented_preset_title',
         ],
         'composition' => [
             'faction'         => '@todo ru: .group.composition.faction',
             'undo'            => '@todo ru: .group.composition.undo',
-            'party_member_nr' => '@todo ru: .group.composition.party_member_nr'
-        ]
+            'party_member_nr' => '@todo ru: .group.composition.party_member_nr',
+        ],
     ],
     'layout'       => [
         'footer'  => [
@@ -208,13 +217,14 @@ return [
             'my_teams'          => '@todo ru: .layout.navuser.my_teams',
             'my_profile'        => '@todo ru: .layout.navuser.my_profile',
             'logout'            => '@todo ru: .layout.navuser.logout',
-        ]
+        ],
     ],
     'maps'         => [
         'controls' => [
             'elements'  => [
                 'dungeonrouteinfo'         => [
                     'timer'            => '@todo ru: .maps.controls.elements.dungeonrouteinfo.timer',
+                    'timer_title'      => '@todo ru: .maps.controls.elements.dungeonrouteinfo.timer_title',
                     'group_setup'      => '@todo ru: .maps.controls.elements.dungeonrouteinfo.group_setup',
                     'affixes'          => '@todo ru: .maps.controls.elements.dungeonrouteinfo.affixes',
                     'route_info_title' => '@todo ru: .maps.controls.elements.dungeonrouteinfo.route_info_title',
@@ -238,9 +248,10 @@ return [
                     'mdt' => '@todo ru: .maps.controls.elements.mdtclones.mdt',
                 ],
                 'rating'                   => [
+                    'rate_this_route'          => '@todo ru: .maps.controls.elements.rating.rate_this_route',
                     'unable_to_rate_own_route' => '@todo ru: .maps.controls.elements.rating.unable_to_rate_own_route',
                     'your_rating'              => '@todo ru: .maps.controls.elements.rating.your_rating',
-                ]
+                ],
             ],
             'enemyinfo' => [
                 'enemy_info'      => '@todo ru: .maps.controls.enemyinfo.enemy_info',
@@ -303,7 +314,7 @@ return [
                 'why_report_this_route'  => '@todo ru: .modal.userreport.dungeonroute.why_report_this_route',
                 'contact_by_email'       => '@todo ru: .modal.userreport.dungeonroute.contact_by_email',
                 'contact_by_email_guest' => '@todo ru: .modal.userreport.dungeonroute.contact_by_email_guest',
-                'submit'                 => '@todo ru: .modal.userreport.dungeonroute.submit'
+                'submit'                 => '@todo ru: .modal.userreport.dungeonroute.submit',
             ],
             'enemy'        => [
                 'report_enemy_bug'       => '@todo ru: .modal.userreport.enemy.report_enemy_bug',
@@ -347,6 +358,8 @@ return [
     ],
     'tag'          => [
         'manager' => [
+            'route_personal' => '@todo ru: .tag.manager.route_personal',
+            'route_team'     => '@todo ru: .tag.manager.route_team',
             'name'           => '@todo ru: .tag.manager.name',
             'color'          => '@todo ru: .tag.manager.color',
             'usage'          => '@todo ru: .tag.manager.usage',
@@ -373,16 +386,16 @@ return [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => '@todo ru: .thirdparty.nitropay.adcontrols.remove_ads',
-            ]
+            ],
         ],
         'cookieconsent' => [
-            'learn_more' => '@todo ru: .thirdparty.cookieconsent.learn_more'
+            'learn_more' => '@todo ru: .thirdparty.cookieconsent.learn_more',
         ],
     ],
     'user'         => [
         'name' => [
             'avatar_title' => '@todo ru: .user.name.avatar_title',
         ],
-    ]
+    ],
 
 ];

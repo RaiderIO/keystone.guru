@@ -449,4 +449,9 @@ return [
     'filter_input_rating_header'            => 'Rating: :value and higher',
     'filter_input_title_header'             => 'Title: :value',
     'filter_input_user_header'              => 'User: :value',
+
+    // Group composition
+    'specialization_select'                 => 'Specialization...',
+    'class_select'                          => 'Class...',
+    'race_select'                           => 'Race...',
 ];

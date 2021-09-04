@@ -62,7 +62,7 @@ return [
             'table_header_color'   => '@todo ru: .expansion.list.table_header_color',
             'table_header_actions' => '@todo ru: .expansion.list.table_header_actions',
             'edit'                 => '@todo ru: .expansion.list.edit',
-        ]
+        ],
     ],
     'floor'      => [
         'flash'   => [
@@ -97,7 +97,7 @@ return [
         'mapping' => [
             'title'  => '@todo ru: .floor.mapping.title',
             'header' => '@todo ru: .floor.mapping.header',
-        ]
+        ],
     ],
     'npc'        => [
         'flash' => [
@@ -141,7 +141,7 @@ return [
             'table_header_enemy_forces'   => '@todo ru: .npc.list.table_header_enemy_forces',
             'table_header_classification' => '@todo ru: .npc.list.table_header_classification',
             'table_header_actions'        => '@todo ru: .npc.list.table_header_actions',
-        ]
+        ],
     ],
     'release'    => [
         'edit' => [
@@ -169,12 +169,15 @@ return [
             'table_header_version' => '@todo ru: .release.list.table_header_version',
             'table_header_title'   => '@todo ru: .release.list.table_header_title',
             'table_header_actions' => '@todo ru: .release.list.table_header_actions',
-            'edit'                 => '@todo ru: .release.list.edit'
-        ]
+            'edit'                 => '@todo ru: .release.list.edit',
+        ],
     ],
     'spell'      => [
         'edit' => [
-            'title'             => '@todo ru: .spell.edit.title',
+            'title_new'         => '@todo ru: .spell.edit.title_new',
+            'header_new'        => '@todo ru: .spell.edit.header_new',
+            'title_edit'        => '@todo ru: .spell.edit.title_edit',
+            'header_edit'       => '@todo ru: .spell.edit.header_edit',
             'game_id'           => '@todo ru: .spell.edit.game_id',
             'name'              => '@todo ru: .spell.edit.name',
             'icon_name'         => '@todo ru: .spell.edit.icon_name',
@@ -192,11 +195,105 @@ return [
             'table_header_id'      => '@todo ru: .spell.list.table_header_id',
             'table_header_name'    => '@todo ru: .spell.list.table_header_name',
             'table_header_actions' => '@todo ru: .spell.list.table_header_actions',
-            'edit'                 => '@todo ru: .spell.list.edit'
-        ]
+            'edit'                 => '@todo ru: .spell.list.edit',
+        ],
     ],
     'tools'      => [
+        'datadump'     => [
+            'viewexporteddungeondata' => [
+                'title'   => '@todo ru: .tools.datadump.viewexporteddungeondata.title',
+                'header'  => '@todo ru: .tools.datadump.viewexporteddungeondata.header',
+                'content' => '@todo ru: .tools.datadump.viewexporteddungeondata.content',
+            ],
+            'viewexportedrelease'     => [
+                'title'   => '@todo ru: .tools.datadump.viewexportedrelease.title',
+                'header'  => '@todo ru: .tools.datadump.viewexportedrelease.header',
+                'content' => '@todo ru: .tools.datadump.viewexportedrelease.content',
+            ],
+        ],
+        'dungeonroute' => [
+            'view'         => [
+                'title'      => '@todo ru: .tools.dungeonroute.view.title',
+                'header'     => '@todo ru: .tools.dungeonroute.view.header',
+                'public_key' => '@todo ru: .tools.dungeonroute.view.public_key',
+                'submit'     => '@todo ru: .tools.dungeonroute.view.submit',
+            ],
+            'viewcontents' => [
+                'title'  => '@todo ru: .tools.dungeonroute.viewcontents.title',
+                'header' => '@todo ru: .tools.dungeonroute.viewcontents.header',
+            ],
+        ],
+        'exception'    => [
+            'select' => [
+                'title'                     => '@todo ru: .tools.exception.select.title',
+                'header'                    => '@todo ru: .tools.exception.select.header',
+                'select_exception_to_throw' => '@todo ru: .tools.exception.select.select_exception_to_throw',
+                'submit'                    => '@todo ru: .tools.exception.select.submit',
+            ],
+        ],
+        'mdt'          => [
+            'diff'         => [
+                'title'                 => '@todo ru: .tools.mdt.diff.title',
+                'header'                => '@todo ru: .tools.mdt.diff.header',
+                'headers'               => [
+                    'mismatched_health'               => '@todo ru: .tools.mdt.diff.headers.mismatched_health',
+                    'mismatched_enemy_count'          => '@todo ru: .tools.mdt.diff.headers.mismatched_enemy_count',
+                    'mismatched_enemy_type'           => '@todo ru: .tools.mdt.diff.headers.mismatched_enemy_type',
+                    'missing_npc'                     => '@todo ru: .tools.mdt.diff.headers.missing_npc',
+                    'mismatched_enemy_forces'         => '@todo ru: .tools.mdt.diff.headers.mismatched_enemy_forces',
+                    'mismatched_enemy_forces_teeming' => '@todo ru: .tools.mdt.diff.headers.mismatched_enemy_forces_teeming',
+                ],
+                'table_header_dungeon'  => '@todo ru: .tools.mdt.diff.table_header_dungeon',
+                'table_header_npc'      => '@todo ru: .tools.mdt.diff.table_header_npc',
+                'table_header_message'  => '@todo ru: .tools.mdt.diff.table_header_message',
+                'table_header_actions'  => '@todo ru: .tools.mdt.diff.table_header_actions',
+                'no_dungeon_name_found' => '@todo ru: .tools.mdt.diff.no_dungeon_name_found',
+                'no_npc_name_found'     => '@todo ru: .tools.mdt.diff.no_npc_name_found',
+                'npc_message'           => '@todo ru: .tools.mdt.diff.npc_message',
+                'apply_mdt_kg'          => '@todo ru: .tools.mdt.diff.apply_mdt_kg',
+            ],
+            'dungeonroute' => [
+                'title'      => '@todo ru: .tools.mdt.dungeonroute.title',
+                'header'     => '@todo ru: .tools.mdt.dungeonroute.header',
+                'public_key' => '@todo ru: .tools.mdt.dungeonroute.public_key',
+                'submit'     => '@todo ru: .tools.mdt.dungeonroute.submit',
+            ],
+            'string'       => [
+                'title'                        => '@todo ru: .tools.mdt.string.title',
+                'header'                       => '@todo ru: .tools.mdt.string.header',
+                'paste_your_mdt_export_string' => '@todo ru: .tools.mdt.string.paste_your_mdt_export_string',
+                'submit'                       => '@todo ru: .tools.mdt.string.submit',
+            ],
+        ],
+        'npcimport'    => [
+            'title'                   => '@todo ru: .tools.npcimport.title',
+            'header'                  => '@todo ru: .tools.npcimport.header',
+            'paste_npc_import_string' => '@todo ru: .tools.npcimport.paste_npc_import_string',
+            'submit'                  => '@todo ru: .tools.npcimport.submit',
+        ],
+        'list'         => [
+            'title'            => '@todo ru: .tools.list.title',
+            'header'           => '@todo ru: .tools.list.header',
+            'header_tools'     => '@todo ru: .tools.list.header_tools',
+            'subheader_import' => '@todo ru: .tools.list.subheader_import',
+            'mass_import_npcs' => '@todo ru: .tools.list.mass_import_npcs',
 
+            'subheader_dungeonroute'    => '@todo ru: .tools.list.subheader_dungeonroute',
+            'view_dungeonroute_details' => '@todo ru: .tools.list.view_dungeonroute_details',
+
+            'subheader_mdt'                   => '@todo ru: .tools.list.subheader_mdt',
+            'view_mdt_string_as_dungeonroute' => '@todo ru: .tools.list.view_mdt_string_as_dungeonroute',
+            'view_dungeonroute_as_mdt_string' => '@todo ru: .tools.list.view_dungeonroute_as_mdt_string',
+            'view_mdt_diff'                   => '@todo ru: .tools.list.view_mdt_diff',
+
+            'subheader_misc'     => '@todo ru: .tools.list.subheader_misc',
+            'drop_caches'        => '@todo ru: .tools.list.drop_caches',
+            'throw_an_exception' => '@todo ru: .tools.list.throw_an_exception',
+
+            'subheader_actions'   => '@todo ru: .tools.list.subheader_actions',
+            'export_dungeon_data' => '@todo ru: .tools.list.export_dungeon_data',
+            'export_releases'     => '@todo ru: .tools.list.export_releases',
+        ],
     ],
     'user'       => [
         'list' => [
@@ -210,7 +307,7 @@ return [
             'table_header_registered' => '@todo ru: .user.list.table_header_registered',
             'table_header_actions'    => '@todo ru: .user.list.table_header_actions',
             'table_header_patreons'   => '@todo ru: .user.list.table_header_patreons',
-        ]
+        ],
     ],
     'userreport' => [
         'list' => [
@@ -223,7 +320,7 @@ return [
             'table_header_contact_at'  => '@todo ru: .userreport.list.table_header_contact_at',
             'table_header_create_at'   => '@todo ru: .userreport.list.table_header_create_at',
             'table_header_actions'     => '@todo ru: .userreport.list.table_header_actions',
-            'handled'                  => '@todo ru: .userreport.list.handled'
-        ]
-    ]
+            'handled'                  => '@todo ru: .userreport.list.handled',
+        ],
+    ],
 ];

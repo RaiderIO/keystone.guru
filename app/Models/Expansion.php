@@ -34,19 +34,19 @@ class Expansion extends CacheModel
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
     protected $dates = [
-//        'released_at',
+        // 'released_at',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
-    const EXPANSION_LEGION = 'legion';
-    const EXPANSION_BFA = 'bfa';
+    const EXPANSION_LEGION      = 'legion';
+    const EXPANSION_BFA         = 'bfa';
     const EXPANSION_SHADOWLANDS = 'shadowlands';
 
     const ALL = [
-        'Legion' => self::EXPANSION_LEGION,
+        'Legion'             => self::EXPANSION_LEGION,
         'Battle for Azeroth' => self::EXPANSION_BFA,
-        'Shadowlands' => self::EXPANSION_SHADOWLANDS,
+        'Shadowlands'        => self::EXPANSION_SHADOWLANDS,
     ];
 
     /**
@@ -65,16 +65,16 @@ class Expansion extends CacheModel
      * @return bool
      * @throws Exception
      */
-    public function saveFromRequest(Request $request, $fileUploadDirectory = 'uploads') : bool
+    public function saveFromRequest(Request $request, string $fileUploadDirectory = 'uploads'): bool
     {
         $new = isset($this->id);
 
         $file = $request->file('icon');
 
         $this->icon_file_id = -1;
-        $this->name = $request->get('name');
-        $this->shortname = $request->get('shortname');
-        $this->color = $request->get('color');
+        $this->name         = $request->get('name');
+        $this->shortname    = $request->get('shortname');
+        $this->color        = $request->get('color');
 
         // Update or insert it
         if ($this->save()) {

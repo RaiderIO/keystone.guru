@@ -19,7 +19,7 @@ return [
                 'next_week_affixes' => 'Next week\'s affixes',
                 'this_week_affixes' => 'This week\'s affixes',
                 'new'               => 'New',
-            ]
+            ],
         ],
 
         'my_profile' => 'My profile',
@@ -80,7 +80,7 @@ return [
 
             'user_reports' => [
                 'user_reports' => 'User reports',
-            ]
+            ],
         ],
-    ]
+    ],
 ];
