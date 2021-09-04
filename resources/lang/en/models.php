@@ -9,5 +9,5 @@ return [
         'permission_petko'         => 'Used with Petko\'s permission',
         'subtitle_temporary_route' => 'Temporary route',
         'subtitle_author'          => 'By %s',
-    ]
+    ],
 ];

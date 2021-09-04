@@ -14,9 +14,9 @@ return [
     */
 
     'password' => '@todo ru: .password',
-    'reset' => '@todo ru: .reset',
-    'sent' => '@todo ru: .sent',
-    'token' => '@todo ru: .token',
-    'user' => "@todo ru: .user",
+    'reset'    => '@todo ru: .reset',
+    'sent'     => '@todo ru: .sent',
+    'token'    => '@todo ru: .token',
+    'user'     => "@todo ru: .user",
 
 ];

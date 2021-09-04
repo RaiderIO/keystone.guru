@@ -19,7 +19,7 @@ return [
                 'next_week_affixes' => '@todo ru: .home.dungeonroutes.discoverdungeon.next_week_affixes',
                 'this_week_affixes' => '@todo ru: .home.dungeonroutes.discoverdungeon.this_week_affixes',
                 'new'               => '@todo ru: .home.dungeonroutes.discoverdungeon.new',
-            ]
+            ],
         ],
 
         'my_profile' => '@todo ru: .home.my_profile',
@@ -80,7 +80,7 @@ return [
 
             'user_reports' => [
                 'user_reports' => '@todo ru: .home.admin.user_reports.user_reports',
-            ]
+            ],
         ],
-    ]
+    ],
 ];

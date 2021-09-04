@@ -15,7 +15,7 @@ $showSiegeWarning = $showSiegeWarning ?? false;
 $dungeonsSelect = [];
 if ($showAll)
 {
-    $dungeonsSelect = ['All' => [-1 => __('views/common.dungeon.select.all_dungeons')]];
+    $dungeonsSelect = [__('views/common.dungeon.select.all') => [-1 => __('views/common.dungeon.select.all_dungeons')]];
 }
 
 // If the user didn't pass us any dungeons, resort to some defaults we may have set

@@ -3,14 +3,14 @@
 return [
     'commit'  => [
         'added'    => [
-            'added' => 'Added'
+            'added' => 'Added',
         ],
         'modified' => [
-            'modified' => 'Modified'
+            'modified' => 'Modified',
         ],
         'removed'  => [
-            'removed' => 'Removed'
-        ]
+            'removed' => 'Removed',
+        ],
     ],
     'release' => [
         'discord_footer' => [
@@ -19,6 +19,6 @@ return [
             'affixes'     => 'Affixes',
             'patreon'     => 'Patreon',
             'get_started' => 'Get started',
-        ]
-    ]
+        ],
+    ],
 ];

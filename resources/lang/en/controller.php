@@ -14,7 +14,7 @@ return [
             'mdt_mismatched_enemy_forces_teeming' => 'NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_count'          => 'NPC %s has mismatched enemy count, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_type'           => 'NPC %s has mismatched enemy type, MDT: %s, KG: %s',
-            'mdt_invalid_category'                => 'Invalid category'
+            'mdt_invalid_category'                => 'Invalid category',
         ],
         'flash' => [
             'caches_dropped_successfully' => 'Caches dropped successfully',
@@ -22,7 +22,7 @@ return [
             'exception'                   => [
                 'token_mismatch'        => '',
                 'internal_server_error' => 'Exception thrown in admin panel',
-            ]
+            ],
         ],
     ],
     'apidungeonroute'      => [
@@ -46,7 +46,7 @@ return [
         'flash'          => [
             'route_cloned_successfully' => 'Route cloned successfully',
             'route_updated'             => 'Route updated',
-            'route_created'             => 'Route created'
+            'route_created'             => 'Route created',
         ],
     ],
     'dungeonroutediscover' => [
@@ -89,7 +89,7 @@ return [
         'flash' => [
             'release_updated' => 'Release updated',
             'release_created' => 'Release created',
-        ]
+        ],
     ],
     'mdtimport'            => [
         'unknown_dungeon' => 'Unknown dungeon',
@@ -99,7 +99,7 @@ return [
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
-        ]
+        ],
     ],
     'profile'              => [
         'flash' => [
@@ -146,6 +146,6 @@ return [
             'account_deleted_successfully' => 'Account deleted successfully.',
             'account_deletion_error'       => 'An error occurred. Please try again.',
             'user_is_not_a_patron'         => 'This user is not a Patron',
-        ]
+        ],
     ],
 ];

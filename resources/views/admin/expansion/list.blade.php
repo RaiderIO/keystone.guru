@@ -39,7 +39,7 @@
             <tr>
                 <td><img src="{{ $expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/></td>
                 <td>{{ $expansion->id }}</td>
-                <td>{{ $expansion->name }}</td>
+                <td>{{ __($expansion->name) }}</td>
                 <td>{{ $expansion->color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['expansion' => $expansion->id]) }}">

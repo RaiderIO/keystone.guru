@@ -194,7 +194,7 @@ foreach ($team->teamusers as $teamuser) {
                                         data-toggle="tooltip" title="{{ __('views/team.edit.copy_to_clipboard_title') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
-                                @if($isUserModerator)
+                                @if($userIsModerator)
                                     <button id="team_invite_link_refresh" class="btn btn-info"
                                             data-toggle="tooltip"
                                             title="{{ __('views/team.edit.refresh_invite_link_title') }}">

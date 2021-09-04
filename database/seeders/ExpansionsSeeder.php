@@ -22,19 +22,19 @@ class ExpansionsSeeder extends Seeder
         $this->command->info('Adding known Expansions');
 
         $expansions = [
-            'Legion'                 => new Expansion([
+            'expansions.legion.name'                 => new Expansion([
                 'shortname'   => Expansion::EXPANSION_LEGION,
                 'color'       => '#27ff0f',
-                'released_at' => Carbon::make('2016-08-30 00:00:00')
-            ]), 'Battle for Azeroth' => new Expansion([
+                'released_at' => Carbon::make('2016-08-30 00:00:00'),
+            ]), 'expansions.battle_for_azeroth.name' => new Expansion([
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
-                'released_at' => Carbon::make('2018-08-14 00:00:00')
-            ]), 'Shadowlands'        => new Expansion([
+                'released_at' => Carbon::make('2018-08-14 00:00:00'),
+            ]), 'expansions.shadowlands.name'        => new Expansion([
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
-                'released_at' => Carbon::make('2020-11-24 00:00:00')
-            ])
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]),
         ];
 
 
@@ -44,11 +44,11 @@ class ExpansionsSeeder extends Seeder
             $expansion->icon_file_id = -1;
             $expansion->save();
 
-            $icon = new File();
-            $icon->model_id = $expansion->id;
+            $icon              = new File();
+            $icon->model_id    = $expansion->id;
             $icon->model_class = get_class($expansion);
-            $icon->disk = 'public';
-            $icon->path = sprintf('images/expansions/%s.png', $expansion->shortname);
+            $icon->disk        = 'public';
+            $icon->path        = sprintf('images/expansions/%s.png', $expansion->shortname);
             $icon->save();
 
             $expansion->icon_file_id = $icon->id;

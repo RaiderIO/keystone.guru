@@ -4,7 +4,7 @@ return [
     'affixgroup'   => [
         'affixgroup' => [
 
-        ]
+        ],
     ],
     'dungeon'      => [
         'griddiscover' => [
@@ -15,31 +15,32 @@ return [
         ],
         'select'       => [
             'dungeon'                  => 'Dungeon',
+            'all'                      => 'All',
             'all_dungeons'             => 'All dungeons',
-            'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.'
-        ]
+            'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.',
+        ],
     ],
     'dungeonroute' => [
         'search'     => [
             'loadmore' => [
                 'loading' => 'Loading...',
-            ]
+            ],
         ],
         'attributes' => [
             'attributes'              => 'Attributes',
             'no_attributes_title'     => 'Select the attributes that your group is comfortable with handling.',
             'select_attributes_title' => 'Attributes describe what features your route has that others may not be able to complete due to composition differences or skill. Marking attributes properly enables others to find routes that fit them more easily.',
-            'attributes_selected'     => '{0} attributes'
+            'attributes_selected'     => '{0} attributes',
         ],
         'card'       => [
             'no_description'    => 'No description',
             'by_author'         => 'By',
             'updated_at'        => 'Updated %s',
             'report'            => 'Report',
-            'refresh_thumbnail' => 'Refresh thumbnail'
+            'refresh_thumbnail' => 'Refresh thumbnail',
         ],
         'rating'     => [
-            'nr_of_votes' => '%s vote(s)'
+            'nr_of_votes' => '%s vote(s)',
         ],
         'table'      => [
             'team'                  => 'Team',
@@ -56,7 +57,7 @@ return [
         ],
         'tier'       => [
             'data_by_subcreation' => '%s - data by https://mplus.subcreation.net',
-        ]
+        ],
     ],
     'forms'        => [
         'createroute'          => [
@@ -159,16 +160,17 @@ return [
     ],
     'group'        => [
         'affixes'     => [
+            'seasonal_index_preset'    => 'Preset :count',
             'awakened_enemy_set'       => 'Awakened enemy set',
             'awakened_enemy_set_title' => 'Awakened enemies (pillar bosses) for M+ levels 10 and higher come in two sets. Each set of affixes is marked either A or B. You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map. You can always adjust your selection from the Route Settings menu later.',
             'tormented_preset'         => 'Tormented preset',
-            'tormented_preset_title'   => 'Tormented enemies for M+ levels 10 and higher come in %s presets. You may attach multiple affixes to your route whom can contain any combination of presets. Choose here which preset will be displayed on the map. You can always adjust your selection from the Route Settings menu later.'
+            'tormented_preset_title'   => 'Tormented enemies for M+ levels 10 and higher come in %s presets. You may attach multiple affixes to your route whom can contain any combination of presets. Choose here which preset will be displayed on the map. You can always adjust your selection from the Route Settings menu later.',
         ],
         'composition' => [
             'faction'         => 'Faction',
             'undo'            => 'Undo',
-            'party_member_nr' => 'Party member #%d'
-        ]
+            'party_member_nr' => 'Party member #%d',
+        ],
     ],
     'layout'       => [
         'footer'  => [
@@ -215,7 +217,7 @@ return [
             'my_teams'          => 'My teams',
             'my_profile'        => 'My profile',
             'logout'            => 'Logout',
-        ]
+        ],
     ],
     'maps'         => [
         'controls' => [
@@ -249,7 +251,7 @@ return [
                     'rate_this_route'          => 'Rate this route',
                     'unable_to_rate_own_route' => 'You cannot rate your own route',
                     'your_rating'              => 'Your rating',
-                ]
+                ],
             ],
             'enemyinfo' => [
                 'enemy_info'      => 'Enemy info',
@@ -312,7 +314,7 @@ return [
                 'why_report_this_route'  => 'Why do you want to report this route? (max. 1000 characters)',
                 'contact_by_email'       => 'Contact me by e-mail if required for further investigation',
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
-                'submit'                 => 'Submit'
+                'submit'                 => 'Submit',
             ],
             'enemy'        => [
                 'report_enemy_bug'       => 'Report enemy bug',
@@ -384,16 +386,16 @@ return [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
-            ]
+            ],
         ],
         'cookieconsent' => [
-            'learn_more' => 'Learn more'
+            'learn_more' => 'Learn more',
         ],
     ],
     'user'         => [
         'name' => [
             'avatar_title' => 'Avatar',
         ],
-    ]
+    ],
 
 ];

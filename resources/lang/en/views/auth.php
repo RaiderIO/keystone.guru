@@ -15,7 +15,7 @@ return [
             'password'         => 'Password',
             'confirm_password' => 'Confirm password',
             'reset_password'   => 'Reset password',
-        ]
+        ],
     ],
     'login'     => [
         'title' => 'Login',
@@ -23,5 +23,5 @@ return [
     'register'  => [
         'title'  => 'Register',
         'header' => 'Register',
-    ]
+    ],
 ];

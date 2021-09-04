@@ -448,4 +448,9 @@ return [
     'filter_input_rating_header'            => '@todo ru: .filter_input_rating_header',
     'filter_input_title_header'             => '@todo ru: .filter_input_title_header',
     'filter_input_user_header'              => '@todo ru: .filter_input_user_header',
+
+    // Group composition
+    'specialization_select'                 => '@todo ru: .specialization_select',
+    'class_select'                          => '@todo ru: .class_select',
+    'race_select'                           => '@todo ru: .race_select',
 ];

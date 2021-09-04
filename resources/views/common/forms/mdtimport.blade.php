@@ -3,7 +3,7 @@
     <div class="row mb-2">
         <div class="col">
             {!! Form::label('import_string',
-            __('views/common.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
+            __('views/common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
             !!}
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
@@ -19,7 +19,7 @@
     <div class="form-group">
         <div class="text-info">
             <i class="fas fa-info-circle"></i> {{ sprintf(
-                    __('views/common.mdtimport.unregistered_user_all_routes_temporary'),
+                    __('views/common.forms.mdtimport.unregistered_user_all_routes_temporary'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                     )
                 }}
@@ -29,10 +29,10 @@
 @else
     <div class="form-group">
         <label for="mdt_import_sandbox">
-            {{ __('views/common.mdtimport.temporary_route') }}
+            {{ __('views/common.forms.mdtimport.temporary_route') }}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 sprintf(
-                    __('views/common.mdtimport.temporary_route_title'),
+                    __('views/common.forms.mdtimport.temporary_route_title'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
@@ -43,7 +43,7 @@
 <div class="form-group">
     <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
         <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
-        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.mdtimport.parsing_your_string') }}
+        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.forms.mdtimport.parsing_your_string') }}
     </div>
 </div>
 <div class="form-group">
@@ -57,7 +57,7 @@
     </div>
 </div>
 <div class="form-group">
-    {!! Form::submit(__('views/common.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+    {!! Form::submit(__('views/common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
     <div class="col-md">
 
     </div>

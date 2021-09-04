@@ -62,7 +62,7 @@ return [
             'table_header_color'   => 'Color',
             'table_header_actions' => 'Actions',
             'edit'                 => 'Edit',
-        ]
+        ],
     ],
     'floor'      => [
         'flash'   => [
@@ -97,7 +97,7 @@ return [
         'mapping' => [
             'title'  => 'Edit Mapping - %s',
             'header' => 'Edit Mapping - %s',
-        ]
+        ],
     ],
     'npc'        => [
         'flash' => [
@@ -141,7 +141,7 @@ return [
             'table_header_enemy_forces'   => 'Enemy forces',
             'table_header_classification' => 'Classification',
             'table_header_actions'        => 'Action',
-        ]
+        ],
     ],
     'release'    => [
         'edit' => [
@@ -169,8 +169,8 @@ return [
             'table_header_version' => 'Version',
             'table_header_title'   => 'Title',
             'table_header_actions' => 'Actions',
-            'edit'                 => 'Edit'
-        ]
+            'edit'                 => 'Edit',
+        ],
     ],
     'spell'      => [
         'edit' => [
@@ -195,8 +195,8 @@ return [
             'table_header_id'      => 'Id',
             'table_header_name'    => 'Name',
             'table_header_actions' => 'Actions',
-            'edit'                 => 'Edit'
-        ]
+            'edit'                 => 'Edit',
+        ],
     ],
     'tools'      => [
         'datadump'     => [
@@ -221,7 +221,7 @@ return [
             'viewcontents' => [
                 'title'  => 'View contents for :dungeonRouteTitle',
                 'header' => 'View contents for %s',
-            ]
+            ],
         ],
         'exception'    => [
             'select' => [
@@ -229,7 +229,7 @@ return [
                 'header'                    => 'Throw an exception',
                 'select_exception_to_throw' => 'Select exception to throw',
                 'submit'                    => 'Submit',
-            ]
+            ],
         ],
         'mdt'          => [
             'diff'         => [
@@ -263,7 +263,7 @@ return [
                 'header'                       => 'View MDT String Contents',
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
                 'submit'                       => 'Submit',
-            ]
+            ],
         ],
         'npcimport'    => [
             'title'                   => 'Mass import NPCs',
@@ -307,7 +307,7 @@ return [
             'table_header_registered' => 'Registered',
             'table_header_actions'    => 'Actions',
             'table_header_patreons'   => 'Patreon',
-        ]
+        ],
     ],
     'userreport' => [
         'list' => [
@@ -320,7 +320,7 @@ return [
             'table_header_contact_at'  => 'Contact at',
             'table_header_create_at'   => 'Created at',
             'table_header_actions'     => 'Actions',
-            'handled'                  => 'Handled'
-        ]
-    ]
+            'handled'                  => 'Handled',
+        ],
+    ],
 ];

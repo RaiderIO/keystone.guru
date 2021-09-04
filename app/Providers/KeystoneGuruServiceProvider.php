@@ -148,7 +148,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'isPrideful'                      => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id,
                 'isTormented'                     => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id,
                 'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
-                    ->with(['affixes:affixes.id,affixes.name,affixes.description'])
+                    ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                     ->get(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));

@@ -13,7 +13,7 @@ $id = $id ?? 'affixes';
 
 $presets = [];
 for ($i = 0; $i < $currentSeason->presets; $i++) {
-    $presets[$i] = sprintf('Preset %s', $i + 1);
+    $presets[$i] = __('views/common.group.affixes.seasonal_index_preset', ['count' => $i + 1]);
 }
 ?>
 
@@ -21,7 +21,7 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
     'selectSelector'   => '#' . $id,
     'teemingSelector'  => $teemingSelector,
     'affixGroups'      => $affixGroups,
-    'modal'            => isset($modal) ? $modal : false,
+    'modal'            => $modal ?? false,
 ]])
 
 <div class="form-group">
@@ -30,51 +30,52 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
         ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
 
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
-        @foreach($affixGroups as $affixGroup)
-            <?php $isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING); ?>
-            <div
-                class="row affix_list_row {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-                {{ $isTeeming ? 'style="display: none;"' : '' }}
-                data-id="{{ $affixGroup->id }}">
-                <?php
-                /** @var \App\Models\AffixGroup $affixGroup */
-                $count = 0;
-                foreach($affixGroup->affixes as $affix){
-                $last = count($affixGroup->affixes) - 1 === $count;
-                ?>
-                <div class="col col-md pr-0 affix_row">
-                    <div class="row no-gutters">
-                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
-                             data-toggle="tooltip"
-                             title="{{ __($affix->description) }}"
-                             style="height: 24px;">
-                        </div>
-                        @if($names)
-                            <div class="col d-md-block d-none pl-1">
-                                @if($last && $affixGroup->seasonal_index !== null)
-                                    {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
-                                @else
-                                    {{ __($affix->name) }}
-                                @endif
-                            </div>
-                        @endif
+        <?php foreach($affixGroups as $affixGroup){
+        $isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING); ?>
+        <div
+            class="row affix_list_row {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+            {{ $isTeeming ? 'style="display: none;"' : '' }}
+            data-id="{{ $affixGroup->id }}">
+            <?php
+            /** @var \App\Models\AffixGroup $affixGroup */
+            $count = 0;
+            foreach($affixGroup->affixes as $affix){
+            $last = count($affixGroup->affixes) - 1 === $count;
+            ?>
+            <div class="col col-md pr-0 affix_row">
+                <div class="row no-gutters">
+                    <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
+                         data-toggle="tooltip"
+                         title="{{ __($affix->description) }}"
+                         style="height: 24px;">
                     </div>
+                    @if($names)
+                        <div class="col d-md-block d-none pl-1">
+                            @if($last && $affixGroup->seasonal_index !== null)
+                                {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
+                            @else
+                                {{ __($affix->name) }}
+                            @endif
+                        </div>
+                    @endif
                 </div>
-                <?php $count++;
-                } ?>
-                <span class="col col-md-auto text-right pl-0">
+            </div>
+            <?php $count++;
+            } ?>
+            <span class="col col-md-auto text-right pl-0">
                     <span class="check" style="visibility: hidden;">
                         <i class="fas fa-check"></i>
                     </span>
                 </span>
-            </div>
-        @endforeach
+        </div>
+        <?php } ?>
     </div>
 </div>
 
 @if($isAwakened)
     <div class="form-group">
-        {!! Form::label('seasonal_index', __('views/common.group.affixes.awakened_enemy_set')) !!} <span class="form-required">*</span>
+        {!! Form::label('seasonal_index', __('views/common.group.affixes.awakened_enemy_set')) !!} <span
+            class="form-required">*</span>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
     __('views/common.group.affixes.awakened_enemy_set_title')
      }}"></i>
@@ -85,7 +86,8 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
 
 @if($isTormented)
     <div class="form-group">
-        {!! Form::label('seasonal_index', __('views/common.group.affixes.tormented_preset')) !!} <span class="form-required">*</span>
+        {!! Form::label('seasonal_index', __('views/common.group.affixes.tormented_preset')) !!} <span
+            class="form-required">*</span>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
     sprintf(__('views/common.group.affixes.tormented_preset_title'), $currentSeason->presets)
      }}"></i>

@@ -34,7 +34,7 @@ $id = $id ?? 'affixes';
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            class: affix.name.toLowerCase(),
+                            class: affix.key.toLowerCase(),
                             name: affix.name
                         });
                     }

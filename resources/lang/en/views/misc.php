@@ -53,5 +53,5 @@ return [
         'title'       => 'Status',
         'header'      => 'Status',
         'description' => 'We\'re up, yay!',
-    ]
+    ],
 ];

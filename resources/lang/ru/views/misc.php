@@ -9,6 +9,9 @@ return [
         'title'                             => '@todo ru: .affixes.title',
         'header'                            => '@todo ru: .affixes.header',
         'start_date'                        => '@todo ru: .affixes.start_date',
+        '2'                                 => '@todo ru: .affixes.2',
+        '4'                                 => '@todo ru: .affixes.4',
+        '7'                                 => '@todo ru: .affixes.7',
         '10_seasonal'                       => '@todo ru: .affixes.10_seasonal',
         'previous'                          => '@todo ru: .affixes.previous',
         'next'                              => '@todo ru: .affixes.next',
@@ -21,8 +24,11 @@ return [
         'header' => '@todo ru: .changelog.header',
     ],
     'credits'   => [
-        'title'  => '@todo ru: .credits.title',
-        'header' => '@todo ru: .credits.header',
+        'title'            => '@todo ru: .credits.title',
+        'header'           => '@todo ru: .credits.header',
+        'header_people'    => '@todo ru: .credits.header_people',
+        'header_libraries' => '@todo ru: .credits.header_libraries',
+        'header_images'    => '@todo ru: .credits.header_images',
     ],
     'demo'      => [
         'title'  => '@todo ru: .demo.title',
@@ -43,9 +49,9 @@ return [
         'enemy_forces'                  => '@todo ru: .mapping.enemy_forces',
         'npcs_assigned'                 => '@todo ru: .mapping.npcs_assigned',
     ],
-    'status' => [
-        'title' => '@todo ru: .status.title',
-        'header' => '@todo ru: .status.header',
+    'status'    => [
+        'title'       => '@todo ru: .status.title',
+        'header'      => '@todo ru: .status.header',
         'description' => '@todo ru: .status.description',
-    ]
+    ],
 ];
