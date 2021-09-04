@@ -13,16 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class NpcType extends CacheModel
 {
-    const ABERRATION = 1;
-    const BEAST = 2;
-    const CRITTER = 3;
-    const DEMON = 4;
-    const DRAGONKIN = 5;
-    const ELEMENTAL = 6;
-    const GIANT = 7;
-    const HUMANOID = 8;
-    const MECHANICAL = 9;
-    const UNDEAD = 10;
+    const ABERRATION    = 1;
+    const BEAST         = 2;
+    const CRITTER       = 3;
+    const DEMON         = 4;
+    const DRAGONKIN     = 5;
+    const ELEMENTAL     = 6;
+    const GIANT         = 7;
+    const HUMANOID      = 8;
+    const MECHANICAL    = 9;
+    const UNDEAD        = 10;
     const UNCATEGORIZED = 11;
 
     const ALL = [

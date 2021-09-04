@@ -156,7 +156,6 @@ class EchoUser extends Signalable {
     }
 
 
-
     cleanup() {
         super.cleanup();
 

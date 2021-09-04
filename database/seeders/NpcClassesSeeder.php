@@ -21,14 +21,14 @@ class NpcClassesSeeder extends Seeder
 
         $npcClasses = [
             new NpcClass([
-                'name' => 'Melee'
+                'name' => 'Melee',
             ]), new NpcClass([
-                'name' => 'Ranged'
+                'name' => 'Ranged',
             ]), new NpcClass([
-                'name' => 'Caster'
+                'name' => 'Caster',
             ]), new NpcClass([
-                'name' => 'Healer'
-            ])
+                'name' => 'Healer',
+            ]),
         ];
 
 

@@ -40,25 +40,25 @@ class APIEnemyController extends Controller
         $beforeEnemy = clone $enemy;
 
         $enemy->enemy_pack_id = (int)$request->get('enemy_pack_id');
-        $npcId = $request->get('npc_id', -1);
-        $enemy->npc_id = $npcId === null ? -1 : (int)$npcId;
+        $npcId                = $request->get('npc_id', -1);
+        $enemy->npc_id        = $npcId === null ? -1 : (int)$npcId;
         // Only when set, otherwise default of -1
-        $mdtId = $request->get('mdt_id', -1);
+        $mdtId         = $request->get('mdt_id', -1);
         $enemy->mdt_id = $mdtId === null ? -1 : (int)$mdtId;
         $seasonalIndex = $request->get('seasonal_index');
         // don't use is_empty since 0 is valid
-        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' || $seasonalIndex < 0 ? null : (int)$seasonalIndex;
-        $seasonalType = $request->get('seasonal_type', null);
-        $enemy->seasonal_type = $seasonalType === null || $seasonalType === '' || $seasonalType < 0 ? null : $seasonalType;
-        $enemy->floor_id = (int)$request->get('floor_id');
-        $enemy->teeming = $request->get('teeming');
-        $enemy->faction = $request->get('faction', 'any');
-        $enemy->required = (int)$request->get('required', false);
-        $enemy->skippable = (int)$request->get('skippable', false);
-        $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
+        $enemy->seasonal_index                = $seasonalIndex === null || $seasonalIndex === '' || $seasonalIndex < 0 ? null : (int)$seasonalIndex;
+        $seasonalType                         = $request->get('seasonal_type', null);
+        $enemy->seasonal_type                 = $seasonalType === null || $seasonalType === '' || $seasonalType < 0 ? null : $seasonalType;
+        $enemy->floor_id                      = (int)$request->get('floor_id');
+        $enemy->teeming                       = $request->get('teeming');
+        $enemy->faction                       = $request->get('faction', 'any');
+        $enemy->required                      = (int)$request->get('required', false);
+        $enemy->skippable                     = (int)$request->get('skippable', false);
+        $enemy->enemy_forces_override         = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
-        $enemy->lat = (float)$request->get('lat');
-        $enemy->lng = (float)$request->get('lng');
+        $enemy->lat                           = (float)$request->get('lat');
+        $enemy->lng                           = (float)$request->get('lng');
 
         if ($enemy->save()) {
 
@@ -73,7 +73,7 @@ class APIEnemyController extends Controller
                     if ($spell->aura) {
                         EnemyActiveAura::insert([
                             'enemy_id' => $enemy->id,
-                            'spell_id' => $activeAura
+                            'spell_id' => $activeAura,
                         ]);
                     }
                 }
@@ -116,10 +116,10 @@ class APIEnemyController extends Controller
 
             // Create a new one, if the user didn't just want to clear it
             if ($raidMarkerName !== null && !empty($raidMarkerName)) {
-                $raidMarker = new DungeonRouteEnemyRaidMarker();
+                $raidMarker                   = new DungeonRouteEnemyRaidMarker();
                 $raidMarker->dungeon_route_id = $dungeonroute->id;
-                $raidMarker->raid_marker_id = RaidMarker::where('name', $raidMarkerName)->first()->id;
-                $raidMarker->enemy_id = $enemy->id;
+                $raidMarker->raid_marker_id   = RaidMarker::where('name', $raidMarkerName)->first()->id;
+                $raidMarker->enemy_id         = $enemy->id;
                 $raidMarker->save();
 
                 $result = ['name' => $raidMarkerName];

@@ -1,14 +1,15 @@
 // $(function () {
-    L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
-        statics: {
-            TYPE: 'enemypatrol'
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.EnemyPatrol.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
+L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
+    statics: {
+        TYPE: 'enemypatrol'
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.EnemyPatrol.TYPE;
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
 // });
 
 class EnemyPatrol extends Polyline {

@@ -2,15 +2,15 @@
 
 namespace App\Logging;
 
-use Monolog\Logger;
 use DiscordHandler\DiscordHandler;
+use Monolog\Logger;
 
 class CreateDiscordLogger
 {
     /**
      * Create a custom Discord Monolog instance.
      *
-     * @param  array  $config
+     * @param array $config
      * @return \Monolog\Logger
      */
     public function __invoke(array $config)

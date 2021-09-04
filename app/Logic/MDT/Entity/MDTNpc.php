@@ -53,14 +53,14 @@ class MDTNpc
 
     function __construct(int $index, array $rawMdtNpc)
     {
-        $this->_index = $index;
-        $this->_rawMdtNpc = $rawMdtNpc;
-        $this->_clones = $rawMdtNpc['clones'];
-        $this->_id = (int)$rawMdtNpc['id'];
-        $this->_spells = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
-        $this->_scale = (float)$rawMdtNpc['scale'];
+        $this->_index        = $index;
+        $this->_rawMdtNpc    = $rawMdtNpc;
+        $this->_clones       = $rawMdtNpc['clones'];
+        $this->_id           = (int)$rawMdtNpc['id'];
+        $this->_spells       = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
+        $this->_scale        = (float)$rawMdtNpc['scale'];
         $this->_countTeeming = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
-        $this->_count = (int)$rawMdtNpc['count'];
+        $this->_count        = (int)$rawMdtNpc['count'];
         // May not always be set?
         if (isset($rawMdtNpc['name'])) {
             $this->_name = $rawMdtNpc['name'];
@@ -70,8 +70,8 @@ class MDTNpc
         if (isset($rawMdtNpc['creatureType'])) {
             $this->_creatureType = $rawMdtNpc['creatureType'];
         }
-        $this->_level = (int)$rawMdtNpc['level'];
-        $this->_health = (int)$rawMdtNpc['health'];
+        $this->_level           = (int)$rawMdtNpc['level'];
+        $this->_health          = (int)$rawMdtNpc['health'];
         $this->_characteristics = isset($rawMdtNpc['characteristics']) ? $rawMdtNpc['characteristics'] : [];
     }
 

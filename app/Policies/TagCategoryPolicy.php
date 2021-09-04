@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\DungeonRoute;
-use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

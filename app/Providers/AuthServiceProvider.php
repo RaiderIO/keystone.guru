@@ -17,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\LiveSession'      => 'App\Policies\LiveSessionPolicy',
         'App\Models\Tags\Tag'         => 'App\Policies\TagPolicy',
         'App\Models\Tags\TagCategory' => 'App\Policies\TagCategoryPolicy',
-        'App\Models\Team'             => 'App\Policies\TeamPolicy'
+        'App\Models\Team'             => 'App\Policies\TeamPolicy',
     ];
 
     /**

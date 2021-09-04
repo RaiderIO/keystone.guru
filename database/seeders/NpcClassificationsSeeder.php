@@ -26,8 +26,8 @@ class NpcClassificationsSeeder extends Seeder
         ];
 
         foreach ($classificationsData as $name => $classificationData) {
-            $classification = new NpcClassification();
-            $classification->name = $name;
+            $classification        = new NpcClassification();
+            $classification->name  = $name;
             $classification->color = $classificationData['color'];
             $classification->save();
         }

@@ -35,14 +35,14 @@ class FloorController extends Controller
             $floor->dungeon_id = $request->get('dungeon');
         }
 
-        $floor->index = $request->get('index');
-        $floor->name = $request->get('name');
-        $floor->default = $request->get('default', false);
-        $defaultMinEnemySize = config('keystoneguru.min_enemy_size_default');
+        $floor->index          = $request->get('index');
+        $floor->name           = $request->get('name');
+        $floor->default        = $request->get('default', false);
+        $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');
         $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
         $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
 
-        $defaultMaxEnemySize = config('keystoneguru.max_enemy_size_default');
+        $defaultMaxEnemySize   = config('keystoneguru.max_enemy_size_default');
         $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
         $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
 
@@ -61,7 +61,7 @@ class FloorController extends Controller
                     FloorCoupling::insert([
                         'floor1_id' => $floor->id,
                         'floor2_id' => $connectedFloorCandidate->id,
-                        'direction' => $direction
+                        'direction' => $direction,
                     ]);
                 }
             }
@@ -82,7 +82,7 @@ class FloorController extends Controller
     public function new(Request $request, Dungeon $dungeon)
     {
         return view('admin.floor.edit', [
-            'dungeon'     => $dungeon
+            'dungeon' => $dungeon,
         ]);
     }
 
@@ -100,7 +100,7 @@ class FloorController extends Controller
             return view('admin.floor.edit', [
                 'dungeon'        => $dungeon,
                 'floor'          => $floor,
-                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
+                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
             Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
@@ -119,8 +119,8 @@ class FloorController extends Controller
         $dungeon = $floor->dungeon->load('floors');
 
         return view('admin.floor.mapping', [
-            'floor'       => $floor,
-            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->getProperties(),
+            'floor'      => $floor,
+            'mapContext' => (new MapContextDungeon($dungeon, $floor))->getProperties(),
         ]);
     }
 
@@ -159,7 +159,7 @@ class FloorController extends Controller
 
         return redirect()->route('admin.floor.edit.mapping', [
             'dungeon' => $request->get('dungeon'),
-            'floor'   => $floor
+            'floor'   => $floor,
         ]);
     }
 }

@@ -26,7 +26,7 @@ class OverpulledEnemyDeletedFormRequest extends FormRequest
         return [
             'enemy_ids'   => 'required|array',
             'enemy_ids.*' => 'numeric',
-            'no_result'   => 'nullable|int'
+            'no_result'   => 'nullable|int',
         ];
     }
 }

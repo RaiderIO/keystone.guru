@@ -29,8 +29,7 @@ trait ListsEnemyPacks
         $result = null;
         $fields = ['id', 'floor_id', 'label', 'teeming', 'faction'];
         if ($enemies) {
-            $result = EnemyPack::with(['enemies' => function ($query) use ($teeming)
-            {
+            $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 // Only include teeming enemies when requested
                 if (!$teeming) {
@@ -40,7 +39,7 @@ trait ListsEnemyPacks
             }]);
         } else {
             $fields[] = 'vertices_json';
-            $result = EnemyPack::query();
+            $result   = EnemyPack::query();
         }
 
         return $result->where('floor_id', $floorId)->get($fields);

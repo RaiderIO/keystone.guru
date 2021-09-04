@@ -53,7 +53,7 @@ class APINpcController extends Controller
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
             new IdColumnHandler($datatablesHandler),
             new NameColumnHandler($datatablesHandler),
-            new DungeonColumnHandler($datatablesHandler)
+            new DungeonColumnHandler($datatablesHandler),
         ])->applyRequestToBuilder()->getResult();
     }
 }

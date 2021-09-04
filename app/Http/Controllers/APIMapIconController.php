@@ -66,7 +66,7 @@ class APIMapIconController extends Controller
         if (is_numeric($teamId)) {
             $team = Team::find($teamId);
             if ($team !== null && $team->isUserCollaborator(Auth::user())) {
-                $mapIcon->team_id = $teamId;
+                $mapIcon->team_id          = $teamId;
                 $mapIcon->dungeon_route_id = -1;
             }
         }
@@ -77,16 +77,16 @@ class APIMapIconController extends Controller
         }
 
         // Only admins may make global comments for all routes
-        $mapIcon->floor_id = (int)$request->get('floor_id');
-        $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
-        $mapIcon->map_icon_type_id = $mapIconTypeId;
+        $mapIcon->floor_id          = (int)$request->get('floor_id');
+        $mapIcon->dungeon_route_id  = $dungeonroute === null ? -1 : $dungeonroute->id;
+        $mapIcon->map_icon_type_id  = $mapIconTypeId;
         $mapIcon->permanent_tooltip = (int)$request->get('permanent_tooltip', false);
-        $seasonalIndex = $request->get('seasonal_index');
+        $seasonalIndex              = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
         $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
-        $mapIcon->comment = $request->get('comment', '') ?? '';
-        $mapIcon->lat = (float)$request->get('lat');
-        $mapIcon->lng = (float)$request->get('lng');
+        $mapIcon->comment        = $request->get('comment', '') ?? '';
+        $mapIcon->lat            = (float)$request->get('lat');
+        $mapIcon->lng            = (float)$request->get('lng');
 
         if ($mapIcon->save()) {
             // Set or unset the linked awakened obelisks now that we have an ID

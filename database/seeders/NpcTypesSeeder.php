@@ -22,7 +22,7 @@ class NpcTypesSeeder extends Seeder
         foreach (NpcType::ALL as $npcTypeName => $id) {
             (new NpcType([
                 'id'   => $id,
-                'type' => $npcTypeName
+                'type' => $npcTypeName,
             ]))->save();
         }
     }

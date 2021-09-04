@@ -35,7 +35,7 @@ class MDTImportController extends Controller
         $importString = new ImportString($seasonService);
 
         try {
-            $warnings = new Collection();
+            $warnings     = new Collection();
             $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false, false);
 
             $affixes = [];
@@ -59,7 +59,7 @@ class MDTImportController extends Controller
                 'notes'            => $dungeonRoute->mapicons->count(),
                 'enemy_forces'     => $dungeonRoute->enemy_forces,
                 'enemy_forces_max' => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
-                'warnings'         => $warningResult
+                'warnings'         => $warningResult,
             ];
 
             // Siege of Boralus faction but hide it otherwise
@@ -108,16 +108,16 @@ class MDTImportController extends Controller
         $sandbox = (bool)$request->get('mdt_import_sandbox', false);
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
-            $string = $request->get('import_string');
+            $string       = $request->get('import_string');
             $importString = new ImportString($seasonService);
 
             try {
                 $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
 
                 // Keep track of the import
-                $mdtImport = new MDTImport();
+                $mdtImport                   = new MDTImport();
                 $mdtImport->dungeon_route_id = $dungeonRoute->id;
-                $mdtImport->import_string = $string;
+                $mdtImport->import_string    = $string;
                 $mdtImport->save();
             } catch (InvalidMDTString $ex) {
                 return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));

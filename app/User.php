@@ -71,7 +71,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'id', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
     ];
 
     /**
@@ -80,11 +80,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'id', 'public_key', 'name', 'echo_color'
+        'id', 'public_key', 'name', 'echo_color',
     ];
 
     protected $appends = [
-        'initials'
+        'initials',
     ];
 
     protected $with = 'iconfile';
@@ -257,20 +257,20 @@ class User extends Authenticatable
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
-                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this)
+                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this),
             ];
         }
 
         return array_merge($teams, [
             'patreon'       => [
-                'unlinked' => $this->patreondata !== null
+                'unlinked' => $this->patreondata !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
+                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count()),
             ],
             'reports'       => [
-                'delete_count' => ($this->reports()->where('status', 0)->count())
-            ]
+                'delete_count' => ($this->reports()->where('status', 0)->count()),
+            ],
         ]);
     }
 
@@ -279,8 +279,7 @@ class User extends Authenticatable
         parent::boot();
 
         // Delete user properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item User */
             $item->dungeonroutes()->delete();
             $item->reports()->delete();

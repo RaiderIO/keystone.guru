@@ -57,12 +57,12 @@ class AffixSeeder extends Seeder
             /** @var $affix Model */
             $affix->save();
 
-            $iconName = strtolower(str_replace(' ', '', $affix->key));
-            $icon = new File();
-            $icon->model_id = $affix->id;
+            $iconName          = strtolower(str_replace(' ', '', $affix->key));
+            $icon              = new File();
+            $icon->model_id    = $affix->id;
             $icon->model_class = get_class($affix);
-            $icon->disk = 'public';
-            $icon->path = sprintf('images/affixes/%s.jpg', $iconName);
+            $icon->disk        = 'public';
+            $icon->path        = sprintf('images/affixes/%s.jpg', $iconName);
             $icon->save();
 
             $affix->icon_file_id = $icon->id;
@@ -152,7 +152,7 @@ class AffixSeeder extends Seeder
         foreach ($groups as $groupArr) {
             $group = AffixGroup::create([
                 'season_id'      => $groupArr['season_id'],
-                'seasonal_index' => $groupArr['seasonal_index'] ?? null
+                'seasonal_index' => $groupArr['seasonal_index'] ?? null,
             ]);
 
             foreach ($groupArr['affixes'] as $affixName) {
@@ -160,7 +160,7 @@ class AffixSeeder extends Seeder
 
                 AffixGroupCoupling::create([
                     'affix_id'       => $affix->id,
-                    'affix_group_id' => $group->id
+                    'affix_group_id' => $group->id,
                 ]);
             }
         }

@@ -26,7 +26,7 @@ class UserController extends Controller
     public function list()
     {
         return view('admin.user.list', [
-            'paidTiers' => PaidTier::all()
+            'paidTiers' => PaidTier::all(),
         ]);
     }
 
@@ -108,7 +108,7 @@ class UserController extends Controller
             foreach ($newPaidTierIds as $newPaidTierId) {
                 $newPaidTier = new PatreonTier([
                     'patreon_data_id' => $user->patreondata->id,
-                    'paid_tier_id'    => $newPaidTierId
+                    'paid_tier_id'    => $newPaidTierId,
                 ]);
                 $newPaidTier->save();
             }

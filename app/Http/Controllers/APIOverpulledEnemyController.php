@@ -28,8 +28,8 @@ class APIOverpulledEnemyController extends Controller
      */
     function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest $request,
-        DungeonRoute $dungeonroute, LiveSession $livesession)
+        OverpulledEnemyFormRequest      $request,
+        DungeonRoute                    $dungeonroute, LiveSession $livesession)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);
@@ -40,7 +40,7 @@ class APIOverpulledEnemyController extends Controller
                 ->where('enemy_id', $enemyId)->firstOrNew([
                     'live_session_id' => $livesession->id,
                     'kill_zone_id'    => (int)$request->get('kill_zone_id'),
-                    'enemy_id'        => $enemyId
+                    'enemy_id'        => $enemyId,
                 ]);
 
             if (!$overpulledEnemy->save()) {
@@ -65,7 +65,7 @@ class APIOverpulledEnemyController extends Controller
      */
     function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest $request, DungeonRoute $dungeonroute, LiveSession $livesession)
+        OverpulledEnemyFormRequest      $request, DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);

@@ -93,12 +93,12 @@ class Tag extends Model
         // Save the tag we're trying to add
         $tag = new Tag();
         // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-        $tag->user_id = Auth::id();
+        $tag->user_id         = Auth::id();
         $tag->tag_category_id = $tagCategoryId;
-        $tag->model_id = null;
-        $tag->model_class = null;
-        $tag->name = $name;
-        $tag->color = null;
+        $tag->model_id        = null;
+        $tag->model_class     = null;
+        $tag->name            = $name;
+        $tag->color           = null;
 
         $tag->save();
 

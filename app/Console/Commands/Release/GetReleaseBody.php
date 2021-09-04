@@ -38,7 +38,7 @@ class GetReleaseBody extends Command
      */
     public function handle()
     {
-        $version = $this->argument('version');
+        $version  = $this->argument('version');
         $platform = $this->argument('platform');
 
         if (substr($version, 0, 1) !== 'v') {

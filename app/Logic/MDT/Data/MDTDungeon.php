@@ -75,10 +75,9 @@ class MDTDungeon
         $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
             // Fetch the cache or set it if it didn't exist
-            $result = $this->_cacheService->remember(sprintf('mdt_npcs_%s', $this->_dungeonName), function ()
-            {
-                $result = new Collection();
-                $mdtHome = base_path('vendor/nnoggie/mythicdungeontools/');
+            $result = $this->_cacheService->remember(sprintf('mdt_npcs_%s', $this->_dungeonName), function () {
+                $result        = new Collection();
+                $mdtHome       = base_path('vendor/nnoggie/mythicdungeontools/');
                 $expansionName = Conversion::getExpansionName($this->_dungeonName);
                 /** @var ExpansionService $expansionService */
                 $expansionService = App::make(ExpansionService::class);
@@ -95,7 +94,7 @@ class MDTDungeon
                         MDT.mapPOIs = {}
                         MDT.dungeonEnemies = {}
                         MDT.scaleMultiplier = {}
-                        
+
                         local L = {}
                         ' .
                         // Some files require LibStub
@@ -104,7 +103,7 @@ class MDTDungeon
                         file_get_contents(sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName)) . PHP_EOL .
                         // Insert dummy function to get what we need
                         '
-                        function GetDungeonEnemies() 
+                        function GetDungeonEnemies()
                             return MDT.dungeonEnemies[dungeonIndex]
                         end
                     ';
@@ -136,8 +135,7 @@ class MDTDungeon
      */
     public function getClonesAsEnemies($floors)
     {
-        return $this->_cacheService->remember(sprintf('mdt_enemies_%s', $this->_dungeonName), function () use ($floors)
-        {
+        return $this->_cacheService->remember(sprintf('mdt_enemies_%s', $this->_dungeonName), function () use ($floors) {
             $enemies = new Collection();
 
             // Ensure floors is a collection
@@ -191,19 +189,19 @@ class MDTDungeon
                         if ((int)$clone['sublevel'] === $floor->index) {
                             $enemy = new Enemy();
                             // Dummy so we can ID them later on
-                            $enemy->is_mdt = true;
-                            $enemy->floor_id = $floor->id;
+                            $enemy->is_mdt        = true;
+                            $enemy->floor_id      = $floor->id;
                             $enemy->enemy_pack_id = (int)$clone['g'];
                             $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                            $enemy->npc_id = $npcId;
+                            $enemy->npc_id        = $npcId;
                             // All MDT_IDs are 1-indexed, because LUA
-                            $enemy->mdt_id = $mdtCloneIndex;
-                            $enemy->enemy_id = -1;
-                            $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                            $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
+                            $enemy->mdt_id                = $mdtCloneIndex;
+                            $enemy->enemy_id              = -1;
+                            $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                            $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
                             $enemy->enemy_forces_override = -1;
 
-                            $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
+                            $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
                             $enemy->lat = $latLng['lat'];
                             $enemy->lng = $latLng['lng'];
 

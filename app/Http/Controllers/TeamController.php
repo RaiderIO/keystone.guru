@@ -42,13 +42,13 @@ class TeamController extends Controller
         $new = $team === null;
 
         if ($new) {
-            $team = new Team();
-            $team->name = $request->get('name');
+            $team             = new Team();
+            $team->name       = $request->get('name');
             $team->public_key = Team::generateRandomPublicKey();
         }
 
-        $team->description = $request->get('description');
-        $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
+        $team->description  = $request->get('description');
+        $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
         // Update or insert it
@@ -173,7 +173,7 @@ class TeamController extends Controller
     public function invite(Request $request, string $invitecode)
     {
         /** @var Team $team */
-        $team = Team::where('invite_code', $invitecode)->first();
+        $team   = Team::where('invite_code', $invitecode)->first();
         $result = null;
 
         if ($team !== null) {

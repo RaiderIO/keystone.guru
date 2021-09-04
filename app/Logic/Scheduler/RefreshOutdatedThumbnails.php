@@ -22,11 +22,9 @@ class RefreshOutdatedThumbnails
         /** @var DungeonRoute[]|Collection $routes */
         $routes = DungeonRoute::where('author_id', '>', '0')
             ->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
-            ->where(function (Builder $builder)
-            {
+            ->where(function (Builder $builder) {
                 // Only if it's not already queued!
-                $builder->where(function (Builder $builder)
-                {
+                $builder->where(function (Builder $builder) {
                     $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
                         ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
                 })->orWhere('thumbnail_updated_at', '<', now()->subDays(config('keystoneguru.thumbnail.refresh_anyways_days')));

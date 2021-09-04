@@ -37,16 +37,16 @@ class APIUserReportController
      */
     private function store(UserReportFormRequest $request, Model $model): bool
     {
-        $userReport = new UserReport();
-        $userReport->model_id = $model->id;
+        $userReport              = new UserReport();
+        $userReport->model_id    = $model->id;
         $userReport->model_class = get_class($model);
-        $userReport->user_id = Auth::id() ?? -1;
+        $userReport->user_id     = Auth::id() ?? -1;
         // May be null if user was not logged in, this is fine
-        $userReport->username = $request->get('username', null);
-        $userReport->category = $request->get('category');
-        $userReport->message = $request->get('message', '');
+        $userReport->username   = $request->get('username', null);
+        $userReport->category   = $request->get('category');
+        $userReport->message    = $request->get('message', '');
         $userReport->contact_ok = $request->get('contact_ok', false);
-        $userReport->status = 0;
+        $userReport->status     = 0;
 
         return $userReport->save();
     }

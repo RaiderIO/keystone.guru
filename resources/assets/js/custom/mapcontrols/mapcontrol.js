@@ -1,5 +1,5 @@
 class MapControl {
-    constructor(map){
+    constructor(map) {
         console.assert(this instanceof MapControl, 'this is not MapControls', this);
         console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
@@ -18,7 +18,7 @@ class MapControl {
         }
     }
 
-    addControl(){
+    addControl() {
 
     }
 }

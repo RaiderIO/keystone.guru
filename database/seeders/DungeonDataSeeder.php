@@ -55,7 +55,7 @@ class DungeonDataSeeder extends Seeder
             new MapIconRelationMapping(),
         ];
 
-        $rootDir = database_path('/seeders/dungeondata/');
+        $rootDir         = database_path('/seeders/dungeondata/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // For each expansion
@@ -161,8 +161,8 @@ class DungeonDataSeeder extends Seeder
             $unsetRelations = [];
 
             for ($i = 0; $i < count($modelData); $i++) {
-                $keys = array_keys($modelData);
-                $key = $keys[$i];
+                $keys  = array_keys($modelData);
+                $key   = $keys[$i];
                 $value = $modelData[$key];
 
                 // $this->command->info(json_encode($key) . ' ' . json_encode($value));

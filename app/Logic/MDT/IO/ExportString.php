@@ -63,8 +63,8 @@ class ExportString extends MDTBase
                     2 => $mdtCoordinates['y'],
                     3 => $mapIcon->floor->index,
                     4 => true,
-                    5 => $mapIcon->comment
-                ]
+                    5 => $mapIcon->comment,
+                ],
             ];
             $mapIconIndex++;
         }
@@ -85,9 +85,9 @@ class ExportString extends MDTBase
                     6 => -8,
                 ],
                 't' => [
-                    1 => 0
+                    1 => 0,
                 ],
-                'l' => []
+                'l' => [],
             ];
 
             if ($line instanceof Brushline) {
@@ -95,7 +95,7 @@ class ExportString extends MDTBase
             }
 
             $vertexIndex = 1;
-            $vertices = json_decode($line->polyline->vertices_json, true);
+            $vertices    = json_decode($line->polyline->vertices_json, true);
             foreach ($vertices as $latLng) {
                 $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
                 // Post increment
@@ -198,13 +198,13 @@ class ExportString extends MDTBase
 
                 ],
                 'pulls'             => $this->_extractPulls($warnings),
-                'currentSublevel'   => 1
+                'currentSublevel'   => 1,
             ],
             'text'       => $this->_dungeonRoute->title,
             'mdi'        => [
                 'freeholdJoined' => false,
                 'freehold'       => 1,
-                'beguiling'      => 1
+                'beguiling'      => 1,
             ],
             // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
             'uid'        => $this->_dungeonRoute->public_key . 'xxKG',

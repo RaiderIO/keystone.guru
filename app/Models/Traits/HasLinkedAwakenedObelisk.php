@@ -56,7 +56,7 @@ trait HasLinkedAwakenedObelisk
      */
     public function setLinkedAwakenedObeliskByMapIconId(?int $mapIconId)
     {
-        $result = false;
+        $result  = false;
         $mapIcon = MapIcon::find($mapIconId);
         // Delete any existing links
         MapObjectToAwakenedObeliskLink::where('source_map_object_id', $this->id)
@@ -69,7 +69,7 @@ trait HasLinkedAwakenedObelisk
                 'source_map_object_id'           => $this->id,
                 'source_map_object_class_name'   => get_class($this),
                 'target_map_icon_type_id'        => $mapIcon->map_icon_type_id,
-                'target_map_icon_seasonal_index' => $mapIcon->seasonal_index
+                'target_map_icon_seasonal_index' => $mapIcon->seasonal_index,
             ]))->save();
         }
 
@@ -81,8 +81,7 @@ trait HasLinkedAwakenedObelisk
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item HasLinkedAwakenedObelisk */
             if ($item->linkedawakenedobelisks !== null) {
                 $item->linkedawakenedobelisks()->delete();

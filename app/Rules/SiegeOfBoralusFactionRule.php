@@ -46,7 +46,7 @@ class SiegeOfBoralusFactionRule implements Rule
 
         if (intval($dungeonId) === $siegeOfBoralus->id) {
             $validFactions = Faction::whereIn('name', ['Alliance', 'Horde'])->get()->pluck('id')->toArray();
-            $result = in_array(intval($factionId), $validFactions);
+            $result        = in_array(intval($factionId), $validFactions);
         }
 
         return $result;

@@ -10,10 +10,7 @@ namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
-use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 
 class EnemyForcesColumnHandler extends DatatablesColumnHandler
 {

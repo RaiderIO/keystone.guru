@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -26,7 +25,8 @@ class DungeonFloorSwitchMarker extends CacheModel
 
     public $timestamps = false;
 
-    public function getDirectionAttribute(){
+    public function getDirectionAttribute()
+    {
         /** @var FloorCoupling $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->floor_id)->where('floor2_id', $this->target_floor_id)->first();
 

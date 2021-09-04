@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\Affix;
-use App\Models\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
@@ -83,8 +82,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService, $seasonService)
-        {
+        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService, $seasonService) {
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
                 ->orderBy('dungeon_id')->get();
@@ -93,7 +91,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $currentExpansion = $expansionService->getCurrentExpansion();
             /** @var Release $latestRelease */
-            $latestRelease = Release::latest()->first();
+            $latestRelease          = Release::latest()->first();
             $latestReleaseSpotlight = Release::where('spotlight', true)
                 ->whereDate('created_at', '>',
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))
@@ -106,8 +104,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'demoRoutes'                      => $demoRoutes,
                 'demoRouteDungeons'               => $demoRouteDungeons,
                 'demoRouteMapping'                => $demoRouteDungeons
-                    ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes)
-                    {
+                    ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes) {
                         return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
                     }),
                 'latestRelease'                   => $latestRelease,
@@ -159,8 +156,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
         // Can use the Auth() global here!
-        view()->composer('*', function (View $view)
-        {
+        view()->composer('*', function (View $view) {
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
                 $view->with('viewName', $view->getName());
@@ -173,72 +169,61 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('adFree', config('app.env') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
         });
 
-        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view)
-        {
+        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) {
         });
 
         // Home page
-        view()->composer('home', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('home', function (View $view) use ($globalViewVariables) {
             $view->with('userCount', $globalViewVariables['userCount']);
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
             $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
         });
 
         // Main view
-        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables)
-        {
+        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables) {
             $view->with('version', $globalViewVariables['appVersion']);
             $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
             $view->with('latestRelease', $globalViewVariables['latestRelease']);
             $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
         });
 
-        view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables)
-        {
+        view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables) {
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
         });
 
-        view()->composer('common.layout.navuser', function (View $view)
-        {
+        view()->composer('common.layout.navuser', function (View $view) {
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
         });
 
-        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables)
-        {
+        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables) {
             $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
             $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
 
-        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables)
-        {
+        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables) {
             $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
             $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
             $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
 
         // Dungeon grid view
-        view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables) {
             $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
         });
 
         // Dungeon grid view
-        view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables)
-        {
+        view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables) {
             $view->with('expansion', $globalViewVariables['currentExpansion']);
             $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
         });
 
         // Displaying a release
-        view()->composer('common.release.release', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('common.release.release', function (View $view) use ($globalViewVariables) {
             $view->with('categories', $globalViewVariables['releaseChangelogCategories']);
         });
 
         // Displaying affixes
-        view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables) {
             $view->with('affixes', $globalViewVariables['affixes']);
             $view->with('isAwakened', $globalViewVariables['isAwakened']);
             $view->with('isPrideful', $globalViewVariables['isPrideful']);
@@ -247,16 +232,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Displaying a release
-        view()->composer('common.group.composition', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('common.group.composition', function (View $view) use ($globalViewVariables) {
             $view->with('specializations', $globalViewVariables['characterClassSpecializations']);
             $view->with('classes', $globalViewVariables['characterClasses']);
             $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
         });
 
         // Dungeon selector
-        view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables) {
             $view->with('allExpansions', $globalViewVariables['expansions']);
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
@@ -264,8 +247,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Profile pages
-        view()->composer('profile.edit', function (View $view) use ($globalViewVariables)
-        {
+        view()->composer('profile.edit', function (View $view) use ($globalViewVariables) {
             $view->with('allClasses', $globalViewVariables['characterClasses']);
         });
     }

@@ -24,8 +24,8 @@ class ImportStringFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'import_string' => 'required|string',
-            'mdt_import_sandbox' => 'bool'
+            'import_string'      => 'required|string',
+            'mdt_import_sandbox' => 'bool',
         ];
     }
 }

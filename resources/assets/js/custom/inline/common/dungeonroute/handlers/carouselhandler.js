@@ -7,7 +7,7 @@ class CarouselHandler {
 
         // Only perform this when the page is actually fully loaded - otherwise space calculations go wrong
         // and owl carousel completely flips and breaks pages.
-        $(function(){
+        $(function () {
             let baseSettings = {
                 nav: false,
                 dots: false,

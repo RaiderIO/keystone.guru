@@ -16,7 +16,7 @@ class DevDiscoverService implements DiscoverServiceInterface
     /** @var Closure|null */
     private ?Closure $closure = null;
 
-    /** @var ExpansionService  */
+    /** @var ExpansionService */
     private ExpansionService $expansionService;
 
     /**

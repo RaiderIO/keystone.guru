@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Session;
 
@@ -35,15 +34,15 @@ class DungeonController extends Controller
         /** @var Dungeon $dungeon */
         // May not be set when editing
 //        $dungeon->expansion_id = $request->get('expansion_id');
-        $dungeon->zone_id = $request->get('zone_id');
-        $dungeon->mdt_id = $request->get('mdt_id');
-        $dungeon->name = $request->get('name');
-        $dungeon->slug = $request->get('slug');
-        $dungeon->key = $request->get('key');
-        $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
+        $dungeon->zone_id                       = $request->get('zone_id');
+        $dungeon->mdt_id                        = $request->get('mdt_id');
+        $dungeon->name                          = $request->get('name');
+        $dungeon->slug                          = $request->get('slug');
+        $dungeon->key                           = $request->get('key');
+        $dungeon->enemy_forces_required         = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
-        $dungeon->timer_max_seconds = $request->get('timer_max_seconds');
-        $dungeon->active = $request->get('active', 0);
+        $dungeon->timer_max_seconds             = $request->get('timer_max_seconds');
+        $dungeon->active                        = $request->get('active', 0);
 
         // Update or insert it
         if ($dungeon->save()) {
@@ -60,7 +59,7 @@ class DungeonController extends Controller
      */
     public function new()
     {
-        return view('admin.dungeon.edit', ['expansions'  => Expansion::all()->pluck('name', 'id')]);
+        return view('admin.dungeon.edit', ['expansions' => Expansion::all()->pluck('name', 'id')]);
     }
 
     /**
@@ -71,8 +70,8 @@ class DungeonController extends Controller
     public function edit(Request $request, Dungeon $dungeon)
     {
         return view('admin.dungeon.edit', [
-            'expansions'  => Expansion::all()->pluck('name', 'id'),
-            'dungeon'     => $dungeon,
+            'expansions' => Expansion::all()->pluck('name', 'id'),
+            'dungeon'    => $dungeon,
         ]);
     }
 

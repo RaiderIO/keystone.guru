@@ -18,29 +18,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Affix extends CacheModel
 {
     const AFFIX_BOLSTERING = 'Bolstering';
-    const AFFIX_BURSTING = 'Bursting';
-    const AFFIX_EXPLOSIVE = 'Explosive';
-    const AFFIX_FORTIFIED = 'Fortified';
-    const AFFIX_GRIEVOUS = 'Grievous';
-    const AFFIX_INFESTED = 'Infested';
-    const AFFIX_NECROTIC = 'Necrotic';
-    const AFFIX_QUAKING = 'Quaking';
-    const AFFIX_RAGING = 'Raging';
+    const AFFIX_BURSTING   = 'Bursting';
+    const AFFIX_EXPLOSIVE  = 'Explosive';
+    const AFFIX_FORTIFIED  = 'Fortified';
+    const AFFIX_GRIEVOUS   = 'Grievous';
+    const AFFIX_INFESTED   = 'Infested';
+    const AFFIX_NECROTIC   = 'Necrotic';
+    const AFFIX_QUAKING    = 'Quaking';
+    const AFFIX_RAGING     = 'Raging';
     const AFFIX_RELENTLESS = 'Relentless';
-    const AFFIX_SANGUINE = 'Sanguine';
-    const AFFIX_SKITTISH = 'Skittish';
-    const AFFIX_TEEMING = 'Teeming';
+    const AFFIX_SANGUINE   = 'Sanguine';
+    const AFFIX_SKITTISH   = 'Skittish';
+    const AFFIX_TEEMING    = 'Teeming';
     const AFFIX_TYRANNICAL = 'Tyrannical';
-    const AFFIX_VOLCANIC = 'Volcanic';
-    const AFFIX_REAPING = 'Reaping';
-    const AFFIX_BEGUILING = 'Beguiling';
-    const AFFIX_AWAKENED = 'Awakened';
-    const AFFIX_INSPIRING = 'Inspiring';
-    const AFFIX_SPITEFUL = 'Spiteful';
-    const AFFIX_STORMING = 'Storming';
-    const AFFIX_PRIDEFUL = 'Prideful';
-    const AFFIX_TORMENTED = 'Tormented';
-    const AFFIX_UNKNOWN = 'Unknown';
+    const AFFIX_VOLCANIC   = 'Volcanic';
+    const AFFIX_REAPING    = 'Reaping';
+    const AFFIX_BEGUILING  = 'Beguiling';
+    const AFFIX_AWAKENED   = 'Awakened';
+    const AFFIX_INSPIRING  = 'Inspiring';
+    const AFFIX_SPITEFUL   = 'Spiteful';
+    const AFFIX_STORMING   = 'Storming';
+    const AFFIX_PRIDEFUL   = 'Prideful';
+    const AFFIX_TORMENTED  = 'Tormented';
+    const AFFIX_UNKNOWN    = 'Unknown';
 
     const ALL_AFFIXES = [
         self::AFFIX_BOLSTERING,

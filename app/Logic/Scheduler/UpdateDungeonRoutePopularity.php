@@ -30,7 +30,7 @@ class UpdateDungeonRoutePopularity
             WHERE dungeon_routes.id = page_views.model_id
         ', [
             'modelClass'     => DungeonRoute::class,
-            'popularityDate' => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString()
+            'popularityDate' => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString(),
         ]);
 
         Log::channel('scheduler')->debug('OK Updating dungeonroute popularity');

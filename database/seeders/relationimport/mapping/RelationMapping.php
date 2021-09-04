@@ -37,11 +37,11 @@ abstract class RelationMapping
      */
     public function __construct(string $fileName, string $class, bool $persistent = false)
     {
-        $this->fileName = $fileName;
-        $this->class = $class;
+        $this->fileName   = $fileName;
+        $this->class      = $class;
         $this->persistent = $persistent;
 
-        $this->preSaveAttributeParsers = collect();
+        $this->preSaveAttributeParsers  = collect();
         $this->postSaveAttributeParsers = collect();
     }
 

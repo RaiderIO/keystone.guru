@@ -15,10 +15,10 @@ use Illuminate\Support\Collection;
  */
 class PublishedState extends CacheModel
 {
-    public const UNPUBLISHED = 'unpublished';
-    public const TEAM = 'team';
+    public const UNPUBLISHED     = 'unpublished';
+    public const TEAM            = 'team';
     public const WORLD_WITH_LINK = 'world_with_link';
-    public const WORLD = 'world';
+    public const WORLD           = 'world';
 
     public const ALL = [
         self::UNPUBLISHED,
@@ -30,7 +30,7 @@ class PublishedState extends CacheModel
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     protected $hidden = ['pivot'];
@@ -72,8 +72,7 @@ class PublishedState extends CacheModel
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

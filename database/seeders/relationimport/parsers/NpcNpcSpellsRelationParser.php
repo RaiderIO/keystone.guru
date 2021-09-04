@@ -2,7 +2,6 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcSpell;
 
 class NpcNpcSpellsRelationParser implements RelationParser

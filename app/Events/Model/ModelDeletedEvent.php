@@ -25,7 +25,7 @@ class ModelDeletedEvent extends ContextEvent
     public function __construct(Model $context, User $user, Model $overpulledEnemy)
     {
         // Don't save Model here because serialization will fail due to object being deleted
-        $this->_modelId = $overpulledEnemy->getRouteKey();
+        $this->_modelId    = $overpulledEnemy->getRouteKey();
         $this->_modelClass = get_class($overpulledEnemy);
         parent::__construct($context, $user);
     }

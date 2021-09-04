@@ -34,7 +34,7 @@ abstract class ContextEvent implements ShouldBroadcast
     public function __construct(Model $context, User $user)
     {
         $this->_context = $context;
-        $this->_user = $user;
+        $this->_user    = $user;
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class ContextEvent implements ShouldBroadcast
             '__name'            => $this->broadcastAs(),
             'context_route_key' => $this->_context->getRouteKey(),
             'context_class'     => get_class($this->_context),
-            'user'              => $this->_user
+            'user'              => $this->_user,
         ];
     }
 

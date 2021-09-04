@@ -70,8 +70,8 @@ abstract class DatatablesColumnHandler
             throw new \Exception('Unable to find columns parameter in Request parameters');
         }
 
-        $columns = $request->get('columns');
-        $order = ($request->get('order', []))[0];
+        $columns       = $request->get('columns');
+        $order         = ($request->get('order', []))[0];
         $generalSearch = ($request->get('search'))['value'];
 
         // Find the column we should handle
@@ -80,7 +80,7 @@ abstract class DatatablesColumnHandler
         $columnIndex = -1;
         foreach ($columns as $index => $value) {
             if ($value['name'] === $this->_columnName) {
-                $column = $value;
+                $column      = $value;
                 $columnIndex = $index;
                 break;
             }

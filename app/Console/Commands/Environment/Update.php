@@ -10,17 +10,17 @@ class Update extends Command
     use ExecutesShellCommands;
 
     const COMPILE = [
-        'live'     => true,
-        'local'    => false,
-        'mapping'  => true,
-        'staging'  => true,
+        'live'    => true,
+        'local'   => false,
+        'mapping' => true,
+        'staging' => true,
     ];
 
     const COMPILE_AS = [
-        'live'     => 'production',
-        'local'    => 'dev',
-        'mapping'  => 'production',
-        'staging'  => 'dev',
+        'live'    => 'production',
+        'local'   => 'dev',
+        'mapping' => 'production',
+        'staging' => 'dev',
     ];
 
     /**
@@ -53,7 +53,7 @@ class Update extends Command
 
         $this->call('migrate', [
             '--database' => 'migrate',
-            '--force'    => true
+            '--force'    => true,
         ]);
 
         // Drop all caches for all models while we re-seed
@@ -61,7 +61,7 @@ class Update extends Command
 
         $this->call('db:seed', [
             '--database' => 'migrate',
-            '--force'    => true
+            '--force'    => true,
         ]);
 
         // After seed, create a release if necessary
