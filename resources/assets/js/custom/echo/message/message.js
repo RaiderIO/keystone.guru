@@ -14,7 +14,7 @@ class Message extends Signalable {
 
         // Default values
         this.user = {
-            public_key: getState().getMapContext().getPublicKey()
+            public_key: getState().getUser().public_key
         };
         this.floor_id = getState().getCurrentFloor().id;
 

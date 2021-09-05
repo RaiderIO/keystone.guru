@@ -11,19 +11,13 @@ class Echo extends Signalable {
 
         this.map = map;
 
-        /** @type EchoUser[] List of usernames currently connected */
+        /** @type {EchoUser[]} List of usernames currently connected */
         this._echoUsers = [];
-        /** @type EchoUser|null The user that we're currently following, if any */
+        /** @type {EchoUser|null} The user that we're currently following, if any */
         this._echoUserFollow = null;
-        /** @type EchoUser|null The user that we've most recently followed, even if we stopped following */
+        /** @type {EchoUser|null} The user that we've most recently followed, even if we stopped following */
         this._echoUserRefollow = null;
         this._status = ECHO_STATUS_DISCONNECTED;
-
-        let mousePositionHandler = new MousePositionHandler(this);
-        mousePositionHandler.register('message:received', this, this._onMousePositionReceived.bind(this));
-
-        let viewPortHandler = new ViewPortHandler(this);
-        viewPortHandler.register('message:received', this, this._onViewPortReceived.bind(this));
 
         this._handlers = [
             // NPC
@@ -42,8 +36,8 @@ class Echo extends Signalable {
             new OverpulledEnemyDeletedHandler(this),
 
             // Whisper handlers
-            mousePositionHandler,
-            viewPortHandler
+            new MousePositionHandler(this),
+            new ViewPortHandler(this)
         ];
     }
 
@@ -178,7 +172,7 @@ class Echo extends Signalable {
         this._echoUserFollow = this.getUserByPublicKey(publicKey);
         this._echoUserFollow.setFollowing(true);
         // Adjust the initial view port
-        this._adjustViewPortToUser(this._echoUserFollow);
+        this._echoUserFollow.adjustViewportToThisUser();
 
         this._echoUserRefollow = this._echoUserFollow;
 
@@ -206,7 +200,7 @@ class Echo extends Signalable {
     }
 
     /**
-     *
+     * Refollows the user we were previously following.
      */
     refollowUser() {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
@@ -214,6 +208,32 @@ class Echo extends Signalable {
         if (this._echoUserRefollow !== null) {
             this.followUserByPublicKey(this._echoUserRefollow.getPublicKey());
         }
+    }
+
+    /**
+     * @returns {boolean} True if we're currently following a user, false if we're not.
+     */
+    isFollowingUser() {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        return this._echoUserFollow !== null;
+    }
+
+    /**
+     * @returns {EchoUser|null} An EchoUser if we're following that person, or null if we're not following anyone at this moment.
+     */
+    getFollowingUser() {
+        return this._echoUserFollow;
+    }
+
+    /**
+     *
+     * @param mousePositionReceivedEvent {Object}
+     */
+    onMousePositionReceived(mousePositionReceivedEvent) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
     }
 
     /**
@@ -264,53 +284,6 @@ class Echo extends Signalable {
                 this.signal('user:remove', {user: echoUserCandidate});
                 // Remove all by the same user name
                 i--;
-            }
-        }
-    }
-
-    /**
-     *
-     * @param mousePositionReceivedEvent {Object}
-     * @private
-     */
-    _onMousePositionReceived(mousePositionReceivedEvent) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-
-        this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
-    }
-
-    /**
-     *
-     * @param viewPortReceivedEvent {Object}
-     * @private
-     */
-    _onViewPortReceived(viewPortReceivedEvent) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-
-        // Only if we're actively following someone
-        if (this._echoUserFollow instanceof EchoUser) {
-            this._adjustViewPortToUser(this._echoUserFollow);
-        }
-    }
-
-    /**
-     *
-     * @param echoUser {EchoUser}
-     * @private
-     */
-    _adjustViewPortToUser(echoUser) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-        console.assert(echoUser instanceof EchoUser, 'echoUser is not an EchoUser', echoUser);
-
-        // Only if their last center and zoom are known
-        if (echoUser.getCenter() !== null && echoUser.getZoom() !== null) {
-            let center = [echoUser.getCenter().lat, echoUser.getCenter().lng];
-
-            // If we need to change floors, do so, otherwise change immediately
-            if (echoUser.getFloorId() !== null && echoUser.getFloorId() !== getState().getCurrentFloor().id) {
-                getState().setFloorId(echoUser.getFloorId(), center, echoUser.getZoom());
-            } else {
-                this.map.leafletMap.setView(center, echoUser.getZoom());
             }
         }
     }

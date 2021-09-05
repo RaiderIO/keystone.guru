@@ -181,7 +181,7 @@ class EchoControls extends MapControl {
         });
 
         $('.echo_follow_user').on('click', function () {
-            getState().getEcho().followUserByPublicKey(parseInt($(this).data('public_key')));
+            getState().getEcho().followUserByPublicKey($(this).data('public_key'));
 
             // Rebuild the layout so that the button switches from follow to unfollow
             self._refreshVisual();

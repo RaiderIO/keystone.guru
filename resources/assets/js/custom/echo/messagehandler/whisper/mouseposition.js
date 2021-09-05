@@ -27,12 +27,13 @@ class MousePositionHandler extends WhisperMessageHandler {
                     }
                 })
             });
+
+            // Periodically send new mouse locations
+            setInterval(this._sendMousePositions.bind(this), c.map.echo.mouseSendFrequencyMs);
         }
 
+        // Mobile can receive mouse positions though
         this.register('message:received', this, this._onReceive.bind(this));
-
-        // Periodically send new mouse locations
-        setInterval(this._sendMousePositions.bind(this), c.map.echo.mouseSendFrequencyMs);
     }
 
     /**
@@ -61,6 +62,8 @@ class MousePositionHandler extends WhisperMessageHandler {
         if (echoUser !== null) {
             echoUser.mapobject.onPositionsReceived(message);
             echoUser.mapobject.setSynced(true);
+
+            this.echo.onMousePositionReceived(mousePositionReceivedEvent);
         } else {
             console.warn(`Unable to find echo user ${message.user.public_key}!`);
         }

@@ -36,6 +36,23 @@ class EchoUser extends Signalable {
     }
 
     /**
+     * Adjust the viewport of the current map to whatever this user is viewing.
+     */
+    adjustViewportToThisUser() {
+        // Only if their last center and zoom are known
+        if (this.getCenter() !== null && this.getZoom() !== null) {
+            let center = [this.getCenter().lat, this.getCenter().lng];
+
+            // If we need to change floors, do so, otherwise change immediately
+            if (this.getFloorId() !== null && this.getFloorId() !== getState().getCurrentFloor().id) {
+                getState().setFloorId(this.getFloorId(), center, this.getZoom());
+            } else {
+                this.map.leafletMap.setView(center, this.getZoom());
+            }
+        }
+    }
+
+    /**
      * @returns {string}
      */
     getPublicKey() {
@@ -94,7 +111,7 @@ class EchoUser extends Signalable {
 
     /**
      *
-     * @returns {Number|null}
+     * @returns {L.LatLng|null}
      */
     getCenter() {
         return this.center;

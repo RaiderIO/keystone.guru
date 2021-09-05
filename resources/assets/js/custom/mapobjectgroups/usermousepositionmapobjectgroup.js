@@ -1,6 +1,6 @@
 class UserMousePositionMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_POSITION], editable, false);
+        super(manager, [MAP_OBJECT_GROUP_USER_MOUSE_POSITION], editable);
 
         this.title = 'Hide/show mouse positions of other users';
         this.fa_class = 'fa-mouse-pointer';
@@ -27,6 +27,14 @@ class UserMousePositionMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof UserMousePositionMapObjectGroup, 'this is not a UserMousePositionMapObjectGroup', this);
 
         return new UserMousePosition(this.manager.map, layer);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isUserToggleable() {
+        return false;
     }
 
     /**

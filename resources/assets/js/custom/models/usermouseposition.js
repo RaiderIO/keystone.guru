@@ -23,7 +23,7 @@ function getUserMousePositionIcon(userMousePosition) {
     textWidth -= (c.map.settings.maxZoom - getState().getMapZoomLevel());
 
     let handlebarsData = $.extend({}, {
-        user_id: userMousePosition.id,
+        public_key: userMousePosition.public_key,
         initials: userMousePosition.initials,
         color: userMousePosition.color,
         avatar_url: userMousePosition.avatar_url,
@@ -77,6 +77,12 @@ class UserMousePosition extends MapObject {
         }
 
         return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'public_key',
+                type: 'string',
+                default: '',
+                edit: false,
+            }),
             new Attribute({
                 name: 'floor_id',
                 type: 'int', // Not changeable by user

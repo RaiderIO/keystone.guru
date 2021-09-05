@@ -30,6 +30,11 @@ class ViewPortHandler extends WhisperMessageHandler {
             // Keep track of all user's most recent zoom location
             echoUser.setCenter(e.center);
             echoUser.setZoom(e.zoom);
+
+            // If we are following this user, adjust our viewport to match theirs
+            if( this.echo.isFollowingUser() ) {
+                this.echo.getFollowingUser().adjustViewportToThisUser();
+            }
         } else {
             console.warn(`Unable to find echo user ${e.user.public_key}!`);
         }
