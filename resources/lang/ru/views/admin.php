@@ -134,6 +134,7 @@ return [
             'all_dungeons'                   => '@todo ru: .npc.edit.all_dungeons',
         ],
         'list'  => [
+            'all_dungeons'                => '@todo ru: .npc.list.all_dungeons',
             'title'                       => '@todo ru: .npc.list.title',
             'header'                      => '@todo ru: .npc.list.header',
             'create_npc'                  => '@todo ru: .npc.list.create_npc',

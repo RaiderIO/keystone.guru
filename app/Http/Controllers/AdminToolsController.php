@@ -119,7 +119,7 @@ class AdminToolsController extends Controller
                 $npcCandidate->save();
 
                 // Changed the mapping; so make sure we synchronize it
-                $this->mappingChanged($beforeModel->exists ? $beforeModel : null, $npcCandidate);
+                $this->mappingChanged($beforeModel, $npcCandidate);
             }
         } catch (Exception $ex) {
 

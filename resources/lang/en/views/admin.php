@@ -134,6 +134,7 @@ return [
             'all_dungeons'                   => 'All dungeons',
         ],
         'list'  => [
+            'all_dungeons'                => 'All',
             'title'                       => 'Npc listing',
             'header'                      => 'View NPCs',
             'create_npc'                  => 'Create NPC',

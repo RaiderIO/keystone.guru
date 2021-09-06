@@ -45,7 +45,7 @@
                         'data': 'dungeon.name',
                         'name': 'dungeon_id',
                         'render': function (data, type, row, meta) {
-                            return row.dungeon_id === -1 ? 'Any' : row.dungeon.name;
+                            return row.dungeon_id === -1 ? '{{ __('views/admin.npc.list.all_dungeons') }}' : lang.get(row.dungeon.name);
                         },
                     },
                     {
