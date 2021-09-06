@@ -3,6 +3,8 @@
 return [
     'dungeon'    => [
         'edit' => [
+            'title_new'                     => '@todo ru: .dungeon.edit.title_new',
+            'title_edit'                    => '@todo ru: .dungeon.edit.title_edit',
             'header_new'                    => '@todo ru: .dungeon.edit.header_new',
             'header_edit'                   => '@todo ru: .dungeon.edit.header_edit',
             'active'                        => '@todo ru: .dungeon.edit.active',

@@ -19,7 +19,7 @@ class RowElementFloorSwitch extends RowElement {
         return {
             'id': this.killZone.id,
             'target_floor_id': this.targetFloor.id,
-            'name': this.targetFloor.name,
+            'name': lang.get(this.targetFloor.name),
             'start': this.start
         };
     }

@@ -28,10 +28,11 @@ $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 // Group the dungeons by expansion
 foreach ($dungeonsByExpansion as $expansionId => $dungeons)
 {
-    $dungeonsSelect[$allExpansions->where('id', $expansionId)->first()->name] = $dungeons->pluck('name', 'id')->mapWithKeys(function($name, $id){
+    $dungeonsSelect[__($allExpansions->where('id', $expansionId)->first()->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function($name, $id){
         return [$id => __($name)];
     })->toArray();
 }
+
 ?>
 
 @if($showSiegeWarning && $siegeOfBoralus)

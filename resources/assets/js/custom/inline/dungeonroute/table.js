@@ -299,7 +299,7 @@ class DungeonrouteTable extends InlineCode {
                 'data': 'dungeon.name',
                 'name': 'dungeon_id',
                 'render': function (data, type, row, meta) {
-                    return data;
+                    return lang.get(data);
                 },
             },
             features: {
