@@ -254,7 +254,7 @@ class EchoControls extends MapControl {
 
     /**
      * Sets the display color of a user.
-     * @param user {object}
+     * @param user {EchoUser}
      * @private
      */
     _applyUserColor(user) {

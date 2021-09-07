@@ -77,6 +77,7 @@ class AdminToolsController extends Controller
             9  => NpcType::MECHANICAL,
             6  => NpcType::UNDEAD,
             10 => NpcType::UNCATEGORIZED,
+            // 12 => NpcType::BATTLE_PET,
         ];
 
         $aggressivenessMapping = [
@@ -98,10 +99,9 @@ class AdminToolsController extends Controller
                     continue;
                 }
 
-                if ($npcCandidate->exists) {
-                    $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
-                } else {
-                    $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                if (!isset($npcTypeMapping[$npcData['type']])) {
+                    $log[] = sprintf('*** Unable to find npc type %s; npc %s (%s) NOT added; needs manual work', $npcData['type'], $npcData['id'], $npcData['name']);
+                    continue;
                 }
 
                 $npcCandidate->id                = $npcData['id'];
@@ -116,7 +116,15 @@ class AdminToolsController extends Controller
                 }
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
-                $npcCandidate->save();
+                if ($npcCandidate->save()) {
+                    if ($npcCandidate->exists) {
+                        $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    } else {
+                        $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    }
+                } else {
+                    $log[] = sprintf('*** Error saving NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                }
 
                 // Changed the mapping; so make sure we synchronize it
                 $this->mappingChanged($beforeModel, $npcCandidate);
