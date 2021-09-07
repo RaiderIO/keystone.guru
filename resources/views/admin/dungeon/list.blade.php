@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('list.views/admin.dungeon.list.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.dungeon.list.title')])
 
 @section('header-title')
     {{ __('views/admin.dungeon.list.header') }}
