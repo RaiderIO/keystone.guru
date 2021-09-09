@@ -41,10 +41,14 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
         let width = c.map.mapicon.calculateSize(mapIconType.width);
         let height = c.map.mapicon.calculateSize(mapIconType.height);
 
+        let isSelectable = editModeEnabled || deleteModeEnabled;
+
         let handlebarsData = $.extend({}, mapIconType, {
             selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : '')),
-            width: width,
-            height: height
+            outer_width: width + (isSelectable ? 8 : 0),
+            outer_height: height + (isSelectable ? 8 : 0),
+            inner_width: width,
+            inner_height: height
         });
 
         icon = L.divIcon({

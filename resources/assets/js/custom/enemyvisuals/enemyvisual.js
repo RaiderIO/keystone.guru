@@ -546,6 +546,11 @@ class EnemyVisual extends Signalable {
             return;
         }
 
+
+        let isDeletable = this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable();
+        let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
+            (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
+
         let size = this.mainVisual.getSize();
 
         let width = size.iconSize[0];
@@ -567,9 +572,17 @@ class EnemyVisual extends Signalable {
         let outerWidthStr = `${outerWidth}px`;
         let outerHeightStr = `${outerHeight}px`;
 
+        let mainVisualWidthStr = outerWidthStr;
+        let mainVisualHeightStr = outerHeightStr;
+
+        if( isSelectable ) {
+            mainVisualWidthStr = `${outerWidth + 8}px`;
+            mainVisualHeightStr = `${outerHeight + 8}px`;
+        }
+
         // Compensate for a 2px border on the inner, 2x border on the outer
-        this._$mainVisual[0].style.width = outerWidthStr;
-        this._$mainVisual[0].style.height = outerHeightStr;
+        this._$mainVisual[0].style.width = mainVisualWidthStr;
+        this._$mainVisual[0].style.height = mainVisualHeightStr;
 
         this._$mainVisualOuter[0].style.width = outerWidthStr;
         this._$mainVisualOuter[0].style.height = outerHeightStr;
