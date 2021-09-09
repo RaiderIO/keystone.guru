@@ -556,6 +556,10 @@ html, body, #map, #app, .wrapper {
     outline: none !important;
 }
 
+.leaflet-div-icon.leaflet-edit-marker-selected {
+    border: unset;
+}
+
 .leaflet-verticalcenter {
     position: absolute;
     z-index: 1000;
@@ -957,10 +961,10 @@ html, body, #map, #app, .wrapper {
     border-color: yellow !important;
 }
 
-.selected_enemy_icon {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
+/*.selected_enemy_icon {*/
+/*    margin-top: -4px !important;*/
+/*    margin-left: -4px !important;*/
+/*}*/
 
 #map_enemy_forces {
     font-size: 1.3em;
