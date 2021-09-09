@@ -546,7 +546,14 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 153,
+                        "floor1_id": 38,
+                        "floor2_id": 39,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 39,
@@ -555,7 +562,20 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 154,
+                        "floor1_id": 39,
+                        "floor2_id": 38,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 155,
+                        "floor1_id": 39,
+                        "floor2_id": 40,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 40,
@@ -564,7 +584,14 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 156,
+                        "floor1_id": 40,
+                        "floor2_id": 39,
+                        "direction": "up"
+                    }
+                ]
             }
         ]
     },
