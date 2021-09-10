@@ -4,7 +4,7 @@
 /** @var $classes \Illuminate\Support\Collection|\App\Models\CharacterClass[] */
 /** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
 
-$factions = isset($factions) ? $factions : \App\Models\Faction::all();
+$factions = $factions ?? \App\Models\Faction::all();
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
@@ -20,7 +20,7 @@ $factions = isset($factions) ? $factions : \App\Models\Faction::all();
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                                {
+        .{{ strtolower($faction->key) }}                                {
             color: {{ $faction->color }};
             font-weight: bold;
         }

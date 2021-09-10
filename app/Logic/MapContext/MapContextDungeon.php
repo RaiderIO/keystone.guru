@@ -70,7 +70,7 @@ class MapContextDungeon extends MapContext
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified
-            'faction' => strtolower(Faction::where('name', 'Unspecified')->first()->name),
+            'faction' => __(strtolower(Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
             'npcs'    => $npcs,
         ]);
     }

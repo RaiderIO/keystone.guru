@@ -495,7 +495,7 @@ class CommonGroupComposition extends InlineCode {
 
             let option = jQuery('<option>', {
                 value: obj.id,
-                text: obj.name
+                text: lang.get(obj.name)
             });
 
             let currentCssPrefix = '';
@@ -504,11 +504,11 @@ class CommonGroupComposition extends InlineCode {
                 currentCssPrefix = cssPrefix(obj);
             } else {
                 // We make something up
-                currentCssPrefix = cssPrefix + obj.name.replace(/ /g, '').toLowerCase();
+                currentCssPrefix = cssPrefix + obj.key.replace(/ /g, '').toLowerCase();
             }
 
             let data = {
-                name: obj.name,
+                name: lang.get(obj.name),
                 css_class: currentCssPrefix
             };
 

@@ -23,39 +23,39 @@ class CharacterInfoSeeder extends Seeder
 
         $this->command->info('Adding known races');
 
-        $alliance_id = Faction::where('name', '=', 'Alliance')->first()->id;
-        $horde_id    = Faction::where('name', '=', 'Horde')->first()->id;
+        $factionAllianceId = Faction::where('key', Faction::FACTION_ALLIANCE)->first()->id;
+        $factionHordeId    = Faction::where('key', Faction::FACTION_HORDE)->first()->id;
 
-        if ($alliance_id === 0 || $horde_id === 0) {
+        if ($factionAllianceId === 0 || $factionHordeId === 0) {
             throw new \Exception('Unable to find factions');
         }
 
         // Do the name as key => value so we can easily fetch it later on
-        $races = ['Human'               => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Dwarf'               => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Night Elf'           => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Gnome'               => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Draenei'             => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Worgen'              => new CharacterRace(['faction_id' => $alliance_id]),
-                  'PandarenAlliance'    => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Void Elf'            => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Lightforged Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Dark Iron Dwarf'     => new CharacterRace(['faction_id' => $alliance_id]),
+        $races = ['Human'               => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Dwarf'               => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Night Elf'           => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Gnome'               => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Draenei'             => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Worgen'              => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'PandarenAlliance'    => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Void Elf'            => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Lightforged Draenei' => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Dark Iron Dwarf'     => new CharacterRace(['faction_id' => $factionAllianceId]),
 
 
-                  'Orc'                 => new CharacterRace(['faction_id' => $horde_id]),
-                  'Undead'              => new CharacterRace(['faction_id' => $horde_id]),
-                  'Tauren'              => new CharacterRace(['faction_id' => $horde_id]),
-                  'Troll'               => new CharacterRace(['faction_id' => $horde_id]),
-                  'Blood Elf'           => new CharacterRace(['faction_id' => $horde_id]),
-                  'Goblin'              => new CharacterRace(['faction_id' => $horde_id]),
-                  'PandarenHorde'       => new CharacterRace(['faction_id' => $horde_id]),
-                  'Nightborne'          => new CharacterRace(['faction_id' => $horde_id]),
-                  'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
-                  'Mag\'har Orc'        => new CharacterRace(['faction_id' => $horde_id]),
+                  'Orc'                 => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Undead'              => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Tauren'              => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Troll'               => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Blood Elf'           => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Goblin'              => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'PandarenHorde'       => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Nightborne'          => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Highmountain Tauren' => new CharacterRace(['faction_id' => $factionHordeId]),
+                  'Mag\'har Orc'        => new CharacterRace(['faction_id' => $factionHordeId]),
 
-                  'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
-                  'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
+                  'Kul Tiran Human' => new CharacterRace(['faction_id' => $factionAllianceId]),
+                  'Zandalari Troll' => new CharacterRace(['faction_id' => $factionHordeId]),
         ];
 
         foreach ($races as $name => $race) {
