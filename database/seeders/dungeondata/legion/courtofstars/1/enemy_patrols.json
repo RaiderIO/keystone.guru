@@ -1,1 +1,110 @@
-[]
+[
+    {
+        "id": 292,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-147.625,\"lng\":158.3125},{\"lat\":-144.6875,\"lng\":164.25}]"
+        }
+    },
+    {
+        "id": 293,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-129.499034,\"lng\":172.981153},{\"lat\":-134.614578,\"lng\":174.970531},{\"lat\":-140.487979,\"lng\":175.728389}]"
+        }
+    },
+    {
+        "id": 294,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-154.224161,\"lng\":168.623468},{\"lat\":-151.808487,\"lng\":171.607535},{\"lat\":-148.256027,\"lng\":173.691645},{\"lat\":-145.319326,\"lng\":174.781067}]"
+        }
+    },
+    {
+        "id": 295,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-144.987763,\"lng\":136.035562},{\"lat\":-150.198039,\"lng\":134.756676},{\"lat\":-155.029385,\"lng\":137.977574},{\"lat\":-153.750499,\"lng\":145.366692},{\"lat\":-146.929775,\"lng\":147.403436}]"
+        }
+    },
+    {
+        "id": 296,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-124.125,\"lng\":140.65625},{\"lat\":-120.625,\"lng\":126.28125},{\"lat\":-113.40625,\"lng\":125.75}]"
+        }
+    },
+    {
+        "id": 297,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-114.90625,\"lng\":117.75},{\"lat\":-123.375,\"lng\":119.15625},{\"lat\":-132.03125,\"lng\":132.75}]"
+        }
+    },
+    {
+        "id": 298,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-66.265234,\"lng\":132.719932},{\"lat\":-65.554742,\"lng\":129.451668},{\"lat\":-59.68134,\"lng\":123.009873},{\"lat\":-54.944726,\"lng\":124.904518},{\"lat\":-51.250166,\"lng\":127.983318},{\"lat\":-50.871237,\"lng\":132.151538},{\"lat\":-50.681773,\"lng\":137.172349},{\"lat\":-52.955348,\"lng\":140.866908},{\"lat\":-56.839371,\"lng\":142.951019},{\"lat\":-61.575986,\"lng\":142.951019},{\"lat\":-65.838938,\"lng\":139.966952},{\"lat\":-66.265234,\"lng\":133.146227}]"
+        }
+    },
+    {
+        "id": 299,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-67.496753,\"lng\":117.468034},{\"lat\":-69.86506,\"lng\":100.037293},{\"lat\":-60.818127,\"lng\":99.516266}]"
+        }
+    },
+    {
+        "id": 300,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-50.634407,\"lng\":130.920018},{\"lat\":-52.955348,\"lng\":144.798298}]"
+        }
+    }
+]
