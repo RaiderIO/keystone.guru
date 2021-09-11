@@ -39,9 +39,16 @@
                 "index": 1,
                 "name": "The Ravenscrypt",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
+                "min_enemy_size": 24,
+                "max_enemy_size": 52,
+                "floorcouplings": [
+                    {
+                        "id": 170,
+                        "floor1_id": 2,
+                        "floor2_id": 3,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 3,
@@ -50,43 +57,102 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 158,
+                        "floor1_id": 3,
+                        "floor2_id": 2,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 159,
+                        "floor1_id": 3,
+                        "floor2_id": 4,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 4,
                 "index": 3,
                 "name": "Ravenshold",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
+                "min_enemy_size": 24,
+                "max_enemy_size": 52,
+                "floorcouplings": [
+                    {
+                        "id": 171,
+                        "floor1_id": 4,
+                        "floor2_id": 3,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 172,
+                        "floor1_id": 4,
+                        "floor2_id": 5,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 5,
                 "index": 4,
                 "name": "The Rook's Roost",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
+                "min_enemy_size": 24,
+                "max_enemy_size": 52,
+                "floorcouplings": [
+                    {
+                        "id": 173,
+                        "floor1_id": 5,
+                        "floor2_id": 4,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 174,
+                        "floor1_id": 5,
+                        "floor2_id": 6,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 6,
                 "index": 5,
                 "name": "Lord Ravencrest's Chamber",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
+                "min_enemy_size": 24,
+                "max_enemy_size": 52,
+                "floorcouplings": [
+                    {
+                        "id": 166,
+                        "floor1_id": 6,
+                        "floor2_id": 5,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 167,
+                        "floor1_id": 6,
+                        "floor2_id": 7,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 7,
                 "index": 6,
                 "name": "The Raven's Crown",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "floorcouplings": []
+                "min_enemy_size": 24,
+                "max_enemy_size": 52,
+                "floorcouplings": [
+                    {
+                        "id": 169,
+                        "floor1_id": 7,
+                        "floor2_id": 6,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
