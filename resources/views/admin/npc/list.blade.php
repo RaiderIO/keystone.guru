@@ -55,6 +55,12 @@
                         'searchable': false
                     },
                     {
+                        'title': lang.get('messages.enemy_count_label'),
+                        'data': 'enemy_count',
+                        'name': 'enemy_count',
+                        'searchable': false
+                    },
+                    {
                         'title': lang.get('messages.classification_label'),
                         'data': 'classification.name',
                         'name': 'classification.name',
@@ -89,6 +95,7 @@
             <th width="30%">{{ __('views/admin.npc.list.table_header_name') }}</th>
             <th width="15%">{{ __('views/admin.npc.list.table_header_dungeon') }}</th>
             <th width="10%">{{ __('views/admin.npc.list.table_header_enemy_forces') }}</th>
+            <th width="10%">{{ __('views/admin.npc.list.table_header_enemy_count') }}</th>
             <th width="10%">{{ __('views/admin.npc.list.table_header_classification') }}</th>
             <th width="10%">{{ __('views/admin.npc.list.table_header_actions') }}</th>
         </tr>

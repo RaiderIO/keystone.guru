@@ -142,6 +142,7 @@ return [
             'table_header_name'           => 'Name',
             'table_header_dungeon'        => 'Dungeon',
             'table_header_enemy_forces'   => 'Enemy forces',
+            'table_header_enemy_count'    => 'Enemy count',
             'table_header_classification' => 'Classification',
             'table_header_actions'        => 'Action',
         ],

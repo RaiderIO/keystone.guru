@@ -160,6 +160,7 @@ return [
     'patreon_label'                          => 'Patreon',
     'datatable_no_users_in_table'            => 'No users found',
     'datatable_no_npcs_in_table'             => 'No npcs found',
+    'enemy_count_label'                      => 'Enemy count',
     'user_report_handled_success'            => 'User report successfully marked as resolved',
     'dungeonroute_refresh_thumbnail_success' => 'Thumbnail refresh queued successfully',
     'updated_paid_tiers_successfully_label'  => 'Paid tiers updated successfully',
