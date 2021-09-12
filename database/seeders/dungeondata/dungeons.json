@@ -469,7 +469,7 @@
         "key": "neltharionslair",
         "name": "dungeons.legion.neltharions_lair.name",
         "slug": "neltharions-lair",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
         "floors": [
