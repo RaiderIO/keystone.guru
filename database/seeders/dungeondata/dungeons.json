@@ -30,7 +30,7 @@
         "key": "blackrookhold",
         "name": "dungeons.legion.black_rook_hold.name",
         "slug": "black-rook-hold",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
         "floors": [
