@@ -98,5 +98,5 @@ return [
         'name'        => 'Неизвестно',
         'description' => 'Аффиксы на этой неделе пока не известны.',
     ],
-    'seasonal_index_preset' => '@todo ru: .seasonal_index_preset',
+    'seasonal_index_preset' => '%s расстановка %d',
 ];
