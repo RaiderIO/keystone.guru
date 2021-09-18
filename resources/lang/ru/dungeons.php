@@ -3,235 +3,235 @@
 return [
     'legion'      => [
         'arcway'               => [
-            'name'   => '@todo ru: .legion.arcway.name',
+            'name'   => 'Катакомбы Сурамара',
             'floors' => [
-                '' => '@todo ru: .legion.arcway.floors.',
+                '' => '',
             ],
         ],
         'black_rook_hold'      => [
-            'name'   => '@todo ru: .legion.black_rook_hold.name',
+            'name'   => 'Крепость Черной Ладьи',
             'floors' => [
-                '' => '@todo ru: .legion.black_rook_hold.floors.',
+                '' => '',
             ],
         ],
         'court_of_stars'       => [
-            'name'   => '@todo ru: .legion.court_of_stars.name',
+            'name'   => 'Квартал Звезд',
             'floors' => [
-                '' => '@todo ru: .legion.court_of_stars.floors.',
+                '' => '',
             ],
         ],
         'darkheart_thicket'    => [
-            'name'   => '@todo ru: .legion.darkheart_thicket.name',
+            'name'   => 'Чаща Темного Сердца',
             'floors' => [
-                '' => '@todo ru: .legion.darkheart_thicket.floors.',
+                '' => '',
             ],
         ],
         'eye_of_aszhara'       => [
-            'name'   => '@todo ru: .legion.eye_of_aszhara.name',
+            'name'   => 'Око Азшары',
             'floors' => [
-                '' => '@todo ru: .legion.eye_of_aszhara.floors.',
+                '' => '',
             ],
         ],
         'halls_of_valor'       => [
-            'name'   => '@todo ru: .legion.halls_of_valor.name',
+            'name'   => 'Чертоги Доблести',
             'floors' => [
-                '' => '@todo ru: .legion.halls_of_valor.floors.',
+                '' => '',
             ],
         ],
         'maw_of_souls'         => [
-            'name'   => '@todo ru: .legion.maw_of_souls.name',
+            'name'   => 'Утесы Адской Пасти',
             'floors' => [
-                '' => '@todo ru: .legion.maw_of_souls.floors.',
+                '' => '',
             ],
         ],
         'neltharions_lair'     => [
-            'name'   => '@todo ru: .legion.neltharions_lair.name',
+            'name'   => 'Логово Нелтариона',
             'floors' => [
-                '' => '@todo ru: .legion.neltharions_lair.floors.',
+                '' => '',
             ],
         ],
         'vault_of_the_wardens' => [
-            'name'   => '@todo ru: .legion.vault_of_the_wardens.name',
+            'name'   => 'Казематы Стражей',
             'floors' => [
-                '' => '@todo ru: .legion.vault_of_the_wardens.floors.',
+                '' => '',
             ],
         ],
 
         'lower_karazhan' => [
-            'name'   => '@todo ru: .legion.lower_karazhan.name',
+            'name'   => 'Нижняя часть Каражана',
             'floors' => [
-                '' => '@todo ru: .legion.lower_karazhan.floors.',
+                '' => '',
             ],
         ],
         'upper_karazhan' => [
-            'name'   => '@todo ru: .legion.upper_karazhan.name',
+            'name'   => 'Верхняя часть Каражана',
             'floors' => [
-                '' => '@todo ru: .legion.upper_karazhan.floors.',
+                '' => '',
             ],
         ],
 
         'cathedral_of_eternal_night'  => [
-            'name'   => '@todo ru: .legion.cathedral_of_eternal_night.name',
+            'name'   => 'Собор Вечной Ночи',
             'floors' => [
-                '' => '@todo ru: .legion.cathedral_of_eternal_night.floors.',
+                '' => '',
             ],
         ],
         'the_seat_of_the_triumvirate' => [
-            'name'   => '@todo ru: .legion.the_seat_of_the_triumvirate.name',
+            'name'   => 'Престол Триумвирата',
             'floors' => [
-                '' => '@todo ru: .legion.the_seat_of_the_triumvirate.floors.',
+                '' => '',
             ],
         ],
     ],
     'bfa'         => [
         'atal_dazar'                => [
-            'name'   => '@todo ru: .bfa.atal_dazar.name',
+            'name'   => 'Атал\'Дазар',
             'floors' => [
-                '' => '@todo ru: .bfa.atal_dazar.floors.',
+                '' => '',
             ],
         ],
         'freehold'                  => [
-            'name'   => '@todo ru: .bfa.freehold.name',
+            'name'   => 'Вольная Гавань',
             'floors' => [
-                '' => '@todo ru: .bfa.freehold.floors.',
+                '' => '',
             ],
         ],
         'kings_rest'                => [
-            'name'   => '@todo ru: .bfa.kings_rest.name',
+            'name'   => 'Гробница королей',
             'floors' => [
-                '' => '@todo ru: .bfa.kings_rest.floors.',
+                '' => '',
             ],
         ],
         'shrine_of_the_storm'       => [
-            'name'   => '@todo ru: .bfa.shrine_of_the_storm.name',
+            'name'   => 'Святилище Штормов',
             'floors' => [
-                '' => '@todo ru: .bfa.shrine_of_the_storm.floors.',
+                '' => '',
             ],
         ],
         'siege_of_boralus'          => [
-            'name'   => '@todo ru: .bfa.siege_of_boralus.name',
+            'name'   => 'Осада Боралуса',
             'floors' => [
-                '' => '@todo ru: .bfa.siege_of_boralus.floors.',
+                '' => '',
             ],
         ],
         'temple_of_sethraliss'      => [
-            'name'   => '@todo ru: .bfa.temple_of_sethraliss.name',
+            'name'   => 'Храм Сетралисс',
             'floors' => [
-                '' => '@todo ru: .bfa.temple_of_sethraliss.floors.',
+                '' => '',
             ],
         ],
         'the_motherlode'            => [
-            'name'   => '@todo ru: .bfa.the_motherlode.name',
+            'name'   => 'ЗОЛОТАЯ ЖИЛА!!!',
             'floors' => [
-                '' => '@todo ru: .bfa.the_motherlode.floors.',
+                '' => '',
             ],
         ],
         'the_underrot'              => [
-            'name'   => '@todo ru: .bfa.the_underrot.name',
+            'name'   => 'Подгнилье',
             'floors' => [
-                '' => '@todo ru: .bfa.the_underrot.floors.',
+                '' => '',
             ],
         ],
         'tol_dagor'                 => [
-            'name'   => '@todo ru: .bfa.tol_dagor.name',
+            'name'   => 'Тол Дагор',
             'floors' => [
-                '' => '@todo ru: .bfa.tol_dagor.floors.',
+                '' => '',
             ],
         ],
         'waycrest_manor'            => [
-            'name'   => '@todo ru: .bfa.waycrest_manor.name',
+            'name'   => 'Усадьба Уэйкрестов',
             'floors' => [
-                '' => '@todo ru: .bfa.waycrest_manor.floors.',
+                '' => '',
             ],
         ],
         'mechagon_junkyard'         => [
-            'name'   => '@todo ru: .bfa.mechagon_junkyard.name',
+            'name'   => 'Мехагон: Свалка',
             'floors' => [
-                '' => '@todo ru: .bfa.mechagon_junkyard.floors.',
+                '' => '',
             ],
         ],
         'mechagon_workshop'         => [
-            'name'   => '@todo ru: .bfa.mechagon_workshop.name',
+            'name'   => 'Мехагон: Мастерская',
             'floors' => [
-                '' => '@todo ru: .bfa.mechagon_workshop.floors.',
+                '' => '',
             ],
         ],
         'orgrimmar_horrific_vision' => [
-            'name'   => '@todo ru: .bfa.orgrimmar_horrific_vision.name',
+            'name'   => 'Оргриммар (Жуткие Видения)',
             'floors' => [
-                '' => '@todo ru: .bfa.orgrimmar_horrific_vision.floors.',
+                '' => '',
             ],
         ],
         'stormwind_horrific_vision' => [
-            'name'   => '@todo ru: .bfa.stormwind_horrific_vision.name',
+            'name'   => 'Штормград (Жуткие Видения)',
             'floors' => [
-                '' => '@todo ru: .bfa.stormwind_horrific_vision.floors.',
+                '' => '',
             ],
         ],
     ],
     'shadowlands' => [
         'de_other_side'         => [
-            'name'   => '@todo ru: .shadowlands.de_other_side.name',
+            'name'   => 'Та Сторона',
             'floors' => [
-                'de_other_side' => '@todo ru: .shadowlands.de_other_side.floors.de_other_side',
-                'mechagon'      => '@todo ru: .shadowlands.de_other_side.floors.mechagon',
-                'zul_gurub'     => '@todo ru: .shadowlands.de_other_side.floors.zul_gurub',
-                'ardenweald'    => '@todo ru: .shadowlands.de_other_side.floors.ardenweald',
+                'de_other_side' => 'Та Сторона',
+                'mechagon'      => 'Мехагон',
+                'zul_gurub'     => 'Зул\'Гуруб',
+                'ardenweald'    => 'Арденвельд',
             ],
         ],
         'halls_of_atonement'    => [
-            'name'   => '@todo ru: .shadowlands.halls_of_atonement.name',
+            'name'   => 'Чертоги Покаяния',
             'floors' => [
-                'halls_of_atonement'     => '@todo ru: .shadowlands.halls_of_atonement.floors.halls_of_atonement',
-                'the_nave_of_pain'       => '@todo ru: .shadowlands.halls_of_atonement.floors.the_nave_of_pain',
-                'the_sanctuary_of_souls' => '@todo ru: .shadowlands.halls_of_atonement.floors.the_sanctuary_of_souls',
+                'halls_of_atonement'     => 'Чертоги Покаяния',
+                'the_nave_of_pain'       => 'Неф Боли',
+                'the_sanctuary_of_souls' => 'Святилище Душ',
             ],
         ],
         'mists_of_tirna_scithe' => [
-            'name'   => '@todo ru: .shadowlands.mists_of_tirna_scithe.name',
+            'name'   => 'Туманы Тирна Скитта',
             'floors' => [
-                'mists_of_tirna_scithe' => '@todo ru: .shadowlands.mists_of_tirna_scithe.floors.mists_of_tirna_scithe',
+                'mists_of_tirna_scithe' => 'Туманы Тирна Скитта',
             ],
         ],
         'plaguefall'            => [
-            'name'   => '@todo ru: .shadowlands.plaguefall.name',
+            'name'   => 'Чумные каскады',
             'floors' => [
-                'plaguefall'            => '@todo ru: .shadowlands.plaguefall.floors.plaguefall',
-                'the_festering_sanctum' => '@todo ru: .shadowlands.plaguefall.floors.the_festering_sanctum',
+                'plaguefall'            => 'Чумные каскады',
+                'the_festering_sanctum' => 'Гниющее святилище',
             ],
         ],
         'sanguine_depths'       => [
-            'name'   => '@todo ru: .shadowlands.sanguine_depths.name',
+            'name'   => 'Кровавые катакомбы',
             'floors' => [
-                'depths_of_despair'      => '@todo ru: .shadowlands.sanguine_depths.floors.depths_of_despair',
-                'amphitheater_of_sorrow' => '@todo ru: .shadowlands.sanguine_depths.floors.amphitheater_of_sorrow',
+                'depths_of_despair'      => 'Глубины Отчаяния',
+                'amphitheater_of_sorrow' => 'Амфитеатр Скорбиw',
             ],
         ],
         'spires_of_ascension'   => [
-            'name'   => '@todo ru: .shadowlands.spires_of_ascension.name',
+            'name'   => 'Шпили Перерождения',
             'floors' => [
-                'honors_ascent'      => '@todo ru: .shadowlands.spires_of_ascension.floors.honors_ascent',
-                'gardens_of_repose'  => '@todo ru: .shadowlands.spires_of_ascension.floors.gardens_of_repose',
-                'font_of_fealty'     => '@todo ru: .shadowlands.spires_of_ascension.floors.font_of_fealty',
-                'seat_of_the_archon' => '@todo ru: .shadowlands.spires_of_ascension.floors.seat_of_the_archon',
+                'honors_ascent'      => 'Подъем Чести',
+                'gardens_of_repose'  => 'Сады Отдохновения',
+                'font_of_fealty'     => 'Источник Преданности',
+                'seat_of_the_archon' => 'Престол Архонта',
             ],
         ],
         'the_necrotic_wake'     => [
-            'name'   => '@todo ru: .shadowlands.the_necrotic_wake.name',
+            'name'   => 'Смертельная тризна',
             'floors' => [
-                'the_necrotic_wake' => '@todo ru: .shadowlands.the_necrotic_wake.floors.the_necrotic_wake',
-                'stitchwerks'       => '@todo ru: .shadowlands.the_necrotic_wake.floors.stitchwerks',
-                'zolramus'          => '@todo ru: .shadowlands.the_necrotic_wake.floors.zolramus',
+                'the_necrotic_wake' => 'Смертельная тризна',
+                'stitchwerks'       => 'Трупосшивальня',
+                'zolramus'          => 'Золрамус"',
             ],
         ],
         'theater_of_pain'       => [
-            'name'   => '@todo ru: .shadowlands.theater_of_pain.name',
+            'name'   => 'Театр Боли',
             'floors' => [
-                'theater_of_pain'         => '@todo ru: .shadowlands.theater_of_pain.floors.theater_of_pain',
-                'chamber_of_conquest'     => '@todo ru: .shadowlands.theater_of_pain.floors.chamber_of_conquest',
-                'altars_of_agony'         => '@todo ru: .shadowlands.theater_of_pain.floors.altars_of_agony',
-                'lower_barrow_of_carnage' => '@todo ru: .shadowlands.theater_of_pain.floors.lower_barrow_of_carnage',
-                'upper_barrow_of_carnage' => '@todo ru: .shadowlands.theater_of_pain.floors.upper_barrow_of_carnage',
+                'theater_of_pain'         => 'Театр Боли',
+                'chamber_of_conquest'     => 'Зал Победы',
+                'altars_of_agony'         => 'Алтари Агонии',
+                'lower_barrow_of_carnage' => 'Нижний уровень кургана Резни',
+                'upper_barrow_of_carnage' => 'Верхний уровень кургана Резнии',
             ],
         ],
     ],

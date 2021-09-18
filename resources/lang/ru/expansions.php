@@ -3,12 +3,12 @@
 
 return [
     'legion'             => [
-        'name' => '@todo ru: .legion.name',
+        'name' => 'Легион',
     ],
     'battle_for_azeroth' => [
-        'name' => '@todo ru: .battle_for_azeroth.name',
+        'name' => 'Битва за Азерот',
     ],
     'shadowlands'        => [
-        'name' => '@todo ru: .shadowlands.name',
+        'name' => 'Темные земли',
     ],
 ];

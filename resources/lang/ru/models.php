@@ -2,12 +2,12 @@
 
 return [
     'dungeonroute' => [
-        'title_temporary_route'    => '@todo ru: .dungeonroute.title_temporary_route',
-        'title_clone'              => '@todo ru: .dungeonroute.title_clone',
-        'subtitle_clone_of'        => '@todo ru: .dungeonroute.subtitle_clone_of',
-        'permission_dratnos'       => '@todo ru: .dungeonroute.permission_dratnos',
-        'permission_petko'         => '@todo ru: .dungeonroute.permission_petko',
-        'subtitle_temporary_route' => '@todo ru: .dungeonroute.subtitle_temporary_route',
-        'subtitle_author'          => '@todo ru: .dungeonroute.subtitle_author',
+        'title_temporary_route'    => ':dungeonName Временный Маршрут',
+        'title_clone'              => ':routeTitle (Клонировать)',
+        'subtitle_clone_of'        => 'Клон :routeLink',
+        'permission_dratnos'       => 'Используется с разрешения Дратноса',
+        'permission_petko'         => 'Используется с разрешения Петко',
+        'subtitle_temporary_route' => 'Временный Маршрут',
+        'subtitle_author'          => 'Автор %s',
     ],
 ];
