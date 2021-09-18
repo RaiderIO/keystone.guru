@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed'   => '@todo ru: .failed',
-    'throttle' => '@todo ru: .throttle',
+    'failed'   => 'Неверный логин или пароль',
+    'throttle' => 'Слишком много попыток входа в систему. Повторите попытку через :seconds секунд.',
 
 ];
