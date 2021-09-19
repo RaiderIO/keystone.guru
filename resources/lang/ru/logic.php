@@ -2,7 +2,7 @@
 
 return [
     'mdt' => [
-        'io' => [аналогичного
+        'io' => [
             'export_string' => [
                 'category'                                        => [
                     'pull'     => 'Пулл %d',

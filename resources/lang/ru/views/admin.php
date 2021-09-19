@@ -3,6 +3,8 @@
 return [
     'dungeon'    => [
         'edit' => [
+            'title_new'                     => '@todo ru: .dungeon.edit.title_new',
+            'title_edit'                    => '@todo ru: .dungeon.edit.title_edit',
             'header_new'                    => 'Новое подземелье',
             'header_edit'                   => 'Редактировать подземелье',
             'active'                        => 'Действующий',
@@ -132,6 +134,7 @@ return [
             'all_dungeons'                   => '@todo ru: .npc.edit.all_dungeons',
         ],
         'list'  => [
+            'all_dungeons'                => '@todo ru: .npc.list.all_dungeons',
             'title'                       => '@todo ru: .npc.list.title',
             'header'                      => '@todo ru: .npc.list.header',
             'create_npc'                  => '@todo ru: .npc.list.create_npc',
@@ -139,6 +142,7 @@ return [
             'table_header_name'           => '@todo ru: .npc.list.table_header_name',
             'table_header_dungeon'        => '@todo ru: .npc.list.table_header_dungeon',
             'table_header_enemy_forces'   => '@todo ru: .npc.list.table_header_enemy_forces',
+            'table_header_enemy_count'    => '@todo ru: .npc.list.table_header_enemy_count',
             'table_header_classification' => '@todo ru: .npc.list.table_header_classification',
             'table_header_actions'        => '@todo ru: .npc.list.table_header_actions',
         ],
