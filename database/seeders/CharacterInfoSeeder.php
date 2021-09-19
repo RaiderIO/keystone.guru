@@ -8,6 +8,7 @@ use App\Models\CharacterRace;
 use App\Models\CharacterRaceClassCoupling;
 use App\Models\Faction;
 use App\Models\File;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class CharacterInfoSeeder extends Seeder
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function run()
     {
@@ -27,61 +28,59 @@ class CharacterInfoSeeder extends Seeder
         $factionHordeId    = Faction::where('key', Faction::FACTION_HORDE)->first()->id;
 
         if ($factionAllianceId === 0 || $factionHordeId === 0) {
-            throw new \Exception('Unable to find factions');
+            throw new Exception('Unable to find factions');
         }
 
         // Do the name as key => value so we can easily fetch it later on
-        $races = ['Human'               => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Dwarf'               => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Night Elf'           => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Gnome'               => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Draenei'             => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Worgen'              => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'PandarenAlliance'    => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Void Elf'            => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Lightforged Draenei' => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Dark Iron Dwarf'     => new CharacterRace(['faction_id' => $factionAllianceId]),
+        $races = [
+            'races.human'               => new CharacterRace(['key' => 'human', 'faction_id' => $factionAllianceId]),
+            'races.dwarf'               => new CharacterRace(['key' => 'dwarf', 'faction_id' => $factionAllianceId]),
+            'races.night_elf'           => new CharacterRace(['key' => 'night_elf', 'faction_id' => $factionAllianceId]),
+            'races.gnome'               => new CharacterRace(['key' => 'gnome', 'faction_id' => $factionAllianceId]),
+            'races.draenei'             => new CharacterRace(['key' => 'draenei', 'faction_id' => $factionAllianceId]),
+            'races.worgen'              => new CharacterRace(['key' => 'worgen', 'faction_id' => $factionAllianceId]),
+            'races.pandarenalliance'    => new CharacterRace(['key' => 'pandarenalliance', 'faction_id' => $factionAllianceId]),
+            'races.void_elf'            => new CharacterRace(['key' => 'void_elf', 'faction_id' => $factionAllianceId]),
+            'races.lightforged_draenei' => new CharacterRace(['key' => 'lightforged_draenei', 'faction_id' => $factionAllianceId]),
+            'races.dark_iron_wolf'      => new CharacterRace(['key' => 'dark_iron_wolf', 'faction_id' => $factionAllianceId]),
 
+            'races.orc'                 => new CharacterRace(['key' => 'orc', 'faction_id' => $factionHordeId]),
+            'races.undead'              => new CharacterRace(['key' => 'undead', 'faction_id' => $factionHordeId]),
+            'races.tauren'              => new CharacterRace(['key' => 'tauren', 'faction_id' => $factionHordeId]),
+            'races.troll'               => new CharacterRace(['key' => 'troll', 'faction_id' => $factionHordeId]),
+            'races.blood_elf'           => new CharacterRace(['key' => 'blood_elf', 'faction_id' => $factionHordeId]),
+            'races.goblin'              => new CharacterRace(['key' => 'goblin', 'faction_id' => $factionHordeId]),
+            'races.pandarenhorde'       => new CharacterRace(['key' => 'pandarenhorde', 'faction_id' => $factionHordeId]),
+            'races.nightborne'          => new CharacterRace(['key' => 'nightborne', 'faction_id' => $factionHordeId]),
+            'races.highmountain_tauren' => new CharacterRace(['key' => 'highmountain_tauren', 'faction_id' => $factionHordeId]),
+            'races.maghar_orc'          => new CharacterRace(['key' => 'maghar_orc', 'faction_id' => $factionHordeId]),
 
-                  'Orc'                 => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Undead'              => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Tauren'              => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Troll'               => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Blood Elf'           => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Goblin'              => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'PandarenHorde'       => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Nightborne'          => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Highmountain Tauren' => new CharacterRace(['faction_id' => $factionHordeId]),
-                  'Mag\'har Orc'        => new CharacterRace(['faction_id' => $factionHordeId]),
-
-                  'Kul Tiran Human' => new CharacterRace(['faction_id' => $factionAllianceId]),
-                  'Zandalari Troll' => new CharacterRace(['faction_id' => $factionHordeId]),
+            'races.kul_tiran_human' => new CharacterRace(['key' => 'kul_tiran_human', 'faction_id' => $factionAllianceId]),
+            'races.zandalari_troll' => new CharacterRace(['key' => 'zandalari_troll', 'faction_id' => $factionHordeId]),
         ];
 
         foreach ($races as $name => $race) {
             $race->name = $name;
-            // Pesky Pandaren
-            $race->name = str_replace('Alliance', '', $race->name);
-            $race->name = str_replace('Horde', '', $race->name);
-            /** @var $race Model */
             $race->save();
         }
 
         $this->command->info('Adding known classes');
 
         // Do NOT change the order of this array!
-        $classes = ['Warrior'      => new CharacterClass(['color' => '#C79C6E']),
-                    'Hunter'       => new CharacterClass(['color' => '#ABD473']),
-                    'Death Knight' => new CharacterClass(['color' => '#C41F3B']),
-                    'Mage'         => new CharacterClass(['color' => '#69CCF0']),
-                    'Priest'       => new CharacterClass(['color' => '#FFFFFF']),
-                    'Monk'         => new CharacterClass(['color' => '#00FF96']),
-                    'Rogue'        => new CharacterClass(['color' => '#FFF569']),
-                    'Warlock'      => new CharacterClass(['color' => '#9482C9']),
-                    'Shaman'       => new CharacterClass(['color' => '#0070DE']),
-                    'Paladin'      => new CharacterClass(['color' => '#F58CBA']),
-                    'Druid'        => new CharacterClass(['color' => '#FF7D0A']),
-                    'Demon Hunter' => new CharacterClass(['color' => '#A330C9'])];
+        $classes = [
+            'classes.warrior'      => new CharacterClass(['key' => 'warrior', 'color' => '#C79C6E']),
+            'classes.hunter'       => new CharacterClass(['key' => 'hunter', 'color' => '#ABD473']),
+            'classes.death_knight' => new CharacterClass(['key' => 'deathknight', 'color' => '#C41F3B']),
+            'classes.mage'         => new CharacterClass(['key' => 'mage', 'color' => '#69CCF0']),
+            'classes.priest'       => new CharacterClass(['key' => 'priest', 'color' => '#FFFFFF']),
+            'classes.monk'         => new CharacterClass(['key' => 'monk', 'color' => '#00FF96']),
+            'classes.rogue'        => new CharacterClass(['key' => 'rogue', 'color' => '#FFF569']),
+            'classes.warlock'      => new CharacterClass(['key' => 'warlock', 'color' => '#9482C9']),
+            'classes.shaman'       => new CharacterClass(['key' => 'shaman', 'color' => '#0070DE']),
+            'classes.paladin'      => new CharacterClass(['key' => 'paladin', 'color' => '#F58CBA']),
+            'classes.druid'        => new CharacterClass(['key' => 'druid', 'color' => '#FF7D0A']),
+            'classes.demon_hunter' => new CharacterClass(['key' => 'demonhunter', 'color' => '#A330C9']),
+        ];
 
         foreach ($classes as $name => $class) {
             $class->name = $name;
@@ -106,31 +105,31 @@ class CharacterInfoSeeder extends Seeder
         // In order of the way $classes is structured
         // @formatter:off
         $raceClassMatrix = [
-            'Human'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
-            'Dwarf'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
-            'Night Elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x'],
-            'Gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' '],
-            'Worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' '],
-            'Void Elf'            => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Lightforged Draenei' => ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
-            'Dark Iron Dwarf'     => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
+            'races.human'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
+            'races.dwarf'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
+            'races.night_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x'],
+            'races.gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' '],
+            'races.worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' '],
+            'races.void_elf'            => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.lightforged_draenei' => ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
+            'races.dark_iron_wolf'      => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
 
-            'PandarenAlliance' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'PandarenHorde'    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.pandarenalliance' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.pandarenhorde'    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-            'Orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
-            'Undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Tauren'              => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' '],
-            'Troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
-            'Blood Elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
-            'Goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
-            'Nightborne'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'Highmountain Tauren' => ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
-            'Mag\'har Orc'        => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.tauren'              => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' '],
+            'races.troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
+            'races.blood_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
+            'races.goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.nightborne'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.highmountain_tauren' => ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
+            'races.maghar_orc'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-            'Kul Tiran Human' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
-            'Zandalari Troll' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
+            'races.kul_tiran_human' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'races.zandalari_troll' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
         ];
         // @formatter:on
 
@@ -156,18 +155,66 @@ class CharacterInfoSeeder extends Seeder
         $this->command->info('Adding known class/specialization combinations');
         // @formatter:off
         $classSpecializationMatrix = [
-            'Death Knight' => ['Blood', 'Frost', 'Unholy'],
-            'Demon Hunter' => ['Havoc', 'Vengeance'],
-            'Druid'        => ['Balance', 'Feral', 'Guardian', 'Restoration'],
-            'Hunter'       => ['Beast Mastery', 'Marksman', 'Survival'],
-            'Mage'         => ['Arcane', 'Fire', 'Frost'],
-            'Monk'         => ['Brewmaster', 'Mistweaver', 'Windwalker'],
-            'Paladin'      => ['Holy', 'Protection', 'Retribution'],
-            'Priest'       => ['Discipline', 'Holy', 'Shadow'],
-            'Rogue'        => ['Assassination', 'Outlaw', 'Subtlety'],
-            'Shaman'       => ['Elemental', 'Enhancement', 'Restoration'],
-            'Warlock'      => ['Affliction', 'Demonology', 'Destruction'],
-            'Warrior'      => ['Arms', 'Fury', 'Protection'],
+            'classes.death_knight' => [
+                new CharacterClassSpecialization(['key' => 'blood', 'name' => 'specializations.death_knight.blood']),
+                new CharacterClassSpecialization(['key' => 'frost', 'name' => 'specializations.death_knight.frost']),
+                new CharacterClassSpecialization(['key' => 'unholy', 'name' => 'specializations.death_knight.unholy']),
+            ],
+            'classes.demon_hunter' => [
+                new CharacterClassSpecialization(['key' => 'havoc', 'name' => 'specializations.demon_hunter.havoc']),
+                new CharacterClassSpecialization(['key' => 'vengeance', 'name' => 'specializations.demon_hunter.vengeance']),
+            ],
+            'classes.druid'        => [
+                new CharacterClassSpecialization(['key' => 'balance', 'name' => 'specializations.druid.balance']),
+                new CharacterClassSpecialization(['key' => 'feral', 'name' => 'specializations.druid.feral']),
+                new CharacterClassSpecialization(['key' => 'guardian', 'name' => 'specializations.druid.guardian']),
+                new CharacterClassSpecialization(['key' => 'restoration', 'name' => 'specializations.druid.restoration']),
+            ],
+            'classes.hunter'       => [
+                new CharacterClassSpecialization(['key' => 'beast_mastery', 'name' => 'specializations.hunter.beast_mastery']),
+                new CharacterClassSpecialization(['key' => 'marksman', 'name' => 'specializations.hunter.marksman']),
+                new CharacterClassSpecialization(['key' => 'survival', 'name' => 'specializations.hunter.survival']),
+            ],
+            'classes.mage'         => [
+                new CharacterClassSpecialization(['key' => 'arcane', 'name' => 'specializations.mage.arcane']),
+                new CharacterClassSpecialization(['key' => 'fire', 'name' => 'specializations.mage.fire']),
+                new CharacterClassSpecialization(['key' => 'frost', 'name' => 'specializations.mage.frost']),
+            ],
+            'classes.monk'         => [
+                new CharacterClassSpecialization(['key' => 'brewmaster', 'name' => 'specializations.monk.brewmaster']),
+                new CharacterClassSpecialization(['key' => 'mistweaver', 'name' => 'specializations.monk.mistweaver']),
+                new CharacterClassSpecialization(['key' => 'windwalker', 'name' => 'specializations.monk.windwalker']),
+            ],
+            'classes.paladin'      => [
+                new CharacterClassSpecialization(['key' => 'holy', 'name' => 'specializations.paladin.holy']),
+                new CharacterClassSpecialization(['key' => 'protection', 'name' => 'specializations.paladin.protection']),
+                new CharacterClassSpecialization(['key' => 'retribution', 'name' => 'specializations.paladin.retribution']),
+            ],
+            'classes.priest'       => [
+                new CharacterClassSpecialization(['key' => 'discipline', 'name' => 'specializations.priest.discipline']),
+                new CharacterClassSpecialization(['key' => 'holy', 'name' => 'specializations.priest.holy']),
+                new CharacterClassSpecialization(['key' => 'shadow', 'name' => 'specializations.priest.shadow']),
+            ],
+            'classes.rogue'        => [
+                new CharacterClassSpecialization(['key' => 'assassination', 'name' => 'specializations.rogue.assassination']),
+                new CharacterClassSpecialization(['key' => 'outlaw', 'name' => 'specializations.rogue.outlaw']),
+                new CharacterClassSpecialization(['key' => 'subtlety', 'name' => 'specializations.rogue.subtlety']),
+            ],
+            'classes.shaman'       => [
+                new CharacterClassSpecialization(['key' => 'elemental', 'name' => 'specializations.shaman.elemental']),
+                new CharacterClassSpecialization(['key' => 'enhancement', 'name' => 'specializations.shaman.enhancement']),
+                new CharacterClassSpecialization(['key' => 'restoration', 'name' => 'specializations.shaman.restoration']),
+            ],
+            'classes.warlock'      => [
+                new CharacterClassSpecialization(['key' => 'affliction', 'name' => 'specializations.warlock.affliction']),
+                new CharacterClassSpecialization(['key' => 'demonology', 'name' => 'specializations.warlock.demonology']),
+                new CharacterClassSpecialization(['key' => 'destruction', 'name' => 'specializations.warlock.destruction']),
+            ],
+            'classes.warrior'      => [
+                new CharacterClassSpecialization(['key' => 'arms', 'name' => 'specializations.warrior.arms']),
+                new CharacterClassSpecialization(['key' => 'fury', 'name' => 'specializations.warrior.fury']),
+                new CharacterClassSpecialization(['key' => 'protection', 'name' => 'specializations.warrior.protection']),
+            ],
         ];
         // @formatter:on
 
@@ -177,26 +224,20 @@ class CharacterInfoSeeder extends Seeder
             $class = $classes[$classStr];
             // For each of their specs
             foreach ($specializations as $specialization) {
-                $characterClassSpecialization                     = new CharacterClassSpecialization();
-                $characterClassSpecialization->character_class_id = $class->id;
-                $characterClassSpecialization->name               = $specialization;
+                $specialization->character_class_id = $class->id;
                 // Dummy file ID
-                $characterClassSpecialization->icon_file_id = -1;
-
-                $characterClassSpecialization->save();
-
-                $classKey = strtolower(str_replace(' ', '', $class->name));
-                $specKey  = strtolower(str_replace(' ', '', $specialization));
+                $specialization->icon_file_id = -1;
+                $specialization->save();
 
                 $icon              = new File();
-                $icon->model_id    = $characterClassSpecialization->id;
-                $icon->model_class = get_class($characterClassSpecialization);
+                $icon->model_id    = $specialization->id;
+                $icon->model_class = get_class($specialization);
                 $icon->disk        = 'public';
-                $icon->path        = sprintf('images/specializations/%s/%s_%s.png', $classKey, $classKey, $specKey);
+                $icon->path        = sprintf('images/specializations/%s/%s_%s.png', $class->key, $class->key, $specialization->key);
                 $icon->save();
 
-                $characterClassSpecialization->icon_file_id = $icon->id;
-                $characterClassSpecialization->save();
+                $specialization->icon_file_id = $icon->id;
+                $specialization->save();
             }
         }
     }

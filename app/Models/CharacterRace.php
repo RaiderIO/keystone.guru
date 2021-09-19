@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
+ * @property string $key
  * @property string $name
  * @property int $faction_id
  * @property Faction $faction
@@ -21,6 +23,7 @@ class CharacterRace extends CacheModel
 {
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
+    public $fillable = ['key', 'name'];
 
     /**
      * @return BelongsToMany

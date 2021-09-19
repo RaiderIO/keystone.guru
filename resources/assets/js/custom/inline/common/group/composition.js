@@ -406,7 +406,7 @@ class CommonGroupComposition extends InlineCode {
 
             self._addIconOptionToSelect($specializationSelect, self.options.specializations, function (item) {
                 let classDetails = self._findClassById(item.character_class_id);
-                return 'spec_icon_' + classDetails.name.replace(/ /g, '').toLowerCase() + '-' + item.name.replace(/ /g, '').toLowerCase();
+                return 'spec_icon_' + classDetails.key + '-' + item.key;
             });
         });
     }
@@ -453,7 +453,7 @@ class CommonGroupComposition extends InlineCode {
 
             self._addIconOptionToSelect($raceSelect, self.options.races, function (item) {
                 let raceDetails = self._findRaceById(item.id);
-                return 'faction_icon_' + self._findFactionById(raceDetails.faction_id).name.replace(/ /g, '').toLowerCase();
+                return 'faction_icon_' + self._findFactionById(raceDetails.faction_id).key;
             });
         });
     }

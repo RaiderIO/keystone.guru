@@ -160,6 +160,7 @@ return [
     'patreon_label'                          => 'Patreon',
     'datatable_no_users_in_table'            => 'Пользователь не найден',
     'datatable_no_npcs_in_table'             => 'NPC не найдены',
+    'enemy_count_label'                      => '@todo ru: .enemy_count_label',
     'user_report_handled_success'            => 'Отчет пользователя успешно помечен как решенный',
     'dungeonroute_refresh_thumbnail_success' => 'Обновление эскиза успешно поставлено в очередь',
     'updated_paid_tiers_successfully_label'  => 'Платные уровни успешно обновлены',
@@ -268,7 +269,7 @@ return [
     'mdt_paths'                                                     => 'Маршруты',
     'mdt_drawn_lines'                                               => 'Нарисованные линии',
     'mdt_notes'                                                     => 'Заметки',
-    'mdt_enemy_forces'                                              => 'Силы врагов'
+    'mdt_enemy_forces'                                              => 'Силы врагов',
 
     // Default AJAX failed messages
     'ajax_error_default'                                            => 'Произошла ошибка при выполнении вашего запроса. Пожалуйста, попробуйте еще раз.',
@@ -381,14 +382,14 @@ return [
     'title_label'        => 'Название',
     'dungeon_label'      => 'Подземелье',
     'features_label'     => 'Функции',
-    // 'affixes_label' => 'Аффиксы',
-    // 'attributes_label' => 'Атрибуты',
-    // 'setup_label' => 'Установить',
+    // 'affixes_label' => 'Affixes',
+    // 'attributes_label' => 'Attributes',
+    // 'setup_label' => 'Setup',
     'author_label'       => 'Автор',
     'views_label'        => 'Просмотры',
     'rating_label'       => 'Рейтинг',
     'published_label'    => 'Опубликовано',
-    // 'actions_label' => 'Действия',
+    // 'actions_label' => 'Actions',
     'add_route_label'    => 'Добавить',
     'remove_route_label' => 'Удалить',
 
@@ -408,7 +409,7 @@ return [
     'join_date_label'        => 'Дате вступления',
     'role_label'             => 'Роль',
     'assignable_roles_label' => 'Назначаемые роли',
-    // 'actions_label' => 'Действия',
+    // 'actions_label' => 'Actions',
     'leave_label'            => 'Покинуть',
 
     'delete_team_confirm_label'             => 'Вы уверены, что хотите НЕОБРАТИМО удалить эту команду, ее пользователей и маршруты?',

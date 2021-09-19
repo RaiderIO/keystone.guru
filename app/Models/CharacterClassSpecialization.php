@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
+ * @property string $key
  * @property string $name
  * @property int $character_class_id
  * @property int $icon_file_id
@@ -21,6 +23,7 @@ class CharacterClassSpecialization extends CacheModel
 
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
+    public $fillable = ['key', 'name', 'character_class_id', 'icon_file_id'];
 
     /**
      * @return BelongsTo
