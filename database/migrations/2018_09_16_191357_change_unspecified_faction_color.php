@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Faction;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +13,7 @@ class ChangeUnspecifiedFactionColor extends Migration
      */
     public function up()
     {
-        DB::table('factions')->where('name', '=', 'Unspecified')->update(['color' => 'inherit']);
+        DB::table('factions')->where('key', Faction::FACTION_UNSPECIFIED)->update(['color' => 'inherit']);
     }
 
     /**

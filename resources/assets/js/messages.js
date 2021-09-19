@@ -4,9 +4,11 @@ export default {
     'en.affixes': require('../../lang/en/affixes.php'),
     'en.dungeons': require('../../lang/en/dungeons.php'),
     'en.expansions': require('../../lang/en/expansions.php'),
+    'en.factions': require('../../lang/en/factions.php'),
 
     'ru.messages': require('../../lang/ru/js.php'),
     'ru.affixes': require('../../lang/ru/affixes.php'),
     'ru.dungeons': require('../../lang/ru/dungeons.php'),
     'ru.expansions': require('../../lang/ru/expansions.php'),
+    'ru.factions': require('../../lang/ru/factions.php'),
 }

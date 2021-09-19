@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
+ * @property int $icon_file_id
+ * @property string $key
  * @property string $name
+ * @property string $color
  *
  * @property Collection $races
  * @property Collection $dungeonroutes
@@ -19,8 +23,14 @@ class Faction extends CacheModel
 {
     use HasIconFile;
 
+    const FACTION_UNSPECIFIED = 'unspecified';
+    const FACTION_HORDE       = 'horde';
+    const FACTION_ALLIANCE    = 'alliance';
+
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
+    public $fillable = ['icon_file_id', 'key', 'name', 'color'];
+
 
     /**
      * @return HasMany

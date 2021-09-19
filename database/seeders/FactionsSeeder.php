@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Faction;
 use App\Models\File;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,16 +20,31 @@ class FactionsSeeder extends Seeder
         $this->command->info('Adding known factions');
 
         $factions = [
-            new Faction(['name' => 'Unspecified', 'icon_file_id' => -1, 'color' => 'gray']),
-            new Faction(['name' => 'Horde', 'icon_file_id' => -1, 'color' => 'red']),
-            new Faction(['name' => 'Alliance', 'icon_file_id' => -1, 'color' => 'blue']),
+            new Faction([
+                'key'          => Faction::FACTION_UNSPECIFIED,
+                'name'         => 'factions.unspecified',
+                'icon_file_id' => -1,
+                'color'        => 'gray',
+            ]),
+            new Faction([
+                'key'          => Faction::FACTION_HORDE,
+                'name'         => 'factions.horde',
+                'icon_file_id' => -1,
+                'color'        => 'red',
+            ]),
+            new Faction([
+                'key'          => Faction::FACTION_ALLIANCE,
+                'name'         => 'factions.alliance',
+                'icon_file_id' => -1,
+                'color'        => 'blue',
+            ]),
         ];
 
         foreach ($factions as $faction) {
-            /** @var $faction Model */
             $faction->save();
 
-            $iconName          = strtolower(str_replace(' ', '', $faction->name));
+            // Translate faction name to English and convert it to lower case
+            $iconName          = strtolower(str_replace(' ', '', $faction->key));
             $icon              = new File();
             $icon->model_id    = $faction->id;
             $icon->model_class = get_class($faction);

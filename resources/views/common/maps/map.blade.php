@@ -116,12 +116,12 @@ if ($isAdmin) {
             foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction) {
             ?>
             <a class="map_faction_display_control map_controls_custom" href="#"
-               data-faction="{{ strtolower($faction->name) }}"
-                       title="{{ $faction->name }}">
+               data-faction="{{ strtolower($faction->key) }}"
+                       title="{{ __($faction->name) }}">
                         <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                             data-toggle="tooltip" title="{{ $faction->name }}"/>
+                             data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                 </a>
                 <?php
             $i++;
