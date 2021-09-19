@@ -2,15 +2,15 @@
 
 return [
     'cookies' => [
-        'title'  => '@todo ru: .cookies.title',
-        'header' => '@todo ru: .cookies.header',
+        'title'  => 'Политика использования файлов cookie',
+        'header' => 'Политика использования файлов cookie',
     ],
     'privacy' => [
-        'title'  => '@todo ru: .privacy.title',
-        'header' => '@todo ru: .privacy.header',
+        'title'  => 'Политика конфиденциальности',
+        'header' => 'Политика конфиденциальности',
     ],
     'terms'   => [
-        'title'  => '@todo ru: .terms.title',
-        'header' => '@todo ru: .terms.header',
+        'title'  => 'Условия использования',
+        'header' => 'Условия использования',
     ],
 ];
