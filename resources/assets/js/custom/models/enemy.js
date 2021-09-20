@@ -459,7 +459,7 @@ class Enemy extends MapObject {
 
     /**
      * Sets the click popup to be enabled or not.
-     * @param enabled True to enable, false to disable.
+     * @param enabled {Boolean} True to enable, false to disable.
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -526,7 +526,7 @@ class Enemy extends MapObject {
 
     /**
      * Sets the NPC for this enemy based on a remote NPC object.
-     * @param npc
+     * @param npc {Object}
      */
     setNpc(npc) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -549,7 +549,7 @@ class Enemy extends MapObject {
 
     /**
      * Sets the name of the raid marker and changes the icon on the map to that of the raid marker (allowing).
-     * @param name
+     * @param name {String}
      */
     setRaidMarkerName(name) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -569,8 +569,8 @@ class Enemy extends MapObject {
 
     /**
      * Sets the kill zone for this enemy.
-     * @param killZone object
-     * @param ignorePackBuddies bool
+     * @param killZone {Object}
+     * @param ignorePackBuddies {Boolean}
      */
     setKillZone(killZone, ignorePackBuddies = false) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -655,7 +655,7 @@ class Enemy extends MapObject {
 
     /**
      * Set this enemy to be selectable whenever the user wants to select enemies.
-     * @param value boolean True or false
+     * @param value {Boolean} True or false
      */
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -711,7 +711,7 @@ class Enemy extends MapObject {
     /**
      * Set this enemy to be marked as obsolete (was part of a route, but is no longer because we determined we should no
      * longer pull this enemy after an overpull elsewhere).
-     * @param value boolean True or false
+     * @param value {Boolean} True or false
      */
     setObsolete(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -803,7 +803,7 @@ class Enemy extends MapObject {
 
     /**
      * Assigns a raid marker to this enemy.
-     * @param raidMarkerName The name of the marker, or empty to unset it
+     * @param raidMarkerName {String} The name of the marker, or empty to unset it
      */
     assignRaidMarker(raidMarkerName) {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
