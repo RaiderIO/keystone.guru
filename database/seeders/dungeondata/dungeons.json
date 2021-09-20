@@ -223,7 +223,7 @@
         "key": "courtofstars",
         "name": "dungeons.legion.court_of_stars.name",
         "slug": "court-of-stars",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 60,
         "floors": [
