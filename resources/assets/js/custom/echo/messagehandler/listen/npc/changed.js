@@ -20,7 +20,7 @@ class NpcChangedHandler extends MessageHandler {
         mapContext.addRawNpc(e.model);
 
         // Redraw all enemies that have this npc so that we're up-to-date
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
             let enemy = enemyMapObjectGroup.objects[i];
             if (enemy.npc_id === e.model.id) {
