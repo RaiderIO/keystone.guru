@@ -133,6 +133,7 @@ let scripts = [
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/message/listen/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/message/listen/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/whisper/viewport.js',

@@ -17,6 +17,11 @@ class MessageFactory {
                 result = new LiveSessionStopMessage(props);
                 break;
 
+            // Npc
+            case NpcChangedMessage.getName():
+                result = new NpcChangedMessage(props);
+                break;
+
             // Overpulled enemies
             case OverpulledEnemyChangedMessage.getName():
                 result = new OverpulledEnemyChangedMessage(props);
