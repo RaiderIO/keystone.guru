@@ -24,6 +24,7 @@ class NpcChangedHandler extends MessageHandler {
         for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
             let enemy = enemyMapObjectGroup.objects[i];
             if (enemy.npc_id === e.model.id) {
+                enemy.setNpc(e.model);
                 enemy.visual.refresh();
                 // Don't break - there is probably more than one, we need to check all enemies
             }
