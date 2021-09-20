@@ -246,7 +246,7 @@
         "key": "darkheartthicket",
         "name": "dungeons.legion.darkheart_thicket.name",
         "slug": "darkheart-thicket",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 280,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
         "floors": [

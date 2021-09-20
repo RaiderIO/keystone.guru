@@ -26,7 +26,7 @@
         "npc_class_id": 1,
         "name": "Mindshattered Screecher",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
