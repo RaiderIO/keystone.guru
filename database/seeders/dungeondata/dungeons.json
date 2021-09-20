@@ -269,8 +269,8 @@
         "key": "eyeofazshara",
         "name": "dungeons.legion.eye_of_aszhara.name",
         "slug": "eye-of-azshara",
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": 0,
+        "enemy_forces_required": 190,
+        "enemy_forces_required_teeming": 242,
         "timer_max_seconds": 0,
         "floors": [
             {
