@@ -7,10 +7,16 @@
 
 @section('content')
     @isset($expansion)
-        {{ Form::model($expansion, ['route' => ['admin.expansion.update', $expansion->id], 'method' => 'patch', 'files' => true]) }}
+        {{ Form::model($expansion, ['route' => ['admin.expansion.update', $expansion], 'method' => 'patch', 'files' => true]) }}
     @else
         {{ Form::open(['route' => 'admin.expansion.savenew', 'files' => true]) }}
     @endisset
+
+    <div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
+        {!! Form::label('active', __('views/admin.expansion.edit.active')) !!}
+        {!! Form::checkbox('active', 1, isset($expansion) ? $expansion->active : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'active'])
+    </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('views/admin.expansion.edit.name')) !!}

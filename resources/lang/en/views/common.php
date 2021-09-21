@@ -195,7 +195,7 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'routes'                  => 'Routes',
+            'routes'                  => ':expansion routes',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],

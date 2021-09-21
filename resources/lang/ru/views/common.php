@@ -195,7 +195,7 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
-            'routes'                  => 'Маршруты',
+            'routes'                  => ':expansion mаршруты',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
         ],

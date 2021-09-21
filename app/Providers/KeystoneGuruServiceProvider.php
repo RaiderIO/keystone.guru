@@ -134,6 +134,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'affixes'                         => Affix::all(),
 
                 // Misc
+                'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
                 'expansions'                      => Expansion::all(),
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
@@ -193,6 +194,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.layout.navuser', function (View $view) {
             $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
+        });
+
+        view()->composer('common.layout.header', function (View $view) use ($globalViewVariables) {
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
         });
 
         view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables) {

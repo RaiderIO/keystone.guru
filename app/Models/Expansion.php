@@ -7,12 +7,14 @@ use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $icon_file_id
+ * @property int $active
  * @property string $name
  * @property string $shortname
  * @property string $color
@@ -50,11 +52,42 @@ class Expansion extends CacheModel
     ];
 
     /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'shortname';
+    }
+
+    /**
      * @return HasMany
      */
     public function dungeons()
     {
         return $this->hasMany('App\Models\Dungeon');
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    /**
+     * Scope a query to only include inactive dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('active', 0);
     }
 
     /**
@@ -72,6 +105,7 @@ class Expansion extends CacheModel
         $file = $request->file('icon');
 
         $this->icon_file_id = -1;
+        $this->active       = $request->get('active');
         $this->name         = $request->get('name');
         $this->shortname    = $request->get('shortname');
         $this->color        = $request->get('color');

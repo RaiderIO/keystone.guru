@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
@@ -23,12 +26,25 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
+     * @param ExpansionService $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
      */
-    public function discover(DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    public function discover(ExpansionService $expansionService, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        return $this->discoverExpansion($expansionService->getCurrentExpansion(), $discoverService, $seasonService);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonService $seasonService
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function discoverExpansion(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    {
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };

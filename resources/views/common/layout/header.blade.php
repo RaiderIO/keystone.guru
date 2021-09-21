@@ -1,15 +1,21 @@
 <?php
+/** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
+
 $navs = [
     route('dungeonroutes.search') => [
         'fa'   => 'fas fa-search',
         'text' => __('views/common.layout.header.search')
-    ],
-    route('dungeonroutes')        => [
-        'text' => __('views/common.layout.header.routes')
-    ],
-    route('misc.affixes')         => [
-        'text' => __('views/common.layout.header.affixes')
-    ],
+    ]
+];
+
+foreach ($activeExpansions as $expansion) {
+    $navs[route('dungeonroutes.expansion', ['expansion' => $expansion])] = [
+        'text' => __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+    ];
+}
+
+$navs[route('misc.affixes')] = [
+    'text' => __('views/common.layout.header.affixes')
 ];
 
 ?>
