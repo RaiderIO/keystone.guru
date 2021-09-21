@@ -1,1 +1,68 @@
-[]
+[
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -142.58218331401,
+        "lng": 174.74573725392,
+        "comment": "Open when first boss is killed.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -134.46875,
+        "lng": 156.46875,
+        "comment": "Arcane Beacon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -113.59375,
+        "lng": 127.6875,
+        "comment": "Arcane Beacon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 36,
+        "lat": -61.9375,
+        "lng": 135.34375,
+        "comment": "Flask of the Solemn Night",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -64.039024935064,
+        "lng": 117.32593547645,
+        "comment": "Arcane Beacon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -44.571540283946,
+        "lng": 122.39411274571,
+        "comment": "Arcane Beacon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
