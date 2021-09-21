@@ -275,6 +275,7 @@ return [
                 'live_session_concluded'         => 'Live session concluded',
                 'rate_this_route'                => 'Rate this route',
                 'rate_this_route_explanation'    => 'Rating the route will help others discover this route if it\'s good. Thank you!',
+                'you_cannot_rate_your_own_route' => 'You cannot rate your own route - thank you for using live sessions!',
                 'review_live_session'            => 'Review live session',
             ],
             'pulls'     => [

@@ -167,25 +167,34 @@ $echo = $echo ?? false;
     @component('common.general.modal', ['id' => 'stop_live_session_modal'])
         <h3 class="card-title">{{ __('views/common.maps.controls.header.live_session_concluded') }}</h3>
 
-        <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
-        <div class="form-group">
-            <h5>
-                {{ __('views/common.maps.controls.header.rate_this_route') }}
-            </h5>
-            <select>
-                @for($i = 1; $i <= 10; $i++)
-                    <option
-                        value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
-                        {{ $i }}
-                    </option>
-                @endfor
-            </select>
-        </div>
+        <?php // You cannot rate your own routes ?>
+        @if($dungeonroute->author_id !== Auth::id())
+            <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
+            <div class="form-group">
+                <h5>
+                    {{ __('views/common.maps.controls.header.rate_this_route') }}
+                </h5>
+                <select>
+                    @for($i = 1; $i <= 10; $i++)
+                        <option
+                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                            {{ $i }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
 
-        @if($currentRating === false)
+            @if($currentRating === false)
+                <div class="form-group">
+                    <p>
+                        {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}
+                    </p>
+                </div>
+            @endif
+        @else
             <div class="form-group">
                 <p>
-                    {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}
+                    {{ __('views/common.maps.controls.header.you_cannot_rate_your_own_route') }}
                 </p>
             </div>
         @endif
