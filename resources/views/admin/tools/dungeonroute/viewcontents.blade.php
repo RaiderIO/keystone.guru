@@ -21,7 +21,8 @@
                 </h5>
             </div>
 
-            <div id="collapseDungeonroute" class="collapse" aria-labelledby="headingDungeonroute" data-parent="#dungeonrouteAccordion">
+            <div id="collapseDungeonroute" class="collapse" aria-labelledby="headingDungeonroute"
+                 data-parent="#dungeonrouteAccordion">
                 <div class="card-body">
                     @dump($dungeonroute->withoutRelations())
                 </div>

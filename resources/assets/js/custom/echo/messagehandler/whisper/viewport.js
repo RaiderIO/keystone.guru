@@ -32,7 +32,7 @@ class ViewPortHandler extends WhisperMessageHandler {
             echoUser.setZoom(e.zoom);
 
             // If we are following this user, adjust our viewport to match theirs
-            if( this.echo.isFollowingUser() ) {
+            if (this.echo.isFollowingUser()) {
                 this.echo.getFollowingUser().adjustViewportToThisUser();
             }
         } else {

@@ -23,7 +23,7 @@ $rootClass = $rootClass ?? '';
 // Page title
 $title = $title ?? null;
 // Breadcrumbs
-$breadcrumbs = $breadcrumbs ?? $viewName;
+$breadcrumbs       = $breadcrumbs ?? $viewName;
 $breadcrumbsParams = $breadcrumbsParams ?? [];
 ?>
 @extends('layouts.app', ['title' => $title])

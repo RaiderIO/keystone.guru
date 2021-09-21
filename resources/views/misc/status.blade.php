@@ -4,6 +4,6 @@
 
 @section('content')
 
-{{ __('views/misc.status.description') }}
+    {{ __('views/misc.status.description') }}
 
 @endsection

@@ -63,7 +63,7 @@ $id = $id ?? 'affixes';
                 $el.remove();
             });
 
-            if( typeof $affixSelect.attr('readonly') !== 'undefined' ) {
+            if (typeof $affixSelect.attr('readonly') !== 'undefined') {
                 $affixSelect.find('option').attr('disabled', true);
             }
         });

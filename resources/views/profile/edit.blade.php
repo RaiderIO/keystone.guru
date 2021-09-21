@@ -61,7 +61,8 @@ $deleteConsequences = $user->getDeleteConsequences();
             @if(isset($user->iconfile))
                 <div class="form-group">
                     {{__('views/profile.edit.avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
-                                           alt="{{ __('views/profile.edit.avatar_title') }}" style="max-width: 48px"/>
+                                                              alt="{{ __('views/profile.edit.avatar_title') }}"
+                                                              style="max-width: 48px"/>
                 </div>
             @endif
 
@@ -161,14 +162,14 @@ $deleteConsequences = $user->getDeleteConsequences();
                             <?php
                             $consequenceText = '';
                             if ($consequence['result'] === 'new_owner') {
-                            if ($consequence['new_owner'] === null) {
-                            $consequenceText = __('views/profile.edit.account_delete_consequence_teams_you_are_removed');
-                            } else {
-                            $consequenceText = sprintf(__('views/profile.edit.account_delete_consequence_teams_new_admin'),
-                            $consequence['new_owner']->name);
-                            }
-                            } elseif ($consequence['result'] === 'deleted') {
-                            $consequenceText = __('views/profile.edit.account_delete_consequence_teams_team_deleted');
+                                if ($consequence['new_owner'] === null) {
+                                    $consequenceText = __('views/profile.edit.account_delete_consequence_teams_you_are_removed');
+                                } else {
+                                    $consequenceText = sprintf(__('views/profile.edit.account_delete_consequence_teams_new_admin'),
+                                        $consequence['new_owner']->name);
+                                }
+                            } else if ($consequence['result'] === 'deleted') {
+                                $consequenceText = __('views/profile.edit.account_delete_consequence_teams_team_deleted');
                             }
                             ?>
                             {{ sprintf('%s: %s', $teamName, $consequenceText) }}

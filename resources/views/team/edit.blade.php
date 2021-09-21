@@ -2,9 +2,9 @@
 /** @var \App\Models\Team $team */
 $title = sprintf(__('views/team.edit.title'), $team->name);
 /** @var \App\User $user */
-$user = Auth::user();
+$user            = Auth::user();
 $userIsModerator = $team->isUserModerator($user);
-$menuItems = [
+$menuItems       = [
     ['icon' => 'far fa-list-alt', 'text' => __('views/team.edit.overview'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('views/team.edit.routes'), 'target' => '#routes'],
     ['icon' => 'fa-users', 'text' => __('views/team.edit.members'), 'target' => '#members']
@@ -191,7 +191,8 @@ foreach ($team->teamusers as $teamuser) {
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
                                 <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('views/team.edit.copy_to_clipboard_title') }}">
+                                        data-toggle="tooltip"
+                                        title="{{ __('views/team.edit.copy_to_clipboard_title') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
                                 @if($userIsModerator)

@@ -4,31 +4,28 @@
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $siegeOfBoralus \App\Models\Dungeon */
 
-$id = $id ?? 'dungeon_id_select';
-$name = $name ?? 'dungeon_id';
-$label = $label ?? __('views/common.dungeon.select.dungeon');
-$required = $required ?? true;
-$showAll = !isset($showAll) || $showAll;
-$activeOnly = $activeOnly ?? true;
+$id               = $id ?? 'dungeon_id_select';
+$name             = $name ?? 'dungeon_id';
+$label            = $label ?? __('views/common.dungeon.select.dungeon');
+$required         = $required ?? true;
+$showAll          = !isset($showAll) || $showAll;
+$activeOnly       = $activeOnly ?? true;
 $showSiegeWarning = $showSiegeWarning ?? false;
 
 $dungeonsSelect = [];
-if ($showAll)
-{
+if ($showAll) {
     $dungeonsSelect = [__('views/common.dungeon.select.all') => [-1 => __('views/common.dungeon.select.all_dungeons')]];
 }
 
 // If the user didn't pass us any dungeons, resort to some defaults we may have set
-if (!isset($dungeons))
-{
+if (!isset($dungeons)) {
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
 // Group the dungeons by expansion
-foreach ($dungeonsByExpansion as $expansionId => $dungeons)
-{
-    $dungeonsSelect[__($allExpansions->where('id', $expansionId)->first()->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function($name, $id){
+foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
+    $dungeonsSelect[__($allExpansions->where('id', $expansionId)->first()->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
         return [$id => __($name)];
     })->toArray();
 }
@@ -44,7 +41,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons)
             let $dungeonIdSelect = $('#{{ $id }}');
             $dungeonIdSelect.bind('change', function () {
                 let $factionWarning = $('#siege_of_boralus_faction_warning');
-                if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }} ) {
+                if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }}) {
                     $factionWarning.show();
                 } else {
                     $factionWarning.hide();

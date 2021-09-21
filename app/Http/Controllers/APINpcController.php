@@ -49,7 +49,7 @@ class APINpcController extends Controller
             ->selectRaw('npcs.*, COUNT(enemies.id) as enemy_count')
             ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
-        ->groupBy('npcs.id');
+            ->groupBy('npcs.id');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([

@@ -46,9 +46,9 @@
                     $hasTeemingEnemy = false;
                     foreach ($dungeon->floors as $floor) {
                         /** @var $floor \App\Models\Floor */
-                        $totalEnemies += $floor->enemies->count();
+                        $totalEnemies           += $floor->enemies->count();
                         $totalUnassignedEnemies += $floor->enemies->whereIn('npc_id', [-1, 0])->count();
-                        $hasTeemingEnemy = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
+                        $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
                     }
                     ?>
                     @php($curr = $totalEnemies - $totalUnassignedEnemies)

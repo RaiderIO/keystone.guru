@@ -2,16 +2,16 @@
 $selected = $selected ?? '';
 
 // https://gist.github.com/Xeoncross/1204255
-$regions = array(
-    __('views/common.forms.timezoneselect.africa') => DateTimeZone::AFRICA,
-    __('views/common.forms.timezoneselect.america') => DateTimeZone::AMERICA,
+$regions = [
+    __('views/common.forms.timezoneselect.africa')     => DateTimeZone::AFRICA,
+    __('views/common.forms.timezoneselect.america')    => DateTimeZone::AMERICA,
     __('views/common.forms.timezoneselect.antarctica') => DateTimeZone::ANTARCTICA,
-    __('views/common.forms.timezoneselect.asia') => DateTimeZone::ASIA,
-    __('views/common.forms.timezoneselect.atlantic') => DateTimeZone::ATLANTIC,
-    __('views/common.forms.timezoneselect.europe') => DateTimeZone::EUROPE,
-    __('views/common.forms.timezoneselect.indian') => DateTimeZone::INDIAN,
-    __('views/common.forms.timezoneselect.pacific') => DateTimeZone::PACIFIC
-);
+    __('views/common.forms.timezoneselect.asia')       => DateTimeZone::ASIA,
+    __('views/common.forms.timezoneselect.atlantic')   => DateTimeZone::ATLANTIC,
+    __('views/common.forms.timezoneselect.europe')     => DateTimeZone::EUROPE,
+    __('views/common.forms.timezoneselect.indian')     => DateTimeZone::INDIAN,
+    __('views/common.forms.timezoneselect.pacific')    => DateTimeZone::PACIFIC
+];
 $timezones = array();
 foreach ($regions as $name => $mask) {
     $zones = DateTimeZone::listIdentifiers($mask);

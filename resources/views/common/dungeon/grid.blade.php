@@ -20,7 +20,9 @@ $selectable = $selectable ?? false;
     $dungeon = $dungeons->get($index);
     $link = $links->where('dungeon', $dungeon->key)->first();
     ?>
-    <div class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}" data-id="{{ $dungeon->id }}">
+    <div
+        class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"
+        data-id="{{ $dungeon->id }}">
         <div class="card-img-caption">
             @if($names)
                 <h5 class="card-text text-white pr-2">

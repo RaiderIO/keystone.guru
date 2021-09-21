@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
 $dungeonroute = $dungeonroute ?? null;
-$publicKey = optional($dungeonroute)->public_key ?? 'auto';
+$publicKey    = optional($dungeonroute)->public_key ?? 'auto';
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/report', 'options' => [
@@ -30,11 +30,11 @@ $publicKey = optional($dungeonroute)->public_key ?? 'auto';
 
         <div class="form-group">
 
-        @guest
-        {!! Form::label('dungeonroute_report_contact_ok', __('views/common.modal.userreport.dungeonroute.contact_by_email_guest')) !!}
-        @else
-        {!! Form::label('dungeonroute_report_contact_ok', __('views/common.modal.userreport.dungeonroute.contact_by_email')) !!}
-        @endguest
+            @guest
+                {!! Form::label('dungeonroute_report_contact_ok', __('views/common.modal.userreport.dungeonroute.contact_by_email_guest')) !!}
+            @else
+                {!! Form::label('dungeonroute_report_contact_ok', __('views/common.modal.userreport.dungeonroute.contact_by_email')) !!}
+            @endguest
             {!! Form::checkbox('dungeonroute_report_contact_ok', 1, false, ['class' => 'form-control left_checkbox dungeonroute_report_contact_ok']) !!}
         </div>
 

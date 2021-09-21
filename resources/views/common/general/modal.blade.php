@@ -1,13 +1,13 @@
 <?php
-$class = $class ?? '';
-$size = $size ?? 'md';
+$class  = $class ?? '';
+$size   = $size ?? 'md';
 $static = $static ?? false;
 $active = $active ?? false;
 ?>
 @if( $active )
-@include('common.general.inline', ['path' => 'modal/active', 'options' => [
-    'id' => '#' . $id
-]])
+    @include('common.general.inline', ['path' => 'modal/active', 'options' => [
+        'id' => '#' . $id
+    ]])
 @endif
 
 <div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"

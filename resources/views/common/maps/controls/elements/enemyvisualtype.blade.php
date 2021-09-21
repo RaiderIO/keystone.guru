@@ -1,5 +1,5 @@
 <?php
-$enemyVisualType = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$enemyVisualType  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
 $enemyVisualTypes = [
     'enemy_portrait' => __('views/common.maps.controls.elements.enemyvisualtype.portrait'),
     'npc_class'      => __('views/common.maps.controls.elements.enemyvisualtype.npc_class'),

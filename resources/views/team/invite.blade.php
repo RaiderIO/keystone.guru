@@ -1,5 +1,5 @@
 <?php
-$title = isset($team) ? sprintf(__('views/team.invite.title'), $team->name) : __('views/team.invite.invalid_team');
+$title  = isset($team) ? sprintf(__('views/team.invite.title'), $team->name) : __('views/team.invite.invalid_team');
 $header = isset($team) ? sprintf(__('views/team.invite.header'), $team->name) : __('views/team.invite.invalid_team');
 // Checks if you're already a member or not
 $member = $member ?? false;

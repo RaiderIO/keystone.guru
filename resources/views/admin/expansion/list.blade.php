@@ -6,7 +6,8 @@
             <h4>{{ __('views/admin.expansion.list.header') }}</h4>
         </div>
         <div class="ml-auto">
-            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
+            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto"
+               role="button">
                 <i class="fas fa-plus"></i> {{ __('views/admin.expansion.list.create_expansion') }}
             </a>
         </div>
@@ -16,8 +17,7 @@
 @section('scripts')
     <script type="text/javascript">
         $(function () {
-            $('#admin_expansion_table').DataTable({
-            });
+            $('#admin_expansion_table').DataTable({});
         });
     </script>
 @endsection
@@ -42,7 +42,8 @@
                 <td>{{ __($expansion->name) }}</td>
                 <td>{{ $expansion->color }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['expansion' => $expansion->id]) }}">
+                    <a class="btn btn-primary"
+                       href="{{ route('admin.expansion.edit', ['expansion' => $expansion->id]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.expansion.list.edit') }}
                     </a>
                 </td>

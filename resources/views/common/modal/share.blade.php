@@ -1,11 +1,11 @@
 <?php
 /** @var $dungeonroute App\Models\DungeonRoute|null */
 
-$show = $show ?? [];
-$showLink = $show['link'] ?? true;
-$showEmbed = $show['embed'] ?? true;
+$show          = $show ?? [];
+$showLink      = $show['link'] ?? true;
+$showEmbed     = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;
-$showPublish = $show['publish'] ?? true;
+$showPublish   = $show['publish'] ?? true;
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/share'])

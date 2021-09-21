@@ -9,7 +9,7 @@ $tagCategoryNameMapping = [
 ];
 
 $tagCategory = \App\Models\Tags\TagCategory::fromName($category);
-$tags = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['tag_category_id']);
+$tags        = Auth::user()->tags($tagCategory)->groupByRaw('name')->get()->groupBy(['tag_category_id']);
 $isDarkTheme = $theme === 'darkly';
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])

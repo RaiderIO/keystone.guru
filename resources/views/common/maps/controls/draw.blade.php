@@ -14,7 +14,7 @@
             <div id="view_route_actions_container" class="mb-2">
                 @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
             </div>
-        @endisset
+    @endisset
 
     <!-- Draw actions are injected here through drawcontrols.js -->
         <div id="edit_route_draw_actions_container" class="mb-2">

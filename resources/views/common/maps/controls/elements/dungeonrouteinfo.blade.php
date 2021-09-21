@@ -44,7 +44,8 @@ ob_start();
 <?php $content = ob_get_clean(); ?>
 <!-- Dungeonroute info -->
 <div class="row no-gutters">
-    <div class="col" data-toggle="tooltip" data-placement="right" title="{{ __('views/common.maps.controls.elements.dungeonrouteinfo.route_info_title') }}">
+    <div class="col" data-toggle="tooltip" data-placement="right"
+         title="{{ __('views/common.maps.controls.elements.dungeonrouteinfo.route_info_title') }}">
         <button id="map_dungeon_route_info_popover" class="btn btn-info w-100" data-toggle="popover"
                 data-placement="right"
                 data-content="{{ $content }}" data-html="true">

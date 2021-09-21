@@ -107,10 +107,10 @@ class AdminToolsController extends Controller
                 $npcCandidate->id                = $npcData['id'];
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
                 // Bosses
-                if( $npcCandidate->classification_id >= 3 ){
+                if ($npcCandidate->classification_id >= 3) {
                     $npcCandidate->enemy_forces = 0;
                 }
-                $npcCandidate->npc_type_id       = $npcTypeMapping[$npcData['type']];
+                $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
                 $npcCandidate->dungeon_id = count($npcData['location']) >= 8 ? -1 : $dungeon->id;
                 $npcCandidate->name       = $npcData['name'];

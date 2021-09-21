@@ -575,7 +575,7 @@ class EnemyVisual extends Signalable {
         let mainVisualWidthStr = outerWidthStr;
         let mainVisualHeightStr = outerHeightStr;
 
-        if( isSelectable ) {
+        if (isSelectable) {
             mainVisualWidthStr = `${outerWidth + 8}px`;
             mainVisualHeightStr = `${outerHeight + 8}px`;
         }

@@ -37,9 +37,11 @@
     </div>
     <h3>{{ __('views/admin.tools.list.subheader_actions') }}</h3>
     <div class="form-group">
-        <a class="btn btn-primary" href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('views/admin.tools.list.export_dungeon_data') }}</a>
+        <a class="btn btn-primary"
+           href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('views/admin.tools.list.export_dungeon_data') }}</a>
     </div>
     <div class="form-group">
-        <a class="btn btn-primary" href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('views/admin.tools.list.export_releases') }}</a>
+        <a class="btn btn-primary"
+           href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('views/admin.tools.list.export_releases') }}</a>
     </div>
 @endsection

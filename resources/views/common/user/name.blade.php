@@ -3,7 +3,7 @@
 /** @var $link boolean */
 /** @var $showAnonIcon boolean */
 
-$link = $link ?? false;
+$link         = $link ?? false;
 $showAnonIcon = $showAnonIcon ?? true;
 ?>
 

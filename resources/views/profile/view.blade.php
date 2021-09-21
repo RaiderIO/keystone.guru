@@ -1,6 +1,6 @@
 <?php
 /** @var $user \App\User */
-$title = sprintf(__('views/profile.view.title'), $user->name);
+$title  = sprintf(__('views/profile.view.title'), $user->name);
 $header = sprintf(__('views/profile.view.header'), $user->name);
 ?>
 @extends('layouts.sitepage', ['wide' => true, 'title' => $title])

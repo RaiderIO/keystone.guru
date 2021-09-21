@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
 
-$killZonesNumberStyleChecked = ($_COOKIE['kill_zones_number_style'] ?? 'percentage') === 'percentage';
+$killZonesNumberStyleChecked       = ($_COOKIE['kill_zones_number_style'] ?? 'percentage') === 'percentage';
 $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visibility'] ?? '1') === '1';
 ?>
 <div class="pull_settings_tools container">

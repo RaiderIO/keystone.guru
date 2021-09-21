@@ -7,7 +7,7 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
     'breadcrumbsParams' => [$release ?? null],
     'showAds' => false,
     'title' => $release ? __('views/admin.release.edit.title_edit') : __('views/admin.release.edit.title_new'))
-    ])
+])
 @section('header-title', $release ? __('views/admin.release.edit.header_edit') : __('views/admin.release.edit.header_new'))
 @include('common.general.inline', ['path' => 'admin/release/edit', 'options' => ['changelog' => $changelog, 'categories' => $categories]])
 

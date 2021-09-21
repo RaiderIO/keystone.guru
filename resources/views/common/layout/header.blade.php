@@ -1,13 +1,13 @@
 <?php
 $navs = [
     route('dungeonroutes.search') => [
-        'fa' => 'fas fa-search',
+        'fa'   => 'fas fa-search',
         'text' => __('views/common.layout.header.search')
     ],
-    route('dungeonroutes') => [
+    route('dungeonroutes')        => [
         'text' => __('views/common.layout.header.routes')
     ],
-    route('misc.affixes') => [
+    route('misc.affixes')         => [
         'text' => __('views/common.layout.header.affixes')
     ],
 ];

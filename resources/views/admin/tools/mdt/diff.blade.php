@@ -41,8 +41,7 @@
 @section('content')
     <?php
     /** @var $warnings \Illuminate\Support\Collection */
-    $warnings = $warnings->groupBy(function ($item)
-    {
+    $warnings = $warnings->groupBy(function ($item) {
         /** @var $item \App\Logic\MDT\Exception\ImportWarning */
         return $item->getCategory();
     });

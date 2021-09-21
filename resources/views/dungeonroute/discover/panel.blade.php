@@ -6,13 +6,13 @@
  * @var $currentAffixGroup \App\Models\AffixGroup
  */
 
-$dungeon = $dungeon ?? null;
-$cols = $cols ?? 2;
-$showMore = $showMore ?? false;
-$loadMore = $loadMore ?? false;
+$dungeon          = $dungeon ?? null;
+$cols             = $cols ?? 2;
+$showMore         = $showMore ?? false;
+$loadMore         = $loadMore ?? false;
 $showDungeonImage = $showDungeonImage ?? false;
-$affixgroup = $affixgroup ?? null;
-$cache = $cache ?? true;
+$affixgroup       = $affixgroup ?? null;
+$cache            = $cache ?? true;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">

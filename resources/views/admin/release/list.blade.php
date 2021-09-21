@@ -46,10 +46,10 @@
                        href="{{ route('admin.release.edit', ['release' => $release->version]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.release.list.edit') }}
                     </a>
-{{--                    <a class="btn btn-primary"--}}
-{{--                       href="{{ route('admin.release.', ['release' => $release->version]) }}">--}}
-{{--                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.release.list.edit') }}--}}
-{{--                    </a>--}}
+                    {{--                    <a class="btn btn-primary"--}}
+                    {{--                       href="{{ route('admin.release.', ['release' => $release->version]) }}">--}}
+                    {{--                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.release.list.edit') }}--}}
+                    {{--                    </a>--}}
                 </td>
             </tr>
         @endforeach

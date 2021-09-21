@@ -5,7 +5,7 @@
 /** @var $userCount int */
 /** @var $theme string */
 
-$dungeonSelectId = 'demo_dungeon_id';
+$dungeonSelectId    = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
 ?>
 @extends('layouts.sitepage', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])

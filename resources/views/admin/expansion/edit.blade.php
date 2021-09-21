@@ -33,7 +33,7 @@
     @isset($expansion)
         <div class="form-group">
             {{ __('views/admin.expansion.edit.current_image') }}: <img src="{{ $expansion->iconfile->getUrl() }}"
-                                          style="width: 32px; height: 32px;"/>
+                                                                       style="width: 32px; height: 32px;"/>
         </div>
     @endisset
 

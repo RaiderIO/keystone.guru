@@ -14,7 +14,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['ex
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes = [-1 => __('views/dungeonroute.embed.any')];
+    $affixes         = [-1 => __('views/dungeonroute.embed.any')];
     $selectedAffixes = -1;
 }
 ?>
