@@ -5,7 +5,7 @@ return [
         'keystone_guru' => 'Keystone.guru',
         'affixes'       => 'Affixes',
         'changelog'     => 'Changelog',
-        'routes'        => 'Routes',
+        'routes'        => ':expansion routes',
 
         'dungeonroutes' => [
             'search'            => 'Search',

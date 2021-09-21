@@ -6,38 +6,11 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use App\Service\Expansion\ExpansionService;
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-class DevDiscoverService implements DiscoverServiceInterface
+class DevDiscoverService extends BaseDiscoverService
 {
-    /** @var Closure|null */
-    private ?Closure $closure = null;
-
-    /** @var ExpansionService */
-    private ExpansionService $expansionService;
-
-    /**
-     * DevDiscoverService constructor.
-     * @param ExpansionService $expansionService
-     */
-    public function __construct(ExpansionService $expansionService)
-    {
-        $this->expansionService = $expansionService;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function withBuilder(Closure $closure): DiscoverServiceInterface
-    {
-        $this->closure = $closure;
-
-        return $this;
-    }
-
     /**
      * Gets a builder that provides a template for popular routes.
      *
@@ -51,7 +24,7 @@ class DevDiscoverService implements DiscoverServiceInterface
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansionService->getCurrentExpansion()->id)
+            ->where('dungeons.expansion_id', $this->expansion->id)
 //            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false);
@@ -70,7 +43,7 @@ class DevDiscoverService implements DiscoverServiceInterface
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansionService->getCurrentExpansion()->id)
+            ->where('dungeons.expansion_id', $this->expansion->id)
 //            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)

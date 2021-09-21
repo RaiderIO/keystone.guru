@@ -5,6 +5,7 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use Closure;
 use Illuminate\Support\Collection;
 
@@ -15,6 +16,12 @@ interface DiscoverServiceInterface
      * @return $this
      */
     function withBuilder(Closure $closure): self;
+
+    /**
+     * @param Expansion $expansion
+     * @return $this
+     */
+    function withExpansion(Expansion $expansion): self;
 
     /*
     |--------------------------------------------------------------------------

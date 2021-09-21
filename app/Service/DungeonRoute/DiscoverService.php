@@ -7,43 +7,11 @@ use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
-use App\Service\Cache\CacheService;
-use App\Service\Season\SeasonService;
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
-class DiscoverService implements DiscoverServiceInterface
+class DiscoverService extends BaseDiscoverService
 {
-    /** @var CacheService */
-    private CacheService $_cacheService;
-
-    /** @var SeasonService */
-    private SeasonService $_seasonService;
-
-    /** @var Closure|null */
-    private ?Closure $_closure = null;
-
-    /**
-     * DiscoverService constructor.
-     */
-    public function __construct()
-    {
-        $this->_cacheService  = App::make(CacheService::class);
-        $this->_seasonService = App::make(SeasonService::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function withBuilder(Closure $closure): DiscoverServiceInterface
-    {
-        $this->_closure = $closure;
-
-        return $this;
-    }
-
     /**
      * Gets a builder that provides a template for popular routes.
      *
@@ -52,7 +20,7 @@ class DiscoverService implements DiscoverServiceInterface
     private function popularBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
+            ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
@@ -63,9 +31,10 @@ class DiscoverService implements DiscoverServiceInterface
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
                     AND affix_group_id >= %s
-                )) as weightedPopularity', $this->_seasonService->getCurrentSeason()->affixgroups->first()->id)
+                )) as weightedPopularity', $this->seasonService->getCurrentSeason()->affixgroups->first()->id)
             )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
@@ -84,10 +53,12 @@ class DiscoverService implements DiscoverServiceInterface
     private function newBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
+            ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('dungeon_routes.demo', false)
@@ -127,7 +98,7 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeon(): Collection
     {
-        return $this->_cacheService->remember('discover_routes_popular', function () {
+        return $this->cacheService->remember('discover_routes_popular', function () {
             $result = collect();
 
 
@@ -160,7 +131,7 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->_cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup) {
+        return $this->cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup) {
             $result = collect();
 
             $activeDungeons = Dungeon::active()->get();
