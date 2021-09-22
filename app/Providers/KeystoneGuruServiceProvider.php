@@ -137,7 +137,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
                 'expansions'                      => Expansion::all(),
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
-                'activeDungeonsByExpansionIdDesc' => Dungeon::orderByRaw('expansion_id DESC, name')->active()->get(),
+                // Take active expansions into account
+                'activeDungeonsByExpansionIdDesc' => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                    ->where('expansions.active', true)
+                    ->where('dungeons.active', true)
+                    ->orderByRaw('expansion_id DESC, dungeons.name')
+                    ->get(),
                 'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
 
                 // Season

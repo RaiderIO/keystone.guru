@@ -7,13 +7,11 @@
 
 <?php
 /**
- * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
+ * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
  * @var $currentAffixGroup \App\Models\AffixGroup
  * @var $nextAffixGroup \App\Models\AffixGroup
  * @var $expansion \App\Models\Expansion
  */
-
-$dungeons = $expansion->dungeons;
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
         'options' =>  [
@@ -23,9 +21,9 @@ $dungeons = $expansion->dungeons;
 @section('content')
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
-            'dungeons' => $dungeons,
+            'dungeons' => $gridDungeons,
             'colCount' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION ? 3 : 4,
-            'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
+            'links' => $gridDungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
             })
         ])

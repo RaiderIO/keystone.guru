@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Rules\SiegeOfBoralusFactionRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,15 @@ class DungeonRouteFormRequest extends FormRequest
             'level_min'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.levels.min'), config('keystoneguru.levels.max')),
             'level_max'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.levels.min'), config('keystoneguru.levels.max')),
             // Only active dungeons are allowed
-            'dungeon_id'                => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
+            'dungeon_id'                => ['required', Rule::in(
+                Dungeon::select('dungeons.id')
+                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                    ->where('expansions.active', true)
+                    ->where('dungeons.active', true)
+                    ->get()
+                    ->pluck('id')
+                    ->toArray()
+            )],
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming'                   => 'nullable|int',
             'template'                  => 'nullable|int',

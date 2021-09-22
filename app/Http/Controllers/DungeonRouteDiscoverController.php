@@ -7,6 +7,7 @@ use App\Models\Expansion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,9 +40,12 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @throws AuthorizationException
      */
     public function discoverExpansion(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+
         // Redirect to the current expansion
         if (!$expansion->active) {
             return redirect()->route('dungeonroutes');
@@ -55,6 +59,7 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'   => 'dungeonroutes.discover',
+            'gridDungeons'  => $expansion->dungeons,
             'expansion'     => $expansion,
             'dungeonroutes' => [
                 'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
@@ -71,9 +76,13 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverdungeon(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
@@ -95,9 +104,12 @@ class DungeonRouteDiscoverController extends Controller
      * @param Expansion $expansion
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverpopular(Expansion $expansion, DiscoverServiceInterface $discoverService)
     {
+        $this->authorize('view', $expansion);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -116,9 +128,12 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverthisweek(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -140,9 +155,12 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discovernextweek(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -163,9 +181,12 @@ class DungeonRouteDiscoverController extends Controller
      * @param Expansion $expansion
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discovernew(Expansion $expansion, DiscoverServiceInterface $discoverService)
     {
+        $this->authorize('view', $expansion);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -185,9 +206,13 @@ class DungeonRouteDiscoverController extends Controller
      * @param Dungeon $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverdungeonpopular(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -207,9 +232,13 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverdungeonthisweek(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -233,9 +262,13 @@ class DungeonRouteDiscoverController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverdungeonnextweek(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };
@@ -258,9 +291,13 @@ class DungeonRouteDiscoverController extends Controller
      * @param Dungeon $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
+     * @throws AuthorizationException
      */
     public function discoverdungeonnew(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon);
+
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.category'));
         };

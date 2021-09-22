@@ -188,7 +188,7 @@ class Dungeon extends CacheModel
      */
     public function scopeSiegeOfBoralus($query)
     {
-        return $query->where('name', 'Siege of Boralus');
+        return $query->where('key', 'siegeofboralus');
     }
 
     /**
@@ -199,7 +199,7 @@ class Dungeon extends CacheModel
      */
     public function scopeActive($query)
     {
-        return $query->where('active', 1);
+        return $query->where('dungeons.active', 1);
     }
 
     /**
@@ -210,7 +210,7 @@ class Dungeon extends CacheModel
      */
     public function scopeInactive($query)
     {
-        return $query->where('active', 0);
+        return $query->where('dungeons.active', 0);
     }
 
 

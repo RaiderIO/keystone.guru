@@ -76,7 +76,7 @@ class Expansion extends CacheModel
      */
     public function scopeActive($query)
     {
-        return $query->where('active', 1);
+        return $query->where('expansions.active', 1);
     }
 
     /**
@@ -87,7 +87,7 @@ class Expansion extends CacheModel
      */
     public function scopeInactive($query)
     {
-        return $query->where('active', 0);
+        return $query->where('expansions.active', 0);
     }
 
     /**

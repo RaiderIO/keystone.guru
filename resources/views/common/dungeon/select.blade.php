@@ -9,7 +9,8 @@ $name             = $name ?? 'dungeon_id';
 $label            = $label ?? __('views/common.dungeon.select.dungeon');
 $required         = $required ?? true;
 $showAll          = !isset($showAll) || $showAll;
-$activeOnly       = $activeOnly ?? true;
+// Show all dungeons if we're debugging
+$activeOnly       = $activeOnly ?? !env('APP_DEBUG');
 $showSiegeWarning = $showSiegeWarning ?? false;
 
 $dungeonsSelect = [];
@@ -25,9 +26,14 @@ $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
 // Group the dungeons by expansion
 foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
-    $dungeonsSelect[__($allExpansions->where('id', $expansionId)->first()->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
-        return [$id => __($name)];
-    })->toArray();
+    /** @var \App\Models\Expansion $expansion */
+    $expansion = $allExpansions->where('id', $expansionId)->first();
+
+    if ($expansion->active) {
+        $dungeonsSelect[__($expansion->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => __($name)];
+        })->toArray();
+    }
 }
 
 ?>
