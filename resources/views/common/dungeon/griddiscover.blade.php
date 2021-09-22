@@ -6,7 +6,7 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
-$colCount = 4;
+$colCount = $colCount ?? 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
 $names = $names ?? true;
@@ -21,6 +21,8 @@ $tiers = $subcreationTierListService->getTiersByAffixGroups(collect([
     $nextAffixGroup
 ]));
 
+$sideOffset = $colCount === 3 ? 1 : 0;
+
 for( $i = 0; $i < $rowCount; $i++ ) { ?>
 <div class="row no-gutters">
     <?php for( $j = 0; $j < $colCount; $j++ ) {
@@ -30,7 +32,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     $dungeon = $dungeons->get($index);
     $link = $links->where('dungeon', $dungeon->key)->first();
     ?>
-    <div class="p-2 col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} ">
+    <div class="p-2 col-lg-3 col-6 {{ $sideOffset && ($j === 0) ? 'ml-auto' : (($j === $colCount - 1) ? 'mr-auto' : '') }}">
         <div class="card">
             <div class="card-img-caption">
                 <a href="{{ route('dungeonroutes.discoverdungeon', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">

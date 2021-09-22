@@ -7,10 +7,10 @@ use App\Models\Expansion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class DungeonRouteDiscoverController extends Controller
@@ -27,23 +27,25 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @param ExpansionService $expansionService
-     * @param DiscoverServiceInterface $discoverService
-     * @param SeasonService $seasonService
-     * @return Factory
+     * @return RedirectResponse
      */
-    public function discover(ExpansionService $expansionService, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    public function discover(ExpansionService $expansionService)
     {
-        return $this->discoverExpansion($expansionService->getCurrentExpansion(), $discoverService, $seasonService);
+        return redirect()->route('dungeonroutes.expansion', ['expansion' => $expansionService->getCurrentExpansion()]);
     }
 
     /**
      * @param Expansion $expansion
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
     public function discoverExpansion(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
     {
+        // Redirect to the current expansion
+        if (!$expansion->active) {
+            return redirect()->route('dungeonroutes');
+        }
 
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.overview'));

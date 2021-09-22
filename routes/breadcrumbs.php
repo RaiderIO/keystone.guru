@@ -43,7 +43,7 @@ Breadcrumbs::for('dungeonroutes', function (Generator $trail) {
 });
 Breadcrumbs::for('dungeonroutes.expansion', function (Generator $trail, Expansion $expansion) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.routes', ['expansion' => __($expansion->name)]), route('dungeonroutes.expansion', ['expansion' => $expansion]));
+    $trail->push(__('breadcrumbs.home.routes_expansion', ['expansion' => __($expansion->name)]), route('dungeonroutes.expansion', ['expansion' => $expansion]));
 });
 Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail) {
     $trail->parent('dungeonroutes');

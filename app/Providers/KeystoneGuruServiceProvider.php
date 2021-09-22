@@ -203,10 +203,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables) {
             $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
             $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
+            $view->with('expansion', $globalViewVariables['currentExpansion']);
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables) {
-//            $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
             $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
             $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
         });
@@ -219,7 +219,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Dungeon grid view
         view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables) {
             $view->with('expansion', $globalViewVariables['currentExpansion']);
-//            $view->with('dungeons', $globalViewVariables['currentExpansionActiveDungeons']);
         });
 
         // Displaying a release

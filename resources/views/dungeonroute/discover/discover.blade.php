@@ -1,6 +1,6 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-10 offset-xl-1',
-    'breadcrumbs' => 'dungeonroutes',
+    'breadcrumbs' => 'dungeonroutes.expansion',
     'breadcrumbsParams' => [$expansion],
     'title' => __('views/dungeonroute.discover.discover.title')
 ])
@@ -24,6 +24,7 @@ $dungeons = $expansion->dungeons;
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
             'dungeons' => $dungeons,
+            'colCount' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION ? 3 : 4,
             'links' => $dungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
             })

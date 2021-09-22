@@ -31,7 +31,7 @@ class Expansion extends CacheModel
 {
     use HasIconFile;
 
-    public $fillable = ['icon_file_id', 'name', 'shortname', 'color', 'released_at'];
+    public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 

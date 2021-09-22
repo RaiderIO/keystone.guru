@@ -23,14 +23,17 @@ class ExpansionsSeeder extends Seeder
 
         $expansions = [
             'expansions.legion.name'                 => new Expansion([
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_LEGION,
                 'color'       => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00'),
             ]), 'expansions.battle_for_azeroth.name' => new Expansion([
+                'active'      => 0,
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
                 'released_at' => Carbon::make('2018-08-14 00:00:00'),
             ]), 'expansions.shadowlands.name'        => new Expansion([
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00'),

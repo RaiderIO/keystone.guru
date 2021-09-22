@@ -5,6 +5,7 @@
  * @var $currentAffixGroup \App\Models\AffixGroup
  * @var $nextAffixGroup \App\Models\AffixGroup
  * @var $offset int
+ * @var $expansion \App\Models\Expansion
  */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
@@ -148,7 +149,7 @@ if ($timezone === null) {
     <div class="discover">
         @include('dungeonroute.discover.panel', [
             'title' => __('views/misc.affixes.popular_routes_by_current_affixes'),
-            'link' => route('dungeonroutes.thisweek'),
+            'link' => route('dungeonroutes.thisweek', ['expansion' => $expansion]),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
@@ -159,7 +160,7 @@ if ($timezone === null) {
 
         @include('dungeonroute.discover.panel', [
             'title' => __('views/misc.affixes.popular_routes_by_next_affixes'),
-            'link' => route('dungeonroutes.nextweek'),
+            'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
             // The next week's affix group is current for that week
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,

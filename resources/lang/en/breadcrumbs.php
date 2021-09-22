@@ -2,10 +2,11 @@
 
 return [
     'home' => [
-        'keystone_guru' => 'Keystone.guru',
-        'affixes'       => 'Affixes',
-        'changelog'     => 'Changelog',
-        'routes'        => ':expansion routes',
+        'keystone_guru'    => 'Keystone.guru',
+        'affixes'          => 'Affixes',
+        'changelog'        => 'Changelog',
+        'routes'           => 'Routes',
+        'routes_expansion' => ':expansion routes',
 
         'dungeonroutes' => [
             'search'            => 'Search',
