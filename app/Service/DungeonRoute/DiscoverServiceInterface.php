@@ -23,6 +23,12 @@ interface DiscoverServiceInterface
      */
     function withExpansion(Expansion $expansion): self;
 
+    /**
+     * @param bool $enabled
+     * @return $this
+     */
+    function withCache(bool $enabled): self;
+
     /*
     |--------------------------------------------------------------------------
     | DungeonRoutes

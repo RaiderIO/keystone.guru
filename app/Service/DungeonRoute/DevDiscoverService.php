@@ -136,6 +136,7 @@ class DevDiscoverService extends BaseDiscoverService
     function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.
+        return collect();
     }
 
     /**
@@ -144,6 +145,7 @@ class DevDiscoverService extends BaseDiscoverService
     function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
+        return collect();
     }
 
     /**
@@ -152,6 +154,7 @@ class DevDiscoverService extends BaseDiscoverService
     function popularUsersByDungeon(Dungeon $dungeon): Collection
     {
         // TODO: Implement popularUsersByDungeon() method.
+        return collect();
     }
 
     /**
@@ -160,5 +163,6 @@ class DevDiscoverService extends BaseDiscoverService
     function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
+        return collect();
     }
 }

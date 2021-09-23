@@ -55,4 +55,14 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    function withCache(bool $enabled): DiscoverServiceInterface
+    {
+        $this->cacheService->setCacheEnabled($enabled);
+
+        return $this;
+    }
 }

@@ -13,6 +13,19 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
+    /** @var bool */
+    private $cacheEnabled = true;
+
+    /**
+     * @param bool $cacheEnabled
+     * @return CacheService
+     */
+    public function setCacheEnabled(bool $cacheEnabled): CacheService
+    {
+        $this->cacheEnabled = $cacheEnabled;
+        return $this;
+    }
+
     /**
      * @param string $key
      * @return DateInterval|null
@@ -36,7 +49,7 @@ class CacheService implements CacheServiceInterface
         $result = null;
 
         // Will never get triggered if in debug
-        if ($this->has($key)) {
+        if ($this->has($key) && $this->cacheEnabled) {
             $result = $this->get($key);
         } // When in debug, don't do any caching
         else {

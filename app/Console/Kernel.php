@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\Discover\Cache;
+use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Github\CreateGithubRelease;
@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         StopSupervisor::class,
 
         // Discover
-        Cache::class,
+        DiscoverCache::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,
@@ -112,6 +112,8 @@ class Kernel extends ConsoleKernel
 
         // https://laravel.com/docs/8.x/telescope#data-pruning
         $schedule->command('telescope:prune --hours=48')->daily();
+
+        $schedule->command('discover:cache')->hourly();
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 
