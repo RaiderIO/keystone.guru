@@ -29,6 +29,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
         'showMore' => true,
+        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
     @include('dungeonroute.discover.panel', [
@@ -38,6 +39,7 @@
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
         'showMore' => true,
+        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
     @if( !$adFree && !$isMobile)
@@ -53,6 +55,7 @@
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
         'showMore' => true,
+        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
     @include('dungeonroute.discover.panel', [
         'title' => __('views/dungeonroute.discover.dungeon.overview.newly_published_routes'),
@@ -60,6 +63,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => true,
+        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
