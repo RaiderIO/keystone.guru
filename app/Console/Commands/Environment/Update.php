@@ -92,6 +92,7 @@ class Update extends Command
 
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
+        $this->call('discover:cache');
 
         return 0;
     }

@@ -204,7 +204,7 @@ return [
             'register'          => 'Register',
             'telescope'         => 'Telescope',
             'tools'             => 'Tools',
-            'view_releases'     => 'View release',
+            'view_releases'     => 'View releases',
             'view_expansions'   => 'View expansions',
             'view_dungeons'     => 'View dungeons',
             'view_npcs'         => 'View NPCs',

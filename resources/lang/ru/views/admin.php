@@ -169,7 +169,7 @@ return [
         ],
         'list' => [
             'title'                => '@todo ru: .release.list.title',
-            'view_releases'        => '@todo ru: .release.list.view_releases',
+            'view_releases'        => 'Показать релизы',
             'create_release'       => '@todo ru: .release.list.create_release',
             'table_header_id'      => '@todo ru: .release.list.table_header_id',
             'table_header_version' => '@todo ru: .release.list.table_header_version',
