@@ -62,7 +62,7 @@ trait ListsEnemies
         if ($showMdtEnemies) {
             try {
                 $dungeon    = Dungeon::findOrFail($dungeonId);
-                $mdtEnemies = (new MDTDungeon(__($dungeon->name, [], 'en')))->getClonesAsEnemies($dungeon->floors);
+                $mdtEnemies = (new MDTDungeon($dungeon->key))->getClonesAsEnemies($dungeon->floors);
 
                 foreach ($mdtEnemies as $mdtEnemy) {
                     // Skip Emissaries (Season 3), season is over

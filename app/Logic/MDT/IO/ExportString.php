@@ -118,7 +118,7 @@ class ExportString extends MDTBase
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        $mdtEnemies = (new MDTDungeon(__($this->_dungeonRoute->dungeon->name, [], 'en')))
+        $mdtEnemies = (new MDTDungeon($this->_dungeonRoute->dungeon->key))
             ->getClonesAsEnemies($this->_dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based

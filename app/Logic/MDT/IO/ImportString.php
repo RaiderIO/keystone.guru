@@ -206,7 +206,7 @@ class ImportString extends MDTBase
         $enemiesByNpcId = $enemies->groupBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon(__($dungeonRoute->dungeon->name, [], 'en')))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->key))->getClonesAsEnemies($floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 

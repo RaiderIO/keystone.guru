@@ -108,7 +108,7 @@ class DungeonFloorSwitchMarker extends Icon {
                             if (floor.id !== currentFloorId) {
                                 selectFloors.push({
                                     id: floor.id,
-                                    name: floor.name,
+                                    name: lang.get(floor.name),
                                 });
                             }
                         }
@@ -234,7 +234,7 @@ class DungeonFloorSwitchMarker extends Icon {
         let targetFloor = this.map.getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
-            return `Go to ${targetFloor.name}`;
+            return `Go to ${lang.get(targetFloor.name)}`;
         } else {
             return `Unknown`;
         }
