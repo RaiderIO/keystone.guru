@@ -53,24 +53,24 @@ Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail) {
 /**
  * General categories
  */
-Breadcrumbs::for('dungeonroutes.popular', function (Generator $trail) {
-    $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.popular'));
+Breadcrumbs::for('dungeonroutes.popular', function (Generator $trail, Expansion $expansion) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.popular', ['expansion' => $expansion]));
 });
 
-Breadcrumbs::for('dungeonroutes.nextweek', function (Generator $trail) {
-    $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.nextweek'));
+Breadcrumbs::for('dungeonroutes.nextweek', function (Generator $trail, Expansion $expansion) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.nextweek', ['expansion' => $expansion]));
 });
 
-Breadcrumbs::for('dungeonroutes.thisweek', function (Generator $trail) {
-    $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.thisweek'));
+Breadcrumbs::for('dungeonroutes.thisweek', function (Generator $trail, Expansion $expansion) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.thisweek', ['expansion' => $expansion]));
 });
 
-Breadcrumbs::for('dungeonroutes.new', function (Generator $trail) {
-    $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new'));
+Breadcrumbs::for('dungeonroutes.new', function (Generator $trail, Expansion $expansion) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new', ['expansion' => $expansion]));
 });
 
 

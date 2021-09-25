@@ -138,7 +138,7 @@ if ($timezone === null) {
 
         <div class="mt-4 text-center">
             <p>
-                {{ sprintf(__('views/misc.affixes.updated_at'), '2021/Jul/13') }}
+                {{ sprintf(__('views/misc.affixes.updated_at'), '2021/Sep/15') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
                 </a>

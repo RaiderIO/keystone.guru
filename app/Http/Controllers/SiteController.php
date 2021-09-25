@@ -115,15 +115,17 @@ class SiteController extends Controller
      * @param Request $request
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
+     * @param ExpansionService $expansionService
      * @return Factory|View
      */
-    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService, ExpansionService $expansionService)
     {
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
         };
 
         return view('misc.affixes', [
+            'expansion'     => $expansionService->getCurrentExpansion(),
             'seasonService' => $seasonService,
             'offset'        => (int)$request->get('offset', 0),
             'dungeonroutes' => [
