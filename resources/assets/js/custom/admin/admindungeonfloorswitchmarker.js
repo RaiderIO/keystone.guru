@@ -33,7 +33,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         let targetFloor = this.map.getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
-            return `Target: ${targetFloor.name}`;
+            return `Target: ${lang.get(targetFloor.name)}`;
         } else {
             return `Unknown target`;
         }

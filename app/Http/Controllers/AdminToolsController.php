@@ -289,7 +289,8 @@ class AdminToolsController extends Controller
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
-            $mdtNpcs = (new MDTDungeon(__($dungeon->name, [], 'en')))->getMDTNPCs();
+            /** @var Dungeon $dungeon */
+            $mdtNpcs = (new MDTDungeon($dungeon->key))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

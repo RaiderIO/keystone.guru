@@ -233,12 +233,13 @@ class AdminEnemy extends Enemy {
         enemy.mdt_id = this.mdt_id;
         this.enemy_id = enemy.id;
 
-        // Redraw ourselves
-        this.redrawConnectionToMDTEnemy();
-
         // Fire an event to notify everyone an enemy has been selected for this
         this.signal('mdt_connected', {target: enemy});
         enemy.signal('mdt_connected', {target: this});
+
+        // Redraw ourselves
+        this.redrawConnectionToMDTEnemy();
+        this.visual.refresh();
 
         // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
         this.map.setMapState(null);

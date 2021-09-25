@@ -8,7 +8,7 @@
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
             <div class="btn btn-outline-warning" data-toggle="tooltip"
-                 title="{{ __('views/common.mdtimport.reset_title') }}">
+                 title="{{ __('views/common.forms.mdtimport.reset_title') }}">
                 <i class="fas fa-undo"></i>
             </div>
         </div>
