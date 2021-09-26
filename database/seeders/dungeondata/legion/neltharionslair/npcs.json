@@ -213,7 +213,7 @@
         "dungeon_id": 10,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Stoneclaw Hunter",
         "base_health": 12345,
         "enemy_forces": 4,
