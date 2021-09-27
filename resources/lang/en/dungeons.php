@@ -5,81 +5,108 @@ return [
         'arcway'               => [
             'name'   => 'Arcway',
             'floors' => [
-                '' => '',
+                'arcway' => 'Arcway',
             ],
         ],
         'black_rook_hold'      => [
             'name'   => 'Black Rook Hold',
             'floors' => [
-                '' => '',
+                'the_ravenscrypt'          => 'The Ravenscrypt',
+                'the_grand_hall'           => 'The Grand Hall',
+                'ravenshold'               => 'Ravenshold',
+                'the_rooks_roost'          => 'The Rook\'s Roost',
+                'lord_ravencrests_chamber' => 'Lord Ravencrest\'s Chamber',
+                'the_ravens_crown'         => 'The Raven\'s Crown',
             ],
         ],
         'court_of_stars'       => [
             'name'   => 'Court of Stars',
             'floors' => [
-                '' => '',
+                'court_of_stars' => 'Court of Stars',
             ],
         ],
         'darkheart_thicket'    => [
             'name'   => 'Darkheart Thicket',
             'floors' => [
-                '' => '',
+                'darkheart_thicket' => 'Darkheart Thicket',
             ],
         ],
         'eye_of_aszhara'       => [
             'name'   => 'Eye of Aszhara',
             'floors' => [
-                '' => '',
+                'eye_of_aszhara' => 'Eye of Azshara',
             ],
         ],
         'halls_of_valor'       => [
             'name'   => 'Halls of Valor',
             'floors' => [
-                '' => '',
+                'the_high_gate'              => 'The High Gate',
+                'fields_of_the_eternal_hunt' => 'Fields of the Eternal Hunt',
+                'halls_of_valor'             => 'Halls of Valor',
             ],
         ],
         'maw_of_souls'         => [
             'name'   => 'Maw of Souls',
             'floors' => [
-                '' => '',
+                'hellmouth_cliffs' => 'Hellmouth Cliffs',
+                'the_hold'         => 'Hellmouth Cliffs',
+                'the_naglfar'      => 'The Naglfar',
             ],
         ],
         'neltharions_lair'     => [
             'name'   => 'Neltharion\'s Lair',
             'floors' => [
-                '' => '',
+                'neltharions_lair' => 'Neltharion\'s Lair',
             ],
         ],
         'vault_of_the_wardens' => [
             'name'   => 'Vault of the Wardens',
             'floors' => [
-                '' => '',
+                'the_wardens_court'     => 'The Warden\'s Court',
+                'vault_of_the_wardens'  => 'Vault of the Wardens',
+                'vault_of_the_betrayer' => 'Vault of the Betrayer',
             ],
         ],
 
         'lower_karazhan' => [
             'name'   => 'Lower Karazhan',
             'floors' => [
-                '' => '',
+                'servants_quarters'    => 'Servant\'s Quarters',
+                'upper_livery_stables' => 'Upper Livery Stables',
+                'the_banquet_hall'     => 'The Banquet Hall',
+                'the_guest_chambers'   => 'The Guest Chambers',
+                'opera_hall_balcony'   => 'Opera Hall Balcony',
+                'masters_terrace'      => 'Master\'s Terrace',
             ],
         ],
         'upper_karazhan' => [
             'name'   => 'Upper Karazhan',
             'floors' => [
-                '' => '',
+                'lower_broken_stair' => 'Lower Broken Stair',
+                'upper_broken_stair' => 'Upper Broken Stair',
+                'the_menagerie'      => 'The Menagerie',
+                'guardians_library'  => 'Guardian\'s Library',
+                'library_floor'      => 'Library Floor',
+                'upper_library'      => 'Upper Library',
+                'gamesmans_hall'     => 'Gamesman\'s Hall',
+                'netherspace'        => 'Netherspace',
             ],
         ],
 
         'cathedral_of_eternal_night'  => [
             'name'   => 'Cathedral of Eternal Night',
             'floors' => [
-                '' => '',
+                'hall_of_the_moon'     => 'Hall of the Moon',
+                'twilight_groove'      => 'Twilight Grove',
+                'the_emerald_archives' => 'The Emerald Archives',
+                'path_of_illumination' => 'Path of Illumination',
+                'sacristy_of_elune'    => 'Sacristy of Elune',
             ],
         ],
         'the_seat_of_the_triumvirate' => [
             'name'   => 'The Seat of the Triumvirate',
             'floors' => [
-                '' => '',
+                'the_seat_of_the_triumvirate' => 'The Seat of the Triumvirate',
             ],
         ],
     ],

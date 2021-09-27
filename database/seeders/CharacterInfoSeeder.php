@@ -42,7 +42,7 @@ class CharacterInfoSeeder extends Seeder
             'races.pandarenalliance'    => new CharacterRace(['key' => 'pandarenalliance', 'faction_id' => $factionAllianceId]),
             'races.void_elf'            => new CharacterRace(['key' => 'void_elf', 'faction_id' => $factionAllianceId]),
             'races.lightforged_draenei' => new CharacterRace(['key' => 'lightforged_draenei', 'faction_id' => $factionAllianceId]),
-            'races.dark_iron_wolf'      => new CharacterRace(['key' => 'dark_iron_wolf', 'faction_id' => $factionAllianceId]),
+            'races.dark_iron_dwarf'      => new CharacterRace(['key' => 'dark_iron_dwarf', 'faction_id' => $factionAllianceId]),
 
             'races.orc'                 => new CharacterRace(['key' => 'orc', 'faction_id' => $factionHordeId]),
             'races.undead'              => new CharacterRace(['key' => 'undead', 'faction_id' => $factionHordeId]),
@@ -57,6 +57,9 @@ class CharacterInfoSeeder extends Seeder
 
             'races.kul_tiran_human' => new CharacterRace(['key' => 'kul_tiran_human', 'faction_id' => $factionAllianceId]),
             'races.zandalari_troll' => new CharacterRace(['key' => 'zandalari_troll', 'faction_id' => $factionHordeId]),
+
+            'races.mechagnome' => new CharacterRace(['key' => 'mechagnome', 'faction_id' => $factionAllianceId]),
+            'races.vulpera'    => new CharacterRace(['key' => 'vulpera', 'faction_id' => $factionHordeId]),
         ];
 
         foreach ($races as $name => $race) {
@@ -111,12 +114,12 @@ class CharacterInfoSeeder extends Seeder
             'races.gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
             'races.draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' '],
             'races.worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' '],
-            'races.void_elf'            => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.lightforged_draenei' => ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
-            'races.dark_iron_wolf'      => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
+            'races.void_elf'            => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.lightforged_draenei' => ['x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
+            'races.dark_iron_dwarf'      => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
 
-            'races.pandarenalliance' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'races.pandarenhorde'    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.pandarenalliance' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.pandarenhorde'    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
             'races.orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
             'races.undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
@@ -124,12 +127,15 @@ class CharacterInfoSeeder extends Seeder
             'races.troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
             'races.blood_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
             'races.goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
-            'races.nightborne'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.highmountain_tauren' => ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
-            'races.maghar_orc'          => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.nightborne'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.highmountain_tauren' => ['x', 'x', 'x', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
+            'races.maghar_orc'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-            'races.kul_tiran_human' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
-            'races.zandalari_troll' => ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
+            'races.kul_tiran_human' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'races.zandalari_troll' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
+
+            'races.mechagnome' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.vulpera'    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
         ];
         // @formatter:on
 
