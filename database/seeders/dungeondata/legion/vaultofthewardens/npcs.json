@@ -308,7 +308,7 @@
         "dungeon_id": 13,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Shadow Hunter",
         "base_health": 12345,
         "enemy_forces": 4,
