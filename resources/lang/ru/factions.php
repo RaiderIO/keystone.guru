@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'unspecified' => '@todo ru: .unspecified',
-    'horde'       => '@todo ru: .horde',
-    'alliance'    => '@todo ru: .alliance',
+    'unspecified' => 'Не выбрана',
+    'horde'       => 'Орда',
+    'alliance'    => 'Альянс',
 ];

@@ -5,13 +5,18 @@ return [
         'arcway'               => [
             'name'   => 'Катакомбы Сурамара',
             'floors' => [
-                '' => '@todo ru: .legion.arcway.floors.',
+                'arcway' => '0-я фаза',
             ],
         ],
         'black_rook_hold'      => [
             'name'   => 'Крепость Черной Ладьи',
             'floors' => [
-                '' => '@todo ru: .legion.black_rook_hold.floors.',
+                'the_ravenscrypt'          => 'Крипта Воронов',
+                'the_grand_hall'           => 'Главный зал',
+                'ravenshold'               => 'Гнездовье Черной Ладьи',
+                'the_rooks_roost'          => 'Комната лорда Гребня Ворона',
+                'lord_ravencrests_chamber' => 'Корона Ворона',
+                'the_ravens_crown'         => 'Корона Ворона',
             ],
         ],
         'court_of_stars'       => [

@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'death_knight' => '@todo ru: .death_knight',
-    'demon_hunter' => '@todo ru: .demon_hunter',
-    'druid'        => '@todo ru: .druid',
-    'hunter'       => '@todo ru: .hunter',
-    'mage'         => '@todo ru: .mage',
-    'monk'         => '@todo ru: .monk',
-    'paladin'      => '@todo ru: .paladin',
-    'priest'       => '@todo ru: .priest',
-    'rogue'        => '@todo ru: .rogue',
-    'shaman'       => '@todo ru: .shaman',
-    'warlock'      => '@todo ru: .warlock',
-    'warrior'      => '@todo ru: .warrior',
+    'death_knight' => 'Рыцарь смерти',
+    'demon_hunter' => 'Охотник на демонов',
+    'druid'        => 'Друид',
+    'hunter'       => 'Охотник',
+    'mage'         => 'Маг',
+    'monk'         => 'Монах',
+    'paladin'      => 'Паладин',
+    'priest'       => 'Жрец',
+    'rogue'        => 'Разбойник',
+    'shaman'       => 'Шаман',
+    'warlock'      => 'Чернокнижник',
+    'warrior'      => 'Воин',
 ];
