@@ -22,69 +22,91 @@ return [
         'court_of_stars'       => [
             'name'   => 'Квартал Звезд',
             'floors' => [
-                '' => '@todo ru: .legion.court_of_stars.floors.',
+                'court_of_stars' => '@todo ru: .legion.court_of_stars.floors.court_of_stars',
             ],
         ],
         'darkheart_thicket'    => [
             'name'   => 'Чаща Темного Сердца',
             'floors' => [
-                '' => '@todo ru: .legion.darkheart_thicket.floors.',
+                'darkheart_thicket' => '@todo ru: .legion.darkheart_thicket.floors.darkheart_thicket',
             ],
         ],
         'eye_of_aszhara'       => [
             'name'   => 'Око Азшары',
             'floors' => [
-                '' => '@todo ru: .legion.eye_of_aszhara.floors.',
+                'eye_of_aszhara' => '@todo ru: .legion.eye_of_aszhara.floors.eye_of_aszhara',
             ],
         ],
         'halls_of_valor'       => [
             'name'   => 'Чертоги Доблести',
             'floors' => [
-                '' => '@todo ru: .legion.halls_of_valor.floors.',
+                'the_high_gate'              => '@todo ru: .legion.halls_of_valor.floors.the_high_gate',
+                'fields_of_the_eternal_hunt' => '@todo ru: .legion.halls_of_valor.floors.fields_of_the_eternal_hunt',
+                'halls_of_valor'             => '@todo ru: .legion.halls_of_valor.floors.halls_of_valor',
             ],
         ],
         'maw_of_souls'         => [
             'name'   => 'Утесы Адской Пасти',
             'floors' => [
-                '' => '@todo ru: .legion.maw_of_souls.floors.',
+                'hellmouth_cliffs' => '@todo ru: .legion.maw_of_souls.floors.hellmouth_cliffs',
+                'the_hold'         => '@todo ru: .legion.maw_of_souls.floors.the_hold',
+                'the_naglfar'      => '@todo ru: .legion.maw_of_souls.floors.the_naglfar',
             ],
         ],
         'neltharions_lair'     => [
             'name'   => 'Логово Нелтариона',
             'floors' => [
-                '' => '@todo ru: .legion.neltharions_lair.floors.',
+                'neltharions_lair' => '@todo ru: .legion.neltharions_lair.floors.neltharions_lair',
             ],
         ],
         'vault_of_the_wardens' => [
             'name'   => 'Казематы Стражей',
             'floors' => [
-                '' => '@todo ru: .legion.vault_of_the_wardens.floors.',
+                'the_wardens_court'     => '@todo ru: .legion.vault_of_the_wardens.floors.the_wardens_court',
+                'vault_of_the_wardens'  => '@todo ru: .legion.vault_of_the_wardens.floors.vault_of_the_wardens',
+                'vault_of_the_betrayer' => '@todo ru: .legion.vault_of_the_wardens.floors.vault_of_the_betrayer',
             ],
         ],
 
         'lower_karazhan' => [
             'name'   => 'Нижняя часть Каражана',
             'floors' => [
-                '' => '@todo ru: .legion.lower_karazhan.floors.',
+                'servants_quarters'    => '@todo ru: .legion.lower_karazhan.floors.servants_quarters',
+                'upper_livery_stables' => '@todo ru: .legion.lower_karazhan.floors.upper_livery_stables',
+                'the_banquet_hall'     => '@todo ru: .legion.lower_karazhan.floors.the_banquet_hall',
+                'the_guest_chambers'   => '@todo ru: .legion.lower_karazhan.floors.the_guest_chambers',
+                'opera_hall_balcony'   => '@todo ru: .legion.lower_karazhan.floors.opera_hall_balcony',
+                'masters_terrace'      => '@todo ru: .legion.lower_karazhan.floors.masters_terrace',
             ],
         ],
         'upper_karazhan' => [
             'name'   => 'Верхняя часть Каражана',
             'floors' => [
-                '' => '@todo ru: .legion.upper_karazhan.floors.',
+                'lower_broken_stair' => '@todo ru: .legion.upper_karazhan.floors.lower_broken_stair',
+                'upper_broken_stair' => '@todo ru: .legion.upper_karazhan.floors.upper_broken_stair',
+                'the_menagerie'      => '@todo ru: .legion.upper_karazhan.floors.the_menagerie',
+                'guardians_library'  => '@todo ru: .legion.upper_karazhan.floors.guardians_library',
+                'library_floor'      => '@todo ru: .legion.upper_karazhan.floors.library_floor',
+                'upper_library'      => '@todo ru: .legion.upper_karazhan.floors.upper_library',
+                'gamesmans_hall'     => '@todo ru: .legion.upper_karazhan.floors.gamesmans_hall',
+                'netherspace'        => '@todo ru: .legion.upper_karazhan.floors.netherspace',
             ],
         ],
 
         'cathedral_of_eternal_night'  => [
             'name'   => 'Собор Вечной Ночи',
             'floors' => [
-                '' => '@todo ru: .legion.cathedral_of_eternal_night.floors.',
+                'hall_of_the_moon'     => '@todo ru: .legion.cathedral_of_eternal_night.floors.hall_of_the_moon',
+                'twilight_groove'      => '@todo ru: .legion.cathedral_of_eternal_night.floors.twilight_groove',
+                'the_emerald_archives' => '@todo ru: .legion.cathedral_of_eternal_night.floors.the_emerald_archives',
+                'path_of_illumination' => '@todo ru: .legion.cathedral_of_eternal_night.floors.path_of_illumination',
+                'sacristy_of_elune'    => '@todo ru: .legion.cathedral_of_eternal_night.floors.sacristy_of_elune',
             ],
         ],
         'the_seat_of_the_triumvirate' => [
             'name'   => 'Престол Триумвирата',
             'floors' => [
-                '' => '@todo ru: .legion.the_seat_of_the_triumvirate.floors.',
+                'the_seat_of_the_triumvirate' => '@todo ru: .legion.the_seat_of_the_triumvirate.floors.the_seat_of_the_triumvirate',
             ],
         ],
     ],

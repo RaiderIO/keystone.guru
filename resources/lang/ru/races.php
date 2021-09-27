@@ -10,7 +10,7 @@ return [
     'pandarenalliance'    => 'Пандарены Альянс',
     'void_elf'            => 'Эльфы Бездны',
     'lightforged_draenei' => 'Озарённые дренеи',
-    'dark_iron_wolf'      => 'Дворфы из клана Чёрного Железа',
+    'dark_iron_dwarf'      => 'Дворфы из клана Чёрного Железа',
 
 
     'orc'                 => 'Орки',
