@@ -10,38 +10,59 @@ namespace App\Logic\MDT;
 
 use App\Models\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Service\Season\SeasonService;
 use Exception;
 
 class Conversion
 {
+    const EXPANSION_NAME_MAPPING = [
+        Expansion::EXPANSION_LEGION      => 'Legion',
+        Expansion::EXPANSION_BFA         => 'BattleForAzeroth',
+        Expansion::EXPANSION_SHADOWLANDS => 'Shadowlands',
+    ];
+
     const DUNGEON_NAME_MAPPING = [
-        'BattleForAzeroth' => [
-            // Battle for Azeroth
-            'Atal\'Dazar'          => 'AtalDazar',
-            'Freehold'             => 'Freehold',
-            'Kings\' Rest'         => 'KingsRest',
-            'Shrine of the Storm'  => 'ShrineoftheStorm',
-            'Siege of Boralus'     => 'SiegeofBoralus',
-            'Temple of Sethraliss' => 'TempleofSethraliss',
-            'The MOTHERLODE!!'     => 'TheMotherlode',
-            'The Underrot'         => 'TheUnderrot',
-            'Tol Dagor'            => 'TolDagor',
-            'Waycrest Manor'       => 'WaycrestManor',
-            'Mechagon: Junkyard'   => 'MechagonIsland',
-            'Mechagon: Workshop'   => 'MechagonCity',
+        Expansion::EXPANSION_LEGION => [
+            Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
+            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
+            Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
+            Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
+            Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
+            Dungeon::DUNGEON_EYE_OF_AZSHARA              => 'EyeOfAzshara',
+            Dungeon::DUNGEON_HALLS_OF_VALOR              => 'HallsofValor',
+            Dungeon::DUNGEON_LOWER_KARAZHAN              => 'ReturntoKarazhanLower',
+            Dungeon::DUNGEON_MAW_OF_SOULS                => 'MawOfSouls',
+            Dungeon::DUNGEON_NELTHARIONS_LAIR            => 'NeltharionsLair',
+            Dungeon::DUNGEON_UPPER_KARAZHAN              => 'ReturntoKarazhanUpper',
+            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
+            Dungeon::DUNGEON_VAULT_OF_THE_WARDENS        => 'VaultoftheWardens',
         ],
 
-        'Shadowlands' => [
-            // Shadowlands
-            'De Other Side'         => 'DeOtherSide',
-            'Halls of Atonement'    => 'HallsOfAtonement',
-            'Mists of Tirna Scithe' => 'MistsOfTirnaScithe',
-            'Plaguefall'            => 'Plaguefall',
-            'Sanguine Depths'       => 'SanguineDepths',
-            'Spires of Ascension'   => 'SpiresOfAscension',
-            'The Necrotic Wake'     => 'TheNecroticWake',
-            'Theater of Pain'       => 'TheaterOfPain',
+        Expansion::EXPANSION_BFA => [
+            Dungeon::DUNGEON_ATAL_DAZAR           => 'AtalDazar',
+            Dungeon::DUNGEON_FREEHOLD             => 'Freehold',
+            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
+            Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
+            Dungeon::DUNGEON_SIEGE_OF_BORALUS     => 'SiegeofBoralus',
+            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
+            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
+            Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
+            Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
+            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
+            Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
+            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
+        ],
+
+        Expansion::EXPANSION_SHADOWLANDS => [
+            Dungeon::DUNGEON_DE_OTHER_SIDE         => 'DeOtherSide',
+            Dungeon::DUNGEON_HALLS_OF_ATONEMENT    => 'HallsOfAtonement',
+            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE => 'MistsOfTirnaScithe',
+            Dungeon::DUNGEON_PLAGUEFALL            => 'Plaguefall',
+            Dungeon::DUNGEON_SANGUINE_DEPTHS       => 'SanguineDepths',
+            Dungeon::DUNGEON_SPIRES_OF_ASCENSION   => 'SpiresOfAscension',
+            Dungeon::DUNGEON_THE_NECROTIC_WAKE     => 'TheNecroticWake',
+            Dungeon::DUNGEON_THEATER_OF_PAIN       => 'TheaterOfPain',
         ],
     ];
 
@@ -56,40 +77,50 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonName
+     * @param string $dungeonKey
      * @return string|null
      */
-    public static function getExpansionName(string $dungeonName): ?string
+    public static function getExpansionName(string $dungeonKey): ?string
     {
         $result = null;
-        foreach (self::DUNGEON_NAME_MAPPING as $expansionName => $dungeons) {
-            if (isset($dungeons[$dungeonName])) {
-                $result = $expansionName;
+        foreach (self::DUNGEON_NAME_MAPPING as $expansionShortName => $dungeons) {
+            if (isset($dungeons[$dungeonKey])) {
+                $result = $expansionShortName;
+                break;
             }
         }
         return $result;
     }
 
     /**
-     * @param $dungeonName string
-     * @return bool True if MDT has a dungeon name, false if it has not.
+     * @param string $dungeonKey
+     * @return string|null
      */
-    public static function hasMDTDungeonName(string $dungeonName): bool
+    public static function getMDTExpansionName(string $dungeonKey): ?string
     {
-        return is_string(self::getMDTDungeonName($dungeonName));
+        return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)];
     }
 
     /**
-     * @param $dungeonName string
+     * @param $dungeonKey string
+     * @return bool True if MDT has a dungeon name, false if it has not.
+     */
+    public static function hasMDTDungeonName(string $dungeonKey): bool
+    {
+        return is_string(self::getMDTDungeonName($dungeonKey));
+    }
+
+    /**
+     * @param $dungeonKey string
      * @return string|null Gets the MDT version of a dungeon name.
      */
-    public static function getMDTDungeonName(string $dungeonName): ?string
+    public static function getMDTDungeonName(string $dungeonKey): ?string
     {
         $result = false;
 
-        $expansionName = self::getExpansionName($dungeonName);
+        $expansionName = self::getExpansionName($dungeonKey);
         if (is_string($expansionName)) {
-            $result = self::DUNGEON_NAME_MAPPING[$expansionName][$dungeonName];
+            $result = self::DUNGEON_NAME_MAPPING[$expansionName][$dungeonKey];
         }
 
         return $result;
@@ -154,7 +185,7 @@ class Conversion
             9  => 12,
             10 => 1,
             11 => 2,
-            12 => 3
+            12 => 3,
         ];
         return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
     }
@@ -182,7 +213,7 @@ class Conversion
             11 => 7,
             0  => 8,
             1  => 9,
-            2  => 10
+            2  => 10,
         ];
 
         return $weekMapping[$weekIndex];

@@ -50,8 +50,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
                     foreach ($groupedBy as $enemyPackId => $enemies) {
                         /** @var Collection $enemies */
-                        $enemies = $enemies->sortByDesc(function ($row)
-                        {
+                        $enemies = $enemies->sortByDesc(function ($row) {
                             return $row->enemy_forces;
                         });
 
@@ -71,8 +70,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                         }
 
                         // We need to check if we can skip all the enemies in the upcoming pack
-                        $totalEnemyForcesInPack = $enemies->sum(function ($row)
-                        {
+                        $totalEnemyForcesInPack = $enemies->sum(function ($row) {
                             return $row->enemy_forces;
                         });
 
@@ -139,7 +137,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
             if ($killZone->id !== null) {
                 $result->push([
                     'kill_zone'    => new KillZone((array)$killZone),
-                    'enemy_forces' => $killZone->enemy_forces
+                    'enemy_forces' => $killZone->enemy_forces,
                 ]);
             }
         }

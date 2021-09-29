@@ -193,11 +193,10 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
-        $startIndex = $this->affixgroups->search(
+        $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAtTime($this->start())
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup)
-        {
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup) {
             return $affixGroupCandidate->id === $affixGroup->id;
         })->first());
 
@@ -212,6 +211,6 @@ class Season extends CacheModel
     public function getPresetAtDate(Carbon $date): int
     {
         // Only if the current season has presets do we calculate, otherwise return 0
-        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets: 0;
+        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets : 0;
     }
 }

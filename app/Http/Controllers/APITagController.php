@@ -82,11 +82,11 @@ class APITagController extends Controller
             // Save the tag we're trying to add
             $tag = new Tag();
             // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-            $tag->user_id = Auth::id();
+            $tag->user_id         = Auth::id();
             $tag->tag_category_id = $tagCategory->id;
-            $tag->model_id = $model->id;
-            $tag->model_class = $tagCategory->model_class;
-            $tag->name = $tagName;
+            $tag->model_id        = $model->id;
+            $tag->model_class     = $tagCategory->model_class;
+            $tag->name            = $tagName;
             // Will be null if no similar tag is found which is fine
             $tag->color = optional($similarTag)->color;
 

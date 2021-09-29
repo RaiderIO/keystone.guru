@@ -29,7 +29,7 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
             width -= 7;
         }
         // Dangerous = less space
-        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
+        else if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
             width -= 6;
         }
 

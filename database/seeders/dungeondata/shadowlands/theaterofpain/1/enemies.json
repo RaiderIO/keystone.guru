@@ -277,8 +277,8 @@
         "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -119.40625,
-        "lng": 193.6875,
+        "lat": -119.41,
+        "lng": 193.69,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
@@ -299,8 +299,8 @@
         "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.375,
-        "lng": 183.4375,
+        "lat": -128.38,
+        "lng": 183.44,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {

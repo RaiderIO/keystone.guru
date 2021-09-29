@@ -15,7 +15,8 @@ namespace Database\Seeders\RelationImport\Parsers;
  * Another use case is the Vertices that are saved along with a few things (EnemyPacks, Patrols). These need to be extracted
  * and saved to the database again.
  */
-interface RelationParser {
+interface RelationParser
+{
     public function canParseModel($modelClassName);
 
     public function canParseRelation($name, $value);

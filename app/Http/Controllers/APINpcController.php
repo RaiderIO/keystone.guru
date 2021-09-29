@@ -46,14 +46,16 @@ class APINpcController extends Controller
     public function list(Request $request)
     {
         $npcs = Npc::with(['dungeon', 'type', 'classification'])
-            ->select(['npcs.*'])
-            ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id');
+            ->selectRaw('npcs.*, COUNT(enemies.id) as enemy_count')
+            ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id')
+            ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
+            ->groupBy('npcs.id');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
             new IdColumnHandler($datatablesHandler),
             new NameColumnHandler($datatablesHandler),
-            new DungeonColumnHandler($datatablesHandler)
+            new DungeonColumnHandler($datatablesHandler),
         ])->applyRequestToBuilder()->getResult();
     }
 }

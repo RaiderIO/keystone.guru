@@ -18,7 +18,7 @@ class SearchFilterEnemyForces extends SearchFilter {
     }
 
     setValue(value) {
-        if( value ) {
+        if (value) {
             $(this.options.selector).attr('checked', 'checked');
         } else {
             $(this.options.selector).removeAttr('checked');
@@ -26,12 +26,12 @@ class SearchFilterEnemyForces extends SearchFilter {
     }
 
     getFilterHeaderText() {
-        let result = 'Enemy forces: ';
+        let result = '';
 
         if (this.getValue() === 0) {
-            result += 'incomplete';
+            result += lang.get('messages.filter_enemy_forces_header_incomplete');
         } else {
-            result += 'complete';
+            result += lang.get('messages.filter_enemy_forces_header_complete');
         }
 
         return result;

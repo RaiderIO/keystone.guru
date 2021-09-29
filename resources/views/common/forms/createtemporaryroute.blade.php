@@ -8,14 +8,14 @@
         <div class="text-info">
             @guest
                 <i class="fas fa-info-circle"></i> {{ sprintf(
-                    __('As an unregistered user, all created routes will be temporary routes which expire after %s hours.'),
+                    __('views/common.forms.createtemporaryroute.unregistered_user_message'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                     )
                 }}
             @else
                 <i class="fas fa-info-circle"></i> {{
             sprintf(
-                __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
+                __('views/common.forms.createtemporaryroute.registered_user_message'),
                 config('keystoneguru.sandbox_dungeon_route_expires_hours')
             )
                 }}
@@ -25,7 +25,7 @@
 
     <div class="col-lg-12">
         <div class="form-group">
-            {!! Form::submit(__('Create route'), ['class' => 'btn btn-info col-md-auto']) !!}
+            {!! Form::submit(__('views/common.forms.createtemporaryroute.create_route'), ['class' => 'btn btn-info col-md-auto']) !!}
         </div>
     </div>
 </div>

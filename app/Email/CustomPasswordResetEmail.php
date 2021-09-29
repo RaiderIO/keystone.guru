@@ -8,7 +8,6 @@ namespace App\Email;
  * Date: 8-10-2018
  * Time: 14:03
  */
-
 class CustomPasswordResetEmail extends \Illuminate\Auth\Notifications\ResetPassword
 {
     public function toMail($notifiable)

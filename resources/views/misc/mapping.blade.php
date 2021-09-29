@@ -1,28 +1,28 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Mapping')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.mapping.title')])
 
-@section('header-title', __('Mapping progress'))
+@section('header-title', __('views/misc.mapping.header'))
 
 @section('content')
-    <h2>{{ __('Enemy forces mapping progress') }}</h2>
+    <h2>{{ __('views/misc.mapping.enemy_forces_mapping_progress') }}</h2>
     <div class="row">
         <div class="col-lg-2 font-weight-bold">
-            {{ __('Dungeon') }}
+            {{ __('views/misc.mapping.dungeon') }}
         </div>
         <div class="col-lg-4 font-weight-bold">
-            {{ __('Enemy forces assigned to NPCs ') }}
+            {{ __('views/misc.mapping.enemy_forces_assigned') }}
         </div>
         <div class="col-lg-4 font-weight-bold">
-            {{ __('Npcs assigned to enemies') }}
+            {{ __('views/misc.mapping.npcs_assigned_to_enemies') }}
         </div>
         <div class="col-lg-2 font-weight-bold">
-            {{ __('Teeming') }}
+            {{ __('views/misc.mapping.teeming') }}
         </div>
     </div>
     @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
         <?php /** @var $dungeon \App\Models\Dungeon */ ?>
         <div class="row">
             <div class="col-lg-2">
-                {{ $dungeon->name }}
+                {{ __($dungeon->name) }}
             </div>
             <div class="col-lg-4">
                 <div class="progress">
@@ -33,7 +33,7 @@
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
                         <span class="text-left">
-                        {{ __('Enemy forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        {{ __('views/misc.mapping.enemy_forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>
                 </div>
@@ -46,9 +46,9 @@
                     $hasTeemingEnemy = false;
                     foreach ($dungeon->floors as $floor) {
                         /** @var $floor \App\Models\Floor */
-                        $totalEnemies += $floor->enemies->count();
+                        $totalEnemies           += $floor->enemies->count();
                         $totalUnassignedEnemies += $floor->enemies->whereIn('npc_id', [-1, 0])->count();
-                        $hasTeemingEnemy = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
+                        $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
                     }
                     ?>
                     @php($curr = $totalEnemies - $totalUnassignedEnemies)
@@ -58,13 +58,13 @@
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
                         <span class="text-left">
-                        {{ __('NPCs assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        {{ __('views/misc.mapping.npcs_assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>
                 </div>
             </div>
             <div class="col-lg-2">
-                {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
+                {!! Form::checkbox($dungeon->key . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
             </div>
         </div>
     @endforeach

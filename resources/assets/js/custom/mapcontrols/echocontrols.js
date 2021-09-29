@@ -181,7 +181,7 @@ class EchoControls extends MapControl {
         });
 
         $('.echo_follow_user').on('click', function () {
-            getState().getEcho().followUserById(parseInt($(this).data('id')));
+            getState().getEcho().followUserByPublicKey($(this).data('public_key'));
 
             // Rebuild the layout so that the button switches from follow to unfollow
             self._refreshVisual();
@@ -248,19 +248,19 @@ class EchoControls extends MapControl {
     _removeUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove elements associated with the user
-        $(`.echo_user_${user.id}`).remove();
-        $(`#style_echo_user_${user.id}`).remove();
+        $(`.echo_user_${user.public_key}`).remove();
+        $(`#style_echo_user_${user.public_key}`).remove();
     }
 
     /**
      * Sets the display color of a user.
-     * @param user {object}
+     * @param user {EchoUser}
      * @private
      */
     _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let styleID = `style_echo_user_${user.id}`;
+        let styleID = `style_echo_user_${user.public_key}`;
         // Delete any previous styles
         $(`#${styleID}`).remove();
 
@@ -269,13 +269,13 @@ class EchoControls extends MapControl {
             .prop('type', 'text/css')
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html(`
-            .echo_user_${user.id} {
-                border: 3px ${getState().getEcho().getUserColor(user.id)} solid !important
+            .echo_user_${user.public_key} {
+                border: 3px ${getState().getEcho().getUserColor(user.public_key)} solid !important
             }`)
             .appendTo('head');
 
         // Update the text color depending on the luminance
-        let $user = $(`.echo_user_${user.id}`);
+        let $user = $(`.echo_user_${user.public_key}`);
         if (isColorDark(user.color)) {
             $user.addClass('text-white');
             $user.removeClass('text-dark');

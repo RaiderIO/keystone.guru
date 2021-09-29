@@ -24,6 +24,8 @@ class MessageHandler extends Signalable {
      * @param presenceChannel {Channel}
      */
     setup(presenceChannel) {
+        console.assert(this instanceof MessageHandler, 'this is not a MessageHandler', this);
+
         console.log(`Listening for ${this.getMessage()}`);
         presenceChannel.listen(this.getMessage(), this.onReceive.bind(this));
     }
@@ -32,11 +34,13 @@ class MessageHandler extends Signalable {
      * @param e {Object}
      */
     onReceive(e) {
+        console.assert(this instanceof MessageHandler, 'this is not a MessageHandler', this);
+
         // Try to re-map the received message to an object that we know of
         let message = new MessageFactory().create(e.__name, e);
 
         if (message !== null) {
-            let echoUser = this.echo.getUserById(message.user.id);
+            let echoUser = this.echo.getUserByPublicKey(message.user.public_key);
 
             // Floor ID is always set - so set it here
             if (echoUser !== null) {

@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('429 Too Many Requests'),
+    'title' => __('views/errors.429.title'),
     'code' => 429,
-    'message' => __('Sorry, you are making too many requests to our servers.')
+    'message' => __('views/errors.429.message')
     ])

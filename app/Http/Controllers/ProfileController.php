@@ -85,7 +85,7 @@ class ProfileController extends Controller
             if ($request->has('name') && !$user->changed_username) {
                 // Only when the user's name has actually changed
                 if ($user->name !== $request->get('name')) {
-                    $user->name = $request->get('name');
+                    $user->name             = $request->get('name');
                     $user->changed_username = true;
                 }
             }
@@ -93,21 +93,21 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
-        $user->theme = $request->get('theme');
-        $user->echo_color = $request->get('echo_color', randomHexColor());
-        $user->echo_anonymous = $request->get('echo_anonymous', false);
+        $user->theme                 = $request->get('theme');
+        $user->echo_color            = $request->get('echo_color', randomHexColor());
+        $user->echo_anonymous        = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
-        $user->timezone = $request->get('timezone');
+        $user->timezone              = $request->get('timezone');
 
         // Check if these things already exist or not, if so notify the user that they couldn't be saved
         $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->count() > 0;
         if ($emailExists) {
-            Session::flash('warning', __('That e-mail is already in use.'));
+            Session::flash('warning', __('controller.profile.flash.email_already_in_use'));
         }
 
         $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->count() > 0;
         if ($nameExists) {
-            Session::flash('warning', __('That username is already in use.'));
+            Session::flash('warning', __('controller.profile.flash.username_already_in_use'));
         }
 
         // Only when no duplicates are found!
@@ -120,11 +120,11 @@ class ProfileController extends Controller
                     $user->saveUploadedFile($avatar);
                 }
 
-                Session::flash('status', __('Profile updated'));
+                Session::flash('status', __('controller.profile.flash.profile_updated'));
 
                 // Drop the caches for all of their routes since their profile name/icon may have changed
                 foreach ($user->dungeonroutes as $dungeonroute) {
-                    $dungeonroute->dropCaches();
+                    $dungeonroute->dropCaches($dungeonroute->id);
                 }
 
                 // Send an event that the user's color has changed
@@ -164,11 +164,11 @@ class ProfileController extends Controller
                     Log::warning('Echo server is probably not running!');
                 }
             } else {
-                abort(500, __('An unexpected error occurred trying to save your profile'));
+                abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
             }
         }
 
-        return redirect()->route('profile.edit');
+        return redirect()->route('profile.tags');
     }
 
     /**
@@ -181,9 +181,9 @@ class ProfileController extends Controller
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
 
         if (!$user->save()) {
-            abort(500, __('An unexpected error occurred trying to save your profile'));
+            abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
         } else {
-            Session::flash('status', __('Privacy settings updated'));
+            Session::flash('status', __('controller.profile.flash.privacy_settings_updated'));
         }
 
         return redirect()->route('profile.edit');
@@ -195,8 +195,8 @@ class ProfileController extends Controller
      */
     public function changepassword(Request $request)
     {
-        $currentPw = $request->get('current_password');
-        $newPassword = $request->get('new_password');
+        $currentPw          = $request->get('current_password');
+        $newPassword        = $request->get('new_password');
         $newPasswordConfirm = $request->get('new_password-confirm');
 
         $user = Auth::getUser();
@@ -210,17 +210,17 @@ class ProfileController extends Controller
                 if ($currentPw !== $newPassword) {
                     $user->password = Hash::make($newPassword);
                     $user->save();
-                    Session::flash('status', __('Password changed'));
+                    Session::flash('status', __('controller.profile.flash.password_changed'));
 
                     // @todo Send an e-mail letting the user know the password has been changed
                 } else {
-                    $error = ['passwords_match' => __('New password equals the old password')];
+                    $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
                 }
             } else {
-                $error = ['passwords_no_match' => __('New passwords do not match')];
+                $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
             }
         } else {
-            $error = ['passwords_incorrect' => __('Current password is incorrect')];
+            $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
         }
 
         return view('profile.edit')->withErrors($error);
@@ -245,9 +245,9 @@ class ProfileController extends Controller
 
             Tag::saveFromRequest($request, $tagCategoryId);
 
-            Session::flash('status', __('Tag created successfully'));
+            Session::flash('status', __('controller.profile.flash.tag_created_successfully'));
         } else {
-            $error = ['tag_name_new' => __('This tag already exists')];
+            $error = ['tag_name_new' => __('controller.profile.flash.tag_already_exists')];
         }
 
         return view('profile.edit')->withErrors($error);
@@ -270,15 +270,15 @@ class ProfileController extends Controller
     public function delete(Request $request)
     {
         if (Auth::getUser()->hasRole('admin')) {
-            throw new Exception('Admins cannot delete themselves!');
+            throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));
         }
 
         try {
             User::findOrFail(Auth::id())->delete();
             Auth::logout();
-            Session::flash('status', __('Account deleted successfully.'));
+            Session::flash('status', __('controller.profile.flash.account_deleted_successfully'));
         } catch (Exception $e) {
-            Session::flash('warning', __('An error occurred. Please try again.'));
+            Session::flash('warning', __('controller.profile.flash.error_deleting_account'));
         }
 
         return redirect()->route('home');

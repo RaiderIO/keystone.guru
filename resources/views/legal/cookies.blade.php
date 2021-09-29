@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Cookies')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.cookies.title')])
 
-@section('header-title', __('Cookies Policy'))
+@section('header-title', __('views/legal.cookies.header'))
 
 @section('content')
     <p>
@@ -188,7 +188,8 @@
                 pull_gradient_apply_always
             </td>
             <td>
-                Remembers if you want the gradient that you've selected in the map editor to be applied automatically when performing changes to your pull.
+                Remembers if you want the gradient that you've selected in the map editor to be applied automatically
+                when performing changes to your pull.
             </td>
         </tr>
         <tr>
@@ -295,7 +296,7 @@
         </li>
         <li>
             <a href="https://policies.google.com/technologies/cookies?hl=en">How Google uses Cookies <i
-                        class="fas fa-external-link-alt"></i></a>
+                    class="fas fa-external-link-alt"></i></a>
         </li>
     </ul>
 

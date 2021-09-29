@@ -18,9 +18,10 @@
     </li>
     <li class="list-group-item separator p-2 border-0"></li>
     {{#each users}}
-        <li class="list-group-item p-0 m-0 echo_user echo_user_{{id}}">
+        <li class="list-group-item p-0 m-0 echo_user echo_user_{{public_key}}">
             <div class="dropdown">
-                <a href="#" id="dropdown_user_{{id}}" class="nav-link" data-toggle="dropdown" aria-haspopup="true"
+                <a href="#" id="dropdown_user_{{public_key}}" class="nav-link" data-toggle="dropdown"
+                   aria-haspopup="true"
                    aria-expanded="false">
                     {{#ifCond avatar_url '==' null}}
                         {{initials}}
@@ -28,7 +29,7 @@
                         <img src="{{avatar_url}}" alt="{{initials}}"/>
                     {{/ifCond}}
                 </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown_user_{{id}}">
+                <div class="dropdown-menu" aria-labelledby="dropdown_user_{{public_key}}">
                     <a class="dropdown-item" href="#">
                         {{name}}
                     </a>
@@ -36,11 +37,11 @@
                     {{#ifCond ../type '==' 'livesession'}}
                         {{#unless self}}
                             {{#if following}}
-                                <a class="dropdown-item echo_unfollow_user" href="#" data-id="{{id}}">
+                                <a class="dropdown-item echo_unfollow_user" href="#" data-public_key="{{public_key}}">
                                     <i class="fas fa-link"></i> {{../connected_user_unfollow_label}}
                                 </a>
                             {{else}}
-                                <a class="dropdown-item echo_follow_user" href="#" data-id="{{id}}">
+                                <a class="dropdown-item echo_follow_user" href="#" data-public_key="{{public_key}}">
                                     <i class="fas fa-link"></i> {{../connected_user_follow_label}}
                                 </a>
                             {{/if}}

@@ -108,7 +108,7 @@ class DungeonFloorSwitchMarker extends Icon {
                             if (floor.id !== currentFloorId) {
                                 selectFloors.push({
                                     id: floor.id,
-                                    name: floor.name,
+                                    name: lang.get(floor.name),
                                 });
                             }
                         }
@@ -164,14 +164,14 @@ class DungeonFloorSwitchMarker extends Icon {
         // If the user is on this floor..
         if (mousePosition.floor_id === this.target_floor_id) {
             // Add the user to this floor
-            if (!this.usersOnThisFloor.includes(mousePosition.user.id)) {
-                this.usersOnThisFloor.push(mousePosition.user.id);
+            if (!this.usersOnThisFloor.includes(mousePosition.user.public_key)) {
+                this.usersOnThisFloor.push(mousePosition.user.public_key);
 
                 changed = true;
             }
         } else {
             // Remove it from the list
-            let index = this.usersOnThisFloor.indexOf(mousePosition.user.id);
+            let index = this.usersOnThisFloor.indexOf(mousePosition.user.public_key);
             if (index !== -1) {
                 this.usersOnThisFloor.splice(index, 1);
 
@@ -222,7 +222,7 @@ class DungeonFloorSwitchMarker extends Icon {
             let echo = getState().getEcho();
             let usernames = [];
             for (let i = 0; i < this.usersOnThisFloor.length; i++) {
-                let echoUser = echo.getUserById(this.usersOnThisFloor[i]);
+                let echoUser = echo.getUserByPublicKey(this.usersOnThisFloor[i]);
                 if (echoUser !== null) {
                     usernames.push(echoUser.getName());
                 }
@@ -234,7 +234,7 @@ class DungeonFloorSwitchMarker extends Icon {
         let targetFloor = this.map.getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
-            return `Go to ${targetFloor.name}`;
+            return `Go to ${lang.get(targetFloor.name)}`;
         } else {
             return `Unknown`;
         }

@@ -1,10 +1,9 @@
 <?php
-$title = __('New team');
 // Checks if you're already a member or not
-$member = isset($member) ? $member : false;
+$member = $member ?? false;
 ?>
-@extends('layouts.sitepage', ['title' => $title])
-@section('header-title', $title)
+@extends('layouts.sitepage', ['title' => __('views/team.new.title')])
+@section('header-title', __('views/team.new.header'))
 
 @section('content')
     <div class="container">

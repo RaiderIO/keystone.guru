@@ -8,6 +8,6 @@ class SearchFilterTitle extends SearchFilterInputText {
     }
 
     getFilterHeaderText() {
-        return `Title: ${this.getValue()}`;
+        return lang.get('messages.filter_input_title_header').replace(':number', this.getValue());
     }
 }

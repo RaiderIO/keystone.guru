@@ -270,8 +270,8 @@ $.fn.refreshTooltips = function () {
  * @param closure {Function}
  * @returns {$}
  */
-$.fn.if = function(condition, closure) {
-    if( condition ) {
+$.fn.if = function (condition, closure) {
+    if (condition) {
         closure();
     }
 

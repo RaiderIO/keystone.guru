@@ -1,0 +1,137 @@
+{
+    "id": 111,
+    "release_changelog_id": 118,
+    "version": "v4.2",
+    "title": "Legion dungeons and Russian localization",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-09-24T13:16:36+00:00",
+    "updated_at": "2021-09-24T13:16:36+00:00",
+    "changelog": {
+        "id": 118,
+        "release_id": 111,
+        "description": "This is a very big update which I've worked on for quite some time. It doesn't add much new features per-se, but it further improves the foundation of the site on which I can continue to build a better product. The site can now (almost) fully be translated to any language. If you would like Keystone.guru to be available in your native language please contact me and we can work it out together.",
+        "changes": [
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 1,
+                "ticket_id": 882,
+                "change": "Added a background service which performs some caching to increase the load speed of all \/routes pages.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 1,
+                "ticket_id": 883,
+                "change": "Made various changes to accomodate the addition of Legion routes alongside current Shadowlands routes.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 1,
+                "ticket_id": 107,
+                "change": "The site is now fully translatable and available in Russian. Thanks so much to Rodriguez#8726 for your help with providing translations!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 875,
+                "change": "Added Darkheart Thicket mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 876,
+                "change": "Added Eye of Azshara mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 877,
+                "change": "Added Neltharion's Lair mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 878,
+                "change": "Added Vault of the Wardens mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 873,
+                "change": "Added Black Rook Hold mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 874,
+                "change": "Added Court of Stars mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 5,
+                "ticket_id": 866,
+                "change": "Mouse synchronization now properly works when you have set yourself to be anonymous in your profile (which is the default).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 5,
+                "ticket_id": 867,
+                "change": "Following a user's map movements when using a live session will now sync your viewport to their exact position, instead of the previously known position.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 5,
+                "ticket_id": 872,
+                "change": "Concluding a live session will no longer prompt the route author to rate their own route (if the current user made that route); you cannot rate your own routes.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

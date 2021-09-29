@@ -9,7 +9,7 @@ if( $section ) { ?>
     @parent
     <script>
         document.addEventListener('DOMContentLoaded', function (event) {
-            let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+            let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
             if (!code.isActivated()) {
                 <?php
@@ -30,7 +30,7 @@ if( $section ) { ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function (event) {
-        let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+        let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
         if (!code.isActivated()) {
             <?php

@@ -28,8 +28,7 @@ function initials(string $name): string
 {
     $explode = explode(' ', $name);
     if (count($explode) > 1) {
-        $result = join('', array_map(function ($element)
-        {
+        $result = join('', array_map(function ($element) {
             return $element[0];
         }, $explode));
     } else {

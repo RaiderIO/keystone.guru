@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Credits')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.credits.title')])
 
-@section('header-title', __('Credits'))
+@section('header-title', __('views/misc.credits.header'))
 
 @section('content')
     <p>
@@ -9,7 +9,7 @@
         in this website:
     </p>
 
-    <h2>{{ __('People') }}</h2>
+    <h2>{{ __('views/misc.credits.header_people') }}</h2>
     <p>
     <ul>
         <li>
@@ -32,7 +32,7 @@
     </p>
 
 
-    <h2 class="mt-4">{{ __('Libraries') }}</h2>
+    <h2 class="mt-4">{{ __('views/misc.credits.header_libraries') }}</h2>
     <h4>
         General
     </h4>
@@ -63,7 +63,7 @@
     </ul>
     </p>
 
-    <h2 class="mt-4">{{ __('Images') }}</h2>
+    <h2 class="mt-4">{{ __('views/misc.credits.header_images') }}</h2>
     <h4>
         Alliance & Horde icons
     </h4>

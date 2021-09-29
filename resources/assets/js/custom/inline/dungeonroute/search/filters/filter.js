@@ -27,7 +27,7 @@ class SearchFilter {
 
     }
 
-    setValue(value){
+    setValue(value) {
 
     }
 }

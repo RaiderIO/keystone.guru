@@ -21,9 +21,9 @@ trait GeneratesPublicKey
     public static function generateRandomPublicKey(int $length = 7, string $column = 'public_key'): string
     {
         do {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
-            $newKey = '';
+            $newKey           = '';
             for ($i = 0; $i < $length; $i++) {
                 $newKey .= $characters[rand(0, $charactersLength - 1)];
             }

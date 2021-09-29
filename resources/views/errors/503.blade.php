@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Service Unavailable</title> <!-- Fonts -->
+    <title>{{ __('views/errors.503.title') }}</title> <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <style> /*!
@@ -515,7 +515,7 @@
         sm:pt-0">
             <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider"> 503</div>
             <div
-                class="ml-4 text-lg text-gray-500 uppercase tracking-wider"> {{ __('Upgrading Keystone.guru. We\'ll be back in a few minutes!') }}
+                class="ml-4 text-lg text-gray-500 uppercase tracking-wider"> {{ __('views/errors.503.message') }}
             </div>
         </div>
     </div>

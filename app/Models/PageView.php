@@ -52,11 +52,11 @@ class PageView extends Model
         // Only if the view may be counted
         if ($mostRecentPageView === null || !$mostRecentPageView->isRecent()) {
             // Create a new view and save it
-            $pageView = new PageView();
-            $pageView->user_id = $userId;
-            $pageView->model_id = $modelId;
+            $pageView              = new PageView();
+            $pageView->user_id     = $userId;
+            $pageView->model_id    = $modelId;
             $pageView->model_class = $modelClass;
-            $pageView->session_id = $sessionId;
+            $pageView->session_id  = $sessionId;
             $pageView->save();
 
             $result = true;

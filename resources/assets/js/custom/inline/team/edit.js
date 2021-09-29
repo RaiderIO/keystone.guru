@@ -25,8 +25,8 @@ class TeamEdit extends InlineCode {
             self.refreshInviteLink();
         });
 
-        // Add route to team button
-        $('#add_route_btn').bind('click', function () {
+        // Add route to team button - only if enabled (user is Moderator)
+        $('#add_route_btn:enabled').bind('click', function () {
             tableView.setAddMode(true);
 
             code.refreshTable();

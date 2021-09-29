@@ -6,16 +6,16 @@ $mapEnemyAggressivenessBorder = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0
 $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 ?>
 <div class="draw_settings_tools container">
-    <h4>{{ __('Enemies') }}</h4>
+    <h4>{{ __('views/common.forms.mapsettings.enemies') }}</h4>
 
     <!-- Enemy number style -->
     <div class="form-group">
         <div class="row">
             <div class="col">
                 <label for="killzones_pulls_settings_map_number_style">
-                    {{ __('Enemy number style') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.')
-                     }}"></i>
+                    {{ __('views/common.forms.mapsettings.enemy_number_style') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('views/common.forms.mapsettings.enemy_number_style_title') }}"></i>
                 </label>
             </div>
         </div>
@@ -25,7 +25,8 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                        {{ $mapNumberStyleChecked ? 'checked' : '' }}
                        data-toggle="toggle" data-width="150px" data-height="20px"
                        data-onstyle="primary" data-offstyle="primary"
-                       data-on="{{ __('Percentage') }}" data-off="{{ __('Enemy forces') }}">
+                       data-on="{{ __('views/common.forms.mapsettings.percentage') }}"
+                       data-off="{{ __('views/common.forms.mapsettings.enemy_forces') }}">
             </div>
         </div>
     </div>
@@ -35,9 +36,11 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row">
             <div class="col">
                 <label for="map_settings_unkilled_enemy_opacity">
-                    {{ __('Unkilled enemy opacity') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.')
-                     }}"></i>
+                    {{ __('views/common.forms.mapsettings.unkilled_enemy_opacity') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('views/common.forms.mapsettings.unkilled_enemy_opacity_title') }}">
+
+                    </i>
                 </label>
             </div>
         </div>
@@ -57,11 +60,9 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row">
             <div class="col">
                 <label for="map_settings_unkilled_important_enemy_opacity">
-                    {{ __('Unkilled important enemy opacity') }} <i class="fas fa-info-circle" data-toggle="tooltip"
-                                                                    title="{{
-                    __('Important enemies are those that are either Prideful, marked as Inspiring or are marked as required.
-                    These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.')
-                     }}"></i>
+                    {{ __('views/common.forms.mapsettings.unkilled_important_enemy_opacity') }} <i
+                        class="fas fa-info-circle" data-toggle="tooltip"
+                        title="{{ __('views/common.forms.mapsettings.unkilled_important_enemy_opacity_title') }}"></i>
                 </label>
             </div>
         </div>
@@ -81,10 +82,10 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row no-gutters">
             <div class="col pr-2">
                 <label for="map_settings_enemy_aggressiveness_border">
-                    {{ __('Show aggressiveness border') }} <i class="fas fa-info-circle" data-toggle="tooltip"
-                                                              title="{{
-                    __('Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.')
-                     }}"></i>
+                    {{ __('views/common.forms.mapsettings.show_aggressiveness_border') }}
+                    <i class="fas fa-info-circle"
+                       data-toggle="tooltip"
+                       title="{{ __('views/common.forms.mapsettings.show_aggressiveness_border_title') }}"></i>
                 </label>
             </div>
         </div>
@@ -103,11 +104,12 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row no-gutters">
             <div class="col pr-2">
                 <label for="map_settings_enemy_dangerous_border">
-                    {{ __('Highlight dangerous enemies') }} <i class="fas fa-info-circle" data-toggle="tooltip"
-                                                               title="{{
-                    __('Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru.
-                        These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.')
-                     }}"></i>
+                    {{ __('views/common.forms.mapsettings.highlight_dangerous_enemies') }}
+                    <i class="fas fa-info-circle"
+                       data-toggle="tooltip"
+                       title="{{ __('views/common.forms.mapsettings.highlight_dangerous_enemies_title') }}">
+
+                    </i>
                 </label>
             </div>
         </div>
@@ -122,15 +124,17 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     @if($edit)
-        <h4 class="mt-4">{{ __('Drawing') }}</h4>
+        <h4 class="mt-4">{{ __('views/common.forms.mapsettings.drawing') }}</h4>
         <!-- Default line weight -->
         <div class="form-group">
             <div class="row">
                 <div class="col">
                     <label for="edit_route_freedraw_options_weight">
-                        {{ __('Default line weight') }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                    __('This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.')
-                     }}"></i>
+                        {{ __('views/common.forms.mapsettings.default_line_weight') }}
+                        <i class="fas fa-info-circle"
+                           data-toggle="tooltip"
+                           title="{{ __('views/common.forms.mapsettings.default_line_weight_title') }}">
+                        </i>
                     </label>
                 </div>
             </div>
@@ -144,14 +148,4 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             </div>
         </div>
     @endif
-
-    {{--    <div class="form-group mb-0">--}}
-    {{--        <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">--}}
-    {{--            <i class="fas fa-save"></i> {{ __('Save settings') }}--}}
-    {{--        </button>--}}
-    {{--        <button id="save_map_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"--}}
-    {{--                style="display: none;">--}}
-    {{--            <i class="fas fa-circle-notch fa-spin"></i>--}}
-    {{--        </button>--}}
-    {{--    </div>--}}
 </div>

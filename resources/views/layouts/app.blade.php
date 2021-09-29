@@ -59,7 +59,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/theme-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/home-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-    <link rel="icon" href="/images/icon/favicon.ico">
+    <link rel="icon" href="{{ url("/images/icon/favicon.ico") }}">
     @yield('head')
 
     @include('common.general.inlinemanager')

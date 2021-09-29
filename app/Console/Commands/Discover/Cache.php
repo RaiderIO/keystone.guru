@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands\Discover;
 
+use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Service\Cache\CacheService;
-use App\Service\DungeonRoute\DiscoverService;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
-use Psr\SimpleCache\InvalidArgumentException;
 
 class Cache extends Command
 {
@@ -36,21 +38,52 @@ class Cache extends Command
     /**
      * Execute the console command.
      *
-     * @param DiscoverService $discoverService
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonServiceInterface $seasonService
      * @param CacheService $cacheService
      * @return int
-     * @throws InvalidArgumentException
      */
-    public function handle(DiscoverService $discoverService, CacheService $cacheService)
+    public function handle(DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService, CacheService $cacheService)
     {
-        // Refresh caches for all categories
-//        $popular = $discoverService->popular();
-//        $cacheService->set(
-//            config('keystoneguru.discover.service.popular.cache_key'),
-//            $popular,
-//            config('keystoneguru.discover.service.popular.ttl'),
-//        );
+        $this->info('Caching Discover pages');
 
+        // Disable cache
+        $discoverService = $discoverService->withCache(false);
+
+        $currentSeason = $seasonService->getCurrentSeason();
+
+        // Refresh caches for all categories
+        foreach (Expansion::active()->get() as $expansion) {
+            /** @var Expansion $expansion */
+            $this->info(sprintf('- %s', $expansion->shortname));
+
+            $discoverService = $discoverService->withExpansion($expansion);
+            $discoverService->popular();
+            $discoverService->new();
+            $discoverService->popularGroupedByDungeon();
+            $discoverService->popularUsers();
+
+            foreach ($currentSeason->affixgroups as $affixgroup) {
+                $this->info(sprintf('-- AffixGroup %s', $affixgroup->getTextAttribute()));
+                $discoverService->popularGroupedByDungeonByAffixGroup($affixgroup);
+            }
+
+            foreach ($expansion->dungeons()->active()->get() as $dungeon) {
+                /** @var Dungeon $dungeon */
+                $this->info(sprintf('-- Dungeon %s', $dungeon->key));
+
+                $discoverService->popularByDungeon($dungeon);
+                $discoverService->newByDungeon($dungeon);
+                $discoverService->popularUsersByDungeon($dungeon);
+
+                foreach ($currentSeason->affixgroups as $affixgroup) {
+//                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
+                    $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixgroup);
+                    $discoverService->newByDungeonAndAffixGroup($dungeon, $affixgroup);
+                    $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixgroup);
+                }
+            }
+        }
         return 0;
     }
 }

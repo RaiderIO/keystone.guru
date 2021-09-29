@@ -51,18 +51,18 @@ class RefreshAffixGroupEaseTiers extends Command
     {
         $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
 
-        $lastUpdatedAt = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
+        $lastUpdatedAt    = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
         $lastEaseTierPull = SubcreationEaseTierPull::latest()->first();
 
         if ($lastEaseTierPull === null || $lastUpdatedAt->isAfter($lastEaseTierPull->last_updated_at)) {
             $subcreationEaseTierPull = SubcreationEaseTierPull::create([
                 'current_affixes' => $tierLists['current_affixes'],
                 'source_url'      => $tierLists['source_url'],
-                'last_updated_at' => $lastUpdatedAt->setTimezone(new DateTimeZone(config('app.timezone')))->toDateTimeString()
+                'last_updated_at' => $lastUpdatedAt->setTimezone(new DateTimeZone(config('app.timezone')))->toDateTimeString(),
             ]);
 
             $dungeonList = Dungeon::active()->get();
-            $totalSaved = 0;
+            $totalSaved  = 0;
 
             foreach ($tierLists['tier_lists'] as $affixString => $tierList) {
                 $this->info(sprintf('- Parsing %s', $affixString));
@@ -84,7 +84,7 @@ class RefreshAffixGroupEaseTiers extends Command
                                     'subcreation_ease_tier_pull_id' => $subcreationEaseTierPull->id,
                                     'affix_group_id'                => $affixGroupId,
                                     'dungeon_id'                    => $dungeon->id,
-                                    'tier'                          => $tier
+                                    'tier'                          => $tier,
                                 ]))->save();
 
                                 $saved++;
@@ -121,15 +121,14 @@ class RefreshAffixGroupEaseTiers extends Command
     {
         $affixGroupId = null;
 
-        $affixList = Affix::all();
+        $affixList                = Affix::all();
         $currentSeasonAffixGroups = $seasonService->getCurrentSeason()->affixgroups;
 
         $affixes = collect(explode(', ', $affixString));
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 4) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(function (string $affix) use ($affixList)
-            {
+            $invalidAffixes = $affixes->filter(function (string $affix) use ($affixList) {
                 return $affixList->where('name', $affix)->isEmpty();
             });
 
@@ -140,9 +139,8 @@ class RefreshAffixGroupEaseTiers extends Command
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(function (Affix $affix) use ($affixes)
-                    {
-                        return $affixes->search($affix->name) === false;
+                    $notFoundAffixes = $affixGroup->affixes->filter(function (Affix $affix) use ($affixes) {
+                        return $affixes->search($affix->key) === false;
                     });
 
                     // If we have found the match, we're done

@@ -5,7 +5,7 @@
 /** @var $userCount int */
 /** @var $theme string */
 
-$dungeonSelectId = 'demo_dungeon_id';
+$dungeonSelectId    = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
 ?>
 @extends('layouts.sitepage', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
@@ -21,9 +21,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         @component('common.general.alert', ['type' => 'warning', 'dismiss' => false])
-            {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
-             not a supported browser. No really, it really does not work at all. Please try either Google Chrome, Mozilla
-             Firefox or Microsoft Edge.') }}
+            {{ __('views/home.ie_not_supported') }}
         @endcomponent
     @endif
 
@@ -36,21 +34,19 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
                     <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
-                        <strong>{{ __('views/admin.M+ routes made easy') }}</strong>
+                        <strong>{{ __('views/home.tagline') }}</strong>
                     </h1>
 
                     <p class="mbr-text mbr-fonts-style display-7">
-                        {{ __('Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one
-                                place to manage and share your M+ routes.
-') }}
+                        {{ __('views/home.tagline_description') }}
                     </p>
                     <div class="mbr-section-btn mt-3">
                         <a class="btn btn-primary display-4" href="{{ route('dungeonroutes') }}">
-                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('Discover routes') }}
+                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('views/home.discover_routes') }}
                         </a>
                         <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
                            data-target="#create_route_modal">
-                            <i class="fas fa-plus"></i>&nbsp;{{__('Create route')}}
+                            <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
                         </a>
                     </div>
                 </div>
@@ -69,10 +65,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
-                             alt="{{ __('Discover new routes') }}"
+                             alt="{{ __('views/home.discover_new_routes') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
-                             alt="{{ __('Discover new routes') }}"
+                             alt="{{ __('views/home.discover_new_routes') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
@@ -81,12 +77,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('Discover new routes') }}</strong>
+                            <strong>{{ __('views/home.discover_new_routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {!! __('Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
-                                    Integration with :subcreation makes it easy to see which dungeons are the easiest to time for any affix.
-                                    Still can\'t find a route that suits your needs? The :routesearch page allows you to dial in on your exact needs to find a perfect match.',
+                            {!! __('views/home.discover_new_routes_description',
                                     ['subcreation' => '<a href="https://mplus.subcreation.net/" target="_blank">mplus.subcreation.net</a>',
                                     'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
                         </p>
@@ -103,10 +97,11 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('Create your own routes') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('Create your own routes') }}"
+                        <img class="lux_image"
+                             src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
@@ -115,12 +110,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('Create your own routes') }}</strong>
+                            <strong>{{ __('views/home.create_your_own_routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {!! __('Import your routes from Mythic Dungeon Tools or :createANewRoute from scratch. Keystone.guru offers various tools to make your route a memorable one,
-                                    such as free drawing, pathing and placing of icons/comments. Enemy forces can be displayed raw or in percentage on a whim. Various other settings allow you
-                                    to customize your route creation experience to your liking.',
+                            {!! __('views/home.create_your_own_routes_description',
                                     ['createANewRoute' => sprintf('<a href="#" data-toggle="modal" data-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
                         </p>
                     </div>
@@ -137,10 +130,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_get_organized.jpg') }}"
-                             alt="{{ __('Get organized') }}"
+                             alt="{{ __('views/home.get_organized') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_get_organized.jpg') }}"
-                             alt="{{ __('Get organized') }}"
+                             alt="{{ __('views/home.get_organized') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
@@ -149,11 +142,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('Get organized') }}</strong>
+                            <strong>{{ __('views/home.get_organized') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('Organize your routes from your profile or through teams. Keystone.guru offers you a wide array of tools to keep all your routes organized
-                                    and accessible by all your M+ team members. You can always export routes to Mythic Dungeon Tools format to share them with others.') }}
+                            {{ __('views/home.get_organized_description') }}
                         </p>
                     </div>
                 </div>
@@ -168,10 +160,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
-                             alt="{{ __('Custom dungeon mapping') }}"
+                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
-                             alt="{{ __('Custom dungeon mapping') }}"
+                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
@@ -180,10 +172,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('Custom dungeon mapping') }}</strong>
+                            <strong>{{ __('views/home.custom_dungeon_mapping') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('Keystone.guru has its own dungeon mapping with no dependencies on any external tool. View which enemies bolster others, drop sanguine ichor or burst your party. The mapping is open source and free. Always.') }}
+                            {{ __('views/home.custom_dungeon_mapping_description') }}
                         </p>
                     </div>
                 </div>
@@ -198,7 +190,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                        <strong>{{ __('Features') }}</strong>
+                        <strong>{{ __('views/home.features') }}</strong>
                     </h3>
 
                 </div>
@@ -211,10 +203,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-file-export mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('MDT import/export') }}</strong>
+                                <strong>{{ __('views/home.feature_mdt_import_export') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('Get started with your existing routes easily and generate MDT strings for your existing routes so everyone\'s up-to-date.') }}
+                                {{ __('views/home.feature_mdt_import_export_description') }}
                             </p>
                         </div>
                     </div>
@@ -226,10 +218,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-route mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('Fluid mapping experience') }}</strong>
+                                <strong>{{ __('views/home.feature_fluid_mapping_experience') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('Powered by Leaflet, AI enhanced dungeon maps with 5 zoom levels with a minimalistic UI to give you the best mapping experience possible.') }}
+                                {{ __('views/home.feature_fluid_mapping_experience_description') }}
                             </p>
                         </div>
                     </div>
@@ -241,10 +233,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-mobile-alt mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('Mobile friendly') }}</strong>
+                                <strong>{{ __('views/home.feature_mobile_friendly') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('View or edit your routes anywhere you are on your phone or tablet - making toilet breaks that much more interesting.') }}
+                                {{ __('views/home.feature_mobile_friendly_description') }}
                             </p>
                         </div>
                     </div>
@@ -259,7 +251,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
         <div class="mbr-section-head mb-4">
             <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                <strong>{{ __('Live demo') }}</strong>
+                <strong>{{ __('views/home.live_demo') }}</strong>
             </h3>
         </div>
 
@@ -282,7 +274,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="row h-100 justify-content-center align-items-center no-gutters">
                     <div class="col">
                         <h2 style="opacity: 1;">
-                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Loading...') }}
+                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/home.loading') }}
                         </h2>
                     </div>
                 </div>
@@ -313,15 +305,15 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="card-wrapper">
                         <div class="card-box align-center">
                             <h4 class="card-title mbr-fonts-style align-center mb-4 display-1">
-                                <strong>{{ __('Start planning today') }}</strong>
+                                <strong>{{ __('views/home.start_planning_today') }}</strong>
                             </h4>
                             <p class="mbr-text mbr-fonts-style mb-4 display-7">
-                                {{ sprintf(__('Join %d+ other users and plan your M+ routes online!'), (int)($userCount / 1000) * 1000) }}
+                                {{ sprintf(__('views/home.join_other_users'), (int)($userCount / 1000) * 1000) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
                                 <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
                                    data-target="#create_route_modal">
-                                    <i class="fas fa-plus"></i>&nbsp;{{__('Create route')}}
+                                    <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
                                 </a>
                             </div>
                         </div>

@@ -19,8 +19,7 @@ class RaidMarker extends CacheModel
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

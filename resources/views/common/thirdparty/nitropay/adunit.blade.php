@@ -1,14 +1,14 @@
 <?php
 /** @var boolean $isMobile */
 /** @var string $id */
-$id = 'nitropay-' . $id;
+$id   = 'nitropay-' . $id;
 $type = isset($type) ? $type : 'responsive';
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
     'responsive' => 'top-right',
-    'header' => 'bottom-right',
-    'footer' => 'top-right',
+    'header'     => 'bottom-right',
+    'footer'     => 'top-right',
 ];
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];

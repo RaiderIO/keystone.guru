@@ -36,7 +36,7 @@ class NpcFormRequest extends FormRequest
                 'regex:/^[\d\s,]*$/',
             ],
             'enemy_forces'         => 'int',
-            'enemy_forces_teeming' => 'int'
+            'enemy_forces_teeming' => 'int',
         ];
 
         return $rules;

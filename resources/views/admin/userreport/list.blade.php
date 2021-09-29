@@ -1,7 +1,7 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('User reports')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.userreport.list.title')])
 
 @section('header-title')
-    {{ __('View User Reports') }}
+    {{ __('views/admin.userreport.list.header') }}
 @endsection
 
 <?php
@@ -45,13 +45,13 @@
     <table id="admin_user_reports_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="5%">{{ __('Id') }}</th>
-            <th width="10%">{{ __('Author name') }}</th>
-            <th width="10%">{{ __('Category') }}</th>
-            <th width="40%">{{ __('Message') }}</th>
-            <th width="10%">{{ __('Contact at') }}</th>
-            <th width="10%">{{ __('Created at') }}</th>
-            <th width="15%">{{ __('Actions') }}</th>
+            <th width="5%">{{ __('views/admin.userreport.list.table_header_id') }}</th>
+            <th width="10%">{{ __('views/admin.userreport.list.table_header_author_name') }}</th>
+            <th width="10%">{{ __('views/admin.userreport.list.table_header_category') }}</th>
+            <th width="40%">{{ __('views/admin.userreport.list.table_header_message') }}</th>
+            <th width="10%">{{ __('views/admin.userreport.list.table_header_contact_at') }}</th>
+            <th width="10%">{{ __('views/admin.userreport.list.table_header_create_at') }}</th>
+            <th width="15%">{{ __('views/admin.userreport.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
@@ -71,7 +71,7 @@
                 <td>{{ $report->created_at }}</td>
                 <td>
                     <button class="btn btn-success mark_as_handled_btn" data-id="{{$report->id}}">
-                        <i class="fas fa-check-circle"></i> {{ __('Handled') }}
+                        <i class="fas fa-check-circle"></i> {{ __('views/admin.userreport.list.handled') }}
                     </button>
                 </td>
             </tr>

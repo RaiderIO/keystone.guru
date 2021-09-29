@@ -1,9 +1,9 @@
-@extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false])
+@extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false, 'title' => __('views/misc.status.title')])
 
-@section('header-title', __('Status'))
+@section('header-title', __('views/misc.status.header'))
 
 @section('content')
 
-    We're up, yay!
+    {{ __('views/misc.status.description') }}
 
 @endsection

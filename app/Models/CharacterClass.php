@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
+ * @property string $key
  * @property string $name
+ * @property string $color
  * @property Collection $specializations
  *
  * @mixin Eloquent
@@ -20,21 +23,7 @@ class CharacterClass extends CacheModel
 
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['key'];
-
-    /**
-     * @return string The key as used in the front-end to identify the dungeon.
-     */
-    public function getKeyAttribute()
-    {
-        return strtolower(str_replace(" ", "", $this->name));
-    }
+    public $fillable = ['key', 'name', 'color'];
 
     /**
      * @return HasMany

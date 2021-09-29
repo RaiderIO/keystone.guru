@@ -3,7 +3,7 @@
  */
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, names, editable = false, userToggleable = true) {
+    constructor(manager, names, editable = false) {
         super();
         // Ensure its an array
         if (typeof names === 'string') {
@@ -16,7 +16,6 @@ class MapObjectGroup extends Signalable {
         this.manager = manager;
         this.names = names;
         this.editable = editable;
-        this.userToggleable = userToggleable;
 
         // False initially when not loaded anything in yet (from server). True after the initial loading.
         this._initialized = false;
@@ -83,7 +82,7 @@ class MapObjectGroup extends Signalable {
     _shouldHandleEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        return e.user.id !== getState().getUser().id;
+        return e.user.public_key !== getState().getUser().public_key;
     }
 
     /**
@@ -298,7 +297,7 @@ class MapObjectGroup extends Signalable {
     _showReceivedFromEcho(localMapObject, user = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && user !== null && getState().getUser().id !== user.id) {
+        if (getState().isEchoEnabled() && user !== null && getState().getUser().public_key !== user.public_key) {
             let fontClass = '';
 
             // Must be a hex color
@@ -319,7 +318,7 @@ class MapObjectGroup extends Signalable {
 
                 let tooltip = layer.bindTooltip(user.name, {
                     permanent: true,
-                    className: `user_color_${user.id} ${fontClass}`,
+                    className: `user_color_${user.public_key} ${fontClass}`,
                     direction: 'top'
                 });
 
@@ -350,7 +349,7 @@ class MapObjectGroup extends Signalable {
     _showDeletedFromEcho(localMapObject, user) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && getState().getUser().id !== user.id && user.name !== null) {
+        if (getState().isEchoEnabled() && getState().getUser().public_key !== user.public_key && user.name !== null) {
             showInfoNotification(
                 lang.get('messages.echo_object_deleted_notification')
                     .replace('{object}', localMapObject.toString())
@@ -641,6 +640,6 @@ class MapObjectGroup extends Signalable {
     isUserToggleable() {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
 
-        return this.userToggleable;
+        return true;
     }
 }

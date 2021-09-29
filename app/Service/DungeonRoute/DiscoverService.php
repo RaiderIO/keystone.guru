@@ -7,41 +7,18 @@ use App\Models\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
-use App\Service\Cache\CacheService;
-use App\Service\Season\SeasonService;
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
-class DiscoverService implements DiscoverServiceInterface
+class DiscoverService extends BaseDiscoverService
 {
-    /** @var CacheService */
-    private CacheService $_cacheService;
-
-    /** @var SeasonService */
-    private SeasonService $_seasonService;
-
-    /** @var Closure|null */
-    private ?Closure $_closure = null;
-
     /**
-     * DiscoverService constructor.
+     * @param string $key
+     * @return string
      */
-    public function __construct()
+    private function getCacheKey(string $key): string
     {
-        $this->_cacheService = App::make(CacheService::class);
-        $this->_seasonService = App::make(SeasonService::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function withBuilder(Closure $closure): DiscoverServiceInterface
-    {
-        $this->_closure = $closure;
-
-        return $this;
+        return sprintf('discover:%s:%s', $this->expansion->shortname, $key);
     }
 
     /**
@@ -52,20 +29,21 @@ class DiscoverService implements DiscoverServiceInterface
     private function popularBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
+            ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
-                // as routes who only have say 1 or 2 affixes assigned to them.
-                // It also applies a big penalty for routes that do not belong to the current season
+            // as routes who only have say 1 or 2 affixes assigned to them.
+            // It also applies a big penalty for routes that do not belong to the current season
             ->selectRaw(sprintf('dungeon_routes.*, dungeon_routes.popularity * (13 - (
-                    SELECT IF(COUNT(*) = 0, 13, COUNT(*)) 
+                    SELECT IF(COUNT(*) = 0, 13, COUNT(*))
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
                     AND affix_group_id >= %s
-                )) as weightedPopularity', $this->_seasonService->getCurrentSeason()->affixgroups->first()->id)
+                )) as weightedPopularity', $this->seasonService->getCurrentSeason()->affixgroups->first()->id)
             )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
@@ -84,10 +62,12 @@ class DiscoverService implements DiscoverServiceInterface
     private function newBuilder(): Builder
     {
         return DungeonRoute::query()->limit(10)
-            ->when($this->_closure !== null, $this->_closure)
+            ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
+            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
             ->whereNull('dungeon_routes.expires_at')
             ->where('dungeon_routes.demo', false)
@@ -104,7 +84,7 @@ class DiscoverService implements DiscoverServiceInterface
     {
         return $builder
             ->selectRaw('dungeon_routes.*, dungeon_routes.popularity * (13 - (
-                    SELECT COUNT(*) 
+                    SELECT COUNT(*)
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
                 )) as weightedPopularity'
@@ -118,8 +98,10 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popular(): Collection
     {
-        return $this->popularBuilder()
-            ->get();
+        return $this->cacheService->remember($this->getCacheKey('popular'), function () {
+            return $this->popularBuilder()
+                ->get();
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -127,16 +109,14 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeon(): Collection
     {
-        return $this->_cacheService->remember('discover_routes_popular', function ()
-        {
+        return $this->cacheService->remember($this->getCacheKey('grouped_by_dungeon:popular'), function () {
             $result = collect();
 
-
-            $activeDungeons = Dungeon::active()->get();
+            /** @var Collection|Dungeon[] $activeDungeons */
+            $activeDungeons = $this->expansion->dungeons()->active()->get();
             foreach ($activeDungeons as $dungeon) {
                 // Limit the amount of results of our queries to 2
-                $result = $result->merge($this->withBuilder(function (Builder $builder)
-                {
+                $result = $result->merge($this->withBuilder(function (Builder $builder) {
                     $builder->limit(2);
                 })->popularByDungeon($dungeon));
             }
@@ -150,11 +130,15 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->applyAffixGroupCountPenalty(
-            $this->popularBuilder()
-                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-        )->get();
+        return $this->cacheService->remember(
+            $this->getCacheKey(sprintf('affix_group_%d:popular', $affixGroup->id)),
+            function () use ($affixGroup) {
+                return $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get();
+            }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -162,21 +146,22 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->_cacheService->remember(sprintf('discover_routes_popular_by_affix_group_%d', $affixGroup->id), function () use ($affixGroup)
-        {
-            $result = collect();
+        return $this->cacheService->remember(
+            $this->getCacheKey(sprintf('grouped_by_dungeon:affix_group_%d:popular', $affixGroup->id)),
+            function () use ($affixGroup) {
+                $result = collect();
 
-            $activeDungeons = Dungeon::active()->get();
-            foreach ($activeDungeons as $dungeon) {
-                // Limit the amount of results of our queries to 2
-                $result = $result->merge($this->withBuilder(function (Builder $builder)
-                {
-                    $builder->limit(2);
-                })->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
-            }
+                /** @var Collection|Dungeon[] $activeDungeons */
+                $activeDungeons = $this->expansion->dungeons()->active()->get();
+                foreach ($activeDungeons as $dungeon) {
+                    // Limit the amount of results of our queries to 2
+                    $result = $result->merge($this->withBuilder(function (Builder $builder) {
+                        $builder->limit(2);
+                    })->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
+                }
 
-            return $result;
-        }, config('keystoneguru.discover.service.popular.ttl'));
+                return $result;
+            }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -184,9 +169,11 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->popularBuilder()
-            ->where('dungeon_id', $dungeon->id)
-            ->get();
+        return $this->cacheService->remember($this->getCacheKey(sprintf('%s:popular', $dungeon->key)), function () use ($dungeon) {
+            return $this->popularBuilder()
+                ->where('dungeon_id', $dungeon->id)
+                ->get();
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -194,12 +181,16 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->applyAffixGroupCountPenalty(
-            $this->popularBuilder()
-                ->where('dungeon_id', $dungeon->id)
-                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-        )->get();
+        return $this->cacheService->remember(
+            $this->getCacheKey(sprintf('%s:affix_group_%s:popular', $dungeon->key, $affixGroup->id)),
+            function () use ($dungeon, $affixGroup) {
+                return $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->where('dungeon_id', $dungeon->id)
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get();
+            }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -207,7 +198,9 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function new(): Collection
     {
-        return $this->newBuilder()->get();
+        return $this->cacheService->remember($this->getCacheKey('new'), function () {
+            return $this->newBuilder()->get();
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -215,10 +208,12 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByAffixGroup(AffixGroup $affixGroup): Collection
     {
-        return $this->newBuilder()
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
+        return $this->cacheService->remember($this->getCacheKey(sprintf('affix_group_%d:new', $affixGroup->id)), function () use ($affixGroup) {
+            return $this->newBuilder()
+                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                ->get();
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -226,9 +221,11 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->newBuilder()
-            ->where('dungeon_id', $dungeon->id)
-            ->get();
+        return $this->cacheService->remember($this->getCacheKey(sprintf('%s:new', $dungeon->key)), function () use ($dungeon) {
+            return $this->newBuilder()
+                ->where('dungeon_id', $dungeon->id)
+                ->get();
+        }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
     /**
@@ -236,13 +233,16 @@ class DiscoverService implements DiscoverServiceInterface
      */
     function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
-        return $this->newBuilder()
-            ->where('dungeon_id', $dungeon->id)
-            ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            ->get();
+        return $this->cacheService->remember(
+            $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id)),
+            function () use ($dungeon, $affixGroup) {
+                return $this->newBuilder()
+                    ->where('dungeon_id', $dungeon->id)
+                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                    ->get();
+            }, config('keystoneguru.discover.service.popular.ttl'));
     }
-
 
     /**
      * @inheritDoc
@@ -250,6 +250,7 @@ class DiscoverService implements DiscoverServiceInterface
     function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.
+        return collect();
     }
 
     /**
@@ -258,6 +259,7 @@ class DiscoverService implements DiscoverServiceInterface
     function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
+        return collect();
     }
 
     /**
@@ -266,6 +268,7 @@ class DiscoverService implements DiscoverServiceInterface
     function popularUsersByDungeon(Dungeon $dungeon): Collection
     {
         // TODO: Implement popularUsersByDungeon() method.
+        return collect();
     }
 
     /**
@@ -274,5 +277,6 @@ class DiscoverService implements DiscoverServiceInterface
     function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
+        return collect();
     }
 }

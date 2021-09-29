@@ -51,7 +51,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|View
+     * @return void
      */
     public function npcimportsubmit(Request $request)
     {
@@ -77,12 +77,13 @@ class AdminToolsController extends Controller
             9  => NpcType::MECHANICAL,
             6  => NpcType::UNDEAD,
             10 => NpcType::UNCATEGORIZED,
+            // 12 => NpcType::BATTLE_PET,
         ];
 
         $aggressivenessMapping = [
             -1 => 'aggressive',
             0  => 'neutral',
-            1  => 'friendly'
+            1  => 'friendly',
         ];
 
         try {
@@ -98,31 +99,41 @@ class AdminToolsController extends Controller
                     continue;
                 }
 
-                if ($npcCandidate->exists) {
-                    $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
-                } else {
-                    $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
+                if (!isset($npcTypeMapping[$npcData['type']])) {
+                    $log[] = sprintf('*** Unable to find npc type %s; npc %s (%s) NOT added; needs manual work', $npcData['type'], $npcData['id'], $npcData['name']);
+                    continue;
                 }
 
-                $npcCandidate->id = $npcData['id'];
+                $npcCandidate->id                = $npcData['id'];
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
+                // Bosses
+                if ($npcCandidate->classification_id >= 3) {
+                    $npcCandidate->enemy_forces = 0;
+                }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
                 $npcCandidate->dungeon_id = count($npcData['location']) >= 8 ? -1 : $dungeon->id;
-                $npcCandidate->name = $npcData['name'];
+                $npcCandidate->name       = $npcData['name'];
                 // Do not overwrite health if it was set already
                 if ($npcCandidate->base_health <= 0) {
                     $npcCandidate->base_health = 12345;
                 }
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
-                $npcCandidate->save();
+                if ($npcCandidate->save()) {
+                    if ($npcCandidate->exists) {
+                        $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    } else {
+                        $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    }
+                } else {
+                    $log[] = sprintf('*** Error saving NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                }
 
                 // Changed the mapping; so make sure we synchronize it
-                $this->mappingChanged($beforeModel->exists ? $beforeModel : null, $npcCandidate);
+                $this->mappingChanged($beforeModel, $npcCandidate);
             }
         } catch (Exception $ex) {
-
             dump($ex);
         } finally {
             dump($log);
@@ -146,11 +157,11 @@ class AdminToolsController extends Controller
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
             'brushlines', 'paths', 'author', 'killzones', 'pridefulenemies', 'publishedstate',
-            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team'
+            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
         ])->where('public_key', $request->get('public_key'))->firstOrFail();
 
         return view('admin.tools.dungeonroute.viewcontents', [
-            'dungeonroute' => $dungeonRoute
+            'dungeonroute' => $dungeonRoute,
         ]);
     }
 
@@ -199,19 +210,19 @@ class AdminToolsController extends Controller
 
             dd($dungeonRoute);
         } catch (InvalidMDTString $ex) {
-            return abort(400, __('The MDT string format was not recognized.'));
+            return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
 
             // Different message based on our deployment settings
             if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+                $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
             } else {
-                $message = __('Invalid MDT string');
+                $message = __('controller.admintools.error.invalid_mdt_string');
             }
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -253,14 +264,14 @@ class AdminToolsController extends Controller
 
             // Different message based on our deployment settings
             if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+                $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
             } else {
-                $message = __('Invalid MDT string');
+                $message = __('controller.admintools.error.invalid_mdt_string');
             }
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -274,11 +285,12 @@ class AdminToolsController extends Controller
     public function mdtdiff()
     {
         $warnings = new Collection();
-        $npcs = Npc::with(['enemies', 'type'])->get();
+        $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
-            $mdtNpcs = (new MDTDungeon($dungeon->name))->getMDTNPCs();
+            /** @var Dungeon $dungeon */
+            $mdtNpcs = (new MDTDungeon($dungeon->key))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {
@@ -295,7 +307,7 @@ class AdminToolsController extends Controller
                 if ($npc === null) {
                     $warnings->push(
                         new ImportWarning('missing_npc',
-                            sprintf(__('Unable to find npc for id %s'), $mdtNpc->getId()),
+                            sprintf(__('controller.admintools.error.mdt_unable_to_find_npc_for_id'), $mdtNpc->getId()),
                             ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                         )
                     );
@@ -306,7 +318,7 @@ class AdminToolsController extends Controller
                     if ($npc->base_health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
-                                sprintf(__('NPC %s has mismatched health values, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
@@ -316,7 +328,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('NPC %s has mismatched enemy forces, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
@@ -326,7 +338,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
-                                sprintf(__('NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
@@ -336,7 +348,7 @@ class AdminToolsController extends Controller
                     if ($npc->enemies->count() !== count($mdtNpc->getClones())) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_count',
-                                sprintf(__('NPC %s has mismatched enemy count, MDT: %s, KG: %s'),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_count'),
                                     $mdtNpc->getId(), count($mdtNpc->getClones()), $npc->enemies === null ? 0 : $npc->enemies->count()),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                             )
@@ -347,7 +359,7 @@ class AdminToolsController extends Controller
                     if ($npc->type->type !== $mdtNpc->getCreatureType()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_type',
-                                sprintf(__('NPC %s has mismatched enemy type, MDT: %s, KG: %s'),
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_type'),
                                     $mdtNpc->getId(), $mdtNpc->getCreatureType(), $npc->type->type),
                                 ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
                             )
@@ -371,7 +383,7 @@ class AdminToolsController extends Controller
 
         Artisan::call('modelCache:clear');
 
-        Session::flash('status', __('Caches dropped successfully'));
+        Session::flash('status', __('controller.admintools.flash.caches_dropped_successfully'));
 
         return redirect()->route('admin.tools');
     }
@@ -383,8 +395,8 @@ class AdminToolsController extends Controller
     public function applychange(Request $request)
     {
         $category = $request->get('category');
-        $npcId = $request->get('npc_id');
-        $value = $request->get('value');
+        $npcId    = $request->get('npc_id');
+        $value    = $request->get('value');
 
         /** @var Npc $npc */
         $npc = Npc::find($npcId);
@@ -403,12 +415,12 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             case 'mismatched_enemy_type':
-                $npcType = NpcType::where('type', $value)->first();
+                $npcType          = NpcType::where('type', $value)->first();
                 $npc->npc_type_id = $npcType->id;
                 $npc->save();
                 break;
             default:
-                abort(500, 'Invalid category');
+                abort(500, __('controller.admintools.error.mdt_invalid_category'));
                 break;
         }
 
@@ -418,12 +430,13 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exportreleases(Request $request)
     {
         Artisan::call('release:save');
 
-        Session::flash('status', __('Releases exported'));
+        Session::flash('status', __('controller.admintools.flash.releases_exported'));
 
         return view('admin.tools.list');
     }
@@ -442,6 +455,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exceptionselect(Request $request)
     {
@@ -456,9 +470,9 @@ class AdminToolsController extends Controller
     {
         switch ($request->get('exception')) {
             case 'TokenMismatchException':
-                throw new TokenMismatchException('Exception thrown in admin panel');
+                throw new TokenMismatchException(__('controller.admintools.flash.exception.token_mismatch'));
             case 'InternalServerError':
-                throw new Exception('Exception thrown in admin panel');
+                throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
         }
     }
 }

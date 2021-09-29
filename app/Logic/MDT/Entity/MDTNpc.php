@@ -53,14 +53,20 @@ class MDTNpc
 
     function __construct(int $index, array $rawMdtNpc)
     {
-        $this->_index = $index;
+        $this->_index     = $index;
         $this->_rawMdtNpc = $rawMdtNpc;
-        $this->_clones = $rawMdtNpc['clones'];
-        $this->_id = (int)$rawMdtNpc['id'];
-        $this->_spells = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
-        $this->_scale = (float)$rawMdtNpc['scale'];
+        $this->_clones    = $rawMdtNpc['clones'];
+        // Correct clones that don't have a sublevel set
+        foreach ($this->_clones as $index => $clone) {
+            if (!isset($clone['sublevel'])) {
+                $this->_clones[$index]['sublevel'] = 1;
+            }
+        }
+        $this->_id           = (int)$rawMdtNpc['id'];
+        $this->_spells       = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
+        $this->_scale        = (float)$rawMdtNpc['scale'];
         $this->_countTeeming = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
-        $this->_count = (int)$rawMdtNpc['count'];
+        $this->_count        = (int)$rawMdtNpc['count'];
         // May not always be set?
         if (isset($rawMdtNpc['name'])) {
             $this->_name = $rawMdtNpc['name'];
@@ -70,15 +76,15 @@ class MDTNpc
         if (isset($rawMdtNpc['creatureType'])) {
             $this->_creatureType = $rawMdtNpc['creatureType'];
         }
-        $this->_level = (int)$rawMdtNpc['level'];
-        $this->_health = (int)$rawMdtNpc['health'];
+        $this->_level           = (int)$rawMdtNpc['level'];
+        $this->_health          = (int)$rawMdtNpc['health'];
         $this->_characteristics = isset($rawMdtNpc['characteristics']) ? $rawMdtNpc['characteristics'] : [];
     }
 
     /**
      * @return bool
      */
-    public function isEmissary()
+    public function isEmissary(): bool
     {
         return in_array($this->_id, [155432, 155433, 155434]);
     }
@@ -86,7 +92,7 @@ class MDTNpc
     /**
      * @return bool
      */
-    public function isAwakened()
+    public function isAwakened(): bool
     {
         return in_array($this->_id, [161244, 161243, 161124, 161241]);
     }
@@ -94,7 +100,7 @@ class MDTNpc
     /**
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         // Skip emissaries
         return !$this->isEmissary();

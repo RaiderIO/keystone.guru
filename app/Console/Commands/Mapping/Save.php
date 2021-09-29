@@ -100,7 +100,7 @@ class Save extends Command
         $this->info('Saving Spells');
 
         $spells = Spell::all();
-        foreach($spells as $spell){
+        foreach ($spells as $spell) {
             $spell->makeHidden(['icon_url']);
         }
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
@@ -113,7 +113,7 @@ class Save extends Command
     {
 
         foreach (Dungeon::all() as $dungeon) {
-            $this->info(sprintf('- Saving dungeon %s', $dungeon->name));
+            $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
             /** @var $dungeon Dungeon */
             // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
 //            if( $dungeon->getKeyAttribute() !== 'hallsofvalor' ){
@@ -208,7 +208,7 @@ class Save extends Command
 
             /** @var Dungeon $dungeon */
             foreach ($dungeon->floors as $floor) {
-                $this->info(sprintf('-- Saving floor %s', $floor->name));
+                $this->info(sprintf('-- Saving floor %s', __($floor->name)));
                 /** @var Floor $floor */
                 // Only export NPC->id, no need to store the full npc in the enemy
                 $enemies = Enemy::where('floor_id', $floor->id)->without(['npc', 'type'])->with('npc:id')->get()->values();
@@ -221,8 +221,8 @@ class Save extends Command
                         $enemy->npc->unsetRelation('class');
                     }
                 }
-                $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();
-                $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
+                $enemyPacks                = EnemyPack::where('floor_id', $floor->id)->get()->values();
+                $enemyPatrols              = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
                 // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
                 $dungeonFloorSwitchMarkers->makeHidden(['direction']);
@@ -231,11 +231,11 @@ class Save extends Command
                 // at the end of the table instead.
                 $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
 
-                $result['enemies'] = $enemies;
-                $result['enemy_packs'] = $enemyPacks;
-                $result['enemy_patrols'] = $enemyPatrols;
+                $result['enemies']                      = $enemies;
+                $result['enemy_packs']                  = $enemyPacks;
+                $result['enemy_patrols']                = $enemyPatrols;
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
-                $result['map_icons'] = $mapIcons;
+                $result['map_icons']                    = $mapIcons;
 
                 foreach ($result as $category => $categoryData) {
                     // Save enemies, packs, patrols, markers on a per-floor basis

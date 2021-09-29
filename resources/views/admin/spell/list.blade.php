@@ -1,11 +1,11 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('Spell listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.spell.list.title')])
 
 @section('header-title')
-    {{ __('View spells') }}
+    {{ __('views/admin.spell.list.header') }}
 @endsection
 @section('header-addition')
     <a href="{{ route('admin.spell.new') }}" class="btn btn-success text-white float-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('Create Spell') }}
+        <i class="fas fa-plus"></i> {{ __('views/admin.spell.list.create_spell') }}
     </a>
 @endsection
 
@@ -21,10 +21,10 @@
     <table id="admin_spell_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="10%">{{ __('Icon') }}</th>
-            <th width="10%">{{ __('Id') }}</th>
-            <th width="70%">{{ __('Name') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="10%">{{ __('views/admin.spell.list.table_header_icon') }}</th>
+            <th width="10%">{{ __('views/admin.spell.list.table_header_id') }}</th>
+            <th width="70%">{{ __('views/admin.spell.list.table_header_name') }}</th>
+            <th width="10%">{{ __('views/admin.spell.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
@@ -36,7 +36,7 @@
                 <td>{{ $spell->name }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.spell.edit', ['spell' => $spell->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.spell.list.edit') }}
                     </a>
                 </td>
             </tr>

@@ -1,6 +1,6 @@
 <?php
-$dungeon = $dungeon ?? null;
-$hasLoader = isset($routeLoaderSelector);
+$dungeon             = $dungeon ?? null;
+$hasLoader           = isset($routeLoaderSelector);
 $routeLoaderSelector = $routeLoaderSelector ?? '#category_route_load_more_loader';
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/searchloadmore', 'options' => [
@@ -19,6 +19,6 @@ $routeLoaderSelector = $routeLoaderSelector ?? '#category_route_load_more_loader
 
 @if(!$hasLoader)
     <div id="category_route_load_more_loader" class="text-center">
-        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Loading...') }}
+        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.dungeonroute.search.loadmore.loading') }}
     </div>
 @endif

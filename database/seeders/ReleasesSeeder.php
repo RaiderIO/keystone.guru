@@ -21,7 +21,7 @@ class ReleasesSeeder extends Seeder
         $this->_rollback();
 
         $this->command->info('Adding releases');
-        $rootDir = database_path('/seeders/releases/');
+        $rootDir         = database_path('/seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // Iterate over all saved releases
@@ -34,20 +34,26 @@ class ReleasesSeeder extends Seeder
             if (isset($modelsData['changelog'])) {
                 $changelogData = $modelsData['changelog'];
                 // Changelog
-                $changelog = new ReleaseChangelog(array_filter($changelogData, function($value){ return !is_array($value); }));
+                $changelog = new ReleaseChangelog(array_filter($changelogData, function ($value) {
+                    return !is_array($value);
+                }));
                 $changelog->save();
 
                 // Save the changes for each changelog
                 foreach ($changelogData['changes'] as $changeData) {
                     // Changelog changes
-                    $changelogChange = new ReleaseChangelogChange(array_filter($changeData, function($value){ return !is_array($value); }));
+                    $changelogChange = new ReleaseChangelogChange(array_filter($changeData, function ($value) {
+                        return !is_array($value);
+                    }));
                     $changelogChange->save();
                 }
             }
 
             // Save the release last!
             $this->command->info(sprintf('Adding release %s', $modelsData['version']));
-            $release = new Release(array_filter($modelsData, function($value){ return !is_array($value); }));
+            $release = new Release(array_filter($modelsData, function ($value) {
+                return !is_array($value);
+            }));
             $release->save();
         }
     }

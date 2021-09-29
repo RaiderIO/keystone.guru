@@ -1,9 +1,12 @@
 <?php
 /** @var \App\Models\DungeonRoute $dungeonroute */
 ?>
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('View dungeonroute contents')])
+@extends('layouts.sitepage', [
+    'showAds' => false,
+    'title' => __('views/admin.tools.dungeonroute.viewcontents.title', ['dungeonRouteTitle' => $dungeonroute->title]),
+    ])
 
-@section('header-title', __('View contents for %s'))
+@section('header-title', __('views/admin.tools.dungeonroute.viewcontents.header', ['dungeonRouteTitle' => $dungeonroute->title]))
 
 @section('content')
     <div id="dungeonrouteAccordion">
@@ -18,7 +21,8 @@
                 </h5>
             </div>
 
-            <div id="collapseDungeonroute" class="collapse" aria-labelledby="headingDungeonroute" data-parent="#dungeonrouteAccordion">
+            <div id="collapseDungeonroute" class="collapse" aria-labelledby="headingDungeonroute"
+                 data-parent="#dungeonrouteAccordion">
                 <div class="card-body">
                     @dump($dungeonroute->withoutRelations())
                 </div>

@@ -39,6 +39,8 @@ class CommonMapsAdmineditsidebar extends InlineCode {
                 $('#enemy_info_key_value_container').html(
                     template(visualData)
                 );
+
+                refreshTooltips($('#enemy_info_container [data-toggle="tooltip"]'));
                 $('#enemy_report_enemy_id').val(focusedEnemy.id);
             }
         }

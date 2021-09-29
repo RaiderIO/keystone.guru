@@ -8,7 +8,7 @@ class CommonGroupComposition extends InlineCode {
         $('#faction_id').bind('change', function (changeEvent) {
             self._factionChanged(changeEvent);
 
-            if( !self._loadingDefaults ) {
+            if (!self._loadingDefaults) {
                 refreshSelectPickers();
             }
         });
@@ -16,7 +16,7 @@ class CommonGroupComposition extends InlineCode {
         $('.raceselect').bind('change', function (changeEvent) {
             self._raceChanged(changeEvent);
 
-            if( !self._loadingDefaults ) {
+            if (!self._loadingDefaults) {
                 refreshSelectPickers();
             }
         });
@@ -24,7 +24,7 @@ class CommonGroupComposition extends InlineCode {
         $('.classselect').bind('change', function (changeEvent) {
             self._classChanged(changeEvent);
 
-            if( !self._loadingDefaults ) {
+            if (!self._loadingDefaults) {
                 refreshSelectPickers();
             }
         });
@@ -32,7 +32,7 @@ class CommonGroupComposition extends InlineCode {
         $('.specializationselect').bind('change', function (changeEvent) {
             self._specializationChanged(changeEvent);
 
-            if( !self._loadingDefaults ) {
+            if (!self._loadingDefaults) {
                 refreshSelectPickers();
             }
         });
@@ -401,12 +401,12 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $specializationSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: 'Specialization...'
+                text: lang.get('messages.specialization_select')
             }));
 
             self._addIconOptionToSelect($specializationSelect, self.options.specializations, function (item) {
                 let classDetails = self._findClassById(item.character_class_id);
-                return 'spec_icon_' + classDetails.name.replace(/ /g, '').toLowerCase() + '-' + item.name.replace(/ /g, '').toLowerCase();
+                return 'spec_icon_' + classDetails.key + '-' + item.key;
             });
         });
     }
@@ -426,7 +426,7 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $classSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: 'Class...'
+                text: lang.get('messages.class_select')
             }));
 
             self._addIconOptionToSelect($classSelect, self.options.classDetails, 'class_icon_');
@@ -448,12 +448,12 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $raceSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: 'Race...'
+                text: lang.get('messages.race_select')
             }));
 
             self._addIconOptionToSelect($raceSelect, self.options.races, function (item) {
                 let raceDetails = self._findRaceById(item.id);
-                return 'faction_icon_' + self._findFactionById(raceDetails.faction_id).name.replace(/ /g, '').toLowerCase();
+                return 'faction_icon_' + self._findFactionById(raceDetails.faction_id).key;
             });
         });
     }
@@ -495,7 +495,7 @@ class CommonGroupComposition extends InlineCode {
 
             let option = jQuery('<option>', {
                 value: obj.id,
-                text: obj.name
+                text: lang.get(obj.name)
             });
 
             let currentCssPrefix = '';
@@ -504,11 +504,11 @@ class CommonGroupComposition extends InlineCode {
                 currentCssPrefix = cssPrefix(obj);
             } else {
                 // We make something up
-                currentCssPrefix = cssPrefix + obj.name.replace(/ /g, '').toLowerCase();
+                currentCssPrefix = cssPrefix + obj.key.replace(/ /g, '').toLowerCase();
             }
 
             let data = {
-                name: obj.name,
+                name: lang.get(obj.name),
                 css_class: currentCssPrefix
             };
 

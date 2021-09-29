@@ -27,7 +27,7 @@ class ExpansionController extends Controller
 
         // Something went wrong with saving
         if (!$expansion->saveFromRequest($request, 'expansions')) {
-            abort(500, 'Unable to save expansion');
+            abort(500, __('controller.expansion.flash.unable_to_save_expansion'));
         }
 
         return $expansion;
@@ -40,7 +40,7 @@ class ExpansionController extends Controller
      */
     public function new()
     {
-        return view('admin.expansion.edit', ['headerTitle' => __('New expansion')]);
+        return view('admin.expansion.edit');
     }
 
     /**
@@ -50,7 +50,7 @@ class ExpansionController extends Controller
      */
     public function edit(Request $request, Expansion $expansion)
     {
-        return view('admin.expansion.edit', ['expansion' => $expansion, 'headerTitle' => __('Edit expansion')]);
+        return view('admin.expansion.edit', ['expansion' => $expansion]);
     }
 
     /**
@@ -65,7 +65,7 @@ class ExpansionController extends Controller
         $expansion = $this->store($request, $expansion);
 
         // Message to the user
-        Session::flash('status', __('Expansion updated'));
+        Session::flash('status', __('controller.expansion.flash.expansion_updated'));
 
         // Display the edit page
         return $this->edit($request, $expansion);
@@ -82,7 +82,7 @@ class ExpansionController extends Controller
         $expansion = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Expansion created'));
+        Session::flash('status', __('controller.expansion.flash.expansion_created'));
 
         return redirect()->route('admin.expansion.edit', ["expansion" => $expansion]);
     }

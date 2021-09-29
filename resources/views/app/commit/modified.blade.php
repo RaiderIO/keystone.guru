@@ -1,6 +1,6 @@
 @if(!empty($commit['modified']))
-    **{{ __('Modified') }}**:
+    **{{ __('views/app.commit.modified.modified') }}**:
     @foreach($commit['modified'] as $modified)
-          = {{ $modified }}
+        = {{ $modified }}
     @endforeach
 @endif

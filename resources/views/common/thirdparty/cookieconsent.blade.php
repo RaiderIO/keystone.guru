@@ -15,7 +15,7 @@
             },
             "theme": "classic",
             "content": {
-                "link": "Learn more",
+                "link": "{{ __('views/common.thirdparty.cookieconsent.learn_more') }}",
                 "href": "/cookies"
             }
         });

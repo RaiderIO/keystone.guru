@@ -23,7 +23,8 @@
     <div class="row">
         <div class="col">
             <a href="{{ route('login.discord') }}">
-                <img src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block" style="max-height: 64px;"/>
+                <img src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block"
+                     style="max-height: 64px;"/>
             </a>
         </div>
     </div>

@@ -6,7 +6,7 @@
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes = [-1 => 'Any'];
+    $affixes         = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);

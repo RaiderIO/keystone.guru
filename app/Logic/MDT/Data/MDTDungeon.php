@@ -12,10 +12,10 @@ namespace App\Logic\MDT\Data;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Enemy;
+use App\Models\Expansion;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheService;
-use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
@@ -31,17 +31,17 @@ class MDTDungeon
 {
 
     /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
-    private string $_dungeonName;
+    private string $dungeonKey;
 
     /** @var CacheService|mixed */
-    private CacheService $_cacheService;
+    private CacheService $cacheService;
 
 
-    function __construct($dungeonName)
+    function __construct($dungeonKey)
     {
-        $this->_dungeonName = $dungeonName;
+        $this->dungeonKey = $dungeonKey;
 
-        $this->_cacheService = App::make(CacheService::class);
+        $this->cacheService = App::make(CacheService::class);
     }
 
     /**
@@ -73,19 +73,17 @@ class MDTDungeon
     public function getMDTNPCs()
     {
         $result = new Collection();
-        if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
+        if (Conversion::hasMDTDungeonName($this->dungeonKey)) {
             // Fetch the cache or set it if it didn't exist
-            $result = $this->_cacheService->remember(sprintf('mdt_npcs_%s', $this->_dungeonName), function ()
-            {
-                $result = new Collection();
-                $mdtHome = base_path('vendor/nnoggie/mythicdungeontools/');
-                $expansionName = Conversion::getExpansionName($this->_dungeonName);
-                /** @var ExpansionService $expansionService */
-                $expansionService = App::make(ExpansionService::class);
+            $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeonKey), function () {
+                $result           = new Collection();
+                $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools/');
+                $expansionName    = Conversion::getExpansionName($this->dungeonKey);
+                $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeonKey);
 
-                $mdtDungeonName = Conversion::getMDTDungeonName($this->_dungeonName);
-                if (!empty($expansionName) && !empty($mdtDungeonName) && $expansionService->getCurrentExpansion()->name === $expansionName) {
-                    $dungeonHome = sprintf('%s/%s', $mdtHome, $expansionName);
+                $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeonKey);
+                if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+                    $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
                     $eval = '
                         local MDT = {}
@@ -95,7 +93,8 @@ class MDTDungeon
                         MDT.mapPOIs = {}
                         MDT.dungeonEnemies = {}
                         MDT.scaleMultiplier = {}
-                        
+                        MDT.dungeonBosses = {}
+
                         local L = {}
                         ' .
                         // Some files require LibStub
@@ -104,7 +103,7 @@ class MDTDungeon
                         file_get_contents(sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName)) . PHP_EOL .
                         // Insert dummy function to get what we need
                         '
-                        function GetDungeonEnemies() 
+                        function GetDungeonEnemies()
                             return MDT.dungeonEnemies[dungeonIndex]
                         end
                     ';
@@ -136,8 +135,7 @@ class MDTDungeon
      */
     public function getClonesAsEnemies($floors)
     {
-        return $this->_cacheService->remember(sprintf('mdt_enemies_%s', $this->_dungeonName), function () use ($floors)
-        {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeonKey), function () use ($floors) {
             $enemies = new Collection();
 
             // Ensure floors is a collection
@@ -191,19 +189,19 @@ class MDTDungeon
                         if ((int)$clone['sublevel'] === $floor->index) {
                             $enemy = new Enemy();
                             // Dummy so we can ID them later on
-                            $enemy->is_mdt = true;
-                            $enemy->floor_id = $floor->id;
+                            $enemy->is_mdt        = true;
+                            $enemy->floor_id      = $floor->id;
                             $enemy->enemy_pack_id = (int)$clone['g'];
                             $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                            $enemy->npc_id = $npcId;
+                            $enemy->npc_id        = $npcId;
                             // All MDT_IDs are 1-indexed, because LUA
-                            $enemy->mdt_id = $mdtCloneIndex;
-                            $enemy->enemy_id = -1;
-                            $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                            $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
+                            $enemy->mdt_id                = $mdtCloneIndex;
+                            $enemy->enemy_id              = -1;
+                            $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                            $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
                             $enemy->enemy_forces_override = -1;
 
-                            $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
+                            $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
                             $enemy->lat = $latLng['lat'];
                             $enemy->lng = $latLng['lng'];
 

@@ -25,7 +25,7 @@ class ReleaseController extends Controller
     public function store(ReleaseFormRequest $request, Release $release = null)
     {
         if ($new = ($release === null)) {
-            $release = new Release();
+            $release   = new Release();
             $changelog = new ReleaseChangelog();
         } else {
             $changelog = $release->changelog;
@@ -37,8 +37,8 @@ class ReleaseController extends Controller
 
 
         // Update changes
-        $tickets = $request->get('tickets', []);
-        $changes = $request->get('changes', []);
+        $tickets    = $request->get('tickets', []);
+        $changes    = $request->get('changes', []);
         $categories = $request->get('categories', []);
 
         // Delete existing changes
@@ -49,20 +49,20 @@ class ReleaseController extends Controller
             // Only filled in rows, but tickets may be null
             if (/*strlen($tickets[$i]) > 0 && */ (int)$categories[$i] !== -1 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
                 // Add new changes
-                $changelogChange = new ReleaseChangelogChange();
-                $changelogChange->release_changelog_id = $changelog->id;
+                $changelogChange                                = new ReleaseChangelogChange();
+                $changelogChange->release_changelog_id          = $changelog->id;
                 $changelogChange->release_changelog_category_id = $categories[$i];
-                $changelogChange->ticket_id = is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i]));
-                $changelogChange->change = $changes[$i];
+                $changelogChange->ticket_id                     = is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i]));
+                $changelogChange->change                        = $changes[$i];
                 $changelogChange->save();
             }
         }
         $changelog->load('changes');
 
 
-        $release->version = $request->get('version');
-        $release->title = $request->get('title', '') ?? '';
-        $release->silent = $request->get('silent', 0);
+        $release->version   = $request->get('version');
+        $release->title     = $request->get('title', '') ?? '';
+        $release->silent    = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
 
         // Match the changelog to the release
@@ -77,7 +77,7 @@ class ReleaseController extends Controller
             }
         } // Something went wrong with saving
         else {
-            abort(500, 'Unable to save release');
+            abort(500, __('controller.release.error.unable_to_save_release'));
         }
 
         return $release;
@@ -91,8 +91,7 @@ class ReleaseController extends Controller
     public function new()
     {
         return view('admin.release.edit', [
-            'headerTitle' => __('New release'),
-            'categories'  => ReleaseChangelogCategory::all()
+            'categories' => ReleaseChangelogCategory::all(),
         ]);
     }
 
@@ -104,9 +103,8 @@ class ReleaseController extends Controller
     public function edit(Request $request, Release $release)
     {
         return view('admin.release.edit', [
-            'release'     => $release,
-            'headerTitle' => __('Edit release'),
-            'categories'  => ReleaseChangelogCategory::all()
+            'release'    => $release,
+            'categories' => ReleaseChangelogCategory::all(),
         ]);
     }
 
@@ -122,7 +120,7 @@ class ReleaseController extends Controller
         $release = $this->store($request, $release);
 
         // Message to the user
-        Session::flash('status', __('Release updated'));
+        Session::flash('status', __('controller.release.flash.release_updated'));
 
         // Display the edit page
         return $this->edit($request, $release);
@@ -139,7 +137,7 @@ class ReleaseController extends Controller
         $release = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Release created'));
+        Session::flash('status', __('controller.release.flash.release_created'));
 
         return redirect()->route('admin.release.edit', ['release' => $release]);
     }

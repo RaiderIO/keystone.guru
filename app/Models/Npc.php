@@ -133,8 +133,7 @@ class Npc extends CacheModel
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item Npc */
 
             $item->npcbolsteringwhitelists()->delete();

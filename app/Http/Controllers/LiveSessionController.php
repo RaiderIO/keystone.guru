@@ -37,7 +37,7 @@ class LiveSessionController extends Controller
         $liveSession = LiveSession::create([
             'dungeon_route_id' => $dungeonroute->id,
             'user_id'          => Auth::id(),
-            'public_key'       => LiveSession::generateRandomPublicKey()
+            'public_key'       => LiveSession::generateRandomPublicKey(),
         ]);
 
         // If the team is set for this route, invite all team members that are currently viewing this route to join
@@ -52,8 +52,8 @@ class LiveSessionController extends Controller
                 foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
                     /** @var array $channelUser */
                     // Ignore the current user!
-                    if ($channelUser['id'] !== $user->id && $dungeonroute->team->isUserMember(new User($channelUser))) {
-                        $invitees->push($channelUser['id']);
+                    if ($channelUser['public_key'] !== $user->public_key && $dungeonroute->team->isUserMember(new User($channelUser))) {
+                        $invitees->push($channelUser['public_key']);
                     }
                 }
 
@@ -118,7 +118,7 @@ class LiveSessionController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'livesession'  => $livesession,
                 'floor'        => $floor,
-                'mapContext'   => (new MapContextLiveSession($livesession, $floor))->getProperties()
+                'mapContext'   => (new MapContextLiveSession($livesession, $floor))->getProperties(),
             ]);
         }
     }

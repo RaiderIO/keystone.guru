@@ -121,7 +121,7 @@ ob_start(); ?>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
                 <div class="col">
                     {{
-                        empty($dungeonroute->description) ? __('No description') : $dungeonroute->description
+                        empty($dungeonroute->description) ? __('views/common.dungeonroute.card.no_description') : $dungeonroute->description
                     }}
                 </div>
             </div>
@@ -133,7 +133,7 @@ ob_start(); ?>
                         <span class="text-success"> <i class="fas fa-check-circle"></i> </span>
                     @endif
                     {{ sprintf(
-                        __('%s/%s (%s%%)'),
+                        '%s/%s (%s%%)',
                         $dungeonroute->enemy_forces,
                         $dungeonroute->dungeon->enemy_forces_required,
                         $enemyForcesPercentage
@@ -148,14 +148,16 @@ ob_start(); ?>
             <div class="row no-gutters footer">
                 <div class="col bg-card-footer px-2 py-1">
                     <small class="text-muted">
-                        {{ __('By') }}
+                        {{ __('views/common.dungeonroute.card.by_author') }}
                         @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                         @if( $dungeonroute->avg_rating > 1 )
                             -
                             @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])
                         @endif
                         -
-                        {{ sprintf(__('Updated %s'), $dungeonroute->updated_at->diffForHumans() ) }}
+                        <span data-toggle="tooltip" title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
+                            {{ sprintf(__('views/common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
+                        </span>
                     </small>
                 </div>
                 <div class="col-auto bg-card-footer px-2">
@@ -168,14 +170,14 @@ ob_start(); ?>
                         <a class="dropdown-item" href="#" data-toggle="modal"
                            data-target="#userreport_dungeonroute_modal"
                            data-publickey="{{ $dungeonroute->public_key }}">
-                            <i class="fas fa-flag"></i> {{ __('Report') }}
+                            <i class="fas fa-flag"></i> {{ __('views/common.dungeonroute.card.report') }}
                         </a>
                         @auth
                             <div class="dropdown-divider"></div>
                             @if(Auth::user()->hasRole('admin'))
                                 <a class="dropdown-item refresh_thumbnail"
                                    data-publickey="{{ $dungeonroute->public_key }}">
-                                    <i class="fas fa-sync"></i> {{ __('Refresh thumbnail') }}
+                                    <i class="fas fa-sync"></i> {{ __('views/common.dungeonroute.card.refresh_thumbnail') }}
                                 </a>
                             @endif
                         @endauth

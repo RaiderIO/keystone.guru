@@ -17,8 +17,8 @@ class APIProfileController
     {
         $time = $request->get('time', -1);
 
-        $user = Auth::user();
-        $user->legal_agreed = 1;
+        $user                  = Auth::user();
+        $user->legal_agreed    = 1;
         $user->legal_agreed_ms = $time;
 
         $user->save();

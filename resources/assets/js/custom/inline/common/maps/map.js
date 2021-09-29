@@ -216,6 +216,8 @@ class CommonMapsMap extends InlineCode {
         let map = getState().getDungeonMap();
         // After load complete, properly toggle the visibility. Then all layers get toggled properly
         map.register('map:mapobjectgroupsloaded', this, this._mapObjectGroupVisibilityChanged);
+        // The mouse cursors are toggled from a separate button which we need to handle as well
+        getState().register('echocursorsenabled:changed', this, this._mapObjectGroupVisibilityChanged);
 
         let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
         let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
@@ -330,6 +332,8 @@ class CommonMapsMap extends InlineCode {
                 $('#enemy_info_key_value_container').html(
                     template(visualData)
                 );
+
+                refreshTooltips($('#enemy_info_container [data-toggle="tooltip"]'));
                 $('#enemy_report_enemy_id').val(focusedEnemy.id);
             }
         }
@@ -376,36 +380,43 @@ class CommonMapsMap extends InlineCode {
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilityDropdown = $('#map_map_object_group_visibility_dropdown');
         if ($mapObjectGroupVisibilityDropdown.length > 0) {
-            let selected = $mapObjectGroupVisibilityDropdown.find('a.active').map(function (index, element) {
+
+            /** @type array */
+            let hiddenInUI = $mapObjectGroupVisibilityDropdown.find('a:not(.active)').map(function (index, element) {
                 return $(element).data('group');
             }).get();
 
-            // Make a copy so we don't modify the OG array
-            let toHide = MAP_OBJECT_GROUP_NAMES.slice();
-            // Show everything that needs to be shown
-            for (let i = 0; i < selected.length; i++) {
-                let name = selected[i];
-                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(name);
-                group.setVisibility(true);
+            /** @type array */
+            let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
 
-                // Remove it from the toHide list
-                toHide.splice(toHide.indexOf(name), 1);
-            }
+            let hiddenMapObjectGroups = [];
+            // Build a list of elements to hide from the UI
+            for (let index in MAP_OBJECT_GROUP_NAMES) {
+                let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
+                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(mapObjectGroupName);
 
-            // Update our cookie so that we know upon page refresh
-            Cookies.set('hidden_map_object_groups', toHide);
-
-            // Hide everything that needs to be hidden
-            for (let index in toHide) {
-                if (toHide.hasOwnProperty(index)) {
-                    let group = getState().getDungeonMap().mapObjectGroupManager.getByName(toHide[index]);
-                    if (group instanceof MapObjectGroup) {
+                if (group instanceof MapObjectGroup) {
+                    if (hiddenInUI.includes(mapObjectGroupName) ||
+                        // If it's managed in another way, and it's current hidden (changed by some other UI element)
+                        (!group.isUserToggleable() && !group.isShown())
+                    ) {
+                        hiddenMapObjectGroups.push(mapObjectGroupName);
                         group.setVisibility(false);
                     } else {
-                        console.warn(`Unable to find map object group ${toHide[index]} - was a map object removed or does admin have different map object groups?`);
+                        group.setVisibility(true);
                     }
+
+                    // Remove it from the existing cookie list
+                    cookieHiddenMapObjectGroups.splice(cookieHiddenMapObjectGroups.indexOf(mapObjectGroupName), 1);
                 }
             }
+
+            // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
+            // add them to our current list as to not lose our setting for it
+            hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
+
+            // Update our cookie so that we know upon page refresh
+            Cookies.set('hidden_map_object_groups', hiddenMapObjectGroups);
         }
     }
 

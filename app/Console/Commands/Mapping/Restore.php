@@ -2,17 +2,8 @@
 
 namespace App\Console\Commands\Mapping;
 
-use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\EnemyPack;
-use App\Models\EnemyPatrol;
-use App\Models\Floor;
-use App\Models\MapIcon;
 use App\Models\Mapping\MappingChangeLog;
-use App\Models\Npc;
-use App\Models\Spell;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 
@@ -49,7 +40,7 @@ class Restore extends Command
                 if ($changeLog->model_class === 'App\Models\Enemy') {
                     // This mob was marked as inspiring
                     if (strpos($changeLog->after_model, 'inspiring') !== false) {
-                        $enemy = Enemy::findOrFail($changeLog->model_id);
+                        $enemy                = Enemy::findOrFail($changeLog->model_id);
                         $enemy->seasonal_type = 'inspiring';
                         $enemy->save();
                         $this->info(sprintf('Successfully restored %s -> ID = %s', $changeLog->model_class, $changeLog->model_id));

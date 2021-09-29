@@ -15,14 +15,14 @@ $highlight = $highlight ?? false;
     <div class="col">
         <div class="row no-gutters mt-2 ">
             <div
-                class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }} {{ $showText ? '' : 'mx-1' }}"
+                class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }} {{ $showText ? '' : 'mx-1' }}"
                 data-toggle="tooltip"
-                title="{{ $affix->description }}"
+                title="{{ __($affix->description) }}"
                 style="height: 24px;">
             </div>
             @if($showText)
                 <div class="col d-{{ $media }}-block d-none pl-1">
-                    {{ $affix->name }}
+                    {{ __($affix->name) }}
                     {{--                @if($lastColumn && $affixgroup->season->presets > 0 )--}}
                     {{--                    {{ __(sprintf('preset %s', $affixgroup->season->getPresetAt($startDate))) }}--}}
                     {{--                @endif--}}

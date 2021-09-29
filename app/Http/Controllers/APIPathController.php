@@ -39,7 +39,7 @@ class APIPathController extends Controller
 
         try {
             $path->dungeon_route_id = $dungeonroute->id;
-            $path->floor_id = (int) $request->get('floor_id');
+            $path->floor_id         = (int)$request->get('floor_id');
 
             // Init to a default value if new
             if (!$path->exists) {

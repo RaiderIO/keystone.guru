@@ -30,7 +30,7 @@ abstract class MapContext
     function __construct(Model $context, Floor $floor)
     {
         $this->_context = $context;
-        $this->_floor = $floor;
+        $this->_floor   = $floor;
     }
 
     /** @return string */
@@ -58,8 +58,7 @@ abstract class MapContext
         $cacheService = App::make(CacheService::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->_floor->dungeon->id), function ()
-        {
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->_floor->dungeon->id), function () {
             $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
@@ -70,12 +69,11 @@ abstract class MapContext
                 'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
-                'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers
+                'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers,
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $cacheService->remember('static_data', function ()
-        {
+        $static = $cacheService->remember('static_data', function () {
             return [
                 'mapIconTypes'                      => MapIconType::all(),
                 'unknownMapIconType'                => MapIconType::find(1),
@@ -108,7 +106,7 @@ abstract class MapContext
 
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null
-            'userId'          => Auth::id()
+            'userPublicKey'   => optional(Auth::user())->public_key,
         ];
     }
 }

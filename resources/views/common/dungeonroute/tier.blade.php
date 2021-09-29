@@ -15,7 +15,7 @@ $url = $url ?? null;
           @if( $url === null )
           data-toggle="tooltip"
           title="{{ sprintf(
-            __('%s - data by https://mplus.subcreation.net'),
+            __('views/common.dungeonroute.tier.data_by_subcreation'),
                 $affixgroup->getTextAttribute()
             )}}"
           @endif

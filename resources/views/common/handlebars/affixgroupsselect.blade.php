@@ -34,7 +34,7 @@ $id = $id ?? 'affixes';
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            class: affix.name.toLowerCase(),
+                            class: affix.key.toLowerCase(),
                             name: affix.name
                         });
                     }
@@ -63,7 +63,7 @@ $id = $id ?? 'affixes';
                 $el.remove();
             });
 
-            if( typeof $affixSelect.attr('readonly') !== 'undefined' ) {
+            if (typeof $affixSelect.attr('readonly') !== 'undefined') {
                 $affixSelect.find('option').attr('disabled', true);
             }
         });

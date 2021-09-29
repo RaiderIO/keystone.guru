@@ -4,35 +4,41 @@
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $siegeOfBoralus \App\Models\Dungeon */
 
-$id = isset($id) ? $id : 'dungeon_id_select';
-$name = isset($name) ? $name : 'dungeon_id';
-$label = isset($label) ? $label : __('Dungeon');
-$required = isset($required) ? $required : true;
-$showAll = isset($showAll) ? $showAll : true;
-$activeOnly = isset($activeOnly) ? $activeOnly : true;
-$showSiegeWarning = isset($showSiegeWarning) ? $showSiegeWarning : false;
+$id               = $id ?? 'dungeon_id_select';
+$name             = $name ?? 'dungeon_id';
+$label            = $label ?? __('views/common.dungeon.select.dungeon');
+$required         = $required ?? true;
+$showAll          = !isset($showAll) || $showAll;
+// Show all dungeons if we're debugging
+$activeOnly       = $activeOnly ?? !env('APP_DEBUG');
+$showSiegeWarning = $showSiegeWarning ?? false;
 
 $dungeonsSelect = [];
-if ($showAll)
-{
-    $dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
+if ($showAll) {
+    $dungeonsSelect = [__('views/common.dungeon.select.all') => [-1 => __('views/common.dungeon.select.all_dungeons')]];
 }
 
 // If the user didn't pass us any dungeons, resort to some defaults we may have set
-if (!isset($dungeons))
-{
+if (!isset($dungeons)) {
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
 // Group the dungeons by expansion
-foreach ($dungeonsByExpansion as $expansionId => $dungeons)
-{
-    $dungeonsSelect[$allExpansions->where('id', $expansionId)->first()->name] = $dungeons->pluck('name', 'id')->toArray();
+foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
+    /** @var \App\Models\Expansion $expansion */
+    $expansion = $allExpansions->where('id', $expansionId)->first();
+
+    if ($expansion->active) {
+        $dungeonsSelect[__($expansion->name)] = $dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => __($name)];
+        })->toArray();
+    }
 }
+
 ?>
 
-@if($showSiegeWarning)
+@if($showSiegeWarning && $siegeOfBoralus)
 @section('scripts')
     @parent
 
@@ -41,7 +47,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons)
             let $dungeonIdSelect = $('#{{ $id }}');
             $dungeonIdSelect.bind('change', function () {
                 let $factionWarning = $('#siege_of_boralus_faction_warning');
-                if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }} ) {
+                if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }}) {
                     $factionWarning.show();
                 } else {
                     $factionWarning.hide();
@@ -59,7 +65,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons)
     {!! Form::select($name, $dungeonsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
+            <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}
         </div>
     @endif
 

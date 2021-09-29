@@ -2,7 +2,8 @@
 /** @var $theme string */
 
 $isDarkMode = $theme === 'darkly';
-?><li>
+?>
+<li>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-dark {{ $isDarkMode ? '' : 'active' }}">
             <input type="radio" id="theme_light_mode" class="theme_switch_btn" name="theme" autocomplete="off"

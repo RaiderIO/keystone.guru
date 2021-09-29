@@ -3,7 +3,8 @@
     <div class="col btn-group dropright">
         <button type="button" class="btn btn-accent dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"
-                data-tooltip="tooltip" data-placement="right" title="{{ __('Show/hide map elements') }}">
+                data-tooltip="tooltip" data-placement="right"
+                title="{{ __('views/common.maps.controls.elements.mapobjectgroupvisibility.show_hide_map_elements') }}">
             <i class="fa fa-eye"></i>
         </button>
         <div id="map_map_object_group_visibility_dropdown" class="dropdown-menu">

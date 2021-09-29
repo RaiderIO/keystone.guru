@@ -7,12 +7,14 @@ use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $icon_file_id
+ * @property int $active
  * @property string $name
  * @property string $shortname
  * @property string $color
@@ -29,25 +31,34 @@ class Expansion extends CacheModel
 {
     use HasIconFile;
 
-    public $fillable = ['icon_file_id', 'name', 'shortname', 'color', 'released_at'];
+    public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
     protected $dates = [
-//        'released_at',
+        // 'released_at',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
-    const EXPANSION_LEGION = 'legion';
-    const EXPANSION_BFA = 'bfa';
+    const EXPANSION_LEGION      = 'legion';
+    const EXPANSION_BFA         = 'bfa';
     const EXPANSION_SHADOWLANDS = 'shadowlands';
 
     const ALL = [
-        'Legion' => self::EXPANSION_LEGION,
+        'Legion'             => self::EXPANSION_LEGION,
         'Battle for Azeroth' => self::EXPANSION_BFA,
-        'Shadowlands' => self::EXPANSION_SHADOWLANDS,
+        'Shadowlands'        => self::EXPANSION_SHADOWLANDS,
     ];
+
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'shortname';
+    }
 
     /**
      * @return HasMany
@@ -58,6 +69,28 @@ class Expansion extends CacheModel
     }
 
     /**
+     * Scope a query to only include active dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('expansions.active', 1);
+    }
+
+    /**
+     * Scope a query to only include inactive dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('expansions.active', 0);
+    }
+
+    /**
      * Saves an expansion with the data from a Request.
      *
      * @param Request $request
@@ -65,16 +98,17 @@ class Expansion extends CacheModel
      * @return bool
      * @throws Exception
      */
-    public function saveFromRequest(Request $request, $fileUploadDirectory = 'uploads') : bool
+    public function saveFromRequest(Request $request, string $fileUploadDirectory = 'uploads'): bool
     {
         $new = isset($this->id);
 
         $file = $request->file('icon');
 
         $this->icon_file_id = -1;
-        $this->name = $request->get('name');
-        $this->shortname = $request->get('shortname');
-        $this->color = $request->get('color');
+        $this->active       = $request->get('active');
+        $this->name         = $request->get('name');
+        $this->shortname    = $request->get('shortname');
+        $this->color        = $request->get('color');
 
         // Update or insert it
         if ($this->save()) {

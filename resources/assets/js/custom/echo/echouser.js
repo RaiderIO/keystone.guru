@@ -11,9 +11,9 @@ class EchoUser extends Signalable {
         this.map = map;
 
         // May be unset when not our own user, but this confuses handlebars
-        this.self = user.id === getState().getUser().id;
+        this.self = user.public_key === getState().getUser().public_key;
 
-        this.id = user.id;
+        this.public_key = user.public_key;
         this.name = user.name;
         this.initials = user.initials;
         this.color = user.color;
@@ -36,10 +36,27 @@ class EchoUser extends Signalable {
     }
 
     /**
-     * @returns {Number}
+     * Adjust the viewport of the current map to whatever this user is viewing.
      */
-    getId() {
-        return this.id;
+    adjustViewportToThisUser() {
+        // Only if their last center and zoom are known
+        if (this.getCenter() !== null && this.getZoom() !== null) {
+            let center = [this.getCenter().lat, this.getCenter().lng];
+
+            // If we need to change floors, do so, otherwise change immediately
+            if (this.getFloorId() !== null && this.getFloorId() !== getState().getCurrentFloor().id) {
+                getState().setFloorId(this.getFloorId(), center, this.getZoom());
+            } else {
+                this.map.leafletMap.setView(center, this.getZoom());
+            }
+        }
+    }
+
+    /**
+     * @returns {string}
+     */
+    getPublicKey() {
+        return this.public_key;
     }
 
     /**
@@ -94,7 +111,7 @@ class EchoUser extends Signalable {
 
     /**
      *
-     * @returns {Number|null}
+     * @returns {L.LatLng|null}
      */
     getCenter() {
         return this.center;
@@ -154,7 +171,6 @@ class EchoUser extends Signalable {
     getFollowing() {
         return this.following;
     }
-
 
 
     cleanup() {

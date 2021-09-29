@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('400 Bad request'),
+    'title' => __('views/errors.400.title'),
     'code' => 400,
-    'message' => __('Your browser sent an invalid request, please try again.')
+    'message' => __('views/errors.400.message')
     ])

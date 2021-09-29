@@ -25,7 +25,7 @@ class SubcreationEaseTierPull extends CacheModel
     protected $fillable = [
         'current_affixes',
         'source_url',
-        'last_updated_at'
+        'last_updated_at',
     ];
 
     /**

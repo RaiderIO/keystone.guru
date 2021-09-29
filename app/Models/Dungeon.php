@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Mockery\Exception;
 
 /**
@@ -54,6 +53,46 @@ class Dungeon extends CacheModel
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
+    // Legion
+    const DUNGEON_ARCWAY                      = 'arcway';
+    const DUNGEON_BLACK_ROOK_HOLD             = 'blackrookhold';
+    const DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  = 'cathedralofeternalnight';
+    const DUNGEON_COURT_OF_STARS              = 'courtofstars';
+    const DUNGEON_DARKHEART_THICKET           = 'darkheartthicket';
+    const DUNGEON_EYE_OF_AZSHARA              = 'eyeofazshara';
+    const DUNGEON_HALLS_OF_VALOR              = 'hallsofvalor';
+    const DUNGEON_LOWER_KARAZHAN              = 'lowerkarazhan';
+    const DUNGEON_MAW_OF_SOULS                = 'mawofsouls';
+    const DUNGEON_NELTHARIONS_LAIR            = 'neltharionslair';
+    const DUNGEON_UPPER_KARAZHAN              = 'upperkarazhan';
+    const DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE = 'theseatofthetriumvirate';
+    const DUNGEON_VAULT_OF_THE_WARDENS        = 'vaultofthewardens';
+
+    // Battle for Azeroth
+    const DUNGEON_ATAL_DAZAR           = 'ataldazar';
+    const DUNGEON_FREEHOLD             = 'freehold';
+    const DUNGEON_KINGS_REST           = 'kingsrest';
+    const DUNGEON_SHRINE_OF_THE_STORM  = 'shrineofthestorm';
+    const DUNGEON_SIEGE_OF_BORALUS     = 'siegeofboralus';
+    const DUNGEON_TEMPLE_OF_SETHRALISS = 'templeofsethraliss';
+    const DUNGEON_THE_MOTHERLODE       = 'themotherlode';
+    const DUNGEON_THE_UNDERROT         = 'theunderrot';
+    const DUNGEON_TOL_DAGOR         = 'toldagor';
+    const DUNGEON_WAYCREST_MANOR    = 'waycrestmanor';
+    const DUNGEON_MECHAGON_JUNKYARD = 'mechagonjunkyard';
+    const DUNGEON_MECHAGON_WORKSHOP    = 'mechagonworkshop';
+
+    // Shadowlands
+    const DUNGEON_DE_OTHER_SIDE         = 'deotherside_ardenweald';
+    const DUNGEON_HALLS_OF_ATONEMENT    = 'hallsofatonement_a';
+    const DUNGEON_MISTS_OF_TIRNA_SCITHE = 'mistsoftirnescithe';
+    const DUNGEON_PLAGUEFALL            = 'plaguefall';
+    const DUNGEON_SANGUINE_DEPTHS       = 'sanguinedepths_a';
+    const DUNGEON_SPIRES_OF_ASCENSION = 'spiresofascension_a';
+    const DUNGEON_THE_NECROTIC_WAKE   = 'necroticwake_a';
+    const DUNGEON_THEATER_OF_PAIN     = 'theaterofpain';
+
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string
@@ -77,7 +116,7 @@ class Dungeon extends CacheModel
     public function getEnemyForcesMappedStatusAttribute()
     {
         $result = [];
-        $npcs = [];
+        $npcs   = [];
 
         try {
             // Loop through all floors
@@ -100,11 +139,11 @@ class Dungeon extends CacheModel
             }
         }
 
-        $total = count($npcs);
-        $result['npcs'] = $npcs;
+        $total              = count($npcs);
+        $result['npcs']     = $npcs;
         $result['unmapped'] = $unmappedCount;
-        $result['total'] = $total;
-        $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
+        $result['total']    = $total;
+        $result['percent']  = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
     }
@@ -189,7 +228,7 @@ class Dungeon extends CacheModel
      */
     public function scopeSiegeOfBoralus($query)
     {
-        return $query->where('name', 'Siege of Boralus');
+        return $query->where('key', 'siegeofboralus');
     }
 
     /**
@@ -200,7 +239,7 @@ class Dungeon extends CacheModel
      */
     public function scopeActive($query)
     {
-        return $query->where('active', 1);
+        return $query->where('dungeons.active', 1);
     }
 
     /**
@@ -211,7 +250,7 @@ class Dungeon extends CacheModel
      */
     public function scopeInactive($query)
     {
-        return $query->where('active', 0);
+        return $query->where('dungeons.active', 0);
     }
 
 
@@ -239,7 +278,7 @@ class Dungeon extends CacheModel
      */
     public function isSiegeOfBoralus()
     {
-        return $this->name === 'Siege of Boralus';
+        return $this->key === 'siegeofboralus';
     }
 
     /**
@@ -249,7 +288,7 @@ class Dungeon extends CacheModel
      */
     public function isTolDagor()
     {
-        return $this->name === 'Tol Dagor';
+        return $this->key === 'toldagor';
     }
 
     public function getTimerUpgradePlusTwoSeconds()
@@ -268,8 +307,7 @@ class Dungeon extends CacheModel
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

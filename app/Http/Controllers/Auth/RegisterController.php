@@ -58,10 +58,10 @@ class RegisterController extends Controller
             'email'                 => 'required|email|max:255|unique:users',
             'game_server_region_id' => 'nullable|int',
             'password'              => 'required|min:8|confirmed',
-            'legal_agreed'          => 'required|accepted'
+            'legal_agreed'          => 'required|accepted',
         ], [
-            'legal_agreed.required' => __('You have to agree to our legal terms to register.'),
-            'legal_agreed.accepted' => __('You have to agree to our legal terms to register. 2')
+            'legal_agreed.required' => __('controller.register.legal_agreed_required'),
+            'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted'),
         ]);
     }
 
@@ -78,13 +78,14 @@ class RegisterController extends Controller
 
         /** @var User $user */
         $user = User::create([
+            'public_key'            => User::generateRandomPublicKey(),
             'name'                  => $data['name'],
             'email'                 => $data['email'],
             'echo_color'            => randomHexColor(),
             'game_server_region_id' => $data['region'],
             'password'              => bcrypt($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
-            'legal_agreed_ms'       => intval($data['legal_agreed_ms'])
+            'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
         $user->attachRole($userRole);
@@ -114,7 +115,7 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        Session::flash('status', __('Registered successfully. Enjoy the website!'));
+        Session::flash('status', __('controller.register.flash.registered_successfully'));
 
         // Set the redirect path if it was set
         $this->redirectTo = $request->get('redirect', '/profile');

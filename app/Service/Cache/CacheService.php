@@ -4,6 +4,7 @@
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +13,19 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
+    /** @var bool */
+    private $cacheEnabled = true;
+
+    /**
+     * @param bool $cacheEnabled
+     * @return CacheService
+     */
+    public function setCacheEnabled(bool $cacheEnabled): CacheService
+    {
+        $this->cacheEnabled = $cacheEnabled;
+        return $this;
+    }
+
     /**
      * @param string $key
      * @return DateInterval|null
@@ -35,7 +49,7 @@ class CacheService implements CacheServiceInterface
         $result = null;
 
         // Will never get triggered if in debug
-        if ($this->has($key)) {
+        if ($this->has($key) && $this->cacheEnabled) {
             $result = $this->get($key);
         } // When in debug, don't do any caching
         else {
@@ -119,11 +133,7 @@ class CacheService implements CacheServiceInterface
         $dungeonRouteIds = collect(DB::select('SELECT `id` FROM dungeon_routes'))->pluck('id')->toArray();
 
         foreach ($dungeonRouteIds as $dungeonRouteId) {
-            // Unset for all variants
-            $this->unset(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_0_1_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_1_0_%d', $dungeonRouteId));
-            $this->unset(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
+            DungeonRoute::dropCaches($dungeonRouteId);
         }
     }
 }

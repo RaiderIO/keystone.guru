@@ -35,14 +35,14 @@ class FloorController extends Controller
             $floor->dungeon_id = $request->get('dungeon');
         }
 
-        $floor->index = $request->get('index');
-        $floor->name = $request->get('name');
-        $floor->default = $request->get('default', false);
-        $defaultMinEnemySize = config('keystoneguru.min_enemy_size_default');
+        $floor->index          = $request->get('index');
+        $floor->name           = $request->get('name');
+        $floor->default        = $request->get('default', false);
+        $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');
         $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
         $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
 
-        $defaultMaxEnemySize = config('keystoneguru.max_enemy_size_default');
+        $defaultMaxEnemySize   = config('keystoneguru.max_enemy_size_default');
         $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
         $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
 
@@ -61,7 +61,7 @@ class FloorController extends Controller
                     FloorCoupling::insert([
                         'floor1_id' => $floor->id,
                         'floor2_id' => $connectedFloorCandidate->id,
-                        'direction' => $direction
+                        'direction' => $direction,
                     ]);
                 }
             }
@@ -82,8 +82,7 @@ class FloorController extends Controller
     public function new(Request $request, Dungeon $dungeon)
     {
         return view('admin.floor.edit', [
-            'headerTitle' => __('New floor'),
-            'dungeon'     => $dungeon
+            'dungeon' => $dungeon,
         ]);
     }
 
@@ -99,13 +98,12 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'headerTitle'    => sprintf(__('%s - Edit floor'), $dungeon->name),
                 'dungeon'        => $dungeon,
                 'floor'          => $floor,
-                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
+                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
-            Session::flash('warning', sprintf('Floor %s is not a part of dungeon %s', $floor->name, $dungeon->name));
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }
@@ -121,9 +119,8 @@ class FloorController extends Controller
         $dungeon = $floor->dungeon->load('floors');
 
         return view('admin.floor.mapping', [
-            'floor'       => $floor,
-            'headerTitle' => __('Edit floor'),
-            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->getProperties(),
+            'floor'      => $floor,
+            'mapContext' => (new MapContextDungeon($dungeon, $floor))->getProperties(),
         ]);
     }
 
@@ -140,7 +137,7 @@ class FloorController extends Controller
         $floor = $this->store($request, $floor);
 
         // Message to the user
-        Session::flash('status', __('Floor updated'));
+        Session::flash('status', __('views/admin.floor.flash.floor_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon, $floor);
@@ -158,11 +155,11 @@ class FloorController extends Controller
         $floor = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Floor created'));
+        Session::flash('status', __('views/admin.floor.flash.floor_created'));
 
         return redirect()->route('admin.floor.edit.mapping', [
             'dungeon' => $request->get('dungeon'),
-            'floor'   => $floor
+            'floor'   => $floor,
         ]);
     }
 }

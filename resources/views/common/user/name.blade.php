@@ -3,22 +3,21 @@
 /** @var $link boolean */
 /** @var $showAnonIcon boolean */
 
-$link = $link ?? false;
+$link         = $link ?? false;
 $showAnonIcon = $showAnonIcon ?? true;
 ?>
 
 @if($link)
     <a href="{{ route('profile.view', ['user' => $user->id]) }}">
-@endif
+        @endif
 
-@isset($user->iconfile)
-    <img src="{{ $user->iconfile->getURL() }}" alt="{{ __('Avatar') }}"
-         style="max-width: 26px; max-height: 26px"/>
-@elseif($showAnonIcon)
-    <i class="fas fa-user"></i>
-@endisset
-{{ $user->name }}
+        @isset($user->iconfile)
+            <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px"/>
+        @elseif($showAnonIcon)
+            <i class="fas fa-user"></i>
+        @endisset
+        {{ $user->name }}
 
-@if($link)
+        @if($link)
     </a>
 @endif

@@ -10,6 +10,7 @@ use App\Models\PatreonData;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\UserReport;
 use Eloquent;
@@ -24,11 +25,13 @@ use Laratrust\Traits\LaratrustUserTrait;
 
 /**
  * @property int $id
+ * @property string $public_key
  * @property int $game_server_region_id
  * @property string $timezone
  * @property string $name
  * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string $email
+ * @property string $locale
  * @property string $theme
  * @property string $echo_color
  * @property boolean $echo_anonymous
@@ -55,6 +58,7 @@ class User extends Authenticatable
     use HasIconFile;
     use LaratrustUserTrait;
     use Notifiable;
+    use GeneratesPublicKey;
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
@@ -67,7 +71,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'id', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
     ];
 
     /**
@@ -76,11 +80,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'id', 'name', 'echo_color'
+        'id', 'public_key', 'name', 'echo_color',
     ];
 
     protected $appends = [
-        'initials'
+        'initials',
     ];
 
     protected $with = 'iconfile';
@@ -253,20 +257,20 @@ class User extends Authenticatable
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
-                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this)
+                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this),
             ];
         }
 
         return array_merge($teams, [
             'patreon'       => [
-                'unlinked' => $this->patreondata !== null
+                'unlinked' => $this->patreondata !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
+                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count()),
             ],
             'reports'       => [
-                'delete_count' => ($this->reports()->where('status', 0)->count())
-            ]
+                'delete_count' => ($this->reports()->where('status', 0)->count()),
+            ],
         ]);
     }
 
@@ -275,8 +279,7 @@ class User extends Authenticatable
         parent::boot();
 
         // Delete user properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item User */
             $item->dungeonroutes()->delete();
             $item->reports()->delete();

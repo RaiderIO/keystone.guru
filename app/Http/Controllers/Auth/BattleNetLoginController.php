@@ -13,15 +13,15 @@ class BattleNetLoginController extends OAuthLoginController
     protected function getUser($oauthUser, $oAuthId)
     {
         return new User([
-            'oauth_id' => $oAuthId,
+            'oauth_id'        => $oAuthId,
             // Prefer nickname over full name
-            'name' => $oauthUser->nickname,
+            'name'            => $oauthUser->nickname,
             // Email is likely null in Battle.net's case, so make up one to make the database happy
-            'email' => sprintf('%s@battle.net', $oauthUser->id),
-            'echo_color' => randomHexColor(),
-            'password' => '',
-            'legal_agreed' => 1,
-            'legal_agreed_ms' => -1
+            'email'           => sprintf('%s@battle.net', $oauthUser->id),
+            'echo_color'      => randomHexColor(),
+            'password'        => '',
+            'legal_agreed'    => 1,
+            'legal_agreed_ms' => -1,
         ]);
     }
 

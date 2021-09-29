@@ -5,10 +5,10 @@
  * @var $currentAffixGroup \App\Models\AffixGroup
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
-$title = $title ?? sprintf('%s routes', $dungeon->name);
+$title      = $title ?? sprintf('%s routes', __($dungeon->name));
 $affixgroup = $affixgroup ?? null;
 ?>
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title, 'breadcrumbsParams' => [$expansion]])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 

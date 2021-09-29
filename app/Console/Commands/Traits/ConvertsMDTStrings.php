@@ -72,7 +72,7 @@ trait ConvertsMDTStrings
             $fileName = $this->saveFile($string);
 
             if ($fileName !== null) {
-                $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
+                $cmd     = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
                 $process = new Process(explode(' ', $cmd));
                 $process->run();
 
@@ -89,7 +89,7 @@ trait ConvertsMDTStrings
                     // MDT strings - they should be ignored
                     if (!$encode && $this->shouldErrorLog($string)) {
                         logger()->error($errorOutput, [
-                            'string' => $string
+                            'string' => $string,
                         ]);
                     }
                 }

@@ -20,7 +20,7 @@ class SiegeOfBoralusFactionRule implements Rule
     /**
      * Create a new rule instance.
      *
-     * @param  ParameterBag $request
+     * @param ParameterBag $request
      * @return void
      */
     public function __construct($request)
@@ -31,8 +31,8 @@ class SiegeOfBoralusFactionRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string $attribute
-     * @param  mixed $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -46,7 +46,7 @@ class SiegeOfBoralusFactionRule implements Rule
 
         if (intval($dungeonId) === $siegeOfBoralus->id) {
             $validFactions = Faction::whereIn('name', ['Alliance', 'Horde'])->get()->pluck('id')->toArray();
-            $result = in_array(intval($factionId), $validFactions);
+            $result        = in_array(intval($factionId), $validFactions);
         }
 
         return $result;
@@ -59,6 +59,6 @@ class SiegeOfBoralusFactionRule implements Rule
      */
     public function message()
     {
-        return __('You need to select a faction for the Siege of Boralus dungeon.');
+        return __('rules.siege_of_boralus_faction_rule.message');
     }
 }

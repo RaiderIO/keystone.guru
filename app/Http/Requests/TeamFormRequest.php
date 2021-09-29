@@ -37,7 +37,7 @@ class TeamFormRequest extends FormRequest
         return [
             'name'        => $nameRules,
             'description' => 'string|nullable',
-            'logo'        => 'image|mimes:png|max:256'
+            'logo'        => 'image|mimes:png|max:256',
         ];
     }
 }

@@ -26,16 +26,15 @@ trait ListsMapIcons
     {
         try {
             $dungeonRouteId = $dungeonRoute->id;
-            $teamId = $dungeonRoute->team_id;
+            $teamId         = $dungeonRoute->team_id;
         } catch (\Exception $ex) {
             // this is okay, it can come from admin request
             $dungeonRouteId = -1;
-            $teamId = -1;
+            $teamId         = -1;
         }
 
         return MapIcon::where('floor_id', $floorId)
-            ->where(function ($query) use ($floorId, $dungeonRouteId, $teamId)
-            {
+            ->where(function ($query) use ($floorId, $dungeonRouteId, $teamId) {
                 /** @var $query Builder */
                 return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1)->orWhere('team_id', $teamId);
             })

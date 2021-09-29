@@ -44,17 +44,17 @@ class SpellController extends Controller
 
         $spellBefore = clone $spell;
 
-        $spell->id = $request->get('id');
+        $spell->id          = $request->get('id');
         $spell->dispel_type = $request->get('dispel_type');
-        $spell->icon_name = $request->get('icon_name');
-        $spell->name = $request->get('name');
-        $schools = $request->get('schools', []);
-        $mask = 0;
+        $spell->icon_name   = $request->get('icon_name');
+        $spell->name        = $request->get('name');
+        $schools            = $request->get('schools', []);
+        $mask               = 0;
         foreach ($schools as $school) {
             $mask |= (int)$school;
         }
         $spell->schools_mask = $mask;
-        $spell->aura = $request->get('aura', false);
+        $spell->aura         = $request->get('aura', false);
 
         if ($spell->save()) {
 //            if ($oldId > 0) {
@@ -81,7 +81,6 @@ class SpellController extends Controller
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
             'schools'     => Spell::ALL_SCHOOLS,
-            'headerTitle' => __('New spell')
         ]);
     }
 
@@ -96,7 +95,6 @@ class SpellController extends Controller
             'spell'       => $spell,
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
             'schools'     => Spell::ALL_SCHOOLS,
-            'headerTitle' => __('Edit spell')
         ]);
     }
 
@@ -117,7 +115,7 @@ class SpellController extends Controller
             $spell = $this->store($request, $spell);
 
             // Message to the user
-            Session::flash('status', __('Spell updated'));
+            Session::flash('status', __('controller.spell.flash.spell_updated'));
 
             // Display the edit page
             return $this->edit($request, $spell);
@@ -135,7 +133,7 @@ class SpellController extends Controller
         $spell = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('Spell %s created'), $spell->name));
+        Session::flash('status', sprintf(__('controller.spell.flash.spell_created'), $spell->name));
 
         return redirect()->route('admin.spell.edit', ['spell' => $spell->id]);
     }

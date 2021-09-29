@@ -1,1 +1,1 @@
-[Home]({{$homeUrl}}) - [Changelog]({{$changelogUrl}}) - [Affixes]({{$affixesUrl}}) - [Patreon]({{$patreonUrl}}) - [Get started]({{$newRouteUrl}})
+[{{ __('views/app.release.discord_footer.home') }}]({{$homeUrl}}) - [{{ __('views/app.release.discord_footer.changelog') }}]({{$changelogUrl}}) - [{{ __('views/app.release.discord_footer.affixes') }}]({{$affixesUrl}}) - [{{ __('views/app.release.discord_footer.patreon') }}]({{$patreonUrl}}) - [{{ __('views/app.release.discord_footer.get_started') }}]({{$newRouteUrl}})

@@ -117,12 +117,12 @@ class File extends Model
             mkdir($storageDir, 755, true);
         }
 
-        $newFile = new File();
-        $newFile->model_id = $model->id;
+        $newFile              = new File();
+        $newFile->model_id    = $model->id;
         $newFile->model_class = get_class($model);
-        $newFile->disk = $disk;
-        $newFile->path = $uploadedFile->store($dir, $disk);
-        $saveResult = $newFile->save();
+        $newFile->disk        = $disk;
+        $newFile->path        = $uploadedFile->store($dir, $disk);
+        $saveResult           = $newFile->save();
 
         if (!$saveResult) {
             // Remove the uploaded file from disk

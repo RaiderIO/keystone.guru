@@ -1,15 +1,21 @@
 <?php
+/** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
+
 $navs = [
     route('dungeonroutes.search') => [
-        'fa' => 'fas fa-search',
-        'text' => __('Search')
-    ],
-    route('dungeonroutes') => [
-        'text' => __('Routes')
-    ],
-    route('misc.affixes') => [
-        'text' => __('Affixes')
-    ],
+        'fa'   => 'fas fa-search',
+        'text' => __('views/common.layout.header.search')
+    ]
+];
+
+foreach ($activeExpansions as $expansion) {
+    $navs[route('dungeonroutes.expansion', ['expansion' => $expansion])] = [
+        'text' => __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+    ];
+}
+
+$navs[route('misc.affixes')] = [
+    'text' => __('views/common.layout.header.affixes')
 ];
 
 ?>
@@ -25,7 +31,7 @@ $navs = [
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('Toggle navigation') }}">
+                aria-label="{{ __('views/common.layout.header.toggle_navigation_title') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -34,7 +40,7 @@ $navs = [
                 <li class="nav-item px-3">
                     <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">
-                        <i class="fas fa-plus"></i> {{__('Create route')}}
+                        <i class="fas fa-plus"></i> {{__('views/common.layout.header.create_route')}}
                     </a>
                 </li>
                 @foreach($navs as $route => $opts)
@@ -49,7 +55,7 @@ $navs = [
                                 @endisset
                                 {{ $opts['text'] }}
                                 @if(isset($opts['new']) && $opts['new'])
-                                    <sup class="text-success">{{ __('NEW') }}</sup>
+                                    <sup class="text-success">{{ __('views/common.layout.header.new') }}</sup>
                                 @endif
                             </a>
                         </li>
@@ -58,6 +64,7 @@ $navs = [
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
+                @include('vendor.language.flags')
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')
             </ul>

@@ -44,7 +44,7 @@ class SidebarNavigation extends Sidebar {
             $.each(getState().getMapContext().getDungeon().floors, function (index, floor) {
                 // Reconstruct the dungeon floor select
                 $switchDungeonFloorSelect.append($('<option>', {
-                    text: floor.name,
+                    text: lang.get(floor.name),
                     value: floor.id
                 }));
             });

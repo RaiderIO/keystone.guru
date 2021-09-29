@@ -35,10 +35,11 @@ trait DungeonRouteTrait
             'brushlines'              => $dungeonRoute->brushlines,
             'pridefulenemies'         => $dungeonRoute->pridefulenemies,
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup)
-            {
+            'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
                 return $affixGroup->affixes;
-            })->collapse()->unique()->pluck(['name'])
+            })->collapse()->unique()->pluck(['name'])->map(function (string $name) {
+                return __($name);
+            }),
         ];
     }
 }

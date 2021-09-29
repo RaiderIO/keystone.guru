@@ -2,10 +2,13 @@
 <div class="form-group">
     <div class="row mb-2">
         <div class="col">
-            {!! Form::label('import_string', __('Paste your Mythic Dungeon Tools export string') . '<span class="form-required">*</span>', [], false) !!}
+            {!! Form::label('import_string',
+            __('views/common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
+            !!}
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
-            <div class="btn btn-outline-warning" data-toggle="tooltip" title="{{ __('Reset') }}">
+            <div class="btn btn-outline-warning" data-toggle="tooltip"
+                 title="{{ __('views/common.forms.mdtimport.reset_title') }}">
                 <i class="fas fa-undo"></i>
             </div>
         </div>
@@ -17,7 +20,7 @@
     <div class="form-group">
         <div class="text-info">
             <i class="fas fa-info-circle"></i> {{ sprintf(
-                    __('As an unregistered user, all imported routes will be temporary routes which expire after %s hours.'),
+                    __('views/common.forms.mdtimport.unregistered_user_all_routes_temporary'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                     )
                 }}
@@ -27,10 +30,10 @@
 @else
     <div class="form-group">
         <label for="mdt_import_sandbox">
-            {{ __('Temporary route') }}
+            {{ __('views/common.forms.mdtimport.temporary_route') }}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 sprintf(
-                    __('A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.'),
+                    __('views/common.forms.mdtimport.temporary_route_title'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
@@ -41,7 +44,7 @@
 <div class="form-group">
     <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
         <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
-        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
+        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.forms.mdtimport.parsing_your_string') }}
     </div>
 </div>
 <div class="form-group">
@@ -55,7 +58,7 @@
     </div>
 </div>
 <div class="form-group">
-    {!! Form::submit(__('Import route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+    {!! Form::submit(__('views/common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
     <div class="col-md">
 
     </div>

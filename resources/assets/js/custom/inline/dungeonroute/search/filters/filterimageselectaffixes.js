@@ -9,6 +9,7 @@ class SearchFilterAffixes extends SearchFilterImageSelect {
     }
 
     getFilterHeaderText() {
-        return `Affixes: ${this.getValue().length} selected`;
+        return lang.get('messages.filter_image_select_affixes_header')
+            .replace(':number', '' + this.getValue().length);
     }
 }

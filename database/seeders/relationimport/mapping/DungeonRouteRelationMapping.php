@@ -48,7 +48,7 @@ class DungeonRouteRelationMapping extends RelationMapping
             new DungeonRouteEnemyRaidMarkersRelationParser(),
             new DungeonRoutePridefulEnemiesRelationParser(),
 
-            new DungeonRouteMapIconsRelationParser()
+            new DungeonRouteMapIconsRelationParser(),
         ]));
     }
 

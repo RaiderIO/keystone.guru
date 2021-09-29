@@ -44,7 +44,7 @@ class Refresh extends Command
             sprintf(
                 'handlebars %s resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js',
                 config('app.env') === 'production' ? '-m' : ''
-            )
+            ),
         ]);
 
         $this->info('Handlebars refreshed');

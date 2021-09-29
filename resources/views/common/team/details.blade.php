@@ -5,37 +5,40 @@
 @endisset
 
 @if(!isset($model))
-<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-    {!! Form::label('name', __('Name') . '<span class="form-required">*</span>', [], false) !!}
-    {!! Form::text('name', null, ['class' => 'form-control']) !!}
-</div>
+    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+        {!! Form::label('name', __('views/common.team.details.name') . '<span class="form-required">*</span>', [], false) !!}
+        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+    </div>
 @endif
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-    {!! Form::label('description', __('Description')) !!}
+    {!! Form::label('description', __('views/common.team.details.description')) !!}
     {!! Form::text('description', null, ['class' => 'form-control']) !!}
 </div>
 
 <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
-    {!! Form::label('logo', __('Logo')) !!}
+    {!! Form::label('logo', __('views/common.team.details.logo')) !!}
     {!! Form::file('logo', ['class' => 'form-control']) !!}
 </div>
 
 @if(isset($model) && isset($model->iconfile))
     <div class="form-group">
-        {{__('Current logo:')}} <img src="{{ $model->iconfile->getURL() }}"
-                                     alt="{{ __('Team logo') }}" style="max-width: 48px"/>
+        {{__('views/common.team.details.current_logo') }}: <img src="{{ $model->iconfile->getURL() }}"
+                                                                alt="{{ __('views/common.team.details.team_logo_title') }}"
+                                                                style="max-width: 48px"/>
     </div>
 @endif
 
 <div class="row">
     <div class="col">
-        {!! Form::submit(isset($model) ? __('Save') : __('Submit'), ['class' => 'btn btn-info']) !!}
+        {!! Form::submit(isset($model) ?
+            __('views/common.team.details.save') :
+            __('views/common.team.details.submit'), ['class' => 'btn btn-info']) !!}
     </div>
     <div class="col">
         @if(isset($model) && $model->getUserRole(Auth::user()) === 'admin')
             <button id="delete_team" class="btn btn-danger float-right">
-                <i class="fas fa-trash"></i> {{ __('Disband team') }}
+                <i class="fas fa-trash"></i> {{ __('views/common.team.details.disband_team') }}
             </button>
         @endif
     </div>

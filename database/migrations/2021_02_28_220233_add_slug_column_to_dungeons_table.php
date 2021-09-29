@@ -19,13 +19,6 @@ class AddSlugColumnToDungeonsTable extends Migration
         {
             $table->string('slug')->after('name')->default('');
         });
-
-        // Fill the slug field
-        Dungeon::all()->each(function (Dungeon $dungeon)
-        {
-            $dungeon->slug = Str::slug($dungeon->name);
-            $dungeon->save();
-        });
     }
 
     /**

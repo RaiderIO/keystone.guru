@@ -77,7 +77,7 @@ class Team extends Model
     public function canAddRemoveRoute(User $user): bool
     {
         $userRole = $this->getUserRole($user);
-        $roles = config('keystoneguru.team_roles');
+        $roles    = config('keystoneguru.team_roles');
         // Moderator or higher
         return $roles[$userRole] >= 3;
     }
@@ -143,14 +143,14 @@ class Team extends Model
      */
     public function getAssignableRoles(User $user, User $targetUser)
     {
-        $userRole = $this->getUserRole($user);
+        $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
-        $result = [];
+        $result         = [];
 
         // If both users have a valid role (should always be the case)
         if ($userRole !== false && $targetUserRole !== false) {
-            $roles = config('keystoneguru.team_roles');
-            $userRoleKey = $roles[$userRole];
+            $roles             = config('keystoneguru.team_roles');
+            $userRoleKey       = $roles[$userRole];
             $targetUserRoleKey = $roles[$targetUserRole];
             // For now, admins cannot be demoted to anything else
             if ($targetUserRoleKey !== 4) {
@@ -182,17 +182,17 @@ class Team extends Model
     public function canChangeRole($user, $targetUser, $role): bool
     {
         $result = false;
-        $roles = config('keystoneguru.team_roles');
+        $roles  = config('keystoneguru.team_roles');
 
         // Only if it's a valid role
         if (isset($roles[$role])) {
-            $userRole = $this->getUserRole($user);
+            $userRole       = $this->getUserRole($user);
             $targetUserRole = $this->getUserRole($targetUser);
 
             if ($userRole !== false && $targetUserRole !== false) {
-                $userRoleKey = $roles[$userRole];
+                $userRoleKey       = $roles[$userRole];
                 $targetUserRoleKey = $roles[$targetUserRole];
-                $targetRoleKey = $roles[$role];
+                $targetRoleKey     = $roles[$role];
 
                 // User has a bigger role, and then only up to where the current user is (no promotions past their own
                 // rank) the person, and only users who are currently a moderator or admin may change roles
@@ -211,7 +211,7 @@ class Team extends Model
     public function changeRole(User $user, string $role): void
     {
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
-        $roles = config('keystoneguru.team_roles');
+        $roles    = config('keystoneguru.team_roles');
         // Only when user is part of the team, and when the role is a valid one.
         if ($teamUser !== null && isset($roles[$role])) {
             // Update the role with the new one
@@ -269,11 +269,11 @@ class Team extends Model
      */
     public function canRemoveMember(User $user, User $targetUser): bool
     {
-        $userRole = $this->getUserRole($user);
+        $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
-        $roles = config('keystoneguru.team_roles');
+        $roles          = config('keystoneguru.team_roles');
         // Moderator or higher
-        $userRoleKey = $roles[$userRole];
+        $userRoleKey       = $roles[$userRole];
         $targetUserRoleKey = $roles[$targetUserRole];
         // Be admin, or moderator that's removing normal users
 
@@ -312,10 +312,10 @@ class Team extends Model
     {
         // Prevent duplicate member listings
         if (!$this->isUserMember($user)) {
-            $teamUser = new TeamUser();
+            $teamUser          = new TeamUser();
             $teamUser->team_id = $this->id;
             $teamUser->user_id = $user->id;
-            $teamUser->role = $role;
+            $teamUser->role    = $role;
             $teamUser->save();
         }
     }
@@ -331,9 +331,8 @@ class Team extends Model
         if ($this->getUserRole($user) !== 'admin') {
             return null;
         } else {
-            $roles = config('keystoneguru.team_roles');
-            $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles)
-            {
+            $roles    = config('keystoneguru.team_roles');
+            $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles) {
                 return $roles[$obj->role];
             })->first();
 
@@ -356,8 +355,7 @@ class Team extends Model
         parent::boot();
 
         // Delete team properly if it gets deleted
-        static::deleting(function ($item)
-        {
+        static::deleting(function ($item) {
             /** @var $item Team */
 
             // Delete icons

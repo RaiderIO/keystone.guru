@@ -5,8 +5,6 @@ namespace App\Console\Commands\Scheduler;
 use App\Models\DungeonRoute;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DeleteExpiredDungeonRoutes extends Command

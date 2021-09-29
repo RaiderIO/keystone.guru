@@ -32,12 +32,12 @@ class LiveSession extends Model
     protected $fillable = [
         'dungeon_route_id',
         'user_id',
-        'public_key'
+        'public_key',
     ];
 
     protected $with = [
         'user',
-        'dungeonroute'
+        'dungeonroute',
     ];
 
     use GeneratesPublicKey;
@@ -108,8 +108,7 @@ class LiveSession extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function (LiveSession $item)
-        {
+        static::deleting(function (LiveSession $item) {
             $item->overpulledenemies()->delete();
         });
     }

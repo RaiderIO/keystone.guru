@@ -27,7 +27,7 @@ class SearchHandler {
             dataType: 'html',
             data: searchParams.params,
             beforeSend: function () {
-                if( options.hasOwnProperty('beforeSend') ) {
+                if (options.hasOwnProperty('beforeSend')) {
                     options.beforeSend();
                 }
             },
@@ -52,12 +52,12 @@ class SearchHandler {
                 $(`.${containerClass} [data-toggle="popover"]`).popover();
                 refreshTooltips();
 
-                if( options.hasOwnProperty('success') ) {
+                if (options.hasOwnProperty('success')) {
                     options.success(html);
                 }
             },
             complete: function () {
-                if( options.hasOwnProperty('complete') ) {
+                if (options.hasOwnProperty('complete')) {
                     options.complete();
                 }
             }

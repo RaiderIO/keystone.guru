@@ -1,10 +1,11 @@
 <?php
-$title = isset($team) ? sprintf(__('Invitation to join team %s'), $team->name) : __('Invalid team');
+$title  = isset($team) ? sprintf(__('views/team.invite.title'), $team->name) : __('views/team.invite.invalid_team');
+$header = isset($team) ? sprintf(__('views/team.invite.header'), $team->name) : __('views/team.invite.invalid_team');
 // Checks if you're already a member or not
-$member = isset($member) ? $member : false;
+$member = $member ?? false;
 ?>
 @extends('layouts.sitepage', ['breadcrumbsParams' => [$team], 'showAds' => false, 'title' => $title])
-@section('header-title', $title)
+@section('header-title', $header)
 
 @section('content')
     <div class="container text-center">
@@ -12,18 +13,18 @@ $member = isset($member) ? $member : false;
             @isset($team->iconfile)
                 <p>
                     <img src="{{ $team->iconfile->getURL() }}" style="max-width: 256px; max-height: 256px;"
-                         alt="{{ __('Team logo') }}"/>
+                         alt="{{ __('views/team.invite.logo_image_alt') }}"/>
                 </p>
             @endisset
             <p>
                 @if( $member )
-                    {{ sprintf(__('You are already a member of team %s!'), $team->name) }}
+                    {{ sprintf(__('views/team.invite.already_a_member'), $team->name) }}
                 @else
-                    {{ sprintf(__('You have been invited to join team %s.'), $team->name) }}
+                    {{ sprintf(__('views/team.invite.invited_to_join'), $team->name) }}
                     @auth
-                        {{ __('Accept the invitation to join the team!') }}
+                        {{ __('views/team.invite.accept_the_invitation') }}
                     @else
-                        {{ __('Login or register on Keystone.guru to join the team, it\'s free!') }}
+                        {{ __('views/team.invite.login_or_register_to_accept') }}
                     @endauth
                 @endif
             </p>
@@ -31,21 +32,21 @@ $member = isset($member) ? $member : false;
                 <div class="col">
                     @if( $member )
                         <a href="{{ route('team.edit', ['team' => $team]) }}" class="btn btn-primary col-lg-auto">
-                            <i class="fas fa-backward"></i> {{ __('Return to team') }}
+                            <i class="fas fa-backward"></i> {{ __('views/team.invite.return_to_team') }}
                         </a>
                     @else
                         @auth
                             <a href="{{ route('team.invite.accept', ['invitecode' => $team->invite_code ]) }}"
                                class="btn btn-primary col-lg-auto">
-                                <i class="fas fa-user-plus"></i> {{ __('Accept invitation') }}
+                                <i class="fas fa-user-plus"></i> {{ __('views/team.invite.accept_invitation') }}
                             </a>
                         @else
                             <button class="btn btn-primary col-lg-auto" data-toggle="modal" data-target="#login_modal">
-                                {{ __('Login') }}
+                                {{ __('views/team.invite.login') }}
                             </button>
                             <button class="btn btn-primary col-lg-auto" data-toggle="modal"
                                     data-target="#register_modal">
-                                {{ __('Register now!') }}
+                                {{ __('views/team.invite.register') }}
                             </button>
                         @endauth
                     @endif
@@ -56,10 +57,10 @@ $member = isset($member) ? $member : false;
                 <i class="fas fa-ban"></i>
             </h1>
             <p>
-                {{ __('This team could not be found. Perhaps the invite link has been changed or the team has been deleted.') }}
+                {{ __('views/team.invite.invite_not_found') }}
             </p>
             <button class="btn btn-primary col-lg-auto">
-                <i class="fas fa-home"></i> {{ __('Back to the home page') }}
+                <i class="fas fa-home"></i> {{ __('views/team.invite.back_to_homepage') }}
             </button>
         @endisset
     </div>

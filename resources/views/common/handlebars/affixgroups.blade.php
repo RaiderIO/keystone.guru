@@ -33,7 +33,7 @@
                         affixes.push({
                             title: affix.name,
                             name: affix.name,
-                            class: affix.name.toLowerCase()
+                            class: affix.key.toLowerCase()
                         });
                     }
                 }
@@ -47,7 +47,7 @@
         let $result = $("<div>").append($(result));
 
         // Only for complex affixes
-        if( data.length > 1 ){
+        if (data.length > 1) {
             let $rowContainer = $($result.find('.affix_list_row_container'));
             let $targetTooltip = $($result.find('.target_tooltip'));
 

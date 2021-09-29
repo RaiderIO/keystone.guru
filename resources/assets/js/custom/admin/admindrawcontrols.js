@@ -1,5 +1,5 @@
 class AdminDrawControls extends DrawControls {
-    _getHotkeys(){
+    _getHotkeys() {
         return [{
             hotkey: '1',
             cssClass: 'leaflet-draw-draw-mapicon',

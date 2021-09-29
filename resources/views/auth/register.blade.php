@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['title' => __('Register'), 'showAds' => false])
+@extends('layouts.sitepage', ['title' => __('views/auth.register.title'), 'showAds' => false])
 
-@section('header-title', 'Register')
+@section('header-title', __('views/auth.register.header'))
 @section('content')
     @include('common.forms.register')
 @endsection

@@ -11,19 +11,13 @@ class Echo extends Signalable {
 
         this.map = map;
 
-        /** @type EchoUser[] List of usernames currently connected */
+        /** @type {EchoUser[]} List of usernames currently connected */
         this._echoUsers = [];
-        /** @type EchoUser|null The user that we're currently following, if any */
+        /** @type {EchoUser|null} The user that we're currently following, if any */
         this._echoUserFollow = null;
-        /** @type EchoUser|null The user that we've most recently followed, even if we stopped following */
+        /** @type {EchoUser|null} The user that we've most recently followed, even if we stopped following */
         this._echoUserRefollow = null;
         this._status = ECHO_STATUS_DISCONNECTED;
-
-        let mousePositionHandler = new MousePositionHandler(this);
-        mousePositionHandler.register('message:received', this, this._onMousePositionReceived.bind(this));
-
-        let viewPortHandler = new ViewPortHandler(this);
-        viewPortHandler.register('message:received', this, this._onViewPortReceived.bind(this));
 
         this._handlers = [
             // NPC
@@ -42,8 +36,8 @@ class Echo extends Signalable {
             new OverpulledEnemyDeletedHandler(this),
 
             // Whisper handlers
-            mousePositionHandler,
-            viewPortHandler
+            new MousePositionHandler(this),
+            new ViewPortHandler(this)
         ];
     }
 
@@ -120,15 +114,15 @@ class Echo extends Signalable {
 
     /**
      * Gets a user by its name.
-     * @param id {Number} The ID of the user.
+     * @param publicKey {String} The public key of the user.
      * @returns {EchoUser}
      */
-    getUserById(id) {
+    getUserByPublicKey(publicKey) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
         let result = null;
 
         for (let i = 0; i < this._echoUsers.length; i++) {
-            if (this._echoUsers[i].getId() === id) {
+            if (this._echoUsers[i].getPublicKey() === publicKey) {
                 result = this._echoUsers[i];
                 break;
             }
@@ -139,46 +133,46 @@ class Echo extends Signalable {
 
     /**
      * Gets the color of a specific user.
-     * @param id {Number}
+     * @param publicKey {String}
      * @returns {string}
      */
-    getUserColor(id) {
+    getUserColor(publicKey) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let user = this.getUserById(id);
+        let user = this.getUserByPublicKey(publicKey);
         return user === null || user.getColor() === null ||
-        typeof user.getColor() === 'undefined' || user.getColor().length === 0 ?
-            '#000' : user.getColor();
+            typeof user.getColor() === 'undefined' || (user.getColor().length === 0 ? '#000' : user.getColor());
     }
 
     /**
      * Sets a user's color.
-     * @param id {Number} The user's id.
+     * @param publicKey {String} The user's public key.
      * @param color {string} The new color of the user.
      */
-    setUserColorById(id, color) {
+    setUserColorByPublicKey(publicKey, color) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let echoUser = this.getUserById(id);
+        let echoUser = this.getUserByPublicKey(publicKey);
         echoUser.setColor(color);
 
         this.signal('user:colorchanged', {user: echoUser});
     }
 
     /**
-     * Starts following the user around so that you're hands free (or turn it off)
-     * @param id {Number}
+     * Starts following the user around so that you're hands free (or turn it off).
+     *
+     * @param publicKey {String}
      */
-    followUserById(id) {
+    followUserByPublicKey(publicKey) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
         // Unfollow the current user
         this.unfollowUser();
 
-        this._echoUserFollow = this.getUserById(id);
+        this._echoUserFollow = this.getUserByPublicKey(publicKey);
         this._echoUserFollow.setFollowing(true);
         // Adjust the initial view port
-        this._adjustViewPortToUser(this._echoUserFollow);
+        this._echoUserFollow.adjustViewportToThisUser();
 
         this._echoUserRefollow = this._echoUserFollow;
 
@@ -206,14 +200,40 @@ class Echo extends Signalable {
     }
 
     /**
-     *
+     * Refollows the user we were previously following.
      */
     refollowUser() {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
         if (this._echoUserRefollow !== null) {
-            this.followUserById(this._echoUserRefollow.getId());
+            this.followUserByPublicKey(this._echoUserRefollow.getPublicKey());
         }
+    }
+
+    /**
+     * @returns {boolean} True if we're currently following a user, false if we're not.
+     */
+    isFollowingUser() {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        return this._echoUserFollow !== null;
+    }
+
+    /**
+     * @returns {EchoUser|null} An EchoUser if we're following that person, or null if we're not following anyone at this moment.
+     */
+    getFollowingUser() {
+        return this._echoUserFollow;
+    }
+
+    /**
+     *
+     * @param mousePositionReceivedEvent {Object}
+     */
+    onMousePositionReceived(mousePositionReceivedEvent) {
+        console.assert(this instanceof Echo, 'this is not an Echo', this);
+
+        this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
     }
 
     /**
@@ -239,7 +259,7 @@ class Echo extends Signalable {
     _addUser(rawUser) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let existingEchoUser = this.getUserById(rawUser.id);
+        let existingEchoUser = this.getUserByPublicKey(rawUser.public_key);
         if (existingEchoUser === null) {
             let echoUser = new EchoUser(this.map, rawUser);
             this._echoUsers.push(echoUser);
@@ -258,61 +278,12 @@ class Echo extends Signalable {
 
         for (let i = 0; i < this._echoUsers.length; i++) {
             let echoUserCandidate = this._echoUsers[i];
-            if (echoUserCandidate.getId() === rawUser.id) {
+            if (echoUserCandidate.getPublicKey() === rawUser.public_key) {
                 this._echoUsers.splice(i, 1);
                 echoUserCandidate.cleanup();
                 this.signal('user:remove', {user: echoUserCandidate});
                 // Remove all by the same user name
                 i--;
-            }
-        }
-    }
-
-    /**
-     *
-     * @param mousePositionReceivedEvent {Object}
-     * @private
-     */
-    _onMousePositionReceived(mousePositionReceivedEvent) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-
-        this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
-    }
-
-    /**
-     *
-     * @param viewPortReceivedEvent {Object}
-     * @private
-     */
-    _onViewPortReceived(viewPortReceivedEvent) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-
-        // Only if we're actively following someone
-        if (this._echoUserFollow instanceof EchoUser) {
-            this._adjustViewPortToUser(this._echoUserFollow);
-        }
-    }
-
-    /**
-     *
-     * @param echoUser {EchoUser}
-     * @private
-     */
-    _adjustViewPortToUser(echoUser) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
-        console.assert(echoUser instanceof EchoUser, 'echoUser is not an EchoUser', echoUser);
-
-        // Only if their last center and zoom are known
-        if (echoUser.getCenter() !== null && echoUser.getZoom() !== null) {
-            let center = [echoUser.getCenter().lat, echoUser.getCenter().lng];
-
-            // If we need to change floors, do so, otherwise change immediately
-            if (echoUser.getFloorId() !== null && echoUser.getFloorId() !== getState().getCurrentFloor().id) {
-                console.log(echoUser.getFloorId(), center, echoUser.getZoom());
-                getState().setFloorId(echoUser.getFloorId(), center, echoUser.getZoom());
-            } else {
-                console.log(center, echoUser.getZoom());
-                this.map.leafletMap.setView(center, echoUser.getZoom());
             }
         }
     }

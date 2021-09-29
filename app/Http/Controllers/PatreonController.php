@@ -47,11 +47,11 @@ class PatreonController extends Controller
     public function link(Request $request)
     {
         $state = $request->get('state');
-        $code = $request->get('code');
+        $code  = $request->get('code');
 
         // If session was not expired
         if (csrf_token() === $state) {
-            $client_id = config('keystoneguru.patreon.oauth.client_id');
+            $client_id     = config('keystoneguru.patreon.oauth.client_id');
             $client_secret = config('keystoneguru.patreon.oauth.secret');
 
             $oauth_client = new OAuth($client_id, $client_secret);
@@ -70,18 +70,18 @@ class PatreonController extends Controller
                 $userId = Auth::user()->id;
                 PatreonData::where('user_id', $userId)->delete();
 
-                $patreonData = new PatreonData();
-                $patreonData->user_id = $userId;
-                $patreonData->access_token = $tokens['access_token'];
+                $patreonData                = new PatreonData();
+                $patreonData->user_id       = $userId;
+                $patreonData->access_token  = $tokens['access_token'];
                 $patreonData->refresh_token = $tokens['refresh_token'];
-                $patreonData->expires_at = date('Y-m-d H:i:s', time() + $tokens['expires_in']);
+                $patreonData->expires_at    = date('Y-m-d H:i:s', time() + $tokens['expires_in']);
 
                 $patreonData->save();
 
                 $api_client = new API($patreonData->access_token);
                 /** @var Document $patron_response */
                 $patronResponse = $api_client->fetch_user();
-                $responseArray = $patronResponse->asArray(true);
+                $responseArray  = $patronResponse->asArray(true);
                 /**
                  * array:2 [▼
                  * "data" => array:4 [▼
@@ -125,9 +125,9 @@ class PatreonController extends Controller
                  * ]
                  * ]
                  */
-                $user = Auth::user();
+                $user                            = Auth::user();
                 $user->raw_patreon_response_data = json_encode($responseArray);
-                $user->patreon_data_id = $patreonData->id;
+                $user->patreon_data_id           = $patreonData->id;
                 $user->save();
 
                 // I pray this works. I have no reason to believe this will work
@@ -139,8 +139,8 @@ class PatreonController extends Controller
                     // If the tier is found..
                     if ($paidTier !== null) {
                         // Save it in the database; the user now has access to that tier!
-                        $patreonTier = new PatreonTier();
-                        $patreonTier->paid_tier_id = $paidTier->id;
+                        $patreonTier                  = new PatreonTier();
+                        $patreonTier->paid_tier_id    = $paidTier->id;
                         $patreonTier->patreon_data_id = $patreonData->id;
                         $patreonTier->save();
                     }

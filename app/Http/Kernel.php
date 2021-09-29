@@ -70,14 +70,14 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'             => Authenticate::class,
-        'auth.basic'       => AuthenticateWithBasicAuth::class,
-        'bindings'         => SubstituteBindings::class,
-        'can'              => Authorize::class,
-        'guest'            => RedirectIfAuthenticated::class,
-        'throttle'         => ThrottleRequests::class,
-        'ajax'             => OnlyAjax::class,
-        'viewcachebuster'  => ViewCacheBuster::class,
-        'legal_agreed'     => LegalAgreed::class,
+        'auth'            => Authenticate::class,
+        'auth.basic'      => AuthenticateWithBasicAuth::class,
+        'bindings'        => SubstituteBindings::class,
+        'can'             => Authorize::class,
+        'guest'           => RedirectIfAuthenticated::class,
+        'throttle'        => ThrottleRequests::class,
+        'ajax'            => OnlyAjax::class,
+        'viewcachebuster' => ViewCacheBuster::class,
+        'legal_agreed'    => LegalAgreed::class,
     ];
 }

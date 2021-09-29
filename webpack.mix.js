@@ -133,6 +133,7 @@ let scripts = [
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/message/listen/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/message/listen/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/whisper/viewport.js',
@@ -279,6 +280,7 @@ if (images) {
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/external', 'public/images/external', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
+    mix.copy('resources/assets/images/flags', 'public/images/flags', false);
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);

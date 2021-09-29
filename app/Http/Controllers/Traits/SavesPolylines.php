@@ -25,15 +25,15 @@ trait SavesPolylines
      */
     private function _savePolyline(Polyline $polyline, Model $ownerModel, array $data): Polyline
     {
-        $polyline->model_id = $ownerModel->id;
+        $polyline->model_id    = $ownerModel->id;
         $polyline->model_class = get_class($ownerModel);
-        $polyline->color = $data['color'] ?? '#f00';
+        $polyline->color       = $data['color'] ?? '#f00';
         // Only set the animated color if the user has paid for it
         if (Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES)) {
-            $colorAnimated = $data['color_animated'] ?? null;
+            $colorAnimated            = $data['color_animated'] ?? null;
             $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
         }
-        $polyline->weight = (int)$data['weight'] ?? 2;
+        $polyline->weight        = (int)$data['weight'] ?? 2;
         $polyline->vertices_json = $data['vertices_json'] ?? '{}';
         $polyline->save();
 

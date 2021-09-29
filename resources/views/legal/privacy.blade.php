@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('Privacy')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.privacy.title')])
 
-@section('header-title', __('Privacy Policy'))
+@section('header-title', __('views/legal.privacy.header'))
 
 @section('content')
     <p>Effective date: August 07, 2018</p>
@@ -11,7 +11,7 @@
         our
         Service and the choices you have associated with that data. This Privacy Policy for Keystone Guru is powered by
         <a
-                href="https://www.freeprivacypolicy.com/free-privacy-policy-generator.php">FreePrivacyPolicy.com</a>.
+            href="https://www.freeprivacypolicy.com/free-privacy-policy-generator.php">FreePrivacyPolicy.com</a>.
     </p>
 
     <p>We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of
@@ -146,7 +146,7 @@
         <li>
             We use Google AdSense to display ads on some of our pages. Google Adsense may use user data.
             You can review Google's privacy policy regarding advertising <a
-                    href="https://policies.google.com/technologies/ads">here</a>.
+                href="https://policies.google.com/technologies/ads">here</a>.
         </li>
         <li>
             The <a href="https://support.google.com/adsense/answer/2839090">DoubleClick cookie</a> is used by Google in
