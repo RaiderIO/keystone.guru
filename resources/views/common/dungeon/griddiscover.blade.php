@@ -32,7 +32,8 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     $dungeon = $dungeons->get($index);
     $link = $links->where('dungeon', $dungeon->key)->first();
     ?>
-    <div class="p-2 col-lg-3 col-6 {{ $sideOffset && ($j === 0) ? 'ml-auto' : (($j === $colCount - 1) ? 'mr-auto' : '') }}">
+    <div
+        class="p-2 col-lg-3 col-6 {{ $sideOffset && ($j === 0) ? 'ml-auto' : (($j === $colCount - 1) ? 'mr-auto' : '') }}">
         <div class="card">
             <div class="card-img-caption">
                 <a href="{{ route('dungeonroutes.discoverdungeon', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
@@ -65,7 +66,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $currentAffixGroup,
                                 'url' => $url,
-                                'tier' => $tiers->get($currentAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
+                                'tier' => optional($tiers->get($currentAffixGroup->id)->where('dungeon_id', $dungeon->id)->first())->tier
                             ])
                             @endif
                             {!! ($thisWeekTier = ob_get_clean()) !!}
@@ -82,7 +83,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 'dungeon' => $dungeon,
                                 'affixgroup' => $nextAffixGroup,
                                 'url' => $url,
-                                'tier' => $tiers->get($nextAffixGroup->id)->where('dungeon_id', $dungeon->id)->first()->tier
+                                'tier' => optional($tiers->get($nextAffixGroup->id)->where('dungeon_id', $dungeon->id)->first())->tier
                             ])
                             @endif
                             {!! ($nextWeekTier = ob_get_clean()) !!}

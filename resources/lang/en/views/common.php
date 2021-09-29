@@ -39,6 +39,9 @@ return [
             'report'            => 'Report',
             'refresh_thumbnail' => 'Refresh thumbnail',
         ],
+        'cardlist' => [
+            'no_dungeonroutes' => 'No routes found',
+        ],
         'rating'     => [
             'nr_of_votes' => '%s vote(s)',
         ],

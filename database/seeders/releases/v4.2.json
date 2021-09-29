@@ -45,26 +45,6 @@
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
-                "ticket_id": 875,
-                "change": "Added Darkheart Thicket mapping.",
-                "category": {
-                    "id": 4,
-                    "category": "Mapping changes"
-                }
-            },
-            {
-                "release_changelog_id": 118,
-                "release_changelog_category_id": 4,
-                "ticket_id": 876,
-                "change": "Added Eye of Azshara mapping.",
-                "category": {
-                    "id": 4,
-                    "category": "Mapping changes"
-                }
-            },
-            {
-                "release_changelog_id": 118,
-                "release_changelog_category_id": 4,
                 "ticket_id": 877,
                 "change": "Added Neltharion's Lair mapping.",
                 "category": {
@@ -97,6 +77,26 @@
                 "release_changelog_category_id": 4,
                 "ticket_id": 874,
                 "change": "Added Court of Stars mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 875,
+                "change": "Added Darkheart Thicket mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 4,
+                "ticket_id": 876,
+                "change": "Added Eye of Azshara mapping.",
                 "category": {
                     "id": 4,
                     "category": "Mapping changes"

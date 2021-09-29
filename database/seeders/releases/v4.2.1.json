@@ -1,0 +1,16 @@
+{
+    "id": 112,
+    "release_changelog_id": 119,
+    "version": "v4.2.1",
+    "title": "v4.2 hotfixes",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2021-09-29T12:18:02+00:00",
+    "updated_at": "2021-09-29T12:18:02+00:00",
+    "changelog": {
+        "id": 119,
+        "release_id": 112,
+        "description": null,
+        "changes": []
+    }
+}
