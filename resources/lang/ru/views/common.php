@@ -39,6 +39,9 @@ return [
             'report'            => 'Жалоба',
             'refresh_thumbnail' => 'Обновить миниатюры',
         ],
+        'cardlist'   => [
+            'no_dungeonroutes' => 'Маршруты не найдены',
+        ],
         'rating'     => [
             'nr_of_votes' => '%s голосов',
         ],

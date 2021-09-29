@@ -77,7 +77,10 @@ class RefreshAffixGroupEaseTiers extends Command
                     foreach ($tierList as $tier => $dungeons) {
                         foreach ($dungeons as $dungeonName) {
                             // If found
-                            $dungeon = $dungeonList->where('name', $dungeonName)->first();
+                            $dungeon = $dungeonList->first(function (Dungeon $dungeon) use ($dungeonName) {
+                                // Translate the name of the dungeon to English (from a key), and then match it
+                                return __($dungeon->name, [], 'en') === $dungeonName;
+                            });
 
                             if ($dungeon instanceof Dungeon) {
                                 (new AffixGroupEaseTier([
@@ -128,13 +131,18 @@ class RefreshAffixGroupEaseTiers extends Command
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 4) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(function (string $affix) use ($affixList) {
-                return $affixList->where('name', $affix)->isEmpty();
+            $invalidAffixes = $affixes->filter(function (string $affixName) use ($affixList) {
+                // Find the affix in the list and match by translated name - must be found to continue
+                return $affixList->filter(function (Affix $affix) use ($affixName) {
+                    return __($affix->name, [], 'en') === $affixName;
+                })->isEmpty();
             });
 
-            // None found, great!
-            if ($invalidAffixes->isEmpty()) {
-
+            // Non invalid affixes found, great!
+            if ($invalidAffixes->isNotEmpty()) {
+                $this->error(sprintf('Unable to find Affix(es) %s', $invalidAffixes->join(', ')));
+            } // Cannot find an affix in this list - perhaps it's new?
+            else {
                 // Now we must find affixgroups that correspond to the affix list
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
@@ -149,9 +157,6 @@ class RefreshAffixGroupEaseTiers extends Command
                         break;
                     }
                 }
-            } // Cannot find an affix in this list - perhaps it's new?
-            else {
-                $this->error(sprintf('Unable to find Affix(es) %s', $invalidAffixes->join(', ')));
             }
         }
 
