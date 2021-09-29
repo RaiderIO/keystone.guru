@@ -14,7 +14,7 @@
             {
                 "id": 1,
                 "index": 1,
-                "name": "Arcway",
+                "name": "dungeons.legion.arcway.floors.arcway",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -37,13 +37,13 @@
             {
                 "id": 2,
                 "index": 1,
-                "name": "The Ravenscrypt",
+                "name": "dungeons.legion.black_rook_hold.floors.the_ravenscrypt",
                 "default": 1,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
                 "floorcouplings": [
                     {
-                        "id": 170,
+                        "id": 175,
                         "floor1_id": 2,
                         "floor2_id": 3,
                         "direction": "up"
@@ -53,19 +53,19 @@
             {
                 "id": 3,
                 "index": 2,
-                "name": "The Grand Hall",
+                "name": "dungeons.legion.black_rook_hold.floors.the_grand_hall",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 158,
+                        "id": 176,
                         "floor1_id": 3,
                         "floor2_id": 2,
                         "direction": "down"
                     },
                     {
-                        "id": 159,
+                        "id": 177,
                         "floor1_id": 3,
                         "floor2_id": 4,
                         "direction": "up"
@@ -75,19 +75,19 @@
             {
                 "id": 4,
                 "index": 3,
-                "name": "Ravenshold",
+                "name": "dungeons.legion.black_rook_hold.floors.ravenshold",
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
                 "floorcouplings": [
                     {
-                        "id": 171,
+                        "id": 178,
                         "floor1_id": 4,
                         "floor2_id": 3,
                         "direction": "down"
                     },
                     {
-                        "id": 172,
+                        "id": 179,
                         "floor1_id": 4,
                         "floor2_id": 5,
                         "direction": "up"
@@ -97,19 +97,19 @@
             {
                 "id": 5,
                 "index": 4,
-                "name": "The Rook's Roost",
+                "name": "dungeons.legion.black_rook_hold.floors.the_rooks_roost",
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
                 "floorcouplings": [
                     {
-                        "id": 173,
+                        "id": 180,
                         "floor1_id": 5,
                         "floor2_id": 4,
                         "direction": "down"
                     },
                     {
-                        "id": 174,
+                        "id": 181,
                         "floor1_id": 5,
                         "floor2_id": 6,
                         "direction": "left"
@@ -119,19 +119,19 @@
             {
                 "id": 6,
                 "index": 5,
-                "name": "Lord Ravencrest's Chamber",
+                "name": "dungeons.legion.black_rook_hold.floors.lord_ravencrests_chamber",
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
                 "floorcouplings": [
                     {
-                        "id": 166,
+                        "id": 182,
                         "floor1_id": 6,
                         "floor2_id": 5,
                         "direction": "right"
                     },
                     {
-                        "id": 167,
+                        "id": 183,
                         "floor1_id": 6,
                         "floor2_id": 7,
                         "direction": "up"
@@ -141,13 +141,13 @@
             {
                 "id": 7,
                 "index": 6,
-                "name": "The Raven's Crown",
+                "name": "dungeons.legion.black_rook_hold.floors.the_ravens_crown",
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
                 "floorcouplings": [
                     {
-                        "id": 169,
+                        "id": 184,
                         "floor1_id": 7,
                         "floor2_id": 6,
                         "direction": "down"
@@ -171,7 +171,7 @@
             {
                 "id": 8,
                 "index": 1,
-                "name": "Hall of the Moon",
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.hall_of_the_moon",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -180,7 +180,7 @@
             {
                 "id": 9,
                 "index": 2,
-                "name": "Twilight Grove",
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.twilight_groove",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -189,7 +189,7 @@
             {
                 "id": 10,
                 "index": 3,
-                "name": "The Emerald Archives",
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.the_emerald_archives",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -198,7 +198,7 @@
             {
                 "id": 11,
                 "index": 4,
-                "name": "Path of Illumination",
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.path_of_illumination",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -207,7 +207,7 @@
             {
                 "id": 12,
                 "index": 5,
-                "name": "Sacristy of Elune",
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.sacristy_of_elune",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -230,7 +230,7 @@
             {
                 "id": 13,
                 "index": 1,
-                "name": "Court of Stars",
+                "name": "dungeons.legion.court_of_stars.floors.court_of_stars",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -253,7 +253,7 @@
             {
                 "id": 14,
                 "index": 1,
-                "name": "Darkheart Thicket",
+                "name": "dungeons.legion.darkheart_thicket.floors.darkheart_thicket",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -276,7 +276,7 @@
             {
                 "id": 15,
                 "index": 1,
-                "name": "Eye of Azshara",
+                "name": "dungeons.legion.eye_of_aszhara.floors.eye_of_aszhara",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -299,13 +299,13 @@
             {
                 "id": 17,
                 "index": 1,
-                "name": "Fields of the Eternal Hunt",
+                "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 2,
+                        "id": 187,
                         "floor1_id": 17,
                         "floor2_id": 16,
                         "direction": "up"
@@ -315,19 +315,19 @@
             {
                 "id": 16,
                 "index": 2,
-                "name": "The High Gate",
+                "name": "dungeons.legion.halls_of_valor.floors.the_high_gate",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 1,
+                        "id": 185,
                         "floor1_id": 16,
                         "floor2_id": 17,
                         "direction": "right"
                     },
                     {
-                        "id": 3,
+                        "id": 186,
                         "floor1_id": 16,
                         "floor2_id": 18,
                         "direction": "up"
@@ -337,13 +337,13 @@
             {
                 "id": 18,
                 "index": 3,
-                "name": "Halls of Valor",
+                "name": "dungeons.legion.halls_of_valor.floors.halls_of_valor",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 4,
+                        "id": 188,
                         "floor1_id": 18,
                         "floor2_id": 16,
                         "direction": "down"
@@ -367,7 +367,7 @@
             {
                 "id": 24,
                 "index": 1,
-                "name": "Servant's Quarters",
+                "name": "dungeons.legion.lower_karazhan.floors.servants_quarters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -376,7 +376,7 @@
             {
                 "id": 23,
                 "index": 2,
-                "name": "Upper Livery Stables",
+                "name": "dungeons.legion.lower_karazhan.floors.upper_livery_stables",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -385,7 +385,7 @@
             {
                 "id": 22,
                 "index": 3,
-                "name": "The Banquet Hall",
+                "name": "dungeons.legion.lower_karazhan.floors.the_banquet_hall",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -394,7 +394,7 @@
             {
                 "id": 21,
                 "index": 4,
-                "name": "The Guest Chambers",
+                "name": "dungeons.legion.lower_karazhan.floors.the_guest_chambers",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -403,7 +403,7 @@
             {
                 "id": 20,
                 "index": 5,
-                "name": "Opera Hall Balcony",
+                "name": "dungeons.legion.lower_karazhan.floors.opera_hall_balcony",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -412,7 +412,7 @@
             {
                 "id": 19,
                 "index": 6,
-                "name": "Master's Terrace",
+                "name": "dungeons.legion.lower_karazhan.floors.netherspace",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -435,29 +435,56 @@
             {
                 "id": 25,
                 "index": 1,
-                "name": "Hellmouth Cliffs",
+                "name": "dungeons.legion.maw_of_souls.floors.hellmouth_cliffs",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 193,
+                        "floor1_id": 25,
+                        "floor2_id": 26,
+                        "direction": "right"
+                    }
+                ]
             },
             {
                 "id": 26,
                 "index": 2,
-                "name": "The Hold",
+                "name": "dungeons.legion.maw_of_souls.floors.the_hold",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 196,
+                        "floor1_id": 26,
+                        "floor2_id": 25,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 197,
+                        "floor1_id": 26,
+                        "floor2_id": 27,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 27,
                 "index": 3,
-                "name": "The Naglfar",
+                "name": "dungeons.legion.maw_of_souls.floors.the_naglfar",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 195,
+                        "floor1_id": 27,
+                        "floor2_id": 26,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -476,7 +503,7 @@
             {
                 "id": 28,
                 "index": 1,
-                "name": "Neltharion's Lair",
+                "name": "dungeons.legion.neltharions_lair.floors.neltharions_lair",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -499,7 +526,7 @@
             {
                 "id": 29,
                 "index": 7,
-                "name": "Lower Broken Stair",
+                "name": "dungeons.legion.upper_karazhan.floors.lower_broken_stair",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -508,7 +535,7 @@
             {
                 "id": 30,
                 "index": 8,
-                "name": "Upper Broken Stair",
+                "name": "dungeons.legion.upper_karazhan.floors.upper_broken_stair",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -517,7 +544,7 @@
             {
                 "id": 31,
                 "index": 9,
-                "name": "The Menagerie",
+                "name": "dungeons.legion.upper_karazhan.floors.the_menagerie",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -526,7 +553,7 @@
             {
                 "id": 32,
                 "index": 10,
-                "name": "Guardian's Library",
+                "name": "dungeons.legion.upper_karazhan.floors.guardians_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -535,7 +562,7 @@
             {
                 "id": 33,
                 "index": 11,
-                "name": "Library Floor",
+                "name": "dungeons.legion.upper_karazhan.floors.library_floor",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -544,7 +571,7 @@
             {
                 "id": 34,
                 "index": 12,
-                "name": "Upper Library",
+                "name": "dungeons.legion.upper_karazhan.floors.upper_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -553,7 +580,7 @@
             {
                 "id": 35,
                 "index": 13,
-                "name": "Gamesman's Hall",
+                "name": "dungeons.legion.upper_karazhan.floors.gamesmans_hall",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -562,7 +589,7 @@
             {
                 "id": 36,
                 "index": 14,
-                "name": "Netherspace",
+                "name": "dungeons.legion.upper_karazhan.floors.netherspace",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -585,7 +612,7 @@
             {
                 "id": 37,
                 "index": 1,
-                "name": "The Seat of the Triumvirate",
+                "name": "dungeons.legion.the_seat_of_the_triumvirate.floors.the_seat_of_the_triumvirate",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -608,13 +635,13 @@
             {
                 "id": 38,
                 "index": 1,
-                "name": "The Warden's Court",
+                "name": "dungeons.legion.vault_of_the_wardens.floors.the_wardens_court",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 153,
+                        "id": 189,
                         "floor1_id": 38,
                         "floor2_id": 39,
                         "direction": "down"
@@ -624,19 +651,19 @@
             {
                 "id": 39,
                 "index": 2,
-                "name": "Vault of the Wardens",
+                "name": "dungeons.legion.vault_of_the_wardens.floors.vault_of_the_wardens",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 154,
+                        "id": 190,
                         "floor1_id": 39,
                         "floor2_id": 38,
                         "direction": "up"
                     },
                     {
-                        "id": 155,
+                        "id": 191,
                         "floor1_id": 39,
                         "floor2_id": 40,
                         "direction": "down"
@@ -646,13 +673,13 @@
             {
                 "id": 40,
                 "index": 3,
-                "name": "Vault of the Betrayer",
+                "name": "dungeons.legion.vault_of_the_wardens.floors.vault_of_the_betrayer",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 156,
+                        "id": 192,
                         "floor1_id": 40,
                         "floor2_id": 39,
                         "direction": "up"
