@@ -280,7 +280,7 @@ return [
                 'live_session_concluded'         => 'Живая сессия завершена',
                 'rate_this_route'                => 'Оцените этот маршрут',
                 'rate_this_route_explanation'    => 'Оценка маршрута поможет другим пользователям открыть для себя этот маршрут, если он хороший. Спасибо!',
-                'you_cannot_rate_your_own_route' => '@todo ru: .maps.controls.header.you_cannot_rate_your_own_route',
+                'you_cannot_rate_your_own_route' => 'Вы не можете оценить свой собственный маршрут',
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
             'pulls'     => [
