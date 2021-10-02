@@ -146,6 +146,24 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                         ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <label for="edit_route_freedraw_options_weight">
+                        {{ __('views/common.forms.mapsettings.default_line_color') }}
+                        <i class="fas fa-info-circle"
+                           data-toggle="tooltip"
+                           title="{{ __('views/common.forms.mapsettings.default_line_color_title') }}">
+                        </i>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col default_color_selection">
+                    <div id="edit_route_freedraw_options_color" class="w-100">
+
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 </div>

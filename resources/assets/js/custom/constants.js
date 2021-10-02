@@ -1,6 +1,7 @@
 // @TODO: temporary solution for ensuring default values for certain cookies are set
 let cookieDefaults = {
     polyline_default_weight: 3,
+    polyline_default_color: null,
     hidden_map_object_groups: [],
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
@@ -80,6 +81,20 @@ const AFFIX_STORMING = 'Storming';
 const AFFIX_PRIDEFUL = 'Prideful';
 const AFFIX_TORMENTED = 'Tormented';
 const AFFIX_UNKNOWN = 'Unknown';
+
+/**
+ * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.
+ * @returns {(function(): *)|(function(): string)|*}
+ */
+function polylineDefaultColor() {
+    let defaultColor = Cookies.get('polyline_default_color');
+    if (defaultColor === null || defaultColor === 'null') {
+        // Return the random color function
+        return randomColor();
+    } else {
+        return defaultColor;
+    }
+}
 
 let c = {
     paidtiers: {
@@ -206,12 +221,11 @@ let c = {
                 return '#E25D5D';
             }
         },
-        /* These colors may be overriden by drawcontrols.js */
         path: {
-            defaultColor: randomColor,
+            defaultColor: polylineDefaultColor,
         },
         polyline: {
-            defaultColor: randomColor,
+            defaultColor: polylineDefaultColor,
             defaultColorAnimated: '#F00',
             defaultWeight: Cookies.get('polyline_default_weight'),
             minWeight: 1,

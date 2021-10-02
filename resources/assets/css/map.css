@@ -1095,3 +1095,8 @@ html, body, #map, #app, .wrapper {
         color: inherit;
     }
 }
+
+/* Make the selection fill the width of the parent */
+.default_color_selection .pickr .pcr-button {
+    width: 100%;
+}

@@ -108,6 +108,8 @@ return [
             'drawing'                                => 'Рисование',
             'default_line_weight'                    => 'Толщина линии по умолчанию',
             'default_line_weight_title'              => 'Это контролирует ширину всех линий по умолчанию, которые вы создаете на карте, например, контуров и свободных линий.',
+            'default_line_color'                     => '@todo ru: .forms.mapsettings.default_line_color',
+            'default_line_color_title'               => '@todo ru: .forms.mapsettings.default_line_color_title',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Вставьте строку экспорта Mythic Dungeon Tools',
