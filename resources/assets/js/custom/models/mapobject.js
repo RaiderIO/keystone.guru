@@ -872,6 +872,8 @@ class MapObject extends Signalable {
                         }
 
                         data[name] = obj;
+                    } else if (attribute.type === 'bool' ) {
+                        data[name] = this._getValue(name) ? 1 : 0;
                     } else {
                         // Multiple select means send as an array
                         if (attribute.hasOwnProperty('multiple') && attribute.multiple) {
