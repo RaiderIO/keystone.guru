@@ -45,7 +45,9 @@ class APIEnemyController extends Controller
         // Only when set, otherwise default of -1
         $mdtId         = $request->get('mdt_id', -1);
         $enemy->mdt_id = $mdtId === null ? -1 : (int)$mdtId;
-        $seasonalIndex = $request->get('seasonal_index');
+        // May be null if not set
+        $enemy->mdt_npc_id = (int)$request->get('mdt_npc_id');
+        $seasonalIndex     = $request->get('seasonal_index');
         // don't use is_empty since 0 is valid
         $enemy->seasonal_index                = $seasonalIndex === null || $seasonalIndex === '' || $seasonalIndex < 0 ? null : (int)$seasonalIndex;
         $seasonalType                         = $request->get('seasonal_type', null);

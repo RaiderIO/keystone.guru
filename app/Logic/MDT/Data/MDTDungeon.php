@@ -18,6 +18,9 @@ use App\Models\Npc;
 use App\Service\Cache\CacheService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Lua;
+use LuaException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MythicDungeonTools/blob/master/Transmission.lua
@@ -109,14 +112,14 @@ class MDTDungeon
                     ';
 
                     try {
-                        $lua = new \Lua();
+                        $lua = new Lua();
                         $lua->eval($eval);
                         $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
                         foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
                             $result->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
                         }
-                    } catch (\LuaException $ex) {
+                    } catch (LuaException $ex) {
                         dd($ex, $expansionName, $mdtDungeonName, $eval);
                     }
                 }
@@ -132,6 +135,7 @@ class MDTDungeon
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      * @param $floors Floor|Collection The floors that you want to get the clones for.
      * @return Collection|Enemy[]
+     * @throws InvalidArgumentException
      */
     public function getClonesAsEnemies($floors)
     {
@@ -182,7 +186,7 @@ class MDTDungeon
 
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
             foreach ($floors as $floor) {
-                /** @var Collection $npcs */
+                /** @var Collection|Npc[] $npcs */
                 $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
                 foreach ($npcClones as $npcId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
@@ -210,9 +214,6 @@ class MDTDungeon
                             if ($enemy->npc === null) {
                                 $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
                             }
-
-                            // Some properties which are dynamic on a normal enemy but static here
-                            $enemy->raid_marker_name = null;
 
                             $enemies->push($enemy);
                         }

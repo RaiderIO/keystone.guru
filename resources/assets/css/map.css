@@ -712,6 +712,10 @@ html, body, #map, #app, .wrapper {
     background-color: green;
 }
 
+.enemy_icon.mdt.coupled.different_npc {
+    background-color: orange;
+}
+
 /*
  * Enemy types
  */

@@ -5,6 +5,8 @@ namespace App\Logic\MapContext;
 
 use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\RaidMarker;
 
 /**
  * Trait DungeonRouteTrait
@@ -20,6 +22,8 @@ trait DungeonRouteTrait
      */
     private function getDungeonRouteProperties(DungeonRoute $dungeonRoute): array
     {
+        $raidMarkers = RaidMarker::all();
+
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
@@ -34,6 +38,12 @@ trait DungeonRouteTrait
             'paths'                   => $dungeonRoute->paths,
             'brushlines'              => $dungeonRoute->brushlines,
             'pridefulenemies'         => $dungeonRoute->pridefulenemies,
+            'enemyRaidMarkers'        => $dungeonRoute->enemyraidmarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) use ($raidMarkers) {
+                return [
+                    'enemy_id'         => $drEnemyRaidMarker->enemy_id,
+                    'raid_marker_name' => $raidMarkers->where('id', $drEnemyRaidMarker->raid_marker_id)->first()->name,
+                ];
+            }),
             // A list of affixes that this route has (not to be confused with AffixGroups)
             'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
                 return $affixGroup->affixes;

@@ -40,7 +40,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context);
+        return $this->listEnemies($this->_context->dungeon->id, false);
     }
 
     public function getEchoChannelName(): string

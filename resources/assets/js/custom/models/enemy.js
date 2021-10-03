@@ -30,20 +30,21 @@ let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 
 /**
- * @property floor_id int
- * @property enemy_pack_id int
- * @property npc_id int
- * @property mdt_id int
- * @property seasonal_type string
- * @property seasonal_index int
- * @property enemy_forces_override int
- * @property enemy_forces_override_teeming int
- * @property raid_marker_name string
- * @property dangerous bool
- * @property required bool
- * @property skippable bool
- * @property lat float
- * @property lng float
+ * @property {Number} floor_id
+ * @property {Number} enemy_pack_id
+ * @property {Number} npc_id
+ * @property {Number} mdt_id
+ * @property {Number} mdt_npc_id
+ * @property {String} seasonal_type
+ * @property {Number} seasonal_index
+ * @property {Number} enemy_forces_override
+ * @property {Number} enemy_forces_override_teeming
+ * @property {String} raid_marker_name
+ * @property {Boolean} dangerous
+ * @property {Boolean} required
+ * @property {Boolean} skippable
+ * @property {Number} lat
+ * @property {Number} lng
  *
  * @property L.Layer layer
  */
@@ -63,6 +64,7 @@ class Enemy extends MapObject {
 
         // MDT
         this.mdt_id = -1;
+        this.mdt_npc_id = null;
         this.is_mdt = false;
 
         // The visual display of this enemy
@@ -130,6 +132,18 @@ class Enemy extends MapObject {
                 edit: false, // Not directly changeable by user
                 default: -1
             }),
+            new Attribute({
+                name: 'enemy_forces_override',
+                type: 'int',
+                admin: true,
+                default: -1
+            }),
+            new Attribute({
+                name: 'enemy_forces_override_teeming',
+                type: 'int',
+                admin: true,
+                default: -1
+            }),
             // new Attribute({
             //     name: 'npc',
             //     type: 'object',
@@ -155,7 +169,7 @@ class Enemy extends MapObject {
                         self.setNpc(npc);
                     }
 
-                    this.npc_id = value;
+                    self.npc_id = value;
                 }
             }),
             new Attribute({
@@ -169,6 +183,18 @@ class Enemy extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: -1
+            }),
+            new Attribute({
+                name: 'mdt_npc_id',
+                type: 'select',
+                admin: true,
+                values: selectNpcs,
+                default: null,
+                live_search: true,
+                setter: function (value) {
+                    // Values from a select are always strings, cast this
+                    self.mdt_npc_id = parseInt(value);
+                }
             }),
             new Attribute({
                 name: 'seasonal_type',
@@ -215,18 +241,6 @@ class Enemy extends MapObject {
                 setter: function (value) {
                     self.active_auras = value;
                 }
-            }),
-            new Attribute({
-                name: 'enemy_forces_override',
-                type: 'int',
-                admin: true,
-                default: -1
-            }),
-            new Attribute({
-                name: 'enemy_forces_override_teeming',
-                type: 'int',
-                admin: true,
-                default: -1
             }),
             new Attribute({
                 name: 'required',
@@ -303,6 +317,13 @@ class Enemy extends MapObject {
             this.is_mdt = remoteMapObject.is_mdt;
             // Whatever enemy this MDT enemy is linked to
             this.enemy_id = remoteMapObject.enemy_id;
+
+            // Link the mdt_npc_id on load so that the visual knows to display it differently
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let linkedEnemy = enemyMapObjectGroup.findMapObjectById(this.enemy_id);
+            if (linkedEnemy instanceof Enemy) {
+                this.mdt_npc_id = linkedEnemy.mdt_npc_id;
+            }
             // Hide this enemy by default
             this.setDefaultVisible(false);
             this.setIsLocal(remoteMapObject.local);
@@ -799,6 +820,14 @@ class Enemy extends MapObject {
         // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
 
         this.linked_awakened_enemy = awakenedEnemy;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getMdtNpcId() {
+        return this.mdt_npc_id !== null ? this.mdt_npc_id : this.npc_id;
     }
 
     /**

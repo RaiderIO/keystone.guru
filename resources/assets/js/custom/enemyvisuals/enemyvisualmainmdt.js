@@ -25,16 +25,20 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
         width -= margin;
 
         // More characters to display..
-        if (text >= 10) {
-            width -= 7;
-        }
+        // if (text >= 10) {
+        //     width -= 7;
+        // }
         // Dangerous = less space
-        else if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
+        if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
             width -= 6;
         }
 
         if (this.enemyvisual.enemy.enemy_id > 0) {
             data.main_visual_inner_classes += ' coupled';
+        }
+
+        if (this.enemyvisual.enemy.mdt_npc_id > 0) {
+            data.main_visual_inner_classes += ' different_npc';
         }
         data.main_visual_outer_classes += ' enemy_icon_npc_mdt text-black text-center';
 
@@ -57,9 +61,13 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
-    // getSize() {
-    //     console.assert(this instanceof EnemyVisualMainMDT, 'this is not an EnemyVisualMainMDT!', this);
-    //
-    //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
-    // }
+    /**
+     *
+     */
+    refreshSize() {
+        super.refreshSize();
+
+        let width = this._getTextWidth();
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id},#map_enemy_visual_${this.enemyvisual.enemy.id} .mdt_inner`).css('font-size', `${width}px`);
+    }
 }

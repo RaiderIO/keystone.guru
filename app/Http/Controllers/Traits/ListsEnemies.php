@@ -10,13 +10,13 @@ namespace App\Http\Controllers\Traits;
 
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
 use Error;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Psr\SimpleCache\InvalidArgumentException;
 
 trait ListsEnemies
 {
@@ -26,31 +26,20 @@ trait ListsEnemies
      *
      * @param int $dungeonId
      * @param bool $showMdtEnemies
-     * @param DungeonRoute|null $dungeonRoute
      * @return array|bool
+     * @throws InvalidArgumentException
      */
-    function listEnemies(int $dungeonId, bool $showMdtEnemies = false, ?DungeonRoute $dungeonRoute = null)
+    function listEnemies(int $dungeonId, bool $showMdtEnemies = false)
     {
-        // Eloquent wasn't working with me, raw SQL it is
-        /** @var array $result */
-        $result = DB::select($query = '
-                select `enemies`.*, `raid_markers`.`name` as `raid_marker_name`
-                from `enemies`
-                       left join `dungeon_route_enemy_raid_markers`
-                         on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
-                            `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
-                       left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                       join `floors` on enemies.floor_id = floors.id
-                where `floors`.dungeon_id = :dungeonId
-                group by `enemies`.`id`;
-                ', $params = [
-            'routeId'   => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'dungeonId' => $dungeonId,
-        ]);
+        /** @var Collection|Enemy[] $enemies */
+        $enemies = Enemy::selectRaw('enemies.*')
+            ->join('floors', 'enemies.floor_id', '=', 'floors.id')
+            ->where('floors.dungeon_id', $dungeonId)
+            ->get();
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
         /** @var Npc[]|Collection $npcs */
-        $npcs = Npc::whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
+        $npcs = Npc::whereIn('id', $enemies->pluck('npc_id')->unique()->toArray())->get();
 
         /** @var Collection $npcTypes */
         $npcTypes = NpcType::all();
@@ -58,7 +47,7 @@ trait ListsEnemies
         $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
-        $filteredEnemies = [];
+        $filteredEnemies = collect();
         if ($showMdtEnemies) {
             try {
                 $dungeon    = Dungeon::findOrFail($dungeonId);
@@ -67,7 +56,7 @@ trait ListsEnemies
                 foreach ($mdtEnemies as $mdtEnemy) {
                     // Skip Emissaries (Season 3), season is over
                     if (!in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
-                        $filteredEnemies[] = $mdtEnemy;
+                        $filteredEnemies->push($mdtEnemy);
                     }
                 }
 
@@ -78,10 +67,10 @@ trait ListsEnemies
         }
 
         // Post process enemies
-        foreach ($result as $enemy) {
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
+        foreach ($enemies as $enemy) {
+            $enemy->npc = $npcs->first(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
-            })->first();
+            });
 
             if ($enemy->npc !== null) {
                 $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
@@ -91,7 +80,7 @@ trait ListsEnemies
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($filteredEnemies as $mdtEnemy) {
                 // Match them
-                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
+                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->getMdtNpcId()) {
                     // Match found, assign and quit
                     $mdtEnemy->enemy_id = $enemy->id;
                     break;
@@ -102,6 +91,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => collect($result), 'enemiesMdt' => collect($filteredEnemies)];
+        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $filteredEnemies->toArray()];
     }
 }

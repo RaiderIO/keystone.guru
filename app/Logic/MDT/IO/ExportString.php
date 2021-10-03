@@ -15,7 +15,7 @@ use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
-use App\Models\Enemy;
+use App\Models\KillZone;
 use App\Models\Path;
 use App\Service\Season\SeasonService;
 use Illuminate\Support\Collection;
@@ -123,7 +123,7 @@ class ExportString extends MDTBase
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
-        /** @var Collection|Enemy[] $killZones */
+        /** @var Collection|KillZone[] $killZones */
         $killZones = $this->_dungeonRoute->killzones()->with(['enemies'])->get();
         foreach ($killZones as $killZone) {
             $pull = [];
@@ -140,7 +140,7 @@ class ExportString extends MDTBase
                 // Find the MDT enemy - we need to know the mdt_npc_index
                 $mdtNpcIndex = -1;
                 foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                    if ($mdtEnemyCandidate->npc_id === $enemy->npc_id && $mdtEnemyCandidate->mdt_id === $enemy->mdt_id) {
+                    if ($mdtEnemyCandidate->npc_id === $enemy->getMdtNpcId() && $mdtEnemyCandidate->mdt_id === $enemy->mdt_id) {
                         $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
                         break;
                     }
@@ -149,7 +149,7 @@ class ExportString extends MDTBase
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
-                        sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->npc_id),
+                        sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                         ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                     ));
                 }

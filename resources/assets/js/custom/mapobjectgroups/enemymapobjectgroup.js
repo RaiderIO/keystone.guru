@@ -43,13 +43,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
      * @inheritDoc
      **/
     _getRawObjects() {
-        let enemies = [];
         let mapContext = getState().getMapContext();
+        let enemies = mapContext.getEnemies();
         if (mapContext instanceof MapContextDungeon) {
             // Union to create new array
             enemies = _.union(enemies, mapContext.getMdtEnemies());
         }
-        return _.union(enemies, mapContext.getEnemies());
+        return enemies;
     }
 
     /**
@@ -164,6 +164,18 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 // Assign obsolete enemies from cache
                 let obsoleteEnemiesData = getState().getMapContext().getObsoleteEnemies();
                 enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
+            }
+
+            if (mapContext instanceof MapContextDungeonRoute) {
+                let enemyRaidMarkers = mapContext.getEnemyRaidMarkers();
+                // Assign raid markers to this enemy if it was assigned one
+                for (let i = 0; i < enemyRaidMarkers.length; i++) {
+                    let enemyRaidMarker = enemyRaidMarkers[i];
+                    if (enemyRaidMarker.enemy_id === enemy.id) {
+                        enemy.setRaidMarkerName(enemyRaidMarker.raid_marker_name);
+                        break;
+                    }
+                }
             }
         }
     }

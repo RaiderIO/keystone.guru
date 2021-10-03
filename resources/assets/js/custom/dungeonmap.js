@@ -782,8 +782,6 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         console.assert(this.pather instanceof L.Pather, 'this.pather is not a L.Pather', this.pather);
 
-        console.log(c.map.polyline.defaultColor());
-
         this.pather.setOptions({
             strokeWidth: c.map.polyline.defaultWeight,
             smoothFactor: 5,
