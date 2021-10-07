@@ -10,7 +10,6 @@ $affixgroup = $affixgroup ?? null;
 $cache = $cache ?? true;
 
 $i = 0;
-$dungeonroutes = collect();
 $count = $dungeonroutes->count(); ?>
 @if($dungeonroutes->isEmpty())
     <div class="row no-gutters">

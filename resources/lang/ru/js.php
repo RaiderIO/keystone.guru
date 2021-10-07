@@ -309,6 +309,7 @@ return [
     'enemy_faction_label'                                           => 'Фракция',
     'enemy_teeming_label'                                           => 'Кишащий',
     'enemy_npc_id_label'                                            => 'NPC',
+    'enemy_mdt_npc_id_label'                                        => '@todo ru: .enemy_mdt_npc_id_label',
     'enemy_seasonal_type_label'                                     => 'Тип сезона',
     'enemy_seasonal_type_select_default_label'                      => 'Не выбрано',
     'enemy_seasonal_index_label'                                    => 'Индекс сезона',
@@ -320,6 +321,7 @@ return [
     'enemy_required_label'                                          => 'Необходимый',
     'enemy_skippable_label'                                         => 'Пропускаемый',
     'enemy_npc_id_select_default_label'                             => 'Выбрать NPC',
+    'enemy_mdt_npc_id_select_default_label'                         => '@todo ru: .enemy_mdt_npc_id_select_default_label',
 
     // Admin enemy pack
     'admin_enemy_pack_faction_label'                                => 'Фракция',

@@ -80,7 +80,7 @@ class APIMapIconController extends Controller
         $mapIcon->floor_id          = (int)$request->get('floor_id');
         $mapIcon->dungeon_route_id  = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id  = $mapIconTypeId;
-        $mapIcon->permanent_tooltip = (int)$request->get('permanent_tooltip', false);
+        $mapIcon->permanent_tooltip = (bool)$request->get('permanent_tooltip', false);
         $seasonalIndex              = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
         $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;

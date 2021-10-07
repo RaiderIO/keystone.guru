@@ -164,7 +164,7 @@
                 polyline_default_color
             </td>
             <td>
-                Remembers the color you set when changing the color of a polyline in the map editor.
+                Remembers the default color when you create a new polyline in the map editor.
             </td>
         </tr>
         <tr>

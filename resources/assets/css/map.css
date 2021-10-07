@@ -712,6 +712,10 @@ html, body, #map, #app, .wrapper {
     background-color: green;
 }
 
+.enemy_icon.mdt.coupled.different_npc {
+    background-color: orange;
+}
+
 /*
  * Enemy types
  */
@@ -1094,4 +1098,9 @@ html, body, #map, #app, .wrapper {
     to {
         color: inherit;
     }
+}
+
+/* Make the selection fill the width of the parent */
+.default_color_selection .pickr .pcr-button {
+    width: 100%;
 }

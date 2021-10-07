@@ -135,13 +135,17 @@ Route::group(['middleware' => ['viewcachebuster', 'language']], function () {
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
 
+    // May not be logged in - we have anonymous routes
+    Route::group(['prefix' => '{dungeonroute}'], function () {
+        // Edit your own dungeon routes
+        Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
+        Route::get('edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
+        // Submit a patch for your own dungeon route
+        Route::patch('edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
+    });
+
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         Route::group(['prefix' => '{dungeonroute}'], function () {
-            // Edit your own dungeon routes
-            Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
-            Route::get('edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
-            // Submit a patch for your own dungeon route
-            Route::patch('edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
 
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live', [LiveSessionController::class, 'create'])->name('dungeonroute.livesession.create');

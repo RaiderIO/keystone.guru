@@ -5,6 +5,7 @@
         "npc_id": 162693,
         "floor_id": 91,
         "mdt_id": 1,
+        "mdt_npc_id": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,

@@ -39,7 +39,7 @@ return [
             'report'            => 'Report',
             'refresh_thumbnail' => 'Refresh thumbnail',
         ],
-        'cardlist' => [
+        'cardlist'   => [
             'no_dungeonroutes' => 'No routes found',
         ],
         'rating'     => [
@@ -108,6 +108,8 @@ return [
             'drawing'                                => 'Drawing',
             'default_line_weight'                    => 'Default line weight',
             'default_line_weight_title'              => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
+            'default_line_color'                     => 'Default line color',
+            'default_line_color_title'               => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Paste your Mythic Dungeon Tools export string',

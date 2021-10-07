@@ -108,6 +108,8 @@ return [
             'drawing'                                => 'Рисование',
             'default_line_weight'                    => 'Толщина линии по умолчанию',
             'default_line_weight_title'              => 'Это контролирует ширину всех линий по умолчанию, которые вы создаете на карте, например, контуров и свободных линий.',
+            'default_line_color'                     => '@todo ru: .forms.mapsettings.default_line_color',
+            'default_line_color_title'               => '@todo ru: .forms.mapsettings.default_line_color_title',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Вставьте строку экспорта Mythic Dungeon Tools',
@@ -278,7 +280,7 @@ return [
                 'live_session_concluded'         => 'Живая сессия завершена',
                 'rate_this_route'                => 'Оцените этот маршрут',
                 'rate_this_route_explanation'    => 'Оценка маршрута поможет другим пользователям открыть для себя этот маршрут, если он хороший. Спасибо!',
-                'you_cannot_rate_your_own_route' => '@todo ru: .maps.controls.header.you_cannot_rate_your_own_route',
+                'you_cannot_rate_your_own_route' => 'Вы не можете оценить свой собственный маршрут',
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
             'pulls'     => [

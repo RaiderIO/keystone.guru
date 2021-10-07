@@ -69,23 +69,28 @@ class EnemyVisualManager extends Signalable {
     _onZoomLevelChanged(zoomLevelChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
+        let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
             let enemy = enemyMapObjectGroup.objects[i];
 
             // Only refresh what we can see
-            if (enemy.id > 0) {
+            let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
+            if (enemy.id > 0 || isMdt) {
                 let shouldAlwaysRebuild = enemy.visual.shouldAlwaysRebuild();
                 if (shouldAlwaysRebuild || enemy.isVisibleOnScreen()) {
                     // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                     // reworking to support a full refresh of the visual
-                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted()) {
+                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt) {
                         window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
                     } else {
                         window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
                     }
                     // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
-                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = parseInt(zoomLevelChangedEvent.data.mapZoomLevel);
+                    // But don't do this for mdt enemies - just recalculate then
+                    if (enemy.id > 0) {
+                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = parseInt(zoomLevelChangedEvent.data.mapZoomLevel);
+                    }
                 }
             }
         }

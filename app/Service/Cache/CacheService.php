@@ -14,7 +14,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class CacheService implements CacheServiceInterface
 {
     /** @var bool */
-    private $cacheEnabled = true;
+    private bool $cacheEnabled = true;
 
     /**
      * @param bool $cacheEnabled

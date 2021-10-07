@@ -309,6 +309,7 @@ return [
     'enemy_faction_label'                                           => 'Faction',
     'enemy_teeming_label'                                           => 'Teeming',
     'enemy_npc_id_label'                                            => 'Npc',
+    'enemy_mdt_npc_id_label'                                        => 'MDT Npc (optional)',
     'enemy_seasonal_type_label'                                     => 'Seasonal type',
     'enemy_seasonal_type_select_default_label'                      => 'Not set',
     'enemy_seasonal_index_label'                                    => 'Seasonal index',
@@ -320,6 +321,7 @@ return [
     'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
+    'enemy_mdt_npc_id_select_default_label'                         => 'Select NPC',
 
     // Admin enemy pack
     'admin_enemy_pack_faction_label'                                => 'Faction',

@@ -27,7 +27,7 @@ class AdminEnemy extends Enemy {
         // When we're synced, connect to our connected enemy
         this.register(['shown', 'hidden'], this, function (hiddenEvent) {
             if (self.mdt_id > 0) {
-                if (hiddenEvent.data.visible) {
+                if (hiddenEvent.data.visible && getState().getMdtMappingModeEnabled()) {
                     self.redrawConnectionToMDTEnemy();
                 } else {
                     self.removeExistingConnectionToEnemy();
@@ -128,7 +128,7 @@ class AdminEnemy extends Enemy {
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
-                    if (mdtEnemy.is_mdt && self.npc_id === mdtEnemy.npc_id && self.mdt_id === mdtEnemy.mdt_id) {
+                    if (mdtEnemy.is_mdt && self.getMdtNpcId() === mdtEnemy.npc_id && self.mdt_id === mdtEnemy.mdt_id) {
                         result = mdtEnemy;
                         return false;
                     }
@@ -232,6 +232,8 @@ class AdminEnemy extends Enemy {
         // This helps with drawing the lines
         enemy.mdt_id = this.mdt_id;
         this.enemy_id = enemy.id;
+        // Couple this as well (one way) so that the visual knows the npc ids don't match
+        this.mdt_npc_id = enemy.mdt_npc_id;
 
         // Fire an event to notify everyone an enemy has been selected for this
         this.signal('mdt_connected', {target: enemy});
@@ -391,6 +393,7 @@ class AdminEnemy extends Enemy {
                 npc_id_type: typeof this.npc_id,
                 is_mdt: this.is_mdt,
                 mdt_id: this.mdt_id,
+                mdt_npc_id: this.mdt_npc_id,
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: this.visual !== null ? this.visual.constructor.name : 'undefined'
