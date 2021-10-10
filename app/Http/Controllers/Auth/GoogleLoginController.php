@@ -9,6 +9,7 @@ class GoogleLoginController extends OAuthLoginController
     protected function getUser($oauthUser, $oAuthId)
     {
         return new User([
+            'public_key'      => User::generateRandomPublicKey(),
             'oauth_id'        => $oAuthId,
             // Prefer nickname over full name
             'name'            => isset($oauthUser->nickname) && $oauthUser->nickname !== null ? $oauthUser->nickname : $oauthUser->name,
