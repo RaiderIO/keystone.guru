@@ -14,7 +14,8 @@ class UserReportFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole("user") || \Auth::user()->hasRole("admin");
+        return \Auth::check() &&
+            (\Auth::user()->hasRole('user') || \Auth::user()->hasRole('admin'));
     }
 
     /**
