@@ -1,0 +1,27 @@
+{
+    "id": 114,
+    "release_changelog_id": 121,
+    "version": "v4.2.3",
+    "title": "",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2021-10-10T08:53:41+00:00",
+    "updated_at": "2021-10-10T08:53:41+00:00",
+    "changelog": {
+        "id": 121,
+        "release_id": 114,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 121,
+                "release_changelog_category_id": 5,
+                "ticket_id": 896,
+                "change": "Fixed OAuth registered users not having a public key - this caused them some issues across the site.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
