@@ -6,6 +6,7 @@ use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Github\CreateGithubRelease;
+use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\LocalizationSync;
@@ -42,6 +43,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         CreateGithubRelease::class,
         CreateGithubReleaseTicket::class,
+        CreateGithubReleasePullRequest::class,
         StartSupervisor::class,
         StopSupervisor::class,
 

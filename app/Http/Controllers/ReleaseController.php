@@ -74,6 +74,7 @@ class ReleaseController extends Controller
 
             if (Artisan::call('release:save') === 0) {
                 Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
+                Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
             }
         } // Something went wrong with saving
         else {

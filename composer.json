@@ -42,7 +42,7 @@
     "fzaninotto/faker": "~1.4",
     "genealabs/laravel-model-caching": "^0.11.1",
     "geoip2/geoip2": "~2.0",
-    "graham-campbell/github": "^9.3",
+    "graham-campbell/github": "^9.8",
     "intervention/image": "^2.5",
     "jenssegers/agent": "^2.6",
     "laravel-frontend-presets/argon": "^1.0",
