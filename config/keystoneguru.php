@@ -2,10 +2,13 @@
 
 
 return [
+    // This is really only to give some admins more power than other admins - there's no point in changing this for nefarious reasons
     'super_admins' => [
         'Admin',
         'gallypsa',
     ],
+
+    'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
 
     'github_username' => 'Wotuu',
 
