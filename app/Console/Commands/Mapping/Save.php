@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Mapping;
 
+use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
@@ -16,10 +17,12 @@ use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Save extends Command
 {
     use SavesArrayToJsonFile;
+    use ExecutesShellCommands;
 
     /**
      * The name and signature of the console command.
@@ -51,6 +54,19 @@ class Save extends Command
         $this->_saveNpcs($dungeonDataDir);
         $this->_saveSpells($dungeonDataDir);
         $this->_saveDungeonData($dungeonDataDir);
+
+        $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
+
+        // If we should copy the result to another folder..
+        if ($mappingBackupDir !== null) {
+            $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d h:i:s'));
+
+            $this->info(sprintf('Saving backup of mapping to %s', $targetDir));
+            $this->shell([
+                sprintf('mkdir -p "%s"', $targetDir),
+                sprintf('cp -R "%s" "%s"', $dungeonDataDir, $targetDir),
+            ]);
+        }
 
         return 0;
     }
