@@ -63,10 +63,10 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
 }
 
 /**
- * @property floor_id int
- * @property map_icon_type_id int
- * @property permanent_tooltip int
- * @property comment string
+ * @property {Number} floor_id
+ * @property {Number} map_icon_type_id
+ * @property {Number} permanent_tooltip
+ * @property {String} comment
  */
 class Icon extends MapObject {
     constructor(map, layer, options) {
@@ -265,7 +265,7 @@ class Icon extends MapObject {
         this.unbindTooltip();
 
         if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
-            let text = this.getDisplayText();
+            let text = lang.get(this.getDisplayText());
 
             // Wrap the text
             if (text.length > 75) {
