@@ -14,12 +14,11 @@ L.Draw.MapIcon = L.Draw.Marker.extend({
 });
 
 /**
- * @property floor_id int
- * @property map_icon_type_id int
- * @property linked_awakened_obelisk_id int
- * @property permanent_tooltip int
- * @property seasonal_index int
- * @property comment string
+ * @property {Number} floor_id
+ * @property {Number} map_icon_type_id
+ * @property {Number} linked_awakened_obelisk_id
+ * @property {Number} permanent_tooltip
+ * @property {Number} seasonal_index
  */
 class MapIcon extends Icon {
     constructor(map, layer) {
