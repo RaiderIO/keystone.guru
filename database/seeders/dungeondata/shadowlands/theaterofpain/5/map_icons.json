@@ -5,7 +5,7 @@
         "map_icon_type_id": 41,
         "lat": -135.375,
         "lng": 144.625,
-        "comment": "The pack jumps out from both sides when you step out onto the bridge",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.pack_jump_from_sides",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

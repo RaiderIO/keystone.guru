@@ -16,7 +16,7 @@
         "map_icon_type_id": 2,
         "lat": -220.55008415943,
         "lng": 279.34908120584,
-        "comment": "Pack is in a cave below the water behind the waterfall.",
+        "comment": "messages.map_icons.legion.neltharions_lair.hidden_pack_in_cave",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

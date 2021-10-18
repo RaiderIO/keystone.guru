@@ -5,7 +5,7 @@
         "map_icon_type_id": 61,
         "lat": -163.75,
         "lng": 194.5625,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -16,7 +16,7 @@
         "map_icon_type_id": 61,
         "lat": -161.9375,
         "lng": 199.8125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -27,7 +27,7 @@
         "map_icon_type_id": 61,
         "lat": -145.1875,
         "lng": 164.53125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 60,
         "lat": -137.5625,
         "lng": 156.15625,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -49,7 +49,7 @@
         "map_icon_type_id": 60,
         "lat": -113.375,
         "lng": 83.03125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -60,7 +60,7 @@
         "map_icon_type_id": 63,
         "lat": -108,
         "lng": 119.5,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -71,7 +71,7 @@
         "map_icon_type_id": 63,
         "lat": -116.125,
         "lng": 119.875,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -82,7 +82,7 @@
         "map_icon_type_id": 63,
         "lat": -62.25,
         "lng": 144.875,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -93,7 +93,7 @@
         "map_icon_type_id": 62,
         "lat": -57.375,
         "lng": 183.75,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -104,7 +104,7 @@
         "map_icon_type_id": 62,
         "lat": -82.03125,
         "lng": 305.3125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -115,7 +115,7 @@
         "map_icon_type_id": 64,
         "lat": -87.375,
         "lng": 316.8125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -126,7 +126,7 @@
         "map_icon_type_id": 64,
         "lat": -109.5,
         "lng": 338.25,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 61,
         "lat": -120.65625,
         "lng": 193.90625,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -148,7 +148,7 @@
         "map_icon_type_id": 60,
         "lat": -113.71875,
         "lng": 186.125,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -159,7 +159,7 @@
         "map_icon_type_id": 63,
         "lat": -80.375,
         "lng": 219.5,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -170,7 +170,7 @@
         "map_icon_type_id": 62,
         "lat": -89,
         "lng": 257,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -181,7 +181,7 @@
         "map_icon_type_id": 57,
         "lat": -217.1875,
         "lng": 271.6875,
-        "comment": "NECROLORD: Speed\/Vers group buff - Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members.",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.necrolord_banner",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -192,7 +192,7 @@
         "map_icon_type_id": 64,
         "lat": -189.25,
         "lng": 274.75,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -203,7 +203,7 @@
         "map_icon_type_id": 64,
         "lat": -199.75,
         "lng": 279.5,
-        "comment": "Teleporter",
+        "comment": "messages.map_icons.shadowlands.theater_of_pain.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
