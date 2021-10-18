@@ -5,7 +5,7 @@
         "map_icon_type_id": 58,
         "lat": -113.5625,
         "lng": 226.21875,
-        "comment": "NIGHT FAE: AoE Stun - Allows use of Haunted Urns in set locations which procs a large AoE stun ( Haunted Urn), 30 yds for 10 sec.",
+        "comment": "messages.map_icons.shadowlands.de_other_side.haunted_urn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
