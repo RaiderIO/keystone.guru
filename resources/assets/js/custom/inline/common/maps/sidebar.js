@@ -11,7 +11,7 @@ class Sidebar {
     activate() {
         let self = this;
 
-        if (isMobile()) {
+        if (this.options.hideOnMove) {
             let dungeonMap = getState().getDungeonMap();
             let fn = function () {
                 self._hideSidebar();
@@ -35,7 +35,7 @@ class Sidebar {
             refreshTooltips();
         });
 
-        if (!isMobile()) {
+        if (this.options.defaultState) {
             this._showSidebar();
         }
     }

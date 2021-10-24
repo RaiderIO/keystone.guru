@@ -21,6 +21,7 @@ $sandbox = $dungeonroute->isSandbox();
             'sandboxMode' => $sandbox,
             'floorId' => $floor->id,
             'show' => [
+                'header' => true,
                 'controls' => [
                     'draw' => true,
                     'pulls' => true,

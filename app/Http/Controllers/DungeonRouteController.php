@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
+use App\Http\Requests\DungeonRoute\EmbedFormRequest;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
@@ -249,14 +250,14 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param EmbedFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param string $floorIndex
      * @return Application|Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function embed(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
+    public function embed(EmbedFormRequest $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
     {
         $this->authorize('embed', $dungeonroute);
 
@@ -267,10 +268,20 @@ class DungeonRouteController extends Controller
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
+        $pulls             = $request->get('pulls');
+        $pullsDefaultState = $request->get('pullsDefaultState');
+        $enemyinfo         = $request->get('enemyinfo');
+
         return view('dungeonroute.embed', [
             'dungeonroute' => $dungeonroute,
             'floor'        => $floor,
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+            'embedOptions' => [
+                // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
+                'pulls'             => $pulls === null || $pulls,
+                'pullsDefaultState' => $pullsDefaultState === null ? $pullsDefaultState : (bool)$pullsDefaultState,
+                'enemyinfo'         => $enemyinfo === null ? $enemyinfo : (bool)$enemyinfo,
+            ],
         ]);
     }
 

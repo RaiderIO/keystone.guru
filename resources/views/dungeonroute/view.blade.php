@@ -28,6 +28,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
             'gestureHandling' => (bool)$dungeonroute->demo,
             'showAttribution' => !(bool)$dungeonroute->demo,
             'show' => [
+                'header' => true,
                 'controls' => [
                     'view' => true,
                     'pulls' => true,

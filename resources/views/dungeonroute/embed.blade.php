@@ -9,6 +9,7 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
+/** @var $embedOptions array */
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
@@ -36,17 +37,18 @@ if (count($affixes) == 0) {
 ]])
 
 @section('content')
-    <header class="embed"
+    <header class="header_embed"
             style="background-image: url('/images/dungeons/{{$dungeon->expansion->shortname}}/{{$dungeon->key}}.jpg'); background-size: cover;">
         <div class="row no-gutters">
             <div class="col-8">
-                <h4>
-                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
-                       target="_blank">{{ $dungeonroute->title }}</a>
-                </h4>
+                <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}" target="_blank">
+                    <h4>
+                        {{ $dungeonroute->title }}
+                    </h4>
+                </a>
             </div>
             <div class="col-4">
-                <a href="{{ route('home') }}">
+                <a href="{{ route('home') }}" target="_blank">
                     <h4 class="text-right">
                         {{ config('app.name') }}
                     </h4>
@@ -56,7 +58,8 @@ if (count($affixes) == 0) {
         <div class="row no-gutters">
             <div class="col-4">
                 <div class="embed-header-subtitle">
-                    {!! $dungeonroute->getSubHeaderHtml() !!}
+                    <?php // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php ?>
+                    <div id="edit_route_enemy_forces_container"></div>
                 </div>
             </div>
             <div class="col-4">
@@ -94,7 +97,6 @@ if (count($affixes) == 0) {
             'embed' => true,
             'edit' => false,
             'echo' => false,
-            'noUI' => true,
             'defaultZoom' => 1,
             'floorId' => $floor->id,
             'showAttribution' => false,
@@ -103,7 +105,12 @@ if (count($affixes) == 0) {
                 'killzonepath'
             ],
             'show' => [
-                'share' => []
+                'header' => false,
+                'share' => [],
+                'controls' => [
+                    'pulls' => $embedOptions['pulls'],
+                    'pullsDefaultState' => $embedOptions['pullsDefaultState']
+                ],
             ]
         ])
     </div>

@@ -145,13 +145,13 @@ html, body, #map, #app, .wrapper {
     right: 300px;
 }
 
-.embed,
+.header_embed,
 .sidebar .sidebar-header {
     padding: 10px 20px;
     text-shadow: black 2px 2px;
 }
 
-.embed {
+.header_embed {
     border-bottom: 1px black solid;
 }
 
@@ -262,12 +262,12 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-#pulls_sidebar:not(.mobile) .pulls_container {
+#pulls_sidebar:not(.mobile,.embed) .pulls_container {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     max-height: calc(100vh - 158px);
 }
 
-#pulls_sidebar:not(.mobile) .edit .pulls_container {
+#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (158px + 55px));
 }
@@ -389,8 +389,11 @@ html, body, #map, #app, .wrapper {
 .route_manipulation_tools {
     position: fixed;
     z-index: 99999;
-    top: 70px;
     align-items: flex-start !important;
+}
+
+.route_manipulation_tools:not(.embed) {
+    top: 70px;
 }
 
 .route_manipulation_tools.right {
