@@ -28,6 +28,7 @@ $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Analytics or not, default = $isProduction
 $analytics = $analytics ?? $isProduction;
 
+$bodyClass = $bodyClass ?? '';
 $rootClass = $rootClass ?? '';
 
 // Bit of a hack to do this here - but for now this works
@@ -81,7 +82,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
         @include('common.thirdparty.analytics')
     @endif
 </head>
-<body>
+<body class="{{ $bodyClass }}">
 <div id="app">
     @yield('app-content')
 </div>

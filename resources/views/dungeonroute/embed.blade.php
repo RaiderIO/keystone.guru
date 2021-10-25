@@ -4,6 +4,7 @@
     'footer' => false,
     'header' => false,
     'title' => __('views/dungeonroute.embed.title', ['routeTitle' => $dungeonroute->title]),
+    'bodyClass' => 'overflow-hidden',
     'cookieConsent' => false
 ])
 <?php
@@ -109,7 +110,8 @@ if (count($affixes) == 0) {
                 'share' => [],
                 'controls' => [
                     'pulls' => $embedOptions['pulls'],
-                    'pullsDefaultState' => $embedOptions['pullsDefaultState']
+                    'pullsDefaultState' => $embedOptions['pullsDefaultState'],
+                    'enemyinfo' => $embedOptions['enemyinfo'],
                 ],
             ]
         ])

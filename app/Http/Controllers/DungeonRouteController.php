@@ -278,9 +278,9 @@ class DungeonRouteController extends Controller
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             'embedOptions' => [
                 // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
-                'pulls'             => $pulls === null || $pulls,
-                'pullsDefaultState' => $pullsDefaultState === null ? $pullsDefaultState : (bool)$pullsDefaultState,
-                'enemyinfo'         => $enemyinfo === null ? $enemyinfo : (bool)$enemyinfo,
+                'pulls'             => $pulls === null || $pulls, // Default true - available
+                'pullsDefaultState' => (bool)$pullsDefaultState, // Default false - closed
+                'enemyinfo'         => (bool)$enemyinfo, // Default false - not available
             ],
         ]);
     }
