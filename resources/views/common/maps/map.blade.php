@@ -163,7 +163,8 @@ if ($isAdmin) {
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
         @include('common.maps.controls.pulls', [
             'edit' => $edit,
-            'defaultState' => $show['controls']['pullsDefaultState'] ?? true,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
             'embed' => $embed,
             'dungeonroute' => $dungeonroute,
         ])

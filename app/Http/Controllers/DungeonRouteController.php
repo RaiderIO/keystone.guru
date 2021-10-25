@@ -270,6 +270,7 @@ class DungeonRouteController extends Controller
 
         $pulls             = $request->get('pulls');
         $pullsDefaultState = $request->get('pullsDefaultState');
+        $pullsHideOnMove   = $request->get('pullsHideOnMove');
         $enemyinfo         = $request->get('enemyinfo');
 
         return view('dungeonroute.embed', [
@@ -280,6 +281,7 @@ class DungeonRouteController extends Controller
                 // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
                 'pulls'             => $pulls === null || $pulls, // Default true - available
                 'pullsDefaultState' => (bool)$pullsDefaultState, // Default false - closed
+                'pullsHideOnMove'   => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
                 'enemyinfo'         => (bool)$enemyinfo, // Default false - not available
             ],
         ]);

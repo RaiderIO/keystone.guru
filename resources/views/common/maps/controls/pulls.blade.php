@@ -5,13 +5,15 @@
 /** @var bool $embed */
 /** @var bool $isMobile */
 /** @var bool $defaultState */
+/** @var bool $hideOnMove */
 
 // By default, show it if we're not mobile, but allow overrides
 $defaultState = $defaultState ?? !$isMobile;
+$hideOnMove = $hideOnMove ?? $isMobile;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'defaultState' => $defaultState,
-    'hideOnMove' => $isMobile,
+    'hideOnMove' => $hideOnMove,
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
     'sidebarSelector' => '#pulls_sidebar',

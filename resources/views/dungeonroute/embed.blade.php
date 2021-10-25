@@ -111,6 +111,7 @@ if (count($affixes) == 0) {
                 'controls' => [
                     'pulls' => $embedOptions['pulls'],
                     'pullsDefaultState' => $embedOptions['pullsDefaultState'],
+                    'pullsHideOnMove' => $embedOptions['pullsHideOnMove'],
                     'enemyinfo' => $embedOptions['enemyinfo'],
                 ],
             ]
