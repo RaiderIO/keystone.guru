@@ -249,6 +249,9 @@ return [
                 'mapobjectgroupvisibility' => [
                     'show_hide_map_elements' => 'Show/hide map elements',
                 ],
+                'labeltoggle'              => [
+                    'show_hide_labels' => 'Show/hide labels',
+                ],
                 'mdtclones'                => [
                     'mdt' => 'MDT',
                 ],

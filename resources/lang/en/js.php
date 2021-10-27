@@ -129,6 +129,14 @@ return [
     'finish'                                      => 'Finish',
     'finish_drawing'                              => 'Finish drawing',
 
+    'draw_handler_route_tooltip_start' => 'Click to start drawing path.',
+    'draw_handler_route_tooltip_cont'  => 'Click to continue drawing path.',
+    'draw_handler_route_tooltip_end'   => 'Click the \'Finish\' button on the toolbar to complete your path.',
+
+    'draw_handler_brushline_tooltip_start' => 'Click to start drawing line.',
+    'draw_handler_brushline_tooltip_cont'  => 'Click and drag to continue drawing line.',
+    'draw_handler_brushline_tooltip_end'   => 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.',
+
     'enemypack'                              => 'Pack',
     'enemy'                                  => 'Enemy',
     'enemypatrol'                            => 'Patrol',

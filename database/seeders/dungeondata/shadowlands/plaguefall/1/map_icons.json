@@ -5,7 +5,7 @@
         "map_icon_type_id": 12,
         "lat": -96.25,
         "lng": 239.75,
-        "comment": "messages.map_icons.shadowlands.plaguefall.graveyard_dr_ickus",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.graveyard_dr_ickus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -27,7 +27,7 @@
         "map_icon_type_id": 45,
         "lat": -34.5625,
         "lng": 187.0625,
-        "comment": "messages.map_icons.shadowlands.plaguefall.gushing_slime",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.gushing_slime",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 44,
         "lat": -64.625,
         "lng": 234.4375,
-        "comment": "messages.map_icons.shadowlands.plaguefall.congealed_slime",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.congealed_slime",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -49,7 +49,7 @@
         "map_icon_type_id": 49,
         "lat": -74.84375,
         "lng": 218.09375,
-        "comment": "messages.map_icons.shadowlands.plaguefall.pestilence_slime",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.pestilence_slime",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

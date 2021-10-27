@@ -14,6 +14,9 @@ $enemyVisualTypes = [
                 data-tooltip="tooltip" data-placement="right"
                 title="{{ __('views/common.maps.controls.elements.enemyvisualtype.enemy_visual_type_title') }}">
             <i class="fa fa-users"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('views/common.maps.controls.elements.enemyvisualtype.enemy_visual_type_title') }}
+            </span>
         </button>
         <div id="map_enemy_visuals_dropdown" class="dropdown-menu">
             <a class="dropdown-item disabled">

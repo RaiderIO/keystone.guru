@@ -16,7 +16,7 @@
         "map_icon_type_id": 57,
         "lat": -178.75,
         "lng": 189.75,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.necrolord_banner",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.necrolord_banner",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -27,7 +27,7 @@
         "map_icon_type_id": 42,
         "lat": -127.3125,
         "lng": 223.1875,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 42,
         "lat": -159.5625,
         "lng": 175.125,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -49,7 +49,7 @@
         "map_icon_type_id": 42,
         "lat": -188.0625,
         "lng": 268.6875,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -50,6 +50,9 @@ ob_start();
                 data-placement="right"
                 data-content="{{ $content }}" data-html="true">
             <i class="fa fa-info-circle"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('views/common.maps.controls.elements.dungeonrouteinfo.route_info_title') }}
+            </span>
         </button>
     </div>
 </div>

@@ -11,6 +11,9 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="{{ $currentUserRating !== false ? 'fas' : 'far' }} fa-star"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('views/common.maps.controls.elements.rating.rate_this_route') }}
+            </span>
         </button>
         <div id="map_rating_dropdown" class="dropdown-menu">
             @if( $dungeonroute->isOwnedByUser())

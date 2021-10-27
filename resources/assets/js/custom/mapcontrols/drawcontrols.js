@@ -54,16 +54,16 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
 $.extend(L.drawLocal.draw.handlers, {
     route: {
         tooltip: {
-            start: 'Click to start drawing path.',
-            cont: 'Click to continue drawing path.',
-            end: 'Click the \'Finish\' button on the toolbar to complete your path.'
+            start: lang.get('messages.draw_handler_route_tooltip_start'),
+            cont: lang.get('messages.draw_handler_route_tooltip_cont'),
+            end: lang.get('messages.draw_handler_route_tooltip_end')
         }
     },
     brushline: {
         tooltip: {
-            start: 'Click to start drawing line.',
-            cont: 'Click and drag to continue drawing line.',
-            end: 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.'
+            start: lang.get('messages.draw_handler_brushline_tooltip_start'),
+            cont: lang.get('messages.draw_handler_brushline_tooltip_cont'),
+            end: lang.get('messages.draw_handler_brushline_tooltip_end')
         }
     }
 });

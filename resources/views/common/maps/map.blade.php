@@ -145,7 +145,9 @@ if ($isAdmin) {
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession
         ])
-    @elseif(isset($show['controls']['draw']) && $show['controls']['draw'])
+    @endif
+
+    @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors,

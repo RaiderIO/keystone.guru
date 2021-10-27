@@ -5,7 +5,7 @@
         "map_icon_type_id": 57,
         "lat": -139.875,
         "lng": 241.25,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.necrolord_banner",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.necrolord_banner",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -16,7 +16,7 @@
         "map_icon_type_id": 6,
         "lat": -192,
         "lng": 255.75,
-        "comment": "messages.map_icons.shadowlands.theater_of_pain.graveyard_gorechop",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.graveyard_gorechop",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

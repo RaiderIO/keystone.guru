@@ -16,7 +16,7 @@
         "map_icon_type_id": 6,
         "lat": -60.3125,
         "lng": 347.625,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -27,7 +27,7 @@
         "map_icon_type_id": 6,
         "lat": -62.75,
         "lng": 273,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.door_unlock_after_ingra_maloch",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.door_unlock_after_ingra_maloch",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 3,
         "lat": -206.875,
         "lng": 54.625,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.exit",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.exit",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -82,7 +82,7 @@
         "map_icon_type_id": 6,
         "lat": -109.875,
         "lng": 326.375,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -93,7 +93,7 @@
         "map_icon_type_id": 12,
         "lat": -133.25,
         "lng": 158.25,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.depleted_anima_seed",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.depleted_anima_seed",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -104,7 +104,7 @@
         "map_icon_type_id": 12,
         "lat": -73.75,
         "lng": 258,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.depleted_anima_seed",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.depleted_anima_seed",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -115,7 +115,7 @@
         "map_icon_type_id": 2,
         "lat": -67.5625,
         "lng": 249.9375,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.map_missing_wall",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.map_missing_wall",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -126,7 +126,7 @@
         "map_icon_type_id": 44,
         "lat": -77.5625,
         "lng": 282.6875,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.savory_statshroom",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.savory_statshroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 48,
         "lat": -73.4375,
         "lng": 287.75,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.tasty_toughshroom",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.tasty_toughshroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -148,7 +148,7 @@
         "map_icon_type_id": 6,
         "lat": -74.3125,
         "lng": 298.25,
-        "comment": "messages.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
+        "comment": "mapping.map_icons.shadowlands.mists_of_tirna_scithe.brambles",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

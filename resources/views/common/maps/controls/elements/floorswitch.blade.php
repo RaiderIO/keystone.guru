@@ -9,6 +9,9 @@
                 data-tooltip="tooltip" data-placement="right"
                 title="{{ __('views/common.maps.controls.elements.floor_switch.switch_floors') }}">
             <i class="fa fa-dungeon"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('views/common.maps.controls.elements.floor_switch.switch_floors') }}
+            </span>
         </button>
         <div id="map_floor_selection_dropdown" class="dropdown-menu">
             <a class="dropdown-item disabled">

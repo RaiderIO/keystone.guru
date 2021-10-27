@@ -31,6 +31,8 @@
             @if( $isAdmin )
                 @include('common.maps.controls.elements.mdtclones')
             @endif
+
+            @include('common.maps.controls.elements.labeltoggle', ['floors' => $floors])
         </div>
     </div>
 </nav>
