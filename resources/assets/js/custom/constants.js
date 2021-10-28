@@ -12,6 +12,7 @@ let cookieDefaults = {
     map_enemy_dangerous_border: 0,
     enemy_display_type: 'enemy_portrait',
     echo_cursors_enabled: 1,
+    map_controls_show_hide_labels: 1
 };
 
 for (let name in cookieDefaults) {

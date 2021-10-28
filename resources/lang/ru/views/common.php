@@ -232,22 +232,25 @@ return [
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Настройка группы',
                     'affixes'          => 'Аффиксы',
-                    'route_info_title' => 'Информация о маршруте',
+                    'route_info_title' => '@todo',
                 ],
                 'enemyvisualtype'          => [
                     'portrait'                => 'Портрет',
                     'npc_class'               => 'Класс',
                     'npc_type'                => 'Тип',
                     'enemy_forces'            => 'Силы врага',
-                    'enemy_visual_type'       => 'Визуализация врагов',
-                    'enemy_visual_type_title' => 'Визуализация врагов',
+                    'enemy_visual_type'       => '@todo',
+                    'enemy_visual_type_title' => '@todo',
                 ],
                 'floor_switch'             => [
-                    'switch_floors' => 'Сменить уровень',
+                    'switch_floors' => 'Уровни',
                     'floors'        => 'Уровни',
                 ],
                 'mapobjectgroupvisibility' => [
-                    'show_hide_map_elements' => 'Показать/скрыть элементы на карте',
+                    'toggle_map_elements' => '@todo ru: .maps.controls.elements.mapobjectgroupvisibility.toggle_map_elements',
+                ],
+                'labeltoggle'              => [
+                    'hide_labels' => '@todo ru: .maps.controls.elements.labeltoggle.hide_labels',
                 ],
                 'mdtclones'                => [
                     'mdt' => 'MDT',
@@ -293,9 +296,9 @@ return [
             ],
             'view'      => [
                 'edit_this_route_title'          => 'Редактировать это маршрут',
-                'clone_this_route_title'         => 'Клонировать этот маршрут',
-                'report_for_moderation'          => 'Сообщить модератору',
-                'report_for_moderation_finished' => 'Вы отправили этот маршрут на модерацию.',
+                'clone_this_route_title'         => '@todo',
+                'report_for_moderation'          => '@todo',
+                'report_for_moderation_finished' => '@todo',
             ],
         ],
         'map'      => [
