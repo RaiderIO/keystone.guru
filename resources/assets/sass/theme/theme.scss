@@ -517,6 +517,10 @@ body {
     padding: 0.750rem;
   }
 
+  .route_manipulation_tools.left .btn.minimized {
+    justify-content: unset;
+  }
+
   #view_route_map_actions_container .btn,
   #edit_route_draw_map_actions_container .btn {
     border-radius: 0;

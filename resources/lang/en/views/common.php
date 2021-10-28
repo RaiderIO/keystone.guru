@@ -247,7 +247,7 @@ return [
                     'floors'        => 'Floors',
                 ],
                 'mapobjectgroupvisibility' => [
-                    'show_hide_map_elements' => 'Show/hide map elements',
+                    'toggle_map_elements' => 'Toggle map elements',
                 ],
                 'labeltoggle'              => [
                     'show_hide_labels' => 'Show/hide labels',

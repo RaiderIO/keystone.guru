@@ -52,12 +52,16 @@
             @endisset
         </div>
 
-        <div id="view_route_map_actions_container">
+        <div id="view_route_map_actions_container" class="mb-2">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 
             @include('common.maps.controls.elements.enemyvisualtype')
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
+        </div>
+
+        <div id="view_route_misc_actions_container">
+            @include('common.maps.controls.elements.labeltoggle')
         </div>
     </div>
 </nav>

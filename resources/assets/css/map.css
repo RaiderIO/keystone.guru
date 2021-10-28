@@ -445,6 +445,10 @@ html, body, #map, #app, .wrapper {
     }
 }
 
+.map_controls_element_label_toggle:before {
+    content: "\a0";
+}
+
 #enemy_info_container {
     width: 300px;
     margin: 0 !important;
