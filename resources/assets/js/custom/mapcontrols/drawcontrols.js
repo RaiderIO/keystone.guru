@@ -300,12 +300,12 @@ class DrawControls extends MapControl {
 
     /**
      * Get HTML that should be placed inside a button that is used for interaction with the route.
-     * @param faIconClass string
-     * @param text string
-     * @param hotkey string
-     * @param title string
-     * @param btnType string
-     * @returns {string}
+     * @param faIconClass {String}
+     * @param text {String}
+     * @param hotkey {String}
+     * @param title {String}
+     * @param btnType {String}
+     * @returns {String}
      * @private
      */
     _getButtonHtml(faIconClass, text, hotkey = '', title = '', btnType = '') {
@@ -357,7 +357,7 @@ class DrawControls extends MapControl {
             let $child = $(child);
 
             // Clear of classes, add a row
-            let $parent = $child.removeClass().addClass('test')
+            let $parent = $child.removeClass();
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');

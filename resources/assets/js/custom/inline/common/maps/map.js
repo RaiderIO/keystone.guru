@@ -346,7 +346,7 @@ class CommonMapsMap extends InlineCode {
     _hideLabels($toggleBtn) {
         let $labels = $('.map_controls_element_label_toggle');
         // Align to the center now
-        $labels.hide().closest('.btn').removeClass('text-left').removeClass('minimized');
+        $labels.hide().closest('.btn').removeClass('maximized');
         $toggleBtn.find('i').addClass('fa-chevron-right').removeClass('fa-chevron-left');
 
         Cookies.set('map_controls_show_hide_labels', 0);
@@ -360,7 +360,7 @@ class CommonMapsMap extends InlineCode {
     _showLabels($toggleBtn) {
         let $labels = $('.map_controls_element_label_toggle');
         // Align to the left now
-        $labels.show().closest('.btn').addClass('text-left').addClass('minimized');
+        $labels.show().closest('.btn').addClass('maximized');
         $toggleBtn.find('i').removeClass('fa-chevron-right').addClass('fa-chevron-left');
 
         Cookies.set('map_controls_show_hide_labels', 1);

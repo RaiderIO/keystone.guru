@@ -129,6 +129,14 @@ return [
     'finish'                                      => 'Завершить',
     'finish_drawing'                              => 'Завершить рисование',
 
+    'draw_handler_route_tooltip_start' => '@todo ru: .draw_handler_route_tooltip_start',
+    'draw_handler_route_tooltip_cont'  => '@todo ru: .draw_handler_route_tooltip_cont',
+    'draw_handler_route_tooltip_end'   => '@todo ru: .draw_handler_route_tooltip_end',
+
+    'draw_handler_brushline_tooltip_start' => '@todo ru: .draw_handler_brushline_tooltip_start',
+    'draw_handler_brushline_tooltip_cont'  => '@todo ru: .draw_handler_brushline_tooltip_cont',
+    'draw_handler_brushline_tooltip_end'   => '@todo ru: .draw_handler_brushline_tooltip_end',
+
     'enemypack'                              => 'Пак',
     'enemy'                                  => 'Враг',
     'enemypatrol'                            => 'Патруль',
