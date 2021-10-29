@@ -8,7 +8,7 @@ class SearchFilterInputText extends SearchFilterInput {
 
         let self = this;
 
-        $(this.options.selector).on('keypress', function (keyEvent) {
+        $(this.options.selector).on('keydown', function (keyEvent) {
             // Enter pressed
             if (keyEvent.keyCode === 13) {
                 self.options.onChange();

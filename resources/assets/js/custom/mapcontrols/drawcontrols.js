@@ -80,6 +80,7 @@ class DrawControls extends MapControl {
         this._mapControl = null;
         this.editableItemsLayer = editableItemsLayer;
         this.drawControlOptions = {};
+        this.drawControlSnackbarId = null;
 
         // Add a created item to the list of drawn items
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
@@ -120,6 +121,11 @@ class DrawControls extends MapControl {
         });
     }
 
+    /**
+     *
+     * @returns {Object}
+     * @private
+     */
     _getHotkeys() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
         let self = this;
@@ -156,6 +162,11 @@ class DrawControls extends MapControl {
         return hotkeys;
     }
 
+    /**
+     * @param cssClass {String}
+     * @returns {null|String}
+     * @private
+     */
     _findHotkeyByCssClass(cssClass) {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
@@ -343,6 +354,8 @@ class DrawControls extends MapControl {
     }
 
     _addControlSetupBottomBar() {
+        let self = this;
+
         let container = this._mapControl.getContainer();
         let $targetContainer = $('#edit_route_draw_container');
         $targetContainer.append(container);
@@ -375,14 +388,40 @@ class DrawControls extends MapControl {
             $parent.append($buttons);
         });
 
-        // Put the draw actions in a different div
-        let $drawActions = $container.find('.leaflet-draw-actions');
-        // Add the col class to make it align properly in its 'row' parent
-        // $drawActions.addClass('col');
-        // Add to the proper container
-        $('#edit_route_draw_actions_container').append(
-            $drawActions
-        );
+        let $originalDrawActions = $container.find('.leaflet-draw-actions');
+
+        this.map.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+            // Put the draw actions in a different div
+            let $drawActions = $container.find('.leaflet-draw-actions');
+            $originalDrawActions.removeClass('row no-gutters').addClass('row no-gutters')
+                .find('li').removeClass('col btn btn-info mx-2 p-0').addClass('col btn btn-info mx-2 p-0')
+                .find('a').removeClass('d-inline-block w-100 h-100').addClass('d-inline-block w-100 h-100');
+
+            $drawActions.css('top', '').css('display', '');
+            // Add it to an empty snackbar - but copy the DOM over on render time so that we preserve all the Leaflet.draw events
+            self.drawControlSnackbarId = getState().addSnackbar('', {
+                onDomAdded: function (id) {
+                    $(`#${id}`).append(
+                        $drawActions
+                    );
+                }
+            });
+        });
+
+        this.map.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+            let snackbar = $(`#${self.drawControlSnackbarId}`);
+
+            if (snackbar.length > 0) {
+                // Restore the draw actions to the previous container - storing it for future use
+                let $drawActions = snackbar.find('.leaflet-draw-actions');
+                $container.append(
+                    $drawActions
+                );
+                // Delete the now empty snackbar
+                getState().removeSnackbar(self.drawControlSnackbarId);
+                self.drawControlSnackbarId = null;
+            }
+        });
     }
 
     _addControlSetupBrushlineButton() {
