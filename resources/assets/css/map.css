@@ -520,6 +520,29 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+#snackbar_container .leaflet-draw-actions {
+    position: unset;
+}
+
+#snackbar_container .leaflet-draw-actions {
+    margin-bottom: 0;
+}
+
+#snackbar_container .leaflet-draw-actions li.btn {
+    border-radius: 0;
+}
+
+#snackbar_container .leaflet-draw-actions a {
+    color: white;
+    border: unset;
+    font: inherit;
+}
+
+#snackbar_container .leaflet-draw-actions a:hover {
+    background-color: unset;
+    text-decoration: none;
+}
+
 .leaflet-draw-toolbar {
     margin-top: 0;
 }

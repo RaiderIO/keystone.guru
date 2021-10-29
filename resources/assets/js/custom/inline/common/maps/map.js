@@ -25,16 +25,18 @@ class CommonMapsMap extends InlineCode {
 
         let self = this;
 
+        if (!this.options.noUI) {
+            // Snackbars
+            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
+            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
+        }
+
         this._initDungeonMap();
 
         if (!this.options.noUI) {
             this.settingsTabRoute.activate();
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
-
-            // Snackbars
-            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
-            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
 
             // Register for external changes so that we update our dropdown
             getState().register('floorid:changed', this, this._onFloorIdChanged.bind(this));

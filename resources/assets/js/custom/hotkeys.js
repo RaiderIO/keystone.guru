@@ -1,5 +1,6 @@
-class Hotkeys {
+class Hotkeys extends Signalable {
     constructor(map) {
+        super();
         this.map = map;
 
         this.map.register('map:refresh', this, (this._mapRefreshed).bind(this));
@@ -8,14 +9,14 @@ class Hotkeys {
 
     /**
      * Called whenever leaflet map has been refreshed.
-     * @param refreshEvent
+     * @param refreshEvent {Object}
      * @private
      */
     _mapRefreshed(refreshEvent) {
         console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
         let self = this;
 
-        this.map.leafletMap.on('keypress', function (event) {
+        this.map.leafletMap.on('keydown', function (event) {
             // Ignore keypress events in a text area
             if (!self.map.hasPopupOpen()) {
                 self.onKeyPressed.call(self, event);
@@ -25,9 +26,9 @@ class Hotkeys {
 
     /**
      * Associates a key with a classname to press (of the button in the drawcontrol)
-     * @param key string
-     * @param className string
-     * @param enabled function|null
+     * @param key {String}
+     * @param className {String}
+     * @param enabled {Function|null}
      */
     attach(key, className, enabled) {
         this.keys.push({
@@ -39,31 +40,36 @@ class Hotkeys {
 
     /**
      * Called whenever a key was pressed on the leaflet map.
-     * @param event
+     * @param event {Object}
      */
     onKeyPressed(event) {
         console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
 
         let keyEvent = event.originalEvent;
-        let className = '';
+        let keyObj = null;
         for (let i = 0; i < this.keys.length; i++) {
-            let keyObj = this.keys[i];
-            if (keyObj.key === keyEvent.key &&
-                (typeof keyObj.enabled !== 'function' || (typeof keyObj.enabled === 'function' && keyObj.enabled()))
+            let keyObjCandidate = this.keys[i];
+            if (keyObjCandidate.key === keyEvent.key &&
+                (typeof keyObjCandidate.enabled !== 'function' || (typeof keyObjCandidate.enabled === 'function' && keyObjCandidate.enabled()))
             ) {
-                className = keyObj.className;
+                keyObj = keyObjCandidate;
                 break;
             }
         }
 
-        if (className !== '') {
-            this._triggerClickOnClass(className);
+        if (keyObj !== null) {
+            this._triggerClickOnClass(keyObj.className);
+
+            this.signal('hotkey:pressed', {
+                key: keyObj,
+                event: event
+            });
         }
     }
 
     /**
      * Forces a click event directly on the first object with the associated class name.
-     * @param className
+     * @param className {String}
      * @private
      */
     _triggerClickOnClass(className) {
