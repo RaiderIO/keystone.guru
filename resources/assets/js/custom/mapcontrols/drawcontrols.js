@@ -397,7 +397,17 @@ class DrawControls extends MapControl {
                 .find('li').removeClass('col btn btn-info mx-2 p-0').addClass('col btn btn-info mx-2 p-0')
                 .find('a').removeClass('d-inline-block w-100 h-100').addClass('d-inline-block w-100 h-100');
 
-            $drawActions.css('top', '').css('display', '');
+            $drawActions.css('top', '');
+
+            // Don't change the display of those who have display: none;
+            $drawActions.each(function (index, elem) {
+                let $elem = $(elem);
+                if ($elem.is(':visible')) {
+                    // Should not be block but inherit from the clsses instead (which will be flex)
+                    $elem.css('display', '');
+                }
+            });
+
             // Add it to an empty snackbar - but copy the DOM over on render time so that we preserve all the Leaflet.draw events
             self.drawControlSnackbarId = getState().addSnackbar('', {
                 onDomAdded: function (id) {
