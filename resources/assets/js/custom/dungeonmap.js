@@ -224,14 +224,18 @@ class DungeonMap extends Signalable {
             self.setMapState(new DeleteMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof DeleteMapState) {
+                self.setMapState(null);
+            }
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
             self.setMapState(new EditMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof EditMapState) {
+                self.setMapState(null);
+            }
         });
 
         // If we created something
