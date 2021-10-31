@@ -43,7 +43,7 @@ class SettingsTabPull extends SettingsTab {
             }
 
             // Do stuff on change of the gradient
-            this._grapick.on('change', complete => {
+            let onChange = complete => {
                 // construct pull_gradient string from handlers
                 let pullGradient = [];
                 for (let i = 0; i < self._grapick.getHandlers().length; i++) {
@@ -55,7 +55,12 @@ class SettingsTabPull extends SettingsTab {
                 getState().getMapContext().setPullGradient(result);
 
                 self._savePullGradientSettings();
-            });
+            };
+
+            this._grapick.on('handler:drag:end', onChange);
+            this._grapick.on('handler:add', onChange);
+            this._grapick.on('handler:remove', onChange);
+            this._grapick.on('handler:color:change', onChange);
 
             $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
@@ -113,7 +118,7 @@ class SettingsTabPull extends SettingsTab {
                 $('#save_pull_settings_saving').show();
             },
             success: function (json) {
-                showSuccessNotification(lang.get('messages.pull_gradient_settings_saved'));
+                // showSuccessNotification(lang.get('messages.pull_gradient_settings_saved'));
             },
             complete: function () {
                 $('#save_pull_settings').show();
