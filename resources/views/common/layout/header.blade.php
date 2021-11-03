@@ -25,7 +25,7 @@ $navs[route('misc.affixes')] = [
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Laravel') }}"
+            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"

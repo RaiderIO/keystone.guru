@@ -105,7 +105,7 @@ $hideOnMove = $hideOnMove ?? $isMobile;
                     </h5>
                 </div>
             </div>
-            <div id="killzones_container" class="mr-3">
+            <div id="killzones_container" class="pr-3">
             </div>
         </div>
 
