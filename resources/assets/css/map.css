@@ -145,9 +145,12 @@ html, body, #map, #app, .wrapper {
     right: 300px;
 }
 
-.header_embed,
 .sidebar .sidebar-header {
     padding: 10px 20px;
+    text-shadow: black 2px 2px;
+}
+.header_embed {
+    padding: 0 20px 10px 20px;
     text-shadow: black 2px 2px;
 }
 
@@ -409,9 +412,8 @@ html, body, #map, #app, .wrapper {
 }
 
 .route_manipulation_tools .bg-header {
-    padding-right: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
     margin-left: 0 !important;
+    padding: 0 0.5rem 0 0 !important;
 }
 
 @media (min-width: 1200px) {
@@ -426,10 +428,6 @@ html, body, #map, #app, .wrapper {
     .route_manipulation_tools:not(.top) {
         top: unset;
         align-items: center !important;
-    }
-
-    .route_manipulation_tools .bg-header {
-        padding: 0.5rem !important;
     }
 
     .route_manipulation_tools.left .bg-header {
