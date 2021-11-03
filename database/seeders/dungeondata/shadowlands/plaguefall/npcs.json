@@ -403,7 +403,7 @@
         "dungeon_id": 31,
         "classification_id": 2,
         "npc_type_id": 10,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Venomous Sniper",
         "base_health": 72100,
         "enemy_forces": 8,
