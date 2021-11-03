@@ -15,7 +15,7 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_enemy_forces_template_view'];
+                let template = Handlebars.templates[self.map.options.embed ? 'map_enemy_forces_template_embed' : 'map_enemy_forces_template_view'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     enemy_forces_total: self.map.enemyForcesManager.getEnemyForcesRequired()
@@ -71,61 +71,52 @@ class EnemyForcesControls extends MapControl {
         let enemyForcesRequired = this.map.enemyForcesManager.getEnemyForcesRequired();
         let enemyForcesPercent = enemyForcesRequired === 0 ? 0 : ((currentEnemyForces / enemyForcesRequired) * 100);
         let $enemyForces = $('#map_enemy_forces');
-        let $numbers = $('#map_enemy_forces_numbers');
+        let $enemyForcesStatus = $('#map_enemy_forces_status');
 
-        $numbers.removeClass('map_enemy_forces_too_much_warning');
-        $numbers.removeClass('map_enemy_forces_ok');
-        $numbers.removeAttr('title');
+        $enemyForces.removeClass('map_enemy_forces_too_much_warning map_enemy_forces_ok');
+        $enemyForcesStatus.removeAttr('title');
 
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         if (!killZoneMapObjectGroup.hasKilledAllRequiredEnemies()) {
-            $numbers.attr('title', lang.get('messages.enemy_forces_not_all_required_enemies_killed_label'))
-                .addClass('map_enemy_forces_too_little_warning');
+            $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_not_all_required_enemies_killed_label'))
+            $enemyForces.addClass('map_enemy_forces_too_little_warning');
 
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();
         } else if (currentEnemyForces >= enemyForcesRequired) {
-            // When editing the route..
-            if (this.map.options.edit) {
-                if (enemyForcesPercent > 110) {
-                    $numbers.attr('title', lang.get('messages.enemy_forces_too_much_label'))
-                        .addClass('map_enemy_forces_too_much_warning');
-                    $('#map_enemy_forces_success').hide();
-                    $('#map_enemy_forces_warning').show();
-                } else if (enemyForcesPercent >= 100) {
-                    $numbers.attr('title', '')
-                        .addClass('map_enemy_forces_ok');
-                    $('#map_enemy_forces_success').show();
-                    $('#map_enemy_forces_warning').hide();
-                }
-            }
-            // Only when viewing a route with less than 100% enemy forces
-            else {
-                if (enemyForcesPercent > 110) {
-                    $numbers.attr('title', lang.get('messages.enemy_forces_too_much_label'))
-                        .addClass('map_enemy_forces_too_much_warning');
-                    $('#map_enemy_forces_success').hide();
-                    $('#map_enemy_forces_warning').show();
-                } else if (enemyForcesPercent >= 100) {
-                    $numbers.attr('title', '')
-                        .addClass('map_enemy_forces_ok');
-                    $('#map_enemy_forces_success').show();
-                    $('#map_enemy_forces_warning').hide();
-                }
+            if (enemyForcesPercent > 110) {
+                $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_too_much_label'));
+                $enemyForces.addClass('map_enemy_forces_too_much_warning');
+
+                $('#map_enemy_forces_success').hide();
+                $('#map_enemy_forces_warning').show();
+            } else if (enemyForcesPercent >= 100) {
+                $enemyForcesStatus.attr('title', '')
+                $enemyForces.addClass('map_enemy_forces_ok');
+                $('#map_enemy_forces_success').show();
+                $('#map_enemy_forces_warning').hide();
             }
         } else if (enemyForcesPercent < 100) {
-            $numbers.attr('title', lang.get('messages.enemy_forces_too_little_label'));
-            $numbers.addClass('map_enemy_forces_too_little_warning');
+            $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_too_little_label'));
+            $enemyForces.addClass('map_enemy_forces_too_little_warning');
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();
         }
 
+        let $mapEnemyForcesPercent = $('#map_enemy_forces_percent')
+            .html(Math.round(enemyForcesPercent * 10) / 10);
+
+        if (this.map.options.embed) {
+            $mapEnemyForcesPercent.attr('title', `${currentEnemyForces}/${enemyForcesRequired}`)
+                .refreshTooltips();
+        }
+
         $('#map_enemy_forces_count').html(currentEnemyForces);
         $('#map_enemy_forces_count_total').html(enemyForcesRequired);
-        $('#map_enemy_forces_percent').html(Math.round(enemyForcesPercent * 10) / 10);
+
         $('#map_enemy_forces_override_warning').toggle(this.map.enemyForcesManager.getEnemyForcesOverride() !== null);
 
-        $numbers.refreshTooltips();
+        $enemyForcesStatus.refreshTooltips();
     }
 
     /**
