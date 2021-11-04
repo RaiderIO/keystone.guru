@@ -740,6 +740,30 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemyclassifications/boss.png') !important;
 }
 
+.castermelee {
+    background-image: url('/images/enemyclasses/castermelee.png') !important;
+}
+
+.healercaster {
+    background-image: url('/images/enemyclasses/healercaster.png') !important;
+}
+
+.healermelee {
+    background-image: url('/images/enemyclasses/healermelee.png') !important;
+}
+
+.rangedcaster {
+    background-image: url('/images/enemyclasses/rangedcaster.png') !important;
+}
+
+.rangedhealer {
+    background-image: url('/images/enemyclasses/rangedhealer.png') !important;
+}
+
+.rangedmelee {
+    background-image: url('/images/enemyclasses/rangedmelee.png') !important;
+}
+
 .enemy_icon.mdt {
     background-color: hotpink;
 }

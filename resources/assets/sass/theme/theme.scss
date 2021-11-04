@@ -473,10 +473,20 @@ body {
     background-color: var($--theme-darker) !important;
   }
 
+  .enemy_icon.boss,
   .enemy_icon.melee,
   .enemy_icon.caster,
   .enemy_icon.ranged,
   .enemy_icon.healer,
+  .enemy_icon.enchanted,
+  .enemy_icon.tide,
+  .enemy_icon.void,
+  .enemy_icon.castermelee,
+  .enemy_icon.healercaster,
+  .enemy_icon.healermelee,
+  .enemy_icon.rangedcaster,
+  .enemy_icon.rangedhealer,
+  .enemy_icon.rangedmelee,
   .enemy_icon.enemy_forces {
     background-color: var($--theme-darker);
     color: var($--theme-text-contrast);
