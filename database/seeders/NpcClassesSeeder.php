@@ -28,6 +28,18 @@ class NpcClassesSeeder extends Seeder
                 'name' => 'Caster',
             ]), new NpcClass([
                 'name' => 'Healer',
+            ]), new NpcClass([
+                'name' => 'Caster/Melee',
+            ]), new NpcClass([
+                'name' => 'Healer/Caster',
+            ]), new NpcClass([
+                'name' => 'Healer/Melee',
+            ]), new NpcClass([
+                'name' => 'Ranged/Caster',
+            ]), new NpcClass([
+                'name' => 'Ranged/Healer',
+            ]), new NpcClass([
+                'name' => 'Ranged/Melee',
             ]),
         ];
 
