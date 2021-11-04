@@ -47,7 +47,7 @@ class Stopwatch
      * Pause a timer.
      * @param $timerName string The name of the timer.
      */
-    public static function pause($timerName = 'default'): void
+    public static function pause(string $timerName = 'default'): void
     {
         // Do this first to interfere as least as possible with an IF down here
         // Timer is already running at this point, grab the time as quick as we can
