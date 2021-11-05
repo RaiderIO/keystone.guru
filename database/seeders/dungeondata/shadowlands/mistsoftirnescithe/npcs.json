@@ -308,7 +308,7 @@
         "dungeon_id": 30,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 4,
+        "npc_class_id": 7,
         "name": "Mistveil Tender",
         "base_health": 76095,
         "enemy_forces": 4,
