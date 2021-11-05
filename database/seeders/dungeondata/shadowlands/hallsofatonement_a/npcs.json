@@ -251,7 +251,7 @@
         "dungeon_id": 29,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 3,
+        "npc_class_id": 5,
         "name": "Depraved Collector",
         "base_health": 80100,
         "enemy_forces": 4,
