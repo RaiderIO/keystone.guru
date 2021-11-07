@@ -70,6 +70,17 @@ class Team extends Model
     }
 
     /**
+     * Get the amount of routes that are visible for everyone in the team
+     * @return int
+     */
+    public function getVisibleRouteCount(): int
+    {
+        return $this->dungeonroutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+            PublishedState::TEAM, PublishedState::WORLD, PublishedState::WORLD_WITH_LINK,
+        ])->get()->pluck('id'))->count();
+    }
+
+    /**
      * Checks if a user can add/remove a route to this team or not.
      * @param $user User
      * @return boolean
@@ -179,7 +190,7 @@ class Team extends Model
      * @param $role string
      * @return boolean
      */
-    public function canChangeRole($user, $targetUser, $role): bool
+    public function canChangeRole(User $user, User $targetUser, string $role): bool
     {
         $result = false;
         $roles  = config('keystoneguru.team_roles');

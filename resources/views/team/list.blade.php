@@ -1,4 +1,6 @@
 <?php
+/** @var \Illuminate\Support\Collection|\App\Models\Team[] $models */
+
 setcookie('viewed_teams', true);
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/team.list.title')])
@@ -22,7 +24,7 @@ setcookie('viewed_teams', true);
         </thead>
 
         <tbody>
-        @foreach ($models->all() as $team)
+        @foreach ($models as $team)
             <tr data-teamid="{{ $team->public_key }}">
                 <td class="clickable">
                     @isset($team->iconfile)
@@ -31,8 +33,8 @@ setcookie('viewed_teams', true);
                     @endisset
                     {{ $team->name }}
                 </td>
-                <td class="clickable">{{ $team->members->count() }}</td>
-                <td class="clickable">{{ $team->dungeonroutes->count() }}</td>
+                <td class="clickable">{{ $team->members()->count() }}</td>
+                <td class="clickable">{{ $team->getVisibleRouteCount() }}</td>
             </tr>
         @endforeach
         </tbody>

@@ -393,6 +393,7 @@ return [
         'select'  => [
             'select_team' => 'Select team...',
             'team'        => 'Team',
+            'create_team' => 'Create team',
         ],
     ],
     'thirdparty'   => [
