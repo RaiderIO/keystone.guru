@@ -221,9 +221,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
         });
 
-        // Dungeon grid view
         view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables) {
             $view->with('expansion', $globalViewVariables['currentExpansion']);
+        });
+
+        view()->composer(['common.forms.createroute'], function (View $view) use ($globalViewVariables) {
+            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
         });
 
         // Displaying a release
@@ -253,6 +256,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
+        });
+
+        // Team selector
+        view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
+            $view->with('teams', Auth::check() ? Auth::user()->teams : []);
         });
 
         // Profile pages

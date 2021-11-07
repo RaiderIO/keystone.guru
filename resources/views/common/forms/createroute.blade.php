@@ -1,8 +1,6 @@
-@inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
-/** @var \App\Service\Season\SeasonService $seasonService */
-$currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+/** @var \App\Models\AffixGroup $currentAffixGroup */
 $teeming = old('teeming') ?? $currentAffixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 
@@ -17,6 +15,8 @@ $dungeonroute = $dungeonroute ?? null;
     @if( !isset($dungeonroute) )
         @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
     @endif
+
+    @include('common.team.select', ['required' => false])
 
     <div class="form-group">
         <label for="dungeon_route_title">
