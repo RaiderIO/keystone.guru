@@ -1,3 +1,24 @@
+@section('scripts')
+    @parent
+
+    <script>
+        $(function () {
+            let $temporaryRoute = $('#mdt_import_sandbox');
+            $temporaryRoute.bind('change', function () {
+                let $mdtImportTeamIdSelect = $('#mdt_import_team_id_select');
+
+                if ($temporaryRoute.is(':checked')) {
+                    $mdtImportTeamIdSelect.attr('disabled', true);
+                } else {
+                    $mdtImportTeamIdSelect.removeAttr('disabled');
+                }
+
+                refreshSelectPickers();
+            });
+        })
+    </script>
+@endsection
+
 {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
 <div class="form-group">
     <div class="row mb-2">
@@ -38,8 +59,10 @@
                 )
                  }}"></i>
         </label>
-        {!! Form::checkbox('mdt_import_sandbox', 1, false, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('mdt_import_sandbox', 1, false, ['id' => 'mdt_import_sandbox', 'class' => 'form-control left_checkbox']) !!}
     </div>
+
+    @include('common.team.select', ['id' => 'mdt_import_team_id_select',  'required' => false])
 @endguest
 <div class="form-group">
     <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">

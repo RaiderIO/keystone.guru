@@ -3,6 +3,8 @@
 namespace App\Http\Requests\MDT;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ImportStringFormRequest extends FormRequest
 {
@@ -26,6 +28,10 @@ class ImportStringFormRequest extends FormRequest
         return [
             'import_string'      => 'required|string',
             'mdt_import_sandbox' => 'bool',
+            // May be -1 (unset) or must be part of the user's teams
+            'team_id'            => [Rule::in(
+                array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [-1])
+            )],
         ];
     }
 }

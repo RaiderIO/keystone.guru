@@ -15,5 +15,16 @@ if (!$required) {
     @if($label !== false)
         {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
     @endif
-    {!! Form::select($name, $teamsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
+    <div class="row">
+        @if(!$teams->isEmpty())
+            <div class="col">
+                {!! Form::select($name, $teamsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
+            </div>
+        @endif
+        <div class="col-auto">
+            <a href="{{ route('team.new') }}" class="btn btn-success">
+                <i class="fa fa-plus"></i> {{ __('Create team') }}
+            </a>
+        </div>
+    </div>
 </div>
