@@ -70,29 +70,27 @@ if (count($affixes) == 0) {
             </div>
         </div>
         <div class="row no-gutters">
-            <div class="col-3">
+            <div class="col-auto">
                 <div class="embed-header-subtitle">
                     <?php // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php ?>
                     <div id="edit_route_enemy_forces_container"></div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-auto pl-2">
+                <?php
+                $mostRelevantAffixGroup = $dungeonroute->getMostRelevantAffixGroup();
+                ?>
+                @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
+            </div>
+            <div class="col">
+            </div>
+            <div class="col-auto pr-2">
                 <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
                 @if($dungeon->floors()->count() > 1)
                     {!! Form::select('map_floor_selection', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
                 @endif
             </div>
-            <div class="col-3">
-                {!! Form::select('affixes[]', $affixes, $selectedAffixes,
-                    ['id' => 'affixes',
-                    'class' => 'form-control affixselect selectpicker',
-                    'multiple' => 'multiple',
-                    'title' => __('views/dungeonroute.embed.affixes_title'),
-                    'readonly' => 'readonly',
-                    'data-selected-text-format' => 'count > 1',
-                    'data-count-selected-text' => __('views/dungeonroute.embed.affixes_selected')]) !!}
-            </div>
-            <div class="col-3">
+            <div class="col-auto">
                 <div id="embed_copy_mdt_string" class="btn btn-primary float-right">
                     <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
                 </div>

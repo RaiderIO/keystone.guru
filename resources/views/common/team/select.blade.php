@@ -23,7 +23,7 @@ if (!$required) {
         @endif
         <div class="col-auto">
             <a href="{{ route('team.new') }}" class="btn btn-success">
-                <i class="fa fa-plus"></i> {{ __('Create team') }}
+                <i class="fa fa-plus"></i> {{ __('views/common.team.select.create_team') }}
             </a>
         </div>
     </div>
