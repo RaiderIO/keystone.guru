@@ -622,6 +622,7 @@ class DungeonRoute extends Model
         }
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->team_id    = (int)$request->get('team_id', $this->team_id);
 
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead

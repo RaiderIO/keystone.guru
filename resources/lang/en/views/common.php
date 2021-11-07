@@ -390,6 +390,10 @@ return [
             'submit'          => 'Submit',
             'disband_team'    => 'Disband team',
         ],
+        'select'  => [
+            'select_team' => 'Select team...',
+            'team'        => 'Team',
+        ],
     ],
     'thirdparty'   => [
         'nitropay'      => [
