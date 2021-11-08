@@ -46,8 +46,6 @@
             }
         }
 
-        console.log(handlebarsData);
-
         let result = template(handlebarsData);
         // Start with an empty div since .html() takes the inner html, I don't want to lose the outer most div doing this
         let $result = $("<div>").append($(result));

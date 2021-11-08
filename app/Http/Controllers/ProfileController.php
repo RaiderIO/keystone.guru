@@ -45,11 +45,11 @@ class ProfileController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function routes(Request $request)
     {
-        return view('profile.routes');
+        return redirect()->route('home');
     }
 
     /**

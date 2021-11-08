@@ -2,20 +2,21 @@
 
 @section('content')
     @include('common.general.messages')
-    <div class="row form-group text-center">
-        <div class="col">
-            {{ __('Welcome to Keystone.guru! Get started by creating a route, or a new team to collaboratively create routes with your friends.') }}
+    @if( Auth::user()->dungeonroutes()->count() === 0)
+        <div class="row form-group text-center">
+            <div class="col">
+                {{ __('views/profile.overview.welcome_text') }}
+            </div>
         </div>
-    </div>
+    @endif
     <div class="row form-group text-center">
         <div class="col-md px-4 mt-4">
             <a class="btn btn-outline-success w-100" href="#" data-toggle="modal" data-target="#create_route_modal">
                 <h4>
-                    <i class="fa fa-plus"></i> {{ __('Create route') }}
+                    <i class="fa fa-plus"></i> {{ __('views/profile.overview.create_route') }}
                 </h4>
                 <span class="text-light">
-                        {{ __('A route is a path through a dungeon to reach the end goal of 100% enemy forces while killing all bosses.
-                                Various tools help you organize your intended path for your party members. You can share them with the world - or keep them private and organize them as you wish. ') }}
+                        {{ __('views/profile.overview.create_route_description') }}
                     </span>
             </a>
         </div>
@@ -23,16 +24,15 @@
         <div class="col-md px-4 mt-4">
             <a class="btn btn-outline-info w-100" href="{{ route('team.new') }}">
                 <h4>
-                    <i class="fa fa-plus"></i> {{ __('Create team') }}
+                    <i class="fa fa-plus"></i> {{ __('views/profile.overview.create_team') }}
                 </h4>
                 <span class="text-light">
-                        {{ __('A team is used to share your routes with friends and help everyone stay in-sync with the latest changes to the routes you do more often.
-                                Collaborative editing make adjusting an existing route much easier while you spar for the best route for your team.') }}
+                        {{ __('views/profile.overview.create_team_description') }}
                     </span>
             </a>
         </div>
     </div>
-    <div class="row form-group">
+    <div class="row form-group mb-4">
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('profile.favorites') }}">
                 <i class="fa fa-star"></i> {{ __('views/profile.overview.favorites') }}
@@ -54,11 +54,6 @@
             </a>
         </div>
     </div>
-
-
-    <h2 class="mt-4">
-        {{ __('My routes') }}
-    </h2>
 
     @include('common.dungeonroute.table', ['view' => 'profile'])
 @endsection
