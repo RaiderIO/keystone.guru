@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class SiteController extends Controller
@@ -21,13 +22,15 @@ class SiteController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @param ExpansionService $expansionService
-     *
      * @return Application|Factory|View
      */
-    public function index(ExpansionService $expansionService)
+    public function index()
     {
-        return view('home', ['expansionService' => $expansionService]);
+        if (Auth::check()) {
+            return view('profile.overview');
+        } else {
+            return view('home');
+        }
     }
 
     /**

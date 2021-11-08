@@ -203,7 +203,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                 </div>
             @endif
             <div class="text-danger font-weight-bold">
-                {{ __('account_delete_warning') }}
+                {{ __('views/profile.edit.account_delete_warning') }}
             </div>
             {{ Form::open(['route' => 'profile.delete']) }}
             {!! Form::hidden('_method', 'delete') !!}

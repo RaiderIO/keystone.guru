@@ -61,6 +61,13 @@ return [
     'favorites' => [
         'title' => 'My favorites',
     ],
+    'overview'  => [
+        'title'     => 'Overview',
+        'favorites' => 'Favorites',
+        'tags'      => 'Tags',
+        'teams'     => 'Teams',
+        'profile'   => 'Profile',
+    ],
     'routes'    => [
         'title' => 'My routes',
     ],
