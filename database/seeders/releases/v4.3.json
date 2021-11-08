@@ -1,0 +1,87 @@
+{
+    "id": 115,
+    "release_changelog_id": 122,
+    "version": "v4.3",
+    "title": "Updates to route embedding and many UX and QOL updates",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-11-08T21:06:11+00:00",
+    "updated_at": "2021-11-08T21:06:11+00:00",
+    "changelog": {
+        "id": 122,
+        "release_id": 115,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 1,
+                "ticket_id": 902,
+                "change": "Embed page has been greatly improved. Many thanks to Jah for the feedback!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 1,
+                "ticket_id": 825,
+                "change": "When logged in, creating a route now directly gives you the option to add the route to an existing team.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 1,
+                "ticket_id": 745,
+                "change": "When logged in, the home page is now replaced with an overview page for your account, making it easier to navigate the site without having to dive in the top right menu to explore certain pages. Work in progress and feedback is appreciated!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 3,
+                "ticket_id": 904,
+                "change": "The icons used for editing your route now show a label by default, with the option of hiding the labels.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 3,
+                "ticket_id": 906,
+                "change": "Adding certain map elements will no longer show malformed confirm buttons that you have to press in the left sidebar. There's now a new hovering bar in the bottom center of your screen that will handle these buttons.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 5,
+                "ticket_id": 907,
+                "change": "Adjusting your pull gradient for a route will no longer spam notifications. Thanks omicron-o!",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 5,
+                "ticket_id": 911,
+                "change": "Hovering over pulls now highlights the full width of the row.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

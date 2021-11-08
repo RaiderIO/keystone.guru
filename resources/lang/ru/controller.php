@@ -87,8 +87,9 @@ return [
             'unable_to_save_release' => 'Невозможно сохранить релиз',
         ],
         'flash' => [
-            'release_updated' => 'Релиз обновлен',
-            'release_created' => 'Релиз создан',
+            'release_updated'  => 'Релиз обновлен',
+            'release_created'  => 'Релиз создан',
+            'github_exception' => '@todo ru: .release.flash.github_exception',
         ],
     ],
     'mdtimport'            => [
