@@ -87,8 +87,9 @@ return [
             'unable_to_save_release' => 'Unable to save release',
         ],
         'flash' => [
-            'release_updated' => 'Release updated',
-            'release_created' => 'Release created',
+            'release_updated'  => 'Release updated',
+            'release_created'  => 'Release created',
+            'github_exception' => 'An error occurred communicating with Github: %s',
         ],
     ],
     'mdtimport'            => [

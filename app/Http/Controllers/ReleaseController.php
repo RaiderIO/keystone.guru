@@ -73,8 +73,12 @@ class ReleaseController extends Controller
             $changelog->save();
 
             if (Artisan::call('release:save') === 0) {
-                Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
-                Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
+                try {
+                    Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
+                    Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
+                } catch (Exception $exception) {
+                    Session::flash('status', sprintf(__('controller.release.flash.github_exception'), $exception->getMessage()));
+                }
             }
         } // Something went wrong with saving
         else {
