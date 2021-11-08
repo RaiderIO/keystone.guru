@@ -27,6 +27,7 @@ return [
         'my_routes'  => 'My routes',
         'my_tags'    => 'My tags',
         'my_teams'   => 'My teams',
+        'overview'   => 'Overview',
         'new_team'   => 'New team',
         'edit_team'  => 'Edit team',
         'join_team'  => 'Join team',

@@ -27,7 +27,7 @@ foreach ($regions as $name => $mask) {
 // View
 ?>
 <label for="timezone">
-    {{ __('views/common.timezoneselect.timezone') }}
+    {{ __('views/common.forms.timezoneselect.timezone') }}
 </label>
 <select id="timezone" name="timezone" class="form-control">
     @foreach ($timezones as $region => $list)
