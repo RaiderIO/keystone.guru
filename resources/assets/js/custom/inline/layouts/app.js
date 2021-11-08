@@ -244,15 +244,15 @@ function _hideTooltips() {
 function refreshTooltips($element = null) {
     // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
-        $('.tooltip').remove();
         if ($element === null) {
             refreshTooltips($('[data-toggle="tooltip"]'));
             refreshTooltips($('[data-tooltip="tooltip"]'));
         } else {
+            $('.tooltip').remove();
             $element.unbind('click', _hideTooltips.bind(this))
                 .bind('click', _hideTooltips.bind(this))
                 .tooltip('_fixTitle')
-                .tooltip({trigger: 'hover'});
+                .tooltip({trigger: 'manual'});
         }
     }
 }

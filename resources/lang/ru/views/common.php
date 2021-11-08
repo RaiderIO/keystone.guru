@@ -390,6 +390,11 @@ return [
             'submit'          => 'Подтвердить',
             'disband_team'    => 'Распустить команду',
         ],
+        'select'  => [
+            'select_team' => '@todo ru: .team.select.select_team',
+            'team'        => '@todo ru: .team.select.team',
+            'create_team' => '@todo ru: .team.select.create_team',
+        ],
     ],
     'thirdparty'   => [
         'nitropay'      => [

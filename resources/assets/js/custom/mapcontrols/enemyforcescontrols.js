@@ -104,7 +104,7 @@ class EnemyForcesControls extends MapControl {
         }
 
         let $mapEnemyForcesPercent = $('#map_enemy_forces_percent')
-            .html(Math.round(enemyForcesPercent * 10) / 10);
+            .html(Math.round(enemyForcesPercent * 10) / 10 + '%');
 
         if (this.map.options.embed) {
             $mapEnemyForcesPercent.attr('title', `${currentEnemyForces}/${enemyForcesRequired}`)

@@ -62,11 +62,19 @@ return [
         'title' => 'My favorites',
     ],
     'overview'  => [
-        'title'     => 'Overview',
-        'favorites' => 'Favorites',
-        'tags'      => 'Tags',
-        'teams'     => 'Teams',
-        'profile'   => 'Profile',
+        'title'                    => 'Overview',
+        'favorites'                => 'Favorites',
+        'tags'                     => 'Tags',
+        'teams'                    => 'Teams',
+        'profile'                  => 'Profile',
+        'welcome_text'             => 'Welcome to Keystone.guru! Get started by creating a route, or a new team to collaboratively create routes with your friends.',
+        'create_route'             => 'Create route',
+        'create_route_description' => 'A route is a path through a dungeon to reach the end goal of 100% enemy forces while killing all bosses.
+                                Various tools help you organize your intended path for your party members. You can share them with the world - or keep them private and organize them as you wish.',
+        'create_team'              => 'Create team',
+        'create_team_description'  => 'A team is used to share your routes with friends and help everyone stay in-sync with the latest changes to the routes you do more often.
+                                Collaborative editing make adjusting an existing route much easier while you spar for the best route for your team.',
+
     ],
     'routes'    => [
         'title' => 'My routes',

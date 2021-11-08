@@ -52,7 +52,7 @@ class Sidebar {
         $sidebar.removeClass('active');
         // Move toggle button back
         $sidebarToggle.removeClass('active');
-        $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
+        // $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
         // Toggle image
         if (this.options.anchor === 'left') {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');

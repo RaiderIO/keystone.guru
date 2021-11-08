@@ -61,6 +61,19 @@ return [
     'favorites' => [
         'title' => 'Избранное',
     ],
+    'overview'  => [
+        'title'                    => '@todo ru: .overview.title',
+        'favorites'                => '@todo ru: .overview.favorites',
+        'tags'                     => '@todo ru: .overview.tags',
+        'teams'                    => '@todo ru: .overview.teams',
+        'profile'                  => '@todo ru: .overview.profile',
+        'welcome_text'             => '@todo ru: .overview.welcome_text',
+        'create_route'             => '@todo ru: .overview.create_route',
+        'create_route_description' => '@todo ru: .overview.create_route_description',
+        'create_team'              => '@todo ru: .overview.create_team',
+        'create_team_description'  => '@todo ru: .overview.create_team_description',
+
+    ],
     'routes'    => [
         'title' => 'Мои маршруты',
     ],
