@@ -25,16 +25,18 @@ class CommonMapsMap extends InlineCode {
 
         let self = this;
 
+        if (!this.options.noUI) {
+            // Snackbars
+            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
+            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
+        }
+
         this._initDungeonMap();
 
         if (!this.options.noUI) {
             this.settingsTabRoute.activate();
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
-
-            // Snackbars
-            getState().register('snackbar:add', this, this._onSnackbarAdd.bind(this));
-            getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
 
             // Register for external changes so that we update our dropdown
             getState().register('floorid:changed', this, this._onFloorIdChanged.bind(this));
@@ -45,6 +47,7 @@ class CommonMapsMap extends InlineCode {
             this._setupMapObjectGroupVisibility();
             this._setupEnemyVisualTypes();
             this._setupFavorite();
+            this._setupLabelToggle();
 
             // Sharing
             $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
@@ -310,6 +313,61 @@ class CommonMapsMap extends InlineCode {
             $favorite.val(favorited ? '1' : '0');
         });
     }
+
+    /**
+     *
+     * @private
+     */
+    _setupLabelToggle() {
+        let self = this;
+
+        let $toggleBtn = $('#map_controls_element_label_toggle_btn').bind('click', function () {
+            let $this = $(this);
+
+            let isVisible = parseInt(Cookies.get('map_controls_show_hide_labels')) === 1;
+            if (isVisible) {
+                self._hideLabels($this);
+            } else {
+                self._showLabels($this);
+            }
+        });
+
+        // Initially load the label state
+        if (parseInt(Cookies.get('map_controls_show_hide_labels')) === 1) {
+            this._showLabels($toggleBtn);
+        } else {
+            this._hideLabels($toggleBtn);
+        }
+    }
+
+    /**
+     *
+     * @param $toggleBtn
+     * @private
+     */
+    _hideLabels($toggleBtn) {
+        let $labels = $('.map_controls_element_label_toggle');
+        // Align to the center now
+        $labels.hide().closest('.btn').removeClass('maximized');
+        $toggleBtn.find('i').addClass('fa-chevron-right').removeClass('fa-chevron-left');
+
+        Cookies.set('map_controls_show_hide_labels', 0);
+    }
+
+    /**
+     *
+     * @param $toggleBtn
+     * @private
+     */
+    _showLabels($toggleBtn) {
+        let $labels = $('.map_controls_element_label_toggle');
+        // Align to the left now
+        $labels.show().closest('.btn').addClass('maximized');
+        $toggleBtn.find('i').removeClass('fa-chevron-right').addClass('fa-chevron-left');
+
+        Cookies.set('map_controls_show_hide_labels', 1);
+    }
+
 
     /**
      * Called when the focused enemy was changed

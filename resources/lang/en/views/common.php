@@ -232,28 +232,31 @@ return [
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Group setup',
                     'affixes'          => 'Affixes',
-                    'route_info_title' => 'Route info',
+                    'route_info_title' => 'Info',
                 ],
                 'enemyvisualtype'          => [
                     'portrait'                => 'Portrait',
                     'npc_class'               => 'Class',
                     'npc_type'                => 'Type',
                     'enemy_forces'            => 'Enemy forces',
-                    'enemy_visual_type'       => 'Enemy visual type',
-                    'enemy_visual_type_title' => 'Enemy visual type',
+                    'enemy_visual_type'       => 'Visuals',
+                    'enemy_visual_type_title' => 'Visuals',
                 ],
                 'floor_switch'             => [
-                    'switch_floors' => 'Switch floors',
+                    'switch_floors' => 'Floors',
                     'floors'        => 'Floors',
                 ],
                 'mapobjectgroupvisibility' => [
-                    'show_hide_map_elements' => 'Show/hide map elements',
+                    'toggle_map_elements' => 'Elements',
+                ],
+                'labeltoggle'              => [
+                    'hide_labels' => 'Hide',
                 ],
                 'mdtclones'                => [
                     'mdt' => 'MDT',
                 ],
                 'rating'                   => [
-                    'rate_this_route'          => 'Rate this route',
+                    'rate_this_route'          => 'Rate',
                     'unable_to_rate_own_route' => 'You cannot rate your own route',
                     'your_rating'              => 'Your rating',
                 ],
@@ -292,10 +295,10 @@ return [
                 'no_pulls_created_view'  => 'No pulls created.',
             ],
             'view'      => [
-                'edit_this_route_title'          => 'Edit this route',
-                'clone_this_route_title'         => 'Clone this route',
-                'report_for_moderation'          => 'Report for moderation',
-                'report_for_moderation_finished' => 'You have reported this route for moderation.',
+                'edit_this_route_title'          => 'Edit',
+                'clone_this_route_title'         => 'Clone',
+                'report_for_moderation'          => 'Report',
+                'report_for_moderation_finished' => 'Reported',
             ],
         ],
         'map'      => [
@@ -386,6 +389,11 @@ return [
             'save'            => 'Save',
             'submit'          => 'Submit',
             'disband_team'    => 'Disband team',
+        ],
+        'select'  => [
+            'select_team' => 'Select team...',
+            'team'        => 'Team',
+            'create_team' => 'Create team',
         ],
     ],
     'thirdparty'   => [

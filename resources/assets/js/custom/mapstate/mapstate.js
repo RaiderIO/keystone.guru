@@ -12,7 +12,16 @@ class MapState extends Signalable {
     start() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
         console.warn('Starting MapState ' + this.getName());
+        let self = this;
+
         this._started = true;
+
+        // $(document).bind('keydown', function (event) {
+        //     // Escape
+        //     if (event.originalEvent.keyCode === 27) {
+        //         self.stop();
+        //     }
+        // });
     }
 
     stop() {

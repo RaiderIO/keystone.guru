@@ -145,13 +145,16 @@ html, body, #map, #app, .wrapper {
     right: 300px;
 }
 
-.embed,
 .sidebar .sidebar-header {
     padding: 10px 20px;
     text-shadow: black 2px 2px;
 }
+.header_embed {
+    padding: 0 20px 10px 20px;
+    text-shadow: black 2px 2px;
+}
 
-.embed {
+.header_embed {
     border-bottom: 1px black solid;
 }
 
@@ -216,21 +219,31 @@ html, body, #map, #app, .wrapper {
 #pulls_sidebar .bg-header {
     padding-right: 0 !important;
     user-select: none;
+
+    -webkit-transition: right 0.2s;
+    -o-transition: right 0.2s;
+    transition: right 0.2s;
 }
 
 #pulls_sidebar.active {
     right: 0;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1024px) {
+    #pulls_sidebar,
+    #pulls_sidebar .bg-header {
+        width: 300px;
+    }
+
+    #pulls_sidebar:not(.active) {
+        right: -300px;
+    }
+}
+
+@media (min-width: 1024px) {
     #pulls_sidebar,
     #pulls_sidebar .bg-header {
         width: 350px;
-        padding-right: 0 !important;
-
-        -webkit-transition: right 0.2s;
-        -o-transition: right 0.2s;
-        transition: right 0.2s;
     }
 
     #pulls_sidebar:not(.active) {
@@ -242,7 +255,6 @@ html, body, #map, #app, .wrapper {
     #pulls_sidebar,
     #pulls_sidebar .bg-header {
         width: 400px;
-        padding-right: 0 !important;
     }
 
     #pulls_sidebar:not(.active) {
@@ -254,7 +266,6 @@ html, body, #map, #app, .wrapper {
     #pulls_sidebar,
     #pulls_sidebar .bg-header {
         width: 450px;
-        padding-right: 0 !important;
     }
 
     #pulls_sidebar:not(.active) {
@@ -262,12 +273,12 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-#pulls_sidebar:not(.mobile) .pulls_container {
+#pulls_sidebar:not(.mobile,.embed) .pulls_container {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     max-height: calc(100vh - 158px);
 }
 
-#pulls_sidebar:not(.mobile) .edit .pulls_container {
+#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (158px + 55px));
 }
@@ -314,7 +325,7 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-#pulls_sidebar .map_killzonessidebar_floor_switch,
+#pulls_sidebar .edit .map_killzonessidebar_floor_switch,
 #pulls_sidebar .map_killzonessidebar_killzone .grip {
     cursor: move;
     font-size: 1.2em;
@@ -389,8 +400,11 @@ html, body, #map, #app, .wrapper {
 .route_manipulation_tools {
     position: fixed;
     z-index: 99999;
-    top: 70px;
     align-items: flex-start !important;
+}
+
+.route_manipulation_tools:not(.embed) {
+    top: 70px;
 }
 
 .route_manipulation_tools.right {
@@ -398,9 +412,8 @@ html, body, #map, #app, .wrapper {
 }
 
 .route_manipulation_tools .bg-header {
-    padding-right: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
     margin-left: 0 !important;
+    padding: 0 0.5rem 0 0 !important;
 }
 
 @media (min-width: 1200px) {
@@ -417,10 +430,6 @@ html, body, #map, #app, .wrapper {
         align-items: center !important;
     }
 
-    .route_manipulation_tools .bg-header {
-        padding: 0.5rem !important;
-    }
-
     .route_manipulation_tools.left .bg-header {
         margin-left: 0.5rem !important;
     }
@@ -432,6 +441,10 @@ html, body, #map, #app, .wrapper {
     #enemy_info_container {
         margin: 0.5rem !important;
     }
+}
+
+.map_controls_element_label_toggle:before {
+    content: "\a0";
 }
 
 #enemy_info_container {
@@ -503,6 +516,29 @@ html, body, #map, #app, .wrapper {
 .floating_panel,
 .sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+#snackbar_container .leaflet-draw-actions {
+    position: unset;
+}
+
+#snackbar_container .leaflet-draw-actions {
+    margin-bottom: 0;
+}
+
+#snackbar_container .leaflet-draw-actions li.btn {
+    border-radius: 0;
+}
+
+#snackbar_container .leaflet-draw-actions a {
+    color: white;
+    border: unset;
+    font: inherit;
+}
+
+#snackbar_container .leaflet-draw-actions a:hover {
+    background-color: unset;
+    text-decoration: none;
 }
 
 .leaflet-draw-toolbar {
@@ -702,6 +738,30 @@ html, body, #map, #app, .wrapper {
 
 .boss {
     background-image: url('/images/enemyclassifications/boss.png') !important;
+}
+
+.castermelee {
+    background-image: url('/images/enemyclasses/castermelee.png') !important;
+}
+
+.healercaster {
+    background-image: url('/images/enemyclasses/healercaster.png') !important;
+}
+
+.healermelee {
+    background-image: url('/images/enemyclasses/healermelee.png') !important;
+}
+
+.rangedcaster {
+    background-image: url('/images/enemyclasses/rangedcaster.png') !important;
+}
+
+.rangedhealer {
+    background-image: url('/images/enemyclasses/rangedhealer.png') !important;
+}
+
+.rangedmelee {
+    background-image: url('/images/enemyclasses/rangedmelee.png') !important;
 }
 
 .enemy_icon.mdt {

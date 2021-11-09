@@ -16,7 +16,7 @@
         "map_icon_type_id": 44,
         "lat": -199.1875,
         "lng": 160.25,
-        "comment": "KYRIAN: Spear of Destiny - throw the Spear of Destiny at a location, hitting all enemies within 8 yards, stunning them and making them take 20% additional damage for 10 seconds.",
+        "comment": "mapping.map_icons.shadowlands.spires_of_ascension.spear_of_destiny",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

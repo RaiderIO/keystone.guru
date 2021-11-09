@@ -113,6 +113,11 @@ Breadcrumbs::for('profile.edit', function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.my_profile'), route('profile.edit'));
 });
 
+Breadcrumbs::for('profile.overview', function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.overview'), route('home'));
+});
+
 Breadcrumbs::for('profile.routes', function (Generator $trail) {
     $trail->parent('profile.edit');
     $trail->push(__('breadcrumbs.home.my_routes'), route('profile.routes'));

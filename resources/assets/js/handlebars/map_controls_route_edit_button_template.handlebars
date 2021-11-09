@@ -7,6 +7,15 @@
             btn-info
         {{/ifCond}}
         ">
-        <i class="fas {{ fa_class }}"></i>
+        <div class="row no-gutters">
+            <div class="col-auto">
+                <i class="fas {{ fa_class }}"></i>
+            </div>
+            <div class="col">
+                <span class="map_controls_element_label_toggle" style="display: none;">
+                    {{ text }}
+                </span>
+            </div>
+        </div>
     </div>
 </div>

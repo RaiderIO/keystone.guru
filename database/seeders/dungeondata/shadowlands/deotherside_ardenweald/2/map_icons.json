@@ -5,7 +5,7 @@
         "map_icon_type_id": 4,
         "lat": -147.5,
         "lng": 185.5,
-        "comment": "Exit",
+        "comment": "mapping.map_icons.shadowlands.de_other_side.exit",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -16,7 +16,7 @@
         "map_icon_type_id": 49,
         "lat": -153.1875,
         "lng": 234.6875,
-        "comment": "Engineers can disable the river of flowing blobs for a few minutes by pressing the red button.",
+        "comment": "mapping.map_icons.shadowlands.de_other_side.engineer_blob_button",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

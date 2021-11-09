@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class APIUserReportController
 {
@@ -48,7 +49,17 @@ class APIUserReportController
         $userReport->contact_ok = $request->get('contact_ok', false);
         $userReport->status     = 0;
 
-        return $userReport->save();
+        $saveResult = $userReport->save();
+        if ($saveResult) {
+            Log::info('New user report', [
+                'category'    => $userReport->category,
+                'message'     => $userReport->message,
+                'model'       => $userReport->model_id,
+                'model_class' => $userReport->model_class,
+            ]);
+        }
+
+        return $saveResult;
     }
 
     /**

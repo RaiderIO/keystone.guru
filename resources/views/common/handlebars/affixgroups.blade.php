@@ -31,14 +31,18 @@
                         let affix = serverAffixGroup.affixes[j];
                         // Push an affix to the list
                         affixes.push({
-                            title: affix.name,
-                            name: affix.name,
+                            title: lang.get(affix.name),
+                            name: lang.get(affix.name),
                             class: affix.key.toLowerCase()
                         });
                     }
                 }
 
-                handlebarsData.affixgroups.push({affixes: affixes});
+                handlebarsData.affixgroups.push({
+                    affixes: affixes,
+                    // Make it 1-indexed
+                    seasonal_index: typeof serverAffixGroup.seasonal_index === 'number' ? serverAffixGroup.seasonal_index + 1 : null
+                });
             }
         }
 

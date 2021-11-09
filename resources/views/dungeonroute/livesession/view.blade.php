@@ -33,6 +33,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
             'edit' => false,
             'floorId' => $floor->id,
             'show' => [
+                'header' => true,
                 'controls' => [
                     'live' => true,
                     'pulls' => true,

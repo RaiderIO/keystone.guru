@@ -54,16 +54,16 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
 $.extend(L.drawLocal.draw.handlers, {
     route: {
         tooltip: {
-            start: 'Click to start drawing path.',
-            cont: 'Click to continue drawing path.',
-            end: 'Click the \'Finish\' button on the toolbar to complete your path.'
+            start: lang.get('messages.draw_handler_route_tooltip_start'),
+            cont: lang.get('messages.draw_handler_route_tooltip_cont'),
+            end: lang.get('messages.draw_handler_route_tooltip_end')
         }
     },
     brushline: {
         tooltip: {
-            start: 'Click to start drawing line.',
-            cont: 'Click and drag to continue drawing line.',
-            end: 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.'
+            start: lang.get('messages.draw_handler_brushline_tooltip_start'),
+            cont: lang.get('messages.draw_handler_brushline_tooltip_cont'),
+            end: lang.get('messages.draw_handler_brushline_tooltip_end')
         }
     }
 });
@@ -80,6 +80,7 @@ class DrawControls extends MapControl {
         this._mapControl = null;
         this.editableItemsLayer = editableItemsLayer;
         this.drawControlOptions = {};
+        this.drawControlSnackbarId = null;
 
         // Add a created item to the list of drawn items
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
@@ -108,6 +109,15 @@ class DrawControls extends MapControl {
             }
         });
 
+        this.map.register('map:pathertoggled', this, function (toggleEvent) {
+            // If it was disabled - remove the current snackbar
+            if (!toggleEvent.data.enabled && self.drawControlSnackbarId !== null) {
+                // Delete the snackbar including .leaflet-draw-actions-pather - we don't need it anymore and will just re-create it
+                getState().removeSnackbar(self.drawControlSnackbarId);
+                self.drawControlSnackbarId = null;
+            }
+        });
+
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.register('pridefulenemy:assigned', this, this._refreshPridefulButtonText.bind(this));
         enemyMapObjectGroup.register('pridefulenemy:unassigned', this, this._refreshPridefulButtonText.bind(this));
@@ -120,6 +130,11 @@ class DrawControls extends MapControl {
         });
     }
 
+    /**
+     *
+     * @returns {Object}
+     * @private
+     */
     _getHotkeys() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
         let self = this;
@@ -156,6 +171,11 @@ class DrawControls extends MapControl {
         return hotkeys;
     }
 
+    /**
+     * @param cssClass {String}
+     * @returns {null|String}
+     * @private
+     */
     _findHotkeyByCssClass(cssClass) {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
@@ -300,12 +320,12 @@ class DrawControls extends MapControl {
 
     /**
      * Get HTML that should be placed inside a button that is used for interaction with the route.
-     * @param faIconClass string
-     * @param text string
-     * @param hotkey string
-     * @param title string
-     * @param btnType string
-     * @returns {string}
+     * @param faIconClass {String}
+     * @param text {String}
+     * @param hotkey {String}
+     * @param title {String}
+     * @param btnType {String}
+     * @returns {String}
      * @private
      */
     _getButtonHtml(faIconClass, text, hotkey = '', title = '', btnType = '') {
@@ -343,6 +363,8 @@ class DrawControls extends MapControl {
     }
 
     _addControlSetupBottomBar() {
+        let self = this;
+
         let container = this._mapControl.getContainer();
         let $targetContainer = $('#edit_route_draw_container');
         $targetContainer.append(container);
@@ -357,7 +379,7 @@ class DrawControls extends MapControl {
             let $child = $(child);
 
             // Clear of classes, add a row
-            let $parent = $child.removeClass().addClass('test')
+            let $parent = $child.removeClass();
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');
@@ -375,14 +397,53 @@ class DrawControls extends MapControl {
             $parent.append($buttons);
         });
 
-        // Put the draw actions in a different div
-        let $drawActions = $container.find('.leaflet-draw-actions');
-        // Add the col class to make it align properly in its 'row' parent
-        // $drawActions.addClass('col');
-        // Add to the proper container
-        $('#edit_route_draw_actions_container').append(
-            $drawActions
-        );
+        let $originalDrawActions = $container.find('.leaflet-draw-actions');
+
+        this.map.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+            // Ensure that pather is disabled now
+            self.map.togglePather(false);
+
+            // Put the draw actions in a different div
+            let $drawActions = $container.find('.leaflet-draw-actions');
+            $originalDrawActions.removeClass('row no-gutters').addClass('row no-gutters')
+                .find('li').removeClass('col btn btn-info mx-2 p-0').addClass('col btn btn-info mx-2 p-0')
+                .find('a').removeClass('d-inline-block w-100 h-100').addClass('d-inline-block w-100 h-100');
+
+            $drawActions.css('top', '');
+
+            // Don't change the display of those who have display: none;
+            $drawActions.each(function (index, elem) {
+                let $elem = $(elem);
+                if ($elem.is(':visible')) {
+                    // Should not be block but inherit from the clsses instead (which will be flex)
+                    $elem.css('display', '');
+                }
+            });
+
+            // Add it to an empty snackbar - but copy the DOM over on render time so that we preserve all the Leaflet.draw events
+            self.drawControlSnackbarId = getState().addSnackbar('', {
+                onDomAdded: function (id) {
+                    $(`#${id}`).append(
+                        $drawActions
+                    );
+                }
+            });
+        });
+
+        this.map.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+            let snackbar = $(`#${self.drawControlSnackbarId}`);
+
+            if (snackbar.length > 0) {
+                // Restore the draw actions to the previous container - storing it for future use
+                let $drawActions = snackbar.find('.leaflet-draw-actions');
+                $container.append(
+                    $drawActions
+                );
+                // Delete the now empty snackbar
+                getState().removeSnackbar(self.drawControlSnackbarId);
+                self.drawControlSnackbarId = null;
+            }
+        });
     }
 
     _addControlSetupBrushlineButton() {
@@ -421,6 +482,38 @@ class DrawControls extends MapControl {
                 // Cancel is always the last button
                 $a.last()[0].click();
             }
+
+            // Finished button container
+            let $drawActions = $('<ul>', {
+                class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom row no-gutters',
+            });
+            // Create the button
+            let $button = $('<a>', {
+                href: '#',
+                class: 'd-inline-block w-100 h-100',
+                'data-toggle': 'tooltip',
+                'data-placement': 'right',
+                title: lang.get('messages.finish_drawing'),
+                text: lang.get('messages.finish')
+            });
+
+            // On click, disable pather
+            $button.bind('click', function () {
+                self.map.togglePather(false);
+            });
+
+            // Build the draw actions
+            $drawActions.append($('<li>', {
+                class: 'col btn btn-info p-0'
+            }).append($button));
+
+            self.drawControlSnackbarId = getState().addSnackbar('', {
+                onDomAdded: function (id) {
+                    $(`#${id}`).append(
+                        $drawActions
+                    );
+                }
+            });
         });
 
         // Depends on whether the prideful button was added or not
@@ -429,35 +522,6 @@ class DrawControls extends MapControl {
         } else {
             $brushlineButton.insertAfter('.leaflet-draw-draw-mapicon');
         }
-
-
-        // Cancel button container
-        let $drawActions = $('<ul>', {
-            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom col',
-            style: 'top: 7px;'
-        });
-        // Add as the first child
-        let $drawActionsContainer = $('#edit_route_draw_actions_container');
-        $drawActionsContainer.find('.leaflet-draw-actions-pather').remove();
-        $drawActionsContainer.append($drawActions);
-        // Remove all previous entries
-        $drawActions.empty();
-        // Create the button
-        let $button = $('<a>', {
-            href: '#',
-            'data-toggle': 'tooltip',
-            'data-placement': 'right',
-            title: lang.get('messages.finish_drawing'),
-            text: lang.get('messages.finish')
-        });
-
-        // On click, disable pather
-        $button.bind('click', function () {
-            self.map.togglePather(false);
-        });
-
-        // Build the draw actions
-        $drawActions.append($('<li>').append($button));
 
         // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
         this.map.togglePather(this.map.getMapState() instanceof PatherMapState);
@@ -545,8 +609,6 @@ class DrawControls extends MapControl {
 
     cleanup() {
         super.cleanup();
-
-        this.map.unregister('map:pathertoggled', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.unregister('pridefulenemy:assigned', this);

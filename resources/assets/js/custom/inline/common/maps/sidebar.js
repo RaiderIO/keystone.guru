@@ -11,7 +11,7 @@ class Sidebar {
     activate() {
         let self = this;
 
-        if (isMobile()) {
+        if (this.options.hideOnMove) {
             let dungeonMap = getState().getDungeonMap();
             let fn = function () {
                 self._hideSidebar();
@@ -35,7 +35,7 @@ class Sidebar {
             refreshTooltips();
         });
 
-        if (!isMobile()) {
+        if (this.options.defaultState) {
             this._showSidebar();
         }
     }
@@ -52,7 +52,7 @@ class Sidebar {
         $sidebar.removeClass('active');
         // Move toggle button back
         $sidebarToggle.removeClass('active');
-        $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
+        // $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
         // Toggle image
         if (this.options.anchor === 'left') {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');

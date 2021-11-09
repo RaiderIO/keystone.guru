@@ -10,10 +10,11 @@ $enemyVisualTypes = [
 <div class="row no-gutters">
     <div class="col btn-group dropright">
         <button type="button" class="btn btn-accent dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false"
-                data-tooltip="tooltip" data-placement="right"
-                title="{{ __('views/common.maps.controls.elements.enemyvisualtype.enemy_visual_type_title') }}">
+                aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-users"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('views/common.maps.controls.elements.enemyvisualtype.enemy_visual_type_title') }}
+            </span>
         </button>
         <div id="map_enemy_visuals_dropdown" class="dropdown-menu">
             <a class="dropdown-item disabled">

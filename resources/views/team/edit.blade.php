@@ -114,7 +114,7 @@ foreach ($team->teamusers as $teamuser) {
                                 {{ __('views/team.edit.routes') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $team->dungeonroutes->count() }}</h1>
+                                <h1>{{ $team->getVisibleRouteCount() }}</h1>
                             </div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@ foreach ($team->teamusers as $teamuser) {
                                 {{ __('views/team.edit.members') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $team->members->count() }}</h1>
+                                <h1>{{ $team->members()->count() }}</h1>
                             </div>
                         </div>
                     </div>

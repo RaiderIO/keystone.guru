@@ -2,8 +2,18 @@
 /** @var bool $edit */
 /** @var \App\Models\DungeonRoute $model */
 /** @var \App\Models\Dungeon $dungeon */
+/** @var bool $embed */
+/** @var bool $isMobile */
+/** @var bool $defaultState */
+/** @var bool $hideOnMove */
+
+// By default, show it if we're not mobile, but allow overrides
+$defaultState = $defaultState ?? !$isMobile;
+$hideOnMove = $hideOnMove ?? $isMobile;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
+    'defaultState' => $defaultState,
+    'hideOnMove' => $hideOnMove,
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
     'sidebarSelector' => '#pulls_sidebar',
@@ -20,55 +30,61 @@
 ]])
 
 <nav id="pulls_sidebar"
-     class="route_manipulation_tools top right row no-gutters map_fade_out {{ $isMobile ? 'mobile' : 'active' }}">
+     class="route_manipulation_tools top right row no-gutters map_fade_out
+             {{ $embed ? 'embed' : '' }}
+     {{ $isMobile ? 'mobile' : '' }}
+     {{ $defaultState ? 'active' : '' }}
+         ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
         <div id="pulls_sidebar_trigger" class="handle">
-            <i class="fas {{ $isMobile ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+            <i class="fas {{ $defaultState ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
-        @if($edit)
-            <div class="p-1">
+        @if(!$embed)
+            @if($edit)
+                <div class="p-1">
+                    <div class="row pr-2 mb-2 no-gutters">
+                        <div class="col-auto" data-toggle="tooltip"
+                             title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
+                            <button class="btn btn-info w-100" data-toggle="modal"
+                                    data-target="#route_settings_modal">
+                                <i class='fas fa-cog'></i>
+                            </button>
+                        </div>
+                        <div class="col pl-2 pr-2">
+                            <div id="killzones_new_pull" class="btn btn-success w-100">
+                                <i class="fas fa-plus"></i> {{__('views/common.maps.controls.pulls.new_pull')}}
+                            </div>
+                        </div>
+                        <div class="col-auto" data-toggle="tooltip"
+                             title="{{ __('views/common.maps.controls.pulls.delete_all_pulls_title') }}">
+                            <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if($edit)
+                <div class="">
+                    <div id="edit_route_enemy_forces_container"></div>
+                </div>
+            @else
                 <div class="row pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip"
                          title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
-                        <button class="btn btn-info w-100" data-toggle="modal"
-                                data-target="#route_settings_modal">
+                        <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
                     </div>
-                    <div class="col pl-2 pr-2">
-                        <div id="killzones_new_pull" class="btn btn-success w-100">
-                            <i class="fas fa-plus"></i> {{__('views/common.maps.controls.pulls.new_pull')}}
+                    <div class="col">
+                        <div id="edit_route_enemy_forces_container" class="pt-1">
+
                         </div>
                     </div>
-                    <div class="col-auto" data-toggle="tooltip"
-                         title="{{ __('views/common.maps.controls.pulls.delete_all_pulls_title') }}">
-                        <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
                 </div>
-            </div>
-        @endif
-
-        @if($edit)
-            <div class="">
-                <div id="edit_route_enemy_forces_container"></div>
-            </div>
-        @else
-            <div class="row pr-2 mb-2 no-gutters">
-                <div class="col-auto" data-toggle="tooltip"
-                     title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
-                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
-                        <i class='fas fa-cog'></i>
-                    </button>
-                </div>
-                <div class="col">
-                    <div id="edit_route_enemy_forces_container" class="pt-1">
-
-                    </div>
-                </div>
-            </div>
+            @endif
         @endif
 
         <div class="pulls_container" data-simplebar>
@@ -89,7 +105,7 @@
                     </h5>
                 </div>
             </div>
-            <div id="killzones_container" class="mr-3">
+            <div id="killzones_container">
             </div>
         </div>
 

@@ -8,7 +8,7 @@ $echo = $echo ?? false;
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name', 'Keystone.guru') }}"
+            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
 

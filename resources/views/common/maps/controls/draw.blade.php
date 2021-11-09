@@ -21,7 +21,7 @@
 
         </div>
 
-        <div id="edit_route_draw_map_actions_container">
+        <div id="edit_route_draw_map_actions_container" class="mb-2">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 
             @include('common.maps.controls.elements.enemyvisualtype')
@@ -31,6 +31,10 @@
             @if( $isAdmin )
                 @include('common.maps.controls.elements.mdtclones')
             @endif
+        </div>
+
+        <div id="edit_route_misc_actions_container">
+            @include('common.maps.controls.elements.labeltoggle')
         </div>
     </div>
 </nav>

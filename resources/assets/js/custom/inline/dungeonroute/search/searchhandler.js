@@ -31,7 +31,7 @@ class SearchHandler {
                     options.beforeSend();
                 }
             },
-            success: function (html) {
+            success: function (html, textStatus, xhr) {
                 if (searchParams.params.offset === 0) {
                     $targetContainer.empty();
                 }
@@ -53,7 +53,7 @@ class SearchHandler {
                 refreshTooltips();
 
                 if (options.hasOwnProperty('success')) {
-                    options.success(html);
+                    options.success(html, textStatus, xhr);
                 }
             },
             complete: function () {

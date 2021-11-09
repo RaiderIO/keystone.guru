@@ -132,18 +132,20 @@ if ($isAdmin) {
 
 
 
+
         </script>
     @endif
 @endsection
 
 @if(!$noUI)
-    @include('common.maps.controls.header', [
-        'title' => isset($dungeonroute) ? $dungeonroute->title : __($dungeon->name),
-        'echo' => $echo,
-        'dungeonroute' => $dungeonroute,
-        'livesession' => $livesession
-    ])
-
+    @if(isset($show['header']) && $show['header'])
+        @include('common.maps.controls.header', [
+            'title' => isset($dungeonroute) ? $dungeonroute->title : __($dungeon->name),
+            'echo' => $echo,
+            'dungeonroute' => $dungeonroute,
+            'livesession' => $livesession
+        ])
+    @endif
 
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
@@ -163,6 +165,9 @@ if ($isAdmin) {
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
         @include('common.maps.controls.pulls', [
             'edit' => $edit,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
+            'embed' => $embed,
             'dungeonroute' => $dungeonroute,
         ])
     @endif

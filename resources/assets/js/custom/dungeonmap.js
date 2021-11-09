@@ -224,14 +224,18 @@ class DungeonMap extends Signalable {
             self.setMapState(new DeleteMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof DeleteMapState) {
+                self.setMapState(null);
+            }
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
             self.setMapState(new EditMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof EditMapState) {
+                self.setMapState(null);
+            }
         });
 
         // If we created something
@@ -504,7 +508,7 @@ class DungeonMap extends Signalable {
                 // mapControls.push(new EnemyVisualControls(this));
             }
 
-            if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
+            if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().key === 'siegeofboralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 

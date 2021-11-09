@@ -114,6 +114,12 @@ class MDTImportController extends Controller
             try {
                 $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
 
+                // Ensure team_id is set
+                if (!$sandbox) {
+                    $dungeonRoute->team_id = $request->get('team_id', -1);
+                    $dungeonRoute->save();
+                }
+
                 // Keep track of the import
                 $mdtImport                   = new MDTImport();
                 $mdtImport->dungeon_route_id = $dungeonRoute->id;

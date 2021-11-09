@@ -201,9 +201,9 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APIDungeonRouteSearchFormRequest $request
      * @param SeasonServiceInterface $seasonService
-     * @return string
+     * @return Response|string
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request, SeasonServiceInterface $seasonService): string
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request, SeasonServiceInterface $seasonService)
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -295,13 +295,18 @@ class APIDungeonRouteController extends Controller
             ->limit((int)$request->get('limit', 20))
             ->selectRaw($selectRaw);
 
+        $result = $query->get();
 
-        return view('common.dungeonroute.cardlist', [
-            'currentAffixGroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
-            'dungeonroutes'     => $query->get(),
-            'showAffixes'       => true,
-            'showDungeonImage'  => true,
-        ])->render();
+        if ($result->isEmpty()) {
+            return response()->noContent();
+        } else {
+            return view('common.dungeonroute.cardlist', [
+                'currentAffixGroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+                'dungeonroutes'     => $result,
+                'showAffixes'       => true,
+                'showDungeonImage'  => true,
+            ])->render();
+        }
     }
 
     /**
@@ -309,9 +314,9 @@ class APIDungeonRouteController extends Controller
      * @param string $category
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonServiceInterface $seasonService
-     * @return string
+     * @return Response|string
      */
-    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService): string
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService)
     {
         $result = collect();
 
@@ -363,14 +368,18 @@ class APIDungeonRouteController extends Controller
                 break;
         }
 
-        return view('common.dungeonroute.cardlist', [
-            'currentAffixGroup' => $currentSeason->getCurrentAffixGroup(),
-            'dungeonroutes'     => $result,
-            'affixgroup'        => $affixGroup,
-            'showAffixes'       => true,
-            'showDungeonImage'  => $dungeon === null,
-            'cols'              => 2,
-        ])->render();
+        if ($result->isEmpty()) {
+            return response()->noContent();
+        } else {
+            return view('common.dungeonroute.cardlist', [
+                'currentAffixGroup' => $currentSeason->getCurrentAffixGroup(),
+                'dungeonroutes'     => $result,
+                'affixgroup'        => $affixGroup,
+                'showAffixes'       => true,
+                'showDungeonImage'  => $dungeon === null,
+                'cols'              => 2,
+            ])->render();
+        }
     }
 
     /**

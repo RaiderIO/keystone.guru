@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -622,6 +623,7 @@ class DungeonRoute extends Model
         }
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->team_id    = (int)$request->get('team_id', $this->team_id);
 
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead
@@ -968,6 +970,38 @@ class DungeonRoute extends Model
         return $this->affixes->filter(function (AffixGroup $affixGroup) use ($affix) {
             return $affixGroup->hasAffix($affix);
         })->isNotEmpty();
+    }
+
+    /**
+     * Returns a single affix group from the list of affix groups attached to this dungeon route and returns the most relevant
+     * one based on what the current affix is. By default will return the first affix group.
+     * @return AffixGroup|null
+     */
+    public function getMostRelevantAffixGroup(): ?AffixGroup
+    {
+            $seasonService     = App::make(SeasonService::class);
+        return $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+
+        $result = null;
+
+        if ($this->affixgroups->isNotEmpty()) {
+            $result = $this->affixgroups->first;
+
+            /** @var SeasonService $seasonService */
+            $seasonService     = App::make(SeasonService::class);
+            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+
+            dd($currentAffixGroup);
+
+            foreach ($this->affixgroups as $affixgroup) {
+                if ($affixgroup->id === $currentAffixGroup->id) {
+                    $result = $affixgroup;
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

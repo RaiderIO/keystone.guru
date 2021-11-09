@@ -5,7 +5,7 @@
         "map_icon_type_id": 10,
         "lat": -164.125,
         "lng": 176,
-        "comment": "Dungeon Exit",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.exit",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -16,7 +16,7 @@
         "map_icon_type_id": 22,
         "lat": -92.125,
         "lng": 201.25,
-        "comment": "Landing",
+        "comment": "mapping.map_icons.shadowlands.plaguefall.landing",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

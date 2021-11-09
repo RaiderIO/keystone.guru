@@ -565,7 +565,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     } else {
                         newMapState = new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
                     }
-                    getState.setMapState(newMapState);
+                    self.map.setMapState(newMapState);
 
                     // Move the map to the killzone's center location
                     self.map.focusOnKillZone(newSelectedKillZone);

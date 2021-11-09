@@ -269,6 +269,14 @@ body {
     background-color: #20895E;
   }
 
+  .btn-outline-success:hover .text-light {
+    color: #fff !important;
+  }
+
+  .btn-outline-info:hover .text-light {
+    color: #fff !important;
+  }
+
   .panel-heading {
     font-size: 28px;
   }
@@ -473,10 +481,20 @@ body {
     background-color: var($--theme-darker) !important;
   }
 
+  .enemy_icon.boss,
   .enemy_icon.melee,
   .enemy_icon.caster,
   .enemy_icon.ranged,
   .enemy_icon.healer,
+  .enemy_icon.enchanted,
+  .enemy_icon.tide,
+  .enemy_icon.void,
+  .enemy_icon.castermelee,
+  .enemy_icon.healercaster,
+  .enemy_icon.healermelee,
+  .enemy_icon.rangedcaster,
+  .enemy_icon.rangedhealer,
+  .enemy_icon.rangedmelee,
   .enemy_icon.enemy_forces {
     background-color: var($--theme-darker);
     color: var($--theme-text-contrast);
@@ -501,20 +519,24 @@ body {
     text-decoration: none;
   }
 
-  #view_route_actions_container .btn,
-  #edit_route_draw_container .row {
+  .route_manipulation_tools.left .btn {
     width: 100%;
-    height: 40px;
+    height: 48px;
   }
 
   .route_manipulation_tools.left .btn {
     border: none;
     border-radius: 0;
     display: flex;
-    justify-content: center;
+    //justify-content: center;
     align-items: center;
-    font-size: 1rem;
-    padding: 0.750rem;
+    //font-size: 1rem;
+    padding: 0.75rem 0.75rem 0.75rem 1.4rem;
+  }
+
+  .route_manipulation_tools.left .btn.maximized {
+    //justify-content: unset;
+    //padding: 0.49rem 0.75rem;
   }
 
   #view_route_map_actions_container .btn,
