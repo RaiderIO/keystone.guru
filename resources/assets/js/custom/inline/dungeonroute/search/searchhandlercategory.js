@@ -30,9 +30,10 @@ class SearchHandlerCategory extends SearchHandler {
             limit: this.limit,
             dungeon: typeof this.options.dungeon !== 'undefined' && this.options.dungeon !== null ? this.options.dungeon.id : null
         }), $.extend({}, {
-            success: function (html) {
-                // Only if we actually got any results back
-                self.hasMore = html.length > 0;
+            success: function (html, textStatus, xhr) {
+                console.log(html, textStatus, xhr);
+                // Only if we actually get results back
+                self.hasMore = xhr.status !== 204;
                 if (self.hasMore) {
                     // Increase the offset so that we load new rows whenever we fetch more
                     self.offset += self.limit;

@@ -38,6 +38,26 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
+     * Remembers a value with a specific key if a condition is met
+     * @param bool $condition
+     * @param string $key
+     * @param $value
+     * @param null $ttl
+     * @return Closure|mixed|null
+     * @throws InvalidArgumentException
+     */
+    public function rememberWhen(bool $condition, string $key, $value, $ttl = null)
+    {
+        if ($condition) {
+            $value = $this->remember($key, $value, $ttl);
+        } else if ($value instanceof Closure) {
+            $value = $value();
+        }
+
+        return $value;
+    }
+
+    /**
      * @param string $key
      * @param Closure|mixed $value
      * @param null $ttl
