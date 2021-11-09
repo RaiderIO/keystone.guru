@@ -140,8 +140,9 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                     self.loading = true;
                     $('#route_list_overlay').show();
                 },
-                success: function (html) {
-                    self.hasMore = html.length > 0;
+                success: function (html, textStatus, xhr) {
+                    console.log(html, textStatus, xhr);
+                    self.hasMore = xhr.status !== 204;
                     if (self.hasMore) {
                         // Increase the offset so that we load new rows whenever we fetch more
                         self.offset += self.limit;
