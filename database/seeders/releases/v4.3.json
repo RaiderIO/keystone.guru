@@ -81,6 +81,16 @@
                     "id": 5,
                     "category": "Bugfixes"
                 }
+            },
+            {
+                "release_changelog_id": 122,
+                "release_changelog_category_id": 5,
+                "ticket_id": 915,
+                "change": "Attempting to load more routes in various pages no longer keeps loading the same routes over and over.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             }
         ]
     }
