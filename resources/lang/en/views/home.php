@@ -4,7 +4,7 @@ return [
     'ie_not_supported'                   => 'It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
              not a supported browser. No really, it really does not work at all. Please try either Google Chrome, Mozilla
              Firefox or Microsoft Edge.',
-    'tagline'                            => 'M+ routes make easy',
+    'tagline'                            => 'M+ routes made easy',
     'tagline_description'                => 'Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
     'discover_routes'                    => 'Discover routes',
     'create_route'                       => 'Create route',

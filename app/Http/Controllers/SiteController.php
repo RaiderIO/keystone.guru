@@ -89,11 +89,16 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return Factory|View
+     * @return Application|Factory|View|RedirectResponse
      */
     public function changelog(Request $request)
     {
-        return view('misc.changelog', ['releases' => Release::orderBy('created_at', 'DESC')->paginate(5)]);
+        $releases = Release::orderBy('created_at', 'DESC')->paginate(5);
+        if ($releases->isEmpty()) {
+            return redirect()->route('misc.changelog');
+        } else {
+            return view('misc.changelog', ['releases' => $releases]);
+        }
     }
 
     /**
