@@ -20,7 +20,7 @@ return [
             'caches_dropped_successfully' => 'Кеш сброшен успешно',
             'releases_exported'           => 'Релизы экспортированы',
             'exception'                   => [
-                'token_mismatch'        => '@todo ru: .admintools.flash.exception.token_mismatch',
+                'token_mismatch'        => '',
                 'internal_server_error' => 'Дополнение добавлено в админ панель',
             ],
         ],
@@ -89,7 +89,7 @@ return [
         'flash' => [
             'release_updated'  => 'Релиз обновлен',
             'release_created'  => 'Релиз создан',
-            'github_exception' => '@todo ru: .release.flash.github_exception',
+            'github_exception' => 'Произошла ошибка связи с Github: %s',
         ],
     ],
     'mdtimport'            => [

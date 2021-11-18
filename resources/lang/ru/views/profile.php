@@ -62,16 +62,18 @@ return [
         'title' => 'Избранное',
     ],
     'overview'  => [
-        'title'                    => '@todo ru: .overview.title',
-        'favorites'                => '@todo ru: .overview.favorites',
-        'tags'                     => '@todo ru: .overview.tags',
-        'teams'                    => '@todo ru: .overview.teams',
-        'profile'                  => '@todo ru: .overview.profile',
-        'welcome_text'             => '@todo ru: .overview.welcome_text',
-        'create_route'             => '@todo ru: .overview.create_route',
-        'create_route_description' => '@todo ru: .overview.create_route_description',
-        'create_team'              => '@todo ru: .overview.create_team',
-        'create_team_description'  => '@todo ru: .overview.create_team_description',
+        'title'                    => 'Обзор',
+        'favorites'                => 'Избранное',
+        'tags'                     => 'Теги',
+        'teams'                    => 'Команды',
+        'profile'                  => 'Профиль',
+        'welcome_text'             => 'Добро пожаловать на Keystone.guru! Начните с создания маршрута или создайте новую команду для совместного создания маршрутов с друзьями.',
+        'create_route'             => 'Создать Маршрут',
+        'create_route_description' => 'Маршрут - это путь через подземелье, чтоб достичь конечной цели набрав 100% треша и убив всех боссов.
+                                 Различные инструменты помогут вам организовать ваш маршрут для членов вашей группы. Вы можете поделиться ими со всем миром - или оставить его в секрете и упорядочить по своему желанию.',
+        'create_team'              => 'Создать команду',
+        'create_team_description'  => 'Команда используется, чтобы делиться вашими маршрутами с друзьями и помогать всем оставаться в курсе последних изменений в маршрутах.
+                                 Совместное редактирование значительно упрощает корректировку существующего маршрута, пока вы боретесь за лучший маршрут для своей команды.',
 
     ],
     'routes'    => [
