@@ -114,85 +114,102 @@ return [
         'atal_dazar'                => [
             'name'   => 'Atal\'Dazar',
             'floors' => [
-                '' => '',
+                'atal_dazar'       => 'Atal\'dazar',
+                'sacrificial_pits' => 'Sacrificial Pits',
             ],
         ],
         'freehold'                  => [
             'name'   => 'Freehold',
             'floors' => [
-                '' => '',
+                'freehold' => '',
             ],
         ],
         'kings_rest'                => [
             'name'   => 'King\'s Rest',
             'floors' => [
-                '' => '',
+                'kings_rest' => '',
             ],
         ],
         'shrine_of_the_storm'       => [
             'name'   => 'Shrine of the Storm',
             'floors' => [
-                '' => '',
+                'shrine_of_the_storm' => '',
+                'storms_end'          => '',
             ],
         ],
         'siege_of_boralus'          => [
             'name'   => 'Siege of Boralus',
             'floors' => [
-                '' => '',
+                'siege_of_boralus' => '',
             ],
         ],
         'temple_of_sethraliss'      => [
             'name'   => 'Temple of Sethraliss',
             'floors' => [
-                '' => '',
+                'temple_of_sethraliss' => '',
+                'atrium_of_sethraliss' => '',
             ],
         ],
         'the_motherlode'            => [
             'name'   => 'The MOTHERLODE!!',
             'floors' => [
-                '' => '',
+                'the_motherlode' => '',
             ],
         ],
         'the_underrot'              => [
             'name'   => 'The Underrot',
             'floors' => [
-                '' => '',
+                'the_underrot'  => '',
+                'ruins_descent' => '',
             ],
         ],
         'tol_dagor'                 => [
             'name'   => 'Tol Dagor',
             'floors' => [
-                '' => '',
+                'tol_dagor'         => '',
+                'the_drain'         => '',
+                'the_brig'          => '',
+                'detention_block'   => '',
+                'officer_ouarters'  => '',
+                'overseers_redoubt' => '',
+                'overseers_summit'  => '',
             ],
         ],
         'waycrest_manor'            => [
             'name'   => 'Waycrest Manor',
             'floors' => [
-                '' => '',
+                'the_grand_foyer' => '',
+                'upstairs'       => '',
+                'the_cellar'      => '',
+                'catacombs'       => '',
+                'the_rupture'     => '',
             ],
         ],
         'mechagon_junkyard'         => [
             'name'   => 'Mechagon: Junkyard',
             'floors' => [
-                '' => '',
+                'mechagon_island' => '',
             ],
         ],
         'mechagon_workshop'         => [
             'name'   => 'Mechagon: Workshop',
             'floors' => [
-                '' => '',
+                'the_robodrome'  => '',
+                'waste_pipes'    => '',
+                'the_under_junk' => '',
+                'mechagon_city'  => '',
             ],
         ],
         'orgrimmar_horrific_vision' => [
             'name'   => 'Orgrimmar (Horrific Vision)',
             'floors' => [
-                '' => '',
+                'orgrimmar_horrific_vision' => '',
             ],
         ],
         'stormwind_horrific_vision' => [
             'name'   => 'Stormwind (Horrific Vision)',
             'floors' => [
-                '' => '',
+                'stormwind_horrific_vision' => '',
             ],
         ],
     ],

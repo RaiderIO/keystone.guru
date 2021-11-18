@@ -27,7 +27,7 @@ return [
         'my_routes'  => 'Мои маршруты',
         'my_tags'    => 'Мои теги',
         'my_teams'   => 'Моя команда',
-        'overview'   => '@todo ru: .home.overview',
+        'overview'   => 'Обзор',
         'new_team'   => 'Новая команда',
         'edit_team'  => 'Редактировать команду',
         'join_team'  => 'Присоединиться к команде',

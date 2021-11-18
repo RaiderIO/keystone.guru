@@ -108,8 +108,8 @@ return [
             'drawing'                                => 'Рисование',
             'default_line_weight'                    => 'Толщина линии по умолчанию',
             'default_line_weight_title'              => 'Это контролирует ширину всех линий по умолчанию, которые вы создаете на карте, например, контуров и свободных линий.',
-            'default_line_color'                     => '@todo ru: .forms.mapsettings.default_line_color',
-            'default_line_color_title'               => '@todo ru: .forms.mapsettings.default_line_color_title',
+            'default_line_color'                     => 'Цвет линии по умолчанию',
+            'default_line_color_title'               => 'Эта настройка отвечает за цвет по умолчанию для любых линий, которые вы рисуете на карте, например, контуры.',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Вставьте строку экспорта Mythic Dungeon Tools',
@@ -232,25 +232,25 @@ return [
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Настройка группы',
                     'affixes'          => 'Аффиксы',
-                    'route_info_title' => '@todo',
+                    'route_info_title' => 'Информация',
                 ],
                 'enemyvisualtype'          => [
                     'portrait'                => 'Портрет',
                     'npc_class'               => 'Класс',
                     'npc_type'                => 'Тип',
                     'enemy_forces'            => 'Силы врага',
-                    'enemy_visual_type'       => '@todo',
-                    'enemy_visual_type_title' => '@todo',
+                    'enemy_visual_type'       => 'Визуализация',
+                    'enemy_visual_type_title' => 'Визуализация',
                 ],
                 'floor_switch'             => [
                     'switch_floors' => 'Уровни',
                     'floors'        => 'Уровни',
                 ],
                 'mapobjectgroupvisibility' => [
-                    'toggle_map_elements' => '@todo ru: .maps.controls.elements.mapobjectgroupvisibility.toggle_map_elements',
+                    'toggle_map_elements' => 'Элементы',
                 ],
                 'labeltoggle'              => [
-                    'hide_labels' => '@todo ru: .maps.controls.elements.labeltoggle.hide_labels',
+                    'hide_labels' => 'Скрыть',
                 ],
                 'mdtclones'                => [
                     'mdt' => 'MDT',
@@ -296,9 +296,9 @@ return [
             ],
             'view'      => [
                 'edit_this_route_title'          => 'Редактировать это маршрут',
-                'clone_this_route_title'         => '@todo',
-                'report_for_moderation'          => '@todo',
-                'report_for_moderation_finished' => '@todo',
+                'clone_this_route_title'         => 'Клонировать',
+                'report_for_moderation'          => 'Сообщить',
+                'report_for_moderation_finished' => 'Отправлено',
             ],
         ],
         'map'      => [
@@ -391,9 +391,9 @@ return [
             'disband_team'    => 'Распустить команду',
         ],
         'select'  => [
-            'select_team' => '@todo ru: .team.select.select_team',
-            'team'        => '@todo ru: .team.select.team',
-            'create_team' => '@todo ru: .team.select.create_team',
+            'select_team' => 'Выбрать команду...',
+            'team'        => 'Команда',
+            'create_team' => 'Создать команду',
         ],
     ],
     'thirdparty'   => [
