@@ -1,3 +1,6 @@
+let cookieDefaultAttributes = {path: '/', sameSite: 'None', secure: true};
+Cookies.withAttributes(cookieDefaultAttributes);
+
 // @TODO: temporary solution for ensuring default values for certain cookies are set
 let cookieDefaults = {
     polyline_default_weight: 3,
@@ -17,12 +20,15 @@ let cookieDefaults = {
 
 for (let name in cookieDefaults) {
     if (cookieDefaults.hasOwnProperty(name)) {
-        if (typeof Cookies.get(name) === 'undefined') {
+        let value = Cookies.get(name);
+        if (typeof value === 'undefined') {
             Cookies.set(name, cookieDefaults[name]);
+        } else {
+            // Re-set the cookie with the default attributes so that they're always up-to-date
+            Cookies.set(name, value, cookieDefaultAttributes);
         }
     }
 }
-
 
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';

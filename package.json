@@ -52,7 +52,7 @@
         "jquery-mousewheel": "^3.1.13",
         "jquery-touchswipe": "^1.6.19",
         "jquery-visible": "^1.2.0",
-        "js-cookie": "^2.2.0",
+        "js-cookie": "^3.0.1",
         "lang.js": "^1.1.14",
         "laravel-echo": "^1.6.1",
         "laravel-echo-server": "^1.6.2",
