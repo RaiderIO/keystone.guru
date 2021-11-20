@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Service\Season\SeasonService;
+use App\Traits\UserCurrentTime;
 use Eloquent;
 use Exception;
-use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -24,32 +23,10 @@ use Illuminate\Support\Facades\Log;
  */
 class Season extends CacheModel
 {
+    use UserCurrentTime;
+
     public $with = ['affixgroups'];
     public $timestamps = false;
-
-    /**
-     * @return Repository|mixed|string
-     */
-    private function _getUserTimezone()
-    {
-        // Find the timezone that makes the most sense
-        $timezone = config('app.timezone');
-
-        // But if logged in, get the user's timezone instead
-        if (Auth::check()) {
-            $timezone = Auth::user()->timezone;
-        }
-        return $timezone;
-    }
-
-    /**
-     * @return Carbon Get a date of now with the timezone set properly.
-     * @todo This is a copy of the service function
-     */
-    private function _getNow(): Carbon
-    {
-        return Carbon::now($this->_getUserTimezone());
-    }
 
     /**
      * @return HasMany
@@ -85,7 +62,7 @@ class Season extends CacheModel
         // -1, offset 1 means monday, which we're already at
         $start->addDays($region->reset_day_offset - 1);
         $start->addHours($region->reset_hours_offset);
-        $start->setTimezone($this->_getUserTimezone());
+        $start->setTimezone($this->getUserTimezone());
 
         return $start;
     }
@@ -113,7 +90,7 @@ class Season extends CacheModel
      */
     public function getAffixGroupIterations(): int
     {
-        return $this->getAffixGroupIterationsAt($this->_getNow());
+        return $this->getAffixGroupIterationsAt($this->getUserNow());
     }
 
     /**
@@ -139,7 +116,7 @@ class Season extends CacheModel
     {
         $result = false;
         try {
-            $result = $this->getAffixGroupAtTime($this->_getNow());
+            $result = $this->getAffixGroupAtTime($this->getUserNow());
         } catch (Exception $ex) {
             Log::error('Error getting current affix group: ' . $ex->getMessage());
         }
@@ -155,7 +132,7 @@ class Season extends CacheModel
     {
         $result = false;
         try {
-            $result = $this->getAffixGroupAtTime($this->_getNow()->addDays(7));
+            $result = $this->getAffixGroupAtTime($this->getUserNow()->addDays(7));
         } catch (Exception $ex) {
             Log::error('Error getting current affix group: ' . $ex->getMessage());
         }

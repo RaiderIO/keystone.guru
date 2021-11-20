@@ -5,6 +5,7 @@ namespace App\Service\Season;
 
 use App\Models\Season;
 use App\Service\Cache\CacheService;
+use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,25 +19,9 @@ use Illuminate\Support\Facades\Auth;
  */
 class SeasonService implements SeasonServiceInterface
 {
+    use UserCurrentTime;
+
     private $_seasons = null;
-
-    /**
-     * @return Carbon Get a date of now with the timezone set properly.
-     */
-    private function _getNow(): Carbon
-    {
-        // Find the timezone that makes the most sense
-        $timezone = config('app.timezone');
-
-        // But if logged in, get the user's timezone instead
-        if (Auth::check()) {
-            $timezone = Auth::user()->timezone;
-        }
-
-        return Carbon::createFromDate(2021, 11, 16, $timezone)->setHour(9);
-
-//        return Carbon::now($timezone);
-    }
 
     /**
      * @return Collection
@@ -86,7 +71,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getCurrentSeason(): ?Season
     {
-        return $this->getSeasonAt($this->_getNow());
+        return $this->getSeasonAt($this->getUserNow());
     }
 
     /**
@@ -153,7 +138,7 @@ class SeasonService implements SeasonServiceInterface
         // iteration (currently 12).
 
         $firstSeasonStart    = $firstSeason->start();
-        $now                 = $this->_getNow()->addWeeks($iterationOffset * $affixCount)->maximum($firstSeasonStart);
+        $now                 = $this->getUserNow()->addWeeks($iterationOffset * $affixCount)->maximum($firstSeasonStart);
         $weeksSinceBeginning = $firstSeason->getWeeksSinceStartAt($now);
 
 
