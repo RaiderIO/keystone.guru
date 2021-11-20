@@ -20,14 +20,14 @@ class GameServerRegionsSeeder extends Seeder
 
         $gameServerRegions = [
             // https://us.battle.net/forums/en/wow/topic/20745655899?page=1#post-1
-            new GameServerRegion(['short' => 'us', 'name' => 'Americas', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
+            new GameServerRegion(['short' => GameServerRegion::AMERICAS, 'name' => 'gameserverregions.us', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
             // http://wowreset.com/
-            new GameServerRegion(['short' => 'eu', 'name' => 'Europe', 'reset_day_offset' => 3, 'reset_hours_offset' => 7]),
+            new GameServerRegion(['short' => GameServerRegion::EUROPE, 'name' => 'gameserverregions.eu', 'reset_day_offset' => 3, 'reset_hours_offset' => 7]),
             // Copy paste from America, I couldn't find info for these regions
-            new GameServerRegion(['short' => 'cn', 'name' => 'China', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
-            new GameServerRegion(['short' => 'tw', 'name' => 'Taiwan', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
+            new GameServerRegion(['short' => GameServerRegion::CHINA, 'name' => 'gameserverregions.cn', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
+            new GameServerRegion(['short' => GameServerRegion::TAIWAN, 'name' => 'gameserverregions.tw', 'reset_day_offset' => 2, 'reset_hours_offset' => 15]),
             // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
-            new GameServerRegion(['short' => 'kr', 'name' => 'Korea', 'reset_day_offset' => 3, 'reset_hours_offset' => 23]),
+            new GameServerRegion(['short' => GameServerRegion::KOREA, 'name' => 'gameserverregions.kr', 'reset_day_offset' => 3, 'reset_hours_offset' => 23]),
         ];
 
         foreach ($gameServerRegions as $gameServerRegion) {

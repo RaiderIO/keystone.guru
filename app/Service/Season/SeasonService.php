@@ -33,7 +33,9 @@ class SeasonService implements SeasonServiceInterface
             $timezone = Auth::user()->timezone;
         }
 
-        return Carbon::now($timezone);
+        return Carbon::createFromDate(2021, 11, 16, $timezone)->setHour(9);
+
+//        return Carbon::now($timezone);
     }
 
     /**

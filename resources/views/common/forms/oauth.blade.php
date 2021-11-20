@@ -11,7 +11,7 @@
             <div class="col">
                 <a href="{{ route('login.battlenet', ['region' => $region->short]) }}"
                    class="btn btn-bnet mx-auto d-block border-left border-secondary">
-                    {{ $region->name }}
+                    {{ __($region->name) }}
                 </a>
             </div>
         @endforeach

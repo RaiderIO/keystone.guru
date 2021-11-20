@@ -22,6 +22,14 @@ class GameServerRegion extends CacheModel
     protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
 
+    const AMERICAS = 'us';
+    const EUROPE   = 'eu';
+    const CHINA    = 'cn';
+    const TAIWAN   = 'tw';
+    const KOREA    = 'kr';
+
+    const DEFAULT_REGION = GameServerRegion::AMERICAS;
+
     /**
      * @return HasMany
      */
@@ -35,9 +43,7 @@ class GameServerRegion extends CacheModel
      */
     public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        return Auth::check() ?
-            Auth::user()->gameserverregion ?? GameServerRegion::where('short', 'us')->first() :
-            GameServerRegion::where('short', 'us')->first();
+        return optional(Auth::user())->gameserverregion ?? GameServerRegion::where('short', self::DEFAULT_REGION)->first();
     }
 
     public static function boot()

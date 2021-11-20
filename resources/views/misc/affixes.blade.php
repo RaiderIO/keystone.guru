@@ -24,7 +24,7 @@ if ($timezone === null) {
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">
-                    {{ sprintf(__('views/misc.affixes.header'), $region->name) }}
+                    {{ sprintf(__('views/misc.affixes.header'), __($region->name)) }}
                 </h5>
 
                 <table class="affixes_overview_table table-striped bg-secondary" width="100%">

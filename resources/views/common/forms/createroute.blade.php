@@ -1,5 +1,4 @@
 <?php
-$region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 /** @var \App\Models\AffixGroup $currentAffixGroup */
 $teeming = old('teeming') ?? $currentAffixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
