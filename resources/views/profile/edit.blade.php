@@ -86,7 +86,10 @@ $deleteConsequences = $user->getDeleteConsequences();
             @endif
             <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
                 {!! Form::label('game_server_region_id', __('views/profile.edit.region')) !!}
-                {!! Form::select('game_server_region_id', array_merge(['-1' => __('views/profile.edit.select_region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
+                {!! Form::select('game_server_region_id', array_merge(['-1' => __('views/profile.edit.select_region')],
+                    \App\Models\GameServerRegion::all()->mapWithKeys(function (\App\Models\GameServerRegion $region){
+                        return [$region->id => __($region->name)];
+                    })->toArray()), null, ['class' => 'form-control']) !!}
                 @include('common.forms.form-error', ['key' => 'game_server_region_id'])
             </div>
             <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">

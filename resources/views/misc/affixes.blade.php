@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('views/misc.about.title')])
+@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('views/misc.affixes.title')])
 <?php
 /**
  * @var $seasonService \App\Service\Season\SeasonService
@@ -9,13 +9,6 @@
  */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
-$timezone = null;
-if (Auth::check()) {
-    $timezone = Auth::user()->timezone;
-}
-if ($timezone === null) {
-    $timezone = config('app.timezone');
-}
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -24,14 +17,14 @@ if ($timezone === null) {
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">
-                    {{ sprintf(__('views/misc.affixes.header'), $region->name) }}
+                    {{ sprintf(__('views/misc.affixes.header'), __($region->name)) }}
                 </h5>
 
                 <table class="affixes_overview_table table-striped bg-secondary" width="100%">
                     <thead>
                     <tr>
                         <th width="20%">
-                            {{ sprintf(__('views/misc.affixes.start_date'), $timezone) }}
+                            {{ sprintf(__('views/misc.affixes.start_date'), $seasonService->getUserTimezone()) }}
                         </th>
                         <th width="20%">
                             {{ __('views/misc.affixes.2') }}
