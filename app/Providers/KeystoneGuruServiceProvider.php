@@ -9,6 +9,7 @@ use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PublishedState;
 use App\Models\Release;
@@ -118,8 +119,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 // Discover routes
                 'currentExpansion'                => $currentExpansion,
                 'currentExpansionActiveDungeons'  => $currentExpansion->dungeons,
-                'currentAffixGroup'               => $currentSeason->getCurrentAffixGroup(),
-                'nextAffixGroup'                  => $currentSeason->getNextAffixGroup(),
+                'affixGroups'                     => [
+                    'current' => GameServerRegion::all()->mapWithKeys(function (GameServerRegion $region) use ($currentSeason) {
+                        return [$region->short => $currentSeason->getCurrentAffixGroupInRegion($region)];
+                    })->all(),
+                    'next'    => GameServerRegion::all()->mapWithKeys(function (GameServerRegion $region) use ($currentSeason) {
+                        return [$region->short => $currentSeason->getNextAffixGroupInRegion($region)];
+                    })->all(),
+                ],
 
                 // Find routes
 
@@ -207,13 +214,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
-            $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
+            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
+            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][GameServerRegion::getUserOrDefaultRegion()->short]);
         });
 
         view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
-            $view->with('nextAffixGroup', $globalViewVariables['nextAffixGroup']);
+            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
+            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][GameServerRegion::getUserOrDefaultRegion()->short]);
         });
 
         // Dungeon grid view
@@ -226,7 +233,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer(['common.forms.createroute'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['currentAffixGroup']);
+            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
         });
 
         // Displaying a release

@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AffixGroupEaseTier extends CacheModel
 {
-    public $with = ['affixgroup', 'dungeon'];
     public $fillable = ['subcreation_ease_tier_pull_id', 'affix_group_id', 'dungeon_id', 'tier'];
 
     /**

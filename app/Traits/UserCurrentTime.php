@@ -21,8 +21,6 @@ trait UserCurrentTime
      */
     public function getUserNow(): Carbon
     {
-//        return Carbon::createFromDate(2021, 11, 16, $this->getUserTimezone())->setHour(9);
-
         return Carbon::now($this->getUserTimezone());
     }
 }

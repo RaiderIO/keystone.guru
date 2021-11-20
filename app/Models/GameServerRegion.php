@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * @property string $short
  * @property string $name
+ * @property string $timezone
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_hours_offset
  *
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class GameServerRegion extends CacheModel
 {
-    protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
+    protected $fillable = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
 
     const AMERICAS = 'us';
@@ -29,6 +30,14 @@ class GameServerRegion extends CacheModel
     const KOREA    = 'kr';
 
     const DEFAULT_REGION = GameServerRegion::AMERICAS;
+
+    const ALL = [
+        self::AMERICAS,
+        self::EUROPE,
+        self::CHINA,
+        self::TAIWAN,
+        self::KOREA
+    ];
 
     /**
      * @return HasMany
