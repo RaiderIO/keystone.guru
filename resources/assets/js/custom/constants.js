@@ -5,7 +5,7 @@ Cookies.withAttributes(cookieDefaultAttributes);
 let cookieDefaults = {
     polyline_default_weight: 3,
     polyline_default_color: null,
-    hidden_map_object_groups: [],
+    hidden_map_object_groups: '[]',
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
@@ -21,8 +21,9 @@ let cookieDefaults = {
 for (let name in cookieDefaults) {
     if (cookieDefaults.hasOwnProperty(name)) {
         let value = Cookies.get(name);
-        if (typeof value === 'undefined') {
-            Cookies.set(name, cookieDefaults[name]);
+        // If not set at all, or set to empty, re-fill it to fix a bug
+        if (typeof value === 'undefined' || (name === 'hidden_map_object_groups' && value === '')) {
+            Cookies.set(name, cookieDefaults[name], cookieDefaultAttributes);
         } else {
             // Re-set the cookie with the default attributes so that they're always up-to-date
             Cookies.set(name, value, cookieDefaultAttributes);
