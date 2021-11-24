@@ -1,0 +1,47 @@
+{
+    "id": 116,
+    "release_changelog_id": 123,
+    "version": "v4.3.1",
+    "title": "Bugfix release",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-11-24T21:25:40+00:00",
+    "updated_at": "2021-11-24T21:25:59+00:00",
+    "changelog": {
+        "id": 123,
+        "release_id": 116,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 123,
+                "release_changelog_category_id": 5,
+                "ticket_id": 917,
+                "change": "Changelog page no longer crashes if you manually supply an invalid page number in the url.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 123,
+                "release_changelog_category_id": 5,
+                "ticket_id": 912,
+                "change": "Whatever the site thinks the current and next affixes are is now determined by your region (you can set this in your Profile if you're registered - otherwise US is assumed).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 123,
+                "release_changelog_category_id": 5,
+                "ticket_id": 919,
+                "change": "Embedded routes are no longer sometimes unresponsive upon page load.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
