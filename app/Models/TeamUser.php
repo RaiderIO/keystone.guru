@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\User;
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $id int
@@ -19,9 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Team $team
  * @property User $user
  *
- * @method static \Illuminate\Database\Eloquent\Builder isModerator(int $userId)
+ * @method static Builder isModerator(int $userId)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class TeamUser extends Model
 {
@@ -37,7 +39,7 @@ class TeamUser extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function team()
     {
@@ -45,7 +47,7 @@ class TeamUser extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function user()
     {

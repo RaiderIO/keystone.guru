@@ -121,95 +121,95 @@ return [
         'freehold'                  => [
             'name'   => 'Freehold',
             'floors' => [
-                'freehold' => '',
+                'freehold' => 'Freehold',
             ],
         ],
         'kings_rest'                => [
             'name'   => 'King\'s Rest',
             'floors' => [
-                'kings_rest' => '',
+                'kings_rest' => 'King\'s Rest',
             ],
         ],
         'shrine_of_the_storm'       => [
             'name'   => 'Shrine of the Storm',
             'floors' => [
-                'shrine_of_the_storm' => '',
-                'storms_end'          => '',
+                'shrine_of_the_storm' => 'Shrine of the Storm',
+                'storms_end'          => 'Storm\'s End',
             ],
         ],
         'siege_of_boralus'          => [
             'name'   => 'Siege of Boralus',
             'floors' => [
-                'siege_of_boralus' => '',
+                'siege_of_boralus' => 'Siege of Boralus',
             ],
         ],
         'temple_of_sethraliss'      => [
             'name'   => 'Temple of Sethraliss',
             'floors' => [
-                'temple_of_sethraliss' => '',
-                'atrium_of_sethraliss' => '',
+                'temple_of_sethraliss' => 'Temple of Sethraliss',
+                'atrium_of_sethraliss' => 'Atrium of Sethraliss',
             ],
         ],
         'the_motherlode'            => [
             'name'   => 'The MOTHERLODE!!',
             'floors' => [
-                'the_motherlode' => '',
+                'the_motherlode' => 'The MOTHERLODE!!',
             ],
         ],
         'the_underrot'              => [
             'name'   => 'The Underrot',
             'floors' => [
-                'the_underrot'  => '',
-                'ruins_descent' => '',
+                'the_underrot'  => 'The Underrot',
+                'ruins_descent' => 'Ruin\'s Descent',
             ],
         ],
         'tol_dagor'                 => [
             'name'   => 'Tol Dagor',
             'floors' => [
-                'tol_dagor'         => '',
-                'the_drain'         => '',
-                'the_brig'          => '',
-                'detention_block'   => '',
-                'officer_ouarters'  => '',
-                'overseers_redoubt' => '',
-                'overseers_summit'  => '',
+                'tol_dagor'         => 'Tol Dagor',
+                'the_drain'         => 'The Drain',
+                'the_brig'          => 'The Brig',
+                'detention_block'   => 'Detention Block',
+                'officer_ouarters'  => 'Officer Quarters',
+                'overseers_redoubt' => 'Overseer\'s Redoubt',
+                'overseers_summit'  => 'Overseer\'s Summit',
             ],
         ],
         'waycrest_manor'            => [
             'name'   => 'Waycrest Manor',
             'floors' => [
-                'the_grand_foyer' => '',
-                'upstairs'       => '',
-                'the_cellar'      => '',
-                'catacombs'       => '',
-                'the_rupture'     => '',
+                'the_grand_foyer' => 'The Grand Foyer',
+                'upstairs'        => 'Upstairs',
+                'the_cellar'      => 'The Cellar',
+                'catacombs'       => 'Catacombs',
+                'the_rupture'     => 'The Rupture',
             ],
         ],
         'mechagon_junkyard'         => [
             'name'   => 'Mechagon: Junkyard',
             'floors' => [
-                'mechagon_island' => '',
+                'mechagon_island' => 'Mechagon Island',
             ],
         ],
         'mechagon_workshop'         => [
             'name'   => 'Mechagon: Workshop',
             'floors' => [
-                'the_robodrome'  => '',
-                'waste_pipes'    => '',
-                'the_under_junk' => '',
-                'mechagon_city'  => '',
+                'the_robodrome'  => 'The Robodrome',
+                'waste_pipes'    => 'Waste Pipes',
+                'the_under_junk' => 'The Under Junk',
+                'mechagon_city'  => 'Mechagon City',
             ],
         ],
         'orgrimmar_horrific_vision' => [
             'name'   => 'Orgrimmar (Horrific Vision)',
             'floors' => [
-                'orgrimmar_horrific_vision' => '',
+                'orgrimmar_horrific_vision' => 'Orgrimmar (Horrific Vision)',
             ],
         ],
         'stormwind_horrific_vision' => [
             'name'   => 'Stormwind (Horrific Vision)',
             'floors' => [
-                'stormwind_horrific_vision' => '',
+                'stormwind_horrific_vision' => 'Stormwind (Horrific Vision)',
             ],
         ],
     ],
