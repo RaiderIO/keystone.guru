@@ -413,7 +413,7 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools .bg-header {
     margin-left: 0 !important;
-    padding: 0 0.5rem 0 0 !important;
+    /*padding: 0 0.5rem 0 0 !important;*/
 }
 
 @media (min-width: 1200px) {

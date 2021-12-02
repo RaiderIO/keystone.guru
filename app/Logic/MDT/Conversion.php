@@ -161,7 +161,7 @@ class Conversion
      */
     public static function convertLatLngToMDTCoordinate(array $latLng): array
     {
-        return ['y' => $latLng['lat'] * 2.185, 'x' => $latLng['lng'] * 2.185];
+        return ['y' => (string)round($latLng['lat'] * 2.185, 1), 'x' => (string)round($latLng['lng'] * 2.185, 1)];
     }
 
     /**
