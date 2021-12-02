@@ -112,6 +112,7 @@ class ExportString extends MDTBase
     /**
      * @param Collection $warnings
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     private function _extractPulls(Collection $warnings): array
     {
@@ -130,10 +131,10 @@ class ExportString extends MDTBase
 
             // Lua is 1 based, not 0 based
             $enemyIndex = 1;
+            $enemiesAdded = 0;
             foreach ($killZone->enemies as $enemy) {
                 // MDT does not handle prideful NPCs
                 if ($enemy->npc->isPrideful()) {
-                    Stopwatch::pause('pridefulCheck');
                     continue;
                 }
 
@@ -149,9 +150,11 @@ class ExportString extends MDTBase
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
-                        sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
+                    sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                         ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                     ));
+
+                    continue;
                 }
 
                 // Create an array if it didn't exist yet
@@ -161,12 +164,23 @@ class ExportString extends MDTBase
 
                 // For this enemy, kill this clone
                 $pull[$mdtNpcIndex][$enemyIndex++] = $enemy->mdt_id;
+                $enemiesAdded++;
+            }
+
+            // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
+            if( $enemiesAdded === 0 ) {
+                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
+                    sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
+                ));
+
+                continue;
             }
 
             $pull['color'] = strpos($killZone->color, '#') === 0 ? substr($killZone->color, 1) : $killZone->color;
 
             $result[$pullIndex++] = $pull;
         }
+
         return $result;
     }
 
