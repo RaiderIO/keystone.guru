@@ -15,16 +15,6 @@
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 1,
-                "ticket_id": 882,
-                "change": "Added a background service which performs some caching to increase the load speed of all \/routes pages.",
-                "category": {
-                    "id": 1,
-                    "category": "General changes"
-                }
-            },
-            {
-                "release_changelog_id": 118,
-                "release_changelog_category_id": 1,
                 "ticket_id": 883,
                 "change": "Made various changes to accomodate the addition of Legion routes alongside current Shadowlands routes.",
                 "category": {
@@ -37,6 +27,16 @@
                 "release_changelog_category_id": 1,
                 "ticket_id": 107,
                 "change": "The site is now fully translatable and available in Russian. Thanks so much to Rodriguez#8726 for your help with providing translations!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 118,
+                "release_changelog_category_id": 1,
+                "ticket_id": 882,
+                "change": "Added a background service which performs some caching to increase the load speed of all \/routes pages.",
                 "category": {
                     "id": 1,
                     "category": "General changes"

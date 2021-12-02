@@ -25,6 +25,7 @@
                 'killzonepath'
             ],
             'show' => [
+                'header' => true,
                 'controls' => [
                     'draw' => true,
                     'enemyinfo' => true,
