@@ -181,6 +181,7 @@ return [
     'delete_user_label'                                              => 'Удалить пользователя',
 
     // Home page
+    'export_notes_label'                                             => '@todo ru: .export_notes_label',
     'warnings_label'                                                 => 'Предупреждения',
     'category_label'                                                 => 'Категории',
     'message_label'                                                  => 'Сообщение',

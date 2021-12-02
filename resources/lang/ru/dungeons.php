@@ -22,9 +22,7 @@ return [
         'court_of_stars'       => [
             'name'   => 'Квартал Звезд',
             'floors' => [
-                'court_of_stars'     => 'Квартал Звезд',
-                'the_jeweled_estate' => 'Самоцветный дворец',
-                'the_balconies'      => 'Балконы',
+                'court_of_stars' => 'Квартал Звезд',
             ],
         ],
         'darkheart_thicket'    => [
@@ -181,7 +179,7 @@ return [
             'name'   => 'Усадьба Уэйкрестов',
             'floors' => [
                 'the_grand_foyer' => 'Главный вестибюль',
-                'upstairs'       => 'Второй этаж',
+                'upstairs'        => 'Второй этаж',
                 'the_cellar'      => 'Погреб',
                 'catacombs'       => 'Катакомбы',
                 'the_rupture'     => 'Разлом',

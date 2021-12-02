@@ -288,6 +288,7 @@ return [
             'view_dungeonroute_details' => 'View Dungeonroute details',
 
             'subheader_mdt'                   => 'MDT',
+            'view_mdt_string'                 => 'View MDT String contents',
             'view_mdt_string_as_dungeonroute' => 'View MDT String as Dungeonroute',
             'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
             'view_mdt_diff'                   => 'View MDT Diff',

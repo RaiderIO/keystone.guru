@@ -12,7 +12,6 @@ namespace App\Logic\MDT\IO;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Logic\Utils\Stopwatch;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
@@ -52,11 +51,11 @@ class ExportString extends MDTBase
         $result = [];
 
         // Lua is 1 based, not 0 based
-        $mapIconIndex = 1;
+        $currentObjectIndex = 1;
         foreach ($this->_dungeonRoute->mapicons as $mapIcon) {
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
 
-            $result[$mapIconIndex] = [
+            $result[$currentObjectIndex++] = [
                 'n' => true,
                 'd' => [
                     1 => $mdtCoordinates['x'],
@@ -66,12 +65,10 @@ class ExportString extends MDTBase
                     5 => $mapIcon->comment,
                 ],
             ];
-            $mapIconIndex++;
         }
 
         $lines = $this->_dungeonRoute->brushlines->merge($this->_dungeonRoute->paths);
 
-        $lineIndex = 1;
         foreach ($lines as $line) {
             /** @var Path|Brushline $line */
 
@@ -83,9 +80,7 @@ class ExportString extends MDTBase
                     4 => true,
                     5 => strpos($line->polyline->color, '#') === 0 ? substr($line->polyline->color, 1) : $line->polyline->color,
                     6 => -8,
-                ],
-                't' => [
-                    1 => 0,
+                    7 => true,
                 ],
                 'l' => [],
             ];
@@ -94,16 +89,24 @@ class ExportString extends MDTBase
                 $mdtLine['d'][7] = true;
             }
 
-            $vertexIndex = 1;
-            $vertices    = json_decode($line->polyline->vertices_json, true);
+            $vertexIndex            = 1;
+            $vertices               = json_decode($line->polyline->vertices_json, true);
+            $previousMdtCoordinates = null;
             foreach ($vertices as $latLng) {
                 $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
-                // Post increment
-                $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
-                $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
+
+                if ($previousMdtCoordinates !== null) {
+                    // We must do A -> B, B -> C, C -> D. I don't know why he wants the previous coordinates too, but alas that's how it works
+                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['x'];
+                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['y'];
+                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
+                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
+                }
+
+                $previousMdtCoordinates = $mdtCoordinates;
             }
 
-            $result[$lineIndex++] = $mdtLine;
+            $result[$currentObjectIndex++] = $mdtLine;
         }
 
         return $result;
@@ -130,7 +133,7 @@ class ExportString extends MDTBase
             $pull = [];
 
             // Lua is 1 based, not 0 based
-            $enemyIndex = 1;
+            $enemyIndex   = 1;
             $enemiesAdded = 0;
             foreach ($killZone->enemies as $enemy) {
                 // MDT does not handle prideful NPCs
@@ -150,7 +153,7 @@ class ExportString extends MDTBase
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
-                    sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
+                        sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                         ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                     ));
 
@@ -168,7 +171,7 @@ class ExportString extends MDTBase
             }
 
             // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
-            if( $enemiesAdded === 0 ) {
+            if ($enemiesAdded === 0) {
                 $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                     sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                 ));
