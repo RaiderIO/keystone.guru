@@ -119,9 +119,9 @@ return [
             'plaguefall'            => [
                 'start'              => 'Start',
                 'graveyard_dr_ickus' => 'Activates after killing Doctor Ickus',
-                'gushing_slime'      => 'Necrolord: AoE Damage Proc Aura - Using Fleshcraft on the Gushing Slime\'s corpse will grant the Corrosive Gunk aura for 3 minutes. This aura will apply the Corrosive Gunk buff to any nearby party member, giving a 10% chance to proc AoE damage around your character',
-                'congealed_slime'    => 'Necrolord: 25% Damage Reduction Aura - Using Fleshcraft on the Congealed Slime\'s corpse will grant the Congealed Contagion aura for 3 minutes. This aura will apply the Congealed Contagion buff to any nearby party member within 10 yards, giving them with 25% Damage Reduction',
-                'pestilence_slime'   => 'Necrolord: 25% Haste Aura - Using Fleshcraft on the Pestilence Slime\'s corpse will grant the  Rapid Infection aura for 3 minutes. This aura will apply the Rapid Infection buff to any nearby party member within 10 yards, providing them with 25% Haste',
+                'gushing_slime'      => 'Necrolord: AoE Damage Proc Aura - Using Fleshcraft on the Gushing Slime\'s corpse will grant the Corrosive Gunk aura for 2 minutes. This aura will apply the Corrosive Gunk buff to any nearby party member, giving a 10% chance to proc AoE damage around your character',
+                'congealed_slime'    => 'Necrolord: 25% Damage Reduction Aura - Using Fleshcraft on the Congealed Slime\'s corpse will grant the Congealed Contagion aura for 2 minutes. This aura will apply the Congealed Contagion buff to any nearby party member within 10 yards, giving them 10% Damage Reduction',
+                'pestilence_slime'   => 'Necrolord: 25% Haste Aura - Using Fleshcraft on the Pestilence Slime\'s corpse will grant the  Rapid Infection aura for 2 minutes. This aura will apply the Rapid Infection buff to any nearby party member within 10 yards, providing them with 25% Haste',
                 'landing'            => 'Landing',
                 'exit'               => 'Exit',
             ],

@@ -4,17 +4,18 @@ return [
     'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                        => [
+                'category'                                          => [
                     'pull'     => 'Пулл %d',
                     'title'    => 'Название',
                     'map_icon' => 'Иконки карты',
                 ],
-                'unable_to_find_mdt_enemy_for_kg_enemy'           => 'Невозможно найти врага в MDT антологичного для  Keystone.guru с NPC %s (id_вгара: %s, npc_id: %s)',
-                'unable_to_find_mdt_enemy_for_kg_enemy_details'   => 'Ваш маршрут содержит врага, который известен MDT, но Keystone.guru еще не связал этого врага с его аналогом в MDT (или его нет в MDT).',
-                'route_title_contains_non_ascii_char_bug'         => 'Название вашего маршрута содержит символы, отличные от ascii, которые, как известно, вызывают еще не устраненную ошибку кодирования в Keystone.guru. В названии вашего маршрута удалены все неподдерживаемые символы. Приносим извинения за неудобства и надеемся вскоре решить эту проблему.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Старое название: %s, Новое название: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'Один из ваших комментариев к иконке на карте содержит символы, отличные от ascii, которые, как известно, вызывают еще не устраненную ошибку кодирования в Keystone.guru. В вашем комментарии к иконке на карте удалены все неподдерживаемые символы. Приносим извинения за неудобства и надеемся вскоре решить эту проблему.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Старый комментарий: "%s", Новый комментарий: "%s"',
+                'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Невозможно найти врага в MDT антологичного для  Keystone.guru с NPC %s (id_вгара: %d, npc_id: %d)',
+                'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Ваш маршрут содержит врага, который известен MDT, но Keystone.guru еще не связал этого врага с его аналогом в MDT (или его нет в MDT).',
+                'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '@todo ru: .mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull',
+                'route_title_contains_non_ascii_char_bug'           => 'Название вашего маршрута содержит символы, отличные от ascii, которые, как известно, вызывают еще не устраненную ошибку кодирования в Keystone.guru. В названии вашего маршрута удалены все неподдерживаемые символы. Приносим извинения за неудобства и надеемся вскоре решить эту проблему.',
+                'route_title_contains_non_ascii_char_bug_details'   => 'Старое название: %s, Новое название: %s',
+                'map_icon_contains_non_ascii_char_bug'              => 'Один из ваших комментариев к иконке на карте содержит символы, отличные от ascii, которые, как известно, вызывают еще не устраненную ошибку кодирования в Keystone.guru. В вашем комментарии к иконке на карте удалены все неподдерживаемые символы. Приносим извинения за неудобства и надеемся вскоре решить эту проблему.',
+                'map_icon_contains_non_ascii_char_bug_details'      => 'Старый комментарий: "%s", Новый комментарий: "%s"',
             ],
             'import_string' => [
                 'category'                                             => [

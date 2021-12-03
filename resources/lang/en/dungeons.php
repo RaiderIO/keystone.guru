@@ -114,85 +114,102 @@ return [
         'atal_dazar'                => [
             'name'   => 'Atal\'Dazar',
             'floors' => [
-                '' => '',
+                'atal_dazar'       => 'Atal\'dazar',
+                'sacrificial_pits' => 'Sacrificial Pits',
             ],
         ],
         'freehold'                  => [
             'name'   => 'Freehold',
             'floors' => [
-                '' => '',
+                'freehold' => 'Freehold',
             ],
         ],
         'kings_rest'                => [
             'name'   => 'King\'s Rest',
             'floors' => [
-                '' => '',
+                'kings_rest' => 'King\'s Rest',
             ],
         ],
         'shrine_of_the_storm'       => [
             'name'   => 'Shrine of the Storm',
             'floors' => [
-                '' => '',
+                'shrine_of_the_storm' => 'Shrine of the Storm',
+                'storms_end'          => 'Storm\'s End',
             ],
         ],
         'siege_of_boralus'          => [
             'name'   => 'Siege of Boralus',
             'floors' => [
-                '' => '',
+                'siege_of_boralus' => 'Siege of Boralus',
             ],
         ],
         'temple_of_sethraliss'      => [
             'name'   => 'Temple of Sethraliss',
             'floors' => [
-                '' => '',
+                'temple_of_sethraliss' => 'Temple of Sethraliss',
+                'atrium_of_sethraliss' => 'Atrium of Sethraliss',
             ],
         ],
         'the_motherlode'            => [
             'name'   => 'The MOTHERLODE!!',
             'floors' => [
-                '' => '',
+                'the_motherlode' => 'The MOTHERLODE!!',
             ],
         ],
         'the_underrot'              => [
             'name'   => 'The Underrot',
             'floors' => [
-                '' => '',
+                'the_underrot'  => 'The Underrot',
+                'ruins_descent' => 'Ruin\'s Descent',
             ],
         ],
         'tol_dagor'                 => [
             'name'   => 'Tol Dagor',
             'floors' => [
-                '' => '',
+                'tol_dagor'         => 'Tol Dagor',
+                'the_drain'         => 'The Drain',
+                'the_brig'          => 'The Brig',
+                'detention_block'   => 'Detention Block',
+                'officer_ouarters'  => 'Officer Quarters',
+                'overseers_redoubt' => 'Overseer\'s Redoubt',
+                'overseers_summit'  => 'Overseer\'s Summit',
             ],
         ],
         'waycrest_manor'            => [
             'name'   => 'Waycrest Manor',
             'floors' => [
-                '' => '',
+                'the_grand_foyer' => 'The Grand Foyer',
+                'upstairs'        => 'Upstairs',
+                'the_cellar'      => 'The Cellar',
+                'catacombs'       => 'Catacombs',
+                'the_rupture'     => 'The Rupture',
             ],
         ],
         'mechagon_junkyard'         => [
             'name'   => 'Mechagon: Junkyard',
             'floors' => [
-                '' => '',
+                'mechagon_island' => 'Mechagon Island',
             ],
         ],
         'mechagon_workshop'         => [
             'name'   => 'Mechagon: Workshop',
             'floors' => [
-                '' => '',
+                'the_robodrome'  => 'The Robodrome',
+                'waste_pipes'    => 'Waste Pipes',
+                'the_under_junk' => 'The Under Junk',
+                'mechagon_city'  => 'Mechagon City',
             ],
         ],
         'orgrimmar_horrific_vision' => [
             'name'   => 'Orgrimmar (Horrific Vision)',
             'floors' => [
-                '' => '',
+                'orgrimmar_horrific_vision' => 'Orgrimmar (Horrific Vision)',
             ],
         ],
         'stormwind_horrific_vision' => [
             'name'   => 'Stormwind (Horrific Vision)',
             'floors' => [
-                '' => '',
+                'stormwind_horrific_vision' => 'Stormwind (Horrific Vision)',
             ],
         ],
     ],

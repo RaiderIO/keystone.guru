@@ -16,7 +16,7 @@
 
     <h4>{{ __('views/admin.tools.list.subheader_mdt') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.mdt.string.view') }}">{{ __('views/admin.tools.list.view_mdt_string_as_dungeonroute') }}</a>
+        <a href="{{ route('admin.tools.mdt.string.view') }}">{{ __('views/admin.tools.list.view_mdt_string') }}</a>
     </div>
     <div class="form-group">
         <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('views/admin.tools.list.view_mdt_string_as_dungeonroute') }}</a>

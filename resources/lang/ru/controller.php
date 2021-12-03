@@ -89,7 +89,7 @@ return [
         'flash' => [
             'release_updated'  => 'Релиз обновлен',
             'release_created'  => 'Релиз создан',
-            'github_exception' => '@todo ru: .release.flash.github_exception',
+            'github_exception' => 'Произошла ошибка связи с Github: %s',
         ],
     ],
     'mdtimport'            => [

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property $season_id int
  * @property $seasonal_index int
  * @property $seasonal_index_in_season int Only set in in rare case - not a database column! See KeystoneGuruServiceProvider.php
+ * @property $text string To string of the affix group
  *
  * @property Collection|AffixGroupEaseTier[] $easetiers
  * @property Collection|Affix[] $affixes

@@ -66,8 +66,9 @@ $errors   = $errors ?? collect();
                 <div class="col-md-{{ $width }}">
                     {!! Form::select('region', array_merge(
                     ['-1' => __('views/common.forms.register.select_region')],
-                    \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()
-                    ), null, ['class' => 'form-control']) !!}
+                    \App\Models\GameServerRegion::all()->mapWithKeys(function (\App\Models\GameServerRegion $region){
+                        return [$region->id => __($region->name)];
+                    })->toArray()), null, ['class' => 'form-control']) !!}
                 </div>
             </div>
 

@@ -383,14 +383,10 @@ class DungeonMap extends Signalable {
         let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
         let enemy = enemyClickedEvent.context;
-        console.warn('Test');
 
         // If we selected an enemy
         if (getState().getMapContext() instanceof MapContextLiveSession) {
-            console.warn('Test 2');
-            if (SelectKillZoneEnemySelectionOverpull.isEnemySelectable(enemy)) {
-                console.warn('Should have selected enemy', enemy);
-            }
+
         } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;

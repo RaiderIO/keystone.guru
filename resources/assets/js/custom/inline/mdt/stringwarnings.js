@@ -21,7 +21,7 @@ class MdtStringWarnings {
             warningsData.warnings.push({
                 category: warning.category,
                 message: warning.message,
-                details: warning.data.details
+                details: warning.data.hasOwnProperty('details') ? warning.data.details : ''
             });
         }
 

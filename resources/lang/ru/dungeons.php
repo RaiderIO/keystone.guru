@@ -114,85 +114,102 @@ return [
         'atal_dazar'                => [
             'name'   => 'Атал\'Дазар',
             'floors' => [
-                '' => '@todo ru: .bfa.atal_dazar.floors.',
+                'atal_dazar'       => 'Атал\'Дазар',
+                'sacrificial_pits' => 'Жертвенная яма',
             ],
         ],
         'freehold'                  => [
             'name'   => 'Вольная Гавань',
             'floors' => [
-                '' => '@todo ru: .bfa.freehold.floors.',
+                'freehold' => 'Вольная Гавань',
             ],
         ],
         'kings_rest'                => [
             'name'   => 'Гробница королей',
             'floors' => [
-                '' => '@todo ru: .bfa.kings_rest.floors.',
+                'kings_rest' => 'Гробница королей',
             ],
         ],
         'shrine_of_the_storm'       => [
             'name'   => 'Святилище Штормов',
             'floors' => [
-                '' => '@todo ru: .bfa.shrine_of_the_storm.floors.',
+                'shrine_of_the_storm' => 'Святилище Штормов',
+                'storms_end'          => 'Предел шторма',
             ],
         ],
         'siege_of_boralus'          => [
             'name'   => 'Осада Боралуса',
             'floors' => [
-                '' => '@todo ru: .bfa.siege_of_boralus.floors.',
+                'siege_of_boralus' => 'Осада Боралуса',
             ],
         ],
         'temple_of_sethraliss'      => [
             'name'   => 'Храм Сетралисс',
             'floors' => [
-                '' => '@todo ru: .bfa.temple_of_sethraliss.floors.',
+                'temple_of_sethraliss' => 'Храм Сетралисс',
+                'atrium_of_sethraliss' => 'Атриум Сетралисс',
             ],
         ],
         'the_motherlode'            => [
             'name'   => 'ЗОЛОТАЯ ЖИЛА!!!',
             'floors' => [
-                '' => '@todo ru: .bfa.the_motherlode.floors.',
+                'the_motherlode' => 'ЗОЛОТАЯ ЖИЛА!!!',
             ],
         ],
         'the_underrot'              => [
             'name'   => 'Подгнилье',
             'floors' => [
-                '' => '@todo ru: .bfa.the_underrot.floors.',
+                'the_underrot'  => 'Подгнилье',
+                'ruins_descent' => 'Спуск скорби',
             ],
         ],
         'tol_dagor'                 => [
             'name'   => 'Тол Дагор',
             'floors' => [
-                '' => '@todo ru: .bfa.tol_dagor.floors.',
+                'tol_dagor'         => 'Тол Дагор',
+                'the_drain'         => 'Стоки',
+                'the_brig'          => 'Гауптвахта',
+                'detention_block'   => 'Тюремный блок',
+                'officer_ouarters'  => 'Офицерская',
+                'overseers_redoubt' => 'Цитадель надзирателя',
+                'overseers_summit'  => 'Терраса надзирателя',
             ],
         ],
         'waycrest_manor'            => [
             'name'   => 'Усадьба Уэйкрестов',
             'floors' => [
-                '' => '@todo ru: .bfa.waycrest_manor.floors.',
+                'the_grand_foyer' => 'Главный вестибюль',
+                'upstairs'        => 'Второй этаж',
+                'the_cellar'      => 'Погреб',
+                'catacombs'       => 'Катакомбы',
+                'the_rupture'     => 'Разлом',
             ],
         ],
         'mechagon_junkyard'         => [
             'name'   => 'Мехагон: Свалка',
             'floors' => [
-                '' => '@todo ru: .bfa.mechagon_junkyard.floors.',
+                'mechagon_island' => 'Остров Мехагон',
             ],
         ],
         'mechagon_workshop'         => [
             'name'   => 'Мехагон: Мастерская',
             'floors' => [
-                '' => '@todo ru: .bfa.mechagon_workshop.floors.',
+                'the_robodrome'  => 'Рободром',
+                'waste_pipes'    => 'Барахлопровод',
+                'the_under_junk' => 'Барахлимб',
+                'mechagon_city'  => 'Город Мехагон',
             ],
         ],
         'orgrimmar_horrific_vision' => [
             'name'   => 'Оргриммар (Жуткие Видения)',
             'floors' => [
-                '' => '@todo ru: .bfa.orgrimmar_horrific_vision.floors.',
+                'orgrimmar_horrific_vision' => 'Видение Оргриммара',
             ],
         ],
         'stormwind_horrific_vision' => [
             'name'   => 'Штормград (Жуткие Видения)',
             'floors' => [
-                '' => '@todo ru: .bfa.stormwind_horrific_vision.floors.',
+                'stormwind_horrific_vision' => 'Штормград (Жуткие Видения)',
             ],
         ],
     ],

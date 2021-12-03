@@ -254,7 +254,8 @@ class TeamEdit extends InlineCode {
                 if (row.user_id === self.options.currentUserId) {
                     // Handlebars the entire thing
                     template = Handlebars.templates['team_member_table_actions_self_template'];
-                } else if (self.options.userIsModerator && self.options.currentUserRole !== 'admin') {
+                    // Admins can remove all - but moderators cannot remove admins
+                } else if (self.options.userIsModerator && ((self.options.currentUserRole === 'moderator' && row.role !== 'admin') || self.options.currentUserRole === 'admin')) {
                     // Handlebars the entire thing
                     template = Handlebars.templates['team_member_table_actions_template'];
                 }

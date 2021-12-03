@@ -13,7 +13,7 @@ class ChangeAmericasRegionShort extends Migration
     {
         $region = \App\Models\GameServerRegion::where('short', 'na')->first();
         if ($region !== null) {
-            $region->short = 'us';
+            $region->short = \App\Models\GameServerRegion::AMERICAS;
             $region->save();
         }
     }
@@ -25,7 +25,7 @@ class ChangeAmericasRegionShort extends Migration
      */
     public function down()
     {
-        $region = \App\Models\GameServerRegion::where('short', 'us')->first();
+        $region = \App\Models\GameServerRegion::where('short', \App\Models\GameServerRegion::AMERICAS)->first();
         if ($region !== null) {
             $region->short = 'na';
             $region->save();

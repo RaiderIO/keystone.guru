@@ -129,13 +129,13 @@ return [
     'finish'                                      => 'Завершить',
     'finish_drawing'                              => 'Завершить рисование',
 
-    'draw_handler_route_tooltip_start' => '@todo ru: .draw_handler_route_tooltip_start',
-    'draw_handler_route_tooltip_cont'  => '@todo ru: .draw_handler_route_tooltip_cont',
-    'draw_handler_route_tooltip_end'   => '@todo ru: .draw_handler_route_tooltip_end',
+    'draw_handler_route_tooltip_start' => 'Нажмите, чтобы начать рисовать маршрут.',
+    'draw_handler_route_tooltip_cont'  => 'Нажмите, чтобы продолжить рисовать маршрут.',
+    'draw_handler_route_tooltip_end'   => 'Нажмите кнопку \'Готово\' на панели инструментов, чтобы завершить свой рисование.',
 
-    'draw_handler_brushline_tooltip_start' => '@todo ru: .draw_handler_brushline_tooltip_start',
-    'draw_handler_brushline_tooltip_cont'  => '@todo ru: .draw_handler_brushline_tooltip_cont',
-    'draw_handler_brushline_tooltip_end'   => '@todo ru: .draw_handler_brushline_tooltip_end',
+    'draw_handler_brushline_tooltip_start' => 'Нажмите, чтобы начать рисовать линию.',
+    'draw_handler_brushline_tooltip_cont'  => 'Нажмите, чтобы закончить рисовать линию.',
+    'draw_handler_brushline_tooltip_end'   => 'Перетаскивайте объекты, нажмите кнопку \'Готово\' на панели инструментов, чтобы завершить рисование.',
 
     'enemypack'                              => 'Пак',
     'enemy'                                  => 'Враг',
@@ -168,7 +168,7 @@ return [
     'patreon_label'                          => 'Patreon',
     'datatable_no_users_in_table'            => 'Пользователь не найден',
     'datatable_no_npcs_in_table'             => 'NPC не найдены',
-    'enemy_count_label'                      => '@todo ru: .enemy_count_label',
+    'enemy_count_label'                      => 'Счетчик врагов',
     'user_report_handled_success'            => 'Отчет пользователя успешно помечен как решенный',
     'dungeonroute_refresh_thumbnail_success' => 'Обновление эскиза успешно поставлено в очередь',
     'updated_paid_tiers_successfully_label'  => 'Платные уровни успешно обновлены',
@@ -181,6 +181,7 @@ return [
     'delete_user_label'                                              => 'Удалить пользователя',
 
     // Home page
+    'export_notes_label'                                             => '@todo ru: .export_notes_label',
     'warnings_label'                                                 => 'Предупреждения',
     'category_label'                                                 => 'Категории',
     'message_label'                                                  => 'Сообщение',
@@ -317,7 +318,7 @@ return [
     'enemy_faction_label'                                           => 'Фракция',
     'enemy_teeming_label'                                           => 'Кишащий',
     'enemy_npc_id_label'                                            => 'NPC',
-    'enemy_mdt_npc_id_label'                                        => '@todo ru: .enemy_mdt_npc_id_label',
+    'enemy_mdt_npc_id_label'                                        => 'MDT Npc (Необязательно)',
     'enemy_seasonal_type_label'                                     => 'Тип сезона',
     'enemy_seasonal_type_select_default_label'                      => 'Не выбрано',
     'enemy_seasonal_index_label'                                    => 'Индекс сезона',
@@ -329,7 +330,7 @@ return [
     'enemy_required_label'                                          => 'Необходимый',
     'enemy_skippable_label'                                         => 'Пропускаемый',
     'enemy_npc_id_select_default_label'                             => 'Выбрать NPC',
-    'enemy_mdt_npc_id_select_default_label'                         => '@todo ru: .enemy_mdt_npc_id_select_default_label',
+    'enemy_mdt_npc_id_select_default_label'                         => 'Выбрать NPC',
 
     // Admin enemy pack
     'admin_enemy_pack_faction_label'                                => 'Фракция',
