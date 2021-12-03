@@ -75,5 +75,16 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 13,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -76.496320466072,
+        "lng": 142.09842811035,
+        "comment": "Arcane Beacon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
