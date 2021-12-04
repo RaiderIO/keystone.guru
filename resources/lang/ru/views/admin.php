@@ -288,6 +288,7 @@ return [
             'view_dungeonroute_details' => 'Показать детали маршрута подземелья',
 
             'subheader_mdt'                   => 'MDT',
+            'view_mdt_string'                 => '@todo ru: .tools.list.view_mdt_string',
             'view_mdt_string_as_dungeonroute' => 'Просмотреть строку MDT как маршрут подземелья',
             'view_dungeonroute_as_mdt_string' => 'Просмотреть маршрут подземелья как строку MDT',
             'view_mdt_diff'                   => 'Просмотр различия с MDT',

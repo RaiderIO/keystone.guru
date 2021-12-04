@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class AddShortnameToExpansion extends Migration
+class AddShortnameColumnToNpcClassificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class AddShortnameToExpansion extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('expansions', function(Blueprint $table){
+        Schema::table('npc_classifications', function (Blueprint $table) {
             $table->string('shortname')->after('name');
         });
     }
@@ -26,8 +25,7 @@ class AddShortnameToExpansion extends Migration
      */
     public function down()
     {
-        //
-        Schema::table('expansions', function(Blueprint $table){
+        Schema::table('npc_classifications', function (Blueprint $table) {
             $table->dropColumn('shortname');
         });
     }

@@ -128,7 +128,9 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
+                return [$id => __($name)];
+            }),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
                 Npc::orderByRaw('dungeon_id, name')
@@ -136,7 +138,7 @@ class NpcController extends Controller
                     ->groupBy('dungeon_id')
                     ->mapWithKeys(function ($value, $key) {
                         // Halls of Valor => [npcs]
-                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : Dungeon::find($key)->name;
+                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
                         return [$dungeonName => $value->pluck('name', 'id')
                             ->map(function ($value, $key) {
                                 // Make sure the value is formatted as 'Hymdal (123456)'
@@ -157,16 +159,25 @@ class NpcController extends Controller
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
+                return [$id => __($name)];
+            }),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
-                [-1 => __('views/admin.npc.edit.all_npcs')] +
                 Npc::where('dungeon_id', $npc->dungeon_id)
                     ->orWhere('dungeon_id', -1)
                     ->orderByRaw('dungeon_id, name')
-                    ->pluck('name', 'id')
-                    ->map(function ($value, $key) {
-                        return sprintf('%s (%s)', $value, $key);
+                    ->get()
+                    ->groupBy('dungeon_id')
+                    ->mapWithKeys(function ($value, $key) {
+                        // Halls of Valor => [npcs]
+                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+                        return [$dungeonName => $value->pluck('name', 'id')
+                            ->map(function ($value, $key) {
+                                // Make sure the value is formatted as 'Hymdal (123456)'
+                                return sprintf('%s (%s)', $value, $key);
+                            }),
+                        ];
                     })
                     ->toArray(),
         ]);
