@@ -18,18 +18,31 @@ class NpcClassificationsSeeder extends Seeder
         $this->_rollback();
         $this->command->info('Adding known Npc Classifications');
 
-        $classificationsData = [
-            'Normal'     => ['color' => 'white'],
-            'Elite'      => ['color' => 'yellow'],
-            'Boss'       => ['color' => 'red'],
-            'Final Boss' => ['color' => 'red'],
-        ];
+        $npcClassifications = collect([
+            new NpcClassification([
+                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_NORMAL),
+                'shortname' => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+                'color'     => 'white',
+            ]),
+            new NpcClassification([
+                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE),
+                'shortname' => NpcClassification::NPC_CLASSIFICATION_ELITE,
+                'color'     => 'yellow',
+            ]),
+            new NpcClassification([
+                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_BOSS),
+                'shortname' => NpcClassification::NPC_CLASSIFICATION_BOSS,
+                'color'     => 'red',
+            ]),
+            new NpcClassification([
+                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS),
+                'shortname' => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
+                'color'     => 'red',
+            ]),
+        ]);
 
-        foreach ($classificationsData as $name => $classificationData) {
-            $classification        = new NpcClassification();
-            $classification->name  = $name;
-            $classification->color = $classificationData['color'];
-            $classification->save();
+        foreach ($npcClassifications as $npcClassification) {
+            $npcClassification->save();
         }
     }
 

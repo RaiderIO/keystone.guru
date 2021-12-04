@@ -64,7 +64,10 @@
                         'title': lang.get('messages.classification_label'),
                         'data': 'classification.name',
                         'name': 'classification.name',
-                        'searchable': false
+                        'searchable': false,
+                        'render': function (data, type, row, meta) {
+                            return lang.get(row.classification.name);
+                        },
                     },
                     {
                         'title': lang.get('messages.actions_label'),

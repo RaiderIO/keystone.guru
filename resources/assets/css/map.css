@@ -1146,17 +1146,29 @@ html, body, #map, #app, .wrapper {
     z-index: 1001;
 }
 
-.flash {
+.flash:not(.map_enemy_forces_too_little_warning) {
     animation-name: flash-animation;
     animation-duration: 0.75s;
 }
-
 @keyframes flash-animation {
     from {
         color: #9DFF56;
     }
     to {
-        color: inherit;
+        color: #00bc8c;
+    }
+}
+
+.map_enemy_forces_too_little_warning.flash {
+    animation-name: flash-animation-to-warning;
+    animation-duration: 0.75s;
+}
+@keyframes flash-animation-to-warning {
+    from {
+        color: #9DFF56;
+    }
+    to {
+        color: #f0ad4e;
     }
 }
 
