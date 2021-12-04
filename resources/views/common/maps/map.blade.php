@@ -129,10 +129,6 @@ if ($isAdmin) {
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
-
-
-
-
         </script>
     @endif
 @endsection
@@ -187,15 +183,16 @@ if ($isAdmin) {
     @if(!$adFree && $showAds)
         @if($isMobile)
             @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
-        @else
-            <footer class="fixed-bottom container p-0" style="width: 728px">
-                <div id="snackbar_container">
-
-                </div>
-                @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
-            </footer>
         @endif
     @endif
+    <footer class="fixed-bottom container p-0" style="width: 728px">
+        <div id="snackbar_container">
+
+        </div>
+        @if(!$adFree && $showAds)
+            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
+        @endif
+    </footer>
 
 
 
