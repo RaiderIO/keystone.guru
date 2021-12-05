@@ -25,9 +25,6 @@ class EnemyAttaching {
         this.currentMouseoverLayer = null;
         this.currentMouseoverLayerStyle = null;
         this.lastMouseMoveTime = 0;
-        // Attach the monitor to each existing layer
-        // this.map.leafletMap.on('layeradd', (this.onLayerCreated).bind(this));
-        // this.map.leafletMap.eachLayer((this.monitorLayer).bind(this));
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -163,7 +160,6 @@ class EnemyAttaching {
         console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
 
         if (this.currentMouseoverLayer !== null) {
-            console.log(this.currentMouseoverLayerStyle);
             // No longer in this layer, revert changes
             this.currentMouseoverLayer.setStyle({
                 fillColor: this.currentMouseoverLayerStyle.fillColor,
@@ -171,40 +167,5 @@ class EnemyAttaching {
             });
             this.currentMouseoverLayer = null;
         }
-    }
-
-    /**
-     * Wrapper so that 'this' is set properly.
-     * @param event
-     */
-    onLayerCreated(event) {
-        console.log(">> onLayerCreated", event);
-        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
-        // Only listen to created layers of enemy packs
-        if (event.layer instanceof L.Polygon) {
-            this.monitorLayer(event.layer);
-        }
-        console.log("OK onLayerCreated", event);
-    }
-
-    monitorLayer(layer) {
-        console.log(">> monitorLayer", layer);
-        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
-        let self = this;
-
-        console.log('attached to layer ' + layer);
-        layer.on('mouseover', function (e) {
-            console.log(">> mouseover", e);
-            // Only track this when we're 'ghosting' an enemy around to place it somewhere
-            if (self.drawingEnemy) {
-                layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.mouseoverAddEnemy,
-                    color: c.map.admin.mapobject.colors.mouseoverAddEnemyBorder
-                });
-                self.currentMouseoverLayer = layer;
-            }
-            console.log("OK mouseover", e);
-        });
-        console.log("OK monitorLayer", layer);
     }
 }

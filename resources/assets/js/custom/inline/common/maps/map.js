@@ -223,7 +223,12 @@ class CommonMapsMap extends InlineCode {
         getState().register('echocursorsenabled:changed', this, this._mapObjectGroupVisibilityChanged);
 
         let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
-        let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        let cookieHiddenMapObjectGroups = [];
+        try {
+            cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        } catch (exception) {
+            // ignore
+        }
 
         for (let i in mapObjectGroups) {
             if (mapObjectGroups.hasOwnProperty(i)) {
@@ -445,7 +450,12 @@ class CommonMapsMap extends InlineCode {
             }).get();
 
             /** @type array */
-            let cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+            let cookieHiddenMapObjectGroups = [];
+            try {
+                cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+            } catch (exception) {
+                // ignore
+            }
 
             let hiddenMapObjectGroups = [];
             // Build a list of elements to hide from the UI

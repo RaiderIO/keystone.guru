@@ -305,10 +305,14 @@ class ImportString extends MDTBase
                             }
 
                             if ($enemy === null) {
-                                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                                    sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
-                                    ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
-                                ));
+                                // Teeming is gone, and its enemies have not always been mapped on purpose. So if we cannot find a Teeming enemy
+                                // we can skip this warning as to not alert people to something that shouldn't be there in the first place
+                                if (!$mdtEnemy->teeming) {
+                                    $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                        sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
+                                        ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
+                                    ));
+                                }
                                 continue;
                             }
 
