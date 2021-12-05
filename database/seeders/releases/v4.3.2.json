@@ -1,0 +1,27 @@
+{
+    "id": 117,
+    "release_changelog_id": 124,
+    "version": "v4.3.2",
+    "title": "Legion mapping updates",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2021-12-05T15:40:58+00:00",
+    "updated_at": "2021-12-05T15:40:58+00:00",
+    "changelog": {
+        "id": 124,
+        "release_id": 117,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 124,
+                "release_changelog_category_id": 4,
+                "ticket_id": 923,
+                "change": "Fixed various reported mapping issues and MDT importer\/exporter issues, mainly for Legion dungeons.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
