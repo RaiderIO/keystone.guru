@@ -7,6 +7,7 @@ export default {
     'en.expansions': require('../../lang/en/expansions.php'),
     'en.factions': require('../../lang/en/factions.php'),
     'en.mapping': require('../../lang/en/mapping.php'),
+    'en.npcclassifications': require('../../lang/en/npcclassifications.php'),
     'en.races': require('../../lang/en/races.php'),
     'en.specializations': require('../../lang/en/specializations.php'),
 
@@ -17,6 +18,7 @@ export default {
     'ru.expansions': require('../../lang/ru/expansions.php'),
     'ru.factions': require('../../lang/ru/factions.php'),
     'ru.mapping': require('../../lang/en/mapping.php'),
+    'ru.npcclassifications': require('../../lang/ru/npcclassifications.php'),
     'ru.races': require('../../lang/ru/races.php'),
     'ru.specializations': require('../../lang/ru/specializations.php'),
 }

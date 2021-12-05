@@ -193,7 +193,8 @@ class Enemy extends MapObject {
                 live_search: true,
                 setter: function (value) {
                     // Values from a select are always strings, cast this
-                    self.mdt_npc_id = parseInt(value);
+                    let parsed = parseInt(value);
+                    self.mdt_npc_id = value === null || parsed === -1 ? null : parsed;
                 }
             }),
             new Attribute({
