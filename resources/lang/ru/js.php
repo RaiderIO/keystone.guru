@@ -37,6 +37,7 @@ return [
     'mdt_label'              => 'Секция MDT',
     'is_mdt_label'           => 'MDT',
     'mdt_id_label'           => 'MDT_ID',
+    'mdt_npc_id_label'       => 'MDT_NPC_ID',
 
     'preset_label' => 'Предустановка',
     'add_label'    => 'Добавить',
