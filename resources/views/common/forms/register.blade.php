@@ -126,6 +126,7 @@ $errors   = $errors ?? collect();
              '<a href="' . route('legal.privacy') . '">' . __('views/common.forms.register.privacy_policy') . '</a>',
              '<a href="' . route('legal.cookies') . '">' . __('views/common.forms.register.cookie_policy') . '</a>')
              !!}
+            {{ __('views/common.forms.oauth.battletag_warning') }}
         </p>
         <hr>
         @include('common.forms.oauth')

@@ -76,7 +76,7 @@ if (count($affixes) == 0) {
                     <div id="edit_route_enemy_forces_container"></div>
                 </div>
             </div>
-            <div class="col-auto pl-2">
+            <div class="col-md-auto d-md-flex d-none pl-2">
                 <?php
                 $mostRelevantAffixGroup = $dungeonroute->getMostRelevantAffixGroup();
                 ?>

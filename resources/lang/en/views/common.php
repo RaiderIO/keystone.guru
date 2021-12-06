@@ -120,6 +120,9 @@ return [
             'parsing_your_string'                    => 'Parsing your string...',
             'import_route'                           => 'Import route',
         ],
+        'oauth'                => [
+            'battletag_warning' => 'If you publish routes, your battletag/discord username will be visible until you change your username in your profile.',
+        ],
         'pullsettings'         => [
             'pull_number_style'                 => 'Pull number style',
             'pull_number_style_title'           => 'This controls how the pulls sidebar displays numbers.',
