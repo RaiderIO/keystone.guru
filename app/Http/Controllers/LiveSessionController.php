@@ -52,7 +52,8 @@ class LiveSessionController extends Controller
                 foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
                     /** @var array $channelUser */
                     // Ignore the current user!
-                    if ($channelUser['public_key'] !== $user->public_key && $dungeonroute->team->isUserMember(new User($channelUser))) {
+                    if ((isset($channelUser['public_key']) && $channelUser['public_key'] !== $user->public_key) &&
+                        $dungeonroute->team->isUserMember(new User($channelUser))) {
                         $invitees->push($channelUser['public_key']);
                     }
                 }
