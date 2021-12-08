@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * @property $id int
  * @property $seasonal_affix_id int
+ * @property $event string|null
  * @property $start datetime
  * @property $presets int
  *
@@ -33,7 +34,7 @@ class Season extends CacheModel
      */
     public function affixgroups(): HasMany
     {
-        return $this->hasMany('App\Models\AffixGroup');
+        return $this->hasMany('App\Models\AffixGroup')->whereNull('event');
     }
 
     /**

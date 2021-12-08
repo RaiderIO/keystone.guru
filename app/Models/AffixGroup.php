@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property $id int The ID of this Affix.
  * @property $season_id int
  * @property $seasonal_index int
- * @property $seasonal_index_in_season int Only set in in rare case - not a database column! See KeystoneGuruServiceProvider.php
+ * @property $seasonal_index_in_season int Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
  * @property $text string To string of the affix group
  *
  * @property Collection|AffixGroupEaseTier[] $easetiers
@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AffixGroup extends CacheModel
 {
+    const EVENT_LEGION_TIMEWALKING = 'legion_tw';
+
     public $timestamps = false;
     public $with = ['affixes'];
     public $hidden = ['pivot'];

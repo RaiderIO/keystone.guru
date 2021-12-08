@@ -51,6 +51,7 @@ class AffixSeeder extends Seeder
             new Affix(['key' => Affix::AFFIX_PRIDEFUL, 'name' => 'affixes.prideful.name', 'icon_file_id' => -1, 'description' => 'affixes.prideful.description']),
             new Affix(['key' => Affix::AFFIX_TORMENTED, 'name' => 'affixes.tormented.name', 'icon_file_id' => -1, 'description' => 'affixes.tormented.description']),
             new Affix(['key' => Affix::AFFIX_UNKNOWN, 'name' => 'affixes.unknown.name', 'icon_file_id' => -1, 'description' => 'affixes.unknown.description']),
+            new Affix(['key' => Affix::AFFIX_INFERNAL, 'name' => 'affixes.infernal.name', 'icon_file_id' => -1, 'description' => 'affixes.infernal.description']),
         ];
 
         foreach ($affixes as $affix) {
@@ -147,6 +148,8 @@ class AffixSeeder extends Seeder
             ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_RAGING, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_TORMENTED]],
             ['season_id' => 6, 'seasonal_index' => 1, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_TORMENTED]],
             ['season_id' => 6, 'seasonal_index' => 0, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SPITEFUL, Affix::AFFIX_GRIEVOUS, Affix::AFFIX_TORMENTED]],
+
+            ['season_id' => 6, 'event' => AffixGroup::EVENT_LEGION_TIMEWALKING, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_INFERNAL]],
         ];
 
         foreach ($groups as $groupArr) {

@@ -97,5 +97,9 @@ return [
         'name'        => 'Unknown',
         'description' => 'The affixes for this week are not known yet.',
     ],
+    'infernal'              => [
+        'name'        => 'Infernal',
+        'description' => 'Infernal Beacons can be found near some bosses. Activating a Beacon or engaging a nearby boss will trigger a Legion invasion.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 ];
