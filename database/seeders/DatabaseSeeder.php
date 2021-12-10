@@ -39,6 +39,9 @@ class DatabaseSeeder extends Seeder
         $this->call(SeasonsSeeder::class);
         $this->call(AffixSeeder::class);
 
+        // Depends on AffixSeeder
+        $this->call(TimewalkingEventSeeder::class);
+
         //  Depends on Factions
         $this->call(CharacterInfoSeeder::class);
 

@@ -1,6 +1,7 @@
 @extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('views/misc.affixes.title')])
 <?php
 /**
+ * @var $timewalkingEventService \App\Service\TimewalkingEvent\TimewalkingEventService
  * @var $seasonService \App\Service\Season\SeasonService
  * @var $currentAffixGroup \App\Models\AffixGroup
  * @var $nextAffixGroup \App\Models\AffixGroup
@@ -53,13 +54,15 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                     $startDate = $arr['date_start'];
                     /** @var \App\Models\AffixGroup $affixGroup */
                     $affixGroup = $arr['affixgroup'];
+                    $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+                    $timewalkingEventAffixGroup = $timewalkingEvent !== null ? $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate) : null;
                     ?>
                     <tr class="table_row">
                         <?php
                         // Current week if we found the current affix group for this region
                         $currentWeekClass = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1 ? 'current_week ' : '';
                         ?>
-                        <td>
+                        <td @if($timewalkingEvent !== null) rowspan="2" @endif>
                             <div class="affix_row first_column {{ $currentWeekClass }}">
                     <span>
                         {{ $startDate->format('Y/M/d') }}
@@ -101,8 +104,51 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                         }
                         $affixGroupIndex++
                         ?>
+                    </tr>
+
+                    <?php
+                    $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+                    if ($timewalkingEvent !== null) {
+                    $timewalkingEventAffixGroup = $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate);
+                    ?>
+                    <tr class="table_row">
+                        <?php
+                        $affixIndex = 0;
+                        foreach($timewalkingEventAffixGroup->affixes as $affix) {
+                        $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
+                        $class = $currentWeekClass;
+                        $class .= $lastColumn ? 'last_column ' : '';
+                        $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
+                        $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
+                        ?>
+                        <td>
+                            <div class="affix_row {{ $class }}">
+                                <div class="row no-gutters">
+                                    <div
+                                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
+                                        data-toggle="tooltip"
+                                        title="{{ __($affix->description) }}"
+                                        style="height: 24px;">
+                                    </div>
+                                    <div class="col d-lg-block d-none pl-1">
+                                        @if($lastColumn && $affixGroup->seasonal_index !== null)
+                                            {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
+                                        @else
+                                            {{ __($affix->name) }}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </td><?php
+                        $affixIndex++;
+                        }
+                        $affixGroupIndex++
+                        ?>
                     </tr><?php
-                    } ?>
+                    }
+                    }
+
+                    ?>
                     </tbody>
                 </table>
 
