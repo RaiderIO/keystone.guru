@@ -6,12 +6,15 @@ use App\Models\Affix;
 use App\Models\AffixGroup;
 use App\Models\AffixGroupCoupling;
 use App\Models\File;
+use Database\Seeders\Traits\FindsAffixes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class AffixSeeder extends Seeder
 {
+    use FindsAffixes;
+
     /**
      * Run the database seeds.
      *
@@ -23,7 +26,7 @@ class AffixSeeder extends Seeder
 
         $this->command->info('Adding known affixes');
 
-        $affixes = [
+        $affixes = collect([
             new Affix(['key' => Affix::AFFIX_BOLSTERING, 'name' => 'affixes.bolstering.name', 'icon_file_id' => -1, 'description' => 'affixes.bolstering.description']),
             new Affix(['key' => Affix::AFFIX_BURSTING, 'name' => 'affixes.bursting.name', 'icon_file_id' => -1, 'description' => 'affixes.bursting.description']),
             new Affix(['key' => Affix::AFFIX_EXPLOSIVE, 'name' => 'affixes.explosive.name', 'icon_file_id' => -1, 'description' => 'affixes.explosive.description']),
@@ -52,7 +55,7 @@ class AffixSeeder extends Seeder
             new Affix(['key' => Affix::AFFIX_TORMENTED, 'name' => 'affixes.tormented.name', 'icon_file_id' => -1, 'description' => 'affixes.tormented.description']),
             new Affix(['key' => Affix::AFFIX_UNKNOWN, 'name' => 'affixes.unknown.name', 'icon_file_id' => -1, 'description' => 'affixes.unknown.description']),
             new Affix(['key' => Affix::AFFIX_INFERNAL, 'name' => 'affixes.infernal.name', 'icon_file_id' => -1, 'description' => 'affixes.infernal.description']),
-        ];
+        ]);
 
         foreach ($affixes as $affix) {
             /** @var $affix Model */
@@ -157,7 +160,7 @@ class AffixSeeder extends Seeder
             ]);
 
             foreach ($groupArr['affixes'] as $affixName) {
-                $affix = $this->_findAffix($affixes, $affixName);
+                $affix = $this->findAffix($affixes, $affixName);
 
                 AffixGroupCoupling::create([
                     'affix_id'       => $affix->id,
@@ -165,31 +168,6 @@ class AffixSeeder extends Seeder
                 ]);
             }
         }
-    }
-
-    /**
-     * Finds an affix by name in a list of affixes.
-     *
-     * @param $affixes Affix[]
-     * @param $affixName string
-     * @return bool|Affix
-     */
-    private function _findAffix(array $affixes, string $affixName)
-    {
-        $result = false;
-
-        foreach ($affixes as $affix) {
-            if ($affix->key === $affixName) {
-                $result = $affix;
-                break;
-            }
-        }
-
-        if (!$result) {
-            $this->command->error(sprintf('Unable to find affix %s', $affixName));
-        }
-
-        return $result;
     }
 
     /**

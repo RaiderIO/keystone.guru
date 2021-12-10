@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 /**
  * @property $id int The ID of this Affix.
  * @property $affix_id int
  * @property $affix_group_id int
  *
- * @mixin \Eloquent
+ * @property Affix $affix
+ * @property AffixGroup $affixgroup
+ *
+ * @mixin Eloquent
  */
 class AffixGroupCoupling extends CacheModel
 {
@@ -15,17 +21,17 @@ class AffixGroupCoupling extends CacheModel
     protected $fillable = ['affix_id', 'affix_group_id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function affix()
+    public function affix(): HasOne
     {
         return $this->hasOne('App\Models\Affix');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function affixGroup()
+    public function affixgroup(): HasOne
     {
         return $this->hasOne('App\Models\AffixGroup');
     }
