@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasStart;
 use App\Service\Season\SeasonService;
-use App\Traits\UserCurrentTime;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Log;
  */
 class Season extends CacheModel
 {
-    use UserCurrentTime;
+    use HasStart;
 
     public $with = ['affixgroups'];
     public $timestamps = false;
@@ -48,24 +48,6 @@ class Season extends CacheModel
             ->where('affix_groups.season_id', $this->id)
             ->get()
             ->unique('id');
-    }
-
-    /**
-     * @param GameServerRegion|null $region
-     * @return Carbon The start date of this season.
-     */
-    public function start(GameServerRegion $region = null): Carbon
-    {
-        $start      = Carbon::createFromTimeString($this->start, 'UTC');
-        $userRegion = GameServerRegion::getUserOrDefaultRegion();
-
-        $start->startOfWeek();
-        // -1, offset 1 means monday, which we're already at
-        $start->addDays(($region ?? $userRegion)->reset_day_offset - 1);
-        $start->addHours(($region ?? $userRegion)->reset_hours_offset);
-        $start->setTimezone(optional($region)->timezone ?? $this->getUserTimezone());
-
-        return $start;
     }
 
     /**

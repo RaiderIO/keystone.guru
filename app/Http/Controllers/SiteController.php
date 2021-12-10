@@ -7,6 +7,7 @@ use App\Models\Release;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -126,17 +127,24 @@ class SiteController extends Controller
      * @param ExpansionService $expansionService
      * @return Factory|View
      */
-    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService, ExpansionService $expansionService)
+    public function affixes(
+        Request                          $request,
+        DiscoverServiceInterface         $discoverService,
+        SeasonService                    $seasonService,
+        ExpansionService                 $expansionService,
+        TimewalkingEventServiceInterface $timewalkingEventService
+    )
     {
         $closure = function (Builder $builder) {
             $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
         };
 
         return view('misc.affixes', [
-            'expansion'     => $expansionService->getCurrentExpansion(),
-            'seasonService' => $seasonService,
-            'offset'        => (int)$request->get('offset', 0),
-            'dungeonroutes' => [
+            'timewalkingEventService' => $timewalkingEventService,
+            'expansion'               => $expansionService->getCurrentExpansion(),
+            'seasonService'           => $seasonService,
+            'offset'                  => (int)$request->get('offset', 0),
+            'dungeonroutes'           => [
                 'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
                 'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
             ],

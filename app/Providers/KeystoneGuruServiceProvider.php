@@ -55,6 +55,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
+        $this->app->bind('App\Service\TimewalkingEvent\TimewalkingEventServiceInterface', 'App\Service\TimewalkingEvent\TimewalkingEventService');
 
         // External communication
         $this->app->bind('App\Service\Discord\DiscordApiServiceInterface', 'App\Service\Discord\DiscordApiService');
