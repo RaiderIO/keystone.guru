@@ -24,8 +24,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AffixGroup extends CacheModel
 {
-    const EVENT_LEGION_TIMEWALKING = 'legion_tw';
-
     public $timestamps = false;
     public $with = ['affixes'];
     public $hidden = ['pivot'];
