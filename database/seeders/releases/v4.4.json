@@ -1,0 +1,37 @@
+{
+    "id": 118,
+    "release_changelog_id": 125,
+    "version": "v4.4",
+    "title": "Legion timewalking affix dispaly",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-12-11T16:57:55+00:00",
+    "updated_at": "2021-12-11T16:57:55+00:00",
+    "changelog": {
+        "id": 125,
+        "release_id": 118,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 125,
+                "release_changelog_category_id": 1,
+                "ticket_id": 931,
+                "change": "Legion timewalking affixes are now displayed on the affixes page.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 125,
+                "release_changelog_category_id": 5,
+                "ticket_id": 930,
+                "change": "Embedding a route now looks better if you view it on mobile.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
