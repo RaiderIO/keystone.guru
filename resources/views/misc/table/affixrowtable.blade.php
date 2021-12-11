@@ -34,7 +34,7 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'timewalking ' . $timewalking
         <div class="affix_row">
             @if($timewalkingEvent !== null)
 {{--                <img src="{{ $timewalkingEvent->expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/>--}}
-                {{ sprintf(__('%s timewalking'), __($timewalkingEvent->expansion->name)) }}
+                {{ sprintf(__('views/misc.table.affixrowtable.expansion_timewalking'), __($timewalkingEvent->expansion->name)) }}
             @else
                 <span>
     {{ $startDate->format('Y/M/d') }}
