@@ -21,7 +21,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                     {{ sprintf(__('views/misc.affixes.header'), __($region->name)) }}
                 </h5>
 
-                <table class="affixes_overview_table table-striped bg-secondary" width="100%">
+                <table class="affixes_overview_table bg-secondary" width="100%">
                     <thead>
                     <tr>
                         <th width="20%">
@@ -43,112 +43,51 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                     </thead>
                     <tbody>
                     <?php
-
-                    // Whatever group we're highlighting
-                    $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
-
                     $affixGroups = $seasonService->getDisplayedAffixGroups($offset);
                     $affixGroupIndex = 0;
+                    // @formatter:off
                     foreach($affixGroups as $index => $arr){
-                    /** @var \Illuminate\Support\Carbon $startDate */
-                    $startDate = $arr['date_start'];
-                    /** @var \App\Models\AffixGroup $affixGroup */
-                    $affixGroup = $arr['affixgroup'];
-                    $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
-                    $timewalkingEventAffixGroup = $timewalkingEvent !== null ? $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate) : null;
-                    ?>
-                    <tr class="table_row">
-                        <?php
-                        // Current week if we found the current affix group for this region
-                        $currentWeekClass = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1 ? 'current_week ' : '';
-                        ?>
-                        <td @if($timewalkingEvent !== null) rowspan="2" @endif>
-                            <div class="affix_row first_column {{ $currentWeekClass }}">
-                    <span>
-                        {{ $startDate->format('Y/M/d') }}
-                    </span>
-                                <span class="d-xl-inline d-none">
-                        {{ $startDate->format(' @ H\h') }}
-                    </span>
-                            </div>
-                        </td>
-                        <?php
-                        $affixIndex = 0;
-                        foreach($affixGroup->affixes as $affix) {
-                        $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
-                        $class = $currentWeekClass;
-                        $class .= $lastColumn ? 'last_column ' : '';
-                        $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
-                        $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
-                        ?>
-                        <td>
-                            <div class="affix_row {{ $class }}">
-                                <div class="row no-gutters">
-                                    <div
-                                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
-                                        data-toggle="tooltip"
-                                        title="{{ __($affix->description) }}"
-                                        style="height: 24px;">
-                                    </div>
-                                    <div class="col d-lg-block d-none pl-1">
-                                        @if($lastColumn && $affixGroup->seasonal_index !== null)
-                                            {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
-                                        @else
-                                            {{ __($affix->name) }}
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </td><?php
-                        $affixIndex++;
-                        }
-                        $affixGroupIndex++
-                        ?>
-                    </tr>
+                        /** @var \Illuminate\Support\Carbon $startDate */
+                        $startDate = $arr['date_start'];
+                        /** @var \App\Models\AffixGroup $affixGroup */
+                        $affixGroup = $arr['affixgroup'];
+                        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1;
+                        $isFirst = $affixGroupIndex === 0;
+                        $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
-                    <?php
-                    $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
-                    if ($timewalkingEvent !== null) {
-                    $timewalkingEventAffixGroup = $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate);
-                    ?>
-                    <tr class="table_row">
+                        $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+                        $timewalkingEventAffixGroup = $timewalkingEvent !== null ? $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate) : null;
+                        ?>
+                        @include('misc.table.affixrowtable', [
+                            'timewalkingEvent' => null,
+                            'affixGroup' => $affixGroup,
+                            'isCurrentWeek' => $isCurrentWeek,
+                            'isFirst' => $isFirst,
+                            'isLast' => $isLast,
+                            'startDate' => $startDate,
+                            'showBottomBorder' => !($timewalkingEvent instanceof \App\Models\Timewalking\TimewalkingEvent),
+                            'isOdd' => $affixGroupIndex % 2 == 0
+                            ])
                         <?php
-                        $affixIndex = 0;
-                        foreach($timewalkingEventAffixGroup->affixes as $affix) {
-                        $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
-                        $class = $currentWeekClass;
-                        $class .= $lastColumn ? 'last_column ' : '';
-                        $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
-                        $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
-                        ?>
-                        <td>
-                            <div class="affix_row {{ $class }}">
-                                <div class="row no-gutters">
-                                    <div
-                                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
-                                        data-toggle="tooltip"
-                                        title="{{ __($affix->description) }}"
-                                        style="height: 24px;">
-                                    </div>
-                                    <div class="col d-lg-block d-none pl-1">
-                                        @if($lastColumn && $affixGroup->seasonal_index !== null)
-                                            {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
-                                        @else
-                                            {{ __($affix->name) }}
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </td><?php
-                        $affixIndex++;
+                        if ($timewalkingEvent !== null) {
+                            $timewalkingEventAffixGroup = $timewalkingEventService->getTimewalkingEventAffixGroupAt($startDate);
+                            ?>
+                            @include('misc.table.affixrowtable', [
+                                'timewalkingEvent' => $timewalkingEvent,
+                                'affixGroup' => $timewalkingEventAffixGroup,
+                                'isCurrentWeek' => $isCurrentWeek,
+                                'isFirst' => $isFirst,
+                                'isLast' => $isLast,
+                                'showTopBorder' => false,
+                                'isOdd' => $affixGroupIndex % 2 == 0
+                                ])
+                            <?php
                         }
-                        $affixGroupIndex++
-                        ?>
-                    </tr><?php
+                        $affixGroupIndex++;
                     }
-                    }
+                    // @formatter:on
 
-                    ?>
+                            ?>
                     </tbody>
                 </table>
 

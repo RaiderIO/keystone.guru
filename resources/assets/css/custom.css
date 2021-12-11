@@ -281,6 +281,12 @@
     margin-right: 16px;
 }
 
+.affixes_overview_table tr.timewalking.legion {
+    background-image: url('../images/dungeons/legion/wallpaper.jpg');
+    background-position-x: center;
+    background-position-y: -437px;
+}
+
 .affixes_overview_table td {
     padding: 0;
 }
