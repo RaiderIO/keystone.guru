@@ -396,7 +396,7 @@ body {
   }
 
   .affixes_overview_table .current_week {
-    background-color: var($--theme-darker);
+    //background-color: var($--theme-darker);
   }
 
   #team_members_table .dropdown.bootstrap-select .btn {
@@ -731,8 +731,11 @@ body {
       border-bottom: var($--theme-affix-page-seasonal-color) 3px solid;
     }
 
-    .current_week {
+    .current_week.border_top {
       border-top: var($--theme-affix-page-current-week-border-color) 3px solid !important;
+    }
+
+    .current_week.border_bottom {
       border-bottom: var($--theme-affix-page-current-week-border-color) 3px solid !important;
     }
 

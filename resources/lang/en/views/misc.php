@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'table'     => [
+        'affixrowtable' => [
+            'expansion_timewalking' => '%s timewalking',
+        ],
+    ],
     'about'     => [
         'title'  => 'About',
         'header' => 'About Keystone.guru',
