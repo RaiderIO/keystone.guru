@@ -21,7 +21,7 @@ $showTopBorder = $showTopBorder ?? true;
 $showBottomBorder = $showBottomBorder ?? true;
 $isOdd = $isOdd ?? false;
 
-$timewalkingClasses = $timewalkingEvent !== null ? 'timewalking ' . $timewalkingEvent->expansion->shortname : '';
+$timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->shortname : '';
 ?>
 <tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ $timewalkingClasses }}">
     <?php
