@@ -19,13 +19,15 @@ class CommonGroupAffixes extends InlineCode {
         }
 
         $(`${this.options.selectSelector}_list_custom .affix_list_row`).bind('click', this._affixRowClicked.bind(this));
+        $(`${this.options.dungeonSelector}`).on('change', this._dungeonChanged.bind(this));
 
         // Perform loading of existing affix groups
         this._applyAffixRowSelectionOnList();
+        this._dungeonChanged();
+    }
 
-        $('#seasonal_index').bind('change', function () {
-            console.log('change');
-        });
+    _dungeonChanged() {
+        console.log('test');
     }
 
     /**

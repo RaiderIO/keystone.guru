@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Affix;
-use App\Models\AffixGroup;
-use App\Models\AffixGroupCoupling;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupCoupling;
 use App\Models\File;
 use Database\Seeders\Traits\FindsAffixes;
 use Illuminate\Database\Eloquent\Model;

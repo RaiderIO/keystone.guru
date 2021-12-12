@@ -91,6 +91,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
 
+            $activeDungeonsByExpansionId = Dungeon::select('dungeons.*')
+                ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                ->where('expansions.active', true)
+                ->where('dungeons.active', true)
+                ->orderByRaw('expansion_id DESC, dungeons.name')
+                ->get();
+
             $currentExpansion = $expansionService->getCurrentExpansion();
             /** @var Release $latestRelease */
             $latestRelease          = Release::latest()->first();
@@ -100,6 +107,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 )->latest()->first();
 
             $currentSeason = $seasonService->getCurrentSeason();
+
+            $allExpansions = Expansion::all();
 
             return [
                 'isProduction'                    => config('app.env') === 'production',
@@ -143,16 +152,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
                 // Misc
                 'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
-                'expansions'                      => Expansion::all(),
+                'expansions'                      => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 // Take active expansions into account
-                'activeDungeonsByExpansionIdDesc' => Dungeon::select('dungeons.*')
-                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                    ->where('expansions.active', true)
-                    ->where('dungeons.active', true)
-                    ->orderByRaw('expansion_id DESC, dungeons.name')
-                    ->get(),
+                'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
                 'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
+                'dungeonsExpansions'              => $activeDungeonsByExpansionId
+                    ->pluck('expansion_id', 'id')->mapWithKeys(function (int $expansionId, int $dungeonId) use ($allExpansions) {
+                        return [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname];
+                    }),
 
                 // Season
                 'currentSeason'                   => $currentSeason,
@@ -162,6 +170,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
                     ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                     ->get(),
+                'timewalkingAffixGroups'          => [
+                    Expansion::EXPANSION_LEGION => Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()
+                        ->timewalkingevent
+                        ->timewalkingeventaffixgroups()
+                        ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
+                        ->get(),
+                ],
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -249,6 +264,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isPrideful', $globalViewVariables['isPrideful']);
             $view->with('isTormented', $globalViewVariables['isTormented']);
             $view->with('affixGroups', $globalViewVariables['currentSeasonAffixGroups']);
+            $view->with('timewalkingAffixGroups', $globalViewVariables['timewalkingAffixGroups']);
+            $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
         });
 
         // Displaying a release

@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\Timewalking\TimewalkingEvent;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -41,8 +45,14 @@ class DungeonRouteDiscoverController extends Controller
      * @param SeasonService $seasonService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
+     * @throws Exception
      */
-    public function discoverExpansion(Expansion $expansion, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    public function discoverExpansion(
+        Expansion                        $expansion,
+        DiscoverServiceInterface         $discoverService,
+        SeasonServiceInterface           $seasonService,
+        TimewalkingEventServiceInterface $timewalkingEventService
+    )
     {
         $this->authorize('view', $expansion);
 
@@ -55,6 +65,16 @@ class DungeonRouteDiscoverController extends Controller
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
 
+        $currentAffixGroup = null;
+        if ($expansion->hasTimewalkingEvent()) {
+            $currentAffixGroup = $expansion->timewalkingevent->timewalkingeventaffixgroups->first();
+            $nextAffixGroup    = $expansion->timewalkingevent->timewalkingeventaffixgroups->count() > 1 ?
+                $expansion->timewalkingevent->timewalkingeventaffixgroups->get(1) : null;
+        } else {
+            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+            $nextAffixGroup    = $seasonService->getCurrentSeason()->getNextAffixGroup();
+        }
+
         $discoverService = $discoverService->withExpansion($expansion);
 
         return view('dungeonroute.discover.discover', [
@@ -62,8 +82,8 @@ class DungeonRouteDiscoverController extends Controller
             'gridDungeons'  => $expansion->dungeons()->active()->get(),
             'expansion'     => $expansion,
             'dungeonroutes' => [
-                'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
-                'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+                'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
+                'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
                 'new'      => $discoverService->withBuilder($closure)->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],

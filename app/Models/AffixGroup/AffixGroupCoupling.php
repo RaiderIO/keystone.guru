@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\AffixGroup;
 
+use App\Models\Affix;
+use App\Models\CacheModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -33,6 +35,6 @@ class AffixGroupCoupling extends CacheModel
      */
     public function affixgroup(): HasOne
     {
-        return $this->hasOne('App\Models\AffixGroup');
+        return $this->hasOne('App\Models\AffixGroup\AffixGroup');
     }
 }

@@ -3,8 +3,8 @@
 /**
  * @var $timewalkingEventService \App\Service\TimewalkingEvent\TimewalkingEventService
  * @var $seasonService \App\Service\Season\SeasonService
- * @var $currentAffixGroup \App\Models\AffixGroup
- * @var $nextAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $offset int
  * @var $expansion \App\Models\Expansion
  */
@@ -49,7 +49,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                     foreach($affixGroups as $index => $arr){
                         /** @var \Illuminate\Support\Carbon $startDate */
                         $startDate = $arr['date_start'];
-                        /** @var \App\Models\AffixGroup $affixGroup */
+                        /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
                         $affixGroup = $arr['affixgroup'];
                         $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1;
                         $isFirst = $affixGroupIndex === 0;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\Models\Timewalking\TimewalkingEvent $timewalkingEvent
- * @var \App\Models\AffixGroup $affixGroup
+ * @var \App\Models\AffixGroup\AffixGroup $affixGroup
  * @var \Illuminate\Support\Carbon|null $startDate
  * @var boolean $showStartDate
  * @var boolean $isCurrentWeek

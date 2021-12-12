@@ -15,7 +15,7 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Affix;
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;

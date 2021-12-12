@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
 use App\Service\Season\SeasonService;
 use Eloquent;
@@ -33,7 +34,7 @@ class Season extends CacheModel
      */
     public function affixgroups(): HasMany
     {
-        return $this->hasMany('App\Models\AffixGroup');
+        return $this->hasMany('App\Models\AffixGroup\AffixGroup');
     }
 
     /**

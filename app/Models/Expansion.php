@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use Carbon\Carbon;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -24,6 +26,7 @@ use Illuminate\Support\Collection;
  * @property Carbon $updated_at
  *
  * @property Collection|Dungeon[] $dungeons
+ * @property TimewalkingEvent|null $timewalkingevent
  *
  * @mixin Eloquent
  */
@@ -32,8 +35,8 @@ class Expansion extends CacheModel
     use HasIconFile;
 
     public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
-
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
+    public $with = ['timewalkingevent'];
 
     protected $dates = [
         // 'released_at',
@@ -55,7 +58,7 @@ class Expansion extends CacheModel
      * https://stackoverflow.com/a/34485411/771270
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'shortname';
     }
@@ -63,9 +66,17 @@ class Expansion extends CacheModel
     /**
      * @return HasMany
      */
-    public function dungeons()
+    public function dungeons(): HasMany
     {
         return $this->hasMany('App\Models\Dungeon');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function timewalkingevent(): HasOne
+    {
+        return $this->hasOne('App\Models\Timewalking\TimewalkingEvent');
     }
 
     /**
@@ -74,7 +85,7 @@ class Expansion extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('expansions.active', 1);
     }
@@ -85,9 +96,17 @@ class Expansion extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeInactive($query)
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTimewalkingEvent(): bool
+    {
+        return $this->timewalkingevent instanceof TimewalkingEvent;
     }
 
     /**

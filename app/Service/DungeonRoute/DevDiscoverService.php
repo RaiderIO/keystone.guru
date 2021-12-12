@@ -3,7 +3,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,7 +69,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -77,7 +77,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -93,7 +93,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -109,7 +109,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    function newByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
@@ -125,7 +125,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
@@ -142,7 +142,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
         return collect();
@@ -160,7 +160,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
         return collect();

@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Scheduler;
 
 use App\Models\Affix;
-use App\Models\AffixGroupEaseTier;
+use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use App\Models\SubcreationEaseTierPull;
 use App\Service\Season\SeasonServiceInterface;

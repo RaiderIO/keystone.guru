@@ -3,7 +3,7 @@
  * @var $title string
  * @var $cols int
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 
 $dungeon          = $dungeon ?? null;

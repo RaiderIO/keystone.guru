@@ -6,7 +6,7 @@
 
 <?php
 /**
- * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $showAds boolean
  * @var $isMobile boolean
  * @var $dungeon \App\Models\Dungeon

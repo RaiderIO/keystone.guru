@@ -3,7 +3,7 @@
 /** @var $subcreationTierListService \App\Service\Subcreation\AffixGroupEaseTierServiceInterface */
 /** @var $tier string */
 /** @var $dungeon \App\Models\Dungeon */
-/** @var $affixgroup \App\Models\AffixGroup */
+/** @var $affixgroup \App\Models\AffixGroup\AffixGroup */
 
 // Users may write their own tiers if they received it from a batch call for example
 $tier = $tier ?? $subcreationTierListService->getTierForAffixAndDungeon($affixgroup, $dungeon);

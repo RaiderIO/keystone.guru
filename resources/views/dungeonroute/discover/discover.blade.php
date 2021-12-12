@@ -8,8 +8,8 @@
 <?php
 /**
  * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup
- * @var $nextAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $expansion \App\Models\Expansion
  */
 ?>

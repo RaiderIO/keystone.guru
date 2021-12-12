@@ -2,7 +2,7 @@
 /**
  * @var $category string
  * @var $dungeon \App\Models\Dungeon
- * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
 $title      = $title ?? sprintf('%s routes', __($dungeon->name));
