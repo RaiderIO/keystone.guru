@@ -9,7 +9,6 @@ use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * This service provides functionality for reading the current laravel echo service and parsing its contents.
@@ -61,6 +60,12 @@ class SeasonService implements SeasonServiceInterface
                 $season = $seasonCandidate;
                 break;
             }
+        }
+
+        if ($season === null) {
+            logger()->error('Season is null for date', [
+                'date' => $date,
+            ]);
         }
 
         return $season;

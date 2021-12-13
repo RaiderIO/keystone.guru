@@ -157,7 +157,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
                 'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
-                'dungeonsExpansions'              => $activeDungeonsByExpansionId
+                'dungeonExpansions'              => $activeDungeonsByExpansionId
                     ->pluck('expansion_id', 'id')->mapWithKeys(function (int $expansionId, int $dungeonId) use ($allExpansions) {
                         return [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname];
                     }),

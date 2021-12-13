@@ -253,7 +253,7 @@ class DungeonRoute extends Model
      */
     public function timewalkingeventaffixgroups(): HasMany
     {
-        return $this->hasMany('App\Models\TimewalkingEvent\TimewalkingEventAffixGroup');
+        return $this->hasMany('App\Models\DungeonRouteTimewalkingEventAffixGroup');
     }
 
     /**
@@ -269,7 +269,7 @@ class DungeonRoute extends Model
      */
     public function timewalkingaffixes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\TimewalkingEvent\TimewalkingAffixGroup', 'dungeon_route_timewalking_event_affix_groups');
+        return $this->belongsToMany('App\Models\Timewalking\TimewalkingEventAffixGroup', 'dungeon_route_timewalking_event_affix_groups');
     }
 
     /**
