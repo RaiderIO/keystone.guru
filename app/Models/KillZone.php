@@ -42,7 +42,7 @@ class KillZone extends Model
      *
      * @return BelongsTo
      */
-    function dungeonroute()
+    function dungeonroute(): BelongsTo
     {
         return $this->belongsTo('App\Models\DungeonRoute');
     }
@@ -50,7 +50,7 @@ class KillZone extends Model
     /**
      * @return BelongsToMany
      */
-    function enemies()
+    function enemies(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Enemy', 'kill_zone_enemies');
     }
@@ -58,7 +58,7 @@ class KillZone extends Model
     /**
      * @return HasMany
      */
-    function killzoneenemies()
+    function killzoneenemies(): HasMany
     {
         return $this->hasMany('App\Models\KillZoneEnemy');
     }
@@ -66,7 +66,7 @@ class KillZone extends Model
     /**
      * @return BelongsTo
      */
-    function floor()
+    function floor(): BelongsTo
     {
         return $this->belongsTo('App\Models\Floor');
     }

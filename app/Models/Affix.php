@@ -82,6 +82,6 @@ class Affix extends CacheModel
      */
     public function affixGroups()
     {
-        return $this->belongsToMany('App\Models\AffixGroup', 'affix_group_couplings');
+        return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'affix_group_couplings');
     }
 }

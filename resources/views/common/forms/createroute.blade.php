@@ -1,10 +1,11 @@
 <?php
-/** @var \App\Models\AffixGroup $currentAffixGroup */
+/** @var \App\Models\AffixGroup\AffixGroup $currentAffixGroup */
 $teeming = old('teeming') ?? $currentAffixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 
 // Make sure $model exists
 $dungeonroute = $dungeonroute ?? null;
+$dungeonSelectId = 'dungeon_id_select';
 ?>
 
 @if(!isset($dungeonroute))
@@ -12,7 +13,7 @@ $dungeonroute = $dungeonroute ?? null;
 @endisset
 <div class="container">
     @if( !isset($dungeonroute) )
-        @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSiegeWarning' => true])
     @endif
 
     @include('common.team.select', ['required' => false])
@@ -69,6 +70,7 @@ $dungeonroute = $dungeonroute ?? null;
 
                         @include('common.group.affixes', [
                             'dungeonroute'     => $dungeonroute ?? null,
+                            'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
                             'teemingSelector'  => '#teeming',
                             'collapseSelector' => '#createRouteAdvancedCollapse',
                             'defaultSelected'  => $defaultSelectedAffixes

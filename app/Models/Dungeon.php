@@ -50,7 +50,7 @@ class Dungeon extends CacheModel
     protected $appends = ['floor_count'];
     public $with = ['expansion', 'floors'];
 
-    public $hidden = ['expansion_id', 'created_at', 'updated_at'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Legion

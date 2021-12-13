@@ -3,8 +3,8 @@
 
 namespace App\Service\Subcreation;
 
-use App\Models\AffixGroup;
-use App\Models\AffixGroupEaseTier;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use App\Models\SubcreationEaseTierPull;
 use Illuminate\Support\Collection;

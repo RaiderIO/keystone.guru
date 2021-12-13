@@ -6,7 +6,7 @@ use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Logic\MDT\IO\ImportString;
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\MDTImport;
 use App\Service\Season\SeasonService;
 use Exception;

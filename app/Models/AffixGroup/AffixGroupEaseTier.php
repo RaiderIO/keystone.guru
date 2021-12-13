@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\AffixGroup;
 
+use App\Models\CacheModel;
+use App\Models\Dungeon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -34,7 +36,7 @@ class AffixGroupEaseTier extends CacheModel
      */
     public function affixgroup()
     {
-        return $this->belongsTo('App\Models\AffixGroup');
+        return $this->belongsTo('App\Models\AffixGroup\AffixGroup');
     }
 
     /**

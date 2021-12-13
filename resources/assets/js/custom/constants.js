@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 let cookieDefaultAttributes = {path: '/', sameSite: 'None', secure: true};
 Cookies.withAttributes(cookieDefaultAttributes);
 
@@ -89,6 +91,7 @@ const AFFIX_STORMING = 'Storming';
 const AFFIX_PRIDEFUL = 'Prideful';
 const AFFIX_TORMENTED = 'Tormented';
 const AFFIX_UNKNOWN = 'Unknown';
+const AFFIX_INFERNAL = 'Infernal';
 
 /**
  * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.

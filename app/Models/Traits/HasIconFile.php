@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
 
 /**
  * @property File $iconfile
- * @property $icon_file_id int
+ * @property int $icon_file_id
  *
  * @mixin Model
  */
@@ -19,9 +19,9 @@ trait HasIconFile
     /**
      * @return HasOne
      */
-    function iconfile()
+    function iconfile(): HasOne
     {
-        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', '=', get_class($this));
+        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', get_class($this));
     }
 
     /**

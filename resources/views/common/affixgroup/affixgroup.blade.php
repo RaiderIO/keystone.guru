@@ -1,5 +1,5 @@
 <?php
-/** @var $affixgroup \App\Models\AffixGroup */
+/** @var $affixgroup \App\Models\AffixGroup\AffixGroup */
 $media = $media ?? 'lg';
 $showText = $showText ?? true;
 $class = $class ?? '';

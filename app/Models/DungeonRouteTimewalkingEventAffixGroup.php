@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property $id int
  * @property $dungeon_route_id int
- * @property $affix_group_id int
+ * @property $timewalking_event_affix_group_id int
  *
  * @mixin Eloquent
  */
-class DungeonRouteAffixGroup extends Model
+class DungeonRouteTimewalkingEventAffixGroup extends Model
 {
     public $hidden = ['id'];
     public $fillable = [
         'dungeon_route_id',
-        'affix_group_id',
+        'timewalking_event_affix_group_id',
     ];
 
     public $timestamps = false;
@@ -26,7 +26,7 @@ class DungeonRouteAffixGroup extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
         return $this->belongsTo('App\Models\DungeonRoute');
     }
@@ -34,8 +34,8 @@ class DungeonRouteAffixGroup extends Model
     /**
      * @return BelongsTo
      */
-    public function affixgroup()
+    public function timewalkingeventaffixgroup(): BelongsTo
     {
-        return $this->belongsTo('App\Models\AffixGroup\AffixGroup');
+        return $this->belongsTo('App\Models\Timewalking\TimewalkingAffixGroup');
     }
 }

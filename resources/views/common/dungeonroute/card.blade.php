@@ -3,8 +3,8 @@
 <?php
 /** @var $cacheService \App\Service\Cache\CacheService */
 /** @var $dungeonroute \App\Models\DungeonRoute */
-/** @var $currentAffixGroup \App\Models\AffixGroup */
-/** @var $tierAffixGroup \App\Models\AffixGroup|null */
+/** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
+/** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */
 /** @var $__env array */
 /** @var $cache boolean */
 
@@ -21,7 +21,7 @@ if (!isset($tierAffixGroup)) {
         $tierAffixGroup = $dungeonroute->affixes->first();
     } else {
         // If the affix list contains the current affix, we can use that to display the tier instead
-        $tierAffixGroup = $dungeonroute->affixes->filter(function (\App\Models\AffixGroup $affixGroup) use ($currentAffixGroup) {
+        $tierAffixGroup = $dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
             return $affixGroup->id === $currentAffixGroup->id;
         })->isNotEmpty() ? $currentAffixGroup : null;
     }

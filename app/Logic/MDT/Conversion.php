@@ -8,7 +8,7 @@
 
 namespace App\Logic\MDT;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Service\Season\SeasonService;

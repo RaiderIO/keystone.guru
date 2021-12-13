@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $dungeon \App\Models\Dungeon
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
