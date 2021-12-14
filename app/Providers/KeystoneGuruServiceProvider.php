@@ -248,10 +248,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('expansion', $globalViewVariables['currentExpansion']);
         });
 
-        view()->composer(['common.forms.createroute'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
-        });
-
         // Displaying a release
         view()->composer('common.release.release', function (View $view) use ($globalViewVariables) {
             $view->with('categories', $globalViewVariables['releaseChangelogCategories']);
@@ -265,6 +261,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isTormented', $globalViewVariables['isTormented']);
             $view->with('affixGroups', $globalViewVariables['currentSeasonAffixGroups']);
             $view->with('timewalkingAffixGroups', $globalViewVariables['timewalkingAffixGroups']);
+            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
+            $view->with('currentExpansion', $globalViewVariables['currentExpansion']);
             $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
         });
 

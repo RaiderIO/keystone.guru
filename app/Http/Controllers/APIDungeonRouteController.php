@@ -202,6 +202,7 @@ class APIDungeonRouteController extends Controller
      * @param APIDungeonRouteSearchFormRequest $request
      * @param SeasonServiceInterface $seasonService
      * @return Response|string
+     * @throws Exception
      */
     function htmlsearch(APIDungeonRouteSearchFormRequest $request, SeasonServiceInterface $seasonService)
     {

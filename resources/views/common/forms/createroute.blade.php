@@ -1,7 +1,7 @@
 <?php
-/** @var \App\Models\AffixGroup\AffixGroup $currentAffixGroup */
-$teeming = old('teeming') ?? $currentAffixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
-$defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
+/** @var \App\Models\DungeonRoute|null $dungeonroute */
+$teeming = old('teeming') ?? false;
+$defaultSelectedAffixes = old('affixes') ?? [];
 
 // Make sure $model exists
 $dungeonroute = $dungeonroute ?? null;
@@ -14,6 +14,8 @@ $dungeonSelectId = 'dungeon_id_select';
 <div class="container">
     @if( !isset($dungeonroute) )
         @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSiegeWarning' => true])
+    @else
+        <input id="{{ $dungeonSelectId }}" type="hidden" value="{{ $dungeonroute->dungeon_id }}">
     @endif
 
     @include('common.team.select', ['required' => false])

@@ -267,7 +267,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsToMany
      */
-    public function timewalkingaffixes(): BelongsToMany
+    public function timewalkingeventaffixes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Timewalking\TimewalkingEventAffixGroup', 'dungeon_route_timewalking_event_affix_groups');
     }
@@ -732,14 +732,18 @@ class DungeonRoute extends Model
                 }
             }
 
-            $newAffixes = $request->get('affixes', []);
+            $newAffixes = $request->get('route_select_affixes', []);
             if (!empty($newAffixes)) {
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
                 $this->timewalkingeventaffixgroups()->delete();
 
-                if (Dungeon::first($this->dungeon_id)->expansion->hasTimewalkingEvent()) {
+                $expansion = Dungeon::find($this->dungeon_id)->expansion;
+                // If we have a timewalking event for this dungeon we need to save the affixes differently
+                if ($expansion->hasTimewalkingEvent()) {
                     foreach ($newAffixes as $value) {
+                        // Correct the value to remove the expansion from it
+                        $value = str_replace('-' . $expansion->shortname, '', $value);
                         /** @var TimewalkingEventAffixGroup $affixGroup */
                         $affixGroup = TimewalkingEventAffixGroup::findOrNew($value);
 
@@ -748,13 +752,14 @@ class DungeonRoute extends Model
                             continue;
                         }
 
-                        $drAffixGroup                                   = new DungeonRouteTimewalkingEventAffixGroup();
-                        $drAffixGroup->timewalking_event_affix_group_id = $affixGroup->id;
-                        $drAffixGroup->dungeon_route_id                 = $this->id;
-                        $drAffixGroup->save();
+                        DungeonRouteTimewalkingEventAffixGroup::create([
+                            'timewalking_event_affix_group_id' => $affixGroup->id,
+                            'dungeon_route_id'                 => $this->id,
+                        ]);
                     }
                 } else {
                     foreach ($newAffixes as $value) {
+                        $value = str_replace('-' . $expansion->shortname, '', $value);
                         /** @var AffixGroup $affixGroup */
                         $affixGroup = AffixGroup::findOrNew($value);
 
@@ -763,10 +768,10 @@ class DungeonRoute extends Model
                             continue;
                         }
 
-                        $drAffixGroup                   = new DungeonRouteAffixGroup();
-                        $drAffixGroup->affix_group_id   = $affixGroup->id;
-                        $drAffixGroup->dungeon_route_id = $this->id;
-                        $drAffixGroup->save();
+                        DungeonRouteAffixGroup::create([
+                            'affix_group_id'   => $affixGroup->id,
+                            'dungeon_route_id' => $this->id,
+                        ]);
                     }
                 }
             }
