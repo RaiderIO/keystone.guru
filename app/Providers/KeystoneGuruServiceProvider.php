@@ -50,11 +50,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         } else {
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
-        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
+        // Depends on ExpansionService
+        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
+        // Depends on SeasonService
         $this->app->bind('App\Service\TimewalkingEvent\TimewalkingEventServiceInterface', 'App\Service\TimewalkingEvent\TimewalkingEventService');
 
         // External communication
@@ -170,13 +172,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
                     ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                     ->get(),
-                'timewalkingAffixGroups'          => [
-                    Expansion::EXPANSION_LEGION => Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()
-                        ->timewalkingevent
-                        ->timewalkingeventaffixgroups()
-                        ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
-                        ->get(),
-                ],
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
 
@@ -260,7 +255,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isPrideful', $globalViewVariables['isPrideful']);
             $view->with('isTormented', $globalViewVariables['isTormented']);
             $view->with('affixGroups', $globalViewVariables['currentSeasonAffixGroups']);
-            $view->with('timewalkingAffixGroups', $globalViewVariables['timewalkingAffixGroups']);
+//            $view->with('timewalkingAffixGroups', $globalViewVariables['timewalkingAffixGroups']);
             $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
             $view->with('currentExpansion', $globalViewVariables['currentExpansion']);
             $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);

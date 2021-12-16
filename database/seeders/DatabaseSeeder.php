@@ -35,11 +35,13 @@ class DatabaseSeeder extends Seeder
         $this->call(TagCategorySeeder::class);
         $this->call(PublishedStatesSeeder::class);
 
-        // Depends on SeasonsSeeder
+        // Depends on ExpansionsSeeder
         $this->call(SeasonsSeeder::class);
+
+        // Depends on ExpansionsSeeder, SeasonsSeeder
         $this->call(AffixSeeder::class);
 
-        // Depends on AffixSeeder
+        // Depends on SeasonsSeeder, AffixSeeder
         $this->call(TimewalkingEventSeeder::class);
 
         //  Depends on Factions

@@ -38,7 +38,7 @@ class Test extends Command
      */
     public function handle(TimewalkingEventServiceInterface $timewalkingEventService)
     {
-        $affixGroup = $timewalkingEventService->getTimewalkingEventAffixGroupAt(now()->addWeeks(2));
+        $affixGroup = $timewalkingEventService->getAffixGroupAt(now()->addWeeks(2));
 //        dd(optional($affixGroup)->getTextAttribute());
 //        dd($timewalkingEventService->getActiveTimewalkingEventAt(now()->addWeeks(14)));
         // 'presence-local-route-edit.E2mXPo3'

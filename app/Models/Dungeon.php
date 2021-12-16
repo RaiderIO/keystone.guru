@@ -151,7 +151,7 @@ class Dungeon extends CacheModel
     /**
      * @return BelongsTo
      */
-    public function expansion()
+    public function expansion(): BelongsTo
     {
         return $this->belongsTo('App\Models\Expansion');
     }
@@ -159,7 +159,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function floors()
+    public function floors(): HasMany
     {
         return $this->hasMany('App\Models\Floor')->orderBy('index');
     }
@@ -167,7 +167,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function dungeonroutes()
+    public function dungeonroutes(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoute');
     }
@@ -175,7 +175,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function npcs()
+    public function npcs(): HasMany
     {
         return $this->hasMany('App\Models\Npc')->orWhere('dungeon_id', -1);
     }
@@ -183,7 +183,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemies()
+    public function enemies(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\Enemy', 'App\Models\Floor');
     }
@@ -191,7 +191,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemypacks()
+    public function enemypacks(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\EnemyPack', 'App\Models\Floor');
     }
@@ -199,7 +199,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemypatrols()
+    public function enemypatrols(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\EnemyPatrol', 'App\Models\Floor');
     }
@@ -207,7 +207,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function mapicons()
+    public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\MapIcon', 'App\Models\Floor')->where('dungeon_route_id', -1);
     }
@@ -215,7 +215,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function floorswitchmarkers()
+    public function floorswitchmarkers(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\DungeonFloorSwitchMarker', 'App\Models\Floor');
     }

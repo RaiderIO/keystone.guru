@@ -3,13 +3,14 @@
 
 namespace App\Service\TimewalkingEvent;
 
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
-use App\Models\Timewalking\TimewalkingEventAffixGroup;
 use Illuminate\Support\Carbon;
 
 interface TimewalkingEventServiceInterface
 {
     function getActiveTimewalkingEventAt(Carbon $date): ?TimewalkingEvent;
 
-    function getTimewalkingEventAffixGroupAt(Carbon $date): ?TimewalkingEventAffixGroup;
+    function getAffixGroupAt(Expansion $expansion, Carbon $date): ?AffixGroup;
 }

@@ -25,16 +25,6 @@ trait DungeonRouteTrait
     {
         $raidMarkers = RaidMarker::all();
 
-        if ($dungeonRoute->dungeon->expansion->hasTimewalkingEvent()) {
-            $affixList = $dungeonRoute->timewalkingeventaffixes->map(function (TimewalkingEventAffixGroup $affixGroup) {
-                return $affixGroup->affixes;
-            });
-        } else {
-            $affixList = $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
-                return $affixGroup->affixes;
-            });
-        }
-
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
@@ -56,7 +46,9 @@ trait DungeonRouteTrait
                 ];
             }),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'           => $affixList->collapse()->unique()->pluck(['name'])->map(function (string $name) {
+            'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
+                return $affixGroup->affixes;
+            })->collapse()->unique()->pluck(['name'])->map(function (string $name) {
                 return __($name, [], 'en');
             }),
         ];

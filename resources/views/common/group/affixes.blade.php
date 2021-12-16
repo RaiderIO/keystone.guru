@@ -9,7 +9,6 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** @var $affixes \Illuminate\Support\Collection */
 /** @var $affixGroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
-/** @var $timewalkingAffixGroups \Illuminate\Support\Collection */
 /** This is the display of affixes when selecting them when creating a new route */
 
 /** @var \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] $affixGroups */
@@ -18,12 +17,7 @@ $defaultExpansionKey = $currentExpansion->shortname;
 
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {
-    if ($dungeonroute->dungeon->expansion->hasTimewalkingEvent()) {
-        $defaultSelected = $dungeonroute->timewalkingeventaffixgroups->pluck(['timewalking_event_affix_group_id'])->toArray();
-    } else {
-        $defaultSelected = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
-    }
-//    dd($dungeonroute->timewalkingeventaffixgroups);
+    $defaultSelected = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
     $defaultExpansionKey = $dungeonroute->dungeon->expansion->shortname;
 }
 
@@ -61,12 +55,6 @@ for ($i = 0; $i < $currentSeason->presets; $i++) {
 $selectValues = $affixGroups->pluck('id')->mapWithKeys(function (int $value) use ($currentExpansion) {
     return [sprintf('%d-%s', $value, $currentExpansion->shortname) => $value];
 });
-
-foreach ($timewalkingAffixGroups as $expansionKey => $timewalkingAffixGroupsList) {
-    $selectValues = $selectValues->merge($timewalkingAffixGroupsList->mapWithKeys(function (\App\Models\Timewalking\TimewalkingEventAffixGroup $affixGroup) use ($expansionKey) {
-        return [sprintf('%d-%s', $affixGroup->id, $expansionKey) => $affixGroup->id];
-    }));
-}
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -76,7 +64,6 @@ foreach ($timewalkingAffixGroups as $expansionKey => $timewalkingAffixGroupsList
     'defaultSelected'        => $defaultSelected,
     'defaultExpansionKey'    => $defaultExpansionKey,
     'affixGroups'            => $affixGroups,
-    'timewalkingAffixGroups' => $timewalkingAffixGroups,
     'modal'                  => $modal ?? false,
     'dungeonExpansions'      => $dungeonExpansions,
     'currentAffixGroupId'    => $currentAffixGroup->id,
@@ -89,12 +76,6 @@ foreach ($timewalkingAffixGroups as $expansionKey => $timewalkingAffixGroupsList
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
             @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $currentExpansion->shortname])
-        @endforeach
-
-        @foreach($timewalkingAffixGroups as $expansionKey => $affixGroups)
-            @foreach($affixGroups as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $expansionKey])
-            @endforeach
         @endforeach
     </div>
     <?php // formatter:on ?>

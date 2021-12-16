@@ -7,6 +7,7 @@ use App\Models\Traits\HasStart;
 use App\Service\Season\SeasonService;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * @property $id int
+ * @property $expansion_id int
  * @property $seasonal_affix_id int
  * @property $start datetime
  * @property $presets int
  *
+ * @property Expansion $expansion
  * @property Collection|AffixGroup[] $affixgroups
  *
  * @mixin Eloquent
@@ -26,8 +29,17 @@ class Season extends CacheModel
 {
     use HasStart;
 
-    public $with = ['affixgroups'];
+    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'start', 'presets'];
+    public $with = ['expansion', 'affixgroups'];
     public $timestamps = false;
+
+    /**
+     * @return BelongsTo
+     */
+    public function expansion(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\Expansion');
+    }
 
     /**
      * @return HasMany
