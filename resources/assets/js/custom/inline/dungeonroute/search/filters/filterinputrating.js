@@ -25,7 +25,7 @@ class SearchFilterRating extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_rating_header').replace(':number', this.getValue());
+        return lang.get('messages.filter_input_rating_header').replace(':value', this.getValue());
     }
 
     /**

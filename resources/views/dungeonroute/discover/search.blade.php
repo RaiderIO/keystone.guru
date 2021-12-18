@@ -6,6 +6,7 @@
     {{ __('views/dungeonroute.discover.search.header') }}
 @endsection
 <?php
+/** @var $activeExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $seasonService \App\Service\Season\SeasonService */
 $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 $featuredAffixes = $seasonService->getCurrentSeason()->getFeaturedAffixes();
@@ -29,8 +30,32 @@ $featuredAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3));
 @endsection
 
 @section('content')
-    <div class="discover_panel">
-        @include('common.dungeon.grid', ['names' => true, 'selectable' => true])
+    <div id="search_expansion_dungeon">
+        <ul id="search_expansion_select_tabs" class="nav nav-tabs" role="tablist">
+            @foreach($activeExpansions as $expansion)
+                <li class="nav-item">
+                    <a id="{{ $expansion->shortname }}-search-tab"
+                       class="nav-link {{ $loop->index === 0 ? 'active' : '' }}"
+                       href="#{{ $expansion->shortname }}-search-content"
+                       role="tab"
+                       aria-controls="{{ $expansion->shortname }}-search-content"
+                       aria-selected="{{ $loop->index === 0 ? 'true' : 'false' }}"
+                       data-toggle="tab"
+                       data-expansion="{{ $expansion->shortname }}"
+                    >{{ __($expansion->name) }}</a>
+                </li>
+            @endforeach
+        </ul>
+        <div class="tab-content">
+            @foreach($activeExpansions as $expansion)
+                <div id="{{ $expansion->shortname }}-search-content"
+                     class="tab-pane fade show {{ $loop->index === 0 ? 'active' : '' }}"
+                     role="tabpanel"
+                     aria-labelledby="{{ $expansion->shortname }}-search-content">
+                    @include('common.dungeon.grid', ['expansion' => $expansion, 'names' => true, 'selectable' => true])
+                </div>
+            @endforeach
+        </div>
     </div>
     <div class="row mb-2">
         <div class="col-xl-3">

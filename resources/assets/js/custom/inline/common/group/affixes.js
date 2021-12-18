@@ -53,8 +53,6 @@ class CommonGroupAffixes extends InlineCode {
                 this.currentSelection = [this.options.currentAffixes[this.currentSelectionExpansionKey]];
             }
 
-            console.log(this.currentSelectionExpansionKey);
-
             // Show the correct presets for this expansion (if any)
             $(`.presets`).hide().filter(`.${this.currentSelectionExpansionKey}`).show();
 
@@ -179,8 +177,6 @@ class CommonGroupAffixes extends InlineCode {
                 refreshSelectPickers();
             }
         }
-
-        console.log(this.currentSelection);
 
         $(this.options.selectSelector).val(this.currentSelection);
 

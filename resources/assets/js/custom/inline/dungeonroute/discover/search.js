@@ -12,16 +12,17 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.loading = false;
         this.hasMore = true;
 
-        this.filters = [
-            new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
-            new SearchFilterTitle('#title', this._search.bind(this)),
-            new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
-            new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
-            new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
-            new SearchFilterRating('#rating', this._search.bind(this)),
-            new SearchFilterUser('#user', this._search.bind(this)),
-        ];
+        this.filters = {
+            'expansion': new SearchFilterManualExpansion(this._search.bind(this)),
+            'dungeon': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
+            'title': new SearchFilterTitle('#title', this._search.bind(this)),
+            'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'filter_affixes': new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
+            'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
+            'enemy_forces': new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
+            'rating': new SearchFilterRating('#rating', this._search.bind(this)),
+            'user': new SearchFilterUser('#user', this._search.bind(this)),
+        };
     }
 
     /**
@@ -39,6 +40,8 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         // Set default values for the filters
         let queryParams = getQueryParams();
+
+        // @TODO enemy_forces=0 gets flipped back to 1?
 
         // Find the query parameters
         for (let key in queryParams) {
@@ -58,6 +61,19 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                 }
             }
         }
+
+        // Restore selected expansion tab
+        if (this.filters.expansion.getValue() !== '') {
+            $(`#${this.filters.expansion.getValue()}-search-tab`).tab('show');
+        }
+
+        // Whenever the tab is changed, apply the new filter
+        $('#search_expansion_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            let expansion = $(e.target).data('expansion');
+
+            $(`#search_expansion_dungeon .grid_dungeon`).removeClass('selectable').filter(`.${expansion}`).addClass('selectable');
+            self.filters.expansion.setValue(expansion);
+        });
 
         this.$loadMore = $('#route_list_load_more');
 
@@ -141,7 +157,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                     $('#route_list_overlay').show();
                 },
                 success: function (html, textStatus, xhr) {
-                    console.log(html, textStatus, xhr);
                     self.hasMore = xhr.status !== 204;
                     if (self.hasMore) {
                         // Increase the offset so that we load new rows whenever we fetch more

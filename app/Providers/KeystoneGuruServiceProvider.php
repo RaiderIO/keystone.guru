@@ -170,7 +170,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
                 // Misc
                 'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
-                'expansions'                      => $allExpansions,
+                'allExpansions'                   => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
@@ -255,6 +255,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Dungeon grid view
+        view()->composer('dungeonroute.discover.search', function (View $view) use ($globalViewVariables) {
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+        });
+
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
@@ -289,7 +293,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon selector
         view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables) {
-            $view->with('allExpansions', $globalViewVariables['expansions']);
+            $view->with('allExpansions', $globalViewVariables['allExpansions']);
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
