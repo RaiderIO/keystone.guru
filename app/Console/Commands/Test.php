@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Expansion;
+use App\Models\GameServerRegion;
+use App\Service\Expansion\ExpansionService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Illuminate\Console\Command;
 
@@ -36,8 +39,15 @@ class Test extends Command
      *
      * @return int
      */
-    public function handle(TimewalkingEventServiceInterface $timewalkingEventService)
+    public function handle(ExpansionService $expansionService, TimewalkingEventServiceInterface $timewalkingEventService)
     {
+        /** @var Expansion $legion */
+        $legion = Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first();
+
+        $affixGroup = $expansionService->getCurrentAffixGroup($legion, GameServerRegion::getUserOrDefaultRegion());
+
+        dd($affixGroup->getTextAttribute());
+
         $affixGroup = $timewalkingEventService->getAffixGroupAt(now()->addWeeks(2));
 //        dd(optional($affixGroup)->getTextAttribute());
 //        dd($timewalkingEventService->getActiveTimewalkingEventAt(now()->addWeeks(14)));

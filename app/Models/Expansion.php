@@ -73,6 +73,14 @@ class Expansion extends CacheModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function seasons(): HasMany
+    {
+        return $this->hasMany('App\Models\Season');
+    }
+
+    /**
      * @return HasOne
      */
     public function timewalkingevent(): HasOne

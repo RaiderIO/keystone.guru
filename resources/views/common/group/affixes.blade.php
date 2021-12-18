@@ -4,7 +4,7 @@
 /** @var $defaultSelected array */
 /** @var $dungeonSelector string|null */
 /** @var $affixes \Illuminate\Support\Collection */
-/** @var $expansionsData array */
+/** @var $expansionsData \Illuminate\Support\Collection|\App\Service\Expansion\ExpansionData[] */
 /** @var $allAffixGroups \Illuminate\Support\Collection */
 /** @var $currentAffixes array */
 /** @var $dungeonExpansions array */
@@ -39,21 +39,29 @@ $id = $id ?? 'route_select_affixes';
 
 <?php // @formatter:off ?>
 <div class="form-group">
-    {!! Form::select($id . '[]', $allAffixGroups->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
+    {!! Form::select($id . '[]', $allAffixGroups->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @foreach($expansionsData as $expansionData)
-            @foreach($expansionData['season']['affixGroups']['all'] as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $expansionData['expansion']->shortname])
+            @foreach($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups() as $affixGroup)
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $expansionData->getExpansion()->shortname])
             @endforeach
         @endforeach
     </div>
 </div>
 
 @foreach($expansionsData as $expansionData)
-    @if($expansionData['season']['isAwakened'])
-        @include('common.group.presets.awakened', ['expansion' => $expansionData['expansion'], 'season' => $expansionData['season']['current'], 'dungeonroute' => $dungeonroute ?? null])
-    @elseif($expansionData['season']['isTormented'])
-        @include('common.group.presets.tormented', ['expansion' => $expansionData['expansion'], 'season' => $expansionData['season']['current'], 'dungeonroute' => $dungeonroute ?? null])
+    @if($expansionData->getExpansionSeason()->isAwakened())
+        @include('common.group.presets.awakened', [
+            'expansion'    => $expansionData->getExpansion(),
+            'season'       => $expansionData->getExpansionSeason()->getSeason(),
+            'dungeonroute' => $dungeonroute ?? null,
+        ])
+    @elseif($expansionData->getExpansionSeason()->isTormented())
+        @include('common.group.presets.tormented', [
+            'expansion'    => $expansionData->getExpansion(),
+            'season'       => $expansionData->getExpansionSeason()->getSeason(),
+            'dungeonroute' => $dungeonroute ?? null,
+        ])
     @endif
 @endforeach
 <?php // @formatter:on ?>
