@@ -19,10 +19,13 @@ use App\Models\RouteAttribute;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\Expansion\ExpansionData;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
@@ -69,11 +72,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * Bootstrap services.
      *
      * @param CacheService $cacheService
+     * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @return void
      * @throws InvalidArgumentException
      */
-    public function boot(CacheService $cacheService, DiscoverServiceInterface $discoverService)
+    public function boot(CacheService $cacheService, ExpansionServiceInterface $expansionService, DiscoverServiceInterface $discoverService)
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
@@ -84,7 +88,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($discoverService) {
+        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService) {
             // Build a list of some common
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
@@ -113,53 +117,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $allRegions    = GameServerRegion::all();
             $allExpansions = Expansion::all();
 
-            $expansionsData = [];
+            /** @var Collection|ExpansionData[] $expansionsData */
+            $expansionsData = collect();
             foreach ($allExpansions as $expansion) {
-                $expansionCurrentSeason                = $expansion->currentseason;
-                $expansionsData[$expansion->shortname] = [
-                    'expansion'      => $expansion,
-                    'activeDungeons' => $expansion->dungeons,
-                    'season'         => [
-                        'current'     => $expansionCurrentSeason,
-                        'affixGroups' => [
-                            'current' => $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansion, $expansionCurrentSeason) {
-                                if ($expansion->hasTimewalkingEvent()) {
-                                    // @TODO Fix this
-                                    $currentAffixGroup = $expansion->currentseason->affixgroups->first();
-                                } else {
-                                    $currentAffixGroup = $expansionCurrentSeason->getCurrentAffixGroupInRegion($region);
-                                }
-
-                                return [$region->short => $currentAffixGroup];
-                            })->all(),
-                            'next'    => $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansion, $expansionCurrentSeason) {
-                                if ($expansion->hasTimewalkingEvent()) {
-                                    // @TODO Fix this
-                                    $nextAffixGroup = $expansion->currentseason->affixgroups->first();
-                                } else {
-                                    $nextAffixGroup = $expansionCurrentSeason->getNextAffixGroupInRegion($region);
-                                }
-
-                                return [$region->short => $nextAffixGroup];
-                            })->all(),
-                            'all'     => $expansion->currentseason->affixgroups()
-                                ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
-                                ->get(),
-                        ],
-                        'isAwakened'  => $expansionCurrentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id,
-                        'isPrideful'  => $expansionCurrentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id,
-                        'isTormented' => $expansionCurrentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id,
-                        'isInfernal'  => $expansionCurrentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id,
-                    ],
-                ];
+                $expansionsData->put($expansion->shortname, $expansionService->getData($expansion));
             }
 
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();
             $allCurrentAffixes = collect();
             foreach ($expansionsData as $expansionData) {
-                $allAffixGroups = $allAffixGroups->merge($expansionData['season']['affixGroups']['all']);
-                $allCurrentAffixes->put($expansionData['expansion']->shortname, $expansionData['season']['affixGroups']['current']);
+                $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroups());
             }
 
             return [
@@ -268,14 +237,21 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
         });
 
-        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables, $userOrDefaultRegion) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][$userOrDefaultRegion->short]);
-            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][$userOrDefaultRegion->short]);
-        });
+        view()->composer([
+            'dungeonroute.discover.category',
+            'dungeonroute.discover.dungeon.category',
+            'misc.affixes',
+            'dungeonroute.discover.discover',
+            'dungeonroute.discover.dungeon.overview',
+        ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
+            /** @var Expansion $expansion */
+            $expansion = $view->getData()['expansion'];
 
-        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables, $userOrDefaultRegion) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][$userOrDefaultRegion->short]);
-            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][$userOrDefaultRegion->short]);
+            /** @var ExpansionData $expansionsData */
+            $expansionsData = $globalViewVariables['expansionsData']->get($expansion->shortname);
+
+            $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup($userOrDefaultRegion));
+            $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup($userOrDefaultRegion));
         });
 
         // Dungeon grid view

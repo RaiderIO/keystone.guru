@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
-use App\Models\Timewalking\TimewalkingEvent;
+use App\Models\GameServerRegion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
-use App\Service\Season\SeasonServiceInterface;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -41,16 +39,15 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @param Expansion $expansion
+     * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
-     * @param SeasonService $seasonService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
-     * @throws Exception
      */
     public function discoverExpansion(
-        Expansion                        $expansion,
-        DiscoverServiceInterface         $discoverService,
-        SeasonServiceInterface           $seasonService
+        Expansion                 $expansion,
+        ExpansionServiceInterface $expansionService,
+        DiscoverServiceInterface  $discoverService
     )
     {
         $this->authorize('view', $expansion);
@@ -64,14 +61,10 @@ class DungeonRouteDiscoverController extends Controller
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
 
-        if ($expansion->hasTimewalkingEvent()) {
-            $currentAffixGroup = $expansion->currentseason->affixgroups->first();
-            $nextAffixGroup    = $expansion->currentseason->affixgroups->count() > 1 ?
-                $expansion->currentseason->affixgroups->get(1) : null;
-        } else {
-            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
-            $nextAffixGroup    = $seasonService->getCurrentSeason()->getNextAffixGroup();
-        }
+        $userRegion = GameServerRegion::getUserOrDefaultRegion();
+
+        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
 
         $discoverService = $discoverService->withExpansion($expansion);
 

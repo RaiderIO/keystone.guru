@@ -56,7 +56,6 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
                         $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
-                        $timewalkingEventAffixGroup = $timewalkingEvent !== null ? $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate) : null;
                         ?>
                         @include('misc.table.affixrowtable', [
                             'timewalkingEvent' => null,
@@ -70,7 +69,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                             ])
                         <?php
                         if ($timewalkingEvent !== null) {
-                            $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
+                            $timewalkingEventAffixGroup = $seasonService->getCurrentSeason($timewalkingEvent->expansion)->getAffixGroupAtTime($startDate);
                             ?>
                             @include('misc.table.affixrowtable', [
                                 'timewalkingEvent' => $timewalkingEvent,
@@ -89,9 +88,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 
                             ?>
                     </tbody>
-                </table>
-
-                <div class="row mt-2">
+                </table>                <div class="row mt-2">
                     <div class="col">
 
                     </div>
