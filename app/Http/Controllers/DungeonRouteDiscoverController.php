@@ -65,9 +65,9 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         if ($expansion->hasTimewalkingEvent()) {
-            $currentAffixGroup = $expansion->timewalkingevent->affixgroups->first();
-            $nextAffixGroup    = $expansion->timewalkingevent->affixgroups->count() > 1 ?
-                $expansion->timewalkingevent->affixgroups->get(1) : null;
+            $currentAffixGroup = $expansion->currentseason->affixgroups->first();
+            $nextAffixGroup    = $expansion->currentseason->affixgroups->count() > 1 ?
+                $expansion->currentseason->affixgroups->get(1) : null;
         } else {
             $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
             $nextAffixGroup    = $seasonService->getCurrentSeason()->getNextAffixGroup();

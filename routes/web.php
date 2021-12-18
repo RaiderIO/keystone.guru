@@ -80,8 +80,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language']], function () {
 
     Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');
 
-    Route::get('demo', [SiteController::class, 'demo'])->name('misc.demo');
-
     Route::get('timetest', [SiteController::class, 'timetest'])->name('misc.timetest');
 
     Route::get('embed/{dungeonroute}', [SiteController::class, 'embed'])->name('misc.embed');

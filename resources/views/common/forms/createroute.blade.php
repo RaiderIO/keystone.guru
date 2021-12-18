@@ -11,6 +11,7 @@ $dungeonSelectId = 'dungeon_id_select';
 @if(!isset($dungeonroute))
     {{ Form::open(['route' => 'dungeonroute.savenew']) }}
 @endisset
+
 <div class="container">
     @if( !isset($dungeonroute) )
         @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSiegeWarning' => true])

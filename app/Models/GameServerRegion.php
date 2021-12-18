@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
+ * @property int $id
  * @property string $short
  * @property string $name
  * @property string $timezone

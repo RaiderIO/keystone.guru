@@ -3,6 +3,7 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
+/** @var $allRouteAttributes \Illuminate\Support\Collection|\App\Models\RouteAttribute[] */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute $model */
@@ -45,7 +46,7 @@ if (Auth::check()) {
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
             'teamPublicKey' => $team ? $team->public_key : '',
-            'teams' => Auth::check() ? \App\User::findOrFail(Auth::id())->teams()->whereHas('teamusers', function($teamuser){
+            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamusers', function($teamuser){
                 /** @var $teamuser \App\Models\TeamUser  */
                 $teamuser->isModerator(Auth::id());
             })->get() : [],
@@ -94,7 +95,7 @@ if (Auth::check()) {
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
-        'selectedIds' => array_merge( [-1], \App\Models\RouteAttribute::all()->pluck('id')->toArray() ),
+        'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
         'showNoAttributes' => true])
     </div>
     <div class="col-lg pl-1 pr-1">

@@ -631,7 +631,7 @@ class DungeonRoute extends Model
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty     = 1;
-        $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
+        $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
         $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient              = $request->get('pull_gradient', '');
@@ -651,6 +651,9 @@ class DungeonRoute extends Model
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
+
+        // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
+        $this->unsetRelations();
 
 
         // Update or insert it
@@ -719,8 +722,13 @@ class DungeonRoute extends Model
                 $this->affixgroups()->delete();
 
                 foreach ($newAffixes as $value) {
+                    // Skip any affixes that don't exist, and don't match our current expansion
+                    if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                        continue;
+                    }
+
                     /** @var AffixGroup $affixGroup */
-                    $affixGroup = AffixGroup::findOrNew($value);
+                    $affixGroup = AffixGroup::find($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
                     if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
@@ -732,6 +740,9 @@ class DungeonRoute extends Model
                         'dungeon_route_id' => $this->id,
                     ]);
                 }
+
+                // Reload the affixes relation
+                $this->load('affixes');
             }
 
             // Instantly generate a placeholder thumbnail for new routes.

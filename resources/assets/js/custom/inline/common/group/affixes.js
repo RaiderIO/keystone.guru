@@ -12,10 +12,11 @@ class CommonGroupAffixes extends InlineCode {
 
         let self = this;
 
-        this.currentSelectionExpansionKey = this.options.defaultExpansionKey;
         this.currentSelection = this.options.defaultSelected;
+        this.currentSelectionExpansionKey = null;
+        this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
 
-        this._automaticSeasonalIndexChange = typeof this.options.dungeonroute !== 'object';
+        this._automaticSeasonalIndexChange = this.hasDungeonRoute;
 
         if (this.options.hasOwnProperty('teemingSelector')) {
             $(this.options.teemingSelector).bind('change', function () {
@@ -40,27 +41,22 @@ class CommonGroupAffixes extends InlineCode {
 
         // Don't mess with it if it's not working for whatever reason
         if (typeof expansionKey !== 'undefined' && expansionKey.length > 0) {
+
             // Hide everything
             let $affixListRows = $(`${this.options.selectSelector}_list_custom .affix_list_row`).hide();
             // Show the affixes for the expansion that was selected
             $affixListRows.filter(`.${expansionKey}`).show();
 
             // If the expansion changed we need to change the default selection
-            if (this.currentSelectionExpansionKey !== expansionKey) {
+            if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
                 this.currentSelectionExpansionKey = expansionKey;
-                this.currentSelection = [];
-
-                // If we're going timewalking, just add all affixes, cba fetching current affix for it, it's a hassle
-                if (this.currentSelectionExpansionKey === this.options.currentExpansionKey) {
-                    this.currentSelection.push(`${this.options.currentAffixGroupId}-${this.currentSelectionExpansionKey}`);
-                } else {
-                    for (let i = 0; i < this.options.timewalkingAffixGroups[this.currentSelectionExpansionKey].length; i++) {
-                        let affixGroupCandidate = this.options.timewalkingAffixGroups[this.currentSelectionExpansionKey][i];
-
-                        this.currentSelection.push(`${affixGroupCandidate.id}-${this.currentSelectionExpansionKey}`);
-                    }
-                }
+                this.currentSelection = [this.options.currentAffixes[this.currentSelectionExpansionKey]];
             }
+
+            console.log(this.currentSelectionExpansionKey);
+
+            // Show the correct presets for this expansion (if any)
+            $(`.presets`).hide().filter(`.${this.currentSelectionExpansionKey}`).show();
 
             this._applyAffixRowSelection();
         } else {
@@ -87,10 +83,7 @@ class CommonGroupAffixes extends InlineCode {
 
         let $el = $(clickEvent.currentTarget);
         // Convert to string since currentSelection has strings
-        let id = `${$el.data('id')}-${$el.data('expansion')}`;
-
-        // Affixes is leading!
-        let $affixRowSelect = $(this.options.selectSelector);
+        let id = parseInt($el.data('id'));
 
         // If it exists in the current selection
         let index = this.currentSelection.indexOf(id);
@@ -108,31 +101,6 @@ class CommonGroupAffixes extends InlineCode {
 
     /**
      *
-     * @param id {Number}
-     * @param expansion {String}
-     * @returns {Object|null}
-     * @private
-     */
-    _getTimewalkingAffixGroupById(id, expansion) {
-        let result = null;
-
-        if (typeof this.options.timewalkingAffixGroups[expansion] === 'undefined') {
-            console.error('Unable to find timewalking affixes for expansion!', expansion);
-        }
-
-        for (let i = 0; i < this.options.timewalkingAffixGroups[expansion].length; i++) {
-            let affixGroupCandidate = this.options.timewalkingAffixGroups[expansion][i];
-            if (affixGroupCandidate.id === id) {
-                result = affixGroupCandidate;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     *
      * @param {Number} id
      * @returns {Object|null}
      * @private
@@ -140,9 +108,9 @@ class CommonGroupAffixes extends InlineCode {
     _getAffixGroupById(id) {
         let result = null;
 
-        for (let i = 0; i < this.options.affixGroups.length; i++) {
-            if (this.options.affixGroups[i].id === id) {
-                result = this.options.affixGroups[i];
+        for (let i = 0; i < this.options.allAffixGroups.length; i++) {
+            if (this.options.allAffixGroups[i].id === id) {
+                result = this.options.allAffixGroups[i];
                 break;
             }
         }
@@ -165,19 +133,12 @@ class CommonGroupAffixes extends InlineCode {
             let $child = $(child);
             let found = false;
             let childId = $child.data('id');
-            let childExpansion = $child.data('expansion');
-            let selectionKey = `${childId}-${childExpansion}`;
 
             for (let i = 0; i < self.currentSelection.length; i++) {
                 let currentSelection = self.currentSelection[i];
 
-                if (currentSelection === selectionKey) {
-                    let affixGroup = null;
-                    if (childExpansion === self.options.currentExpansionKey) {
-                        affixGroup = self._getAffixGroupById(childId);
-                    } else {
-                        affixGroup = self._getTimewalkingAffixGroupById(childId, childExpansion);
-                    }
+                if (currentSelection === childId) {
+                    let affixGroup = self._getAffixGroupById(childId);
 
                     if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
                         selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
@@ -219,9 +180,9 @@ class CommonGroupAffixes extends InlineCode {
             }
         }
 
+        console.log(this.currentSelection);
 
         $(this.options.selectSelector).val(this.currentSelection);
-
 
         // Teeming is no longer a thing - this intervenes with the affix selection for expansions, re-instate if Teeming is ever a thing again
         // if (this._isTeemingSelected()) {

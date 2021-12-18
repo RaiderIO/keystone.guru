@@ -7,8 +7,7 @@ $cssClasses = $cssClasses ?? '';
 ?>
 <div
     class="row affix_list_row expansion {{$expansionKey}} {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-    {{ $isTeeming ? 'style="display: none;"' : '' }}
-    data-id="{{ $affixGroup->id }}" data-expansion="{{ $expansionKey }}">
+    {{ $isTeeming ? 'style="display: none;"' : '' }} data-id="{{ $affixGroup->id }}">
     <?php
     $count = 0;
     foreach($affixGroup->affixes as $affix){

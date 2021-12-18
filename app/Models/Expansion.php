@@ -27,6 +27,7 @@ use Illuminate\Support\Collection;
  *
  * @property Collection|Dungeon[] $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
+ * @property Season|null $currentseason
  *
  * @mixin Eloquent
  */
@@ -77,6 +78,14 @@ class Expansion extends CacheModel
     public function timewalkingevent(): HasOne
     {
         return $this->hasOne('App\Models\Timewalking\TimewalkingEvent');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function currentseason(): HasOne
+    {
+        return $this->hasOne(Season::class)->where('expansion_id', $this->id)->orderBy('start', 'desc')->limit(1);
     }
 
     /**
