@@ -27,10 +27,12 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
+use App\Models\Expansion;
 use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -200,19 +202,27 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteSearchFormRequest $request
+     * @param ExpansionServiceInterface $expansionService
      * @param SeasonServiceInterface $seasonService
      * @return Response|string
      * @throws Exception
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request, SeasonServiceInterface $seasonService)
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService, SeasonServiceInterface $seasonService)
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
         // May be modified/adjusted later on
         $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
 
+        if ($request->has('expansion')) {
+            $expansionId = Expansion::where('shortname', $request->get('expansion'))->first()->id;
+        } else {
+            $expansionId = $expansionService->getCurrentExpansion()->id;
+        }
+
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->where('dungeons.expansion_id', $expansionId)
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {

@@ -26,7 +26,7 @@ class SearchFilterLevel extends SearchFilterInput {
 
     getFilterHeaderText() {
         return lang.get('messages.filter_input_level_header')
-            .replace(':number', this.getValue().replace(';', ' - +'));
+            .replace(':value', '+' + this.getValue().replace(';', ' - +'));
     }
 
     /**
