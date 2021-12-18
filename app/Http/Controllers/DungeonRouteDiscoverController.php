@@ -50,8 +50,7 @@ class DungeonRouteDiscoverController extends Controller
     public function discoverExpansion(
         Expansion                        $expansion,
         DiscoverServiceInterface         $discoverService,
-        SeasonServiceInterface           $seasonService,
-        TimewalkingEventServiceInterface $timewalkingEventService
+        SeasonServiceInterface           $seasonService
     )
     {
         $this->authorize('view', $expansion);
@@ -65,11 +64,10 @@ class DungeonRouteDiscoverController extends Controller
             $builder->limit(config('keystoneguru.discover.limits.overview'));
         };
 
-        $currentAffixGroup = null;
         if ($expansion->hasTimewalkingEvent()) {
-            $currentAffixGroup = $expansion->timewalkingevent->timewalkingeventaffixgroups->first();
-            $nextAffixGroup    = $expansion->timewalkingevent->timewalkingeventaffixgroups->count() > 1 ?
-                $expansion->timewalkingevent->timewalkingeventaffixgroups->get(1) : null;
+            $currentAffixGroup = $expansion->currentseason->affixgroups->first();
+            $nextAffixGroup    = $expansion->currentseason->affixgroups->count() > 1 ?
+                $expansion->currentseason->affixgroups->get(1) : null;
         } else {
             $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
             $nextAffixGroup    = $seasonService->getCurrentSeason()->getNextAffixGroup();

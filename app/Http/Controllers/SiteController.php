@@ -153,16 +153,6 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @param ExpansionService $expansionService
-     * @return Factory|View
-     */
-    public function demo(Request $request, ExpansionService $expansionService)
-    {
-        return view('misc.demo', ['expansionService' => $expansionService]);
-    }
-
-    /**
-     * @param Request $request
      * @return Factory|View
      */
     public function status(Request $request)

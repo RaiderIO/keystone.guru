@@ -1,3 +1,6 @@
+/**
+ * @property [currentExpansionKey: string, dungeonroute: string] options
+ */
 class CommonGroupAffixes extends InlineCode {
     /**
      *
@@ -9,12 +12,15 @@ class CommonGroupAffixes extends InlineCode {
 
         let self = this;
 
-        this._automaticSeasonalIndexChange = typeof this.options.dungeonroute !== 'object';
+        this.currentSelection = this.options.defaultSelected;
+        this.currentSelectionExpansionKey = null;
+        this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
+
+        this._automaticSeasonalIndexChange = this.hasDungeonRoute;
 
         if (this.options.hasOwnProperty('teemingSelector')) {
             $(this.options.teemingSelector).bind('change', function () {
-                $(self.options.selectSelector).val('');
-                self._applyAffixRowSelectionOnList();
+                self._applyAffixRowSelection();
             });
         }
 
@@ -22,12 +28,40 @@ class CommonGroupAffixes extends InlineCode {
         $(`${this.options.dungeonSelector}`).on('change', this._dungeonChanged.bind(this));
 
         // Perform loading of existing affix groups
-        this._applyAffixRowSelectionOnList();
         this._dungeonChanged();
     }
 
+    /**
+     * Dungeon selection changed, we also need to change the list of affixes that may be selected
+     * @private
+     */
     _dungeonChanged() {
-        console.log('test');
+        let selectedDungeonId = $(`${this.options.dungeonSelector}`).val();
+        let expansionKey = this.options.dungeonExpansions[selectedDungeonId];
+
+        // Don't mess with it if it's not working for whatever reason
+        if (typeof expansionKey !== 'undefined' && expansionKey.length > 0) {
+
+            // Hide everything
+            let $affixListRows = $(`${this.options.selectSelector}_list_custom .affix_list_row`).hide();
+            // Show the affixes for the expansion that was selected
+            $affixListRows.filter(`.${expansionKey}`).show();
+
+            // If the expansion changed we need to change the default selection
+            if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
+                this.currentSelectionExpansionKey = expansionKey;
+                this.currentSelection = [this.options.currentAffixes[this.currentSelectionExpansionKey]];
+            }
+
+            console.log(this.currentSelectionExpansionKey);
+
+            // Show the correct presets for this expansion (if any)
+            $(`.presets`).hide().filter(`.${this.currentSelectionExpansionKey}`).show();
+
+            this._applyAffixRowSelection();
+        } else {
+            console.warn(`Could not find expansionKey`, expansionKey);
+        }
     }
 
     /**
@@ -49,33 +83,34 @@ class CommonGroupAffixes extends InlineCode {
 
         let $el = $(clickEvent.currentTarget);
         // Convert to string since currentSelection has strings
-        let id = $el.data('id') + '';
-
-        // Affixes is leading!
-        let $affixRowSelect = $(this.options.selectSelector);
-        let currentSelection = $affixRowSelect.val();
+        let id = parseInt($el.data('id'));
 
         // If it exists in the current selection
-        let index = currentSelection.indexOf(id);
+        let index = this.currentSelection.indexOf(id);
         if (index >= 0) {
             // remove it from the list
-            currentSelection.splice(index, 1);
+            this.currentSelection.splice(index, 1);
         }
         // Otherwise add it
         else {
-            currentSelection.push(id);
+            this.currentSelection.push(id);
         }
 
-        $affixRowSelect.val(currentSelection);
-        this._applyAffixRowSelectionOnList();
+        this._applyAffixRowSelection();
     }
 
+    /**
+     *
+     * @param {Number} id
+     * @returns {Object|null}
+     * @private
+     */
     _getAffixGroupById(id) {
         let result = null;
 
-        for (let i = 0; i < this.options.affixGroups.length; i++) {
-            if (this.options.affixGroups[i].id === id) {
-                result = this.options.affixGroups[i];
+        for (let i = 0; i < this.options.allAffixGroups.length; i++) {
+            if (this.options.allAffixGroups[i].id === id) {
+                result = this.options.allAffixGroups[i];
                 break;
             }
         }
@@ -87,23 +122,24 @@ class CommonGroupAffixes extends InlineCode {
      * Applies the current selection to the list of affixes that are being displayed.
      * @private
      */
-    _applyAffixRowSelectionOnList() {
+    _applyAffixRowSelection() {
         console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this);
         let self = this;
 
         let $list = $(`${this.options.selectSelector}_list_custom`);
-        let selection = $(this.options.selectSelector).val();
         let selectedSeasonalIndices = [];
 
         $.each($list.children(), function (index, child) {
             let $child = $(child);
             let found = false;
+            let childId = $child.data('id');
 
-            for (let i = 0; i < selection.length; i++) {
-                let currentSelection = parseInt(selection[i]);
+            for (let i = 0; i < self.currentSelection.length; i++) {
+                let currentSelection = self.currentSelection[i];
 
-                if (currentSelection === $child.data('id')) {
-                    let affixGroup = self._getAffixGroupById(currentSelection);
+                if (currentSelection === childId) {
+                    let affixGroup = self._getAffixGroupById(childId);
+
                     if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
                         selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
                     }
@@ -144,13 +180,17 @@ class CommonGroupAffixes extends InlineCode {
             }
         }
 
+        console.log(this.currentSelection);
 
-        if (this._isTeemingSelected()) {
-            $('.affix_row_no_teeming').hide();
-            $('.affix_row_teeming').show();
-        } else {
-            $('.affix_row_no_teeming').show();
-            $('.affix_row_teeming').hide();
-        }
+        $(this.options.selectSelector).val(this.currentSelection);
+
+        // Teeming is no longer a thing - this intervenes with the affix selection for expansions, re-instate if Teeming is ever a thing again
+        // if (this._isTeemingSelected()) {
+        //     $('.affix_row_no_teeming').hide();
+        //     $('.affix_row_teeming').show();
+        // } else {
+        //     $('.affix_row_no_teeming').show();
+        //     $('.affix_row_teeming').hide();
+        // }
     }
 }

@@ -1,13 +1,13 @@
 <?php
 /** @var $affixGroup \App\Models\AffixGroup\AffixGroup */
+/** @var $expansionKey string */
 
 $isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $cssClasses = $cssClasses ?? '';
 ?>
 <div
-    class="row affix_list_row {{$cssClasses}} {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-    {{ $isTeeming ? 'style="display: none;"' : '' }}
-    data-id="{{ $affixGroup->id }}">
+    class="row affix_list_row expansion {{$expansionKey}} {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+    {{ $isTeeming ? 'style="display: none;"' : '' }} data-id="{{ $affixGroup->id }}">
     <?php
     $count = 0;
     foreach($affixGroup->affixes as $affix){
@@ -34,8 +34,8 @@ $cssClasses = $cssClasses ?? '';
     <?php $count++;
     } ?>
     <span class="col col-md-auto text-right pl-0">
-                    <span class="check" style="visibility: hidden;">
-                        <i class="fas fa-check"></i>
-                    </span>
-                </span>
+        <span class="check" style="visibility: hidden;">
+            <i class="fas fa-check"></i>
+        </span>
+    </span>
 </div>

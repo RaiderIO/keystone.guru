@@ -1,11 +1,11 @@
 /**
- * @property name {string}
- * @property type {string}
- * @property values {Array}
- * @property admin {boolean}
- * @property show_default {boolean}
- * @property edit {boolean}
- * @property save {boolean}
+ * @property {string} name
+ * @property {string} type
+ * @property {Array} values
+ * @property {boolean} admin
+ * @property {boolean} show_default
+ * @property {boolean} edit
+ * @property {boolean} save
  */
 class Attribute {
     constructor(options) {

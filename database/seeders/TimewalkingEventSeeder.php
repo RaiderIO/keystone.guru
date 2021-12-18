@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Affix;
 use App\Models\Expansion;
-use App\Models\Timewalking\TimewalkingAffixGroupCoupling;
 use App\Models\Timewalking\TimewalkingEvent;
-use App\Models\Timewalking\TimewalkingEventAffixGroup;
-use App\Models\Timewalking\TimewalkingEventAffixGroupCoupling;
 use Database\Seeders\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +29,7 @@ class TimewalkingEventSeeder extends Seeder
                 'name'                 => 'timewalkingevent.legion.name',
                 'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_LEGION,
                 'start'                => '2021-12-07 00:00:00',
-                'start_duration_weeks' => 2,
+                'start_duration_weeks' => 4,
                 'week_interval'        => 14,
             ],
             //            [
@@ -54,37 +50,8 @@ class TimewalkingEventSeeder extends Seeder
             //            ],
         ];
 
-        $timewalkingEvents = [];
         foreach ($timewalkingEventsData as $timewalkingEvent) {
-            $timewalkingEvents[TimewalkingEvent::TIMEWALKING_EVENT_LEGION] = TimewalkingEvent::create($timewalkingEvent);
-        }
-
-        $groups = [
-            [
-                'timewalking_event_id' => $timewalkingEvents[TimewalkingEvent::TIMEWALKING_EVENT_LEGION]->id,
-                'affixes'              => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_INFERNAL],
-            ],
-            [
-                'timewalking_event_id' => $timewalkingEvents[TimewalkingEvent::TIMEWALKING_EVENT_LEGION]->id,
-                'affixes'              => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_INFERNAL],
-            ],
-        ];
-
-        $affixes = Affix::all();
-        foreach ($groups as $groupArr) {
-            $group = TimewalkingEventAffixGroup::create([
-                'timewalking_event_id' => $groupArr['timewalking_event_id'],
-                'seasonal_index'       => $groupArr['seasonal_index'] ?? null,
-            ]);
-
-            foreach ($groupArr['affixes'] as $affixName) {
-                $affix = $this->findAffix($affixes, $affixName);
-
-                TimewalkingEventAffixGroupCoupling::create([
-                    'affix_id'                         => $affix->id,
-                    'timewalking_event_affix_group_id' => $group->id,
-                ]);
-            }
+            TimewalkingEvent::create($timewalkingEvent);
         }
     }
 
@@ -94,7 +61,5 @@ class TimewalkingEventSeeder extends Seeder
     private function _rollback()
     {
         DB::table('timewalking_events')->truncate();
-        DB::table('timewalking_event_affix_groups')->truncate();
-        DB::table('timewalking_event_affix_group_couplings')->truncate();
     }
 }

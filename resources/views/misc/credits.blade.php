@@ -23,7 +23,7 @@
         </li>
         <li>
             Various members of
-            <span class="font-weight-bold">{{ link_to('http://darkwolves.eu/', 'Dark Wolves') }}</span> and
+            <span class="font-weight-bold">{{ link_to('https://darkwolves.eu/', 'Dark Wolves') }}</span> and
             <span class="font-weight-bold">Sark</span>
             for helping me with mapping dungeons, from odd requests to "kill that mob" to "hold up for a second you
             guys are going too fast" :).

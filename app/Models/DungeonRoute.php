@@ -9,7 +9,6 @@ use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Models\Timewalking\TimewalkingEventAffixGroup;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
@@ -86,9 +85,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection $playerraces
  *
  * @property Collection|AffixGroup[] $affixes
- * @property Collection|TimewalkingEventAffixGroup[] $timewalkingeventaffixes
  * @property Collection|DungeonRouteAffixGroup[] $affixgroups
- * @property Collection|DungeonRouteTimewalkingEventAffixGroup[] $timewalkingeventaffixgroups
  * @property Collection|DungeonRouteRating[] $ratings
  * @property Collection|DungeonRouteFavorite[] $favorites
  *
@@ -249,27 +246,11 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return HasMany
-     */
-    public function timewalkingeventaffixgroups(): HasMany
-    {
-        return $this->hasMany('App\Models\DungeonRouteTimewalkingEventAffixGroup');
-    }
-
-    /**
      * @return BelongsToMany
      */
     public function affixes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'dungeon_route_affix_groups');
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function timewalkingaffixes(): BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Timewalking\TimewalkingEventAffixGroup', 'dungeon_route_timewalking_event_affix_groups');
     }
 
     /**
@@ -650,7 +631,7 @@ class DungeonRoute extends Model
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty     = 1;
-        $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
+        $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
         $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient              = $request->get('pull_gradient', '');
@@ -670,6 +651,9 @@ class DungeonRoute extends Model
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
+
+        // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
+        $this->unsetRelations();
 
 
         // Update or insert it
@@ -732,43 +716,33 @@ class DungeonRoute extends Model
                 }
             }
 
-            $newAffixes = $request->get('affixes', []);
+            $newAffixes = $request->get('route_select_affixes', []);
             if (!empty($newAffixes)) {
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
-                $this->timewalkingeventaffixgroups()->delete();
 
-                if (Dungeon::first($this->dungeon_id)->expansion->hasTimewalkingEvent()) {
-                    foreach ($newAffixes as $value) {
-                        /** @var TimewalkingEventAffixGroup $affixGroup */
-                        $affixGroup = TimewalkingEventAffixGroup::findOrNew($value);
-
-                        // Do not add affixes that do not belong to our Teeming selection
-                        if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
-                            continue;
-                        }
-
-                        $drAffixGroup                                   = new DungeonRouteTimewalkingEventAffixGroup();
-                        $drAffixGroup->timewalking_event_affix_group_id = $affixGroup->id;
-                        $drAffixGroup->dungeon_route_id                 = $this->id;
-                        $drAffixGroup->save();
+                foreach ($newAffixes as $value) {
+                    // Skip any affixes that don't exist, and don't match our current expansion
+                    if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                        continue;
                     }
-                } else {
-                    foreach ($newAffixes as $value) {
-                        /** @var AffixGroup $affixGroup */
-                        $affixGroup = AffixGroup::findOrNew($value);
 
-                        // Do not add affixes that do not belong to our Teeming selection
-                        if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
-                            continue;
-                        }
+                    /** @var AffixGroup $affixGroup */
+                    $affixGroup = AffixGroup::find($value);
 
-                        $drAffixGroup                   = new DungeonRouteAffixGroup();
-                        $drAffixGroup->affix_group_id   = $affixGroup->id;
-                        $drAffixGroup->dungeon_route_id = $this->id;
-                        $drAffixGroup->save();
+                    // Do not add affixes that do not belong to our Teeming selection
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
+                        continue;
                     }
+
+                    DungeonRouteAffixGroup::create([
+                        'affix_group_id'   => $affixGroup->id,
+                        'dungeon_route_id' => $this->id,
+                    ]);
                 }
+
+                // Reload the affixes relation
+                $this->load('affixes');
             }
 
             // Instantly generate a placeholder thumbnail for new routes.
@@ -1119,7 +1093,6 @@ class DungeonRoute extends Model
 
             // Dungeonroute settings
             $item->affixgroups()->delete();
-            $item->timewalkingeventaffixgroups()->delete();
             $item->routeattributesraw()->delete();
             $item->playerclasses()->delete();
             $item->playerraces()->delete();

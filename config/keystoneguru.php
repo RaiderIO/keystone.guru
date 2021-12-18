@@ -43,7 +43,7 @@ return [
             'ttl' => '15 minutes',
         ],
         'global_view_variables'  => [
-            'ttl' => '1 day',
+            'ttl' => '1 hour',
         ],
     ],
 
