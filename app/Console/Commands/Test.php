@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\DungeonRoute;
+use App\Models\DungeonRouteAffixGroup;
 use App\Models\Expansion;
-use App\Models\GameServerRegion;
 use App\Service\Expansion\ExpansionService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Illuminate\Console\Command;
@@ -41,12 +42,27 @@ class Test extends Command
      */
     public function handle(ExpansionService $expansionService, TimewalkingEventServiceInterface $timewalkingEventService)
     {
-        /** @var Expansion $legion */
-        $legion = Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first();
+        $legionExpansionId = Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()->id;
 
-        $affixGroup = $expansionService->getCurrentAffixGroup($legion, GameServerRegion::getUserOrDefaultRegion());
+        $result = DungeonRoute::select('dungeon_routes.*')
+            ->where('dungeons.expansion_id', $legionExpansionId)
+            ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
+            ->get();
 
-        dd($affixGroup->getTextAttribute());
+        foreach($result as $dungeonRoute){
+            DungeonRouteAffixGroup::where('dungeon_route_id', $dungeonRoute->id)->delete();
+
+            logger()->debug(sprintf('Deleted affixes for dungeon route %d', $dungeonRoute->id));
+
+            // Give the dungeon route new affix groups
+            DungeonRouteAffixGroup::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'affix_group_id' => 73
+            ]);
+            logger()->debug(sprintf('Created new affixes for dungeon route %d', $dungeonRoute->id));
+        }
+
+        dd($result->pluck('id'));
 
         $affixGroup = $timewalkingEventService->getAffixGroupAt(now()->addWeeks(2));
 //        dd(optional($affixGroup)->getTextAttribute());
