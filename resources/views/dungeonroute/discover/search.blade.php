@@ -80,7 +80,7 @@
                     <div class="filter_affix {{ $expansion }}" style="display: none;">
                         <div class="row">
                             <div class="col">
-                                {!! Form::select('filter_affixes[]', $affixgroups->pluck('text', 'id'), [],
+                                {!! Form::select(sprintf('filter_affixes_%s[]', $expansion), $affixgroups->pluck('text', 'id'), [],
                                     ['id' => 'filter_affixes_' . $expansion,
                                     'class' => 'form-control affixselect selectpicker',
                                     'multiple' => 'multiple',
@@ -94,7 +94,7 @@
                         /** @noinspection PhpUndefinedVariableInspection */
                         $featuredAffixes = $featuredAffixesByActiveExpansion->get($expansion);
 
-                        $chunkedFeaturedAffixes = $featuredAffixes->chunk(ceil($featuredAffixes->count() / 3))
+                        $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : 5);
                         ?>
                         @foreach($chunkedFeaturedAffixes as $affixRow)
                             <div class="row mt-2 pl-2 featured_affixes">
