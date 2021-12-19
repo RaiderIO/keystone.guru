@@ -50,6 +50,8 @@ class Season extends CacheModel
     }
 
     /**
+     * Get a list of unique affixes found in this season.
+     *
      * @return Collection
      */
     public function getFeaturedAffixes(): Collection

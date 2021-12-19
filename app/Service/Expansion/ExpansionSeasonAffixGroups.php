@@ -2,6 +2,7 @@
 
 namespace App\Service\Expansion;
 
+use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
@@ -9,6 +10,9 @@ use Illuminate\Support\Collection;
 
 class ExpansionSeasonAffixGroups
 {
+    /** @var Collection|Affix[] */
+    private Collection $featuredAffixes;
+
     /** @var Collection */
     private Collection $currentAffixGroups;
 
@@ -28,6 +32,8 @@ class ExpansionSeasonAffixGroups
     {
         $allRegions = GameServerRegion::all();
 
+        $this->featuredAffixes = $expansionSeason->getSeason()->getFeaturedAffixes();
+
         $this->currentAffixGroups = $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansionService, $expansion) {
             return [$region->short => $expansionService->getCurrentAffixGroup($expansion, $region)];
         });
@@ -39,6 +45,14 @@ class ExpansionSeasonAffixGroups
         $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
             ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
             ->get();
+    }
+
+    /**
+     * @return Collection|Affix[]
+     */
+    public function getFeaturedAffixes(): Collection
+    {
+        return $this->featuredAffixes;
     }
 
     /**
@@ -60,7 +74,7 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @return Collection
+     * @return Collection|AffixGroup[]
      */
     public function getCurrentAffixGroups(): Collection
     {
@@ -68,7 +82,7 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @return Collection
+     * @return Collection|AffixGroup[]
      */
     public function getNextAffixGroups(): Collection
     {
@@ -76,7 +90,7 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @return Collection
+     * @return Collection|AffixGroup[]
      */
     public function getAllAffixGroups(): Collection
     {

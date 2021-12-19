@@ -11,21 +11,22 @@ if (!isset($affixgroups)) {
 $id = $id ?? 'affixes';
 ?>
 <script>
-    let _affixGroups = {!! $affixgroups !!};
+    let _affixGroups{{ $id }} = {!! $affixgroups !!};
 
     $(function () {
-        handlebarsLoadAffixGroupSelect('#{{ $id }}');
+        handlebarsLoadAffixGroupSelect{{ $id }}();
     });
 
     /**
      * Converts a received setup from a dungeon route (setup property) to a parsed handlebars template.
      * @returns {*}
      */
-    function handlebarsLoadAffixGroupSelect(affixSelectSelector) {
+    function handlebarsLoadAffixGroupSelect{{ $id }}() {
+        let affixSelectSelector = '#{{ $id }}';
         // @TODO make one template with multiple options, rather than calling this template N amount of times?
-        for (let i in _affixGroups) {
-            if (_affixGroups.hasOwnProperty(i)) {
-                let affixGroup = _affixGroups[i];
+        for (let i in _affixGroups{{ $id }}) {
+            if (_affixGroups{{ $id }}.hasOwnProperty(i)) {
+                let affixGroup = _affixGroups{{ $id }}[i];
                 let template = Handlebars.templates['affixgroup_select_option_template'];
 
                 let affixes = [];

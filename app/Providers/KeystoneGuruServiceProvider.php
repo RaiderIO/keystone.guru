@@ -123,63 +123,82 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $expansionsData->put($expansion->shortname, $expansionService->getData($expansion));
             }
 
+            /** @var Collection|Expansion[] $activeExpansions */
+            $activeExpansions = Expansion::active()->orderBy('id', 'desc')->get();
+
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();
             $allCurrentAffixes = collect();
             foreach ($expansionsData as $expansionData) {
+
                 $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
                 $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroups());
             }
 
+            // Gather all affix groups by active expansions
+            $allAffixGroupsByActiveExpansion  = collect();
+            $featuredAffixesByActiveExpansion = collect();
+            foreach ($activeExpansions as $activeExpansion) {
+                /** @var ExpansionData $expansionData */
+                $expansionData = $expansionsData->get($activeExpansion->shortname);
+                $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
+            }
+
             return [
-                'isProduction'                    => config('app.env') === 'production',
-                'demoRoutes'                      => $demoRoutes,
-                'demoRouteDungeons'               => $demoRouteDungeons,
-                'demoRouteMapping'                => $demoRouteDungeons
+                'isProduction'                     => config('app.env') === 'production',
+                'demoRoutes'                       => $demoRoutes,
+                'demoRouteDungeons'                => $demoRouteDungeons,
+                'demoRouteMapping'                 => $demoRouteDungeons
                     ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes) {
                         return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
                     }),
-                'latestRelease'                   => $latestRelease,
-                'latestReleaseSpotlight'          => $latestReleaseSpotlight,
-                'appVersion'                      => GitVersionHelper::getVersion(),
-                'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
+                'latestRelease'                    => $latestRelease,
+                'latestReleaseSpotlight'           => $latestReleaseSpotlight,
+                'appVersion'                       => GitVersionHelper::getVersion(),
+                'appVersionAndName'                => GitVersionHelper::getNameAndVersion(),
 
                 // Home
-                'userCount'                       => User::count(),
+                'userCount'                        => User::count(),
 
                 // OAuth/register
-                'allRegions'                      => $allRegions,
+                'allRegions'                       => $allRegions,
 
                 // Composition
-                'allFactions'                     => Faction::all(),
+                'allFactions'                      => Faction::all(),
 
                 // Expansions/season data
-                'expansionsData'                  => $expansionsData,
+                'expansionsData'                   => $expansionsData,
 
                 // Changelog
-                'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
+                'releaseChangelogCategories'       => ReleaseChangelogCategory::all(),
 
                 // Map
-                'characterClassSpecializations'   => CharacterClassSpecialization::all(),
-                'characterClasses'                => CharacterClass::with('specializations')->get(),
+                'characterClassSpecializations'    => CharacterClassSpecialization::all(),
+                'characterClasses'                 => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
-                'affixes'                         => Affix::all(),
-                'allRouteAttributes'              => RouteAttribute::all(),
-                'allPublishedStates'              => PublishedState::all(),
+                'characterRacesClasses'            => CharacterRace::with(['classes:character_classes.id'])->get(),
+                'affixes'                          => Affix::all(),
+                'allRouteAttributes'               => RouteAttribute::all(),
+                'allPublishedStates'               => PublishedState::all(),
 
                 // Misc
-                'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
-                'allExpansions'                   => $allExpansions,
-                'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
+                'activeExpansions'                 => $activeExpansions, // Show most recent expansions first
+                'allExpansions'                    => $allExpansions,
+                'dungeonsByExpansionIdDesc'        => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
                 // Take active expansions into account
-                'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
-                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
+                'activeDungeonsByExpansionIdDesc'  => $activeDungeonsByExpansionId,
+                'siegeOfBoralus'                   => Dungeon::siegeOfBoralus()->first(),
+
+                // Search
+                'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
+                'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
+                'currentExpansion'                 => $expansionService->getCurrentExpansion(),
 
                 // Create route
-                'allAffixGroups'                  => $allAffixGroups,
-                'allCurrentAffixes'               => $allCurrentAffixes,
-                'dungeonExpansions'               => $allDungeonsByExpansionId
+                'allAffixGroups'                   => $allAffixGroups,
+                'allCurrentAffixes'                => $allCurrentAffixes,
+                'dungeonExpansions'                => $allDungeonsByExpansionId
                     ->pluck('expansion_id', 'id')->mapWithKeys(function (int $expansionId, int $dungeonId) use ($allExpansions) {
                         return [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname];
                     }),
@@ -256,6 +275,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', function (View $view) use ($globalViewVariables) {
+            $view->with('currentExpansion', $globalViewVariables['currentExpansion']);
+            $view->with('allAffixGroupsByActiveExpansion', $globalViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $globalViewVariables['featuredAffixesByActiveExpansion']);
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
         });
 
