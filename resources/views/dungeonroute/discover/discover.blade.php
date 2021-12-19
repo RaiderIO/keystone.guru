@@ -19,6 +19,8 @@
 ])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
+
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
             'dungeons' => $gridDungeons,

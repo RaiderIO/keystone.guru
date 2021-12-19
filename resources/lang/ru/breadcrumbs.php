@@ -2,7 +2,7 @@
 
 return [
     'home' => [
-        'keystone_guru'    => 'keystone_guru',
+        'keystone_guru'    => 'Keystone.guru',
         'affixes'          => 'Аффиксы',
         'changelog'        => 'История изменений',
         'routes'           => 'Маршруты',

@@ -1,11 +1,9 @@
 <?php
 /**
  * @var $category string
- * @var $dungeon \App\Models\Dungeon
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  */
-$title      = $title ?? sprintf('%s routes', __($dungeon->name));
 $affixgroup = $affixgroup ?? null;
 ?>
 @extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title, 'breadcrumbsParams' => [$expansion]])
@@ -13,6 +11,7 @@ $affixgroup = $affixgroup ?? null;
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
 
     @include('dungeonroute.discover.panel', [
         'cols' => 2,

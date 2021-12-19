@@ -107,7 +107,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
         @yield('global-message')
 
         <div
-            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "col-md-8 offset-md-2" }}">
+            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "" }}">
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
