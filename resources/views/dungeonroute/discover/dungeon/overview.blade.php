@@ -21,7 +21,7 @@
 ])
 
 @section('content')
-    @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
+    @include('dungeonroute.discover.wallpaper', ['expansion' => null, 'dungeon' => $dungeon])
 
     @include('dungeonroute.discover.panel', [
         'title' => __('views/dungeonroute.discover.dungeon.overview.popular'),
