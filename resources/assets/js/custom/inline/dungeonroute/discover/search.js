@@ -17,7 +17,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             'dungeons': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
             'title': new SearchFilterTitle('#title', this._search.bind(this)),
             'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            'affixgroups': new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
+            'affixgroups': new SearchFilterAffixGroups(`.filter_affix.${this.options.currentExpansion} select`, this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
             'enemy_forces': new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
             'rating': new SearchFilterRating('#rating', this._search.bind(this)),
@@ -59,8 +59,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         $('#search_expansion_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
-            $(`#search_expansion_dungeon .grid_dungeon`).removeClass('selectable').filter(`.${expansion}`).addClass('selectable');
-            self.filters.expansion.setValue(expansion);
+            self._selectExpansion(expansion);
         });
 
         this.$loadMore = $('#route_list_load_more');
@@ -73,8 +72,26 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
+        this._selectExpansion(this.options.currentExpansion);
+
         // Show some not very useful routes to get people to start using the filters
         this._search();
+    }
+
+    /**
+     *
+     * @param expansion {String}
+     * @private
+     */
+    _selectExpansion(expansion) {
+        $(`#search_expansion_dungeon .grid_dungeon`).removeClass('selectable').filter(`.${expansion}`).addClass('selectable');
+        this.filters.expansion.setValue(expansion);
+
+        // Update the affix group list
+        this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
+        this.filters.affixgroups.activate();
+
+        $(`.filter_affix`).hide().filter(`.${expansion}`).show();
     }
 
     /**

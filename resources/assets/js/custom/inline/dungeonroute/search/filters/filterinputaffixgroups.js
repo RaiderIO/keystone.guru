@@ -10,7 +10,7 @@ class SearchFilterAffixGroups extends SearchFilterInput {
         super.activate();
 
         // Grouped affixes
-        $(this.options.selector).change(this.options.onChange);
+        $(this.options.selector).off('change').change(this.options.onChange);
     }
 
     getFilterHeaderText() {
