@@ -1,7 +1,6 @@
 class SearchFilterManualExpansion extends SearchFilterManual {
     constructor(onChange) {
         super({
-            name: 'expansion',
             onChange: onChange
         });
     }

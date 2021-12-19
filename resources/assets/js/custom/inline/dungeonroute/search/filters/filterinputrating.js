@@ -1,7 +1,6 @@
 class SearchFilterRating extends SearchFilterInput {
     constructor(selector, onChange) {
         super({
-            name: 'rating',
             selector: selector,
             onChange: onChange
         });
