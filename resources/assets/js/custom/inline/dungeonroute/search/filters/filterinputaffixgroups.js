@@ -1,7 +1,6 @@
 class SearchFilterAffixGroups extends SearchFilterInput {
     constructor(selector, onChange) {
         super({
-            name: 'affixgroups',
             selector: selector,
             onChange: onChange
         });

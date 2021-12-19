@@ -1,7 +1,6 @@
 class SearchFilterLevel extends SearchFilterInput {
     constructor(selector, onChange, levelMin, levelMax) {
         super({
-            name: 'level',
             selector: selector,
             onChange: onChange
         });

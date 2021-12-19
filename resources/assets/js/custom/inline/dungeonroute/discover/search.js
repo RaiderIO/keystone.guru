@@ -14,10 +14,10 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         this.filters = {
             'expansion': new SearchFilterManualExpansion(this._search.bind(this)),
-            'dungeon': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
+            'dungeons': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
             'title': new SearchFilterTitle('#title', this._search.bind(this)),
             'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            'filter_affixes': new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
+            'affixgroups': new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
             'enemy_forces': new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
             'rating': new SearchFilterRating('#rating', this._search.bind(this)),
@@ -41,24 +41,12 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         // Set default values for the filters
         let queryParams = getQueryParams();
 
-        // @TODO enemy_forces=0 gets flipped back to 1?
-
         // Find the query parameters
         for (let key in queryParams) {
-            if (queryParams.hasOwnProperty(key)) {
+            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(key)) {
                 let value = queryParams[key];
 
-                // Find the appropriate filter
-                for (let filterIndex in this.filters) {
-                    if (this.filters.hasOwnProperty(filterIndex)) {
-                        let filter = this.filters[filterIndex];
-                        // Find the filter and apply the value to the filter (use startsWith to catch array values)
-                        if (key.startsWith(filter.options.name)) {
-                            filter.setValue(value);
-                            break;
-                        }
-                    }
-                }
+                this.filters[key].setValue(value);
             }
         }
 

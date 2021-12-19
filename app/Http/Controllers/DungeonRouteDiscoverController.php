@@ -229,6 +229,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'expansion'     => $expansion,
             'category'      => 'popular',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.popular'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
@@ -255,6 +256,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'expansion'     => $expansion,
             'category'      => 'thisweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
@@ -285,6 +287,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'expansion'     => $expansion,
             'category'      => 'nextweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
@@ -314,6 +317,7 @@ class DungeonRouteDiscoverController extends Controller
         };
 
         return view('dungeonroute.discover.dungeon.category', [
+            'expansion'     => $expansion,
             'category'      => 'new',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
