@@ -28,6 +28,8 @@ class DiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
@@ -40,7 +42,7 @@ class DiscoverService extends BaseDiscoverService
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
                     AND affix_group_id >= %s
-                )) as weightedPopularity', $this->seasonService->getCurrentSeason()->affixgroups->first()->id)
+                )) as weightedPopularity', $this->expansionService->getCurrentSeason($this->expansion)->affixgroups->first()->id)
             )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
@@ -61,6 +63,8 @@ class DiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])

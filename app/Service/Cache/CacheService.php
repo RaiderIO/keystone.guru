@@ -17,16 +17,6 @@ class CacheService implements CacheServiceInterface
     private bool $cacheEnabled = true;
 
     /**
-     * @param bool $cacheEnabled
-     * @return CacheService
-     */
-    public function setCacheEnabled(bool $cacheEnabled): CacheService
-    {
-        $this->cacheEnabled = $cacheEnabled;
-        return $this;
-    }
-
-    /**
      * @param string $key
      * @return DateInterval|null
      */
@@ -35,6 +25,16 @@ class CacheService implements CacheServiceInterface
         $cacheConfig = config('keystoneguru.cache');
 
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
+    }
+
+    /**
+     * @param bool $cacheEnabled
+     * @return CacheService
+     */
+    public function setCacheEnabled(bool $cacheEnabled): CacheService
+    {
+        $this->cacheEnabled = $cacheEnabled;
+        return $this;
     }
 
     /**
