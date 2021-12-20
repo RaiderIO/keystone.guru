@@ -18,6 +18,8 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
@@ -37,6 +39,8 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')

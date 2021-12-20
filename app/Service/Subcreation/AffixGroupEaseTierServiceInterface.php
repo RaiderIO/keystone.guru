@@ -21,4 +21,9 @@ interface AffixGroupEaseTierServiceInterface
      * @return Collection|AffixGroupEaseTier[]
      */
     function getTiersByAffixGroups(Collection $affixGroups): Collection;
+
+    /**
+     * @return Collection
+     */
+    function getTiers(): Collection;
 }
