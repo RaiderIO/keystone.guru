@@ -19,6 +19,15 @@ use Illuminate\View\View;
 
 class SiteController extends Controller
 {
+    /**
+     * Show the application dashboard.
+     *
+     * @return Application|Factory|View
+     */
+    public function test()
+    {
+        return view('misc.test');
+    }
 
     /**
      * Show the application dashboard.

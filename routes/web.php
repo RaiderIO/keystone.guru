@@ -57,6 +57,8 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
+//Route::get('test', [SiteController::class, 'test']);
+
 Route::group(['middleware' => ['viewcachebuster', 'language']], function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
