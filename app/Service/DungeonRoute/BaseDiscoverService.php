@@ -21,7 +21,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     protected ?Closure $closure = null;
 
     /** @var Expansion|null */
-    protected ?Expansion $expansion;
+    protected ?Expansion $expansion = null;
 
     /**
      * DiscoverService constructor.

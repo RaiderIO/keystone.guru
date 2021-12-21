@@ -1,3 +1,6 @@
+<?php
+/** @var $isMobile bool */
+?>
 <script>
     /** Instance that handles all inline code for specific pages */
     let _inlineManager;
@@ -11,6 +14,6 @@
      * @TODO This should go somewhere else?
      **/
     function isMobile() {
-        return {{ (new \Jenssegers\Agent\Agent())->isMobile() ? 'true' : 'false' }};
+        return {{ $isMobile ? 'true' : 'false' }};
     }
 </script>

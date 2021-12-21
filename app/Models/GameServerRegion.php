@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Service\Cache\CacheService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -37,7 +39,7 @@ class GameServerRegion extends CacheModel
         self::EUROPE,
         self::CHINA,
         self::TAIWAN,
-        self::KOREA
+        self::KOREA,
     ];
 
     /**
@@ -53,7 +55,19 @@ class GameServerRegion extends CacheModel
      */
     public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        return optional(Auth::user())->gameserverregion ?? GameServerRegion::where('short', self::DEFAULT_REGION)->first();
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->game_server_region_id !== -1) {
+                return $user->gameserverregion;
+            }
+        }
+
+        /** @var CacheService $cacheService */
+        $cacheService = App::make(CacheService::class);
+
+        return $cacheService->remember('default_region', function () {
+            return GameServerRegion::where('short', self::DEFAULT_REGION)->first();
+        });
     }
 
     public static function boot()
