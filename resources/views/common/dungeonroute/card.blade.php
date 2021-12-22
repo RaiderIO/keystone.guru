@@ -1,7 +1,7 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
 
 <?php
-/** @var $cacheService \App\Service\Cache\CacheService */
+/** @var $cacheService \App\Service\Cache\CacheServiceInterface */
 /** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
 /** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */

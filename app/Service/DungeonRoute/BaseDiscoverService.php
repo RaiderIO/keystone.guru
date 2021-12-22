@@ -4,15 +4,15 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use Closure;
 use Illuminate\Support\Facades\App;
 
 abstract class BaseDiscoverService implements DiscoverServiceInterface
 {
-    /** @var CacheService */
-    protected CacheService $cacheService;
+    /** @var CacheServiceInterface */
+    protected CacheServiceInterface $cacheService;
 
     /** @var ExpansionService */
     protected ExpansionService $expansionService;
@@ -28,7 +28,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
      */
     public function __construct()
     {
-        $this->cacheService     = App::make(CacheService::class);
+        $this->cacheService     = App::make(CacheServiceInterface::class);
         $this->expansionService = App::make(ExpansionService::class);
     }
 

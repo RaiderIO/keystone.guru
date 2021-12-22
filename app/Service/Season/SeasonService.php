@@ -5,7 +5,7 @@ namespace App\Service\Season;
 
 use App\Models\Expansion;
 use App\Models\Season;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Traits\UserCurrentTime;
 use Exception;
@@ -147,8 +147,8 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getDisplayedAffixGroups(int $iterationOffset, ?Expansion $expansion = null): Collection
     {
-        /** @var CacheService $cacheService */
-//        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+//        $cacheService = App::make(CacheServiceInterface::class);
 
 //        return $cacheService->remember(sprintf('displayed_affix_groups_%d', $iterationOffset), function () use ($iterationOffset)
 //        {

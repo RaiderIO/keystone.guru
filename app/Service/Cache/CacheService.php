@@ -69,6 +69,7 @@ class CacheService implements CacheServiceInterface
 
         // If we should ignore the cache, of if it's found
         if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+
             // Get the result by calling the closure
             if ($value instanceof Closure) {
                 $value = $value();
