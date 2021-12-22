@@ -4,7 +4,6 @@ namespace App\Console\Commands\Discover;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
-use App\Service\Cache\CacheService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
@@ -40,10 +39,9 @@ class Cache extends Command
      *
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonServiceInterface $seasonService
-     * @param CacheService $cacheService
      * @return int
      */
-    public function handle(DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService, CacheService $cacheService)
+    public function handle(DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService)
     {
         $this->info('Caching Discover pages');
 

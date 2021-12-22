@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
@@ -29,12 +28,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Internals
-        $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
 
         // Model helpers
         if (config('app.env') === 'local') {
+            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\DevCacheService');
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
         } else {
+            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
@@ -118,7 +118,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
         });
 
-        view()->composer('common.layout.navuser', function (View $view) use($isUserAdmin) {
+        view()->composer('common.layout.navuser', function (View $view) use ($isUserAdmin) {
             $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 0);
         });
 

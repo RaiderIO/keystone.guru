@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -62,8 +62,8 @@ class GameServerRegion extends CacheModel
             }
         }
 
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         return $cacheService->remember('default_region', function () {
             return GameServerRegion::where('short', self::DEFAULT_REGION)->first();

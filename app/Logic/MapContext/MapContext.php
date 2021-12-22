@@ -11,7 +11,7 @@ use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +54,8 @@ abstract class MapContext
      */
     public function getProperties(): array
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
         $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->_floor->dungeon->id), function () {

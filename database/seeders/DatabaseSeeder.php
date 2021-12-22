@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -10,10 +10,10 @@ class DatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @param CacheService $cacheService
+     * @param CacheServiceInterface $cacheService
      * @return void
      */
-    public function run(CacheService $cacheService)
+    public function run(CacheServiceInterface $cacheService)
     {
         $cacheService->dropCaches();
         // $this->call(UsersTableSeeder::class);

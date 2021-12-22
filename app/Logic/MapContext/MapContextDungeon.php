@@ -8,6 +8,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Facades\App;
 
 /**
@@ -58,8 +59,8 @@ class MapContextDungeon extends MapContext
 
     public function getProperties(): array
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         // Get or set the NPCs
         $npcs = $cacheService->remember(sprintf('npcs_%s', $this->_context->id), function () {

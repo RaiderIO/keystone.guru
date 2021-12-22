@@ -12,7 +12,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Npc;
 use App\Models\NpcType;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
@@ -374,10 +374,10 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param CacheService $cacheService
+     * @param CacheServiceInterface $cacheService
      * @return RedirectResponse
      */
-    public function dropCache(Request $request, CacheService $cacheService)
+    public function dropCache(Request $request, CacheServiceInterface $cacheService)
     {
         $cacheService->dropCaches();
 
