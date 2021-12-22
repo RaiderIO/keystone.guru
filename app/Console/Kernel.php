@@ -124,7 +124,7 @@ class Kernel extends ConsoleKernel
 
         // We don't want the cache when we're debugging to ensure fresh data every time
         if (!$debug) {
-            $schedule->command('keystoneguru:view cache')->everyThirtyMinutes();
+            $schedule->command('keystoneguru:view cache')->everyTenMinutes();
         }
 
         Log::channel('scheduler')->debug('Finished scheduler');
