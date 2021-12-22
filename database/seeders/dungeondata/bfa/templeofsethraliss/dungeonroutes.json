@@ -32,21 +32,6 @@
         "brushlines": [],
         "paths": [
             {
-                "floor_id": 49,
-                "polyline": {
-                    "color": "#80FF1A",
-                    "color_animated": "#244812",
-                    "weight": 3,
-                    "vertices_json": "[{\"lat\":-184.625,\"lng\":226.5},{\"lat\":-69.77,\"lng\":152.43}]"
-                },
-                "linkedawakenedobelisks": [
-                    {
-                        "target_map_icon_type_id": 18,
-                        "target_map_icon_seasonal_index": null
-                    }
-                ]
-            },
-            {
                 "floor_id": 48,
                 "polyline": {
                     "color": "#80FF1A",
@@ -88,6 +73,21 @@
                     {
                         "target_map_icon_type_id": 17,
                         "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            },
+            {
+                "floor_id": 49,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-184.625,\"lng\":226.5},{\"lat\":-69.77,\"lng\":152.43}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 18,
+                        "target_map_icon_seasonal_index": null
                     }
                 ]
             }
