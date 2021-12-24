@@ -71,7 +71,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'public_key', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'id', 'public_key', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
     ];
 
     /**
@@ -174,22 +174,17 @@ class User extends Authenticatable
     /**
      * Checks if this user has paid for a certain tier one way or the other.
      *
-     * @param $name
+     * @param string $name
      * @return bool
      */
-    function hasPaidTier($name): bool
+    function hasPaidTier(string $name): bool
     {
         // True for all admins
         $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreondata !== null) {
-            foreach ($this->patreondata->paidtiers as $tier) {
-                if ($tier->name === $name) {
-                    $result = true;
-                    break;
-                }
-            }
+            $result = $this->patreondata->paidtiers()->where('paid_tiers.id', PaidTier::ALL[$name])->exists();
         }
 
         return $result;
@@ -204,7 +199,7 @@ class User extends Authenticatable
     {
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
-            $result = PaidTier::all()->pluck(['name']);
+            $result = array_keys(PaidTier::ALL);
         } else if (isset($this->patreondata)) {
             $result = $this->patreondata->paidtiers->pluck(['name']);
         } else {

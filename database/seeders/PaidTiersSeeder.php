@@ -19,8 +19,11 @@ class PaidTiersSeeder extends Seeder
 
         $this->command->info('Adding Paid Tiers');
 
-        foreach (PaidTier::ALL as $paidTierName) {
-            (new PaidTier(['name' => $paidTierName]))->save();
+        foreach (PaidTier::ALL as $paidTierName => $id) {
+            PaidTier::create([
+                'id'           => $id,
+                'paidTierName' => $paidTierName,
+            ]);
         }
     }
 

@@ -18,16 +18,16 @@ class PaidTier extends CacheModel
     public const ANIMATED_POLYLINES      = 'animated-polylines';
 
     public const ALL = [
-        self::AD_FREE,
-        self::UNLIMITED_DUNGEONROUTES,
-        self::UNLISTED_ROUTES,
-        self::ANIMATED_POLYLINES,
+        self::AD_FREE                 => 1,
+        self::UNLIMITED_DUNGEONROUTES => 2,
+        self::UNLISTED_ROUTES         => 3,
+        self::ANIMATED_POLYLINES      => 4,
     ];
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
+        'id', 'name',
     ];
 
     protected $hidden = ['pivot'];

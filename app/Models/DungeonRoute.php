@@ -792,9 +792,7 @@ class DungeonRoute extends Model
         $dungeonroute->author_id          = Auth::id();
         $dungeonroute->dungeon_id         = $this->dungeon_id;
         $dungeonroute->faction_id         = $this->faction_id;
-        $dungeonroute->published_state_id = $unpublished ?
-            PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id :
-            $this->published_state_id;
+        $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
         // $dungeonroute->team_id = $this->team_id;
         $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);

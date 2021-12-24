@@ -47,7 +47,7 @@ class DiscoverService extends BaseDiscoverService
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
-            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
@@ -72,7 +72,7 @@ class DiscoverService extends BaseDiscoverService
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
-            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');

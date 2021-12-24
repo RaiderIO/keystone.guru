@@ -156,7 +156,7 @@ class APIDungeonRouteController extends Controller
                 }
 
                 $routes = $routes->whereIn('published_state_id',
-                    PublishedState::whereIn('name', [PublishedState::TEAM, PublishedState::WORLD])->get()->pluck('id')
+                    [PublishedState::ALL[PublishedState::TEAM], PublishedState::ALL[PublishedState::WORLD]]
                 );
 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
 //                    /** @var $query Builder */
@@ -172,7 +172,7 @@ class APIDungeonRouteController extends Controller
 
         // Only show routes that are visible to the world, unless we're viewing our own routes
         if ((!$mine && !$teamPublicKey) || $userId !== 0) {
-            $routes = $routes->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id);
+            $routes = $routes->where('published_state_id', PublishedState::ALL[PublishedState::WORLD]);
         }
 
         // Visible here to allow proper usage of indexes
@@ -299,7 +299,7 @@ class APIDungeonRouteController extends Controller
 
         // Disable some checks when we're local - otherwise we'd get no routes at all
         $query->when(config('app.env') !== 'local', function (Builder $builder) {
-            $builder->where('published_state_id', PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id)
+            $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
                 ->where('demo', 0)
                 ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
@@ -472,8 +472,8 @@ class APIDungeonRouteController extends Controller
             abort(422, 'This sharing state is not available for this route');
         }
 
-        $dungeonroute->published_state_id = PublishedState::where('name', $publishedState)->first()->id;
-        if ($dungeonroute->published_state_id === PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id) {
+        $dungeonroute->published_state_id = PublishedState::ALL[$publishedState];
+        if ($dungeonroute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
             $dungeonroute->published_at = date('Y-m-d H:i:s', time());
         }
         $dungeonroute->save();

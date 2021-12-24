@@ -643,7 +643,7 @@ class ImportString extends MDTBase
         $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
         // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
         $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
-        $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
+        $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED]; // Needs to be explicit otherwise redirect to edit will not have this value
         $dungeonRoute->public_key         = DungeonRoute::generateRandomPublicKey();
         $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
         $dungeonRoute->title              = $decoded['text'];

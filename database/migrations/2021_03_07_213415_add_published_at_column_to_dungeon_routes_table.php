@@ -22,7 +22,7 @@ class AddPublishedAtColumnToDungeonRoutesTable extends Migration
             sprintf(
                 'UPDATE `dungeon_routes` SET `published_at` = `updated_at` WHERE published_state_id = %s',
                 4
-//                PublishedState::where('name', PublishedState::WORLD)->firstOrFail()->id
+//                PublishedState::ALL[PublishedState::WORLD]
             )
         );
     }

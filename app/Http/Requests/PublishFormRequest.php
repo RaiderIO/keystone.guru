@@ -20,7 +20,7 @@ class PublishFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // Auth::user()->hasRole(["user", "admin"]);
+        return true;
     }
 
     /**
@@ -31,7 +31,7 @@ class PublishFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'published_state' => ['required', Rule::in(PublishedState::ALL)],
+            'published_state' => ['required', Rule::in(array_keys(PublishedState::ALL))],
         ];
     }
 }

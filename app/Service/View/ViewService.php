@@ -52,7 +52,7 @@ class ViewService implements ViewServiceInterface
         return $this->cacheService->setCacheEnabled($useCache)->remember('global_view_variables', function () {
             // Build a list of some common
             $demoRoutes = DungeonRoute::where('demo', true)
-                ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
+                ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
                 ->orderBy('dungeon_id')->get();
 
             $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
