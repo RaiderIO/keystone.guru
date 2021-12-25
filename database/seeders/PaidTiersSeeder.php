@@ -21,8 +21,8 @@ class PaidTiersSeeder extends Seeder
 
         foreach (PaidTier::ALL as $paidTierName => $id) {
             PaidTier::create([
-                'id'           => $id,
-                'paidTierName' => $paidTierName,
+                'id'   => $id,
+                'name' => $paidTierName,
             ]);
         }
     }
