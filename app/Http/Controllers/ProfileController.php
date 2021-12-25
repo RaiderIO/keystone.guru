@@ -236,7 +236,7 @@ class ProfileController extends Controller
     {
         $error = [];
 
-        $tagCategoryId = TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL)->id;
+        $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
 
         if (!Tag::where('name', $request->get('tag_name_new'))
             ->where('user_id', Auth::id())

@@ -31,7 +31,7 @@ class APIKillZoneController extends Controller
      * @return KillZone
      * @throws \Exception
      */
-    private function _saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true)
+    private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true)
     {
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($data['id']);
@@ -46,7 +46,7 @@ class APIKillZoneController extends Controller
         if ($killZone->save()) {
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
-                $killZone->deleteEnemies();
+                $killZone->killzoneenemies()->delete();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
                 $enemyIds = array_unique($data['enemies'] ?? []);
@@ -111,7 +111,7 @@ class APIKillZoneController extends Controller
             if (!isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
-            $killZone = $this->_saveKillZone($dungeonroute, $data);
+            $killZone = $this->saveKillZone($dungeonroute, $data);
 
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
@@ -145,7 +145,7 @@ class APIKillZoneController extends Controller
                 $kzDataWithoutEnemies = $killZoneData;
                 unset($kzDataWithoutEnemies['enemies']);
                 // Do not save the enemy forces - we save it one time down below
-                $killZones->push($this->_saveKillZone($dungeonroute, $kzDataWithoutEnemies, false));
+                $killZones->push($this->saveKillZone($dungeonroute, $kzDataWithoutEnemies, false));
             } catch (Exception $ex) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }

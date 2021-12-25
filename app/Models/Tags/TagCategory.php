@@ -20,9 +20,11 @@ class TagCategory extends Model
     const DUNGEON_ROUTE_TEAM     = 'dungeon_route_team';
 
     const ALL = [
-        self::DUNGEON_ROUTE_PERSONAL,
-        self::DUNGEON_ROUTE_TEAM,
+        self::DUNGEON_ROUTE_PERSONAL => 1,
+        self::DUNGEON_ROUTE_TEAM     => 2,
     ];
+
+    protected $fillable = ['id', 'name', 'model_class'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -31,14 +33,5 @@ class TagCategory extends Model
     public function getRouteKeyName()
     {
         return 'category';
-    }
-
-    /**
-     * @param string $name
-     * @return TagCategory
-     */
-    public static function fromName(string $name): TagCategory
-    {
-        return TagCategory::where('name', $name)->firstOrFail();
     }
 }

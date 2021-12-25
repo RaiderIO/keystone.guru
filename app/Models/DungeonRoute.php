@@ -347,7 +347,7 @@ class DungeonRoute extends Model
      */
     public function tagsteam(): HasMany
     {
-        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM));
+        return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
     }
 
     /**
@@ -355,7 +355,7 @@ class DungeonRoute extends Model
      */
     public function tagspersonal(): HasMany
     {
-        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL));
+        return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
     }
 
     /**
@@ -792,9 +792,7 @@ class DungeonRoute extends Model
         $dungeonroute->author_id          = Auth::id();
         $dungeonroute->dungeon_id         = $this->dungeon_id;
         $dungeonroute->faction_id         = $this->faction_id;
-        $dungeonroute->published_state_id = $unpublished ?
-            PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id :
-            $this->published_state_id;
+        $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
         // $dungeonroute->team_id = $this->team_id;
         $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
@@ -872,7 +870,6 @@ class DungeonRoute extends Model
         $result = false;
         $user   = Auth::user();
         if ($user !== null) {
-            // @TODO Probably going to want an index on this one
             $rating = DB::table('dungeon_route_ratings')
                 ->where('dungeon_route_id', '=', $this->id)
                 ->where('user_id', '=', $user->id)
@@ -995,26 +992,24 @@ class DungeonRoute extends Model
         $seasonService = App::make(SeasonService::class);
         return $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 
-        $result = null;
-
-        if ($this->affixgroups->isNotEmpty()) {
-            $result = $this->affixgroups->first;
-
-            /** @var SeasonService $seasonService */
-            $seasonService     = App::make(SeasonService::class);
-            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
-
-            dd($currentAffixGroup);
-
-            foreach ($this->affixgroups as $affixgroup) {
-                if ($affixgroup->id === $currentAffixGroup->id) {
-                    $result = $affixgroup;
-                    break;
-                }
-            }
-        }
-
-        return $result;
+//        $result = null;
+//
+//        if ($this->affixgroups->isNotEmpty()) {
+//            $result = $this->affixgroups->first;
+//
+//            /** @var SeasonService $seasonService */
+//            $seasonService     = App::make(SeasonService::class);
+//            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+//
+//            foreach ($this->affixgroups as $affixgroup) {
+//                if ($affixgroup->id === $currentAffixGroup->id) {
+//                    $result = $affixgroup;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        return $result;
     }
 
     /**

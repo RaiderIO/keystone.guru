@@ -29,13 +29,19 @@ class Faction extends CacheModel
 
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
-    public $fillable = ['icon_file_id', 'key', 'name', 'color'];
+    public $fillable = ['id', 'icon_file_id', 'key', 'name', 'color'];
+
+    const ALL = [
+        self::FACTION_UNSPECIFIED => 1,
+        self::FACTION_HORDE       => 2,
+        self::FACTION_ALLIANCE    => 3,
+    ];
 
 
     /**
      * @return HasMany
      */
-    function races()
+    function races(): HasMany
     {
         return $this->hasMany('App\Models\CharacterRace');
     }
@@ -43,7 +49,7 @@ class Faction extends CacheModel
     /**
      * @return HasMany
      */
-    function dungeonroutes()
+    function dungeonroutes(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoute');
     }

@@ -77,16 +77,26 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
-        $adFree      = config('app.env') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE);
 
         // All views
         view()->share('isMobile', (new Agent())->isMobile());
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
+        $isUserAdmin = null;
+        $adFree      = null;
         // Can use the Auth() global here!
-        view()->composer('*', function (View $view) use ($isUserAdmin, $adFree) {
+        view()->composer('*', function (View $view) use (&$isUserAdmin, &$adFree) {
+            // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
+            if ($isUserAdmin === null) {
+                $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
+            }
+
+            if ($adFree === null) {
+                $adFree = Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE);
+            }
+
+
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
                 $view->with('viewName', $view->getName());
@@ -94,8 +104,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', $isUserAdmin);
-
-            // Set a variable that checks if the user is adfree or not
             $view->with('adFree', $adFree);
         });
 

@@ -3,7 +3,6 @@
 namespace App\Models\Traits;
 
 use App\Models\Tags\Tag;
-use App\Models\Tags\TagCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -18,27 +17,27 @@ use Illuminate\Support\Collection;
 trait HasTags
 {
     /**
-     * @param TagCategory|null $category
+     * @param int|null $tagCategoryId
      * @return hasMany
      */
-    public function tags(?TagCategory $category = null): HasMany
+    public function tags(?int $tagCategoryId = null): HasMany
     {
         $result = $this->hasMany('\App\Models\Tags\Tag', 'model_id')->where('model_class', get_class($this));
 
-        if ($category !== null) {
-            $result->where('tag_category_id', $category->id);
+        if ($tagCategoryId !== null) {
+            $result->where('tag_category_id', $tagCategoryId);
         }
 
         return $result;
     }
 
     /**
-     * @param TagCategory $tagCategory
+     * @param int $tagCategoryId
      * @param string $name
      * @return bool
      */
-    public function hasTag(TagCategory $tagCategory, string $name): bool
+    public function hasTag(int $tagCategoryId, string $name): bool
     {
-        return in_array($name, $this->tags($tagCategory)->get()->pluck(['name'])->toArray());
+        return in_array($name, $this->tags($tagCategoryId)->get()->pluck(['name'])->toArray());
     }
 }

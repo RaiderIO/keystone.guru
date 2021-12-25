@@ -26,6 +26,7 @@ use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\NpcClassification;
 use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
@@ -112,7 +113,6 @@ class ImportString extends MDTBase
                         /** @var MapIcon $obeliskMapIcon */
                         $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
-                        // @TODO #378 We do not support rifts on different floors
                         if (isset($mdtXy['sublevel'])) {
                             throw new ImportWarning('Awakened Obelisks',
                                 sprintf(
@@ -130,7 +130,7 @@ class ImportString extends MDTBase
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
-                        $hasAnimatedLines = Auth::check() ? User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES) : false;
+                        $hasAnimatedLines = Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES);
 
                         $polyLine = new Polyline([
                             'model_id'       => -1,
@@ -405,7 +405,7 @@ class ImportString extends MDTBase
                     // that are around the boss instead
                     $hasFinalBoss = false;
                     foreach ($killZone->killzoneenemies as $kzEnemy) {
-                        if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->classification_id === 4) {
+                        if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
                             $hasFinalBoss = true;
                             break;
                         }
@@ -643,7 +643,7 @@ class ImportString extends MDTBase
         $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
         // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
         $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
-        $dungeonRoute->published_state_id = PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id; // Needs to be explicit otherwise redirect to edit will not have this value
+        $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED]; // Needs to be explicit otherwise redirect to edit will not have this value
         $dungeonRoute->public_key         = DungeonRoute::generateRandomPublicKey();
         $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
         $dungeonRoute->title              = $decoded['text'];

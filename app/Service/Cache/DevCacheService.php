@@ -14,7 +14,7 @@ class DevCacheService extends CacheService
      */
     public function get(string $key)
     {
-        $result = Cache::get($key);
+        $result = parent::get($key);
         Counter::increase(sprintf('cacheservice[%s]:%s', $key, $result === null ? 'miss' : 'hit'));
         return $result;
     }

@@ -19,8 +19,11 @@ class PublishedStatesSeeder extends Seeder
 
         $this->command->info('Adding Published States');
 
-        foreach (PublishedState::ALL as $publishedStateName) {
-            (new PublishedState(['name' => $publishedStateName]))->save();
+        foreach (PublishedState::ALL as $publishedStateName => $id) {
+            PublishedState::create([
+                'id'   => $id,
+                'name' => $publishedStateName,
+            ]);
         }
     }
 
