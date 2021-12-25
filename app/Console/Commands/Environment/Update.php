@@ -97,7 +97,7 @@ class Update extends Command
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
         $this->call('discover:cache');
-        $this->call('keystoneguru:view', ['cache' => true]);
+        $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         return 0;
     }
