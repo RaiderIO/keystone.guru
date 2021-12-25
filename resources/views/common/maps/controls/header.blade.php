@@ -82,12 +82,13 @@ $echo = $echo ?? false;
                         </div>
                         @auth
                             @isset($dungeonroute)
+                                <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
                                 <div class="col-auto ml-2">
                                     <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                       style="display: {{ $dungeonroute->isFavoritedByCurrentUser() ? 'inherit' : 'none' }}"></i>
+                                       style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
                                     <i id="route_not_favorited" class="far fa-star favorite_star"
-                                       style="display: {{ $dungeonroute->isFavoritedByCurrentUser() ? 'none' : 'inherit' }}"></i>
-                                    {!! Form::hidden('favorite', $dungeonroute->isFavoritedByCurrentUser() ? '1' : '0', ['id' => 'favorite']) !!}
+                                       style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
+                                    {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
                                 </div>
                             @endisset
                         @endauth

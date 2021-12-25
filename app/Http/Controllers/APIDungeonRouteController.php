@@ -69,7 +69,7 @@ class APIDungeonRouteController extends Controller
         $userId        = (int)$request->get('user_id', 0);
         // Check if we should load the team's tags or the personal tags
         $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
-        $tagCategory     = TagCategory::fromName($tagCategoryName);
+        $tagCategoryId   = TagCategory::ALL[$tagCategoryName];
 
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
@@ -112,7 +112,7 @@ class APIDungeonRouteController extends Controller
 
             $routes = $routes
                 ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
-                ->where('tags.tag_category_id', $tagCategory->id)
+                ->where('tags.tag_category_id', $tagCategoryId)
                 ->whereIn('tags.name', $tags)
                 // https://stackoverflow.com/a/3267635/771270; this enables AND behaviour for multiple tags
                 ->havingRaw(sprintf('COUNT(DISTINCT tags.name) >= %d', count($tags)));
@@ -666,7 +666,6 @@ class APIDungeonRouteController extends Controller
         $exportString = new ExportString($seasonService);
 
         try {
-            // @TODO improve exception handling
             $warnings     = new Collection();
             $dungeonRoute = $exportString->setDungeonRoute($dungeonroute)
                 ->getEncodedString($warnings);

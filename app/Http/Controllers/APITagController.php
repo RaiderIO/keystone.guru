@@ -74,7 +74,7 @@ class APITagController extends Controller
         $this->authorize('create-tag', [$tagCategory, $model]);
 
         //
-        if (!$model->hasTag($tagCategory, $tagName)) {
+        if (!$model->hasTag($tagCategory->id, $tagName)) {
             // Get the first tag that has the same name, under the same user, with the same category
             /** @var Tag $similarTag */
             $similarTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->where('tag_category_id', $tagCategory->id)->first();

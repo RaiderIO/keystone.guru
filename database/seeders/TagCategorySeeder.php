@@ -21,18 +21,16 @@ class TagCategorySeeder extends Seeder
         $this->command->info('Adding Tag Categories');
 
         $tagCategories = [
-            new TagCategory([
-                'name'        => TagCategory::DUNGEON_ROUTE_PERSONAL,
-                'model_class' => DungeonRoute::class,
-            ]),
-            new TagCategory([
-                'name'        => TagCategory::DUNGEON_ROUTE_TEAM,
-                'model_class' => DungeonRoute::class,
-            ]),
+            TagCategory::DUNGEON_ROUTE_PERSONAL => DungeonRoute::class,
+            TagCategory::DUNGEON_ROUTE_TEAM     => DungeonRoute::class,
         ];
 
-        foreach ($tagCategories as $tagCategory) {
-            $tagCategory->save();
+        foreach ($tagCategories as $tagCategory => $class) {
+            TagCategory::create([
+                'id'          => TagCategory::ALL[$tagCategory],
+                'name'        => $tagCategory,
+                'model_class' => $class,
+            ]);
         }
     }
 

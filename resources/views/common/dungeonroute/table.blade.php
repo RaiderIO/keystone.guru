@@ -23,17 +23,18 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } else if (Auth::check()) {
-    $tagCategory = \App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL);
-    $searchTags  = Auth::user()->tags($tagCategory)->unique($tagCategory)->get();
+    $tagCategoryId = \App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL];
+    $searchTags  = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
 } else {
     $searchTags = collect();
 }
+
 
 $autocompleteTags = collect();
 
 if (Auth::check()) {
     if ($team === null) {
-        $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::fromName(\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL))->get();
+        $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
     } else {
         $autocompleteTags = $team->getAvailableTags();
     }

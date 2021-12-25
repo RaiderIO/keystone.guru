@@ -11,6 +11,7 @@ use App\Logic\MDT\IO\ImportString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Npc;
+use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Season\SeasonService;
@@ -107,7 +108,7 @@ class AdminToolsController extends Controller
                 $npcCandidate->id                = $npcData['id'];
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
                 // Bosses
-                if ($npcCandidate->classification_id >= 3) {
+                if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     $npcCandidate->enemy_forces = 0;
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];

@@ -8,7 +8,6 @@ use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\Tags\Tag;
-use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
@@ -147,15 +146,15 @@ class User extends Authenticatable
     }
 
     /**
-     * @param TagCategory|null $category
+     * @param int|null $category
      * @return HasMany|Tag
      */
-    public function tags(?TagCategory $category = null): HasMany
+    public function tags(?int $categoryId = null): HasMany
     {
         $result = $this->hasMany('\App\Models\Tags\Tag');
 
-        if ($category !== null) {
-            $result->where('tag_category_id', $category->id);
+        if ($categoryId !== null) {
+            $result->where('tag_category_id', $categoryId);
         }
 
         return $result;
@@ -199,7 +198,7 @@ class User extends Authenticatable
     {
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
-            $result = array_keys(PaidTier::ALL);
+            $result = collect(array_keys(PaidTier::ALL));
         } else if (isset($this->patreondata)) {
             $result = $this->patreondata->paidtiers->pluck(['name']);
         } else {

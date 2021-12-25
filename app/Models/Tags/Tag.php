@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * @property TagCategory $tagcategory
  *
- * @method Builder unique(TagCategory $tagCategory)
+ * @method Builder unique(?int $tagCategoryId)
  *
  * @mixin Eloquent
  */
@@ -46,13 +46,13 @@ class Tag extends Model
 
     /**
      * @param Builder $query
-     * @param TagCategory|null $category
+     * @param int|null $categoryId
      * @return Builder
      */
-    public function scopeUnique(Builder $query, ?TagCategory $category = null)
+    public function scopeUnique(Builder $query, ?int $categoryId = null)
     {
-        if ($category instanceof TagCategory) {
-            $query = $query->where('tag_category_id', $category->id);
+        if ($categoryId !== null) {
+            $query = $query->where('tag_category_id', $categoryId);
         }
 
         return $query->groupBy('name');

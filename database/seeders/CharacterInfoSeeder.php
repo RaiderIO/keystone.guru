@@ -24,8 +24,8 @@ class CharacterInfoSeeder extends Seeder
 
         $this->command->info('Adding known races');
 
-        $factionAllianceId = Faction::where('key', Faction::FACTION_ALLIANCE)->first()->id;
-        $factionHordeId    = Faction::where('key', Faction::FACTION_HORDE)->first()->id;
+        $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
+        $factionHordeId    = Faction::ALL[Faction::FACTION_HORDE];
 
         if ($factionAllianceId === 0 || $factionHordeId === 0) {
             throw new Exception('Unable to find factions');
@@ -42,7 +42,7 @@ class CharacterInfoSeeder extends Seeder
             'races.pandarenalliance'    => new CharacterRace(['key' => 'pandarenalliance', 'faction_id' => $factionAllianceId]),
             'races.void_elf'            => new CharacterRace(['key' => 'void_elf', 'faction_id' => $factionAllianceId]),
             'races.lightforged_draenei' => new CharacterRace(['key' => 'lightforged_draenei', 'faction_id' => $factionAllianceId]),
-            'races.dark_iron_dwarf'      => new CharacterRace(['key' => 'dark_iron_dwarf', 'faction_id' => $factionAllianceId]),
+            'races.dark_iron_dwarf'     => new CharacterRace(['key' => 'dark_iron_dwarf', 'faction_id' => $factionAllianceId]),
 
             'races.orc'                 => new CharacterRace(['key' => 'orc', 'faction_id' => $factionHordeId]),
             'races.undead'              => new CharacterRace(['key' => 'undead', 'faction_id' => $factionHordeId]),

@@ -111,30 +111,13 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
-    /**
-     * Deletes all enemies that are related to this Route.
-     */
-    public function deleteEnemies()
-    {
-        // Load the existing kill zone enemies
-        $existingKillZoneEnemiesIds = $this->killzoneenemies->pluck('id')->all();
-        // Only if there's enemies to destroy
-        if (count($existingKillZoneEnemiesIds) > 0) {
-            // Kill them off
-            KillZoneEnemy::destroy($existingKillZoneEnemiesIds);
-        }
-
-        $this->unsetRelation('killzoneenemies');
-    }
-
     public static function boot()
     {
         parent::boot();
 
-        // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item KillZone */
-            $item->deleteEnemies();
+        // Delete kill zone properly if it gets deleted
+        static::deleting(function (KillZone $item) {
+            $item->killzoneenemies()->delete();
         });
     }
 }

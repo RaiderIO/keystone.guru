@@ -23,7 +23,7 @@ return [
 
     'levels' => [
         'min' => 2,
-        'max' => 28
+        'max' => 28,
     ],
 
     'cache' => [
@@ -44,6 +44,9 @@ return [
         ],
         'global_view_variables'  => [
             'ttl' => '1 hour',
+        ],
+        'default_region'         => [
+            'ttl' => '1 week',
         ],
     ],
 
@@ -96,7 +99,7 @@ return [
             'Felbeast',
 
             // Can add more here, see https://www.wowhead.com/basilisk-npcs
-        ]
+        ],
     ],
 
     /**
@@ -185,7 +188,7 @@ return [
      */
     'prideful'                            => [
         'npc_id' => 173729,
-        'count'  => 5
+        'count'  => 5,
     ],
 
     /**
@@ -256,49 +259,49 @@ return [
             //                'ttl'       => '5 min',
             //                'cache_key' => 'new_by_dungeon_%d_and_affix_group_%d',
             //            ],
-        ]
+        ],
     ],
 
     'view' => [
         'common.dungeonroute.card' => [
             'cache' => [
-                'ttl' => '1 hour'
-            ]
-        ]
+                'ttl' => '1 hour',
+            ],
+        ],
     ],
 
     'live_sessions' => [
-        'expires_hours' => 1
+        'expires_hours' => 1,
     ],
 
     'releases' => [
-        'spotlight_show_days' => 7
+        'spotlight_show_days' => 7,
     ],
 
     'influxdb' => [
         'default_tags' => [
-            'environment' => env('APP_ENV')
-        ]
+            'environment' => env('APP_ENV'),
+        ],
     ],
 
     'webhook' => [
         'github' => [
             'url'    => env('DISCORD_GITHUB_WEBHOOK'),
-            'secret' => env('GITHUB_WEBHOOK_SECRET')
+            'secret' => env('GITHUB_WEBHOOK_SECRET'),
         ],
 
         'discord' => [
             'new_release' => [
-                'url' => env('DISCORD_NEW_RELEASE_WEBHOOK')
-            ]
-        ]
+                'url' => env('DISCORD_NEW_RELEASE_WEBHOOK'),
+            ],
+        ],
     ],
 
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
-        ]
+        ],
     ],
 
     'reddit' => [
@@ -310,5 +313,5 @@ return [
         'api'   => [
             'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
         ],
-    ]
+    ],
 ];
