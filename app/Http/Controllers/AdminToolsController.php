@@ -380,6 +380,8 @@ class AdminToolsController extends Controller
      */
     public function dropCache(Request $request, CacheServiceInterface $cacheService)
     {
+        ini_set('max_execution_time', -1);
+
         $cacheService->dropCaches();
 
         Artisan::call('modelCache:clear');

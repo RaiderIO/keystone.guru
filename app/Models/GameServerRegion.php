@@ -57,7 +57,7 @@ class GameServerRegion extends CacheModel
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->game_server_region_id !== -1) {
+            if ($user->game_server_region_id > 0 && $user->gameserverregion !== null) {
                 return $user->gameserverregion;
             }
         }
