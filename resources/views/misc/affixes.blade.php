@@ -123,24 +123,26 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 
     <div class="discover">
         @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
             'title' => __('views/misc.affixes.popular_routes_by_current_affixes'),
             'link' => route('dungeonroutes.thisweek', ['expansion' => $expansion]),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => true,
+            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
             'showDungeonImage' => true,
         ])
 
 
         @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
             'title' => __('views/misc.affixes.popular_routes_by_next_affixes'),
             'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
             // The next week's affix group is current for that week
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => true,
+            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
             'showDungeonImage' => true,
         ])
     </div>

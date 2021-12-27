@@ -24,21 +24,23 @@
     @include('dungeonroute.discover.wallpaper', ['expansion' => null, 'dungeon' => $dungeon])
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.popular'),
         'link' => route('dungeonroutes.discoverdungeon.popular', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
-        'showMore' => true,
+        'loadMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
         'link' => route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
-        'showMore' => true,
+        'loadMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
@@ -49,20 +51,22 @@
     @endif
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
         'link' => route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
-        'showMore' => true,
+        'loadMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.newly_published_routes'),
         'link' => route('dungeonroutes.discoverdungeon.new', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
-        'showMore' => true,
+        'loadMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 

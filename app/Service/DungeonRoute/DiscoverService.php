@@ -18,6 +18,8 @@ class DiscoverService extends BaseDiscoverService
      */
     private function getCacheKey(string $key): string
     {
+        $this->ensureExpansion();
+
         return sprintf('discover:%s:%s', $this->expansion->shortname, $key);
     }
 
@@ -30,6 +32,8 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
+        $currentSeasonAffixGroups = $this->expansionService->getCurrentSeason($this->expansion)->affixgroups;
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
@@ -41,16 +45,16 @@ class DiscoverService extends BaseDiscoverService
                     SELECT IF(COUNT(*) = 0, 13, COUNT(*))
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
-                    AND affix_group_id >= %s
-                )) as weightedPopularity', $this->expansionService->getCurrentSeason($this->expansion)->affixgroups->first()->id)
+                    AND affix_group_id BETWEEN %d AND %d
+                )) as weightedPopularity', $currentSeasonAffixGroups->first()->id, $currentSeasonAffixGroups->last()->id)
             )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
-            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
+//            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
+//                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->groupBy('dungeon_routes.id')
             ->orderBy('weightedPopularity', 'desc');
@@ -72,8 +76,11 @@ class DiscoverService extends BaseDiscoverService
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
+            ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
+//            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
+//                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');
     }
@@ -103,8 +110,7 @@ class DiscoverService extends BaseDiscoverService
     function popular(): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null, $this->getCacheKey('popular'), function () {
-            return $this->popularBuilder()
-                ->get();
+            return $this->popularBuilder()->get();
         }, config('keystoneguru.discover.service.popular.ttl'));
     }
 

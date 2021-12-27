@@ -28,13 +28,13 @@ use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
-use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -203,11 +203,10 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APIDungeonRouteSearchFormRequest $request
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
      * @return Response|string
      * @throws Exception
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService, SeasonServiceInterface $seasonService)
+    function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -215,14 +214,14 @@ class APIDungeonRouteController extends Controller
         $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
 
         if ($request->has('expansion')) {
-            $expansionId = Expansion::where('shortname', $request->get('expansion'))->first()->id;
+            $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
         } else {
-            $expansionId = $expansionService->getCurrentExpansion()->id;
+            $expansion = $expansionService->getCurrentExpansion();
         }
 
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $expansionId)
+            ->where('dungeons.expansion_id', $expansion->id)
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -312,7 +311,7 @@ class APIDungeonRouteController extends Controller
             return response()->noContent();
         } else {
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $seasonService->getCurrentSeason()->getCurrentAffixGroup(),
+                'currentAffixGroup' => $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion()),
                 'dungeonroutes'     => $result,
                 'showAffixes'       => true,
                 'showDungeonImage'  => true,
@@ -324,10 +323,10 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param string $category
      * @param DiscoverServiceInterface $discoverService
-     * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return Response|string
      */
-    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService)
+    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
     {
         $result = collect();
 
@@ -337,15 +336,25 @@ class APIDungeonRouteController extends Controller
         $dungeonId = (int)$request->get('dungeon');
 
         // Fetch the dungeon if it was set, and only if it is active
-        $dungeon = $dungeonId !== null ? Dungeon::active()->where('id', $dungeonId)->first() : null;
+        $dungeon = $dungeonId !== 0 ? Dungeon::active()->where('id', $dungeonId)->first() : null;
+
+        if ($request->has('expansion')) {
+            $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
+        } else {
+            $expansion = $expansionService->getCurrentExpansion();
+        }
 
         // Apply an offset and a limit by default for all subsequent queries
         $closure         = function (Builder $builder) use ($offset, $limit) {
             $builder->offset($offset)->limit($limit);
         };
-        $discoverService = $discoverService->withBuilder($closure);
 
-        $currentSeason = $seasonService->getCurrentSeason();
+        // Prime the discover service
+        $discoverService = $discoverService->withExpansion($expansion)->withBuilder($closure);
+
+        $region = GameServerRegion::getUserOrDefaultRegion();
+
+        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $region);
 
         $affixGroup = null;
         switch ($category) {
@@ -358,16 +367,16 @@ class APIDungeonRouteController extends Controller
                 break;
             case 'thisweek':
                 if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentSeason->getCurrentAffixGroup());
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
                 } else {
-                    $result = $discoverService->popularByAffixGroup($affixGroup = $currentSeason->getCurrentAffixGroup());
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $currentAffixGroup);
                 }
                 break;
             case 'nextweek':
                 if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentSeason->getNextAffixGroup());
+                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
                 } else {
-                    $result = $discoverService->popularByAffixGroup($affixGroup = $currentSeason->getNextAffixGroup());
+                    $result = $discoverService->popularByAffixGroup($affixGroup = $expansionService->getNextAffixGroup($expansion, $region));
                 }
                 break;
             case 'new':
@@ -383,7 +392,7 @@ class APIDungeonRouteController extends Controller
             return response()->noContent();
         } else {
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $currentSeason->getCurrentAffixGroup(),
+                'currentAffixGroup' => $currentAffixGroup,
                 'dungeonroutes'     => $result,
                 'affixgroup'        => $affixGroup,
                 'showAffixes'       => true,

@@ -14,6 +14,7 @@ $affixgroup = $affixgroup ?? null;
     @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'cols' => 2,
         'category' => $category,
         'title' => $title,
@@ -21,7 +22,7 @@ $affixgroup = $affixgroup ?? null;
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $affixgroup,
         'showDungeonImage' => true,
-        'loadMore' => true,
+        'loadMore' => $dungeonroutes->count() >= config('keystoneguru.discover.limits.category'),
     ])
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])

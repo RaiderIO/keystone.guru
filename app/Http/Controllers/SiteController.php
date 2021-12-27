@@ -8,6 +8,7 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -134,7 +135,9 @@ class SiteController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @param ExpansionService $expansionService
+     * @param TimewalkingEventServiceInterface $timewalkingEventService
      * @return Factory|View
+     * @throws Exception
      */
     public function affixes(
         Request                          $request,

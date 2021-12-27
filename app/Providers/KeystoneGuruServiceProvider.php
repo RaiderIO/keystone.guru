@@ -32,7 +32,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Model helpers
         if (config('app.env') === 'local') {
             $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\DevCacheService');
-            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
+            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         } else {
             $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
