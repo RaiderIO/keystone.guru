@@ -17,6 +17,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /** @var ExpansionService */
     protected ExpansionService $expansionService;
 
+    /** @var int */
+    protected int $limit = 10;
+
     /** @var Closure|null */
     protected ?Closure $closure = null;
 
@@ -41,6 +44,16 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
         if ($this->expansion === null) {
             $this->expansion = $this->expansionService->getCurrentExpansion();
         }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function withLimit(int $limit): DiscoverServiceInterface
+    {
+        $this->limit = $limit;
 
         return $this;
     }

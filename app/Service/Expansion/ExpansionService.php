@@ -13,8 +13,6 @@ use Illuminate\Support\Collection;
 
 class ExpansionService implements ExpansionServiceInterface
 {
-
-
     /**
      * @inheritDoc
      */
@@ -46,9 +44,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeason(Expansion $expansion): Season
     {
-        /** @var Season $season */
-        $season = $expansion->seasons()->orderBy('start', 'desc')->limit(1)->first();
-        return $season;
+        return $expansion->currentseason;
     }
 
     /**
@@ -70,6 +66,7 @@ class ExpansionService implements ExpansionServiceInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function getNextAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
     {

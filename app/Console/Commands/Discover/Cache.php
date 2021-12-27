@@ -5,7 +5,7 @@ namespace App\Console\Commands\Discover;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
-use App\Service\Season\SeasonServiceInterface;
+use App\Service\Expansion\ExpansionServiceInterface;
 use Illuminate\Console\Command;
 
 class Cache extends Command
@@ -38,17 +38,15 @@ class Cache extends Command
      * Execute the console command.
      *
      * @param DiscoverServiceInterface $discoverService
-     * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return int
      */
-    public function handle(DiscoverServiceInterface $discoverService, SeasonServiceInterface $seasonService)
+    public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
     {
         $this->info('Caching Discover pages');
 
-        // Disable cache
+        // Disable cache so that we may refresh it
         $discoverService = $discoverService->withCache(false);
-
-        $currentSeason = $seasonService->getCurrentSeason();
 
         // Refresh caches for all categories
         foreach (Expansion::active()->get() as $expansion) {
@@ -61,9 +59,10 @@ class Cache extends Command
             $discoverService->popularGroupedByDungeon();
             $discoverService->popularUsers();
 
-            foreach ($currentSeason->affixgroups as $affixgroup) {
-                $this->info(sprintf('-- AffixGroup %s', $affixgroup->getTextAttribute()));
-                $discoverService->popularGroupedByDungeonByAffixGroup($affixgroup);
+            $currentSeason = $expansionService->getCurrentSeason($expansion);
+            foreach ($currentSeason->affixgroups as $affixGroup) {
+                $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
+                $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
             }
 
             foreach ($expansion->dungeons()->active()->get() as $dungeon) {
@@ -74,11 +73,11 @@ class Cache extends Command
                 $discoverService->newByDungeon($dungeon);
                 $discoverService->popularUsersByDungeon($dungeon);
 
-                foreach ($currentSeason->affixgroups as $affixgroup) {
+                foreach ($currentSeason->affixgroups as $affixGroup) {
 //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
-                    $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixgroup);
-                    $discoverService->newByDungeonAndAffixGroup($dungeon, $affixgroup);
-                    $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixgroup);
+                    $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
+                    $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);
+                    $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixGroup);
                 }
             }
         }

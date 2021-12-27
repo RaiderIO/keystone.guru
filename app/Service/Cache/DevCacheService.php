@@ -4,7 +4,6 @@
 namespace App\Service\Cache;
 
 use App\Logic\Utils\Counter;
-use Illuminate\Support\Facades\Cache;
 
 class DevCacheService extends CacheService
 {
@@ -17,5 +16,11 @@ class DevCacheService extends CacheService
         $result = parent::get($key);
         Counter::increase(sprintf('cacheservice[%s]:%s', $key, $result === null ? 'miss' : 'hit'));
         return $result;
+    }
+
+    public function rememberWhen(bool $condition, string $key, $value, $ttl = null)
+    {
+        Counter::increase(sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'hit' : 'miss'));
+        return parent::rememberWhen($condition, $key, $value, $ttl);
     }
 }

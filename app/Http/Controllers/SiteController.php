@@ -8,6 +8,7 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -134,7 +135,9 @@ class SiteController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @param ExpansionService $expansionService
+     * @param TimewalkingEventServiceInterface $timewalkingEventService
      * @return Factory|View
+     * @throws Exception
      */
     public function affixes(
         Request                          $request,
@@ -144,18 +147,18 @@ class SiteController extends Controller
         TimewalkingEventServiceInterface $timewalkingEventService
     )
     {
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
-        };
-
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $expansionService->getCurrentExpansion(),
             'seasonService'           => $seasonService,
             'offset'                  => (int)$request->get('offset', 0),
             'dungeonroutes'           => [
-                'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
-                'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+                'thisweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                'nextweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
             ],
         ]);
     }
