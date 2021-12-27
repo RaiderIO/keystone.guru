@@ -20,7 +20,7 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        return sprintf('discover:%s:%s', $this->expansion->shortname, $key);
+        return sprintf('discover:%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
     }
 
     /**
@@ -34,7 +34,7 @@ class DiscoverService extends BaseDiscoverService
 
         $currentSeasonAffixGroups = $this->expansionService->getCurrentSeason($this->expansion)->affixgroups;
 
-        return DungeonRoute::query()->limit(10)
+        return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
@@ -53,8 +53,8 @@ class DiscoverService extends BaseDiscoverService
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
-//            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-//                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->groupBy('dungeon_routes.id')
             ->orderBy('weightedPopularity', 'desc');
@@ -69,7 +69,7 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        return DungeonRoute::query()->limit(10)
+        return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
@@ -79,8 +79,8 @@ class DiscoverService extends BaseDiscoverService
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
-//            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-//                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');
     }
@@ -127,9 +127,7 @@ class DiscoverService extends BaseDiscoverService
                 $activeDungeons = $this->expansion->dungeons()->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withBuilder(function (Builder $builder) {
-                        $builder->limit(2);
-                    })->popularByDungeon($dungeon));
+                    $result = $result->merge($this->withLimit(2)->popularByDungeon($dungeon));
                 }
 
                 return $result;
@@ -168,9 +166,7 @@ class DiscoverService extends BaseDiscoverService
                 $activeDungeons = $this->expansion->dungeons()->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withBuilder(function (Builder $builder) {
-                        $builder->limit(2);
-                    })->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
+                    $result = $result->merge($this->withLimit(2)->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
                 }
 
                 return $result;

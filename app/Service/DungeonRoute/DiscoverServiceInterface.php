@@ -12,6 +12,12 @@ use Illuminate\Support\Collection;
 interface DiscoverServiceInterface
 {
     /**
+     * @param int $limit
+     * @return $this
+     */
+    function withLimit(int $limit): self;
+
+    /**
      * @param Closure $closure
      * @return $this
      */

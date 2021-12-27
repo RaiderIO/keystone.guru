@@ -147,18 +147,18 @@ class SiteController extends Controller
         TimewalkingEventServiceInterface $timewalkingEventService
     )
     {
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
-        };
-
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $expansionService->getCurrentExpansion(),
             'seasonService'           => $seasonService,
             'offset'                  => (int)$request->get('offset', 0),
             'dungeonroutes'           => [
-                'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
-                'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+                'thisweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                'nextweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
             ],
         ]);
     }

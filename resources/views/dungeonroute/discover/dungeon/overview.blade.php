@@ -30,7 +30,7 @@
         'link' => route('dungeonroutes.discoverdungeon.popular', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
-        'loadMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
+        'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
@@ -41,7 +41,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
-        'loadMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
+        'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 
@@ -58,7 +58,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
-        'loadMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
+        'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
     @include('dungeonroute.discover.panel', [
@@ -67,7 +67,7 @@
         'link' => route('dungeonroutes.discoverdungeon.new', ['expansion' => $expansion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
-        'loadMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
+        'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
     ])
 

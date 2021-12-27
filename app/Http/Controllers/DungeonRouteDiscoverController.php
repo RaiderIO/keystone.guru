@@ -58,10 +58,6 @@ class DungeonRouteDiscoverController extends Controller
             return redirect()->route('dungeonroutes');
         }
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.overview'));
-        };
-
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
         $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
@@ -74,7 +70,7 @@ class DungeonRouteDiscoverController extends Controller
             'dungeonroutes' => [
                 'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
                 'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
-                'new'      => $discoverService->withBuilder($closure)->new(),
+                'new'      => $discoverService->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],
         ]);
@@ -93,11 +89,7 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $discoverService = $discoverService->withExpansion($expansion);
-
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.overview'));
-        };
+        $discoverService = $discoverService->withExpansion($expansion)->withLimit(config('keystoneguru.discover.limits.overview'));
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
@@ -109,10 +101,10 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
             'dungeonroutes' => [
-                'thisweek' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
-                'nextweek' => $discoverService->withBuilder($closure)->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
-                'new'      => $discoverService->withBuilder($closure)->newByDungeon($dungeon),
-                'popular'  => $discoverService->withBuilder($closure)->popularByDungeon($dungeon),
+                'thisweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
+                'nextweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
+                'new'      => $discoverService->newByDungeon($dungeon),
+                'popular'  => $discoverService->popularByDungeon($dungeon),
             ],
         ]);
     }
@@ -127,16 +119,12 @@ class DungeonRouteDiscoverController extends Controller
     {
         $this->authorize('view', $expansion);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         return view('dungeonroute.discover.category', [
             'expansion'     => $expansion,
             'category'      => 'popular',
             'title'         => __('controller.dungeonroutediscover.popular'),
             'breadcrumbs'   => 'dungeonroutes.popular',
-            'dungeonroutes' => $discoverService->withExpansion($expansion)->withBuilder($closure)->popular(),
+            'dungeonroutes' => $discoverService->withExpansion($expansion)->withLimit(config('keystoneguru.discover.limits.category'))->popular(),
         ]);
     }
 
@@ -162,7 +150,10 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'thisweek',
             'title'         => __('controller.dungeonroutediscover.this_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.thisweek',
-            'dungeonroutes' => $discoverService->withExpansion($expansion)->withBuilder($closure)->popularByAffixGroup($affixGroup),
+            'dungeonroutes' => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popularByAffixGroup($affixGroup),
             'affixgroup'    => $affixGroup,
         ]);
     }
@@ -178,10 +169,6 @@ class DungeonRouteDiscoverController extends Controller
     {
         $this->authorize('view', $expansion);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.category', [
@@ -189,7 +176,10 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'nextweek',
             'title'         => __('controller.dungeonroutediscover.next_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.nextweek',
-            'dungeonroutes' => $discoverService->withExpansion($expansion)->withBuilder($closure)->popularByAffixGroup($affixGroup),
+            'dungeonroutes' => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popularByAffixGroup($affixGroup),
             'affixgroup'    => $affixGroup,
         ]);
     }
@@ -204,16 +194,15 @@ class DungeonRouteDiscoverController extends Controller
     {
         $this->authorize('view', $expansion);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         return view('dungeonroute.discover.category', [
             'expansion'     => $expansion,
             'category'      => 'new',
             'title'         => __('controller.dungeonroutediscover.new'),
             'breadcrumbs'   => 'dungeonroutes.new',
-            'dungeonroutes' => $discoverService->withExpansion($expansion)->withBuilder($closure)->new(),
+            'dungeonroutes' => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->new(),
         ]);
     }
 
@@ -230,10 +219,6 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         return view('dungeonroute.discover.dungeon.category', [
             'expansion'     => $expansion,
             'category'      => 'popular',
@@ -242,7 +227,7 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)
-                ->withBuilder($closure)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeon($dungeon),
         ]);
     }
@@ -260,10 +245,6 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.dungeon.category', [
@@ -274,7 +255,7 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)
-                ->withBuilder($closure)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
             'affixgroup'    => $affixGroup,
         ]);
@@ -293,10 +274,6 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.dungeon.category', [
@@ -307,7 +284,7 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)
-                ->withBuilder($closure)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
             'affixgroup'    => $affixGroup,
         ]);
@@ -325,17 +302,16 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         return view('dungeonroute.discover.dungeon.category', [
             'expansion'     => $expansion,
             'category'      => 'new',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
             'dungeon'       => $dungeon,
-            'dungeonroutes' => $discoverService->withExpansion($expansion)->withBuilder($closure)->newByDungeon($dungeon),
+            'dungeonroutes' => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->newByDungeon($dungeon),
         ]);
     }
 }
