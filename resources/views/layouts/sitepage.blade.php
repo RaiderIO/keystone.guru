@@ -20,6 +20,7 @@ $footer = $footer ?? true;
 $showAds = $showAds ?? true;
 // Any class to add to the root div
 $rootClass = $rootClass ?? '';
+$disableDefaultRootClasses = $disableDefaultRootClasses ?? false;
 // Page title
 $title = $title ?? null;
 // Breadcrumbs
@@ -107,7 +108,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
         @yield('global-message')
 
         <div
-            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : "" }}">
+            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 

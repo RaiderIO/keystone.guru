@@ -6,7 +6,12 @@
  */
 $affixgroup = $affixgroup ?? null;
 ?>
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'title' => $title, 'breadcrumbsParams' => [$expansion]])
+@extends('layouts.sitepage', [
+    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
+    'title' => $title,
+    'breadcrumbsParams' => [$expansion]
+])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 

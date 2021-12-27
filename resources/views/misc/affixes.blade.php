@@ -1,4 +1,9 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover col-xl-10 offset-xl-1', 'showLegalModal' => false, 'title' => __('views/misc.affixes.title')])
+@extends('layouts.sitepage', [
+    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
+    'showLegalModal' => false,
+    'title' => __('views/misc.affixes.title')
+])
 <?php
 /**
  * @var $timewalkingEventService \App\Service\TimewalkingEvent\TimewalkingEventService
@@ -88,7 +93,8 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 
                             ?>
                     </tbody>
-                </table>                <div class="row mt-2">
+                </table>
+                <div class="row mt-2">
                     <div class="col">
 
                     </div>

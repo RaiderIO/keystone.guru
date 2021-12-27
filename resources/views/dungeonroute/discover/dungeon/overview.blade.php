@@ -1,5 +1,6 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$dungeon],
     'title' => sprintf('%s routes', __($dungeon->name))
 ])

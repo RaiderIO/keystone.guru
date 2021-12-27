@@ -1,5 +1,6 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
     'breadcrumbs' => 'dungeonroutes.expansion',
     'breadcrumbsParams' => [$expansion],
     'title' => __('views/dungeonroute.discover.discover.title')

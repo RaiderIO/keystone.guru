@@ -1,4 +1,8 @@
-@extends('layouts.sitepage', ['rootClass' => 'discover', 'title' => __('views/dungeonroute.discover.search.page_title')])
+@extends('layouts.sitepage', [
+    'rootClass' => 'discover',
+    'disableDefaultRootClasses' => true,
+    'title' => __('views/dungeonroute.discover.search.page_title')
+])
 
 @inject('seasonService', 'App\Service\Season\SeasonService')
 
