@@ -81,7 +81,7 @@ ob_start(); ?>
                                     'affixgroup' => $affixgroup,
                                     'showText' => false,
                                     'dungeon' => $dungeonroute->dungeon,
-                                    'highlight' => $currentAffixGroup->id === $affixgroup->id,
+                                    'highlight' => isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id,
                                 ])
                             </div>
                         @endforeach
