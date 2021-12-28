@@ -11,7 +11,6 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -68,8 +67,8 @@ class DungeonRouteDiscoverController extends Controller
             'gridDungeons'  => $expansion->dungeons()->active()->get(),
             'expansion'     => $expansion,
             'dungeonroutes' => [
-                'thisweek' => $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
-                'nextweek' => $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
+                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
                 'new'      => $discoverService->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],
@@ -101,8 +100,8 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
             'dungeonroutes' => [
-                'thisweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
-                'nextweek' => $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
+                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
+                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
                 'new'      => $discoverService->newByDungeon($dungeon),
                 'popular'  => $discoverService->popularByDungeon($dungeon),
             ],
@@ -139,10 +138,6 @@ class DungeonRouteDiscoverController extends Controller
     {
         $this->authorize('view', $expansion);
 
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.category'));
-        };
-
         $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.category', [
@@ -150,7 +145,7 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'thisweek',
             'title'         => __('controller.dungeonroutediscover.this_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.thisweek',
-            'dungeonroutes' => $discoverService
+            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByAffixGroup($affixGroup),
@@ -176,7 +171,7 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'nextweek',
             'title'         => __('controller.dungeonroutediscover.next_week_affixes'),
             'breadcrumbs'   => 'dungeonroutes.nextweek',
-            'dungeonroutes' => $discoverService
+            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByAffixGroup($affixGroup),
@@ -253,7 +248,7 @@ class DungeonRouteDiscoverController extends Controller
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
             'dungeon'       => $dungeon,
-            'dungeonroutes' => $discoverService
+            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
@@ -282,7 +277,7 @@ class DungeonRouteDiscoverController extends Controller
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
             'dungeon'       => $dungeon,
-            'dungeonroutes' => $discoverService
+            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),

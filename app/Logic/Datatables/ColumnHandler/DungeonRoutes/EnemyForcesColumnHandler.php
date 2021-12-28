@@ -20,7 +20,7 @@ class EnemyForcesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'enemy_forces');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         $views = $columnData['search']['value'];
         if (!empty($views)) {

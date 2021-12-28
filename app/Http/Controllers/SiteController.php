@@ -147,18 +147,20 @@ class SiteController extends Controller
         TimewalkingEventServiceInterface $timewalkingEventService
     )
     {
+        $currentExpansion = $expansionService->getCurrentExpansion();
+
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
-            'expansion'               => $expansionService->getCurrentExpansion(),
+            'expansion'               => $currentExpansion,
             'seasonService'           => $seasonService,
             'offset'                  => (int)$request->get('offset', 0),
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
                 'nextweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
             ],
         ]);
     }

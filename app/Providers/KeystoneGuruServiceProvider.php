@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\UserReport;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
@@ -60,9 +62,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      *
      * @param ViewServiceInterface $viewService
      * @param ExpansionServiceInterface $expansionService
+     * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
      * @return void
      */
-    public function boot(ViewServiceInterface $viewService, ExpansionServiceInterface $expansionService)
+    public function boot(ViewServiceInterface $viewService, ExpansionServiceInterface $expansionService, AffixGroupEaseTierServiceInterface $affixGroupEaseTierService)
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
@@ -190,6 +193,20 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
             $view->with('allFactions', $globalViewVariables['allFactions']);
         });
+
+        // Dungeon grid display
+        view()->composer('common.dungeon.griddiscover', function (View $view) use ($globalViewVariables, $affixGroupEaseTierService) {
+            /** @var AffixGroup|null $currentAffixGroup */
+            $currentAffixGroup = $view->getData()['currentAffixGroup'];
+            /** @var AffixGroup|null $nextAffixGroup */
+            $nextAffixGroup = $view->getData()['nextAffixGroup'];
+
+            $view->with('tiers', $affixGroupEaseTierService->getTiersByAffixGroups(collect([
+                $currentAffixGroup,
+                $nextAffixGroup,
+            ])));
+        });
+
 
         // Dungeon selector
         view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables) {

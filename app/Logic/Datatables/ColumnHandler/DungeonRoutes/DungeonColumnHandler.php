@@ -20,7 +20,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {

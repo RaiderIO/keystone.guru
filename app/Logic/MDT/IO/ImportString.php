@@ -47,16 +47,16 @@ use Illuminate\Support\Facades\Auth;
  */
 class ImportString extends MDTBase
 {
-    /** @var string $_encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private string $_encodedString;
+    /** @var string $encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    private string $encodedString;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonService $_seasonService;
+    private SeasonService $seasonService;
 
 
     function __construct(SeasonService $seasonService)
     {
-        $this->_seasonService = $seasonService;
+        $this->seasonService = $seasonService;
     }
 
     /**
@@ -65,7 +65,7 @@ class ImportString extends MDTBase
      * @param DungeonRoute $dungeonRoute
      * @param boolean $save
      */
-    private function _parseRiftOffsets(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
+    private function parseRiftOffsets(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
         // Build an array with a structure that makes more sense
         $rifts = [];
@@ -191,7 +191,7 @@ class ImportString extends MDTBase
      * @param boolean $save
      * @throws Exception
      */
-    private function _parseValuePulls(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save): void
+    private function parseValuePulls(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save): void
     {
         $floors = $dungeonRoute->dungeon->floors;
         /** @var Collection|Enemy[] $enemies */
@@ -470,7 +470,7 @@ class ImportString extends MDTBase
      * @param $dungeonRoute DungeonRoute
      * @param $save boolean
      */
-    private function _parseObjects($warnings, $decoded, $dungeonRoute, $save)
+    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, boolean $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
 
@@ -612,7 +612,7 @@ class ImportString extends MDTBase
         $lua = $this->_getLua();
         // Import it to a table
 //        return $lua->call("StringToTable", [$this->_encodedString, true]);
-        return $this->decode($this->_encodedString);
+        return $this->decode($this->encodedString);
     }
 
     /**
@@ -629,7 +629,7 @@ class ImportString extends MDTBase
         $lua = $this->_getLua();
         // Import it to a table
 //        $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
-        $decoded = $this->decode($this->_encodedString);
+        $decoded = $this->decode($this->encodedString);
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
@@ -665,7 +665,7 @@ class ImportString extends MDTBase
         }
 
         // Set the affix for this route
-        $affixGroup = Conversion::convertWeekToAffixGroup($this->_seasonService, $decoded['week']);
+        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon->expansion, $decoded['week']);
         if ($affixGroup instanceof AffixGroup) {
             if ($save) {
                 // Something we can save to the
@@ -690,13 +690,13 @@ class ImportString extends MDTBase
         }
 
         // Create a path and map icons for MDT rift offsets
-        $this->_parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
+        $this->parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
 
         // Create killzones and attach enemies
-        $this->_parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
+        $this->parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
 
         // For each object the user created
-        $this->_parseObjects($warnings, $decoded, $dungeonRoute, $save);
+        $this->parseObjects($warnings, $decoded, $dungeonRoute, $save);
 
         // Re-calculate the enemy forces
         if ($save) {
@@ -717,7 +717,7 @@ class ImportString extends MDTBase
      */
     public function setEncodedString(string $encodedString): self
     {
-        $this->_encodedString = $encodedString;
+        $this->encodedString = $encodedString;
 
         return $this;
     }
