@@ -9,65 +9,73 @@
 namespace App\Logic\Datatables\ColumnHandler;
 
 use App\Logic\Datatables\DatatablesHandler;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class DatatablesColumnHandler
 {
 
     /** @var DatatablesHandler */
-    private $_dtHandler;
+    private DatatablesHandler $dtHandler;
 
     /**  @var string */
-    private $_columnName;
+    private string $columnName;
 
-    /** @var string */
-    private $_columnData;
+    /** @var string|null */
+    private ?string $columnData;
 
     public function __construct(DatatablesHandler $dtHandler, string $columnName, string $columnData = null)
     {
-        $this->_dtHandler = $dtHandler;
+        $this->dtHandler = $dtHandler;
 
-        $this->_columnName = $columnName;
+        $this->columnName = $columnName;
         // If not set, just copy the column name
-        $this->_columnData = $columnData ?? $columnName;
+        $this->columnData = $columnData ?? $columnName;
     }
 
-    protected abstract function _applyFilter(Builder $builder, $columnData, $order, $generalSearch);
+    /**
+     * @param Builder $builder
+     * @param $columnData
+     * @param $order
+     * @param $generalSearch
+     * @return mixed
+     */
+    protected abstract function applyFilter(Builder $builder, $columnData, $order, $generalSearch);
 
     /**
      * @return DatatablesHandler
      */
     public function getDtHandler(): DatatablesHandler
     {
-        return $this->_dtHandler;
+        return $this->dtHandler;
     }
 
     /**
      * @return string Gets the column name of the handler.
      */
-    public function getColumnName()
+    public function getColumnName(): string
     {
-        return $this->_columnName;
+        return $this->columnName;
     }
 
     /**
-     * @return string Gets the column name of the handler.
+     * @return string|null Gets the column name of the handler.
      */
-    public function getColumnData()
+    public function getColumnData(): ?string
     {
-        return $this->_columnData;
+        return $this->columnData;
     }
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
-    public function applyToBuilder()
+    public function applyToBuilder(): self
     {
-        $request = $this->_dtHandler->getRequest();
+        $request = $this->dtHandler->getRequest();
 
         if (!$request->exists('columns')) {
-            throw new \Exception('Unable to find columns parameter in Request parameters');
+            throw new Exception('Unable to find columns parameter in Request parameters');
         }
 
         $columns       = $request->get('columns');
@@ -79,7 +87,7 @@ abstract class DatatablesColumnHandler
         // Find the index too; needed to handle sorting later on
         $columnIndex = -1;
         foreach ($columns as $index => $value) {
-            if ($value['name'] === $this->_columnName) {
+            if ($value['name'] === $this->columnName) {
                 $column      = $value;
                 $columnIndex = $index;
                 break;
@@ -92,7 +100,7 @@ abstract class DatatablesColumnHandler
             $order = $order['column'] == $columnIndex ? $order : null;
 
             // Handle the filtering of this column
-            $this->_applyFilter($this->_dtHandler->getBuilder(), $column, $order, $generalSearch);
+            $this->applyFilter($this->dtHandler->getBuilder(), $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
 

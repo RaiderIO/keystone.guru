@@ -1,6 +1,5 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
-    'disableDefaultRootClasses' => true,
     'title' => __('views/dungeonroute.discover.search.page_title')
 ])
 

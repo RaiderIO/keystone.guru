@@ -8,10 +8,10 @@
 
 <?php
 /**
+ * @var $expansion \App\Models\Expansion
  * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $expansion \App\Models\Expansion
  */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -24,7 +24,10 @@
 
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
+            'expansion' => $expansion,
             'dungeons' => $gridDungeons,
+            'currentAffixGroup' => $currentAffixGroup,
+            'nextAffixGroup' => $nextAffixGroup,
             'colCount' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION ? 3 : 4,
             'links' => $gridDungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];

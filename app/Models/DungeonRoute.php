@@ -17,6 +17,7 @@ use App\Service\Season\SeasonService;
 use App\User;
 use Carbon\Carbon;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -575,6 +576,7 @@ class DungeonRoute extends Model
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonService $seasonService
      * @return bool
+     * @throws Exception
      */
     public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): bool
     {
@@ -598,7 +600,7 @@ class DungeonRoute extends Model
         if ($saveResult) {
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             $drAffixGroup                   = new DungeonRouteAffixGroup();
-            $drAffixGroup->affix_group_id   = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+            $drAffixGroup->affix_group_id   = $seasonService->getCurrentSeason($this->dungeon->expansion)->getCurrentAffixGroup()->id;
             $drAffixGroup->dungeon_route_id = $this->id;
             $drAffixGroup->save();
         }

@@ -18,7 +18,9 @@ use App\Models\KillZone;
 use App\Models\NpcClassification;
 use App\Models\Path;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Support\Collection;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
@@ -28,32 +30,32 @@ use Illuminate\Support\Collection;
  */
 class ExportString extends MDTBase
 {
-    /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private string $_encodedString;
+    /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    private string $encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
-    private DungeonRoute $_dungeonRoute;
+    private DungeonRoute $dungeonRoute;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonService $_seasonService;
+    private SeasonService $seasonService;
 
 
     function __construct(SeasonService $seasonService)
     {
-        $this->_seasonService = $seasonService;
+        $this->seasonService = $seasonService;
     }
 
     /**
      * @param Collection $warnings
      * @return array
      */
-    private function _extractObjects(Collection $warnings): array
+    private function extractObjects(Collection $warnings): array
     {
         $result = [];
 
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
-        foreach ($this->_dungeonRoute->mapicons as $mapIcon) {
+        foreach ($this->dungeonRoute->mapicons as $mapIcon) {
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
 
             $result[$currentObjectIndex++] = [
@@ -68,7 +70,7 @@ class ExportString extends MDTBase
             ];
         }
 
-        $lines = $this->_dungeonRoute->brushlines->merge($this->_dungeonRoute->paths);
+        $lines = $this->dungeonRoute->brushlines->merge($this->dungeonRoute->paths);
 
         foreach ($lines as $line) {
             /** @var Path|Brushline $line */
@@ -116,20 +118,20 @@ class ExportString extends MDTBase
     /**
      * @param Collection $warnings
      * @return array
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    private function _extractPulls(Collection $warnings): array
+    private function extractPulls(Collection $warnings): array
     {
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        $mdtEnemies = (new MDTDungeon($this->_dungeonRoute->dungeon->key))
-            ->getClonesAsEnemies($this->_dungeonRoute->dungeon->floors);
+        $mdtEnemies = (new MDTDungeon($this->dungeonRoute->dungeon->key))
+            ->getClonesAsEnemies($this->dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
         /** @var Collection|KillZone[] $killZones */
-        $killZones = $this->_dungeonRoute->killzones()->with(['enemies'])->get();
+        $killZones = $this->dungeonRoute->killzones()->with(['enemies'])->get();
         foreach ($killZones as $killZone) {
             $pull = [];
 
@@ -196,7 +198,7 @@ class ExportString extends MDTBase
      * Gets the MDT encoded string based on the currently set DungeonRoute.
      * @param Collection $warnings
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getEncodedString(Collection $warnings): string
     {
@@ -204,55 +206,55 @@ class ExportString extends MDTBase
 
         $mdtObject = [
             //
-            'objects'    => $this->_extractObjects($warnings),
+            'objects'    => $this->extractObjects($warnings),
             // M+ level
-            'difficulty' => $this->_dungeonRoute->level_min,
-            'week'       => $this->_dungeonRoute->affixgroups->isEmpty() ? 1 :
-                Conversion::convertAffixGroupToWeek($this->_seasonService, $this->_dungeonRoute->affixes->first()),
+            'difficulty' => $this->dungeonRoute->level_min,
+            'week'       => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
+                Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
             'value'      => [
-                'currentDungeonIdx' => $this->_dungeonRoute->dungeon->mdt_id,
+                'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
                 'selection'         => [],
                 'currentPull'       => 1,
-                'teeming'           => $this->_dungeonRoute->teeming,
+                'teeming'           => $this->dungeonRoute->teeming,
                 // Legacy - we don't do anything with it
                 'riftOffsets'       => [
 
                 ],
-                'pulls'             => $this->_extractPulls($warnings),
+                'pulls'             => $this->extractPulls($warnings),
                 'currentSublevel'   => 1,
             ],
-            'text'       => $this->_dungeonRoute->title,
+            'text'       => $this->dungeonRoute->title,
             'mdi'        => [
                 'freeholdJoined' => false,
                 'freehold'       => 1,
                 'beguiling'      => 1,
             ],
             // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
-            'uid'        => $this->_dungeonRoute->public_key . 'xxKG',
+            'uid'        => $this->dungeonRoute->public_key . 'xxKG',
         ];
 
         try {
             return $this->encode($mdtObject);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Encoding issue - adjust the title and try again
             if (str_contains($exception->getMessage(), "call to lua function [string &quot;line&quot;]")) {
-                $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->_dungeonRoute->title);
+                $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->dungeonRoute->title);
 
                 // If stripping ascii characters worked in changing the title somehow
-                if ($asciiTitle !== $this->_dungeonRoute->title) {
+                if ($asciiTitle !== $this->dungeonRoute->title) {
                     $warnings->push(
                         new ImportWarning(__('logic.mdt.io.export_string.category.title'),
                             __('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
-                            ['details' => sprintf(__('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->_dungeonRoute->title, $asciiTitle)]
+                            ['details' => sprintf(__('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
                         )
                     );
-                    $this->_dungeonRoute->title = $asciiTitle;
+                    $this->dungeonRoute->title = $asciiTitle;
 
                     return $this->getEncodedString($warnings);
                 } else {
                     $fixedMapIconComment = false;
 
-                    foreach ($this->_dungeonRoute->mapicons as $mapicon) {
+                    foreach ($this->dungeonRoute->mapicons as $mapicon) {
                         $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment);
                         if ($asciiComment !== $mapicon->comment) {
                             $warnings->push(
@@ -288,7 +290,7 @@ class ExportString extends MDTBase
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): ExportString
     {
-        $this->_dungeonRoute = $dungeonRoute->load(['affixgroups', 'dungeon']);
+        $this->dungeonRoute = $dungeonRoute->load(['affixgroups', 'dungeon']);
 
         return $this;
     }
