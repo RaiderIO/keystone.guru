@@ -57,6 +57,25 @@ class UpdatePrepare extends Command
             'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload',
         ]);
 
+        // Backup MySql database if the environment asks for it!
+        $backupDir = config('keystoneguru.db_backup_dir');
+        if (!empty($backupDir)) {
+            $this->info('Backing up MySQL database...');
+
+            $this->shell([
+                sprintf('mysqldump -u %s -p\'%s\' %s | gzip -9 -c > %s/%s.%s.sql.gz',
+                    config('database.connections.migrate.username'),
+                    config('database.connections.migrate.password'),
+                    config('database.connections.migrate.database'),
+                    $backupDir,
+                    config('database.connections.migrate.database'),
+                    now()->format('Y.m.d-h.i')
+                ),
+            ]);
+
+            $this->info('Backing up MySQL database OK!');
+        }
+
         return 0;
     }
 }

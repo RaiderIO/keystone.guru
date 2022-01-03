@@ -77,7 +77,8 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
 
                 if ($diffInWeeks < $timewalkingEvent->start_duration_weeks ||
                     $diffInWeeks % $timewalkingEvent->week_interval === 0) {
-                    $result = $this->seasonService->getCurrentSeason($expansion)->affixgroups->get($diffInWeeks % $timewalkingEvent->week_interval);
+                    $affixGroups = $this->seasonService->getCurrentSeason($expansion)->affixgroups;
+                    $result = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
                 }
             }
         } else {

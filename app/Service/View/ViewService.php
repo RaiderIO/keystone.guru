@@ -91,7 +91,6 @@ class ViewService implements ViewServiceInterface
             $allAffixGroups    = collect();
             $allCurrentAffixes = collect();
             foreach ($expansionsData as $expansionData) {
-
                 $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
                 $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroups());
             }

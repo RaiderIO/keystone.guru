@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\App;
  * @author Wouter
  * @since 13/05/2021
  *
- * @property LiveSession $_context
+ * @property LiveSession $context
  */
 class MapContextLiveSession extends MapContext
 {
@@ -32,22 +32,22 @@ class MapContextLiveSession extends MapContext
 
     public function isTeeming(): bool
     {
-        return $this->_context->dungeonroute->teeming;
+        return $this->context->dungeonroute->teeming;
     }
 
     public function getSeasonalIndex(): int
     {
-        return $this->_context->dungeonroute->seasonal_index;
+        return $this->context->dungeonroute->seasonal_index;
     }
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeonroute->dungeon->id, false);
+        return $this->listEnemies($this->context->dungeonroute->dungeon->id, false);
     }
 
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey());
+        return sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey());
     }
 
     public function getProperties(): array
@@ -55,12 +55,12 @@ class MapContextLiveSession extends MapContext
         /** @var OverpulledEnemyServiceInterface $overpulledEnemyService */
         $overpulledEnemyService = App::make(OverpulledEnemyServiceInterface::class);
 
-        $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->_context);
+        $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->context);
 
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->_context->dungeonroute), [
-            'liveSessionPublicKey' => $this->_context->public_key,
-            'expiresInSeconds'     => $this->_context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->_context->overpulledenemies,
+        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
+            'liveSessionPublicKey' => $this->context->public_key,
+            'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
+            'overpulledEnemies'    => $this->context->overpulledenemies,
             'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
             'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
         ]);
