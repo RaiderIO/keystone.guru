@@ -74,24 +74,25 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                             ])
                         <?php
                         if ($timewalkingEvent !== null) {
-                            $timewalkingEventAffixGroup = $seasonService->getCurrentSeason($timewalkingEvent->expansion)->getAffixGroupAtTime($startDate);
-                            ?>
-                            @include('misc.table.affixrowtable', [
-                                'timewalkingEvent' => $timewalkingEvent,
-                                'affixGroup' => $timewalkingEventAffixGroup,
-                                'isCurrentWeek' => $isCurrentWeek,
-                                'isFirst' => $isFirst,
-                                'isLast' => $isLast,
-                                'showTopBorder' => false,
-                                'isOdd' => $affixGroupIndex % 2 == 0
-                                ])
-                            <?php
+                            $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
+                            if( $timewalkingEventAffixGroup !== null ) { ?>
+                                @include('misc.table.affixrowtable', [
+                                    'timewalkingEvent' => $timewalkingEvent,
+                                    'affixGroup' => $timewalkingEventAffixGroup,
+                                    'isCurrentWeek' => $isCurrentWeek,
+                                    'isFirst' => $isFirst,
+                                    'isLast' => $isLast,
+                                    'showTopBorder' => false,
+                                    'isOdd' => $affixGroupIndex % 2 == 0
+                                    ])
+                                <?php
+                            }
                         }
                         $affixGroupIndex++;
                     }
                     // @formatter:on
 
-                            ?>
+                                ?>
                     </tbody>
                 </table>
                 <div class="row mt-2">
