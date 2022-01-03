@@ -161,8 +161,6 @@ class AffixSeeder extends Seeder
 
             ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_INFERNAL]],
             ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_QUAKING, Affix::AFFIX_INFERNAL]],
-            ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_INFERNAL]],
-            ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_QUAKING, Affix::AFFIX_INFERNAL]],
         ];
 
         foreach ($groups as $groupArr) {
