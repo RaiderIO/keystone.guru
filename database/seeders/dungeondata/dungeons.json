@@ -10,6 +10,7 @@
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": 466,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 1,
@@ -33,6 +34,7 @@
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 6,
         "floors": [
             {
                 "id": 2,
@@ -167,6 +169,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 5,
         "floors": [
             {
                 "id": 8,
@@ -226,6 +229,7 @@
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 60,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 13,
@@ -249,6 +253,7 @@
         "enemy_forces_required": 280,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 14,
@@ -272,6 +277,7 @@
         "enemy_forces_required": 206,
         "enemy_forces_required_teeming": 242,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 15,
@@ -295,6 +301,7 @@
         "enemy_forces_required": 115,
         "enemy_forces_required_teeming": 151,
         "timer_max_seconds": 0,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 17,
@@ -363,6 +370,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 6,
         "floors": [
             {
                 "id": 24,
@@ -431,6 +439,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 25,
@@ -499,6 +508,7 @@
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 28,
@@ -522,6 +532,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 8,
         "floors": [
             {
                 "id": 29,
@@ -608,6 +619,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 37,
@@ -631,6 +643,7 @@
         "enemy_forces_required": 210,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 38,
@@ -699,6 +712,7 @@
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
         "timer_max_seconds": 1800,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 41,
@@ -745,6 +759,7 @@
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
         "timer_max_seconds": 1980,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 43,
@@ -768,6 +783,7 @@
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
         "timer_max_seconds": 2520,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 44,
@@ -791,6 +807,7 @@
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
         "timer_max_seconds": 2520,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 45,
@@ -837,6 +854,7 @@
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
         "timer_max_seconds": 2160,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 47,
@@ -860,6 +878,7 @@
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
         "timer_max_seconds": 2160,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 48,
@@ -906,6 +925,7 @@
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
         "timer_max_seconds": 2340,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 50,
@@ -929,6 +949,7 @@
         "enemy_forces_required": 252,
         "enemy_forces_required_teeming": 286,
         "timer_max_seconds": 1980,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 51,
@@ -975,6 +996,7 @@
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
         "timer_max_seconds": 2160,
+        "floor_count": 7,
         "floors": [
             {
                 "id": 53,
@@ -1131,6 +1153,7 @@
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
         "timer_max_seconds": 2340,
+        "floor_count": 5,
         "floors": [
             {
                 "id": 60,
@@ -1243,6 +1266,7 @@
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
         "timer_max_seconds": 2280,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 65,
@@ -1289,6 +1313,7 @@
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
         "timer_max_seconds": 1920,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 67,
@@ -1357,6 +1382,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 70,
@@ -1403,6 +1429,7 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 0,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 72,
@@ -1426,6 +1453,7 @@
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2580,
+        "floor_count": 4,
         "floors": [
             {
                 "id": 73,
@@ -1516,6 +1544,7 @@
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 1860,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 77,
@@ -1584,6 +1613,7 @@
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 1800,
+        "floor_count": 1,
         "floors": [
             {
                 "id": 80,
@@ -1607,6 +1637,7 @@
         "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2280,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 81,
@@ -1653,6 +1684,7 @@
         "enemy_forces_required": 364,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2460,
+        "floor_count": 2,
         "floors": [
             {
                 "id": 83,
@@ -1699,6 +1731,7 @@
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2340,
+        "floor_count": 4,
         "floors": [
             {
                 "id": 85,
@@ -1789,6 +1822,7 @@
         "enemy_forces_required": 283,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2160,
+        "floor_count": 3,
         "floors": [
             {
                 "id": 89,
@@ -1857,6 +1891,7 @@
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2220,
+        "floor_count": 5,
         "floors": [
             {
                 "id": 92,
