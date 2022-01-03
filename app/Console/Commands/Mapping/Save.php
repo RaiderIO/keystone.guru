@@ -50,15 +50,15 @@ class Save extends Command
 
         $dungeonDataDir = database_path('/seeders/dungeondata/');
 
-        $this->_saveDungeons($dungeonDataDir);
-        $this->_saveNpcs($dungeonDataDir);
-        $this->_saveSpells($dungeonDataDir);
-        $this->_saveDungeonData($dungeonDataDir);
+        $this->saveDungeons($dungeonDataDir);
+        $this->saveNpcs($dungeonDataDir);
+        $this->saveSpells($dungeonDataDir);
+        $this->saveDungeonData($dungeonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
 
         // If we should copy the result to another folder..
-        if ($mappingBackupDir !== null) {
+        if (!empty($mappingBackupDir)) {
             $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d h:i:s'));
 
             $this->info(sprintf('Saving backup of mapping to %s', $targetDir));
@@ -74,7 +74,7 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveDungeons(string $dungeonDataDir)
+    private function saveDungeons(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
         $this->info('Saving dungeons');
@@ -100,7 +100,7 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveNpcs(string $dungeonDataDir)
+    private function saveNpcs(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
         $this->info('Saving global NPCs');
@@ -118,7 +118,7 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveSpells(string $dungeonDataDir)
+    private function saveSpells(string $dungeonDataDir)
     {
         // Save all spells
         $this->info('Saving Spells');
@@ -133,7 +133,7 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveDungeonData(string $dungeonDataDir)
+    private function saveDungeonData(string $dungeonDataDir)
     {
 
         foreach (Dungeon::all() as $dungeon) {

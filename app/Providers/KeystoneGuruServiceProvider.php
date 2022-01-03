@@ -176,7 +176,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             // Convert the current affixes list for ALL regions, and just take the ones that the current user's region has
             $currentAffixes = [];
             foreach ($globalViewVariables['allCurrentAffixes'] as $expansionShortname => $currentAffixGroupByRegion) {
-                $currentAffixes[$expansionShortname] = $currentAffixGroupByRegion[$userOrDefaultRegion->short]->id;
+                $currentAffixes[$expansionShortname] = optional($currentAffixGroupByRegion[$userOrDefaultRegion->short])->id;
             }
 
             $view->with('currentAffixes', $currentAffixes);

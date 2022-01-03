@@ -12,7 +12,7 @@ use App\Models\Floor;
  * @author Wouter
  * @since 06/08/2020
  *
- * @property DungeonRoute $_context
+ * @property DungeonRoute $context
  */
 class MapContextDungeonRoute extends MapContext
 {
@@ -30,26 +30,26 @@ class MapContextDungeonRoute extends MapContext
 
     public function isTeeming(): bool
     {
-        return $this->_context->teeming;
+        return $this->context->teeming;
     }
 
     public function getSeasonalIndex(): int
     {
-        return $this->_context->seasonal_index;
+        return $this->context->seasonal_index;
     }
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeon->id, false);
+        return $this->listEnemies($this->context->dungeon->id, false);
     }
 
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-route-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey());
+        return sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey());
     }
 
     public function getProperties(): array
     {
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->_context));
+        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context));
     }
 }
