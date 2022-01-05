@@ -22,10 +22,10 @@ vagrant box add laravel/homestead
 Select `virtualbox` when asked.
 
 ## Download Node.js, PHP and Composer
-Before continuing, make sure you have a functioning [Node.js](https://nodejs.org/en/) version installed, 
+Before continuing, make sure you have a functioning [Node.js](https://nodejs.org/en/) version installed,
 a local [PHP](https://windows.php.net/download/) (take 7.3 when in doubt) installation (with PHP added to PATH) and [Composer](https://getcomposer.org/download/).
 
-This should in theory not be needed, but in practice I couldn't ever run `npm install` from the VM without it erroring out. YMMV but I needed a functioning local environment for it. 
+This should in theory not be needed, but in practice I couldn't ever run `npm install` from the VM without it erroring out. YMMV but I needed a functioning local environment for it.
 
 
 ## Clone Homestead repo
@@ -37,7 +37,7 @@ git clone https://github.com/laravel/homestead.git Homestead
 
 Checkout proper version (I got recommended to use this one, guess you can skip this?)
 ```bash
-cd Homestead 
+cd Homestead
 git checkout v6.5.0
 ```
 
@@ -101,11 +101,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provider "virtualbox" do |v|
         v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end
-	
+
 end
 ```
 
-The three lines at the end should simply be placed there. Any other lines must remain where they are. If you don't do this, you will not be able to run `npm` from your Vagrant machine. 
+The three lines at the end should simply be placed there. Any other lines must remain where they are. If you don't do this, you will not be able to run `npm` from your Vagrant machine.
 NPM requires symbolic links to be created which is something Vagrant doesn't enable by default due to security concerns.
 
 ## Add to hosts
@@ -132,8 +132,8 @@ Now that you've installed PHPMyAdmin, reboot the VM so that all changes are appl
 
 Add this line to your crontab(located /etc/crontab):
 
-``` 
-*   * *   *   *   root php /home/vagrant/Git/keystone.guru/artisan schedule:run 
+```
+*   * *   *   *   root php /home/vagrant/Git/keystone.guru/artisan schedule:run
 ```
 
 This will call the above command every minute, which Laravel requires in order to run scheduled tasks (refreshing of the route thumbnails).
@@ -148,8 +148,11 @@ Go to `http://phpmyadmin.test` and log in using `homestead//secret`. If you get 
 Create a database for Keystone.guru to save its data. Create a user (or use the default one, I guess) for it as well.
 Create another database for the statistics tracker.
 
+## Enable SSL support
+Follow this article to enable SSL in your browser: https://sternerstuff.dev/2019/03/trust-laravel-homestead-ssl-certificates/
+
 ## Setup Keystone.guru
-Go to the folder where you installed Keystone.guru and make a copy of `.env.example` and rename it `.env`. Fill it out for as far as you can. 
+Go to the folder where you installed Keystone.guru and make a copy of `.env.example` and rename it `.env`. Fill it out for as far as you can.
 You probably don't need most of it. But you do need things like the database and its users.
 
 Open a SSH connection to your vagrant machine and run the following:
@@ -209,5 +212,5 @@ Then add `type: "nfs"` to your folder mapping under your `to:` directive. `vagra
 
 It may also be a good idea to add your sources folder to the excluded list for Windows Defender.
 
-Search windows for `Virus & threat protection`. Open that app, then click on `Virus & threat protection settings`. Scroll down a bit, and in the part where it says `Exclusions` add an exclusion of the Folder type. 
+Search windows for `Virus & threat protection`. Open that app, then click on `Virus & threat protection settings`. Scroll down a bit, and in the part where it says `Exclusions` add an exclusion of the Folder type.
 Browse to your sources (in my case C:\Git) and add it. This will further speed up your VM and NPM/Composer installations.
