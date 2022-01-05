@@ -17,21 +17,25 @@ class UpdateAffixGroupsForExistingLegionDungeons extends Migration
     {
         $expansionService = app(ExpansionServiceInterface::class);
         $legionExpansion  = Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first();
-        $season           = $expansionService->getCurrentSeason($legionExpansion);
+        if ($legionExpansion !== null) {
+            $season = $expansionService->getCurrentSeason($legionExpansion);
 
-        $result = DungeonRoute::select('dungeon_routes.*')
-            ->where('dungeons.expansion_id', $legionExpansion->id)
-            ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
-            ->get();
+            $result = DungeonRoute::select('dungeon_routes.*')
+                ->where('dungeons.expansion_id', $legionExpansion->id)
+                ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
+                ->get();
 
-        foreach ($result as $dungeonRoute) {
-            DungeonRouteAffixGroup::where('dungeon_route_id', $dungeonRoute->id)->delete();
+            foreach ($result as $dungeonRoute) {
+                DungeonRouteAffixGroup::where('dungeon_route_id', $dungeonRoute->id)->delete();
 
-            // Give the dungeon route new affix groups
-            DungeonRouteAffixGroup::create([
-                'dungeon_route_id' => $dungeonRoute->id,
-                'affix_group_id'   => $season->affixgroups->first()->id // first affix in Legion
-            ]);
+                // Give the dungeon route new affix groups
+                DungeonRouteAffixGroup::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'affix_group_id'   => $season->affixgroups->first()->id // first affix in Legion
+                ]);
+            }
+        } else {
+            logger()->info('Unable to migrate existing affix groups for current Legion dungeons - assuming this is a fresh install and no routes can be updated anyways');
         }
     }
 
