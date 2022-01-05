@@ -63,13 +63,13 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 ])
                                 @endif
                                 {!! ($thisWeekTier = ob_get_clean()) !!}
-
-                                &middot;
                             @else
                                 <span class="text-muted">
                                     {{ __('views/common.dungeon.griddiscover.this_week') }}
                                 </span>
                             @endif
+
+                            &middot;
 
                             @if($nextAffixGroup !== null)
                                 <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]); ?>
@@ -86,13 +86,13 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                                 ])
                                 @endif
                                 {!! ($nextWeekTier = ob_get_clean()) !!}
-
-                                &middot;
                             @else
                                 <span class="text-muted">
                                     {{ __('views/common.dungeon.griddiscover.next_week') }}
                                 </span>
                             @endif
+
+                            &middot;
 
                             <a href="{{ route('dungeonroutes.discoverdungeon.new', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
                                 {{ __('views/common.dungeon.griddiscover.new') }}
