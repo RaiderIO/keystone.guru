@@ -180,6 +180,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
 
             $view->with('currentAffixes', $currentAffixes);
+            $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
             $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
             $view->with('allAffixGroups', $globalViewVariables['allAffixGroups']);
             $view->with('affixes', $globalViewVariables['affixes']);

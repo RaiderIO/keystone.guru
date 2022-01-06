@@ -5,7 +5,8 @@
 /** @var $dungeonSelector string|null */
 /** @var $affixes \Illuminate\Support\Collection */
 /** @var $expansionsData \Illuminate\Support\Collection|\App\Service\Expansion\ExpansionData[] */
-/** @var $allAffixGroups \Illuminate\Support\Collection */
+/** @var $allAffixGroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
+/** @var $allExpansions \Illuminate\Support\Collection */
 /** @var $currentAffixes array */
 /** @var $dungeonExpansions array */
 /** This is the display of affixes when selecting them when creating a new route */
@@ -32,6 +33,7 @@ $id = $id ?? 'route_select_affixes';
     'teemingSelector'   => $teemingSelector,
     'modal'             => $modal ?? false,
     'defaultSelected'   => $defaultSelected,
+    'allExpansions'    =>  $allExpansions,
     'allAffixGroups'    => $allAffixGroups,
     'dungeonExpansions' => $dungeonExpansions,
     'currentAffixes'    => $currentAffixes

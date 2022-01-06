@@ -50,7 +50,12 @@ class CommonGroupAffixes extends InlineCode {
             // If the expansion changed we need to change the default selection
             if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
                 this.currentSelectionExpansionKey = expansionKey;
-                this.currentSelection = [this.options.currentAffixes[this.currentSelectionExpansionKey]];
+                let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
+                if (currentAffix !== null) {
+                    this.currentSelection = [currentAffix];
+                } else {
+                    this.currentSelection = [this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey).id];
+                }
             }
 
             // Show the correct presets for this expansion (if any)
@@ -110,6 +115,38 @@ class CommonGroupAffixes extends InlineCode {
             if (this.options.allAffixGroups[i].id === id) {
                 result = this.options.allAffixGroups[i];
                 break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param {Number} expansionKey
+     * @returns {String|null}
+     * @private
+     */
+    _getFirstAffixGroupForExpansion(expansionKey) {
+        let result = null;
+        let expansionId = null;
+
+        for (let key in this.options.allExpansions) {
+            if (this.options.allExpansions.hasOwnProperty(key) && key === expansionKey) {
+                expansionId = this.options.allExpansions[key];
+                break;
+            }
+        }
+
+        console.assert(expansionId !== null, `ExpansionId must be found! Cannot find for ${expansionKey}`);
+
+        for (let index in this.options.allAffixGroups) {
+            if (this.options.allAffixGroups.hasOwnProperty(index)) {
+                let affixGroupCandidate = this.options.allAffixGroups[index];
+                if (affixGroupCandidate.expansion_id === expansionId) {
+                    result = affixGroupCandidate;
+                    break;
+                }
             }
         }
 
