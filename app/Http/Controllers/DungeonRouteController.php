@@ -11,7 +11,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
-use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -134,17 +134,19 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
+     * @param SeasonServiceInterface $seasonService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
+     * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -153,10 +155,11 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonService $seasonService
+     * @param SeasonServiceInterface $seasonService
      * @return DungeonRoute
+     * @throws Exception
      */
-    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): DungeonRoute
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): DungeonRoute
     {
         $dungeonroute = new DungeonRoute();
 
@@ -292,16 +295,19 @@ class DungeonRouteController extends Controller
      * Override to give the type hint which is required.
      *
      * @param DungeonRouteFormRequest $request
+     * @param SeasonServiceInterface $seasonService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function update(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request);
+        $dungeonroute = $this->store($request, $seasonService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
@@ -312,13 +318,14 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
+     * @param SeasonServiceInterface $seasonService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request);
+        $dungeonroute = $this->store($request, $seasonService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
@@ -328,11 +335,11 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonService $seasonService
+     * @param SeasonServiceInterface $seasonService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService)
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService)
     {
         // Store it and show the edit page
         $dungeonroute = $this->storetemporary($request, $seasonService);

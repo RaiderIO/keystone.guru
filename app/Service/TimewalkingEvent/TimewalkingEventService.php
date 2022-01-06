@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\App;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
-
     /** @var SeasonService */
     private $seasonService;
 
@@ -25,6 +24,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
     /**
      * @param Carbon $date
      * @return TimewalkingEvent|null
+     * @TODO Support user regions?
      */
     function getActiveTimewalkingEventAt(Carbon $date): ?TimewalkingEvent
     {
@@ -57,6 +57,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
      * @param Expansion $expansion
      * @param Carbon $date
      * @return AffixGroup|null
+     * @TODO Support user regions?
      */
     function getAffixGroupAt(Expansion $expansion, Carbon $date): ?AffixGroup
     {
