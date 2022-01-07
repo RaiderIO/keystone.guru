@@ -18,6 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class DungeonRoutePlayerSpecialization extends Model
 {
     public $hidden = ['id'];
+    protected $fillable = [
+        'character_class_specialization_id',
+        'dungeon_route_id'
+    ];
 
     public $timestamps = false;
 

@@ -666,10 +666,10 @@ class DungeonRoute extends Model
                 foreach ($newAttributes as $value) {
                     // Only if they exist
                     if (RouteAttribute::where('id', $value)->exists()) {
-                        $drAttribute                     = new DungeonRouteAttribute();
-                        $drAttribute->dungeon_route_id   = $this->id;
-                        $drAttribute->route_attribute_id = $value;
-                        $drAttribute->save();
+                        DungeonRouteAttribute::create([
+                            'dungeon_route_id'   => $this->id,
+                            'route_attribute_id' => $value,
+                        ]);
                     }
                 }
             }
@@ -681,10 +681,10 @@ class DungeonRoute extends Model
                 foreach ($newSpecs as $value) {
                     // Only if they exist
                     if (CharacterClassSpecialization::where('id', $value)->exists()) {
-                        $drpSpec                                    = new DungeonRoutePlayerSpecialization();
-                        $drpSpec->character_class_specialization_id = (int)$value;
-                        $drpSpec->dungeon_route_id                  = $this->id;
-                        $drpSpec->save();
+                        DungeonRoutePlayerSpecialization::create([
+                            'dungeon_route_id'                  => $this->id,
+                            'character_class_specialization_id' => (int)$value,
+                        ]);
                     }
                 }
             }
@@ -695,10 +695,10 @@ class DungeonRoute extends Model
                 $this->playerclasses()->delete();
                 foreach ($newClasses as $value) {
                     if (CharacterClass::where('id', $value)->exists()) {
-                        $drpClass                     = new DungeonRoutePlayerClass();
-                        $drpClass->character_class_id = (int)$value;
-                        $drpClass->dungeon_route_id   = $this->id;
-                        $drpClass->save();
+                        DungeonRoutePlayerClass::create([
+                            'dungeon_route_id'   => $this->id,
+                            'character_class_id' => (int)$value,
+                        ]);
                     }
                 }
             }
@@ -710,10 +710,10 @@ class DungeonRoute extends Model
 
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $value) {
-                    $drpRace                    = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = (int)$value;
-                    $drpRace->dungeon_route_id  = $this->id;
-                    $drpRace->save();
+                    DungeonRoutePlayerRace::create([
+                        'dungeon_route_id'  => $this->id,
+                        'character_race_id' => (int)$value,
+                    ]);
                 }
             }
 
@@ -737,8 +737,8 @@ class DungeonRoute extends Model
                     }
 
                     DungeonRouteAffixGroup::create([
-                        'affix_group_id'   => $affixGroup->id,
                         'dungeon_route_id' => $this->id,
+                        'affix_group_id'   => $affixGroup->id,
                     ]);
                 }
 
