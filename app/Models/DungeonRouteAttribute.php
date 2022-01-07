@@ -15,4 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 class DungeonRouteAttribute extends Model
 {
     public $timestamps = false;
+    protected $fillable = [
+        'route_attribute_id',
+        'dungeon_route_id',
+    ];
 }
