@@ -21,9 +21,9 @@ if (!isset($tierAffixGroup)) {
         $tierAffixGroup = $dungeonroute->affixes->first();
     } else {
         // If the affix list contains the current affix, we can use that to display the tier instead
-        $tierAffixGroup = $dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
+        $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
             return $affixGroup->id === $currentAffixGroup->id;
-        })->isNotEmpty() ? $currentAffixGroup : null;
+        })->isNotEmpty() ? $currentAffixGroup : null);
     }
 }
 
