@@ -468,9 +468,9 @@ class ImportString extends MDTBase
      * @param $warnings Collection A Collection of Warnings that this parsing may produce.
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
-     * @param $save boolean
+     * @param $save bool
      */
-    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, boolean $save)
+    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
 
