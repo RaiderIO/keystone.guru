@@ -16,6 +16,10 @@ class DungeonRoutePlayerClass extends Model
 {
 
     public $hidden = ['id'];
+    protected $fillable = [
+        'character_class_id',
+        'dungeon_route_id',
+    ];
 
     public $timestamps = false;
 

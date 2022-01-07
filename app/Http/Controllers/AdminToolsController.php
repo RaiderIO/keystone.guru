@@ -207,7 +207,7 @@ class AdminToolsController extends Controller
             $dungeonRoute = (new ImportString($seasonService))
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(new Collection(), false, false);
-            $dungeonRoute->makeVisible(['killzones']);
+            $dungeonRoute->makeVisible(['affixes', 'killzones']);
 
             dd($dungeonRoute);
         } catch (InvalidMDTString $ex) {
@@ -385,6 +385,8 @@ class AdminToolsController extends Controller
         $cacheService->dropCaches();
 
         Artisan::call('modelCache:clear');
+
+        Artisan::call('keystoneguru:view', ['operation' => 'cache']);
 
         Session::flash('status', __('controller.admintools.flash.caches_dropped_successfully'));
 
