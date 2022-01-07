@@ -14,6 +14,7 @@ use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\User;
 use Carbon\Carbon;
 use Eloquent;
@@ -574,11 +575,11 @@ class DungeonRoute extends Model
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonService $seasonService
+     * @param SeasonServiceInterface $seasonService
      * @return bool
      * @throws Exception
      */
-    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): bool
+    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): bool
     {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
@@ -598,11 +599,7 @@ class DungeonRoute extends Model
 
         $saveResult = $this->save();
         if ($saveResult) {
-            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
-            $drAffixGroup                   = new DungeonRouteAffixGroup();
-            $drAffixGroup->affix_group_id   = $seasonService->getCurrentSeason($this->dungeon->expansion)->getCurrentAffixGroup()->id;
-            $drAffixGroup->dungeon_route_id = $this->id;
-            $drAffixGroup->save();
+            $this->ensureAffixGroup($seasonService);
         }
 
         return $saveResult;
@@ -612,9 +609,11 @@ class DungeonRoute extends Model
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
+     * @param SeasonServiceInterface $seasonService
      * @return bool
+     * @throws Exception
      */
-    public function saveFromRequest(Request $request): bool
+    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService): bool
     {
         $result = false;
 
@@ -745,6 +744,8 @@ class DungeonRoute extends Model
 
                 // Reload the affixes relation
                 $this->load('affixes');
+            } else if ($new) {
+                $this->ensureAffixGroup($seasonService);
             }
 
             // Instantly generate a placeholder thumbnail for new routes.
@@ -1048,6 +1049,37 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @inheritDoc
+     */
+    public function touch()
+    {
+        DungeonRoute::dropCaches($this->id);
+
+        parent::touch();
+    }
+
+    /**
+     * Creates a missing
+     * @param SeasonServiceInterface $seasonService
+     * @return void
+     * @throws Exception
+     */
+    private function ensureAffixGroup(SeasonServiceInterface $seasonService)
+    {
+        if ($this->affixgroups()->count() === 0) {
+            $currentSeason = $seasonService->getCurrentSeason($this->dungeon->expansion);
+            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
+            DungeonRouteAffixGroup::create([
+                'affix_group_id'   => optional($currentSeason->getCurrentAffixGroup())->id ?? $currentSeason->affixgroups->first()->id,
+                'dungeon_route_id' => $this->id,
+            ]);
+
+            // Make sure the relation should be reloaded
+            $this->unsetRelation('affixgroups');
+        }
+    }
+
+    /**
      * Drops any caches associated with this dungeon route
      * @param int $dungeonRouteId
      */
@@ -1060,16 +1092,6 @@ class DungeonRoute extends Model
             Cache::delete(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
         } catch (InvalidArgumentException $e) {
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function touch()
-    {
-        DungeonRoute::dropCaches($this->id);
-
-        parent::touch();
     }
 
 

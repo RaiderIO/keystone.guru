@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
 use App\Service\Season\SeasonService;
+use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,9 @@ class Season extends CacheModel
     protected $fillable = ['expansion_id', 'seasonal_affix_id', 'start', 'presets'];
     public $with = ['expansion', 'affixgroups'];
     public $timestamps = false;
+
+    /** @var boolean|null Cache for if we're a timewalking season or not */
+    private $isTimewalkingSeason = null;
 
     /**
      * @return BelongsTo
@@ -202,16 +206,24 @@ class Season extends CacheModel
             throw new Exception('Cannot find an affix group of this season before it\'s started!');
         }
 
-        // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
-        // we do not know anything before that so we need help
+        $result = null;
         /** @var SeasonService $seasonService */
-        $seasonService = resolve(SeasonService::class);
+        if ($this->hasTimewalkingEvent()) {
+            $timewalkingEventService = resolve(TimewalkingEventService::class);
+            $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
+        } else {
+            // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
+            // we do not know anything before that so we need help
+            $seasonService = resolve(SeasonService::class);
 
-        // Get the affix group which occurs after a few weeks and return that
-        $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $this->expansion);
-        // Make sure that the affixes wrap over if we run out
-//        return $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
-        return $affixGroupIndex < $this->affixgroups->count() ? $this->affixgroups[$affixGroupIndex] : null;
+            // Get the affix group which occurs after a few weeks and return that
+            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $this->expansion);
+            // Make sure that the affixes wrap over if we run out
+            // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
+            $result = $affixGroupIndex < $this->affixgroups->count() ? $this->affixgroups[$affixGroupIndex] : null;
+        }
+
+        return $result;
     }
 
     /**
@@ -240,5 +252,17 @@ class Season extends CacheModel
     {
         // Only if the current season has presets do we calculate, otherwise return 0
         return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets : 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasTimewalkingEvent(): bool
+    {
+        if ($this->isTimewalkingSeason !== null) {
+            return $this->isTimewalkingSeason;
+        }
+
+        return $this->isTimewalkingSeason = $this->expansion->hasTimewalkingEvent();
     }
 }

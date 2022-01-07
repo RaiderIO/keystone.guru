@@ -404,11 +404,12 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteFormRequest $request
+     * @param SeasonService $seasonService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
-     * @throws Exception
+     * @throws AuthorizationException
      */
-    function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -417,7 +418,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonroute->saveFromRequest($request)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
