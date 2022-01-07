@@ -57,7 +57,7 @@ class SettingsTabRoute extends SettingsTab {
                 ,
                 unlisted: $('#unlisted').is(':checked') ? 1 : 0,
                 demo: $('#demo').is(':checked') && isUserAdmin ? 1 : 0,
-                affixes: $('#route_select_affixes').val(),
+                route_select_affixes: $('#route_select_affixes').val(),
                 _method: 'PATCH'
             },
             beforeSend: function () {

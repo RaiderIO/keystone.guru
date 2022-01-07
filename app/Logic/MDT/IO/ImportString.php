@@ -468,9 +468,9 @@ class ImportString extends MDTBase
      * @param $warnings Collection A Collection of Warnings that this parsing may produce.
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
-     * @param $save boolean
+     * @param $save bool
      */
-    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, boolean $save)
+    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
 
@@ -666,23 +666,19 @@ class ImportString extends MDTBase
 
         // Set the affix for this route
         $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon->expansion, $decoded['week']);
-        if ($affixGroup instanceof AffixGroup) {
-            if ($save) {
-                // Something we can save to the
-                DungeonRouteAffixGroup::create([
-                    'affix_group_id'   => $affixGroup->id,
-                    'dungeon_route_id' => $dungeonRoute->id,
-                ]);
-            } else {
-                // Something we can just return and have the user read
-                $dungeonRoute->affixes->push($affixGroup);
-            }
-
-            // Apply the seasonal index to the route
-            $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
+        if ($save) {
+            // Something we can save to the
+            DungeonRouteAffixGroup::create([
+                'affix_group_id'   => $affixGroup->id,
+                'dungeon_route_id' => $dungeonRoute->id,
+            ]);
         } else {
-            $dungeonRoute->seasonal_index = 0;
+            // Something we can just return and have the user read
+            $dungeonRoute->affixes->push($affixGroup);
         }
+
+        // Apply the seasonal index to the route
+        $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
 
         // Update seasonal index
         if ($save) {
