@@ -21,16 +21,16 @@ class PublishedState extends CacheModel
     public const WORLD           = 'world';
 
     public const ALL = [
-        self::UNPUBLISHED,
-        self::TEAM,
-        self::WORLD_WITH_LINK,
-        self::WORLD,
+        self::UNPUBLISHED     => 1,
+        self::TEAM            => 2,
+        self::WORLD_WITH_LINK => 3,
+        self::WORLD           => 4,
     ];
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
+        'id', 'name',
     ];
 
     protected $hidden = ['pivot'];

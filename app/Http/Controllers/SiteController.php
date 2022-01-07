@@ -7,6 +7,8 @@ use App\Models\Release;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +20,15 @@ use Illuminate\View\View;
 
 class SiteController extends Controller
 {
+    /**
+     * Show the application dashboard.
+     *
+     * @return Application|Factory|View
+     */
+    public function test()
+    {
+        return view('misc.test');
+    }
 
     /**
      * Show the application dashboard.
@@ -124,33 +135,34 @@ class SiteController extends Controller
      * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
      * @param ExpansionService $expansionService
+     * @param TimewalkingEventServiceInterface $timewalkingEventService
      * @return Factory|View
+     * @throws Exception
      */
-    public function affixes(Request $request, DiscoverServiceInterface $discoverService, SeasonService $seasonService, ExpansionService $expansionService)
+    public function affixes(
+        Request                          $request,
+        DiscoverServiceInterface         $discoverService,
+        SeasonService                    $seasonService,
+        ExpansionService                 $expansionService,
+        TimewalkingEventServiceInterface $timewalkingEventService
+    )
     {
-        $closure = function (Builder $builder) {
-            $builder->limit(config('keystoneguru.discover.limits.affix_overview'));
-        };
+        $currentExpansion = $expansionService->getCurrentExpansion();
 
         return view('misc.affixes', [
-            'expansion'     => $expansionService->getCurrentExpansion(),
-            'seasonService' => $seasonService,
-            'offset'        => (int)$request->get('offset', 0),
-            'dungeonroutes' => [
-                'thisweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getCurrentAffixGroup()),
-                'nextweek' => $discoverService->withBuilder($closure)->popularByAffixGroup($seasonService->getCurrentSeason()->getNextAffixGroup()),
+            'timewalkingEventService' => $timewalkingEventService,
+            'expansion'               => $currentExpansion,
+            'seasonService'           => $seasonService,
+            'offset'                  => (int)$request->get('offset', 0),
+            'dungeonroutes'           => [
+                'thisweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
+                'nextweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
             ],
         ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param ExpansionService $expansionService
-     * @return Factory|View
-     */
-    public function demo(Request $request, ExpansionService $expansionService)
-    {
-        return view('misc.demo', ['expansionService' => $expansionService]);
     }
 
     /**

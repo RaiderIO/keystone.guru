@@ -1,6 +1,7 @@
 <?php
 /** @var \App\User $user */
 /** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
+/** @var \App\Models\GameServerRegion[]|\Illuminate\Support\Collection $allRegions */
 
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
@@ -87,7 +88,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
                 {!! Form::label('game_server_region_id', __('views/profile.edit.region')) !!}
                 {!! Form::select('game_server_region_id', array_merge(['-1' => __('views/profile.edit.select_region')],
-                    \App\Models\GameServerRegion::all()->mapWithKeys(function (\App\Models\GameServerRegion $region){
+                    $allRegions->mapWithKeys(function (\App\Models\GameServerRegion $region){
                         return [$region->id => __($region->name)];
                     })->toArray()), null, ['class' => 'form-control']) !!}
                 @include('common.forms.form-error', ['key' => 'game_server_region_id'])

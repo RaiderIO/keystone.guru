@@ -15,7 +15,7 @@ use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Floor;
 use App\Models\Npc;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Lua;
@@ -36,15 +36,15 @@ class MDTDungeon
     /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
     private string $dungeonKey;
 
-    /** @var CacheService|mixed */
-    private CacheService $cacheService;
+    /** @var CacheServiceInterface|mixed */
+    private CacheServiceInterface $cacheService;
 
 
     function __construct($dungeonKey)
     {
         $this->dungeonKey = $dungeonKey;
 
-        $this->cacheService = App::make(CacheService::class);
+        $this->cacheService = App::make(CacheServiceInterface::class);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Rules\SiegeOfBoralusFactionRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,10 @@ class DungeonRouteFormRequest extends FormRequest
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming'                   => 'nullable|int',
             'template'                  => 'nullable|int',
-            'seasonal_index'            => 'int',
+
+            // Array since there's potentially a seasonal index per expansion
+            'seasonal_index'   => 'nullable|array',
+            'seasonal_index.*' => 'nullable|numeric',
 
             'faction_id' => [Rule::exists('factions', 'id'), new SiegeOfBoralusFactionRule($this->request)],
 
@@ -60,9 +64,9 @@ class DungeonRouteFormRequest extends FormRequest
             'race.*'  => 'nullable|numeric',
             'class.*' => 'nullable|numeric',
 
-            'affixes'      => 'array',
-            'affixes.*'    => 'numeric',
-            'attributes.*' => 'nullable|numeric',
+            'route_select_affixes'   => 'array',
+            'route_select_affixes.*' => 'string',
+            'attributes.*'           => 'nullable|numeric',
 
             'unlisted' => 'nullable|int',
         ];

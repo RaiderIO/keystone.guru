@@ -8,6 +8,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Facades\App;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\App;
  * @author Wouter
  * @since 06/08/2020
  *
- * @property Dungeon $_context
+ * @property Dungeon $context
  */
 class MapContextDungeon extends MapContext
 {
@@ -48,22 +49,22 @@ class MapContextDungeon extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->id, true);
+        return $this->listEnemies($this->context->id, true);
     }
 
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-dungeon-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey());
+        return sprintf('%s-dungeon-edit.%s', config('app.type'), $this->context->getRouteKey());
     }
 
     public function getProperties(): array
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         // Get or set the NPCs
-        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->_context->id), function () {
-            return Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc) {
+        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->context->id), function () {
+            return Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(function ($npc) {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values();
         }, config('keystoneguru.cache.npcs.ttl'));

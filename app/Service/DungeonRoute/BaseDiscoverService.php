@@ -4,36 +4,58 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
-use App\Service\Season\SeasonService;
 use Closure;
 use Illuminate\Support\Facades\App;
 
 abstract class BaseDiscoverService implements DiscoverServiceInterface
 {
-    /** @var CacheService */
-    protected CacheService $cacheService;
+    /** @var CacheServiceInterface */
+    protected CacheServiceInterface $cacheService;
 
-    /** @var SeasonService */
-    protected SeasonService $seasonService;
+    /** @var ExpansionService */
+    protected ExpansionService $expansionService;
+
+    /** @var int */
+    protected int $limit = 10;
 
     /** @var Closure|null */
     protected ?Closure $closure = null;
 
     /** @var Expansion|null */
-    protected Expansion $expansion;
+    protected ?Expansion $expansion = null;
 
     /**
      * DiscoverService constructor.
      */
     public function __construct()
     {
-        $this->cacheService  = App::make(CacheService::class);
-        $this->seasonService = App::make(SeasonService::class);
+        $this->cacheService     = App::make(CacheServiceInterface::class);
+        $this->expansionService = App::make(ExpansionService::class);
+    }
 
-        $expansionService = App::make(ExpansionService::class);
-        $this->expansion  = $expansionService->getCurrentExpansion();
+    /**
+     * Makes sure that we have an expansion set at the end of this function if it wasn't set before
+     * @return DiscoverServiceInterface
+     */
+    function ensureExpansion(): DiscoverServiceInterface
+    {
+        if ($this->expansion === null) {
+            $this->expansion = $this->expansionService->getCurrentExpansion();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function withLimit(int $limit): DiscoverServiceInterface
+    {
+        $this->limit = $limit;
+
+        return $this;
     }
 
     /**

@@ -26,6 +26,7 @@ use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Test;
+use App\Console\Commands\View\Cache;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\SynchronizeMapping;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
@@ -83,6 +84,9 @@ class Kernel extends ConsoleKernel
 
         // Test
         Test::class,
+
+        // View
+        Cache::class,
     ];
 
     /**
@@ -95,6 +99,7 @@ class Kernel extends ConsoleKernel
     {
         Log::channel('scheduler')->debug('Starting scheduler');
 
+        $debug   = config('app.debug');
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
@@ -115,7 +120,12 @@ class Kernel extends ConsoleKernel
         // https://laravel.com/docs/8.x/telescope#data-pruning
         $schedule->command('telescope:prune --hours=48')->daily();
 
-        $schedule->command('discover:cache')->hourly();
+        // We don't want the cache when we're debugging to ensure fresh data every time
+        if (!$debug) {
+            $schedule->command('discover:cache')->hourly();
+            $schedule->command('keystoneguru:view', ['operation' => 'cache'])->everyTenMinutes();
+        }
+
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 

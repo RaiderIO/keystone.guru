@@ -1,4 +1,6 @@
 <?php
+/** @var $allRegions \Illuminate\Support\Collection|\App\Models\GameServerRegion[] */
+
 $modal      = $modal ?? false;
 $modalClass = $modal ? 'modal-' : '';
 $width      = $modal ? '12' : '6';
@@ -66,7 +68,7 @@ $errors   = $errors ?? collect();
                 <div class="col-md-{{ $width }}">
                     {!! Form::select('region', array_merge(
                     ['-1' => __('views/common.forms.register.select_region')],
-                    \App\Models\GameServerRegion::all()->mapWithKeys(function (\App\Models\GameServerRegion $region){
+                    $allRegions->mapWithKeys(function (\App\Models\GameServerRegion $region){
                         return [$region->id => __($region->name)];
                     })->toArray()), null, ['class' => 'form-control']) !!}
                 </div>
@@ -126,6 +128,7 @@ $errors   = $errors ?? collect();
              '<a href="' . route('legal.privacy') . '">' . __('views/common.forms.register.privacy_policy') . '</a>',
              '<a href="' . route('legal.cookies') . '">' . __('views/common.forms.register.cookie_policy') . '</a>')
              !!}
+            {{ __('views/common.forms.oauth.battletag_warning') }}
         </p>
         <hr>
         @include('common.forms.oauth')

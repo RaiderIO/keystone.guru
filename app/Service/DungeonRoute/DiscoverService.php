@@ -3,7 +3,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\PublishedState;
@@ -18,7 +18,9 @@ class DiscoverService extends BaseDiscoverService
      */
     private function getCacheKey(string $key): string
     {
-        return sprintf('discover:%s:%s', $this->expansion->shortname, $key);
+        $this->ensureExpansion();
+
+        return sprintf('discover:%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
     }
 
     /**
@@ -28,7 +30,11 @@ class DiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
-        return DungeonRoute::query()->limit(10)
+        $this->ensureExpansion();
+
+        $currentSeasonAffixGroups = $this->expansionService->getCurrentSeason($this->expansion)->affixgroups;
+
+        return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
@@ -39,13 +45,13 @@ class DiscoverService extends BaseDiscoverService
                     SELECT IF(COUNT(*) = 0, 13, COUNT(*))
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
-                    AND affix_group_id >= %s
-                )) as weightedPopularity', $this->seasonService->getCurrentSeason()->affixgroups->first()->id)
+                    AND affix_group_id BETWEEN %d AND %d
+                )) as weightedPopularity', $currentSeasonAffixGroups->first()->id, $currentSeasonAffixGroups->last()->id)
             )
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
-            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
@@ -61,15 +67,20 @@ class DiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
-        return DungeonRoute::query()->limit(10)
+        $this->ensureExpansion();
+
+        return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
-            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+            ->where('dungeons.active', true)
+            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');
     }
@@ -99,8 +110,7 @@ class DiscoverService extends BaseDiscoverService
     function popular(): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null, $this->getCacheKey('popular'), function () {
-            return $this->popularBuilder()
-                ->get();
+            return $this->popularBuilder()->get();
         }, config('keystoneguru.discover.service.popular.ttl'));
     }
 
@@ -117,9 +127,7 @@ class DiscoverService extends BaseDiscoverService
                 $activeDungeons = $this->expansion->dungeons()->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withBuilder(function (Builder $builder) {
-                        $builder->limit(2);
-                    })->popularByDungeon($dungeon));
+                    $result = $result->merge($this->withLimit(2)->popularByDungeon($dungeon));
                 }
 
                 return $result;
@@ -130,7 +138,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('affix_group_%d:popular', $affixGroup->id)),
@@ -147,7 +155,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('grouped_by_dungeon:affix_group_%d:popular', $affixGroup->id)),
@@ -158,9 +166,7 @@ class DiscoverService extends BaseDiscoverService
                 $activeDungeons = $this->expansion->dungeons()->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withBuilder(function (Builder $builder) {
-                        $builder->limit(2);
-                    })->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
+                    $result = $result->merge($this->withLimit(2)->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
                 }
 
                 return $result;
@@ -185,7 +191,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('%s:affix_group_%s:popular', $dungeon->key, $affixGroup->id)),
@@ -215,7 +221,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    function newByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('affix_group_%d:new', $affixGroup->id)), function () use ($affixGroup) {
@@ -244,7 +250,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id)),
@@ -270,7 +276,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
         return collect();
@@ -288,7 +294,7 @@ class DiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
         return collect();

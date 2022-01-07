@@ -3,7 +3,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use Closure;
@@ -11,6 +11,12 @@ use Illuminate\Support\Collection;
 
 interface DiscoverServiceInterface
 {
+    /**
+     * @param int $limit
+     * @return $this
+     */
+    function withLimit(int $limit): self;
+
     /**
      * @param Closure $closure
      * @return $this
@@ -48,16 +54,16 @@ interface DiscoverServiceInterface
     function popularGroupedByDungeon(): Collection;
 
     /**
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection;
+    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
     /**
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection;
+    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
     /**
      * @param Dungeon $dungeon
@@ -67,10 +73,10 @@ interface DiscoverServiceInterface
 
     /**
      * @param Dungeon $dungeon
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
     /**
      * @return Collection
@@ -78,10 +84,10 @@ interface DiscoverServiceInterface
     function new(): Collection;
 
     /**
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection;
+    function newByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
     /**
      * @param Dungeon $dungeon
@@ -91,10 +97,10 @@ interface DiscoverServiceInterface
 
     /**
      * @param Dungeon $dungeon
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
     /*
     |--------------------------------------------------------------------------
@@ -110,10 +116,10 @@ interface DiscoverServiceInterface
     function popularUsers(): Collection;
 
     /**
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection;
+    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
     /**
      * @param Dungeon $dungeon
@@ -123,8 +129,8 @@ interface DiscoverServiceInterface
 
     /**
      * @param Dungeon $dungeon
-     * @param AffixGroup $affixGroup
+     * @param AffixGroupBase $affixGroup
      * @return Collection
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection;
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 }

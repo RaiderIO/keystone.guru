@@ -1,10 +1,9 @@
 <?php
 
-use App\Models\Faction;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
-class ChangeUnspecifiedFactionColor extends Migration
+class DropTimewalkingEventAffixGroupCouplingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +12,7 @@ class ChangeUnspecifiedFactionColor extends Migration
      */
     public function up()
     {
-        DB::table('factions')->where('key', Faction::FACTION_UNSPECIFIED)->update(['color' => 'inherit']);
+        Schema::drop('timewalking_event_affix_group_couplings');
     }
 
     /**
@@ -23,6 +22,6 @@ class ChangeUnspecifiedFactionColor extends Migration
      */
     public function down()
     {
-        //  Too bad
+        //
     }
 }

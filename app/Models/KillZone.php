@@ -42,7 +42,7 @@ class KillZone extends Model
      *
      * @return BelongsTo
      */
-    function dungeonroute()
+    function dungeonroute(): BelongsTo
     {
         return $this->belongsTo('App\Models\DungeonRoute');
     }
@@ -50,7 +50,7 @@ class KillZone extends Model
     /**
      * @return BelongsToMany
      */
-    function enemies()
+    function enemies(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Enemy', 'kill_zone_enemies');
     }
@@ -58,7 +58,7 @@ class KillZone extends Model
     /**
      * @return HasMany
      */
-    function killzoneenemies()
+    function killzoneenemies(): HasMany
     {
         return $this->hasMany('App\Models\KillZoneEnemy');
     }
@@ -66,7 +66,7 @@ class KillZone extends Model
     /**
      * @return BelongsTo
      */
-    function floor()
+    function floor(): BelongsTo
     {
         return $this->belongsTo('App\Models\Floor');
     }
@@ -111,30 +111,13 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
-    /**
-     * Deletes all enemies that are related to this Route.
-     */
-    public function deleteEnemies()
-    {
-        // Load the existing kill zone enemies
-        $existingKillZoneEnemiesIds = $this->killzoneenemies->pluck('id')->all();
-        // Only if there's enemies to destroy
-        if (count($existingKillZoneEnemiesIds) > 0) {
-            // Kill them off
-            KillZoneEnemy::destroy($existingKillZoneEnemiesIds);
-        }
-
-        $this->unsetRelation('killzoneenemies');
-    }
-
     public static function boot()
     {
         parent::boot();
 
-        // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item KillZone */
-            $item->deleteEnemies();
+        // Delete kill zone properly if it gets deleted
+        static::deleting(function (KillZone $item) {
+            $item->killzoneenemies()->delete();
         });
     }
 }

@@ -50,7 +50,7 @@ class Dungeon extends CacheModel
     protected $appends = ['floor_count'];
     public $with = ['expansion', 'floors'];
 
-    public $hidden = ['expansion_id', 'created_at', 'updated_at'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Legion
@@ -77,9 +77,9 @@ class Dungeon extends CacheModel
     const DUNGEON_TEMPLE_OF_SETHRALISS = 'templeofsethraliss';
     const DUNGEON_THE_MOTHERLODE       = 'themotherlode';
     const DUNGEON_THE_UNDERROT         = 'theunderrot';
-    const DUNGEON_TOL_DAGOR         = 'toldagor';
-    const DUNGEON_WAYCREST_MANOR    = 'waycrestmanor';
-    const DUNGEON_MECHAGON_JUNKYARD = 'mechagonjunkyard';
+    const DUNGEON_TOL_DAGOR            = 'toldagor';
+    const DUNGEON_WAYCREST_MANOR       = 'waycrestmanor';
+    const DUNGEON_MECHAGON_JUNKYARD    = 'mechagonjunkyard';
     const DUNGEON_MECHAGON_WORKSHOP    = 'mechagonworkshop';
 
     // Shadowlands
@@ -88,9 +88,9 @@ class Dungeon extends CacheModel
     const DUNGEON_MISTS_OF_TIRNA_SCITHE = 'mistsoftirnescithe';
     const DUNGEON_PLAGUEFALL            = 'plaguefall';
     const DUNGEON_SANGUINE_DEPTHS       = 'sanguinedepths_a';
-    const DUNGEON_SPIRES_OF_ASCENSION = 'spiresofascension_a';
-    const DUNGEON_THE_NECROTIC_WAKE   = 'necroticwake_a';
-    const DUNGEON_THEATER_OF_PAIN     = 'theaterofpain';
+    const DUNGEON_SPIRES_OF_ASCENSION   = 'spiresofascension_a';
+    const DUNGEON_THE_NECROTIC_WAKE     = 'necroticwake_a';
+    const DUNGEON_THEATER_OF_PAIN       = 'theaterofpain';
 
 
     /**
@@ -122,8 +122,7 @@ class Dungeon extends CacheModel
             // Loop through all floors
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
-                // @TODO Hard coded boss?
-                if ($npc !== null && $npc->classification_id < 3) {
+                if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     $npcs[$npc->id] = $npc->enemy_forces >= 0;
                 }
             }
@@ -151,7 +150,7 @@ class Dungeon extends CacheModel
     /**
      * @return BelongsTo
      */
-    public function expansion()
+    public function expansion(): BelongsTo
     {
         return $this->belongsTo('App\Models\Expansion');
     }
@@ -159,7 +158,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function floors()
+    public function floors(): HasMany
     {
         return $this->hasMany('App\Models\Floor')->orderBy('index');
     }
@@ -167,7 +166,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function dungeonroutes()
+    public function dungeonroutes(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoute');
     }
@@ -175,7 +174,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
-    public function npcs()
+    public function npcs(): HasMany
     {
         return $this->hasMany('App\Models\Npc')->orWhere('dungeon_id', -1);
     }
@@ -183,7 +182,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemies()
+    public function enemies(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\Enemy', 'App\Models\Floor');
     }
@@ -191,7 +190,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemypacks()
+    public function enemypacks(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\EnemyPack', 'App\Models\Floor');
     }
@@ -199,7 +198,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function enemypatrols()
+    public function enemypatrols(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\EnemyPatrol', 'App\Models\Floor');
     }
@@ -207,7 +206,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function mapicons()
+    public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\MapIcon', 'App\Models\Floor')->where('dungeon_route_id', -1);
     }
@@ -215,7 +214,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function floorswitchmarkers()
+    public function floorswitchmarkers(): HasManyThrough
     {
         return $this->hasManyThrough('App\Models\DungeonFloorSwitchMarker', 'App\Models\Floor');
     }
@@ -259,7 +258,9 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMinHealth()
     {
-        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->min('base_health') ?? 10000;
+        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+                ->where('dungeon_id', '<>', -1)
+                ->min('base_health') ?? 10000;
     }
 
     /**
@@ -267,7 +268,9 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMaxHealth()
     {
-        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->max('base_health') ?? 100000;
+        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+                ->where('dungeon_id', '<>', -1)
+                ->max('base_health') ?? 100000;
     }
 
     /**

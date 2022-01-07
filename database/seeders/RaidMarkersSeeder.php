@@ -17,21 +17,11 @@ class RaidMarkersSeeder extends Seeder
     {
         $this->_rollback();
 
-        $raidMarkerData = [
-            'star',
-            'circle',
-            'diamond',
-            'triangle',
-            'moon',
-            'square',
-            'cross',
-            'skull',
-        ];
-
-        foreach ($raidMarkerData as $raidMarkerObj) {
-            $raidMarker       = new RaidMarker();
-            $raidMarker->name = $raidMarkerObj;
-            $raidMarker->save();
+        foreach (RaidMarker::ALL as $raidMarkerName => $id) {
+            RaidMarker::create([
+                'id'   => $id,
+                'name' => $raidMarkerName,
+            ]);
         }
     }
 

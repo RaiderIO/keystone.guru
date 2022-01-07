@@ -20,7 +20,7 @@ class AuthorNameColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'author.name');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         // Only order
         if ($order !== null) {

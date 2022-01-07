@@ -41,6 +41,7 @@ class Affix extends CacheModel
     const AFFIX_PRIDEFUL   = 'Prideful';
     const AFFIX_TORMENTED  = 'Tormented';
     const AFFIX_UNKNOWN    = 'Unknown';
+    const AFFIX_INFERNAL   = 'Infernal';
 
     const ALL_AFFIXES = [
         self::AFFIX_BOLSTERING,
@@ -67,6 +68,7 @@ class Affix extends CacheModel
         self::AFFIX_PRIDEFUL,
         self::AFFIX_TORMENTED,
         self::AFFIX_UNKNOWN,
+        self::AFFIX_INFERNAL,
     ];
 
     use HasIconFile;
@@ -80,6 +82,6 @@ class Affix extends CacheModel
      */
     public function affixGroups()
     {
-        return $this->belongsToMany('App\Models\AffixGroup', 'affix_group_couplings');
+        return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'affix_group_couplings');
     }
 }

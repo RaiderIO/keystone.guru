@@ -120,6 +120,9 @@ return [
             'parsing_your_string'                    => 'Разбор вашей строки MDT...',
             'import_route'                           => 'Импорт маршрута',
         ],
+        'oauth'                => [
+            'battletag_warning' => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
+        ],
         'pullsettings'         => [
             'pull_number_style'                 => 'Стиль номера пула',
             'pull_number_style_title'           => 'Это управляет номерами ваших пулов на боковой панели',

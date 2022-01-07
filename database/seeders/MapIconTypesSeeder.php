@@ -129,7 +129,7 @@ class MapIconTypesSeeder extends Seeder
             }
             $mapIconTypeModel->width      = $imageSize[0];
             $mapIconTypeModel->height     = $imageSize[1];
-            $mapIconTypeModel->admin_only = isset($mapIconType['admin_only']) ? $mapIconType['admin_only'] : 0;
+            $mapIconTypeModel->admin_only = $mapIconType['admin_only'] ?? 0;
             $mapIconTypeModel->save();
         }
     }

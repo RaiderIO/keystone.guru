@@ -11,7 +11,7 @@ use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -22,15 +22,15 @@ abstract class MapContext
     use ListsEnemies;
 
     /** @var Model */
-    protected Model $_context;
+    protected Model $context;
 
     /** @var Floor */
-    private Floor $_floor;
+    private Floor $floor;
 
     function __construct(Model $context, Floor $floor)
     {
-        $this->_context = $context;
-        $this->_floor   = $floor;
+        $this->context = $context;
+        $this->floor   = $floor;
     }
 
     /** @return string */
@@ -54,15 +54,15 @@ abstract class MapContext
      */
     public function getProperties(): array
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->_floor->dungeon->id), function () {
-            $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->floor->dungeon->id), function () {
+            $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
-            return array_merge(($this->_floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
+            return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'enemies'                   => $dungeon->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
                 'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
                 'auras'                     => Spell::where('aura', true)->get(),
@@ -85,22 +85,21 @@ abstract class MapContext
             ];
         }, config('keystoneguru.cache.static_data.ttl'));
 
-        $npcMinHealth = $this->_floor->dungeon->getNpcsMinHealth();
-        $npcMaxHealth = $this->_floor->dungeon->getNpcsMaxHealth();
+        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth();
+        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth();
 
         // Prevent the values being exactly the same, which causes issues in the front end
         $npcMaxHealth = $npcMaxHealth + ($npcMinHealth === $npcMaxHealth ? 1 : 0);
 
         return [
             'type'                => $this->getType(),
-            'floorId'             => $this->_floor->id,
+            'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,
             'static'              => $static,
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
-            // @TODO Probably move this? Temp fix
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
 

@@ -23,6 +23,13 @@ class Update extends Command
         'staging' => 'dev',
     ];
 
+    const OPTIMIZE = [
+        'live'    => true,
+        'local'   => false,
+        'mapping' => true,
+        'staging' => true,
+    ];
+
     /**
      * The console command description.
      *
@@ -81,18 +88,16 @@ class Update extends Command
         ]);
 
         $this->call('optimize:clear');
-        if ($environment === 'live') {
-            $this->call('route:cache');
-        } else {
-            $this->call('route:clear');
+        if (self::OPTIMIZE[$environment]) {
+            $this->call('optimize');
         }
-        $this->call('config:clear');
         $this->call('queue:restart');
         $this->call('supervisor:start');
 
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
         $this->call('discover:cache');
+        $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         return 0;
     }

@@ -1,7 +1,6 @@
 class SearchFilterLevel extends SearchFilterInput {
     constructor(selector, onChange, levelMin, levelMax) {
         super({
-            name: 'level',
             selector: selector,
             onChange: onChange
         });
@@ -26,7 +25,7 @@ class SearchFilterLevel extends SearchFilterInput {
 
     getFilterHeaderText() {
         return lang.get('messages.filter_input_level_header')
-            .replace(':number', this.getValue().replace(';', ' - +'));
+            .replace(':value', '+' + this.getValue().replace(';', ' - +'));
     }
 
     /**

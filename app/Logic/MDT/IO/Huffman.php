@@ -16,7 +16,7 @@
 // * or a string (see compressData() for more information).
 // *
 // * For the array version, you must make sure the toString() function
-// * of the objects in the array returns a unique string for the object.TODO
+// * of the objects in the array returns a unique string for the object.
 // *
 // * At the same time, this class represents the Huffman tree itself.
 // */

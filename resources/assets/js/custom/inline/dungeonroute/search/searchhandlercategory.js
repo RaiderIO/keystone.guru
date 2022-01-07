@@ -28,10 +28,10 @@ class SearchHandlerCategory extends SearchHandler {
         this.search($targetContainer, new SearchParams([], {
             offset: this.offset,
             limit: this.limit,
+            expansion: this.options.expansion.shortname,
             dungeon: typeof this.options.dungeon !== 'undefined' && this.options.dungeon !== null ? this.options.dungeon.id : null
         }), $.extend({}, {
             success: function (html, textStatus, xhr) {
-                console.log(html, textStatus, xhr);
                 // Only if we actually get results back
                 self.hasMore = xhr.status !== 204;
                 if (self.hasMore) {

@@ -9,16 +9,18 @@ class SearchParams {
 
         this.params = $.extend({}, queryParameters);
 
-        for (let i = 0; i < this.filters.length; i++) {
-            let filter = this.filters[i];
+        for (let name in this.filters) {
+            if (this.filters.hasOwnProperty(name)) {
+                let filter = this.filters[name];
 
-            let value = filter.getValue();
-            // Prevent sending empty strings
-            if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
-                if (filter.options.array) {
-                    this.params[`${filter.options.name}[]`] = value;
-                } else {
-                    this.params[filter.options.name] = value;
+                let value = filter.getValue();
+                // Prevent sending empty strings
+                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
+                    if (filter.options.array) {
+                        this.params[`${name}[]`] = value;
+                    } else {
+                        this.params[name] = value;
+                    }
                 }
             }
         }

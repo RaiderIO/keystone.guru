@@ -8,7 +8,7 @@
 
 namespace App\Logic\MDT;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Service\Season\SeasonService;
@@ -167,10 +167,11 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      * @param SeasonService $seasonService
+     * @param Expansion $expansion
      * @param int $mdtWeek
      * @return AffixGroup
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, int $mdtWeek): AffixGroup
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, Expansion $expansion, int $mdtWeek): AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
         $weekMapping = [
@@ -187,15 +188,14 @@ class Conversion
             11 => 2,
             12 => 3,
         ];
-        return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
+        return AffixGroup::find($weekMapping[$mdtWeek] + (($seasonService->getSeasons($expansion)->count() - 1) * config('keystoneguru.season_iteration_affix_group_count')));
     }
 
     /**
-     * @param SeasonService $seasonService
      * @param AffixGroup $affixGroup
      * @return int
      */
-    public static function convertAffixGroupToWeek(SeasonService $seasonService, AffixGroup $affixGroup): int
+    public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
         // We need to figure out which week it is in the rotation
         $weekIndex = $affixGroup->id % config('keystoneguru.season_iteration_affix_group_count');

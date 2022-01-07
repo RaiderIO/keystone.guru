@@ -1,9 +1,10 @@
 <?php
 /**
+ * @var $expansion \App\Models\Expansion
  * @var $title string
  * @var $cols int
  * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 
 $dungeon          = $dungeon ?? null;
@@ -47,6 +48,7 @@ $cache            = $cache ?? true;
             </div>
         </div>
     </div>
+
     @if($showMore)
         <div class="row mt-4">
             <div class="col-xl text-center">
@@ -58,6 +60,11 @@ $cache            = $cache ?? true;
     @endif
 
     @if($loadMore)
-        @include('common.dungeonroute.search.loadmore', ['category' => $category, 'dungeon' => $dungeon, 'routeListContainerSelector' => '#category_route_list'])
+        @include('common.dungeonroute.search.loadmore', [
+            'category' => $category,
+            'expansion' => $expansion,
+            'dungeon' => $dungeon,
+            'routeListContainerSelector' => '#category_route_list'
+        ])
     @endif
 </div>

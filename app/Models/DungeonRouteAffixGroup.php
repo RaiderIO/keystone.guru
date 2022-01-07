@@ -36,6 +36,6 @@ class DungeonRouteAffixGroup extends Model
      */
     public function affixgroup()
     {
-        return $this->belongsTo('App\Models\AffixGroup');
+        return $this->belongsTo('App\Models\AffixGroup\AffixGroup');
     }
 }

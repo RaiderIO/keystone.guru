@@ -45,14 +45,17 @@ class LiveSessionController extends Controller
         if ($dungeonroute->team instanceof Team && $dungeonroute->team->isUserMember($user)) {
             try {
                 // Propagate changes to the channel that the user came from
-                $channelName = sprintf('presence-%s-route-edit.%s', env('APP_TYPE'), $dungeonroute->public_key);
+                $channelName = sprintf('presence-%s-route-edit.%s', config('app.type'), $dungeonroute->public_key);
 
                 $invitees = collect();
                 // Check if the user is in this channel..
                 foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
                     /** @var array $channelUser */
                     // Ignore the current user!
-                    if ($channelUser['public_key'] !== $user->public_key && $dungeonroute->team->isUserMember(new User($channelUser))) {
+                    if (!isset($channelUser['public_key'])) {
+                        logger()->notice('Echo user public_key not set', $channelUser);
+                    } else if ($channelUser['public_key'] !== $user->public_key &&
+                        $dungeonroute->team->isUserMember(new User($channelUser))) {
                         $invitees->push($channelUser['public_key']);
                     }
                 }

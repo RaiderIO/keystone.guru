@@ -38,7 +38,7 @@ L.Draw.Path.prototype._getTooltipText = function () {
 }
 
 /**
- * @property int linked_awakened_obelisk_id
+ * @property {Number} linked_awakened_obelisk_id
  */
 class Path extends Polyline {
     constructor(map, layer) {

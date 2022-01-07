@@ -2,8 +2,8 @@
 
 namespace App\Service\Subcreation;
 
-use App\Models\AffixGroup;
-use App\Models\AffixGroupEaseTier;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
@@ -21,4 +21,9 @@ interface AffixGroupEaseTierServiceInterface
      * @return Collection|AffixGroupEaseTier[]
      */
     function getTiersByAffixGroups(Collection $affixGroups): Collection;
+
+    /**
+     * @return Collection
+     */
+    function getTiers(): Collection;
 }

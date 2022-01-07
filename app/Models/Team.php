@@ -124,7 +124,7 @@ class Team extends Model
         // Set already
         if ($dungeonRoute->team_id > 0) {
             // Delete all existing team tags from this route
-            $dungeonRoute->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM))->delete();
+            $dungeonRoute->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])->delete();
 
             $dungeonRoute->team_id = -1;
             $dungeonRoute->save();
@@ -152,7 +152,7 @@ class Team extends Model
      * @param $targetUser User The user that is targeted for a role change.
      * @return array
      */
-    public function getAssignableRoles(User $user, User $targetUser)
+    public function getAssignableRoles(User $user, User $targetUser): array
     {
         $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
@@ -356,7 +356,7 @@ class Team extends Model
      */
     public function getAvailableTags(): Collection
     {
-        return Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
+        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
             ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
             ->get();
     }
@@ -375,7 +375,7 @@ class Team extends Model
             }
 
             // Delete all tags team tags belonging to our routes
-            Tag::where('tag_category_id', TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM)->id)
+            Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
                 ->whereIn('model_id', $item->dungeonroutes->pluck('id')->toArray())->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $item->id)->delete();

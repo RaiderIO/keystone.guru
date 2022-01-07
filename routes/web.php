@@ -57,7 +57,9 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'language']], function () {
+//Route::get('test', [SiteController::class, 'test']);
+
+Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger']], function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
 
@@ -79,8 +81,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language']], function () {
     Route::get('mapping', [SiteController::class, 'mapping'])->name('misc.mapping');
 
     Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');
-
-    Route::get('demo', [SiteController::class, 'demo'])->name('misc.demo');
 
     Route::get('timetest', [SiteController::class, 'timetest'])->name('misc.timetest');
 

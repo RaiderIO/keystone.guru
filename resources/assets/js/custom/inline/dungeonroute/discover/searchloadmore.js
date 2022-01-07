@@ -6,6 +6,7 @@ class DungeonrouteDiscoverSearchloadmore extends InlineCode {
         this.loading = false;
 
         this.searchHandler = new SearchHandlerCategory(this.options.category, 20, this.options.loadMoreCount, {
+            expansion: this.options.expansion,
             dungeon: this.options.dungeon,
             beforeSend: function () {
                 self.loading = true;

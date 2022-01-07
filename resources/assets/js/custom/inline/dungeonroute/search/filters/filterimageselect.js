@@ -1,6 +1,7 @@
 class SearchFilterImageSelect extends SearchFilter {
     constructor(options) {
         super(options);
+        console.assert(options.hasOwnProperty('selector'), 'Filter options must have a selector set', this);
     }
 
     activate() {

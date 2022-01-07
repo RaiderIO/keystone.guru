@@ -2,32 +2,20 @@
 
 namespace App\Providers;
 
-use App\Models\Affix;
-use App\Models\CharacterClass;
-use App\Models\CharacterClassSpecialization;
-use App\Models\CharacterRace;
-use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
-use App\Models\PublishedState;
-use App\Models\Release;
-use App\Models\ReleaseChangelogCategory;
 use App\Models\UserReport;
-use App\Service\Cache\CacheService;
-use App\Service\DungeonRoute\DiscoverServiceInterface;
-use App\Service\Expansion\ExpansionService;
-use App\Service\Season\SeasonService;
-use App\User;
-use Carbon\Carbon;
+use App\Service\Expansion\ExpansionData;
+use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
-use Psr\SimpleCache\InvalidArgumentException;
-use Tremby\LaravelGitVersion\GitVersionHelper;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
@@ -42,19 +30,26 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Internals
-        $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
 
         // Model helpers
         if (config('app.env') === 'local') {
+            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\DevCacheService');
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
         } else {
+            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
             $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
         }
-        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
+        // Depends on ExpansionService
+        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
         $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
+        // Depends on SeasonService
+        $this->app->bind('App\Service\TimewalkingEvent\TimewalkingEventServiceInterface', 'App\Service\TimewalkingEvent\TimewalkingEventService');
+
+        // Depends on all of the above - pretty much
+        $this->app->bind('App\Service\View\ViewServiceInterface', 'App\Service\View\ViewService');
 
         // External communication
         $this->app->bind('App\Service\Discord\DiscordApiServiceInterface', 'App\Service\Discord\DiscordApiService');
@@ -65,14 +60,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
-     * @param CacheService $cacheService
-     * @param ExpansionService $expansionService
-     * @param DiscoverServiceInterface $discoverService
-     * @param SeasonService $seasonService
+     * @param ViewServiceInterface $viewService
+     * @param ExpansionServiceInterface $expansionService
+     * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
      * @return void
-     * @throws InvalidArgumentException
      */
-    public function boot(CacheService $cacheService, ExpansionService $expansionService, DiscoverServiceInterface $discoverService, SeasonService $seasonService)
+    public function boot(ViewServiceInterface $viewService, ExpansionServiceInterface $expansionService, AffixGroupEaseTierServiceInterface $affixGroupEaseTierService)
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
@@ -83,107 +76,38 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Cache some variables so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $cacheService->remember('global_view_variables', function () use ($expansionService, $discoverService, $seasonService) {
-            $demoRoutes = DungeonRoute::where('demo', true)
-                ->where('published_state_id', PublishedState::where('name', PublishedState::WORLD_WITH_LINK)->first()->id)
-                ->orderBy('dungeon_id')->get();
+        $globalViewVariables = $viewService->getCache();
 
-            $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
+        $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
 
-            $currentExpansion = $expansionService->getCurrentExpansion();
-            /** @var Release $latestRelease */
-            $latestRelease          = Release::latest()->first();
-            $latestReleaseSpotlight = Release::where('spotlight', true)
-                ->whereDate('created_at', '>',
-                    Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))
-                )->latest()->first();
-
-            $currentSeason = $seasonService->getCurrentSeason();
-
-            return [
-                'isProduction'                    => config('app.env') === 'production',
-                'demoRoutes'                      => $demoRoutes,
-                'demoRouteDungeons'               => $demoRouteDungeons,
-                'demoRouteMapping'                => $demoRouteDungeons
-                    ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes) {
-                        return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
-                    }),
-                'latestRelease'                   => $latestRelease,
-                'latestReleaseSpotlight'          => $latestReleaseSpotlight,
-                'appVersion'                      => GitVersionHelper::getVersion(),
-                'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
-
-                // Home
-                'userCount'                       => User::count(),
-
-                // Discover routes
-                'currentExpansion'                => $currentExpansion,
-                'currentExpansionActiveDungeons'  => $currentExpansion->dungeons,
-                'affixGroups'                     => [
-                    'current' => GameServerRegion::all()->mapWithKeys(function (GameServerRegion $region) use ($currentSeason) {
-                        return [$region->short => $currentSeason->getCurrentAffixGroupInRegion($region)];
-                    })->all(),
-                    'next'    => GameServerRegion::all()->mapWithKeys(function (GameServerRegion $region) use ($currentSeason) {
-                        return [$region->short => $currentSeason->getNextAffixGroupInRegion($region)];
-                    })->all(),
-                ],
-
-                // Find routes
-
-                // Changelog
-                'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
-
-                // Map
-                'characterClassSpecializations'   => CharacterClassSpecialization::all(),
-                'characterClasses'                => CharacterClass::with('specializations')->get(),
-                // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
-                'affixes'                         => Affix::all(),
-
-                // Misc
-                'activeExpansions'                => Expansion::active()->orderBy('id', 'desc')->get(), // Show most recent expansions first
-                'expansions'                      => Expansion::all(),
-                'dungeonsByExpansionIdDesc'       => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
-                // Take active expansions into account
-                'activeDungeonsByExpansionIdDesc' => Dungeon::select('dungeons.*')
-                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                    ->where('expansions.active', true)
-                    ->where('dungeons.active', true)
-                    ->orderByRaw('expansion_id DESC, dungeons.name')
-                    ->get(),
-                'siegeOfBoralus'                  => Dungeon::siegeOfBoralus()->first(),
-
-                // Season
-                'currentSeason'                   => $currentSeason,
-                'isAwakened'                      => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id,
-                'isPrideful'                      => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id,
-                'isTormented'                     => $currentSeason->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id,
-                'currentSeasonAffixGroups'        => $currentSeason->affixgroups()
-                    ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
-                    ->get(),
-            ];
-        }, config('keystoneguru.cache.global_view_variables.ttl'));
 
         // All views
         view()->share('isMobile', (new Agent())->isMobile());
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
+        $isUserAdmin = null;
+        $adFree      = null;
         // Can use the Auth() global here!
-        view()->composer('*', function (View $view) {
+        view()->composer('*', function (View $view) use (&$isUserAdmin, &$adFree) {
+            // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
+            if ($isUserAdmin === null) {
+                $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
+            }
+
+            if ($adFree === null) {
+                $adFree = Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE);
+            }
+
+
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
                 $view->with('viewName', $view->getName());
             }
 
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
-            $view->with('isUserAdmin', Auth::check() && Auth::getUser()->hasRole('admin'));
-
-            // Set a variable that checks if the user is adfree or not
-            $view->with('adFree', config('app.env') !== 'local' && Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE));
-        });
-
-        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) {
+            $view->with('isUserAdmin', $isUserAdmin);
+            $view->with('adFree', $adFree);
         });
 
         // Home page
@@ -205,35 +129,41 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
         });
 
-        view()->composer('common.layout.navuser', function (View $view) {
-            $view->with('numUserReports', Auth::check() && Auth::user()->is_admin ? UserReport::where('status', 0)->count() : 0);
+        view()->composer('common.layout.navuser', function (View $view) use ($isUserAdmin) {
+            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 0);
         });
 
         view()->composer('common.layout.header', function (View $view) use ($globalViewVariables) {
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
         });
 
-        view()->composer(['dungeonroute.discover.category', 'dungeonroute.discover.dungeon.category', 'misc.affixes'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
-            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][GameServerRegion::getUserOrDefaultRegion()->short]);
-        });
+        view()->composer([
+            'dungeonroute.discover.category',
+            'dungeonroute.discover.dungeon.category',
+            'misc.affixes',
+            'dungeonroute.discover.discover',
+            'dungeonroute.discover.dungeon.overview',
+        ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
+            /** @var Expansion $expansion */
+            $expansion = $view->getData()['expansion'];
 
-        view()->composer(['dungeonroute.discover.discover', 'dungeonroute.discover.dungeon.overview'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
-            $view->with('nextAffixGroup', $globalViewVariables['affixGroups']['next'][GameServerRegion::getUserOrDefaultRegion()->short]);
+            /** @var ExpansionData $expansionsData */
+            $expansionsData = $globalViewVariables['expansionsData']->get($expansion->shortname);
+
+            $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup($userOrDefaultRegion));
+            $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup($userOrDefaultRegion));
         });
 
         // Dungeon grid view
-        view()->composer('common.dungeon.demoroutesgrid', function (View $view) use ($globalViewVariables) {
-            $view->with('dungeons', $globalViewVariables['demoRouteDungeons']);
+        view()->composer('dungeonroute.discover.search', function (View $view) use ($globalViewVariables) {
+            $view->with('currentExpansion', $globalViewVariables['currentExpansion']);
+            $view->with('allAffixGroupsByActiveExpansion', $globalViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $globalViewVariables['featuredAffixesByActiveExpansion']);
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
         });
 
-        view()->composer(['common.dungeon.grid', 'common.dungeon.griddiscover'], function (View $view) use ($globalViewVariables) {
-            $view->with('expansion', $globalViewVariables['currentExpansion']);
-        });
-
-        view()->composer(['common.forms.createroute'], function (View $view) use ($globalViewVariables) {
-            $view->with('currentAffixGroup', $globalViewVariables['affixGroups']['current'][GameServerRegion::getUserOrDefaultRegion()->short]);
+        view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
+            $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
         // Displaying a release
@@ -242,12 +172,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Displaying affixes
-        view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables) {
+        view()->composer('common.group.affixes', function (View $view) use ($globalViewVariables, $userOrDefaultRegion) {
+            // Convert the current affixes list for ALL regions, and just take the ones that the current user's region has
+            $currentAffixes = [];
+            foreach ($globalViewVariables['allCurrentAffixes'] as $expansionShortname => $currentAffixGroupByRegion) {
+                $currentAffixes[$expansionShortname] = optional($currentAffixGroupByRegion[$userOrDefaultRegion->short])->id;
+            }
+
+            $view->with('currentAffixes', $currentAffixes);
+            $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
+            $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
+            $view->with('allAffixGroups', $globalViewVariables['allAffixGroups']);
             $view->with('affixes', $globalViewVariables['affixes']);
-            $view->with('isAwakened', $globalViewVariables['isAwakened']);
-            $view->with('isPrideful', $globalViewVariables['isPrideful']);
-            $view->with('isTormented', $globalViewVariables['isTormented']);
-            $view->with('affixGroups', $globalViewVariables['currentSeasonAffixGroups']);
+            $view->with('expansionsData', $globalViewVariables['expansionsData']);
         });
 
         // Displaying a release
@@ -255,14 +192,42 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('specializations', $globalViewVariables['characterClassSpecializations']);
             $view->with('classes', $globalViewVariables['characterClasses']);
             $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
+            $view->with('allFactions', $globalViewVariables['allFactions']);
         });
+
+        // Dungeon grid display
+        view()->composer('common.dungeon.griddiscover', function (View $view) use ($globalViewVariables, $affixGroupEaseTierService) {
+            /** @var AffixGroup|null $currentAffixGroup */
+            $currentAffixGroup = $view->getData()['currentAffixGroup'];
+            /** @var AffixGroup|null $nextAffixGroup */
+            $nextAffixGroup = $view->getData()['nextAffixGroup'];
+
+            $view->with('tiers', $affixGroupEaseTierService->getTiersByAffixGroups(collect([
+                $currentAffixGroup,
+                $nextAffixGroup,
+            ])));
+        });
+
 
         // Dungeon selector
         view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables) {
-            $view->with('allExpansions', $globalViewVariables['expansions']);
+            $view->with('allExpansions', $globalViewVariables['allExpansions']);
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
+        });
+
+        // Dungeonroute attributes selector, Dungeonroute table
+        view()->composer(['common.dungeonroute.attributes', 'common.dungeonroute.table'], function (View $view) use ($globalViewVariables) {
+            $view->with('allRouteAttributes', $globalViewVariables['allRouteAttributes']);
+        });
+
+        view()->composer('common.dungeonroute.publish', function (View $view) use ($globalViewVariables) {
+            $view->with('allPublishedStates', $globalViewVariables['allPublishedStates']);
+        });
+
+        view()->composer('common.dungeonroute.tier', function (View $view) use ($globalViewVariables) {
+            $view->with('affixGroupEaseTiersByAffixGroup', $globalViewVariables['affixGroupEaseTiersByAffixGroup']);
         });
 
         // Team selector
@@ -273,6 +238,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Profile pages
         view()->composer('profile.edit', function (View $view) use ($globalViewVariables) {
             $view->with('allClasses', $globalViewVariables['characterClasses']);
+            $view->with('allRegions', $globalViewVariables['allRegions']);
         });
     }
 }

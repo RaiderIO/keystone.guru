@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Tags\Tag;
@@ -13,9 +14,11 @@ use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\User;
 use Carbon\Carbon;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -83,8 +86,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection $playerclasses
  * @property Collection $playerraces
  *
- * @property Collection|DungeonRouteAffixGroup[] $affixgroups
  * @property Collection|AffixGroup[] $affixes
+ * @property Collection|DungeonRouteAffixGroup[] $affixgroups
  * @property Collection|DungeonRouteRating[] $ratings
  * @property Collection|DungeonRouteFavorite[] $favorites
  *
@@ -249,7 +252,7 @@ class DungeonRoute extends Model
      */
     public function affixes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\AffixGroup', 'dungeon_route_affix_groups');
+        return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'dungeon_route_affix_groups');
     }
 
     /**
@@ -346,7 +349,7 @@ class DungeonRoute extends Model
      */
     public function tagsteam(): HasMany
     {
-        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_TEAM));
+        return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
     }
 
     /**
@@ -354,7 +357,7 @@ class DungeonRoute extends Model
      */
     public function tagspersonal(): HasMany
     {
-        return $this->tags(TagCategory::fromName(TagCategory::DUNGEON_ROUTE_PERSONAL));
+        return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
     }
 
     /**
@@ -572,10 +575,11 @@ class DungeonRoute extends Model
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonService $seasonService
+     * @param SeasonServiceInterface $seasonService
      * @return bool
+     * @throws Exception
      */
-    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonService $seasonService): bool
+    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): bool
     {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
@@ -595,11 +599,7 @@ class DungeonRoute extends Model
 
         $saveResult = $this->save();
         if ($saveResult) {
-            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
-            $drAffixGroup                   = new DungeonRouteAffixGroup();
-            $drAffixGroup->affix_group_id   = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
-            $drAffixGroup->dungeon_route_id = $this->id;
-            $drAffixGroup->save();
+            $this->ensureAffixGroup($seasonService);
         }
 
         return $saveResult;
@@ -609,9 +609,11 @@ class DungeonRoute extends Model
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
+     * @param SeasonServiceInterface $seasonService
      * @return bool
+     * @throws Exception
      */
-    public function saveFromRequest(Request $request): bool
+    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService): bool
     {
         $result = false;
 
@@ -630,7 +632,7 @@ class DungeonRoute extends Model
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty     = 1;
-        $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
+        $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
         $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient              = $request->get('pull_gradient', '');
@@ -650,6 +652,9 @@ class DungeonRoute extends Model
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
+
+        // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
+        $this->unsetRelations();
 
 
         // Update or insert it
@@ -712,24 +717,35 @@ class DungeonRoute extends Model
                 }
             }
 
-            $newAffixes = $request->get('affixes', []);
+            $newAffixes = $request->get('route_select_affixes', []);
             if (!empty($newAffixes)) {
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
+
                 foreach ($newAffixes as $value) {
+                    // Skip any affixes that don't exist, and don't match our current expansion
+                    if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                        continue;
+                    }
+
                     /** @var AffixGroup $affixGroup */
-                    $affixGroup = AffixGroup::findOrNew($value);
+                    $affixGroup = AffixGroup::find($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
                     if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
                         continue;
                     }
 
-                    $drAffixGroup                   = new DungeonRouteAffixGroup();
-                    $drAffixGroup->affix_group_id   = $affixGroup->id;
-                    $drAffixGroup->dungeon_route_id = $this->id;
-                    $drAffixGroup->save();
+                    DungeonRouteAffixGroup::create([
+                        'affix_group_id'   => $affixGroup->id,
+                        'dungeon_route_id' => $this->id,
+                    ]);
                 }
+
+                // Reload the affixes relation
+                $this->load('affixes');
+            } else if ($new) {
+                $this->ensureAffixGroup($seasonService);
             }
 
             // Instantly generate a placeholder thumbnail for new routes.
@@ -779,9 +795,7 @@ class DungeonRoute extends Model
         $dungeonroute->author_id          = Auth::id();
         $dungeonroute->dungeon_id         = $this->dungeon_id;
         $dungeonroute->faction_id         = $this->faction_id;
-        $dungeonroute->published_state_id = $unpublished ?
-            PublishedState::where('name', PublishedState::UNPUBLISHED)->first()->id :
-            $this->published_state_id;
+        $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
         // $dungeonroute->team_id = $this->team_id;
         $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
@@ -859,7 +873,6 @@ class DungeonRoute extends Model
         $result = false;
         $user   = Auth::user();
         if ($user !== null) {
-            // @TODO Probably going to want an index on this one
             $rating = DB::table('dungeon_route_ratings')
                 ->where('dungeon_route_id', '=', $this->id)
                 ->where('user_id', '=', $user->id)
@@ -979,29 +992,27 @@ class DungeonRoute extends Model
      */
     public function getMostRelevantAffixGroup(): ?AffixGroup
     {
-            $seasonService     = App::make(SeasonService::class);
+        $seasonService = App::make(SeasonService::class);
         return $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 
-        $result = null;
-
-        if ($this->affixgroups->isNotEmpty()) {
-            $result = $this->affixgroups->first;
-
-            /** @var SeasonService $seasonService */
-            $seasonService     = App::make(SeasonService::class);
-            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
-
-            dd($currentAffixGroup);
-
-            foreach ($this->affixgroups as $affixgroup) {
-                if ($affixgroup->id === $currentAffixGroup->id) {
-                    $result = $affixgroup;
-                    break;
-                }
-            }
-        }
-
-        return $result;
+//        $result = null;
+//
+//        if ($this->affixgroups->isNotEmpty()) {
+//            $result = $this->affixgroups->first;
+//
+//            /** @var SeasonService $seasonService */
+//            $seasonService     = App::make(SeasonService::class);
+//            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+//
+//            foreach ($this->affixgroups as $affixgroup) {
+//                if ($affixgroup->id === $currentAffixGroup->id) {
+//                    $result = $affixgroup;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        return $result;
     }
 
     /**
@@ -1038,6 +1049,37 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @inheritDoc
+     */
+    public function touch()
+    {
+        DungeonRoute::dropCaches($this->id);
+
+        parent::touch();
+    }
+
+    /**
+     * Creates a missing
+     * @param SeasonServiceInterface $seasonService
+     * @return void
+     * @throws Exception
+     */
+    private function ensureAffixGroup(SeasonServiceInterface $seasonService)
+    {
+        if ($this->affixgroups()->count() === 0) {
+            $currentSeason = $seasonService->getCurrentSeason($this->dungeon->expansion);
+            // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
+            DungeonRouteAffixGroup::create([
+                'affix_group_id'   => optional($currentSeason->getCurrentAffixGroup())->id ?? $currentSeason->affixgroups->first()->id,
+                'dungeon_route_id' => $this->id,
+            ]);
+
+            // Make sure the relation should be reloaded
+            $this->unsetRelation('affixgroups');
+        }
+    }
+
+    /**
      * Drops any caches associated with this dungeon route
      * @param int $dungeonRouteId
      */
@@ -1050,16 +1092,6 @@ class DungeonRoute extends Model
             Cache::delete(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
         } catch (InvalidArgumentException $e) {
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function touch()
-    {
-        DungeonRoute::dropCaches($this->id);
-
-        parent::touch();
     }
 
 

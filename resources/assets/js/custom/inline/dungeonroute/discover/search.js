@@ -12,16 +12,17 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.loading = false;
         this.hasMore = true;
 
-        this.filters = [
-            new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
-            new SearchFilterTitle('#title', this._search.bind(this)),
-            new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            new SearchFilterAffixGroups('#filter_affixes', this._search.bind(this)),
-            new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
-            new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
-            new SearchFilterRating('#rating', this._search.bind(this)),
-            new SearchFilterUser('#user', this._search.bind(this)),
-        ];
+        this.filters = {
+            'expansion': new SearchFilterManualExpansion(this._search.bind(this)),
+            'dungeons': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
+            'title': new SearchFilterTitle('#title', this._search.bind(this)),
+            'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'affixgroups': new SearchFilterAffixGroups(`.filter_affix.${this.options.currentExpansion} select`, this._search.bind(this)),
+            'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
+            'enemy_forces': new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
+            'rating': new SearchFilterRating('#rating', this._search.bind(this)),
+            'user': new SearchFilterUser('#user', this._search.bind(this)),
+        };
     }
 
     /**
@@ -42,22 +43,24 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         // Find the query parameters
         for (let key in queryParams) {
-            if (queryParams.hasOwnProperty(key)) {
+            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(key)) {
                 let value = queryParams[key];
 
-                // Find the appropriate filter
-                for (let filterIndex in this.filters) {
-                    if (this.filters.hasOwnProperty(filterIndex)) {
-                        let filter = this.filters[filterIndex];
-                        // Find the filter and apply the value to the filter (use startsWith to catch array values)
-                        if (key.startsWith(filter.options.name)) {
-                            filter.setValue(value);
-                            break;
-                        }
-                    }
-                }
+                this.filters[key].setValue(value);
             }
         }
+
+        // Restore selected expansion tab
+        if (this.filters.expansion.getValue() !== '') {
+            $(`#${this.filters.expansion.getValue()}-search-tab`).tab('show');
+        }
+
+        // Whenever the tab is changed, apply the new filter
+        $('#search_expansion_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            let expansion = $(e.target).data('expansion');
+
+            self._selectExpansion(expansion);
+        });
 
         this.$loadMore = $('#route_list_load_more');
 
@@ -69,8 +72,26 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
+        this._selectExpansion(this.options.currentExpansion);
+
         // Show some not very useful routes to get people to start using the filters
         this._search();
+    }
+
+    /**
+     *
+     * @param expansion {String}
+     * @private
+     */
+    _selectExpansion(expansion) {
+        $(`#search_expansion_dungeon .grid_dungeon`).removeClass('selectable').filter(`.${expansion}`).addClass('selectable');
+        this.filters.expansion.setValue(expansion);
+
+        // Update the affix group list
+        this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
+        this.filters.affixgroups.activate();
+
+        $(`.filter_affix`).hide().filter(`.${expansion}`).show();
     }
 
     /**
@@ -141,7 +162,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                     $('#route_list_overlay').show();
                 },
                 success: function (html, textStatus, xhr) {
-                    console.log(html, textStatus, xhr);
                     self.hasMore = xhr.status !== 204;
                     if (self.hasMore) {
                         // Increase the offset so that we load new rows whenever we fetch more

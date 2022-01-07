@@ -1,6 +1,7 @@
 <?php
-/** @var \App\Models\DungeonRoute $dungeonroute */
-$publishStates          = \App\Models\PublishedState::all()->pluck('name');
+/** @var $allPublishedStates \Illuminate\Support\Collection|\App\Models\PublishedState[] */
+/** @var $dungeonroute \App\Models\DungeonRoute */
+$publishStates          = $allPublishedStates->pluck('name');
 $publishStatesAvailable = \App\Models\PublishedState::getAvailablePublishedStates($dungeonroute, Auth::user());
 ?>
 

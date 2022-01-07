@@ -3,10 +3,11 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\RaidMarker;
+use App\Models\Timewalking\TimewalkingEventAffixGroup;
 
 /**
  * Trait DungeonRouteTrait
@@ -48,7 +49,7 @@ trait DungeonRouteTrait
             'uniqueAffixes'           => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
                 return $affixGroup->affixes;
             })->collapse()->unique()->pluck(['name'])->map(function (string $name) {
-                return __($name);
+                return __($name, [], 'en');
             }),
         ];
     }

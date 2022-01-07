@@ -1,0 +1,47 @@
+{
+    "id": 118,
+    "release_changelog_id": 125,
+    "version": "v4.4",
+    "title": "Better (Legion) timewalking support",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2021-12-11T16:57:55+00:00",
+    "updated_at": "2022-01-06T21:46:54+00:00",
+    "changelog": {
+        "id": 125,
+        "release_id": 118,
+        "description": "I had hoped to push this update a lot sooner, but unfortunately the scope of all changes required was underestimated. To make a long story short, the site worked with having a single season with affixes going on at once. With the introduction of M+ timewalking this was no longer true. I had to rewrite a lot of parts of the site that you won't see to make all this work nicely. But at least it's now sorted and if Blizzard releases BFA timewalking (matter of time really) there will hardly be any work left at all. Thanks for your patience!",
+        "changes": [
+            {
+                "release_changelog_id": 125,
+                "release_changelog_category_id": 1,
+                "ticket_id": 931,
+                "change": "Legion timewalking affixes are now displayed on the affixes page. All Legion routes are now assigned affixes that are only available for Legion dungeons. Creating a Legion route now only allows you to select Legion affixes. Searching for routes now also supports multiple expansions. Many, many optimizations have been performed as part of this as well.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 125,
+                "release_changelog_category_id": 1,
+                "ticket_id": 935,
+                "change": "Additional background images are now displayed on the route discover pages.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 125,
+                "release_changelog_category_id": 5,
+                "ticket_id": 930,
+                "change": "Embedding a route now looks better if you view it on mobile.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

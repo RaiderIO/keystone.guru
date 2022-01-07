@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class NpcClassification extends CacheModel
 {
     public $hidden = ['created_at', 'updated_at'];
-    protected $fillable = ['name', 'color'];
+    protected $fillable = ['id', 'name', 'shortname', 'color'];
 
     const NPC_CLASSIFICATION_NORMAL     = 'normal';
     const NPC_CLASSIFICATION_ELITE      = 'elite';
@@ -24,10 +24,10 @@ class NpcClassification extends CacheModel
     const NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
 
     const ALL = [
-        self::NPC_CLASSIFICATION_NORMAL,
-        self::NPC_CLASSIFICATION_ELITE,
-        self::NPC_CLASSIFICATION_BOSS,
-        self::NPC_CLASSIFICATION_FINAL_BOSS,
+        self::NPC_CLASSIFICATION_NORMAL     => 1,
+        self::NPC_CLASSIFICATION_ELITE      => 2,
+        self::NPC_CLASSIFICATION_BOSS       => 3,
+        self::NPC_CLASSIFICATION_FINAL_BOSS => 4,
     ];
 
     /**
@@ -35,7 +35,7 @@ class NpcClassification extends CacheModel
      *
      * @return HasMany
      */
-    function npcs()
+    function npcs(): HasMany
     {
         return $this->hasMany('App\Models\Npc');
     }

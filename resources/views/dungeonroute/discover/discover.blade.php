@@ -1,5 +1,6 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
     'breadcrumbs' => 'dungeonroutes.expansion',
     'breadcrumbsParams' => [$expansion],
     'title' => __('views/dungeonroute.discover.discover.title')
@@ -7,10 +8,10 @@
 
 <?php
 /**
- * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup
- * @var $nextAffixGroup \App\Models\AffixGroup
  * @var $expansion \App\Models\Expansion
+ * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -19,9 +20,14 @@
 ])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
+
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
+            'expansion' => $expansion,
             'dungeons' => $gridDungeons,
+            'currentAffixGroup' => $currentAffixGroup,
+            'nextAffixGroup' => $nextAffixGroup,
             'colCount' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION ? 3 : 4,
             'links' => $gridDungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
@@ -30,20 +36,22 @@
     </div>
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular'),
         'link' => route('dungeonroutes.popular', ['expansion' => $expansion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
-        'showMore' => false,
+        'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
     ])
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
         'link' => route('dungeonroutes.thisweek', ['expansion' => $expansion]),
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
-        'showMore' => true,
+        'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
     ])
 
@@ -54,21 +62,23 @@
     @endif
 
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
         'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
         // The next week's affix group is current for that week
         'currentAffixGroup' => $nextAffixGroup,
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
-        'showMore' => true,
+        'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
     ])
     @include('dungeonroute.discover.panel', [
+        'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.newly_published_routes'),
         'link' => route('dungeonroutes.new', ['expansion' => $expansion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
-        'showMore' => true,
+        'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
         'cache' => false,
     ])

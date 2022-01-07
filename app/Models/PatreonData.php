@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,7 +20,7 @@ use Illuminate\Support\Collection;
  * @property User $user
  * @property Collection|PaidTier[] $paidtiers
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class PatreonData extends Model
 {
@@ -25,25 +29,25 @@ class PatreonData extends Model
     protected $visible = ['paidtiers'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    function user()
+    function user(): HasOne
     {
         return $this->hasOne('App\User');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function tiers()
+    function tiers(): HasMany
     {
         return $this->hasMany('App\Models\PatreonTier');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return BelongsToMany
      */
-    function paidtiers()
+    function paidtiers(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\PaidTier', 'patreon_tiers');
     }
@@ -53,8 +57,8 @@ class PatreonData extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
-            PatreonTier::where('patreon_data_id', '=', $item->id)->delete();
+        static::deleting(function (PatreonData $item) {
+            $item->tiers()->delete();
         });
     }
 }

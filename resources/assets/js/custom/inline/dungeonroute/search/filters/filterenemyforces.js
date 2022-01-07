@@ -1,7 +1,6 @@
 class SearchFilterEnemyForces extends SearchFilter {
     constructor(selector, onChange) {
         super({
-            name: 'enemy_forces',
             selector: selector,
             onChange: onChange
         });
@@ -18,7 +17,7 @@ class SearchFilterEnemyForces extends SearchFilter {
     }
 
     setValue(value) {
-        if (value) {
+        if (parseInt(value) === 1) {
             $(this.options.selector).attr('checked', 'checked');
         } else {
             $(this.options.selector).removeAttr('checked');

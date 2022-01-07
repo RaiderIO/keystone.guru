@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AffixGroup\AffixGroupEaseTier;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,6 +34,6 @@ class SubcreationEaseTierPull extends CacheModel
      */
     public function affixgroupeasetiers()
     {
-        return $this->hasMany('App\Models\AffixGroupEaseTier');
+        return $this->hasMany('App\Models\AffixGroup\AffixGroupEaseTier');
     }
 }

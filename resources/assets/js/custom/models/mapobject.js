@@ -1,8 +1,8 @@
 /**
- * @property id int
- * @property faction string
- * @property teeming string
- * @property local bool
+ * @property {Number} id
+ * @property {String} faction
+ * @property {String} teeming
+ * @property {Boolean} local
  */
 class MapObject extends Signalable {
 

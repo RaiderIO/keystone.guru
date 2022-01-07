@@ -3,7 +3,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\AffixGroup;
+use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +18,8 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
@@ -25,7 +27,7 @@ class DevDiscoverService extends BaseDiscoverService
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
-//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+//            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false);
     }
@@ -37,6 +39,8 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
+        $this->ensureExpansion();
+
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
@@ -44,7 +48,7 @@ class DevDiscoverService extends BaseDiscoverService
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
-//            ->where('dungeon_routes.published_state_id', PublishedState::where('name', PublishedState::WORLD)->first()->id)
+//            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)
             ->orderBy('published_at', 'desc');
@@ -69,7 +73,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -77,7 +81,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularGroupedByDungeonByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -93,7 +97,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
@@ -109,7 +113,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByAffixGroup(AffixGroup $affixGroup): Collection
+    function newByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
@@ -125,7 +129,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
@@ -142,7 +146,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByAffixGroup(AffixGroup $affixGroup): Collection
+    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
         return collect();
@@ -160,7 +164,7 @@ class DevDiscoverService extends BaseDiscoverService
     /**
      * @inheritDoc
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
         return collect();
