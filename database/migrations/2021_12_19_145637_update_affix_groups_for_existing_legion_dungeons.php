@@ -29,10 +29,12 @@ class UpdateAffixGroupsForExistingLegionDungeons extends Migration
                 DungeonRouteAffixGroup::where('dungeon_route_id', $dungeonRoute->id)->delete();
 
                 // Give the dungeon route new affix groups
-                DungeonRouteAffixGroup::create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'affix_group_id'   => $season->affixgroups->first()->id // first affix in Legion
-                ]);
+                foreach ($season->affixgroups as $affixGroup) {
+                    DungeonRouteAffixGroup::create([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'affix_group_id'   => $affixGroup->id,
+                    ]);
+                }
             }
         } else {
             logger()->info('Unable to migrate existing affix groups for current Legion dungeons - assuming this is a fresh install and no routes can be updated anyways');
