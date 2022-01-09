@@ -92,6 +92,48 @@ class Dungeon extends CacheModel
     const DUNGEON_THE_NECROTIC_WAKE     = 'necroticwake_a';
     const DUNGEON_THEATER_OF_PAIN       = 'theaterofpain';
 
+    const ALL_LEGION = [
+        self::DUNGEON_ARCWAY,
+        self::DUNGEON_BLACK_ROOK_HOLD,
+        self::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT,
+        self::DUNGEON_COURT_OF_STARS,
+        self::DUNGEON_DARKHEART_THICKET,
+        self::DUNGEON_EYE_OF_AZSHARA,
+        self::DUNGEON_HALLS_OF_VALOR,
+        self::DUNGEON_LOWER_KARAZHAN,
+        self::DUNGEON_MAW_OF_SOULS,
+        self::DUNGEON_NELTHARIONS_LAIR,
+        self::DUNGEON_UPPER_KARAZHAN,
+        self::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
+        self::DUNGEON_VAULT_OF_THE_WARDENS,
+    ];
+
+    const ALL_BFA = [
+        self::DUNGEON_ATAL_DAZAR,
+        self::DUNGEON_FREEHOLD,
+        self::DUNGEON_KINGS_REST,
+        self::DUNGEON_SHRINE_OF_THE_STORM,
+        self::DUNGEON_SIEGE_OF_BORALUS,
+        self::DUNGEON_TEMPLE_OF_SETHRALISS,
+        self::DUNGEON_THE_MOTHERLODE,
+        self::DUNGEON_THE_UNDERROT,
+        self::DUNGEON_TOL_DAGOR,
+        self::DUNGEON_WAYCREST_MANOR,
+        self::DUNGEON_MECHAGON_JUNKYARD,
+        self::DUNGEON_MECHAGON_WORKSHOP,
+    ];
+
+    const ALL_SHADOWLANDS = [
+        self::DUNGEON_DE_OTHER_SIDE,
+        self::DUNGEON_HALLS_OF_ATONEMENT,
+        self::DUNGEON_MISTS_OF_TIRNA_SCITHE,
+        self::DUNGEON_PLAGUEFALL,
+        self::DUNGEON_SANGUINE_DEPTHS,
+        self::DUNGEON_SPIRES_OF_ASCENSION,
+        self::DUNGEON_THE_NECROTIC_WAKE,
+        self::DUNGEON_THEATER_OF_PAIN,
+    ];
+
 
     /**
      * https://stackoverflow.com/a/34485411/771270

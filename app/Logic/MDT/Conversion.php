@@ -69,9 +69,9 @@ class Conversion
     /**
      * Rounds a number to the nearest two decimals.
      * @param $nr
-     * @return float|int
+     * @return int
      */
-    private static function _round($nr)
+    private static function round($nr) : int
     {
         return (int)($nr * 100) / 100;
     }
@@ -151,7 +151,7 @@ class Conversion
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
-        return ['lat' => self::_round($xy['y'] / 2.185), 'lng' => self::_round($xy['x'] / 2.185)];
+        return ['lat' => self::round($xy['y'] / 2.185), 'lng' => self::round($xy['x'] / 2.185)];
     }
 
     /**
