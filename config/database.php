@@ -68,6 +68,21 @@ return [
         ],
 
         /** Special user for running migrations with more permissions */
+        'phpunit' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST', '127.0.0.1'),
+            'port'      => env('DB_PORT', '3306'),
+            'database'  => env('DB_PHPUNIT_DATABASE', 'forge'),
+            'username'  => env('DB_PHPUNIT_USERNAME', 'forge'),
+            'password'  => env('DB_PHPUNIT_PASSWORD', ''),
+            'charset'   => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+            'strict'    => true,
+            'engine'    => null,
+        ],
+
+        /** Special user for running migrations with more permissions */
         'tracker' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', '127.0.0.1'),
