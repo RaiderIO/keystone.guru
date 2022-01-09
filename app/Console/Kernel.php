@@ -83,7 +83,7 @@ class Kernel extends ConsoleKernel
         DeleteExpiredDungeonRoutes::class,
 
         // Test
-        Test::class,
+//        Test::class,
 
         // View
         Cache::class,
