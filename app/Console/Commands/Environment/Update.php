@@ -14,6 +14,7 @@ class Update extends Command
         'local'   => false,
         'mapping' => true,
         'staging' => true,
+        'testing' => true,
     ];
 
     const COMPILE_AS = [
@@ -21,6 +22,7 @@ class Update extends Command
         'local'   => 'dev',
         'mapping' => 'production',
         'staging' => 'dev',
+        'testing' => 'dev',
     ];
 
     const OPTIMIZE = [
@@ -28,6 +30,7 @@ class Update extends Command
         'local'   => false,
         'mapping' => true,
         'staging' => true,
+        'testing' => false,
     ];
 
     /**
