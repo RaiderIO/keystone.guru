@@ -22,5 +22,5 @@ interface SeasonServiceInterface
 
     function getAffixGroupIndexAt(Carbon $date, ?Expansion $expansion = null): int;
 
-    function getDisplayedAffixGroups(int $iterationOffset, ?Expansion $expansion = null): Collection;
+    function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

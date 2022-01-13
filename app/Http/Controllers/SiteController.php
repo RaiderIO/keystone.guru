@@ -6,15 +6,17 @@ use App\Models\DungeonRoute;
 use App\Models\Release;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -55,10 +57,25 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
+     * @param ExpansionServiceInterface $expansionService
      * @return Factory|View
+     * @throws Exception
      */
-    public function credits(Request $request)
+    public function credits(Request $request, ExpansionServiceInterface $expansionService, SeasonServiceInterface $seasonService)
     {
+        $expansion = $expansionService->getCurrentExpansion();
+
+        $season = $expansionService->getCurrentSeason($expansion);
+        $date   = Carbon::createFromDate(2021, Carbon::JULY, 7);
+
+        dd(
+            $seasonService->getAffixGroupIndexAt($date, $expansion),
+            $season->affixgroups[6]->text,
+            $season->affixgroups->get(6)->text,
+            $season->affixgroups->get(7)->text,
+            $season->getAffixGroupAt($date)->text
+        );
+
         return view('misc.credits');
     }
 

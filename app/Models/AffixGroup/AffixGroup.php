@@ -24,6 +24,7 @@ class AffixGroup extends AffixGroupBase
 {
     public $fillable = ['season_id', 'seasonal_index'];
 
+
     protected function getAffixGroupCouplingsTableName(): string
     {
         return 'affix_group_couplings';
