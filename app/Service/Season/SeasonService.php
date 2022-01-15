@@ -7,7 +7,6 @@ use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
-use App\Service\Expansion\ExpansionServiceInterface;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -145,62 +144,71 @@ class SeasonService implements SeasonServiceInterface
      * @param $iterationOffset int An optional offset to display affixes in the past or future.
      * @return Collection
      * @throws Exception
+     * @todo This can be further improved with some mathy things, but for now it's quick enough
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection
     {
+        $seasons = Season::selectRaw('seasons.*')
+            ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
+            ->whereNull('timewalking_events.id')
+            ->orderBy('start')->get();
+
+        /** @var Season $currentSeason */
+        $currentSeason = $seasons->shift();
+        /** @var Season $nextSeason */
+        $nextSeason       = $seasons->shift();
+        $firstSeasonStart = $currentSeason->start();
+        $affixCount       = config('keystoneguru.season_iteration_affix_group_count');
+
+
+        // Ensure that we cannot go beyond the start of the first season - there's nothing before that
+        $beginDate           = $this->getUserNow()->addWeeks($iterationOffset * $affixCount)->maximum($firstSeasonStart);
+        $weeksSinceBeginning = $currentSeason->getWeeksSinceStartAt($beginDate);
+
         /** @var CacheServiceInterface $cacheService */
 //        $cacheService = App::make(CacheServiceInterface::class);
-
 //        return $cacheService->remember(sprintf('displayed_affix_groups_%d', $iterationOffset), function () use ($iterationOffset)
 //        {
         // Gotta start at the beginning to work out what we should display
-        $firstSeason = Season::first();
 
         // We're going to solve this by starting at the beginning, and then simulating all the M+ weeks so far.
         // Since seasons may start/end at any time during the iteration of affix groups, we need to start at the
         // beginning and add affixes. Once we've simulated everything in the past up until and including the current
         // iteration, we can take off 12 affix groups and return those as those are the affixes we should display!
-        $affixCount = config('keystoneguru.season_iteration_affix_group_count');
         // This formula should be changed if there's seasons which deviate from the usual amount of affix groups in an
         // iteration (currently 12).
-
-        $firstSeasonStart    = $firstSeason->start();
-        $now                 = $this->getUserNow()->addWeeks($iterationOffset * $affixCount)->maximum($firstSeasonStart);
-        $weeksSinceBeginning = $firstSeason->getWeeksSinceStartAt($now);
-
-        $expansionService = resolve(ExpansionServiceInterface::class);
 
         $weeksSinceBeginning = (floor($weeksSinceBeginning / $affixCount) + 1) * $affixCount;
 
         $affixGroups = new Collection();
-        // Add 1 week so that we can always have a next or previous week on the charts, regardless of where we are.
-        // That additional week is used to fetch the first row of the next week
-        try {
-            $expansion = $expansionService->getExpansionAt($firstSeasonStart);
-            for ($i = 0; $i < $weeksSinceBeginning + 1; $i++) {
-                /** $firstSeasonStart will contain the current date we're iterating on; so it's kinda misleading. This comment should eliminate that */
-                $season    = $this->getSeasonAt($firstSeasonStart, $expansion);
-
-                // Get the affix group index
-                $affixGroupIndex = $this->getAffixGroupIndexAt($firstSeasonStart, $expansion);
-
-                $affixGroups->push([
-                    'date_start' => $firstSeasonStart->copy(),
-                    // Get the actual affix group from the season
-                    'affixgroup' => $season->affixgroups[$affixGroupIndex],
-                ]);
-
-                // Add another week and continue..
-                $firstSeasonStart->addWeek();
+        // Add two weeks so that we can show an additional affix before and after the list so that we can always see what's coming up next
+        $affixCountToReturn   = $affixCount + 2;
+        $simulatedTime        = $firstSeasonStart->copy();
+        $totalWeeksToSimulate = $weeksSinceBeginning + 1;
+        for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
+            if ($nextSeason !== null) {
+                // If we should switch to the next season...
+                if ($simulatedTime->gt($nextSeason->start())) {
+                    // Move to the next season
+                    $currentSeason = $nextSeason;
+                    $nextSeason    = $seasons->shift();
+                }
             }
 
-        } catch (Exception $ex) {
-            dd($expansion, $firstSeasonStart, $season->start(), $season, $affixGroups->last());
+            // Keep this affix group (or not)
+            if (($totalWeeksToSimulate - $i) <= $affixCountToReturn) {
+                // Append to the list of when we have which affix groups
+                $affixGroups->push([
+                    'date_start' => $simulatedTime->copy(),
+                    'affixgroup' => $currentSeason->affixgroups[$i % $affixCount],
+                ]);
+            }
+
+            // Add another week and continue..
+            $simulatedTime->addWeek();
         }
 
-        // Subtract TWO weeks since we simulated another week to fetch the first affix of that week.
-        // Then, fetch an additional TWO affixes, one to show extra at the top, one to show extra at the bottom
-        return $affixGroups->slice($affixGroups->count() - ($affixCount + 2), $affixCount + 2);
+        return $affixGroups;
 //        }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
     }
 }

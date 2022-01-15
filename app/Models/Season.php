@@ -35,7 +35,7 @@ class Season extends CacheModel
     public $timestamps = false;
 
     /** @var boolean|null Cache for if we're a timewalking season or not */
-    private $isTimewalkingSeason = null;
+    private ?bool $isTimewalkingSeason = null;
 
     /**
      * @return BelongsTo
