@@ -1,0 +1,27 @@
+{
+    "id": 120,
+    "release_changelog_id": 127,
+    "version": "v4.4.2",
+    "title": "Fixed affixes page and calculations on what the current affixes should be",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-01-15T16:23:32+00:00",
+    "updated_at": "2022-01-15T16:23:32+00:00",
+    "changelog": {
+        "id": 127,
+        "release_id": 120,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 127,
+                "release_changelog_category_id": 5,
+                "ticket_id": 946,
+                "change": "Fixed affixes page and calculations on what the current affixes should be",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
