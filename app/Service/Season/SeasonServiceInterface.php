@@ -12,15 +12,15 @@ interface SeasonServiceInterface
 {
     function getSeasons(?Expansion $expansion = null): Collection;
 
-    function getFirstSeason(?Expansion $expansion = null): Season;
+    function getFirstSeason(): Season;
 
     function getSeasonAt(Carbon $date, ?Expansion $expansion = null);
 
     function getCurrentSeason(?Expansion $expansion = null): ?Season;
 
-    function getIterationsAt(Carbon $date, ?Expansion $expansion = null): int;
+    function getIterationsAt(Carbon $date): int;
 
-    function getAffixGroupIndexAt(Carbon $date, ?Expansion $expansion = null): int;
+    function getAffixGroupIndexAt(Carbon $date): int;
 
     function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

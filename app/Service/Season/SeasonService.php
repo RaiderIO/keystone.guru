@@ -29,10 +29,14 @@ class SeasonService implements SeasonServiceInterface
     /** @var ExpansionService */
     private $expansionService;
 
+    /** @var Season */
+    private $firstSeasonCache = null;
+
     public function __construct()
     {
         $this->expansionService = App::make(ExpansionService::class);
         $this->seasonCache      = collect();
+        $this->firstSeasonCache = null;
     }
 
     /**
@@ -43,20 +47,33 @@ class SeasonService implements SeasonServiceInterface
     {
         $expansion = $expansion ?? $this->expansionService->getCurrentExpansion();
 
-        if ($this->seasonCache->get($expansion->id) === null) {
-            $this->seasonCache->put($expansion->id, Season::where('expansion_id', $expansion->id)->get());
+        if ($this->seasonCache->empty()) {
+            $this->seasonCache = Season::selectRaw('seasons.*')
+                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
+                ->whereNull('timewalking_events.id')
+                ->orderBy('seasons.start')
+                ->get();
         }
 
-        return $this->seasonCache->get($expansion->id);
+        return $this->seasonCache->when($expansion !== null, function (Collection $seasonCache) use ($expansion) {
+            return $seasonCache->where('expansion_id', $expansion->id);
+        });
     }
 
     /**
-     * @param Expansion|null $expansion
      * @return Season
      */
-    public function getFirstSeason(?Expansion $expansion = null): Season
+    public function getFirstSeason(): Season
     {
-        return $this->getSeasons($expansion)->first();
+        if ($this->firstSeasonCache === null) {
+            $this->firstSeasonCache = Season::selectRaw('seasons.*')
+                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
+                ->whereNull('timewalking_events.id')
+                ->orderBy('seasons.start')
+                ->limit(1)
+                ->first();
+        }
+        return $this->firstSeasonCache;
     }
 
     /**
@@ -67,18 +84,16 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getSeasonAt(Carbon $date, ?Expansion $expansion = null): ?Season
     {
-        $seasons = $this->getSeasons($expansion)->reverse();
-        /** @var Season $season By default get the first season - which is the last in the reversed collection */
-        $season = $seasons->last();
-
-        foreach ($seasons as $seasonCandidate) {
-            /** @var Season $seasonCandidate */
-            // Get the season that's the most recent
-            if ($date->gte($seasonCandidate->start())) {
-                $season = $seasonCandidate;
-                break;
-            }
+        if ($expansion === null) {
+            $expansion = $this->expansionService->getCurrentExpansion();
         }
+
+        /** @var Season $season */
+        $season = Season::where('start', '<', $date)
+            ->where('expansion_id', $expansion->id)
+            ->orderBy('start', 'desc')
+            ->limit(1)
+            ->first();
 
         if ($season === null) {
             logger()->error('Season is null for date', [
@@ -90,22 +105,25 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @param Expansion|null $expansion
+     * @param Expansion|null $expansion The expansion you want the current season for - or null to get it for the current expansion.
      * @return Season|null The season that's currently active, or null if none is active at this time.
      */
     public function getCurrentSeason(?Expansion $expansion = null): ?Season
     {
+        if ($expansion === null) {
+            $expansion = $this->expansionService->getCurrentExpansion();
+        }
+
         return $this->getSeasonAt($this->getUserNow(), $expansion);
     }
 
     /**
      * @param $date Carbon The date at which you want to know the full iterations that have been done since then.
-     * @param Expansion|null $expansion
      * @return int The amount of iterations done since all time starting Mythic Plus.
      */
-    public function getIterationsAt(Carbon $date, ?Expansion $expansion = null): int
+    public function getIterationsAt(Carbon $date): int
     {
-        $seasonsStart = $this->getFirstSeason($expansion);
+        $seasonsStart = $this->getFirstSeason();
 
         $weeksSinceStart = $seasonsStart->getWeeksSinceStartAt($date);
 
@@ -117,18 +135,18 @@ class SeasonService implements SeasonServiceInterface
      * Get the index in the list of affix groups that we're currently at. Each season has 12 affix groups per iteration.
      * We can calculate where exactly we are in the current iteration, we just don't know the affix group that represents
      * that index, that's up to the current season.
+     *
      * @param Carbon $date
-     * @param Expansion|null $expansion
      * @return int
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, ?Expansion $expansion = null): int
+    public function getAffixGroupIndexAt(Carbon $date): int
     {
-        $iterationsSinceDate = $this->getIterationsAt($date, $expansion);
+        $iterationsSinceDate = $this->getIterationsAt($date);
 
-        $season      = $this->getFirstSeason($expansion);
+        $season      = $this->getFirstSeason();
         $currentDate = $season->start();
-        $currentDate->addWeeks($iterationsSinceDate * $season->affixgroups()->count());
+        $currentDate->addWeeks($iterationsSinceDate * config('keystoneguru.season_iteration_affix_group_count'));
 
         if ($currentDate->gt($date)) {
             throw new Exception('Iteration calculation is wrong; cannot find the affix group at a specific time because the current date is past the target date!');
