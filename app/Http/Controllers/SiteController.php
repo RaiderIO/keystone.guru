@@ -11,7 +11,6 @@ use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -153,7 +152,7 @@ class SiteController extends Controller
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
             'seasonService'           => $seasonService,
-            'offset'                  => (int)$request->get('offset', 0),
+            'offset'                  => max(min((int)$request->get('offset', 0), 10), -20),
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
