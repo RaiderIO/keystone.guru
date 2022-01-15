@@ -12,10 +12,10 @@ class ConversionTest extends TestCase
      * A basic test example.
      *
      * @return void
-     * @dataProvider providerGetExpansionName_ShouldBeCorrect
+     * @dataProvider checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider
      * @group
      */
-    public function testGetExpansionName_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey)
+    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey)
     {
         // Test
         $expansionKey = Conversion::getExpansionName($dungeonKey);
@@ -27,7 +27,7 @@ class ConversionTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetExpansionName_ShouldBeCorrect(): array
+    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
         $result = [];
         foreach (Dungeon::ALL_LEGION as $dungeonKey) {
