@@ -35,7 +35,7 @@ class Season extends CacheModel
     public $timestamps = false;
 
     /** @var boolean|null Cache for if we're a timewalking season or not */
-    private $isTimewalkingSeason = null;
+    private ?bool $isTimewalkingSeason = null;
 
     /**
      * @return BelongsTo
@@ -206,7 +206,6 @@ class Season extends CacheModel
             throw new Exception('Cannot find an affix group of this season before it\'s started!');
         }
 
-        $result = null;
         /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
             $timewalkingEventService = resolve(TimewalkingEventService::class);
@@ -218,6 +217,7 @@ class Season extends CacheModel
 
             // Get the affix group which occurs after a few weeks and return that
             $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $this->expansion);
+
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
             $result = $affixGroupIndex < $this->affixgroups->count() ? $this->affixgroups[$affixGroupIndex] : null;

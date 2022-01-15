@@ -1,6 +1,7 @@
 <?php namespace App\Http\Middleware;
 
 use App\Logic\Utils\Counter;
+use App\Logic\Utils\Stopwatch;
 use Closure;
 use Debugbar;
 use Illuminate\Http\Request;
@@ -24,6 +25,10 @@ class DebugBarMessageLogger
                 Debugbar::info('CacheService details');
                 foreach (Counter::getAll() as $counter) {
                     Debugbar::info('- ' . $counter);
+                }
+                Debugbar::info('Stopwatch details');
+                foreach (Stopwatch::getAll() as $key => $time) {
+                    Debugbar::info('- ' . $key . ' -> ' . $time);
                 }
             }
         }
