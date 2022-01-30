@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Logic\Utils\Counter;
+use App\Logic\Utils\Stopwatch;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
@@ -14,6 +16,7 @@ use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
@@ -239,6 +242,34 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('profile.edit', function (View $view) use ($globalViewVariables) {
             $view->with('allClasses', $globalViewVariables['characterClasses']);
             $view->with('allRegions', $globalViewVariables['allRegions']);
+        });
+
+
+        // Custom blade directives
+        $expressionToStringContentsParser = function ($expression, $callback) {
+            $parameters = collect(explode(', ', $expression));
+
+            foreach ($parameters as $parameter) {
+                $callback(trim($parameter, '\'"'));
+            }
+        };
+
+        Blade::directive('count', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Counter::increase($parameter);
+            });
+        });
+
+        Blade::directive('measure', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Stopwatch::start($parameter);
+            });
+        });
+
+        Blade::directive('endmeasure', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Stopwatch::pause($parameter);
+            });
         });
     }
 }
