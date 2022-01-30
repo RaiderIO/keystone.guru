@@ -113,7 +113,7 @@ class Kernel extends ConsoleKernel
         // https://laravel.com/docs/8.x/horizon
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
-        if ($appType === 'local' || $appType === 'live') {
+        if ($appType === 'live') {
             $schedule->command('scheduler:telemetry')->everyFiveMinutes();
         }
 

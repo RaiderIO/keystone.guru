@@ -11,12 +11,23 @@ class RowElementKillZone extends RowElement {
         console.assert(killZonesSidebar instanceof CommonMapsKillzonessidebar, 'killZonesSidebar is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
+        let self = this;
+
         /** @type Boolean */
-        this._selected = false;
+        this.initialized = false;
+        /** @type Boolean */
+        this.selected = false;
         /** @type KillZone */
         this.killZone = killZone;
         /** @type Pickr|null */
         this.colorPicker = null;
+
+        getState().getDungeonMap().register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            console.log(mapStateChangedEvent);
+            if (mapStateChangedEvent.data.previousMapState instanceof AddKillZoneMapState) {
+                self.refresh();
+            }
+        });
     }
 
     /**
@@ -340,12 +351,13 @@ class RowElementKillZone extends RowElement {
              * Code to prevent calling refreshTooltips too often
              */
             let $killAreaLabel = $(`#map_killzonessidebar_killzone_${this.killZone.id}_kill_area_label`);
+            console.log($killAreaLabel.attr('data-haskillarea'), $killAreaLabel.data('haskillarea'), this.killZone.hasKillArea());
             // We are displaying 'has kill area' now (somehow using .data() does not work at all)
-            let $hasKillArea = $killAreaLabel.attr('data-haskillarea');
+            let $hasKillArea = parseInt($killAreaLabel.attr('data-haskillarea'));
 
             let resultMessage = '';
             // Set and is currently 0
-            if ($hasKillArea === '1' && !this.killZone.hasKillArea()) {
+            if (this.killZone.hasKillArea()) {
                 // It was not, update it
                 resultMessage = lang.get('messages.remove_kill_area_label');
             } else {
@@ -356,7 +368,7 @@ class RowElementKillZone extends RowElement {
             // Write result regardless
             // $killAreaLabel.attr('data-haskillarea', killZone.hasKillArea() ? '1' : '0');
             // If something was changed
-            if ($hasKillArea !== (this.killZone.hasKillArea() ? '1' : '0')) {
+            if (!this.initialized || $hasKillArea !== (this.killZone.hasKillArea() ? 1 : 0)) {
                 $killAreaLabel.attr('title', resultMessage).refreshTooltips();
             }
 
@@ -371,6 +383,8 @@ class RowElementKillZone extends RowElement {
                 console.warn('Color picker not found!', killZone, killZone.id);
             }
         }
+
+        this.initialized = true;
     }
 
     /**
@@ -383,10 +397,10 @@ class RowElementKillZone extends RowElement {
         let self = this;
 
         // Make it interactive
-        $(`#map_killzonessidebar_killzone_${self.killZone.id}.selectable`).bind('click', this._killZoneRowClicked);
+        $(`#map_killzonessidebar_killzone_${self.killZone.id}.selectable`).unbind('click').bind('click', this._killZoneRowClicked);
 
         if (this.killZonesSidebar.options.edit) {
-            $(`#map_killzonessidebar_killzone_${self.killZone.id}_color`).bind('click', function (clickedEvent) {
+            $(`#map_killzonessidebar_killzone_${self.killZone.id}_color`).unbind('click').bind('click', function (clickedEvent) {
                 // Only one at a time
                 let currentlyActiveColorPicker = self.killZonesSidebar.getCurrentlyActiveColorPicker();
                 if (currentlyActiveColorPicker !== null) {
@@ -397,7 +411,7 @@ class RowElementKillZone extends RowElement {
                 self.killZonesSidebar.setCurrentlyActiveColorPicker(self.colorPicker);
                 self.colorPicker.show();
             });
-            let $hasKillZone = $(`#map_killzonessidebar_killzone_${self.killZone.id}_has_killzone`).bind('click', function () {
+            let $hasKillZone = $(`#map_killzonessidebar_killzone_${self.killZone.id}_has_killzone`).unbind('click').bind('click', function () {
                 // Inject the selectable in the _selectKillZone call to simulate selecting the actual killzone
                 self._selectKillZoneByMapObject(self.killZone);
 
@@ -425,7 +439,7 @@ class RowElementKillZone extends RowElement {
                 // Was inactive (always starts inactive), is active now
                 $hasKillZone.button('toggle');
             }
-            $(`#map_killzonessidebar_killzone_${self.killZone.id}_delete`).bind('click', this._deleteKillZoneClicked);
+            $(`#map_killzonessidebar_killzone_${self.killZone.id}_delete`).unbind('click').bind('click', this._deleteKillZoneClicked);
             this.colorPicker = this._initColorPicker();
             // Small hack to get it to look better
             $(`#map_killzonessidebar_killzone_${self.killZone.id} .pcr-button`).addClass('h-100 w-100');
@@ -443,12 +457,12 @@ class RowElementKillZone extends RowElement {
 
         // Deselect if we were selected and shouldn't be
         let classes = 'selected bg-success';
-        if (this._selected && !selected) {
+        if (this.selected && !selected) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}.selected`).removeClass(classes);
         }
 
         // Select the new one if we should
-        if (!this._selected && selected) {
+        if (!this.selected && selected) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}.selectable`).addClass(classes);
 
             // Make sure we can see the killzone in the sidebar
@@ -458,7 +472,7 @@ class RowElementKillZone extends RowElement {
             }
         }
 
-        this._selected = selected;
+        this.selected = selected;
     }
 
     /**
@@ -498,5 +512,8 @@ class RowElementKillZone extends RowElement {
         // Unset it, ish
         this.colorPicker = null;
         $('#killzones_no_pulls').hide();
+
+
+        getState().getDungeonMap().unregister('map:mapstatechanged', this);
     }
 }
