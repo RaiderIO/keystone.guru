@@ -165,6 +165,7 @@ class EchoControls extends MapControl {
         let template = Handlebars.templates['map_controls_route_echo_connected_users_template'];
 
         let result = template($.extend({}, getHandlebarsDefaultVariables(), {
+            cursorsEnabled: getState().getDungeonMap().options.edit,
             cursorsActive: getState().getEchoCursorsEnabled(),
             users: getState().getEcho().getUsers(),
             type: getState().getMapContext().getType(),
