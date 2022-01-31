@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'table'     => [
+        'affixrowtable' => [
+            'expansion_timewalking' => '@todo ru: .table.affixrowtable.expansion_timewalking',
+        ],
+    ],
     'about'     => [
         'title'  => 'О нас',
         'header' => 'О Keystone.guru',

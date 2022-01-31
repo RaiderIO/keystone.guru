@@ -377,6 +377,7 @@ return [
     'moderator_label'                                               => 'Moderate',
     'admin_label'                                                   => 'Own',
     'change_role_success'                                           => 'Permissions updated',
+    'change_default_role_success'                                   => 'Default role updated',
 
     'team_admin'                    => 'Administrate team',
     'team_moderator'                => 'Moderate team',

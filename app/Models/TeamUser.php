@@ -27,21 +27,35 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TeamUser extends Model
 {
+    const ROLE_MEMBER       = 'member';
+    const ROLE_COLLABORATOR = 'collaborator';
+    const ROLE_MODERATOR    = 'moderator';
+    const ROLE_ADMIN        = 'admin';
+
+    const ALL_ROLES = [
+        self::ROLE_MEMBER       => 1,
+        self::ROLE_COLLABORATOR => 2,
+        self::ROLE_MODERATOR    => 3,
+        self::ROLE_ADMIN        => 4,
+    ];
+
+    protected $fillable = ['team_id', 'user_id', 'role'];
+
     /**
      *
      * @param Builder $query
      * @param int $userId
      * @return Builder
      */
-    function scopeIsModerator(Builder $query, int $userId)
+    function scopeIsModerator(Builder $query, int $userId): Builder
     {
-        return $query->where('user_id', $userId)->whereIn('role', ['admin', 'moderator']);
+        return $query->where('user_id', $userId)->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MODERATOR]);
     }
 
     /**
      * @return BelongsTo
      */
-    function team()
+    function team(): BelongsTo
     {
         return $this->belongsTo('App\Models\Team');
     }
@@ -49,7 +63,7 @@ class TeamUser extends Model
     /**
      * @return BelongsTo
      */
-    function user()
+    function user(): BelongsTo
     {
         return $this->belongsTo('App\User');
     }

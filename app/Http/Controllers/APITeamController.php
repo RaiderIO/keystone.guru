@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Team;
 use App\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -18,6 +20,21 @@ class APITeamController extends Controller
     function list(Request $request)
     {
         return Auth::user()->teams()->get();
+    }
+
+    /**
+     * @param TeamDefaultRoleFormRequest $request
+     * @param Team $team
+     * @return Response
+     * @throws AuthorizationException
+     */
+    public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team)
+    {
+        $this->authorize('change-default-role', $team);
+
+        $team->update(['default_role' => $request->get('default_role')]);
+
+        return response()->noContent();
     }
 
     /**
