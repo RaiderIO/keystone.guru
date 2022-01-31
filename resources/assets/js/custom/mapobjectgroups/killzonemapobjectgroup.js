@@ -16,6 +16,21 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return getState().getMapContext().getKillZones();
     }
 
+    _loadMapObject(remoteMapObject, layer = null, user = null) {
+        /** @type {KillZone} */
+        let mapObject = super._loadMapObject(remoteMapObject, layer, user);
+
+        // If this was received from Echo..
+        if (user !== null && remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
+            // // Restore the kill area if they created it for us
+            this.setLayerToMapObject(this._createLayer(remoteMapObject), mapObject);
+
+            mapObject.redrawConnectionsToEnemies();
+        }
+
+        return mapObject;
+    }
+
     /**
      * @inheritDoc
      */
