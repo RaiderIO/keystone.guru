@@ -351,7 +351,6 @@ class RowElementKillZone extends RowElement {
              * Code to prevent calling refreshTooltips too often
              */
             let $killAreaLabel = $(`#map_killzonessidebar_killzone_${this.killZone.id}_kill_area_label`);
-            console.log($killAreaLabel.attr('data-haskillarea'), $killAreaLabel.data('haskillarea'), this.killZone.hasKillArea());
             // We are displaying 'has kill area' now (somehow using .data() does not work at all)
             let $hasKillArea = parseInt($killAreaLabel.attr('data-haskillarea'));
 

@@ -62,7 +62,7 @@ class APIMapIconController extends Controller
         $mapIconBefore = clone $mapIcon;
 
         // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
-        $teamId = $request->get('team_id', null);
+        $teamId = $request->get('team_id');
         if (is_numeric($teamId)) {
             $team = Team::find($teamId);
             if ($team !== null && $team->isUserCollaborator(Auth::user())) {
