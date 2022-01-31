@@ -23,7 +23,6 @@ class RowElementKillZone extends RowElement {
         this.colorPicker = null;
 
         getState().getDungeonMap().register('map:mapstatechanged', this, function (mapStateChangedEvent) {
-            console.log(mapStateChangedEvent);
             if (mapStateChangedEvent.data.previousMapState instanceof AddKillZoneMapState) {
                 self.refresh();
             }

@@ -221,7 +221,12 @@ class MapObjectGroup extends Signalable {
         console.assert(mapObject instanceof MapObject, 'mapObject is not of type MapObject', mapObject);
         console.assert(typeof options === 'object', 'options is not of type Object', options);
 
-        if (mapObject.layer !== null) {
+        // If the lat/lng is now null, the layer has no right to exist anymore
+        if (remoteMapObject.lat === null || remoteMapObject.lng === null) {
+            this.setLayerToMapObject(null, mapObject);
+        }
+        // Otherwise, if it has a layer, update its position
+        else if (mapObject.layer !== null) {
             mapObject.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
