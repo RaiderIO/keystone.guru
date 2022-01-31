@@ -23,6 +23,8 @@ return [
         'copy_to_clipboard_title'   => 'Copy to clipboard',
         'refresh_invite_link_title' => 'Refresh invite link',
 
+        'default_role' => 'Default role',
+
         'team_tags_description' => 'You can manage tags for the team\'s routes here. Everyone that is a member of this team may view the tags attached to the routes.
                         The personal tags that may or may not have been attached by the route owner will not be visible.',
     ],

@@ -180,11 +180,6 @@ return [
     'sandbox_dungeon_route_expires_hours' => 24,
 
     /**
-     * @var array List of current roles for a user in a team.
-     */
-    'team_roles'                          => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4],
-
-    /**
      * @var array Prideful enemy variables
      */
     'prideful'                            => [

@@ -377,6 +377,7 @@ return [
     'moderator_label'                                               => 'Модерировать',
     'admin_label'                                                   => 'Собственный',
     'change_role_success'                                           => 'Разрешения обновлены',
+    'change_default_role_success'                                   => '@todo ru: .change_default_role_success',
 
     'team_admin'                    => 'Управление командой',
     'team_moderator'                => 'Модерировать команду',
@@ -461,6 +462,7 @@ return [
     'filter_input_level_header'             => 'Уровень: :value',
     'filter_input_rating_header'            => 'Рейтинг: :value и выше',
     'filter_input_title_header'             => 'Название: :value',
+    'filter_input_expansion_header'         => '@todo ru: .filter_input_expansion_header',
     'filter_input_user_header'              => 'Пользователь: :value',
 
     // Group composition

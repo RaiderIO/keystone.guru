@@ -411,7 +411,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             // Teams
             Route::group(['prefix' => 'team/{team}'], function () {
-                Route::post('/changerole', [APITeamController::class, 'changeRole']);
+                Route::put('/changedefaultrole', [APITeamController::class, 'changeDefaultRole']);
+                Route::put('/changerole', [APITeamController::class, 'changeRole']);
                 Route::post('/route/{dungeonroute}', [APITeamController::class, 'addRoute']);
                 Route::delete('/member/{user}', [APITeamController::class, 'removeMember']);
                 Route::delete('/route/{dungeonroute}', [APITeamController::class, 'removeRoute']);

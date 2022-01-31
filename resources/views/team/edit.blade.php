@@ -167,9 +167,6 @@ foreach ($team->teamusers as $teamuser) {
                 {{ __('views/team.edit.members') }}
             </h4>
             <div class="form-group">
-                <h5>
-                    {{ __('views/team.edit.invite_new_members') }}
-                </h5>
                 <div class="row">
                     @if(!isAlertDismissed('team-invite-info'))
                         <div class="col">
@@ -185,7 +182,8 @@ foreach ($team->teamusers as $teamuser) {
                     @endif
                 </div>
                 <div class="row">
-                    <div class="col-xl-5">
+                    <div class="col-xl-6">
+                        {!! Form::label('team_members_invite_link', __('views/team.edit.invite_new_members'), [], false) !!}
                         <div class="input-group-append">
                             {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]),
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
@@ -204,6 +202,13 @@ foreach ($team->teamusers as $teamuser) {
                                 @endif
                             </div>
                         </div>
+                    </div>
+                    <div class="col-xl-6">
+                        {!! Form::label('default_role', __('views/team.edit.default_role'), [], false) !!}
+                        <?php $keys = array_keys(\App\Models\TeamUser::ALL_ROLES); ?>
+                        {!! Form::select('default_role', array_map(function($role){
+                                return __(sprintf('teamroles.%s', $role));
+                            }, array_combine($keys, $keys)), $team->default_role, ['class' => 'form-control selectpicker']) !!}
                     </div>
                 </div>
             </div>
