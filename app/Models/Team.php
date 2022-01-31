@@ -103,7 +103,7 @@ class Team extends Model
     {
         $result = false;
         // Not set
-        if ($dungeonRoute->team_id <= 0) {
+        if ($dungeonRoute->team_id === null) {
             $dungeonRoute->team_id = $this->id;
             $dungeonRoute->save();
             $result = true;
@@ -122,11 +122,11 @@ class Team extends Model
     {
         $result = false;
         // Set already
-        if ($dungeonRoute->team_id > 0) {
+        if ($dungeonRoute->team_id !== null) {
             // Delete all existing team tags from this route
             $dungeonRoute->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])->delete();
 
-            $dungeonRoute->team_id = -1;
+            $dungeonRoute->team_id = null;
             $dungeonRoute->save();
             $result = true;
         }
@@ -303,7 +303,7 @@ class Team extends Model
         // Only if the user could be found..
         if ($this->isUserMember($member)) {
             try {
-                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => -1]);
+                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception $exception) {
                 $result = false;
@@ -380,7 +380,7 @@ class Team extends Model
             // Remove all users associated with this team
             TeamUser::where('team_id', $item->id)->delete();
             // Unassign all routes from this team
-            DungeonRoute::where('team_id', $item->id)->update(['team_id' => -1]);
+            DungeonRoute::where('team_id', $item->id)->update(['team_id' => null]);
         });
     }
 }

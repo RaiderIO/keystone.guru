@@ -46,7 +46,7 @@ class DungeonRouteFormRequest extends FormRequest
             )],
             // May be -1 (unset) or must be part of the user's teams
             'team_id'                   => [Rule::in(
-                array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [-1])
+                array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [null, -1])
             )],
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming'                   => 'nullable|int',

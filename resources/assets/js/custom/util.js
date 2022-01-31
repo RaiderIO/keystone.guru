@@ -140,6 +140,11 @@ function isColorDark(hex) {
  * @returns {number}
  */
 function getLuminance(hex) {
+    // Catch in case the color is bad
+    if( hex.length === 0 ) {
+        hex = '#000';
+    }
+
     let rgb = hexToRgb(hex);
     return 1 - (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255
 }

@@ -38,7 +38,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property $author_id int
  * @property $dungeon_id int
  * @property $faction_id int
- * @property $team_id int
+ * @property $team_id int|null
  * @property $published_state_id int
  *
  * @property $clone_of string
@@ -399,7 +399,7 @@ class DungeonRoute extends Model
      */
     public function getHasTeamAttribute(): bool
     {
-        return $this->team_id > 0;
+        return $this->team_id !== null;
     }
 
     /**
@@ -624,8 +624,9 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->team_id    = (int)$request->get('team_id', $this->team_id);
+        $this->dungeon_id  = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $teamIdFromRequest = (int)$request->get('team_id', $this->team_id);
+        $this->team_id     = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead
@@ -797,7 +798,7 @@ class DungeonRoute extends Model
         $dungeonroute->faction_id         = $this->faction_id;
         $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
-        // $dungeonroute->team_id = $this->team_id;
+        $dungeonroute->team_id        = null;
         $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
         $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->teeming        = $this->teeming;

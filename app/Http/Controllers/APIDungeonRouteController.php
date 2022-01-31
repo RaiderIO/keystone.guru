@@ -145,10 +145,10 @@ class APIDungeonRouteController extends Controller
                 }
 
                 // If available, we need all routes which MAY be assigned to this team, so all routes where
-                // team_id = -1 and the author is one of the team members
+                // team_id = null and the author is one of the team members
                 $available = intval($request->get('available', 0));
                 if ($available === 1) {
-                    $routes = $routes->where('team_id', -1);
+                    $routes = $routes->whereNull('team_id');
                     $routes = $routes->whereIn('author_id', $team->members->pluck(['id'])->toArray());
                 } else {
                     // Where the route is part of the requested team

@@ -3,33 +3,48 @@ class MousePositionHandler extends WhisperMessageHandler {
     constructor(echo) {
         super(echo, MousePositionMessage.getName());
 
-        let self = this;
-        let previousPollTime = (new Date()).getTime();
+        this.previousPollTime = (new Date()).getTime();
 
         this.mousePositions = [];
-        this.previousSyncTime = previousPollTime;
+        this.previousSyncTime = this.previousPollTime;
 
+        this._setup();
+    }
+
+    /**
+     *
+     * @private
+     */
+    _setup() {
+        if (!this.echo.map.options.edit) {
+            console.info('Not in edit mode - not sending/receiving mouse positions');
+            return;
+        }
+
+        let self = this;
 
         // Mobile does not have a mouse so we can't send anything
         if (!isMobile()) {
-            self.echo.map.register('map:mapobjectgroupsloaded', this, function () {
+            this.echo.map.register('map:mapobjectgroupsloaded', this, function () {
                 self.echo.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
                     let currTime = (new Date()).getTime();
 
                     // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
-                    if (currTime - previousPollTime > c.map.echo.mousePollFrequencyMs) {
+                    if (currTime - self.previousPollTime > c.map.echo.mousePollFrequencyMs) {
                         self.mousePositions.push({
                             time: currTime - self.previousSyncTime,
                             lat: mouseMoveEvent.latlng.lat,
                             lng: mouseMoveEvent.latlng.lng
                         });
-                        previousPollTime = currTime;
+                        self.previousPollTime = currTime;
                     }
                 })
             });
 
             // Periodically send new mouse locations
             setInterval(this._sendMousePositions.bind(this), c.map.echo.mouseSendFrequencyMs);
+        } else {
+            console.info('Mobile detected - not sending mouse positions since we do not have a mouse');
         }
 
         // Mobile can receive mouse positions though
