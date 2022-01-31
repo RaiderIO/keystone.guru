@@ -836,11 +836,16 @@ class KillZone extends MapObject {
     removeExistingConnectionsToEnemies() {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
+        if (this.enemiesLayer !== null) {
+            this.enemiesLayer.unbindTooltip();
+        }
+
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             // Remove layers we no longer need from the layer group
             if (this.enemiesLayer !== null) {
+                this.enemiesLayer.unbindTooltip();
                 this.enemyConnectionsLayerGroup.removeLayer(this.enemiesLayer);
                 this.enemiesLayer = null;
             }
@@ -883,7 +888,6 @@ class KillZone extends MapObject {
                 // May be thrown if 'vertices overlap'
                 console.warn(`Vertices overlap!`, p);
             }
-
 
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
