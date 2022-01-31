@@ -64,7 +64,7 @@ class TeamEdit extends InlineCode {
 
         $('select.role_selection').bind('change', function (e) {
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: `/ajax/team/${self.options.teamPublicKey}/changerole`,
                 dataType: 'json',
                 data: {
@@ -73,6 +73,20 @@ class TeamEdit extends InlineCode {
                 },
                 success: function () {
                     showSuccessNotification(lang.get('messages.change_role_success'));
+                }
+            });
+        });
+
+        $('#default_role').bind('change', function (e) {
+            $.ajax({
+                type: 'PUT',
+                url: `/ajax/team/${self.options.teamPublicKey}/changedefaultrole`,
+                dataType: 'json',
+                data: {
+                    default_role: $(this).val()
+                },
+                success: function () {
+                    showSuccessNotification(lang.get('messages.change_default_role_success'));
                 }
             });
         });

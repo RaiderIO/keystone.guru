@@ -97,5 +97,9 @@ return [
         'name'        => 'Неизвестно',
         'description' => 'Аффиксы на этой неделе пока не известны.',
     ],
+    'infernal'              => [
+        'name'        => '@todo ru: .infernal.name',
+        'description' => '@todo ru: .infernal.description',
+    ],
     'seasonal_index_preset' => '%s расстановка %d',
 ];
