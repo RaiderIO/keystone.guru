@@ -27,6 +27,7 @@ class RowElementKillZone extends RowElement {
                 self.refresh();
             }
         });
+        this.killZone.register('killzone:changed', this, this.updateText.bind(this));
     }
 
     /**
@@ -512,6 +513,7 @@ class RowElementKillZone extends RowElement {
         $('#killzones_no_pulls').hide();
 
 
+        this.killZone.unregister('killzone:changed', this);
         getState().getDungeonMap().unregister('map:mapstatechanged', this);
     }
 }

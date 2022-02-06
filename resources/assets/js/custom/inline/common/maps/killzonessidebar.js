@@ -338,6 +338,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                     // NaN check, there's a mirror created and inserted in the container, this filters it out
                     if (id === id && !$killZoneRow.attr('class').includes('draggable-mirror') && !$killZoneRow.attr('class').includes('draggable--original')) {
+                        /** @type KillZone */
                         let killZone = killZoneMapObjectGroup.findMapObjectById(id);
                         console.assert(killZone instanceof KillZone, 'Unable to find killZone!', $killZoneRow);
 
@@ -359,9 +360,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 killZoneMapObjectGroup.applyPullGradient();
             }
 
-            killZoneMapObjectGroup.massSave(['index', 'color'], function () {
-
-            });
+            killZoneMapObjectGroup.massSave(['index', 'color'], null);
         }
         this._dragHasSwitchedOrder = false;
     }
