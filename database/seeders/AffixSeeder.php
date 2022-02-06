@@ -50,7 +50,7 @@ class AffixSeeder extends Seeder
             new Affix(['key' => Affix::AFFIX_AWAKENED, 'name' => 'affixes.awakened.name', 'icon_file_id' => -1, 'description' => 'affixes.awakened.description']),
 
             new Affix(['key' => Affix::AFFIX_INSPIRING, 'name' => 'affixes.inspiring.name', 'icon_file_id' => -1, 'description' => 'affixes.inspiring.description']),
-            new Affix(['key' => Affix::AFFIX_SPITEFUL, 'name' => 'affixes.spiteful.name', 'icon_file_id' => -1, 'description' => 'affixes.inspiring.description']),
+            new Affix(['key' => Affix::AFFIX_SPITEFUL, 'name' => 'affixes.spiteful.name', 'icon_file_id' => -1, 'description' => 'affixes.spiteful.description']),
             new Affix(['key' => Affix::AFFIX_STORMING, 'name' => 'affixes.storming.name', 'icon_file_id' => -1, 'description' => 'affixes.storming.description']),
 
             new Affix(['key' => Affix::AFFIX_PRIDEFUL, 'name' => 'affixes.prideful.name', 'icon_file_id' => -1, 'description' => 'affixes.prideful.description']),
