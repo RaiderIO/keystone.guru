@@ -179,15 +179,27 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     /**
      * Creates a whole new pull.
-     * @param enemyIds array Any enemies that must be in the pull from the start
+     * @param enemyIds {Array} Any enemies that must be in the pull from the start
+     * @param afterIndex {Number} Insert the pull after this pull's index. Null to insert as the last pull
      * @returns {KillZone}
      */
-    createNewPull(enemyIds = []) {
+    createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
         // Construct an object equal to that received from the server
         let killZoneEnemies = [];
         for (let i = 0; i < enemyIds.length; i++) {
             killZoneEnemies.push({enemy_id: enemyIds[i]});
+        }
+
+        let toSave = [];
+        // If we're inserting it last - we don't affect existing killzones
+        if (afterIndex !== null) {
+            // But we do if it was inserted half way - we need to update all indices of everything that's after this pull
+            toSave = this.objects.filter(killzone => killzone.index > afterIndex);
+
+            for (let index in toSave) {
+                toSave[index].index++;
+            }
         }
 
         let killZone = this._loadMapObject({
@@ -197,15 +209,21 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             killzoneenemies: killZoneEnemies,
             lat: null,
             lng: null,
-            index: this.objects.length + 1,
+            index: (afterIndex ?? this.objects.length) + 1,
             // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
             // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
             local: true
         });
 
-        // Change the color as necessary
+        // Change the color as necessary - but don't save if we will do it later on
         if (getState().getMapContext().getPullGradientApplyAlways()) {
-            this.applyPullGradient(true);
+            // Also save the index we just changed up above
+            this.applyPullGradient(afterIndex === null, null);
+        }
+
+        // Save both the color and the index
+        if (afterIndex !== null) {
+            this.massSave(['color', 'index'], null, toSave);
         }
 
         killZone.save();
@@ -216,10 +234,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     /**
      * Applies the pull gradient to killzones
-     * @param save {boolean}
+     * @param save {Boolean}
      * @param saveOnComplete {function|null}
+     * @param saveAdditionalFields {Array}
      */
-    applyPullGradient(save = false, saveOnComplete = null) {
+    applyPullGradient(save = false, saveOnComplete = null, saveAdditionalFields = []) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
         let count = this.objects.length;
@@ -238,13 +257,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         if (save) {
-            this.massSave(['color'], saveOnComplete);
+            this.massSave(['color'].concat(saveAdditionalFields), saveOnComplete);
         }
     }
 
     /**
      * Saves all KillZones using the mass update endpoint.
-     * @param fields {string|array}
+     * @param fields {String|Array}
      * @param onComplete {function|null} Called when massSave completed
      * @param killZones {array}
      */
