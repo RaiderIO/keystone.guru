@@ -71,14 +71,26 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
+        console.warn(`_addKillZone`, killZone);
+
         let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
 
         if (showFloorSwitches && this.rowElements.length === 0) {
             this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
         }
 
+        /** @type KillZoneMapObjectGroup */
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+        let previousKillZoneRowElementVisual = null;
+        let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
+        if (previousKillZone instanceof KillZone) {
+            let previousKillZoneRowElement = this._getRowElementKillZone(previousKillZone);
+            previousKillZoneRowElementVisual = previousKillZoneRowElement ? previousKillZoneRowElement.getVisual() : null;
+        }
+
         let rowElementKillZone = new RowElementKillZone(this, killZone);
-        rowElementKillZone.render($(this.options.killZonesContainerSelector));
+        rowElementKillZone.render($(this.options.killZonesContainerSelector), previousKillZoneRowElementVisual);
         this.rowElements.push(rowElementKillZone);
 
         $('#killzones_no_pulls').hide();
@@ -88,7 +100,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Only do this when there is actually a previous killzone
         if (showFloorSwitches && killZone.index > 1) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
 
             // If there's a difference in floors then we should display a floor switch row
@@ -273,7 +284,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
         // On save, add the row first time 'round
-        if ($(`#map_killzonessidebar_killzone_${killZone.id}`).length === 0) {
+        if (this._getRowElementKillZone(killZone) === null) {
             let self = this;
 
             // Add the killzone to our list
@@ -454,11 +465,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // We do not know the ID before this so we cannot scroll to the new killzone instantly
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
-        killZoneMapObjectGroup.register('save:success', this, function (killZoneSaveSuccessEvent) {
+        killZoneMapObjectGroup.register(['object:add', 'save:success'], this, function (killZoneSaveSuccessEvent) {
             self._onKillZoneSaved(killZoneSaveSuccessEvent.data.object);
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
+            console.warn('object:deleted');
             let isMassDelete = killZoneDeletedEvent.data.hasOwnProperty('mass_delete') && killZoneDeletedEvent.data.mass_delete;
 
             let killZone = killZoneDeletedEvent.data.object;

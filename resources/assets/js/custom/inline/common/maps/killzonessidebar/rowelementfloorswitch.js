@@ -38,7 +38,7 @@ class RowElementFloorSwitch extends RowElement {
     /**
      * @inheritDoc
      */
-    render($targetContainer) {
+    render($targetContainer, $after = null) {
         super.render($targetContainer);
 
         $(`#map_killzonessidebar_floor_switch_${this.killZone.id}`).unbind('click').bind('click', this._floorSwitchRowClicked);

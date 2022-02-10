@@ -7,6 +7,8 @@ class RowElement extends Signalable {
         this.handlebarsTemplate = handlebarsTemplate;
         // Shortcut
         this.map = this.killZonesSidebar.map;
+
+        this.$visual = null;
     }
 
     /**
@@ -16,6 +18,14 @@ class RowElement extends Signalable {
      */
     _getTemplateData() {
         return {};
+    }
+
+    /**
+     *
+     * @returns {null}
+     */
+    getVisual() {
+        return this.$visual;
     }
 
     /**
@@ -35,15 +45,26 @@ class RowElement extends Signalable {
     /**
      *
      * @param $targetContainer {jQuery}
+     * @param $after {jQuery}
      */
-    render($targetContainer) {
+    render($targetContainer, $after = null) {
+        if ($after !== null) {
+            console.assert($($after.parent()).attr('id') === $targetContainer.attr('id'), '$after parent must be the target container!', this);
+        }
+
         // Build the handlebars template
         let template = Handlebars.templates[this.handlebarsTemplate];
 
         let data = $.extend({}, getHandlebarsDefaultVariables(), this._getTemplateData());
 
         // Render the element into the sidebar
-        $targetContainer.append(template(data));
+        this.$visual = $(template(data));
+
+        if ($after === null) {
+            $targetContainer.append(this.$visual);
+        } else {
+            $after.after(this.$visual);
+        }
     }
 
     /**
