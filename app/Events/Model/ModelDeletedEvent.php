@@ -5,28 +5,33 @@ namespace App\Events\Model;
 use App\Events\ContextEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use ReflectionClass;
 
 class ModelDeletedEvent extends ContextEvent
 {
-    /** @var int $_modelId */
-    protected int $_modelId;
+    /** @var int $modelId */
+    protected int $modelId;
 
-    /** @var string $_modelClass */
-    protected string $_modelClass;
+    /** @var string $modelClass */
+    protected string $modelClass;
+
+    /** @var string $modelName */
+    private string $modelName;
 
     /**
      * Create a new event instance.
      *
      * @param $context Model
      * @param $user User
-     * @param $overpulledEnemy Model
+     * @param $model Model
      * @return void
      */
-    public function __construct(Model $context, User $user, Model $overpulledEnemy)
+    public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted
-        $this->_modelId    = $overpulledEnemy->getRouteKey();
-        $this->_modelClass = get_class($overpulledEnemy);
+        $this->modelId    = $model->getRouteKey();
+        $this->modelClass = get_class($model);
+        $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }
 
@@ -34,13 +39,13 @@ class ModelDeletedEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'model_id'    => $this->_modelId,
-            'model_class' => $this->_modelClass,
+            'model_id'    => $this->modelId,
+            'model_class' => $this->modelClass,
         ]);
     }
 
     public function broadcastAs(): string
     {
-        return 'model-deleted';
+        return sprintf('%s-deleted', $this->modelName);
     }
 }
