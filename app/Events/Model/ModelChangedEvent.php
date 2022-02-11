@@ -9,6 +9,6 @@ class ModelChangedEvent extends ContextModelEvent
     public function broadcastAs(): string
     {
         // Quick enough
-        return sprintf('%s-changed', strtolower((new ReflectionClass($this->_model))->getShortName()));
+        return sprintf('%s-changed', strtolower((new ReflectionClass($this->model))->getShortName()));
     }
 }
