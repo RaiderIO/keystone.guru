@@ -285,6 +285,7 @@ class MapObjectGroup extends Signalable {
         }
         this.objects.push(mapObject);
 
+        // Make us listen to their changes
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));

@@ -389,8 +389,8 @@ class RowElementKillZone extends RowElement {
     /**
      * @inheritDoc
      **/
-    render($targetContainer) {
-        super.render($targetContainer);
+    render($targetContainer, $after = null) {
+        super.render($targetContainer, $after);
         console.assert(this instanceof RowElementKillZone, 'this is not a RowElementKillZone', this);
 
         let self = this;

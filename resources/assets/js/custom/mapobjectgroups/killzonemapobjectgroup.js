@@ -185,6 +185,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
      */
     createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+
+        console.log(enemyIds, afterIndex);
+
         // Construct an object equal to that received from the server
         let killZoneEnemies = [];
         for (let i = 0; i < enemyIds.length; i++) {
@@ -222,7 +225,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         // Save both the color and the index
-        if (afterIndex !== null) {
+        if (afterIndex !== null && toSave.length > 0) {
             this.massSave(['color', 'index'], null, toSave);
         }
 

@@ -836,16 +836,11 @@ class KillZone extends MapObject {
     removeExistingConnectionsToEnemies() {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
-        if (this.enemiesLayer !== null) {
-            this.enemiesLayer.unbindTooltip();
-        }
-
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             // Remove layers we no longer need from the layer group
             if (this.enemiesLayer !== null) {
-                this.enemiesLayer.unbindTooltip();
                 this.enemyConnectionsLayerGroup.removeLayer(this.enemiesLayer);
                 this.enemiesLayer = null;
             }
@@ -887,6 +882,11 @@ class KillZone extends MapObject {
             } catch (error) {
                 // May be thrown if 'vertices overlap'
                 console.warn(`Vertices overlap!`, p);
+            }
+
+            // Remove tooltip if it was there before to prevent double tooltips
+            if (this.enemiesLayer !== null) {
+                this.enemiesLayer.unbindTooltip();
             }
 
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
@@ -1004,7 +1004,6 @@ class KillZone extends MapObject {
      */
     isVisibleOnScreen() {
         let result = false;
-        console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
         }
@@ -1015,6 +1014,7 @@ class KillZone extends MapObject {
         super.bindTooltip();
 
         if (!this.map.options.noUI && this.enemiesLayer !== null) {
+            console.warn('UNbinding tooltip', this.enemiesLayer._leaflet_id);
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
@@ -1031,6 +1031,7 @@ class KillZone extends MapObject {
                 }
 
                 try {
+                    console.warn('Binding tooltip', this.enemiesLayer._leaflet_id);
                     this.enemiesLayer.bindTooltip(tooltipText, {
                         direction: this.indexLabelDirection,
                         className: 'leaflet-tooltip-killzone-index',
@@ -1145,6 +1146,6 @@ class KillZone extends MapObject {
     }
 
     toString() {
-        return 'Pull ' + this.index;
+        return `Pull ${this.index}`;
     }
 }
