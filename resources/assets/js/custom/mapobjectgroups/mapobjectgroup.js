@@ -312,7 +312,7 @@ class MapObjectGroup extends Signalable {
                 fontClass = isColorDark(user.color) ? 'text-white' : 'text-dark';
             }
 
-            // @TODO Bit hacky?
+            // @TODO This should NOT use this layer but instead a new layer somehow
             let layer = localMapObject.layer;
             if (localMapObject instanceof KillZone) {
                 // First layer should contain the polygon that is displayed
@@ -321,6 +321,7 @@ class MapObjectGroup extends Signalable {
 
             if (layer !== null) {
                 let oldTooltip = layer.getTooltip();
+                let oldTooltipLayerId = layer._leaflet_id;
 
                 let tooltip = layer.bindTooltip(user.name, {
                     permanent: true,
@@ -335,9 +336,12 @@ class MapObjectGroup extends Signalable {
                     // Do not re-bind a tooltip that shouldn't be there permanently
                     if (typeof oldTooltip !== 'undefined' &&
                         oldTooltip.options !== null &&
-                        !oldTooltip.options.className.includes('user_color_')) {
+                        !oldTooltip.options.className.includes('user_color_') &&
+                        // And only if the layer is still the same - don't start adding ghost tooltips
+                        // The layer COULD have been changed at this time (killzones are notorious for this)
+                        (localMapObject.layer !== null && localMapObject.layer._leaflet_id === oldTooltipLayerId) ) {
                         // Rebind killzone pull index tooltip
-                        layer.bindTooltip(oldTooltip._content, oldTooltip.options);
+                        localMapObject.layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
                 }, c.map.echo.tooltipFadeOutTimeout);
             } else {
@@ -568,6 +572,8 @@ class MapObjectGroup extends Signalable {
         // Unset previous layer
         let oldLayer = mapObject.layer;
         if (mapObject.layer !== null) {
+            // If it had a tooltip make sure to unset it so it doesn't get left over
+            mapObject.layer.unbindTooltip();
             this.layerGroup.removeLayer(mapObject.layer);
             mapObject.layer = null;
             mapObject.setVisible(false);
