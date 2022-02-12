@@ -354,7 +354,7 @@ class CommonMapsMap extends InlineCode {
     _setupLabelToggle() {
         let self = this;
 
-        let $toggleBtn = $('#map_controls_element_label_toggle_btn').bind('click', function () {
+        let $toggleBtn = $('#map_controls_element_label_toggle_btn').unbind('click').bind('click', function () {
             let $this = $(this);
 
             let isVisible = parseInt(Cookies.get('map_controls_show_hide_labels')) === 1;
@@ -652,6 +652,9 @@ class CommonMapsMap extends InlineCode {
         }
 
         history.pushState({page: 1}, newUrl, newUrl);
+
+        // If the floor ID has changed we must also re-show/hide labels since the map controls get rebuilt
+        this._setupLabelToggle();
 
         // Make sure that the sidebar's select picker gets updated with the newly selected value
         refreshSelectPickers();
