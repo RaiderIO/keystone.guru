@@ -31,6 +31,34 @@ class CommonMapsMap extends InlineCode {
             getState().register('snackbar:remove', this, this._onSnackbarRemove.bind(this));
         }
 
+        // Make sure that navigating back actually moves the floor that we're on
+        window.addEventListener('popstate', function (event) {
+            // The popstate event is fired each time when the current history entry changes.
+            let urlParts = event.target.location.href.split('/');
+
+            // We start at 1 since it's possible there is no number found. We then default to the default floor
+            let targetFloor = 1;
+            for (let i = urlParts.length - 1; i >= 0; i--) {
+                let urlPart = urlParts[i];
+
+                // Give us up to 999 indices to have floors for indices/ids
+                if (!isNaN(urlPart) && urlPart.length <= 3) {
+                    targetFloor = parseInt(urlPart);
+                    break;
+                }
+            }
+
+            // We're on the mapping site - it's a floor ID
+            if (getState().isMapAdmin()) {
+                getState().setFloorId(targetFloor);
+            } else {
+                getState().setFloorId(
+                    getState().getMapContext().getFloorByIndex(targetFloor).id
+                );
+            }
+
+        }, false);
+
         this._initDungeonMap();
 
         if (!this.options.noUI) {

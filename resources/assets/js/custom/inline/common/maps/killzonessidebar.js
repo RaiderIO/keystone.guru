@@ -104,7 +104,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             if (previousKillZone !== null) {
                 let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
                 if (floorDifference.length > 0) {
-                    this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+                    this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
                 }
             }
         }
@@ -178,7 +178,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 } else {
                     let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
                     if (floorDifference.length > 0) {
-                        this._addFloorSwitch(killZone, this.map.getFloorById(floorDifference[0]));
+                        this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
                     }
                 }
 
