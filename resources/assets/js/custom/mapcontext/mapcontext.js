@@ -169,6 +169,46 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Finds a floor by id.
+     * @param index {Number}
+     * @returns {*}|bool
+     */
+    getFloorByIndex(index) {
+        console.assert(this instanceof MapContext, 'this is not a MapContext', this);
+        let result = false;
+
+        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
+            let floor = this._options.dungeon.floors[i];
+            if (floor.index === index) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a floor by id.
+     * @param floorId {Number}
+     * @returns {*}|bool
+     */
+    getFloorById(floorId) {
+        console.assert(this instanceof MapContext, 'this is not a MapContext', this);
+        let result = false;
+
+        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
+            let floor = this._options.dungeon.floors[i];
+            if (floor.id === floorId) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      *
      * @returns {{}}
      */

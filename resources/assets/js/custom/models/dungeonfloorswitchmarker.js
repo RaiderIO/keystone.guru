@@ -231,7 +231,7 @@ class DungeonFloorSwitchMarker extends Icon {
             return usernames.join(', ');
         }
 
-        let targetFloor = this.map.getFloorById(this.target_floor_id);
+        let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
             return `Go to ${lang.get(targetFloor.name)}`;

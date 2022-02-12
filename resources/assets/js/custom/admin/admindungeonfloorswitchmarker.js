@@ -30,7 +30,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     getDisplayText() {
         console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not an AdminDungeonFloorSwitchMarker', this);
 
-        let targetFloor = this.map.getFloorById(this.target_floor_id);
+        let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
             return `Target: ${lang.get(targetFloor.name)}`;
