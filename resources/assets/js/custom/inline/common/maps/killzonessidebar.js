@@ -71,8 +71,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
-        console.warn(`_addKillZone`, killZone);
-
         let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
 
         if (showFloorSwitches && this.rowElements.length === 0) {

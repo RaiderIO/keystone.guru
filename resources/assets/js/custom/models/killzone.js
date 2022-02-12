@@ -58,6 +58,10 @@ class KillZone extends MapObject {
 
         this.setSynced(false);
 
+        this.register('object:changed', this, function(objectChangedEvent){
+            self.redrawConnectionsToEnemies();
+        });
+
         this.map.register(['map:refresh'], this, function (shownHiddenEvent) {
             self.redrawConnectionsToEnemies();
         });
@@ -523,7 +527,7 @@ class KillZone extends MapObject {
     _mapZoomLevelChanged(mapZoomLevelChangedEvent) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        // Only if we actually have a tooltip to refresh
+        // // Only if we actually have a tooltip to refresh
         if (this.isVisible()) {
             let currZoomLevel = parseInt(mapZoomLevelChangedEvent.data.mapZoomLevel);
             let prevZoomLevel = parseInt(mapZoomLevelChangedEvent.data.previousMapZoomLevel);
@@ -884,11 +888,6 @@ class KillZone extends MapObject {
                 console.warn(`Vertices overlap!`, p);
             }
 
-            // Remove tooltip if it was there before to prevent double tooltips
-            if (this.enemiesLayer !== null) {
-                this.enemiesLayer.unbindTooltip();
-            }
-
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
                 // Change the pulse color to be dark or light depending on the KZ color
@@ -986,7 +985,7 @@ class KillZone extends MapObject {
     setIndex(index) {
         this.index = index;
 
-        this.bindTooltip();
+        // this.bindTooltip();
     }
 
     /**
@@ -1014,7 +1013,6 @@ class KillZone extends MapObject {
         super.bindTooltip();
 
         if (!this.map.options.noUI && this.enemiesLayer !== null) {
-            console.warn('UNbinding tooltip', this.enemiesLayer._leaflet_id);
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
@@ -1031,7 +1029,6 @@ class KillZone extends MapObject {
                 }
 
                 try {
-                    console.warn('Binding tooltip', this.enemiesLayer._leaflet_id);
                     this.enemiesLayer.bindTooltip(tooltipText, {
                         direction: this.indexLabelDirection,
                         className: 'leaflet-tooltip-killzone-index',
