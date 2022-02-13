@@ -30,7 +30,7 @@
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@shopify/draggable": "^1.0.0-beta.12",
         "@simonwep/pickr": "^1.5.1",
-        "ajv": "^6.10.0",
+        "ajv": "^6.12.3",
         "bootstrap": "^4.3.1",
         "bootstrap-4-autocomplete": "^1.2.3",
         "bootstrap-select": "^1.13.12",
