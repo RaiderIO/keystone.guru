@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
 use App\Models\Release;
+use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
@@ -34,10 +36,12 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(CoverageServiceInterface $coverageService)
     {
         if (Auth::check()) {
-            return view('profile.overview');
+            return view('profile.overview', [
+                'dungeonRoutes' => $coverageService->getForUser(Auth::user())
+            ]);
         } else {
             return view('home');
         }
