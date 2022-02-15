@@ -99,13 +99,11 @@ class MapIconTypesSeeder extends Seeder
             'nw_item_hammer'  => ['name' => 'Hammer', 'width' => 32, 'height' => 32, 'admin_only' => true],
             'nw_item_shield'  => ['name' => 'Shield', 'width' => 32, 'height' => 32, 'admin_only' => true],
             'nw_item_spear'   => ['name' => 'Spear', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            'spell_incarnation' => ['name' => 'Incarnation'],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {
-            $mapIconTypeModel       = new MapIconType();
-            $mapIconTypeModel->key  = $key;
-            $mapIconTypeModel->name = $mapIconType['name'];
-
             // Just in case it doesn't exist
             if (isset($mapIconType['width']) && isset($mapIconType['height'])) {
                 $imageSize = [$mapIconType['width'], $mapIconType['height']];
@@ -127,10 +125,14 @@ class MapIconTypesSeeder extends Seeder
                     $imageSize[1] = $mapIconType['height'];
                 }
             }
-            $mapIconTypeModel->width      = $imageSize[0];
-            $mapIconTypeModel->height     = $imageSize[1];
-            $mapIconTypeModel->admin_only = $mapIconType['admin_only'] ?? 0;
-            $mapIconTypeModel->save();
+
+            MapIconType::create([
+                'key'        => $key,
+                'name'       => $mapIconType['name'],
+                'width'      => $imageSize[0],
+                'height'     => $imageSize[1],
+                'admin_only' => $mapIconType['admin_only'] ?? 0,
+            ]);
         }
     }
 
