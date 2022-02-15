@@ -280,6 +280,15 @@
                 Remembers the theme you wish to have the website in.
             </td>
         </tr>
+        <tr>
+            <td>
+                route_coverage_new_route_style
+            </td>
+            <td>
+                Remembers if you want new routes in the route coverage overview to be created yourself or be searched in
+                the search tool.
+            </td>
+        </tr>
 
     </table>
     </p>

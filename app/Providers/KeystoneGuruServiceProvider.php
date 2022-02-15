@@ -247,6 +247,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $expansionsData = $globalViewVariables['expansionsData']->get($currentExpansion->shortname);
 
             $view->with('dungeons', $allActiveDungeons->where('expansion_id', $currentExpansion->id));
+            $view->with('currentExpansion', $currentExpansion);
             $view->with('affixgroups', $expansionsData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup($userOrDefaultRegion));
         });
@@ -260,6 +261,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('profile.edit', function (View $view) use ($globalViewVariables) {
             $view->with('allClasses', $globalViewVariables['characterClasses']);
             $view->with('allRegions', $globalViewVariables['allRegions']);
+        });
+
+        view()->composer(['profile.overview', 'common.dungeonroute.coverage.affixgroup'], function (View $view) use ($globalViewVariables) {
+            $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
         });
 
 

@@ -83,14 +83,16 @@ class Dungeon extends CacheModel
     const DUNGEON_MECHAGON_WORKSHOP    = 'mechagonworkshop';
 
     // Shadowlands
-    const DUNGEON_DE_OTHER_SIDE         = 'deotherside_ardenweald';
-    const DUNGEON_HALLS_OF_ATONEMENT    = 'hallsofatonement_a';
-    const DUNGEON_MISTS_OF_TIRNA_SCITHE = 'mistsoftirnescithe';
-    const DUNGEON_PLAGUEFALL            = 'plaguefall';
-    const DUNGEON_SANGUINE_DEPTHS       = 'sanguinedepths_a';
-    const DUNGEON_SPIRES_OF_ASCENSION   = 'spiresofascension_a';
-    const DUNGEON_THE_NECROTIC_WAKE     = 'necroticwake_a';
-    const DUNGEON_THEATER_OF_PAIN       = 'theaterofpain';
+    const DUNGEON_DE_OTHER_SIDE              = 'deotherside_ardenweald';
+    const DUNGEON_HALLS_OF_ATONEMENT         = 'hallsofatonement_a';
+    const DUNGEON_MISTS_OF_TIRNA_SCITHE      = 'mistsoftirnescithe';
+    const DUNGEON_PLAGUEFALL                 = 'plaguefall';
+    const DUNGEON_SANGUINE_DEPTHS            = 'sanguinedepths_a';
+    const DUNGEON_SPIRES_OF_ASCENSION        = 'spiresofascension_a';
+    const DUNGEON_THE_NECROTIC_WAKE          = 'necroticwake_a';
+    const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
+    const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazavesh_streets_of_wonder';
+    const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazavesh_so_leahs_gambit';
 
     const ALL_LEGION = [
         self::DUNGEON_ARCWAY,
@@ -132,6 +134,8 @@ class Dungeon extends CacheModel
         self::DUNGEON_SPIRES_OF_ASCENSION,
         self::DUNGEON_THE_NECROTIC_WAKE,
         self::DUNGEON_THEATER_OF_PAIN,
+        self::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+        self::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
     ];
 
 
