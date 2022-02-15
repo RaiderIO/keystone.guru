@@ -3,6 +3,7 @@
 /** @var $dungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $affixgroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
 /** @var $dungeonRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
+/** @var $currentExpansion \App\Models\Expansion */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
 
 /**
@@ -91,16 +92,30 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
                             </div>
                         @else
                             <div class="dungeonroute_coverage_new_dungeon_route">
-                                <button class="btn btn-sm w-100"
+                                <button class="btn btn-sm w-100 new_route_style_create_create"
                                         data-dungeon-id="{{ $dungeon->id }}"
                                         data-affix-group-id="{{ $affixGroup->id }}"
                                         data-toggle="modal"
                                         data-target="#create_route_modal"
+                                        style="display: {{ $newRouteStyle === 'create' ? 'block' : 'none' }}"
                                 >
                                     <i class="fa fa-plus text-info">
 
                                     </i>
                                 </button>
+                            </div>
+                            <div class="dungeonroute_coverage_search_dungeon_route">
+                                <a class="btn btn-sm w-100 new_route_style_create_search"
+                                   style="display: {{ $newRouteStyle === 'search' ? 'block' : 'none' }}"
+                                   href="{{ route('dungeonroutes.search', [
+                                                'expansion' => $currentExpansion->shortname,
+                                                'affixgroups' => $affixGroup->id,
+                                                ]) }}&dungeons={{ $dungeon->id }}"
+                                >
+                                    <i class="fa fa-search text-info">
+
+                                    </i>
+                                </a>
                             </div>
                         @endif
                     </td>

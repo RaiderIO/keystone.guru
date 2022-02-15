@@ -278,5 +278,17 @@ return [
                 'upper_barrow_of_carnage' => 'Upper Barrow of Carnage',
             ],
         ],
+        'tazavesh_streets_of_wonder'       => [
+            'name'   => 'Tazavesh: Streets of Wonder',
+            'floors' => [
+
+            ],
+        ],
+        'tazavesh_so_leahs_gambit'       => [
+            'name'   => 'Tazavesh: So\'Leahs Gambit',
+            'floors' => [
+
+            ],
+        ],
     ],
 ];

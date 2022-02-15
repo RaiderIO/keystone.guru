@@ -278,5 +278,17 @@ return [
                 'upper_barrow_of_carnage' => 'Верхний уровень кургана Резнии',
             ],
         ],
+        'tazavesh_streets_of_wonder'       => [
+            'name'   => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.name',
+            'floors' => [
+
+            ],
+        ],
+        'tazavesh_so_leahs_gambit'       => [
+            'name'   => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.name',
+            'floors' => [
+
+            ],
+        ],
     ],
 ];
