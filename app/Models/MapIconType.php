@@ -20,6 +20,14 @@ class MapIconType extends CacheModel
 {
     public $timestamps = false;
 
+    protected $fillable = [
+        'name',
+        'key',
+        'width',
+        'height',
+        'admin_only',
+    ];
+
     public function mapicons()
     {
         return $this->hasMany('App\Models\MapIcon');

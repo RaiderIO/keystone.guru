@@ -67,6 +67,8 @@ return [
         'tags'                     => 'Tags',
         'teams'                    => 'Teams',
         'profile'                  => 'Profile',
+        'route_coverage'           => 'Route coverage',
+        'route_overview'           => 'Route overview',
         'welcome_text'             => 'Welcome to Keystone.guru! Get started by creating a route, or a new team to collaboratively create routes with your friends.',
         'create_route'             => 'Create route',
         'create_route_description' => 'A route is a path through a dungeon to reach the end goal of 100% enemy forces while killing all bosses.
