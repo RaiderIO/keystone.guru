@@ -1998,5 +1998,33 @@
                 ]
             }
         ]
+    },
+    {
+        "id": 36,
+        "expansion_id": 3,
+        "zone_id": 13577,
+        "mdt_id": 0,
+        "key": "tazavesh_streets_of_wonder",
+        "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
+        "slug": "tazavesh-streets-of-wonder",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 0,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 37,
+        "expansion_id": 3,
+        "zone_id": 13577,
+        "mdt_id": 0,
+        "key": "tazavesh_so_leahs_gambit",
+        "name": "dungeons.tazavesh_so_leahs_gambit.name",
+        "slug": "tazavesh-so-leahs-gambit",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 0,
+        "floor_count": 0,
+        "floors": []
     }
 ]
