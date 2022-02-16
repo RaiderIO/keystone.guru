@@ -2009,7 +2009,7 @@
         "slug": "tazavesh-streets-of-wonder",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2280,
         "floor_count": 0,
         "floors": []
     },
@@ -2019,7 +2019,7 @@
         "zone_id": 13577,
         "mdt_id": 0,
         "key": "tazavesh_so_leahs_gambit",
-        "name": "dungeons.tazavesh_so_leahs_gambit.name",
+        "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
         "slug": "tazavesh-so-leahs-gambit",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
