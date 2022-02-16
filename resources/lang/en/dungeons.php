@@ -214,7 +214,7 @@ return [
         ],
     ],
     'shadowlands' => [
-        'de_other_side'         => [
+        'de_other_side'              => [
             'name'   => 'De Other Side',
             'floors' => [
                 'de_other_side' => 'De Other Side',
@@ -223,7 +223,7 @@ return [
                 'ardenweald'    => 'Ardenweald',
             ],
         ],
-        'halls_of_atonement'    => [
+        'halls_of_atonement'         => [
             'name'   => 'Halls of Atonement',
             'floors' => [
                 'halls_of_atonement'     => 'Halls of Atonement',
@@ -231,27 +231,27 @@ return [
                 'the_sanctuary_of_souls' => 'The Sanctuary of Souls',
             ],
         ],
-        'mists_of_tirna_scithe' => [
+        'mists_of_tirna_scithe'      => [
             'name'   => 'Mists of Tirna Scithe',
             'floors' => [
                 'mists_of_tirna_scithe' => 'Mists of Tirna Scithe',
             ],
         ],
-        'plaguefall'            => [
+        'plaguefall'                 => [
             'name'   => 'Plaguefall',
             'floors' => [
                 'plaguefall'            => 'Plaguefall',
                 'the_festering_sanctum' => 'The Festering Sanctum',
             ],
         ],
-        'sanguine_depths'       => [
+        'sanguine_depths'            => [
             'name'   => 'Sanguine Depths',
             'floors' => [
                 'depths_of_despair'      => 'Depths of Despair',
                 'amphitheater_of_sorrow' => 'Amphitheater of Sorrow',
             ],
         ],
-        'spires_of_ascension'   => [
+        'spires_of_ascension'        => [
             'name'   => 'Spires of Ascension',
             'floors' => [
                 'honors_ascent'      => 'Honor\'s Ascent',
@@ -260,7 +260,7 @@ return [
                 'seat_of_the_archon' => 'Seat of the Archon',
             ],
         ],
-        'the_necrotic_wake'     => [
+        'the_necrotic_wake'          => [
             'name'   => 'The Necrotic Wake',
             'floors' => [
                 'the_necrotic_wake' => 'The Necrotic Wake',
@@ -268,7 +268,7 @@ return [
                 'zolramus'          => 'Zolramus',
             ],
         ],
-        'theater_of_pain'       => [
+        'theater_of_pain'            => [
             'name'   => 'Theater of Pain',
             'floors' => [
                 'theater_of_pain'         => 'Theater of Pain',
@@ -278,16 +278,22 @@ return [
                 'upper_barrow_of_carnage' => 'Upper Barrow of Carnage',
             ],
         ],
-        'tazavesh_streets_of_wonder'       => [
+        'tazavesh_streets_of_wonder' => [
             'name'   => 'Tazavesh: Streets of Wonder',
             'floors' => [
-
-            ],
+                'the_veiled_market'   => 'The Veiled Market',
+                'the_grand_menagerie' => 'The Grand Menagerie',
+                'the_post'            => 'The P.O.S.T',
+                'myzas_oasis'         => 'Myza\'s Oasis',
+            ]
         ],
-        'tazavesh_so_leahs_gambit'       => [
+        'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'Leahs Gambit',
             'floors' => [
-
+                'stormheim'         => 'Stormheim',
+                'aggramars_vault'   => 'Aggramar\'s Vault',
+                'boralus_harbor'    => 'Boralus Harbor',
+                'the_opulent_nexus' => 'The Opulent Nexus',
             ],
         ],
     ],
