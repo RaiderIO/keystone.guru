@@ -55,14 +55,16 @@ class Conversion
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
-            Dungeon::DUNGEON_DE_OTHER_SIDE         => 'DeOtherSide',
-            Dungeon::DUNGEON_HALLS_OF_ATONEMENT    => 'HallsOfAtonement',
-            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE => 'MistsOfTirnaScithe',
-            Dungeon::DUNGEON_PLAGUEFALL            => 'Plaguefall',
-            Dungeon::DUNGEON_SANGUINE_DEPTHS       => 'SanguineDepths',
-            Dungeon::DUNGEON_SPIRES_OF_ASCENSION   => 'SpiresOfAscension',
-            Dungeon::DUNGEON_THE_NECROTIC_WAKE     => 'TheNecroticWake',
-            Dungeon::DUNGEON_THEATER_OF_PAIN       => 'TheaterOfPain',
+            Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
+            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
+            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
+            Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
+            Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
+            Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
+            Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
+            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
+            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
+            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
         ],
     ];
 
@@ -71,7 +73,7 @@ class Conversion
      * @param $nr
      * @return int
      */
-    private static function round($nr) : int
+    private static function round($nr): int
     {
         return (int)($nr * 100) / 100;
     }
