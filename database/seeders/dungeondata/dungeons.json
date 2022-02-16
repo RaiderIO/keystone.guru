@@ -2010,8 +2010,18 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 2280,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 101,
+                "index": 1,
+                "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_veiled_market",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            }
+        ]
     },
     {
         "id": 37,
@@ -2024,7 +2034,58 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 1800,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 4,
+        "floors": [
+            {
+                "id": 97,
+                "index": 1,
+                "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.stormheim",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 199,
+                        "floor1_id": 97,
+                        "floor2_id": 98,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 98,
+                "index": 2,
+                "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.aggramars_vault",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 201,
+                        "floor1_id": 98,
+                        "floor2_id": 97,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 99,
+                "index": 3,
+                "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.boralus_harbor",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            },
+            {
+                "id": 100,
+                "index": 4,
+                "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.the_opulent_nexus",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": []
+            }
+        ]
     }
 ]
