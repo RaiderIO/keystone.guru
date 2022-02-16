@@ -19,6 +19,11 @@ class LaratrustSeeder extends Seeder
      */
     public function run()
     {
+        if (config('app.type') !== 'local') {
+            $this->command->error('You are not allowed to run this seeder on non-local development environments!');
+            return;
+        }
+
         $this->command->info('Truncating User, Role and Permission tables');
         $this->truncateLaratrustTables();
 
@@ -61,10 +66,13 @@ class LaratrustSeeder extends Seeder
                 $this->command->info("Creating '{$key}' user");
                 // Create default user for each role
                 $user = User::create([
-                    'name'       => ucwords(str_replace('_', ' ', $key)),
-                    'public_key' => User::generateRandomPublicKey(),
-                    'email'      => $key . '@app.com',
-                    'password'   => bcrypt('password'),
+                    'name'            => ucwords(str_replace('_', ' ', $key)),
+                    'public_key'      => User::generateRandomPublicKey(),
+                    'echo_color'      => randomHexColor(),
+                    'email'           => $key . '@app.com',
+                    'password'        => bcrypt('password'),
+                    'legal_agreed'    => 1,
+                    'legal_agreed_ms' => -1,
                 ]);
                 $user->attachRole($role);
             }
