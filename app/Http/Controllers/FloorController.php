@@ -22,17 +22,19 @@ class FloorController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param Floor|null $floor
      * @return Floor
+     * @throws Exception
      */
-    public function store(Request $request, Floor $floor = null)
+    public function store(Request $request, Dungeon $dungeon, Floor $floor = null)
     {
-        $beforeFloor = clone $floor;
+        $beforeFloor = $floor === null ? null : clone $floor;
 
         if ($floor === null) {
             $floor = new Floor();
             // May not be set when editing
-            $floor->dungeon_id = $request->get('dungeon');
+            $floor->dungeon_id = $dungeon->id;
         }
 
         $floor->index          = $request->get('index');
@@ -113,6 +115,7 @@ class FloorController extends Controller
      * @param Dungeon $dungeon
      * @param Floor $floor
      * @return Factory|View
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function mapping(Request $request, Dungeon $dungeon, Floor $floor)
     {
@@ -134,7 +137,7 @@ class FloorController extends Controller
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
     {
         // Store it and show the edit page again
-        $floor = $this->store($request, $floor);
+        $floor = $this->store($request, $dungeon, $floor);
 
         // Message to the user
         Session::flash('status', __('views/admin.floor.flash.floor_updated'));
@@ -152,13 +155,13 @@ class FloorController extends Controller
     public function savenew(FloorFormRequest $request, Dungeon $dungeon)
     {
         // Store it and show the edit page
-        $floor = $this->store($request);
+        $floor = $this->store($request, $dungeon);
 
         // Message to the user
         Session::flash('status', __('views/admin.floor.flash.floor_created'));
 
-        return redirect()->route('admin.floor.edit.mapping', [
-            'dungeon' => $request->get('dungeon'),
+        return redirect()->route('admin.floor.edit', [
+            'dungeon' => $dungeon,
             'floor'   => $floor,
         ]);
     }

@@ -285,7 +285,7 @@ return [
                 'the_grand_menagerie' => 'The Grand Menagerie',
                 'the_post'            => 'The P.O.S.T',
                 'myzas_oasis'         => 'Myza\'s Oasis',
-            ],
+            ]
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'Leahs Gambit',

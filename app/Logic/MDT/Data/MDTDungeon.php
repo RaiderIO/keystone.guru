@@ -80,7 +80,7 @@ class MDTDungeon
             // Fetch the cache or set it if it didn't exist
             $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeonKey), function () {
                 $result           = new Collection();
-                $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools/');
+                $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
                 $expansionName    = Conversion::getExpansionName($this->dungeonKey);
                 $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeonKey);
 
