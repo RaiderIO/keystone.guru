@@ -2023,7 +2023,7 @@
         "slug": "tazavesh-so-leahs-gambit",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "floor_count": 0,
         "floors": []
     }
