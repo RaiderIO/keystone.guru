@@ -17,7 +17,7 @@ if (isset($floor)) {
         isset($floor) ? __('views/admin.floor.edit.title_edit') : __('views/admin.floor.edit.title_new'),
         __($dungeon->name)
     )]
-)])
+)
 @section('header-title')
     {{ sprintf(isset($floor) ? __('views/admin.floor.edit.header_edit') : __('views/admin.floor.edit.header_new'), __($dungeon->name)) }}
 @endsection
@@ -36,7 +36,7 @@ if (isset($floor)) {
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
         {!! Form::label('index', __('views/admin.floor.edit.index'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::text('index', $dungeon->floors()->count() + 1, ['class' => 'form-control']) !!}
+        {!! Form::text('index', optional($floor)->index ?? $dungeon->floors()->count() + 1, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
