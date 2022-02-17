@@ -2004,13 +2004,13 @@
         "expansion_id": 3,
         "zone_id": 13577,
         "mdt_id": 0,
-        "key": "tazavesh_streets_of_wonder",
+        "key": "tazaveshstreetsofwonder",
         "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
         "slug": "tazavesh-streets-of-wonder",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 2280,
-        "floor_count": 1,
+        "floor_count": 4,
         "floors": [
             {
                 "id": 101,
@@ -2019,7 +2019,74 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 215,
+                        "floor1_id": 101,
+                        "floor2_id": 102,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 216,
+                        "floor1_id": 101,
+                        "floor2_id": 103,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 217,
+                        "floor1_id": 101,
+                        "floor2_id": 104,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 102,
+                "index": 2,
+                "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 214,
+                        "floor1_id": 102,
+                        "floor2_id": 101,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 103,
+                "index": 3,
+                "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_post",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 213,
+                        "floor1_id": 103,
+                        "floor2_id": 101,
+                        "direction": "right"
+                    }
+                ]
+            },
+            {
+                "id": 104,
+                "index": 4,
+                "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "floorcouplings": [
+                    {
+                        "id": 212,
+                        "floor1_id": 104,
+                        "floor2_id": 101,
+                        "direction": "right"
+                    }
+                ]
             }
         ]
     },
@@ -2028,7 +2095,7 @@
         "expansion_id": 3,
         "zone_id": 13577,
         "mdt_id": 0,
-        "key": "tazavesh_so_leahs_gambit",
+        "key": "tazaveshsoleahsgambit",
         "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
         "slug": "tazavesh-so-leahs-gambit",
         "enemy_forces_required": 0,
@@ -2045,10 +2112,10 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 199,
+                        "id": 205,
                         "floor1_id": 97,
                         "floor2_id": 98,
-                        "direction": "down"
+                        "direction": "right"
                     }
                 ]
             },
@@ -2061,10 +2128,16 @@
                 "max_enemy_size": null,
                 "floorcouplings": [
                     {
-                        "id": 201,
+                        "id": 206,
                         "floor1_id": 98,
                         "floor2_id": 97,
-                        "direction": "up"
+                        "direction": "left"
+                    },
+                    {
+                        "id": 207,
+                        "floor1_id": 98,
+                        "floor2_id": 99,
+                        "direction": "down"
                     }
                 ]
             },
@@ -2075,7 +2148,20 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 209,
+                        "floor1_id": 99,
+                        "floor2_id": 98,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 210,
+                        "floor1_id": 99,
+                        "floor2_id": 100,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 100,
@@ -2084,7 +2170,14 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 211,
+                        "floor1_id": 100,
+                        "floor2_id": 99,
+                        "direction": "right"
+                    }
+                ]
             }
         ]
     }
