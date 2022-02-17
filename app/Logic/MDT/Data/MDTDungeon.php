@@ -16,6 +16,7 @@ use App\Models\Expansion;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Lua;
@@ -48,32 +49,11 @@ class MDTDungeon
     }
 
     /**
-     * Get all clones of a specific NPC.
-     * @param $npcId int WoW's NPC id.
-     * @return array The enemy as an array.
-     */
-    private function _getMDTEnemy(int $npcId)
-    {
-        $enemies = $this->getMDTNPCs();
-
-        $result = null;
-        // Find the enemy in a list of enemies
-        foreach ($enemies as $enemy) {
-            // Id is classed as a double, some lua -> php conversion issue/choice.
-            if ((int)$enemy->id === $npcId) {
-                $result = $enemy;
-                break;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Get a list of NPCs
      * @return Collection|MDTNpc[]
+     * @throws Exception
      */
-    public function getMDTNPCs()
+    public function getMDTNPCs(): Collection
     {
         $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->dungeonKey)) {
@@ -87,6 +67,12 @@ class MDTDungeon
                 $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeonKey);
                 if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
                     $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
+
+                    $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
+
+                    if (!file_exists($mdtDungeonNameFile)) {
+                        throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
+                    }
 
                     $eval = '
                         local MDT = {}
@@ -103,7 +89,7 @@ class MDTDungeon
                         // Some files require LibStub
                         file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
                         // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                        file_get_contents(sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName)) . PHP_EOL .
+                        file_get_contents($mdtDungeonNameFile) . PHP_EOL .
                         // Insert dummy function to get what we need
                         '
                         function GetDungeonEnemies()
@@ -137,17 +123,21 @@ class MDTDungeon
      * @return Collection|Enemy[]
      * @throws InvalidArgumentException
      */
-    public function getClonesAsEnemies($floors)
+    public function getClonesAsEnemies($floors): Collection
     {
         return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeonKey), function () use ($floors) {
             $enemies = new Collection();
+
+            try {
+                $mdtNpcs = $this->getMDTNPCs();
+            } catch (Exception $exception){
+                return $enemies;
+            }
 
             // Ensure floors is a collection
             if (!($floors instanceof Collection)) {
                 $floors = [$floors];
             }
-
-            $mdtNpcs = $this->getMDTNPCs();
 
             // NPC_ID => list of clones
             $npcClones = [];
