@@ -91,8 +91,8 @@ class Dungeon extends CacheModel
     const DUNGEON_SPIRES_OF_ASCENSION        = 'spiresofascension_a';
     const DUNGEON_THE_NECROTIC_WAKE          = 'necroticwake_a';
     const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
-    const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazavesh_streets_of_wonder';
-    const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazavesh_so_leahs_gambit';
+    const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
+    const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
 
     const ALL_LEGION = [
         self::DUNGEON_ARCWAY,
