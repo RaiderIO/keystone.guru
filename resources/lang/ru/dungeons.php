@@ -214,7 +214,7 @@ return [
         ],
     ],
     'shadowlands' => [
-        'de_other_side'         => [
+        'de_other_side'              => [
             'name'   => 'Та Сторона',
             'floors' => [
                 'de_other_side' => 'Та Сторона',
@@ -223,7 +223,7 @@ return [
                 'ardenweald'    => 'Арденвельд',
             ],
         ],
-        'halls_of_atonement'    => [
+        'halls_of_atonement'         => [
             'name'   => 'Чертоги Покаяния',
             'floors' => [
                 'halls_of_atonement'     => 'Чертоги Покаяния',
@@ -231,27 +231,27 @@ return [
                 'the_sanctuary_of_souls' => 'Святилище Душ',
             ],
         ],
-        'mists_of_tirna_scithe' => [
+        'mists_of_tirna_scithe'      => [
             'name'   => 'Туманы Тирна Скитта',
             'floors' => [
                 'mists_of_tirna_scithe' => 'Туманы Тирна Скитта',
             ],
         ],
-        'plaguefall'            => [
+        'plaguefall'                 => [
             'name'   => 'Чумные каскады',
             'floors' => [
                 'plaguefall'            => 'Чумные каскады',
                 'the_festering_sanctum' => 'Гниющее святилище',
             ],
         ],
-        'sanguine_depths'       => [
+        'sanguine_depths'            => [
             'name'   => 'Кровавые катакомбы',
             'floors' => [
                 'depths_of_despair'      => 'Глубины Отчаяния',
                 'amphitheater_of_sorrow' => 'Амфитеатр Скорбиw',
             ],
         ],
-        'spires_of_ascension'   => [
+        'spires_of_ascension'        => [
             'name'   => 'Шпили Перерождения',
             'floors' => [
                 'honors_ascent'      => 'Подъем Чести',
@@ -260,7 +260,7 @@ return [
                 'seat_of_the_archon' => 'Престол Архонта',
             ],
         ],
-        'the_necrotic_wake'     => [
+        'the_necrotic_wake'          => [
             'name'   => 'Смертельная тризна',
             'floors' => [
                 'the_necrotic_wake' => 'Смертельная тризна',
@@ -268,7 +268,7 @@ return [
                 'zolramus'          => 'Золрамус"',
             ],
         ],
-        'theater_of_pain'       => [
+        'theater_of_pain'            => [
             'name'   => 'Театр Боли',
             'floors' => [
                 'theater_of_pain'         => 'Театр Боли',
@@ -278,16 +278,22 @@ return [
                 'upper_barrow_of_carnage' => 'Верхний уровень кургана Резнии',
             ],
         ],
-        'tazavesh_streets_of_wonder'       => [
+        'tazavesh_streets_of_wonder' => [
             'name'   => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.name',
             'floors' => [
-
-            ],
+                'the_veiled_market'   => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_veiled_market',
+                'the_grand_menagerie' => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie',
+                'the_post'            => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_post',
+                'myzas_oasis'         => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis',
+            ]
         ],
-        'tazavesh_so_leahs_gambit'       => [
+        'tazavesh_so_leahs_gambit'   => [
             'name'   => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.name',
             'floors' => [
-
+                'stormheim'         => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.stormheim',
+                'aggramars_vault'   => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.aggramars_vault',
+                'boralus_harbor'    => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.boralus_harbor',
+                'the_opulent_nexus' => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.the_opulent_nexus',
             ],
         ],
     ],

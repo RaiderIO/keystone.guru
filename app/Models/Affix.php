@@ -42,6 +42,7 @@ class Affix extends CacheModel
     const AFFIX_TORMENTED  = 'Tormented';
     const AFFIX_UNKNOWN    = 'Unknown';
     const AFFIX_INFERNAL   = 'Infernal';
+    const AFFIX_ENCRYPTED  = 'Encrypted';
 
     const ALL_AFFIXES = [
         self::AFFIX_BOLSTERING,
@@ -69,6 +70,7 @@ class Affix extends CacheModel
         self::AFFIX_TORMENTED,
         self::AFFIX_UNKNOWN,
         self::AFFIX_INFERNAL,
+        self::AFFIX_ENCRYPTED,
     ];
 
     use HasIconFile;

@@ -927,14 +927,20 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
-.modifier_prideful {
-    background: white url('/images/enemymodifiers/prideful.png') repeat center !important;
+.modifier_encrypted {
+    background: white url('/images/enemymodifiers/encrypted.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_inspiring {
     background: white url('/images/enemymodifiers/inspiring.png') repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
+.modifier_prideful {
+    background: white url('/images/enemymodifiers/prideful.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
