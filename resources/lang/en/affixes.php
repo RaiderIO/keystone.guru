@@ -101,5 +101,9 @@ return [
         'name'        => 'Infernal',
         'description' => 'Infernal Beacons can be found near some bosses. Activating a Beacon or engaging a nearby boss will trigger a Legion invasion.',
     ],
+    'encrypted'              => [
+        'name'        => 'Encrypted',
+        'description' => 'Enemies throughout the dungeon possess relics of the First Ones. Destroy the relics to summon the First Ones\' Automa and gain powerful bonuses, based on the order in which they were destroyed.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 ];

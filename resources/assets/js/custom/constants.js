@@ -92,6 +92,7 @@ const AFFIX_PRIDEFUL = 'Prideful';
 const AFFIX_TORMENTED = 'Tormented';
 const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
+const AFFIX_ENCRYPTED = 'Encrypted';
 
 /**
  * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.
@@ -148,8 +149,9 @@ let c = {
             truesight_display_zoom: 3,
             teeming_display_zoom: 3,
             awakened_display_zoom: 3,
-            prideful_display_zoom: 3,
+            encrypted_display_zoom: 3,
             inspiring_display_zoom: 3,
+            prideful_display_zoom: 3,
             tormented_display_zoom: 3,
             active_aura_display_zoom: 3,
             colors: [

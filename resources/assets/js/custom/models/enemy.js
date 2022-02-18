@@ -28,6 +28,7 @@ let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
+let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 
 /**
  * @property {Number} floor_id
@@ -485,10 +486,6 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        //
-        // if( this.id === 4406 ) {
-        //     console.warn('setPopupEnabled', enabled);
-        // }
 
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
@@ -623,10 +620,12 @@ class Enemy extends MapObject {
         let mapContext = getState().getMapContext();
         if (mapContext instanceof MapContextDungeonRoute) {
             // If we are tormented, but the route has no tormented enemies..
-            if (this.hasOwnProperty('seasonal_type') && this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED &&
-                !mapContext.hasAffix(AFFIX_TORMENTED)) {
-                // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
-                return false;
+            if (this.hasOwnProperty('seasonal_type')) {
+                if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED))) {
+                    // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
+                    return false;
+                }
             }
         }
 
@@ -775,6 +774,15 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isEncryptedNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && [185680, 185683, 185685].includes(this.npc.id);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isInspiring() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
@@ -787,6 +795,15 @@ class Enemy extends MapObject {
     isTormented() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isEncrypted() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED;
     }
 
     /**

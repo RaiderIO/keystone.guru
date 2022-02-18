@@ -282,6 +282,7 @@ class AdminToolsController extends Controller
 
     /**
      * @return Factory|
+     * @throws Exception
      */
     public function mdtdiff()
     {
