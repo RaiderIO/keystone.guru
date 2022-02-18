@@ -2061,11 +2061,11 @@
                 "index": 3,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_post",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 24,
+                "max_enemy_size": 40,
                 "floorcouplings": [
                     {
-                        "id": 213,
+                        "id": 218,
                         "floor1_id": 103,
                         "floor2_id": 101,
                         "direction": "right"
@@ -2098,7 +2098,7 @@
         "key": "tazaveshsoleahsgambit",
         "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
         "slug": "tazavesh-so-leahs-gambit",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 346,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 1800,
         "floor_count": 4,

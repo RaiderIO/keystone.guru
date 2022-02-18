@@ -58,5 +58,29 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-144.08985,\"lng\":162.325436},{\"lat\":-154.71531,\"lng\":150.838453}]"
         }
+    },
+    {
+        "id": 341,
+        "floor_id": 101,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#262df5",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-108.121233,\"lng\":296.148795},{\"lat\":-113.936518,\"lng\":164.838214}]"
+        }
+    },
+    {
+        "id": 342,
+        "floor_id": 101,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#e48633",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-111.208359,\"lng\":281.215716},{\"lat\":-148.541056,\"lng\":164.192071}]"
+        }
     }
 ]
