@@ -167,6 +167,38 @@ class AdminToolsController extends Controller
     }
 
     /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesimport()
+    {
+        return view('admin.tools.enemyforces.import');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesimportsubmit(Request $request)
+    {
+        $json = json_decode($request->get('import_string'), true);
+
+        $results = [];
+        foreach ($json['Npcs'] as $jsonNpc) {
+            $npc = Npc::where('id', $jsonNpc['Id'])->first();
+
+            if ($npc !== null) {
+                $npc->update(['enemy_forces' => $jsonNpc['Amount']]);
+
+                $results[] = sprintf('Changed enemy forces of npc %d to %d', $jsonNpc['Id'], $jsonNpc['Amount']);
+            } else {
+                $results[] = sprintf('Unable to find npc %d', $jsonNpc['Id']);
+            }
+        }
+
+        dd($results);
+    }
+
+    /**
      * @return Factory|
      */
     public function mdtview()
