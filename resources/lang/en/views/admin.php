@@ -229,6 +229,12 @@ return [
                 'header' => 'View contents for %s',
             ],
         ],
+        'enemyforces'       => [
+            'title'                        => 'Import Enemy Forces',
+            'header'                       => 'Import Enemy Forces',
+            'paste_mennos_export_json'     => 'Paste Menno\'s Export Json',
+            'submit'                       => 'Submit',
+        ],
         'exception'    => [
             'select' => [
                 'title'                     => 'Throw an exception',
@@ -292,6 +298,9 @@ return [
             'view_mdt_string_as_dungeonroute' => 'View MDT String as Dungeonroute',
             'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
             'view_mdt_diff'                   => 'View MDT Diff',
+
+            'subheader_enemy_forces' => 'Enemy Forces',
+            'enemy_forces_import'    => 'Import enemy forces',
 
             'subheader_misc'     => 'Misc',
             'drop_caches'        => 'Drop caches',
