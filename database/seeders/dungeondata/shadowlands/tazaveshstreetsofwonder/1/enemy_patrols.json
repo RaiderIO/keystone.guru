@@ -82,5 +82,17 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-111.208359,\"lng\":281.215716},{\"lat\":-148.541056,\"lng\":164.192071}]"
         }
+    },
+    {
+        "id": 343,
+        "floor_id": 101,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-137.977574,\"lng\":148.445491},{\"lat\":-137.977574,\"lng\":146.266649}]"
+        }
     }
 ]

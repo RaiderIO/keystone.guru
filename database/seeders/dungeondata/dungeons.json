@@ -2045,11 +2045,11 @@
                 "index": 2,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 24,
+                "max_enemy_size": 40,
                 "floorcouplings": [
                     {
-                        "id": 214,
+                        "id": 219,
                         "floor1_id": 102,
                         "floor2_id": 101,
                         "direction": "left"
@@ -2077,11 +2077,11 @@
                 "index": 4,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 24,
+                "max_enemy_size": 40,
                 "floorcouplings": [
                     {
-                        "id": 212,
+                        "id": 220,
                         "floor1_id": 104,
                         "floor2_id": 101,
                         "direction": "right"
