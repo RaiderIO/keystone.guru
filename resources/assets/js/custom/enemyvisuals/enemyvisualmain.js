@@ -112,7 +112,12 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Smaller MDT icons to make it easier to link them
         if (this.enemyvisual.enemy.is_mdt) {
-            calculatedSize /= 2;
+            calculatedSize *= c.map.enemy.mdt_size_factor;
+        }
+
+        // If boss, grow
+        if ([NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.enemyvisual.enemy.npc.classification_id)) {
+            calculatedSize *= c.map.enemy.boss_size_factor;
         }
 
 

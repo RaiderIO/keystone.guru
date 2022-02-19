@@ -189,7 +189,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         let finalBoss = null;
         for (let i = 0; i < this.objects.length; i++) {
             let enemy = this.objects[i];
-            if (enemy.npc !== null && enemy.npc.classification_id === 4) {
+            if (enemy.npc !== null && enemy.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS) {
                 finalBoss = enemy;
                 break;
             }

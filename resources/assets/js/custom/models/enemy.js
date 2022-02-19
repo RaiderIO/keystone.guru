@@ -429,7 +429,7 @@ class Enemy extends MapObject {
      * @returns {boolean}
      */
     isLastBoss() {
-        return this.npc !== null && this.npc.classification_id === 4;
+        return this.npc !== null && this.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS;
     }
 
     /**

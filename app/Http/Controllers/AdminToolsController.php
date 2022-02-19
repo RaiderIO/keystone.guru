@@ -187,9 +187,20 @@ class AdminToolsController extends Controller
             $npc = Npc::where('id', $jsonNpc['Id'])->first();
 
             if ($npc !== null) {
-                $npc->update(['enemy_forces' => $jsonNpc['Amount'], 'base_health' => $jsonNpc['MythicHealth']]);
+                $keyMapping = [
+                    'MythicHealth' => 'base_health',
+                    'Amount'       => 'enemy_forces',
+                ];
 
-                $results[] = sprintf('Changed enemy forces of npc %d to %d', $jsonNpc['Id'], $jsonNpc['Amount']);
+                $toUpdate = [];
+                foreach ($jsonNpc as $key => $value) {
+                    if ($key !== 'Id' && $value >= 0 && isset($keyMapping[$key])) {
+                        $toUpdate[$keyMapping[$key]] = $value;
+                    }
+                }
+                $npc->update($toUpdate);
+
+                $results[] = sprintf('Changed npc %d fields: %s', $jsonNpc['Id'], json_encode($toUpdate));
             } else {
                 $results[] = sprintf('Unable to find npc %d', $jsonNpc['Id']);
             }
