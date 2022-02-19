@@ -187,7 +187,7 @@ class AdminToolsController extends Controller
             $npc = Npc::where('id', $jsonNpc['Id'])->first();
 
             if ($npc !== null) {
-                $npc->update(['enemy_forces' => $jsonNpc['Amount']]);
+                $npc->update(['enemy_forces' => $jsonNpc['Amount'], 'base_health' => $jsonNpc['MythicHealth']]);
 
                 $results[] = sprintf('Changed enemy forces of npc %d to %d', $jsonNpc['Id'], $jsonNpc['Amount']);
             } else {
