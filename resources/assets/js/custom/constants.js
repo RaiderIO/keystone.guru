@@ -94,6 +94,12 @@ const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 
+// NPC Classifications
+const NPC_CLASSIFICATION_ID_NORMAL = 1;
+const NPC_CLASSIFICATION_ID_ELITE = 2;
+const NPC_CLASSIFICATION_ID_BOSS = 3;
+const NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
+
 /**
  * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.
  * @returns {(function(): *)|(function(): string)|*}
@@ -160,6 +166,8 @@ let c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
+            mdt_size_factor: 0.5,
+            boss_size_factor: 1.5,
             minSize: function () {
                 let result = getState().getMapContext().getMinEnemySizeDefault();
 

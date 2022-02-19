@@ -4,5 +4,5 @@ return [
     'normal'    => 'Normal',
     'elite'     => 'Elite',
     'boss'      => 'Boss',
-    'finalboss' => 'Boss',
+    'finalboss' => 'Final boss',
 ];
