@@ -116,7 +116,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
         // If boss, grow
-        if ([NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.enemyvisual.enemy.npc.classification_id)) {
+        if (this.enemyvisual.enemy.npc !== null && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.enemyvisual.enemy.npc.classification_id)) {
             calculatedSize *= c.map.enemy.boss_size_factor;
         }
 
