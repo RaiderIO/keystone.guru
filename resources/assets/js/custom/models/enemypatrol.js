@@ -41,7 +41,7 @@ class EnemyPatrol extends Polyline {
                     repeat: 25,
                     symbol: L.Symbol.dash({
                         pixelSize: 10,
-                        pathOptions: {color: 'darkred', weight: 2}
+                        pathOptions: {color: this.polyline.color, weight: 2}
                     })
                 },
                 {
