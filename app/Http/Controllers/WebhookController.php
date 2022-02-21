@@ -112,15 +112,17 @@ class WebhookController extends Controller
                 $embeds[$lastKey]['timestamp'] = $commit['timestamp'];
             }
 
-            // Add footer to the last embed
-            $lastKey                    = array_key_last($embeds);
-            $embeds[$lastKey]['footer'] = [
-                'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                'text'     => 'Keystone.guru Discord Bot',
-            ];
+            // Only send a message if we found a commit that was worthy of mentioning
+            if (!empty($embeds)) {
+                // Add footer to the last embed
+                $lastKey                    = array_key_last($embeds);
+                $embeds[$lastKey]['footer'] = [
+                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'text'     => 'Keystone.guru Discord Bot',
+                ];
 
-            $discordApiService->sendEmbeds(config('keystoneguru.webhook.github.url'), $embeds);
-
+                $discordApiService->sendEmbeds(config('keystoneguru.webhook.github.url'), $embeds);
+            }
         }
 
         return response()->noContent();

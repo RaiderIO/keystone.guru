@@ -57,6 +57,7 @@ class AffixSeeder extends Seeder
             new Affix(['key' => Affix::AFFIX_TORMENTED, 'name' => 'affixes.tormented.name', 'icon_file_id' => -1, 'description' => 'affixes.tormented.description']),
             new Affix(['key' => Affix::AFFIX_UNKNOWN, 'name' => 'affixes.unknown.name', 'icon_file_id' => -1, 'description' => 'affixes.unknown.description']),
             new Affix(['key' => Affix::AFFIX_INFERNAL, 'name' => 'affixes.infernal.name', 'icon_file_id' => -1, 'description' => 'affixes.infernal.description']),
+            new Affix(['key' => Affix::AFFIX_ENCRYPTED, 'name' => 'affixes.encrypted.name', 'icon_file_id' => -1, 'description' => 'affixes.encrypted.description']),
         ]);
 
         foreach ($affixes as $affix) {
@@ -161,6 +162,20 @@ class AffixSeeder extends Seeder
 
             ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_INFERNAL]],
             ['season_id' => 7, 'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_QUAKING, Affix::AFFIX_INFERNAL]],
+
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+            ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_ENCRYPTED]],
+
         ];
 
         foreach ($groups as $groupArr) {
