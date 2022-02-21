@@ -65,7 +65,7 @@ class SeasonsSeeder extends Seeder
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 26,
-                'start'             => '2022-02-28 00:00:00',
+                'start'             => '2022-03-01 00:00:00',
                 'presets'           => 0,
             ],
         ];
