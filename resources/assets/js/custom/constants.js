@@ -167,7 +167,7 @@ let c = {
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
             mdt_size_factor: 0.5,
-            boss_size_factor: 1.5,
+            boss_size_factor: 1.2,
             minSize: function () {
                 let result = getState().getMapContext().getMinEnemySizeDefault();
 
