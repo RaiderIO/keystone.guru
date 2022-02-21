@@ -73,6 +73,7 @@ class Enemy extends MapObject {
         this.isPopupEnabled = false;
         this.overpulledKillZoneId = null;
         this.obsolete = false;
+        this.selectNpcs = [];
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -87,6 +88,12 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('object:changed', this, this._onObjectChanged.bind(this));
+
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().register(['npc:added', 'npc:removed'], this, function (event) {
+            console.log(event);
+            self.selectNpcs = [];
+        });
     }
 
     /**
@@ -100,17 +107,6 @@ class Enemy extends MapObject {
         }
 
         let self = this;
-        let selectNpcs = [];
-        let npcs = getState().getMapContext().getNpcs();
-        for (let index in npcs) {
-            if (npcs.hasOwnProperty(index)) {
-                let npc = npcs[index];
-                selectNpcs.push({
-                    id: npc.id,
-                    name: `${npc.name} (${npc.id})`
-                });
-            }
-        }
 
         let selectAuras = [];
         let auras = getState().getMapContext().getAuras();
@@ -157,7 +153,7 @@ class Enemy extends MapObject {
                 name: 'npc_id',
                 type: 'select',
                 admin: true,
-                values: selectNpcs,
+                values: this._getSelectNpcs.bind(this),
                 default: -1,
                 live_search: true,
                 setter: function (value) {
@@ -189,7 +185,7 @@ class Enemy extends MapObject {
                 name: 'mdt_npc_id',
                 type: 'select',
                 admin: true,
-                values: selectNpcs,
+                values: this._getSelectNpcs.bind(this),
                 default: null,
                 live_search: true,
                 setter: function (value) {
@@ -290,6 +286,31 @@ class Enemy extends MapObject {
                 default: false
             })
         ]);
+    }
+
+    /**
+     *
+     * @returns {[]}
+     * @private
+     */
+    _getSelectNpcs() {
+        // Return cache if we have it
+        if (this.selectNpcs.length > 0) {
+            return this.selectNpcs;
+        }
+
+        let npcs = getState().getMapContext().getNpcs();
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let npc = npcs[index];
+                this.selectNpcs.push({
+                    id: npc.id,
+                    name: `${npc.name} (${npc.id})`
+                });
+            }
+        }
+
+        return this.selectNpcs;
     }
 
     _getPercentageString(enemyForces) {
@@ -877,6 +898,9 @@ class Enemy extends MapObject {
     cleanup() {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
+
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().unregister(['npc:added', 'npc:removed'], this);
 
         this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);
