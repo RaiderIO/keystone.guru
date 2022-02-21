@@ -104,6 +104,8 @@ class NpcController extends Controller
                     broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
                 }
             } else {
+                // Let previous dungeon know that this NPC is no longer available
+                broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
                 broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
             }
 

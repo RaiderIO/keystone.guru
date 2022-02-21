@@ -11,6 +11,8 @@ class MapContextDungeon extends MapContext {
         console.assert(this instanceof MapContextDungeon, 'this is not a MapContextDungeon', this);
 
         this._options.npcs.push(model);
+
+        this.signal('npc:added', {npc: model});
     }
 
     /**
@@ -26,6 +28,8 @@ class MapContextDungeon extends MapContext {
                 if (rawNpc.id === id) {
                     // Remove it
                     let removed = this._options.npcs.splice(index, 1);
+
+                    this.signal('npc:deleted', {npc: removed});
                     break;
                 }
             }

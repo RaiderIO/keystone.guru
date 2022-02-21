@@ -248,6 +248,10 @@ function pickHexFromHandlers(handlers, weight) {
  * @returns {number}
  */
 function getFormattedPercentage(value, max) {
+    if( max === 0 ){
+        return 0;
+    }
+
     let percent = ((value / max) * 100);
     // Round to 1 decimal at best
     return Math.round(percent * 10) / 10;
