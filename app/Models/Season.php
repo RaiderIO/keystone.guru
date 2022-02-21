@@ -202,9 +202,6 @@ class Season extends CacheModel
     {
         /** @var SeasonService $seasonService */
         $start = $this->start($region);
-        if ($date->lt($start)) {
-            throw new Exception('Cannot find an affix group of this season before it\'s started!');
-        }
 
         /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
