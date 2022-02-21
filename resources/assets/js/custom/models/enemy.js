@@ -91,7 +91,6 @@ class Enemy extends MapObject {
 
         // If we added or removed NPCs, we clear the cache
         getState().getMapContext().register(['npc:added', 'npc:removed'], this, function (event) {
-            console.log(event);
             self.selectNpcs = [];
         });
     }
