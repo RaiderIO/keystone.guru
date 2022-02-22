@@ -113,8 +113,7 @@ if (count($affixes) == 0) {
             'floorId' => $floor->id,
             'showAttribution' => false,
             'hiddenMapObjectGroups' => [
-                'enemypack',
-                'killzonepath'
+                'enemypack'
             ],
             'show' => [
                 'header' => false,

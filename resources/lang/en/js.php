@@ -58,6 +58,7 @@ return [
     'brushline_map_object_group_label'                => 'Drawn lines',
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
+    'killzonepath_map_object_group_label'                 => 'Pull connections',
 
     'publish_state_title_unpublished'   => 'Unpublished',
     'publish_state_subtext_unpublished' => 'Only you may view this route',

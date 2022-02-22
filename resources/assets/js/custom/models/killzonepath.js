@@ -76,6 +76,10 @@ class KillZonePath extends Polyline {
     //     });
     // }
 
+    isEditable() {
+        return false;
+    }
+
     toString() {
         return 'KillZonePath';
     }

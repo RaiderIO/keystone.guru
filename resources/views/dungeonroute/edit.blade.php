@@ -34,9 +34,7 @@ $sandbox = $dungeonroute->isSandbox();
                     'publish' => !$sandbox,
                 ]
             ],
-            'hiddenMapObjectGroups' => [
-                'killzonepath'
-            ],
+            'hiddenMapObjectGroups' => [],
         ])
     </div>
 @endsection

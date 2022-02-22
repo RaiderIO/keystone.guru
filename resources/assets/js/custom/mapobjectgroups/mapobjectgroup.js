@@ -567,7 +567,7 @@ class MapObjectGroup extends Signalable {
      */
     setLayerToMapObject(layer, mapObject) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+        console.assert(mapObject.id <= 0 || this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
         // Unset previous layer
         let oldLayer = mapObject.layer;
