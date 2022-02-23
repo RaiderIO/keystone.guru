@@ -2,18 +2,19 @@
 
 namespace App\Console\Commands;
 
+use App\Models\GameServerRegion;
 use App\Service\Expansion\ExpansionService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Illuminate\Console\Command;
 
-class Test extends Command
+class Random extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test';
+    protected $signature = 'random';
 
     /**
      * The console command description.
@@ -39,6 +40,12 @@ class Test extends Command
      */
     public function handle(ExpansionService $expansionService, TimewalkingEventServiceInterface $timewalkingEventService)
     {
+        $this->info(
+            $expansionService->getCurrentAffixGroup(
+                $expansionService->getCurrentExpansion(),
+                GameServerRegion::getUserOrDefaultRegion()
+            )
+        );
 
         $backupDir = config('keystoneguru.db_backup_dir');
         $this->info(

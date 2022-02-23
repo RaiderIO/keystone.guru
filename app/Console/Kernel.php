@@ -16,6 +16,7 @@ use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
+use App\Console\Commands\Random;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -83,7 +84,7 @@ class Kernel extends ConsoleKernel
         DeleteExpiredDungeonRoutes::class,
 
         // Test
-//        Test::class,
+        Random::class,
 
         // View
         Cache::class,
