@@ -167,6 +167,49 @@ class AdminToolsController extends Controller
     }
 
     /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesimport()
+    {
+        return view('admin.tools.enemyforces.import');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesimportsubmit(Request $request)
+    {
+        $json = json_decode($request->get('import_string'), true);
+
+        $results = [];
+        foreach ($json['Npcs'] as $jsonNpc) {
+            $npc = Npc::where('id', $jsonNpc['Id'])->first();
+
+            if ($npc !== null) {
+                $keyMapping = [
+                    'MythicHealth' => 'base_health',
+                    'Amount'       => 'enemy_forces',
+                ];
+
+                $toUpdate = [];
+                foreach ($jsonNpc as $key => $value) {
+                    if ($key !== 'Id' && $value >= 0 && isset($keyMapping[$key])) {
+                        $toUpdate[$keyMapping[$key]] = $value;
+                    }
+                }
+                $npc->update($toUpdate);
+
+                $results[] = sprintf('Changed npc %d fields: %s', $jsonNpc['Id'], json_encode($toUpdate));
+            } else {
+                $results[] = sprintf('Unable to find npc %d', $jsonNpc['Id']);
+            }
+        }
+
+        dd($results);
+    }
+
+    /**
      * @return Factory|
      */
     public function mdtview()
@@ -282,6 +325,7 @@ class AdminToolsController extends Controller
 
     /**
      * @return Factory|
+     * @throws Exception
      */
     public function mdtdiff()
     {

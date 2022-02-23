@@ -202,7 +202,7 @@ class TeamController extends Controller
         if ($team->isCurrentUserMember()) {
             $result = view('team.invite', ['team' => $team, 'member' => true]);
         } else {
-            $team->addMember(Auth::getUser(), 'member');
+            $team->addMember(Auth::getUser(), $team->default_role);
 
             Session::flash('status', sprintf(__('controller.team.flash.invite_accept_success'), $team->name));
             $result = redirect()->route('team.edit', ['team' => $team]);

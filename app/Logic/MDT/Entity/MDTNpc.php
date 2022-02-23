@@ -100,6 +100,14 @@ class MDTNpc
     /**
      * @return bool
      */
+    public function isEncrypted(): bool
+    {
+        return in_array($this->_id, [185680, 185683, 185685]);
+    }
+
+    /**
+     * @return bool
+     */
     public function isValid(): bool
     {
         // Skip emissaries

@@ -6,6 +6,7 @@ use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Requests\KillZone\DeleteAllFormRequest;
+use App\Http\Requests\KillZone\StoreFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
@@ -37,11 +38,11 @@ class APIKillZoneController extends Controller
         $killZone = KillZone::findOrNew($data['id']);
 
         $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id         = (int)((isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id);
-        $killZone->color            = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
-        $killZone->lat              = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
-        $killZone->lng              = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
-        $killZone->index            = (int)((isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index);
+        $killZone->floor_id         = (int)((isset($data['floor_id'])) ? $data['floor_id'] : $killZone->floor_id);
+        $killZone->color            = $data['color'] ?? $killZone->color;
+        $killZone->lat              = empty($data['lat']) ? null : (float)$data['lat'];
+        $killZone->lng              = empty($data['lng']) ? null : (float)$data['lng'];
+        $killZone->index            = (int)($data['index'] ?? $killZone->index);
 
         if ($killZone->save()) {
             // Only when the enemies are actually set
@@ -93,19 +94,19 @@ class APIKillZoneController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param StoreFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return KillZone
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    function store(StoreFormRequest $request, DungeonRoute $dungeonroute)
     {
         if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 
         try {
-            $data = $request->all();
+            $data = $request->validated();
             // Make sure that if we're unsetting all enemies from the killzone, it's handled differently
             // than mass-updating and not wanting to update the enemies at all
             if (!isset($data['enemies'])) {

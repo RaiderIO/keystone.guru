@@ -82,6 +82,21 @@ class LayoutsApp extends InlineCode {
                 }
             }
         });
+
+        // Theme switch button
+        $('.new_route_style_switch_btn').bind('click', function () {
+            let newRouteStyle = $(this).data('new-route-style');
+            let previousNewRouteStyle = Cookies.get('route_coverage_new_route_style');
+
+            // Only when the theme has actually changed
+            if (previousNewRouteStyle !== newRouteStyle) {
+                // Switch images on the front page
+                $(`.new_route_style_create_${previousNewRouteStyle}`).hide()
+                $(`.new_route_style_create_${newRouteStyle}`).show();
+
+                Cookies.set('route_coverage_new_route_style', newRouteStyle);
+            }
+        });
     }
 
     /**

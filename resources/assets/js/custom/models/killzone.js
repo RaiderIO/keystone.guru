@@ -58,6 +58,10 @@ class KillZone extends MapObject {
 
         this.setSynced(false);
 
+        this.register('object:changed', this, function(objectChangedEvent){
+            self.redrawConnectionsToEnemies();
+        });
+
         this.map.register(['map:refresh'], this, function (shownHiddenEvent) {
             self.redrawConnectionsToEnemies();
         });
@@ -523,7 +527,7 @@ class KillZone extends MapObject {
     _mapZoomLevelChanged(mapZoomLevelChangedEvent) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        // Only if we actually have a tooltip to refresh
+        // // Only if we actually have a tooltip to refresh
         if (this.isVisible()) {
             let currZoomLevel = parseInt(mapZoomLevelChangedEvent.data.mapZoomLevel);
             let prevZoomLevel = parseInt(mapZoomLevelChangedEvent.data.previousMapZoomLevel);
@@ -884,7 +888,6 @@ class KillZone extends MapObject {
                 console.warn(`Vertices overlap!`, p);
             }
 
-
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
                 // Change the pulse color to be dark or light depending on the KZ color
@@ -982,7 +985,7 @@ class KillZone extends MapObject {
     setIndex(index) {
         this.index = index;
 
-        this.bindTooltip();
+        // this.bindTooltip();
     }
 
     /**
@@ -1000,7 +1003,6 @@ class KillZone extends MapObject {
      */
     isVisibleOnScreen() {
         let result = false;
-        console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
         }
@@ -1141,6 +1143,6 @@ class KillZone extends MapObject {
     }
 
     toString() {
-        return 'Pull ' + this.index;
+        return `Pull ${this.index}`;
     }
 }

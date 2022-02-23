@@ -193,20 +193,24 @@ class EnemyVisual extends Signalable {
             }
 
             // Awakened marker
-            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
+            if (this.enemy.isAwakenedNpc()) {
                 modifiers.push(new EnemyVisualModifierAwakened(this, 3));
             }
             // Prideful marker
-            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
+            else if (this.enemy.isPridefulNpc()) {
                 modifiers.push(new EnemyVisualModifierPrideful(this, 3));
             }
             // Inspiring marker
-            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
+            else if (this.enemy.isInspiring()) {
                 modifiers.push(new EnemyVisualModifierInspiring(this, 3));
             }
             // Tormented marker
-            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED) {
+            else if (this.enemy.isTormented()) {
                 modifiers.push(new EnemyVisualModifierTormented(this, 3));
+            }
+            // Encrypted marker
+            else if (this.enemy.isEncryptedNpc()) {
+                modifiers.push(new EnemyVisualModifierEncrypted(this, 3));
             }
         }
 

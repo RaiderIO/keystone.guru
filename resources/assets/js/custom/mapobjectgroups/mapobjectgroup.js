@@ -221,7 +221,12 @@ class MapObjectGroup extends Signalable {
         console.assert(mapObject instanceof MapObject, 'mapObject is not of type MapObject', mapObject);
         console.assert(typeof options === 'object', 'options is not of type Object', options);
 
-        if (mapObject.layer !== null) {
+        // If the lat/lng is now null, the layer has no right to exist anymore
+        if (remoteMapObject.lat === null || remoteMapObject.lng === null) {
+            this.setLayerToMapObject(null, mapObject);
+        }
+        // Otherwise, if it has a layer, update its position
+        else if (mapObject.layer !== null) {
             mapObject.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
@@ -280,6 +285,7 @@ class MapObjectGroup extends Signalable {
         }
         this.objects.push(mapObject);
 
+        // Make us listen to their changes
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
@@ -306,7 +312,7 @@ class MapObjectGroup extends Signalable {
                 fontClass = isColorDark(user.color) ? 'text-white' : 'text-dark';
             }
 
-            // @TODO Bit hacky?
+            // @TODO This should NOT use this layer but instead a new layer somehow
             let layer = localMapObject.layer;
             if (localMapObject instanceof KillZone) {
                 // First layer should contain the polygon that is displayed
@@ -315,6 +321,7 @@ class MapObjectGroup extends Signalable {
 
             if (layer !== null) {
                 let oldTooltip = layer.getTooltip();
+                let oldTooltipLayerId = layer._leaflet_id;
 
                 let tooltip = layer.bindTooltip(user.name, {
                     permanent: true,
@@ -329,9 +336,12 @@ class MapObjectGroup extends Signalable {
                     // Do not re-bind a tooltip that shouldn't be there permanently
                     if (typeof oldTooltip !== 'undefined' &&
                         oldTooltip.options !== null &&
-                        !oldTooltip.options.className.includes('user_color_')) {
+                        !oldTooltip.options.className.includes('user_color_') &&
+                        // And only if the layer is still the same - don't start adding ghost tooltips
+                        // The layer COULD have been changed at this time (killzones are notorious for this)
+                        (localMapObject.layer !== null && localMapObject.layer._leaflet_id === oldTooltipLayerId) ) {
                         // Rebind killzone pull index tooltip
-                        layer.bindTooltip(oldTooltip._content, oldTooltip.options);
+                        localMapObject.layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
                 }, c.map.echo.tooltipFadeOutTimeout);
             } else {
@@ -557,11 +567,13 @@ class MapObjectGroup extends Signalable {
      */
     setLayerToMapObject(layer, mapObject) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+        console.assert(mapObject.id <= 0 || this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
         // Unset previous layer
         let oldLayer = mapObject.layer;
         if (mapObject.layer !== null) {
+            // If it had a tooltip make sure to unset it so it doesn't get left over
+            mapObject.layer.unbindTooltip();
             this.layerGroup.removeLayer(mapObject.layer);
             mapObject.layer = null;
             mapObject.setVisible(false);

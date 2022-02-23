@@ -30,7 +30,7 @@
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@shopify/draggable": "^1.0.0-beta.12",
         "@simonwep/pickr": "^1.5.1",
-        "ajv": "^6.10.0",
+        "ajv": "^6.12.3",
         "bootstrap": "^4.3.1",
         "bootstrap-4-autocomplete": "^1.2.3",
         "bootstrap-select": "^1.13.12",
@@ -71,7 +71,7 @@
         "password-strength-meter": "^1.2.2",
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
-        "puppeteer": "^1.17.0",
+        "puppeteer": "^1.20.0",
         "simplebar": "^5.2.0",
         "socket.io-client": "^2.2.0",
         "zikes-circlemenu": "^0.1.1"

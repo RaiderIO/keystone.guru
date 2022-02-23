@@ -140,6 +140,11 @@ function isColorDark(hex) {
  * @returns {number}
  */
 function getLuminance(hex) {
+    // Catch in case the color is bad
+    if( hex.length === 0 ) {
+        hex = '#000';
+    }
+
     let rgb = hexToRgb(hex);
     return 1 - (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255
 }
@@ -243,6 +248,10 @@ function pickHexFromHandlers(handlers, weight) {
  * @returns {number}
  */
 function getFormattedPercentage(value, max) {
+    if( max === 0 ){
+        return 0;
+    }
+
     let percent = ((value / max) * 100);
     // Round to 1 decimal at best
     return Math.round(percent * 10) / 10;
@@ -316,6 +325,10 @@ function getEnemyPatrols() {
 
 function getKillZones() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+}
+
+function getKillZonePaths() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
 }
 
 function getPaths() {

@@ -97,5 +97,13 @@ return [
         'name'        => 'Неизвестно',
         'description' => 'Аффиксы на этой неделе пока не известны.',
     ],
+    'infernal'              => [
+        'name'        => '@todo ru: .infernal.name',
+        'description' => '@todo ru: .infernal.description',
+    ],
+    'encrypted'              => [
+        'name'        => '@todo ru: .encrypted.name',
+        'description' => '@todo ru: .encrypted.description',
+    ],
     'seasonal_index_preset' => '%s расстановка %d',
 ];

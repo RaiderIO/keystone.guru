@@ -226,4 +226,18 @@ class CommonGroupAffixes extends InlineCode {
         //     $('.affix_row_teeming').hide();
         // }
     }
+
+    /**
+     * @param dungeonId {Number}
+     * @param newAffixGroups {Object}
+     */
+    overrideSelection(dungeonId, newAffixGroups) {
+        console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this)
+        console.assert(typeof newAffixGroups === 'object', 'newAffixGroups was not an Object', this);
+
+        $(`${this.options.dungeonSelector}`).val(dungeonId);
+
+        this.currentSelection = newAffixGroups;
+        this._applyAffixRowSelection();
+    }
 }

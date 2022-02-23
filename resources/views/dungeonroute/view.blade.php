@@ -41,9 +41,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                     'publish' => false,
                 ]
             ],
-            'hiddenMapObjectGroups' => [
-                'killzonepath'
-            ],
+            'hiddenMapObjectGroups' => [],
         ])
     </div>
 @endsection

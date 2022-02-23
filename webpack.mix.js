@@ -205,6 +205,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/modifiers/modifieractiveaura.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierawakened.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierclassification.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifierencrypted.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierinspiring.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierprideful.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',

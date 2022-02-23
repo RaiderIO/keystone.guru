@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
  * @property $name string
  * @property $description string
  * @property $invite_code string
+ * @property $default_role string
  *
  * @property Collection $teamusers
  * @property Collection $members
@@ -33,6 +34,7 @@ class Team extends Model
     use HasIconFile;
 
     protected $visible = ['name', 'description', 'public_key'];
+    protected $fillable = ['default_role'];
 
     use GeneratesPublicKey;
 
@@ -40,7 +42,7 @@ class Team extends Model
      * https://stackoverflow.com/a/34485411/771270
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'public_key';
     }
@@ -48,7 +50,7 @@ class Team extends Model
     /**
      * @return HasMany
      */
-    function teamusers()
+    function teamusers(): HasMany
     {
         return $this->hasMany('App\Models\TeamUser');
     }
@@ -56,7 +58,7 @@ class Team extends Model
     /**
      * @return BelongsToMany
      */
-    function members()
+    function members(): BelongsToMany
     {
         return $this->belongsToMany('App\User', 'team_users');
     }
@@ -64,7 +66,7 @@ class Team extends Model
     /**
      * @return HasMany
      */
-    function dungeonroutes()
+    function dungeonroutes(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRoute');
     }
@@ -88,9 +90,8 @@ class Team extends Model
     public function canAddRemoveRoute(User $user): bool
     {
         $userRole = $this->getUserRole($user);
-        $roles    = config('keystoneguru.team_roles');
         // Moderator or higher
-        return $roles[$userRole] >= 3;
+        return !($userRole === null) && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[TeamUser::ROLE_MODERATOR];
     }
 
     /**
@@ -103,7 +104,7 @@ class Team extends Model
     {
         $result = false;
         // Not set
-        if ($dungeonRoute->team_id <= 0) {
+        if ($dungeonRoute->team_id === null) {
             $dungeonRoute->team_id = $this->id;
             $dungeonRoute->save();
             $result = true;
@@ -122,11 +123,11 @@ class Team extends Model
     {
         $result = false;
         // Set already
-        if ($dungeonRoute->team_id > 0) {
+        if ($dungeonRoute->team_id !== null) {
             // Delete all existing team tags from this route
             $dungeonRoute->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])->delete();
 
-            $dungeonRoute->team_id = -1;
+            $dungeonRoute->team_id = null;
             $dungeonRoute->save();
             $result = true;
         }
@@ -137,13 +138,13 @@ class Team extends Model
     /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
      * @param $user User
-     * @return string|boolean
+     * @return string|null
      */
-    public function getUserRole(User $user)
+    public function getUserRole(User $user): ?string
     {
         /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
-        return $teamUser === null ? false : $teamUser->role;
+        return optional($teamUser)->role;
     }
 
     /**
@@ -159,14 +160,17 @@ class Team extends Model
         $result         = [];
 
         // If both users have a valid role (should always be the case)
-        if ($userRole !== false && $targetUserRole !== false) {
-            $roles             = config('keystoneguru.team_roles');
+        if ($userRole !== null && $targetUserRole !== null) {
+            $roles             = TeamUser::ALL_ROLES;
             $userRoleKey       = $roles[$userRole];
             $targetUserRoleKey = $roles[$targetUserRole];
+
+            $admin     = $roles[TeamUser::ROLE_ADMIN];
+            $moderator = $roles[TeamUser::ROLE_MODERATOR];
             // For now, admins cannot be demoted to anything else
-            if ($targetUserRoleKey !== 4) {
+            if ($targetUserRoleKey !== $admin) {
                 // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
-                if ($userRoleKey >= 3 && ($userRoleKey === 4 || $userRoleKey > $targetUserRoleKey)) {
+                if ($userRoleKey >= $moderator && ($userRoleKey === $admin || $userRoleKey > $targetUserRoleKey)) {
 
                     // Count down from all roles that exist, starting by the role the user currently has
                     for ($i = $userRoleKey; $i > 0; $i--) {
@@ -193,21 +197,21 @@ class Team extends Model
     public function canChangeRole(User $user, User $targetUser, string $role): bool
     {
         $result = false;
-        $roles  = config('keystoneguru.team_roles');
+        $roles  = TeamUser::ALL_ROLES;
 
         // Only if it's a valid role
         if (isset($roles[$role])) {
             $userRole       = $this->getUserRole($user);
             $targetUserRole = $this->getUserRole($targetUser);
 
-            if ($userRole !== false && $targetUserRole !== false) {
+            if ($userRole !== null && $targetUserRole !== null) {
                 $userRoleKey       = $roles[$userRole];
                 $targetUserRoleKey = $roles[$targetUserRole];
                 $targetRoleKey     = $roles[$role];
 
                 // User has a bigger role, and then only up to where the current user is (no promotions past their own
                 // rank) the person, and only users who are currently a moderator or admin may change roles
-                $result = $userRoleKey > $targetUserRoleKey && $userRoleKey >= $targetRoleKey && $userRoleKey >= 3;
+                $result = $userRoleKey > $targetUserRoleKey && $userRoleKey >= $targetRoleKey && $userRoleKey >= $roles[TeamUser::ROLE_MODERATOR];
             }
         }
 
@@ -221,8 +225,9 @@ class Team extends Model
      */
     public function changeRole(User $user, string $role): void
     {
+        /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
-        $roles    = config('keystoneguru.team_roles');
+        $roles    = TeamUser::ALL_ROLES;
         // Only when user is part of the team, and when the role is a valid one.
         if ($teamUser !== null && isset($roles[$role])) {
             // Update the role with the new one
@@ -244,10 +249,9 @@ class Team extends Model
      * @param $user  User
      * @return bool True if the user is, false if not.
      */
-    public function isUserCollaborator($user): bool
+    public function isUserCollaborator(User $user): bool
     {
-        $userRole = $this->getUserRole($user);
-        return $userRole !== false && $userRole !== 'member';
+        return $this->getUserRole($user) !== TeamUser::ROLE_MEMBER;
     }
 
     /**
@@ -259,7 +263,7 @@ class Team extends Model
     public function isUserModerator(User $user): bool
     {
         $userRole = $this->getUserRole($user);
-        return $userRole === 'moderator' || $userRole === 'admin';
+        return $userRole === TeamUser::ROLE_MODERATOR || $userRole === TeamUser::ROLE_ADMIN;
     }
 
     /**
@@ -282,13 +286,15 @@ class Team extends Model
     {
         $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
-        $roles          = config('keystoneguru.team_roles');
+        $roles          = TeamUser::ALL_ROLES;
         // Moderator or higher
         $userRoleKey       = $roles[$userRole];
         $targetUserRoleKey = $roles[$targetUserRole];
-        // Be admin, or moderator that's removing normal users
 
-        return $userRoleKey === 4 || ($userRoleKey === 3 && $userRoleKey > $targetUserRoleKey) || $user->id === $targetUser->id;
+        // Be admin, or moderator that's removing normal users
+        return $userRoleKey === $roles[TeamUser::ROLE_ADMIN] ||
+            ($userRoleKey === $roles[TeamUser::ROLE_MODERATOR] && $userRoleKey > $targetUserRoleKey) ||
+            $user->id === $targetUser->id;
     }
 
     /**
@@ -303,10 +309,13 @@ class Team extends Model
         // Only if the user could be found..
         if ($this->isUserMember($member)) {
             try {
-                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => -1]);
+                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception $exception) {
-                $result = false;
+                logger()->error('Unable to remove member from team', [
+                    'team' => $this,
+                    'user' => $member,
+                ]);
             }
         }
 
@@ -323,11 +332,11 @@ class Team extends Model
     {
         // Prevent duplicate member listings
         if (!$this->isUserMember($user)) {
-            $teamUser          = new TeamUser();
-            $teamUser->team_id = $this->id;
-            $teamUser->user_id = $user->id;
-            $teamUser->role    = $role;
-            $teamUser->save();
+            TeamUser::create([
+                'team_id' => $this->id,
+                'user_id' => $user->id,
+                'role'    => $role,
+            ]);
         }
     }
 
@@ -342,7 +351,7 @@ class Team extends Model
         if ($this->getUserRole($user) !== 'admin') {
             return null;
         } else {
-            $roles    = config('keystoneguru.team_roles');
+            $roles    = TeamUser::ALL_ROLES;
             $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles) {
                 return $roles[$obj->role];
             })->first();
@@ -380,7 +389,7 @@ class Team extends Model
             // Remove all users associated with this team
             TeamUser::where('team_id', $item->id)->delete();
             // Unassign all routes from this team
-            DungeonRoute::where('team_id', $item->id)->update(['team_id' => -1]);
+            DungeonRoute::where('team_id', $item->id)->update(['team_id' => null]);
         });
     }
 }

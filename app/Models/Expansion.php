@@ -93,7 +93,11 @@ class Expansion extends CacheModel
      */
     public function currentseason(): HasOne
     {
-        return $this->hasOne(Season::class)->where('expansion_id', $this->id)->orderBy('start', 'desc')->limit(1);
+        return $this->hasOne(Season::class)
+            ->where('expansion_id', $this->id)
+            ->where('start', '<', Carbon::now()->toDateString())
+            ->orderBy('start', 'desc')
+            ->limit(1);
     }
 
     /**

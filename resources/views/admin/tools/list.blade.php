@@ -28,6 +28,11 @@
         <a href="{{ route('admin.tools.mdt.diff') }}">{{ __('views/admin.tools.list.view_mdt_diff') }}</a>
     </div>
 
+    <h4>{{ __('views/admin.tools.list.subheader_enemy_forces') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.enemyforces.import.view') }}">{{ __('views/admin.tools.list.enemy_forces_import') }}</a>
+    </div>
+
     <h4>{{ __('views/admin.tools.list.subheader_misc') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.cache.drop') }}">{{ __('views/admin.tools.list.drop_caches') }}</a>

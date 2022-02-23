@@ -272,6 +272,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/dungeonroute', [AdminToolsController::class, 'dungeonroutesubmit'])->name('admin.tools.dungeonroute.view.submit');
 
 
+                // Import enemy forces
+                Route::get('enemyforces/import', [AdminToolsController::class, 'enemyforcesimport'])->name('admin.tools.enemyforces.import.view');
+                Route::post('enemyforces/import', [AdminToolsController::class, 'enemyforcesimportsubmit'])->name('admin.tools.enemyforces.import.submit');
+
                 // View string contents
                 Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
@@ -411,7 +415,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             // Teams
             Route::group(['prefix' => 'team/{team}'], function () {
-                Route::post('/changerole', [APITeamController::class, 'changeRole']);
+                Route::put('/changedefaultrole', [APITeamController::class, 'changeDefaultRole']);
+                Route::put('/changerole', [APITeamController::class, 'changeRole']);
                 Route::post('/route/{dungeonroute}', [APITeamController::class, 'addRoute']);
                 Route::delete('/member/{user}', [APITeamController::class, 'removeMember']);
                 Route::delete('/route/{dungeonroute}', [APITeamController::class, 'removeRoute']);

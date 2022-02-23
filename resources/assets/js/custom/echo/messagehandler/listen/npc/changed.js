@@ -12,22 +12,29 @@ class NpcChangedHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
         let mapContext = getState().getMapContext();
+        let isSameDungeon = e.model.dungeon_id === mapContext.getDungeon().id;
 
         // Remove any existing NPC
         mapContext.removeRawNpcById(e.model.id);
 
-        // Add the new NPC
-        mapContext.addRawNpc(e.model);
+        // Do not add the npc does not belong to this dungeon
+        if (isSameDungeon) {
+            // Add the new NPC
+            mapContext.addRawNpc(e.model);
+        }
+
 
         // Redraw all enemies that have this npc so that we're up-to-date
         let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
             let enemy = enemyMapObjectGroup.objects[i];
             if (enemy.npc_id === e.model.id) {
-                enemy.setNpc(e.model);
+                // Re-assign the enemy if it was just updated, unassign it if is no longer available
+                enemy.setNpc(isSameDungeon ? e.model : null);
                 enemy.visual.refresh();
-                // Don't break - there is probably more than one, we need to check all enemies
             }
+
+            enemy.setSynced(true);
         }
     }
 }

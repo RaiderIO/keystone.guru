@@ -58,6 +58,7 @@ return [
     'brushline_map_object_group_label'                => 'Drawn lines',
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
+    'killzonepath_map_object_group_label'                 => 'Pull connections',
 
     'publish_state_title_unpublished'   => 'Unpublished',
     'publish_state_subtext_unpublished' => 'Only you may view this route',
@@ -377,6 +378,7 @@ return [
     'moderator_label'                                               => 'Moderate',
     'admin_label'                                                   => 'Own',
     'change_role_success'                                           => 'Permissions updated',
+    'change_default_role_success'                                   => 'Default role updated',
 
     'team_admin'                    => 'Administrate team',
     'team_moderator'                => 'Moderate team',

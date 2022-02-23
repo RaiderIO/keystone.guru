@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Logic\Utils\Counter;
+use App\Logic\Utils\Stopwatch;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
@@ -13,7 +16,9 @@ use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
@@ -45,6 +50,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
         $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
         $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
+        $this->app->bind('App\Service\DungeonRoute\CoverageServiceInterface', 'App\Service\DungeonRoute\CoverageService');
         // Depends on SeasonService
         $this->app->bind('App\Service\TimewalkingEvent\TimewalkingEventServiceInterface', 'App\Service\TimewalkingEvent\TimewalkingEventService');
 
@@ -230,6 +236,22 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('affixGroupEaseTiersByAffixGroup', $globalViewVariables['affixGroupEaseTiersByAffixGroup']);
         });
 
+        view()->composer('common.dungeonroute.coverage.affixgroup', function (View $view) use ($globalViewVariables, $userOrDefaultRegion) {
+            /** @var Collection|Dungeon[] $allActiveDungeons */
+            $allActiveDungeons = $globalViewVariables['activeDungeonsByExpansionIdDesc'];
+
+            /** @var Expansion $currentExpansion */
+            $currentExpansion = $globalViewVariables['currentExpansion'];
+
+            /** @var ExpansionData $expansionsData */
+            $expansionsData = $globalViewVariables['expansionsData']->get($currentExpansion->shortname);
+
+            $view->with('dungeons', $allActiveDungeons->where('expansion_id', $currentExpansion->id));
+            $view->with('currentExpansion', $currentExpansion);
+            $view->with('affixgroups', $expansionsData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+            $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup($userOrDefaultRegion));
+        });
+
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
             $view->with('teams', Auth::check() ? Auth::user()->teams : []);
@@ -239,6 +261,38 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('profile.edit', function (View $view) use ($globalViewVariables) {
             $view->with('allClasses', $globalViewVariables['characterClasses']);
             $view->with('allRegions', $globalViewVariables['allRegions']);
+        });
+
+        view()->composer(['profile.overview', 'common.dungeonroute.coverage.affixgroup'], function (View $view) use ($globalViewVariables) {
+            $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
+        });
+
+
+        // Custom blade directives
+        $expressionToStringContentsParser = function ($expression, $callback) {
+            $parameters = collect(explode(', ', $expression));
+
+            foreach ($parameters as $parameter) {
+                $callback(trim($parameter, '\'"'));
+            }
+        };
+
+        Blade::directive('count', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Counter::increase($parameter);
+            });
+        });
+
+        Blade::directive('measure', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Stopwatch::start($parameter);
+            });
+        });
+
+        Blade::directive('endmeasure', function ($expression) use ($expressionToStringContentsParser) {
+            $expressionToStringContentsParser($expression, function ($parameter) {
+                Stopwatch::pause($parameter);
+            });
         });
     }
 }

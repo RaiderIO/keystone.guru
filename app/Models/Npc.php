@@ -46,7 +46,7 @@ class Npc extends CacheModel
     /**
      * @return bool
      */
-    public function isAwakened()
+    public function isAwakened(): bool
     {
         return in_array($this->id, [161244, 161243, 161124, 161241]);
     }
@@ -54,7 +54,15 @@ class Npc extends CacheModel
     /**
      * @return bool
      */
-    public function isPrideful()
+    public function isEncrypted(): bool
+    {
+        return in_array($this->id, [185680, 185683, 185685]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrideful(): bool
     {
         return $this->id === config('keystoneguru.prideful.npc_id');
     }
@@ -64,7 +72,7 @@ class Npc extends CacheModel
      *
      * @return hasMany
      */
-    function enemies()
+    function enemies(): HasMany
     {
         return $this->hasMany('App\Models\Enemy');
     }
@@ -72,7 +80,7 @@ class Npc extends CacheModel
     /**
      * @return hasMany
      */
-    function npcbolsteringwhitelists()
+    function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany('App\Models\NpcBolsteringWhitelist');
     }
@@ -80,7 +88,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function dungeon()
+    function dungeon(): BelongsTo
     {
         return $this->belongsTo('App\Models\Dungeon');
     }
@@ -88,7 +96,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function classification()
+    function classification(): BelongsTo
     {
         return $this->belongsTo('App\Models\NpcClassification');
     }
@@ -96,7 +104,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function type()
+    function type(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo('App\Models\NpcType', 'npc_type_id');
@@ -105,7 +113,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function class()
+    function class(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo('App\Models\NpcClass', 'npc_class_id');
@@ -114,7 +122,7 @@ class Npc extends CacheModel
     /**
      * @return BelongsToMany
      */
-    public function spells()
+    public function spells(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Spell', 'npc_spells');
     }
@@ -122,7 +130,7 @@ class Npc extends CacheModel
     /**
      * @return HasMany
      */
-    function npcspells()
+    function npcspells(): HasMany
     {
         return $this->hasMany('App\Models\NpcSpell');
     }

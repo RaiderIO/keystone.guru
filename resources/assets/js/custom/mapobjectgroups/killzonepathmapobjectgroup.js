@@ -29,8 +29,19 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         return new KillZonePath(this.manager.map, layer);
     }
 
-    load() {
-        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
+    /**
+     *
+     * @private
+     */
+    _refresh(killZoneChangedEvent) {
+        // Bring all layers we just created to the front
+        for (let i = 0; i < this.objects.length; i++) {
+            this.setLayerToMapObject(null, this.objects[i]);
+            this.objects[i].cleanup();
+            this.objects[i].localDelete();
+        }
+
+        this.objects = [];
 
         let killzoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         let floorSwitchMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
@@ -67,6 +78,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         }
 
         for (let i = 0; i < killzoneMapObjectGroup.objects.length; i++) {
+
+
             let killZone = killzoneMapObjectGroup.objects[i];
             // @TODO centeroid does not take floors into account
             let killZoneCenteroid = killZone.getLayerCenteroid();
@@ -149,9 +162,17 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         // Bring all layers we just created to the front
         for (let i = 0; i < this.objects.length; i++) {
             this.objects[i].layer.bringToFront();
+            this.setMapObjectVisibility(this.objects[i], true);
         }
+    }
 
+    load() {
+        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
 
+        let killzoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        killzoneMapObjectGroup.register('killzone:changed', this, this._refresh.bind(this));
+
+        this._refresh();
         this._initialized = true;
     }
 

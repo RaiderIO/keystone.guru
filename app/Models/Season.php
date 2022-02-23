@@ -201,12 +201,6 @@ class Season extends CacheModel
     public function getAffixGroupAt(Carbon $date, GameServerRegion $region = null): ?AffixGroup
     {
         /** @var SeasonService $seasonService */
-        $start = $this->start($region);
-        if ($date->lt($start)) {
-            throw new Exception('Cannot find an affix group of this season before it\'s started!');
-        }
-
-        /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
             $timewalkingEventService = resolve(TimewalkingEventService::class);
             $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
@@ -216,7 +210,7 @@ class Season extends CacheModel
             $seasonService = resolve(SeasonService::class);
 
             // Get the affix group which occurs after a few weeks and return that
-            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $this->expansion);
+            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date);
 
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;

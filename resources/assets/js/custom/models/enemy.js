@@ -28,6 +28,7 @@ let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
+let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 
 /**
  * @property {Number} floor_id
@@ -72,6 +73,7 @@ class Enemy extends MapObject {
         this.isPopupEnabled = false;
         this.overpulledKillZoneId = null;
         this.obsolete = false;
+        this.selectNpcs = [];
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -86,6 +88,11 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('object:changed', this, this._onObjectChanged.bind(this));
+
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().register(['npc:added', 'npc:removed'], this, function (event) {
+            self.selectNpcs = [];
+        });
     }
 
     /**
@@ -99,17 +106,6 @@ class Enemy extends MapObject {
         }
 
         let self = this;
-        let selectNpcs = [];
-        let npcs = getState().getMapContext().getNpcs();
-        for (let index in npcs) {
-            if (npcs.hasOwnProperty(index)) {
-                let npc = npcs[index];
-                selectNpcs.push({
-                    id: npc.id,
-                    name: `${npc.name} (${npc.id})`
-                });
-            }
-        }
 
         let selectAuras = [];
         let auras = getState().getMapContext().getAuras();
@@ -156,7 +152,7 @@ class Enemy extends MapObject {
                 name: 'npc_id',
                 type: 'select',
                 admin: true,
-                values: selectNpcs,
+                values: this._getSelectNpcs.bind(this),
                 default: -1,
                 live_search: true,
                 setter: function (value) {
@@ -188,7 +184,7 @@ class Enemy extends MapObject {
                 name: 'mdt_npc_id',
                 type: 'select',
                 admin: true,
-                values: selectNpcs,
+                values: this._getSelectNpcs.bind(this),
                 default: null,
                 live_search: true,
                 setter: function (value) {
@@ -289,6 +285,31 @@ class Enemy extends MapObject {
                 default: false
             })
         ]);
+    }
+
+    /**
+     *
+     * @returns {[]}
+     * @private
+     */
+    _getSelectNpcs() {
+        // Return cache if we have it
+        if (this.selectNpcs.length > 0) {
+            return this.selectNpcs;
+        }
+
+        let npcs = getState().getMapContext().getNpcs();
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let npc = npcs[index];
+                this.selectNpcs.push({
+                    id: npc.id,
+                    name: `${npc.name} (${npc.id})`
+                });
+            }
+        }
+
+        return this.selectNpcs;
     }
 
     _getPercentageString(enemyForces) {
@@ -428,7 +449,7 @@ class Enemy extends MapObject {
      * @returns {boolean}
      */
     isLastBoss() {
-        return this.npc !== null && this.npc.classification_id === 4;
+        return this.npc !== null && this.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS;
     }
 
     /**
@@ -485,10 +506,6 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        //
-        // if( this.id === 4406 ) {
-        //     console.warn('setPopupEnabled', enabled);
-        // }
 
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
@@ -623,10 +640,12 @@ class Enemy extends MapObject {
         let mapContext = getState().getMapContext();
         if (mapContext instanceof MapContextDungeonRoute) {
             // If we are tormented, but the route has no tormented enemies..
-            if (this.hasOwnProperty('seasonal_type') && this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED &&
-                !mapContext.hasAffix(AFFIX_TORMENTED)) {
-                // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
-                return false;
+            if (this.hasOwnProperty('seasonal_type')) {
+                if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED))) {
+                    // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
+                    return false;
+                }
             }
         }
 
@@ -775,6 +794,15 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isEncryptedNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && [185680, 185683, 185685].includes(this.npc.id);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isInspiring() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
@@ -787,6 +815,15 @@ class Enemy extends MapObject {
     isTormented() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isEncrypted() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED;
     }
 
     /**
@@ -860,6 +897,9 @@ class Enemy extends MapObject {
     cleanup() {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
+
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().unregister(['npc:added', 'npc:removed'], this);
 
         this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);

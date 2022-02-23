@@ -445,8 +445,6 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _changePublishState(publicKey, value) {
-        console.log(publicKey, value);
-
         $.ajax({
             type: 'POST',
             url: `/ajax/${publicKey}/publishedState`,
@@ -533,6 +531,43 @@ class DungeonrouteTable extends InlineCode {
         }, null, {closeWith: ['button']});
 
         refreshSelectPickers();
+    }
+
+    /**
+     *
+     * @private
+     */
+    _reset() {
+        $('#dungeonroute_search_dungeon_id').val(-1);
+        $('#affixes').val([]);
+        $('#attributes').val([]);
+        $('#dungeonroute_requirements_select').val([]);
+        $('#dungeonroute_tags_select').val([]);
+
+        refreshSelectPickers();
+    }
+
+    /**
+     *
+     * @param dungeonId {Number}
+     * @param affixGroupIds {Array}
+     * @param attributes {Array}
+     * @param requirements {Array}
+     * @param tags {Array}
+     */
+    overrideSelection(dungeonId, affixGroupIds = [], attributes = [], requirements = [], tags = []) {
+        this._reset();
+
+        console.log(dungeonId, affixGroupIds, attributes, requirements, tags);
+
+        $('#dungeonroute_search_dungeon_id').val(dungeonId);
+        $('#affixes').val(affixGroupIds);
+        $('#attributes').val(attributes);
+        $('#dungeonroute_requirements_select').val(requirements);
+        $('#dungeonroute_tags_select').val(tags);
+
+        // Refresh the list of routes
+        $('#dungeonroute_filter').trigger('click');
     }
 
     /**

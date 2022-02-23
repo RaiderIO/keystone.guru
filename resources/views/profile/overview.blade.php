@@ -1,7 +1,12 @@
 @extends('layouts.sitepage', ['rootClass' => 'col-xl-10 offset-xl-1', 'wide' => true, 'title' => __('views/profile.overview.title')])
 
+<?php
+/** @var $newRouteStyle string */
+?>
+
 @section('content')
     @include('common.general.messages')
+
     @if( Auth::user()->dungeonroutes()->count() === 0)
         <div class="row form-group text-center">
             <div class="col">
@@ -9,29 +14,7 @@
             </div>
         </div>
     @endif
-    <div class="row form-group text-center">
-        <div class="col-md px-4 mt-4">
-            <a class="btn btn-outline-success w-100" href="#" data-toggle="modal" data-target="#create_route_modal">
-                <h4>
-                    <i class="fa fa-plus"></i> {{ __('views/profile.overview.create_route') }}
-                </h4>
-                <span class="text-light">
-                        {{ __('views/profile.overview.create_route_description') }}
-                    </span>
-            </a>
-        </div>
 
-        <div class="col-md px-4 mt-4">
-            <a class="btn btn-outline-info w-100" href="{{ route('team.new') }}">
-                <h4>
-                    <i class="fa fa-plus"></i> {{ __('views/profile.overview.create_team') }}
-                </h4>
-                <span class="text-light">
-                        {{ __('views/profile.overview.create_team_description') }}
-                    </span>
-            </a>
-        </div>
-    </div>
     <div class="row form-group mb-4">
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('profile.favorites') }}">
@@ -55,5 +38,35 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col">
+            <h3>
+                {{ __('views/profile.overview.route_coverage') }}
+            </h3>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-dark {{ $newRouteStyle === 'create' ? 'active' : '' }}">
+                    <input type="radio" id="new_route_style_create" class="new_route_style_switch_btn" name="theme" autocomplete="off"
+                           data-new-route-style="create" {{ $newRouteStyle === 'create' ? 'checked' : '' }}>
+                    <i class="fas fa-plus"></i>
+                </label>
+                <label class="btn btn-dark {{ $newRouteStyle === 'create' ? '' : 'active' }}">
+                    <input type="radio" id="new_route_style_search" class="new_route_style_switch_btn" name="theme" autocomplete="off"
+                           data-new-route-style="search" {{ $newRouteStyle === 'create' ? '' : 'checked' }}>
+                    <i class="fas fa-search"></i>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group mb-4">
+        <div class="col">
+            @include('common.dungeonroute.coverage.affixgroup')
+        </div>
+    </div>
+
+    <h3>
+        {{ __('views/profile.overview.route_overview') }}
+    </h3>
     @include('common.dungeonroute.table', ['view' => 'profile'])
 @endsection

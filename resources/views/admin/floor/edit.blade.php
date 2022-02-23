@@ -2,6 +2,9 @@
 /** @var $dungeon \App\Models\Dungeon */
 /* @var $floor \App\Models\Floor */
 /* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
+$floor = $floor ?? null;
+$floorCouplings = $floorCouplings ?? collect();
+
 $connectedFloorCandidates = $dungeon->floors;
 if (isset($floor)) {
     $connectedFloorCandidates = $connectedFloorCandidates->except(optional($floor)->id);
@@ -11,12 +14,12 @@ if (isset($floor)) {
     'breadcrumbsParams' => [$dungeon, $floor ?? null],
     'showAds' => false,
     'title' => sprintf(
-        $floor === null ? __('views/admin.floor.edit.title_new') : __('views/admin.floor.edit.title_edit'),
+        isset($floor) ? __('views/admin.floor.edit.title_edit') : __('views/admin.floor.edit.title_new'),
         __($dungeon->name)
     )]
-)])
+)
 @section('header-title')
-    {{ sprintf($floor === null ? __('views/admin.floor.edit.header_new') : __('views/admin.floor.edit.header_edit'), __($dungeon->name)) }}
+    {{ sprintf(isset($floor) ? __('views/admin.floor.edit.header_edit') : __('views/admin.floor.edit.header_new'), __($dungeon->name)) }}
 @endsection
 <?php
 /**
@@ -33,7 +36,7 @@ if (isset($floor)) {
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
         {!! Form::label('index', __('views/admin.floor.edit.index'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::text('index', null, ['class' => 'form-control']) !!}
+        {!! Form::text('index', optional($floor)->index ?? $dungeon->floors()->count() + 1, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
@@ -61,7 +64,7 @@ if (isset($floor)) {
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('views/admin.floor.edit.default_title')
                  }}"></i>
-        {!! Form::checkbox('default', 1, isset($floor) ? $floor->default : 1, ['class' => 'form-control left_checkbox']) !!}
+        {!! Form::checkbox('default', 1, optional($floor)->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
         @include('common.forms.form-error', ['key' => 'default'])
     </div>
 
@@ -86,7 +89,7 @@ if (isset($floor)) {
         <?php
         foreach($connectedFloorCandidates as $connectedFloorCandidate){
         /** @var \App\Models\FloorCoupling $floorCoupling */
-        if (isset($floorCouplings)) {
+        if ($floorCouplings->isNotEmpty()) {
             $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
         }
         ?>
@@ -96,7 +99,7 @@ if (isset($floor)) {
                     $connectedFloorCandidate->id, isset($floorCoupling) ? 1 : 0, ['class' => 'form-control left_checkbox']) !!}
             </div>
             <div class="col-8">
-                {{ $connectedFloorCandidate->name }}
+                {{ __($connectedFloorCandidate->name) }}
             </div>
             <div class="col-2">
                 {!! Form::select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [
