@@ -15,6 +15,7 @@
  */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
+$now = \Carbon\Carbon::now();
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -56,7 +57,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
                         $startDate = $arr['date_start'];
                         /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
                         $affixGroup = $arr['affixgroup'];
-                        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1;
+                        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks($now) <= 1;
                         $isFirst = $affixGroupIndex === 0;
                         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
