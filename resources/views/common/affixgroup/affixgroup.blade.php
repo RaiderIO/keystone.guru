@@ -5,9 +5,12 @@ $showText = $showText ?? true;
 $class = $class ?? '';
 $dungeon = $dungeon ?? null;
 $highlight = $highlight ?? false;
-$cols = $cols ?? 1;
 
-$chunks = $affixgroup->affixes->chunk(ceil($affixgroup->affixes->count() / $cols));
+$count = $affixgroup->affixes->count();
+$cols = $cols ?? $count;
+
+$chunkCount = ceil($count / $cols);
+$chunks = $affixgroup->affixes->chunk($chunkCount);
 ?>
 @foreach($chunks as $chunk)
     <div class="row no-gutters px-1 affix_group_row {{ $highlight ? 'current' : '' }} {{ $class }}">

@@ -64,6 +64,16 @@
             },
             {
                 "release_changelog_id": 128,
+                "release_changelog_category_id": 3,
+                "ticket_id": 970,
+                "change": "By default, all pulls are now connected with a line similar to the dungeon preview image so you can more easily follow the flow of a route. You can disable this in the left sidebar under Elements -> Pull connections.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 128,
                 "release_changelog_category_id": 4,
                 "ticket_id": 960,
                 "change": "Added Tazavesh: Streets of Wonder and Tazavesh: So'leah's Gambit. Note: MDT importer\/exporter not supported yet.",
