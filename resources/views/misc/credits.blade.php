@@ -4,14 +4,6 @@
 
 @section('content')
 
-    <?php
-        \Illuminate\Support\Facades\DB::raw()
-    ?>
-
-    @dd(\App\Models\Dungeon::all()->map(function(\App\Models\Dungeon $dungeon){
-        return __($dungeon->name);
-    })->toArray())
-
     <p>
         This website could not exist without the help of talented developers around the world, offering their hard work
         for free for usage in projects such as these. The following packages/images deserve credit for being integrated
