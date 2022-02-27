@@ -83,6 +83,9 @@ class MDTDungeon
                         MDT.dungeonEnemies = {}
                         MDT.scaleMultiplier = {}
                         MDT.dungeonBosses = {}
+                        MDT.dungeonList = {}
+                        MDT.dungeonMaps = {}
+                        MDT.dungeonSubLevels = {}
 
                         local L = {}
                         ' .
