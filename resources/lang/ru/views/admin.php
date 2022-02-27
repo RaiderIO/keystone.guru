@@ -80,6 +80,7 @@ return [
             'title_edit'             => 'Редактировать этаж - %s',
             'header_edit'            => 'Редактировать этаж - %s',
             'index'                  => 'Индекс',
+            'mdt_sub_level'          => '@todo ru: .floor.edit.mdt_sub_level',
             'floor_name'             => 'Название этажа',
             'min_enemy_size'         => 'Минимальное количество врагов (пусто по умолчанию (%s))',
             'max_enemy_size'         => 'Максимальное количество врагов (пусто по умолчанию (%s))',
@@ -229,11 +230,11 @@ return [
                 'header' => 'Просмотреть содержимое для %s',
             ],
         ],
-        'enemyforces'       => [
-            'title'                        => '@todo ru: .tools.enemyforces.title',
-            'header'                       => '@todo ru: .tools.enemyforces.header',
-            'paste_mennos_export_json'     => '@todo ru: .tools.enemyforces.paste_mennos_export_json',
-            'submit'                       => '@todo ru: .tools.enemyforces.submit',
+        'enemyforces'  => [
+            'title'                    => '@todo ru: .tools.enemyforces.title',
+            'header'                   => '@todo ru: .tools.enemyforces.header',
+            'paste_mennos_export_json' => '@todo ru: .tools.enemyforces.paste_mennos_export_json',
+            'submit'                   => '@todo ru: .tools.enemyforces.submit',
         ],
         'exception'    => [
             'select' => [

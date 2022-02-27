@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $index
+ * @property int $mdt_sub_level
  * @property string $name
  * @property boolean $default
  * @property int $min_enemy_size
@@ -38,7 +39,7 @@ class Floor extends CacheModel
     /**
      * @return BelongsTo
      */
-    public function dungeon()
+    public function dungeon(): BelongsTo
     {
         return $this->belongsTo('App\Models\Dungeon');
     }
@@ -46,7 +47,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function enemies()
+    function enemies(): HasMany
     {
         return $this->hasMany('App\Models\Enemy');
     }
@@ -54,7 +55,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function enemypacks()
+    function enemypacks(): HasMany
     {
         return $this->hasMany('App\Models\EnemyPack');
     }
@@ -62,7 +63,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function enemypatrols()
+    function enemypatrols(): HasMany
     {
         return $this->hasMany('App\Models\EnemyPatrol');
     }
@@ -70,7 +71,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function mapicons()
+    function mapicons(): HasMany
     {
         return $this->hasMany('App\Models\MapIcon')->where('dungeon_route_id', -1);
     }
@@ -78,7 +79,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function floorcouplings()
+    function floorcouplings(): HasMany
     {
         return $this->hasMany('App\Models\FloorCoupling', 'floor1_id');
     }
@@ -86,7 +87,7 @@ class Floor extends CacheModel
     /**
      * @return Collection A list of all connected floors, regardless of direction
      */
-    public function connectedFloors()
+    public function connectedFloors(): Collection
     {
         return $this->directConnectedFloors->merge($this->reverseConnectedFloors);
     }
@@ -94,7 +95,7 @@ class Floor extends CacheModel
     /**
      * @return BelongsToMany
      */
-    public function directConnectedFloors()
+    public function directConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor1_id', 'floor2_id');
     }
@@ -102,7 +103,7 @@ class Floor extends CacheModel
     /**
      * @return BelongsToMany
      */
-    public function reverseConnectedFloors()
+    public function reverseConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id');
     }
