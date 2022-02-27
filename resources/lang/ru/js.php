@@ -58,6 +58,7 @@ return [
     'brushline_map_object_group_label'                => 'Нарисовать Линию',
     'mapicon_map_object_group_label'                  => 'Иконки',
     'killzone_map_object_group_label'                 => 'Пул',
+    'killzonepath_map_object_group_label'                 => '@todo ru: .killzonepath_map_object_group_label',
 
     'publish_state_title_unpublished'   => 'Не опубликовано',
     'publish_state_subtext_unpublished' => 'Только вы можете просматривать этот маршрут',

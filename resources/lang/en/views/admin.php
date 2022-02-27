@@ -80,6 +80,7 @@ return [
             'title_edit'             => 'Edit Floor - %s',
             'header_edit'            => 'Edit Floor - %s',
             'index'                  => 'Index',
+            'mdt_sub_level'          => 'MDT sub level',
             'floor_name'             => 'Floor name',
             'min_enemy_size'         => 'Minimum enemy size (empty for default (%s))',
             'max_enemy_size'         => 'Maximum enemy size (empty for default (%s))',
@@ -229,11 +230,11 @@ return [
                 'header' => 'View contents for %s',
             ],
         ],
-        'enemyforces'       => [
-            'title'                        => 'Import Enemy Forces',
-            'header'                       => 'Import Enemy Forces',
-            'paste_mennos_export_json'     => 'Paste Menno\'s Export Json',
-            'submit'                       => 'Submit',
+        'enemyforces'  => [
+            'title'                    => 'Import Enemy Forces',
+            'header'                   => 'Import Enemy Forces',
+            'paste_mennos_export_json' => 'Paste Menno\'s Export Json',
+            'submit'                   => 'Submit',
         ],
         'exception'    => [
             'select' => [

@@ -126,7 +126,7 @@ class MDTDungeon
      * @return Collection|Enemy[]
      * @throws InvalidArgumentException
      */
-    public function getClonesAsEnemies($floors): Collection
+    public function getClonesAsEnemies(Collection $floors): Collection
     {
         return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeonKey), function () use ($floors) {
             $enemies = new Collection();
@@ -150,7 +150,7 @@ class MDTDungeon
                 foreach ($mdtNpc->getClones() as $mdtCloneIndex => $clone) {
                     //Only clones that are on the same floor
                     foreach ($floors as $floor) {
-                        if ((int)$clone['sublevel'] === $floor->index) {
+                        if ((int)$clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
                             // Set some additional props that come in handy when converting to an enemy
                             $clone['mdtNpcIndex'] = $mdtNpc->getIndex();
                             // Group ID
@@ -183,7 +183,7 @@ class MDTDungeon
                 $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
                 foreach ($npcClones as $npcId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
-                        if ((int)$clone['sublevel'] === $floor->index) {
+                        if ((int)$clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
                             $enemy = new Enemy();
                             // Dummy so we can ID them later on
                             $enemy->is_mdt        = true;

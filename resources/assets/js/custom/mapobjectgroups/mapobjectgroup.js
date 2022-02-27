@@ -469,7 +469,7 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     *
+     * Called whenever the floor is changed and the map object groups need to update their elements to show new ones.
      */
     update() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
