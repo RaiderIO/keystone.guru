@@ -1,0 +1,37 @@
+{
+    "id": 122,
+    "release_changelog_id": 129,
+    "version": "v4.5.1",
+    "title": "Encrypted affix activated",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-02-28T22:03:03+00:00",
+    "updated_at": "2022-02-28T22:03:03+00:00",
+    "changelog": {
+        "id": 129,
+        "release_id": 122,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 129,
+                "release_changelog_category_id": 1,
+                "ticket_id": 967,
+                "change": "Encrypted affix activated.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 129,
+                "release_changelog_category_id": 5,
+                "ticket_id": 975,
+                "change": "Pull connections are now redrawn properly when you switch floors.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
