@@ -127,6 +127,13 @@ class EnemyVisualMain extends EnemyVisualIcon {
         return this.getSize();
     }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualName';
+    }
+
     cleanup() {
         super.cleanup();
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);

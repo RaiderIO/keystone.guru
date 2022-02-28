@@ -67,6 +67,13 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainNpcType';
+    }
+
     // getSize() {
     //     console.assert(this instanceof EnemyVisualMainNpcType, 'this is not an EnemyVisualMainNpcType!', this);
     //

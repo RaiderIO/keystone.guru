@@ -62,6 +62,13 @@ class EnemyVisualIcon extends Signalable {
         this.enemyvisual.buildVisual();
     }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualIcon';
+    }
+
     cleanup() {
 
     }

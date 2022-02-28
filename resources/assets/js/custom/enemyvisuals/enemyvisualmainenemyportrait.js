@@ -45,6 +45,13 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     }
 
     /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainEnemyPortrait';
+    }
+
+    /**
      *
      */
     refreshSize() {

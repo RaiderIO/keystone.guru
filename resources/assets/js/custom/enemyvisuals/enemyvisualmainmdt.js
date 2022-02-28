@@ -62,6 +62,13 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
     }
 
     /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainMDT';
+    }
+
+    /**
      *
      */
     refreshSize() {

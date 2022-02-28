@@ -28,12 +28,12 @@ class EnemyAttaching {
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        enemyMapObjectGroup.register('save:success', this, function (saveSuccessEvent) {
+        enemyMapObjectGroup.register('save:beforesend', this, function (saveBeforeSendEvent) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
                 console.assert(mapObject instanceof MapObject, 'mapObject is not a MapObject!', mapObject);
-                saveSuccessEvent.data.object.enemy_pack_id = mapObject.id;
+                saveBeforeSendEvent.data.object.enemy_pack_id = mapObject.id;
             }
         });
 
@@ -65,8 +65,6 @@ class EnemyAttaching {
         });
 
         enemyPackMapObjectGroup.register('object:changed', this, function (objectChangedEvent) {
-            console.log(objectChangedEvent);
-
             // Gather some data
             let changedEnemyPack = objectChangedEvent.data.object;
             let enemyPackPolygon = changedEnemyPack.layer;
