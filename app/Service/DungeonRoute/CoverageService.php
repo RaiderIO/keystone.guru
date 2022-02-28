@@ -36,6 +36,7 @@ class CoverageService implements CoverageServiceInterface
             ->where('dungeon_routes.author_id', $user->id)
             ->where('dungeons.expansion_id', $currentExpansion->id)
             ->where('affix_groups.season_id', $currentExpansion->currentseason->id)
+            ->whereNull('expires_at')
             ->groupBy('dungeon_routes.id')
             ->get()
             ->groupBy('dungeon_id');
