@@ -134,17 +134,6 @@
     {
         "floor_id": 83,
         "team_id": null,
-        "map_icon_type_id": 42,
-        "lat": -33.0625,
-        "lng": 163.875,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.tick_bug",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "floor_id": 83,
-        "team_id": null,
         "map_icon_type_id": 49,
         "lat": -119.70070245322,
         "lng": 81.940571770248,
