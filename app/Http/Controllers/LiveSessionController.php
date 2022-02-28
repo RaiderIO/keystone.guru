@@ -50,13 +50,14 @@ class LiveSessionController extends Controller
                 $invitees = collect();
                 // Check if the user is in this channel..
                 foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
+                    $publicKey = $channelUser['public_key'] ?? $channelUser['user_info']['public_key'];
                     /** @var array $channelUser */
                     // Ignore the current user!
-                    if (!isset($channelUser['public_key'])) {
+                    if (!isset($publicKey)) {
                         logger()->notice('Echo user public_key not set', $channelUser);
-                    } else if ($channelUser['public_key'] !== $user->public_key &&
+                    } else if ($publicKey !== $user->public_key &&
                         $dungeonroute->team->isUserMember(new User($channelUser))) {
-                        $invitees->push($channelUser['public_key']);
+                        $invitees->push($publicKey);
                     }
                 }
 
