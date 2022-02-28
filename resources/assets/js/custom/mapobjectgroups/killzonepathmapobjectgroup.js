@@ -176,6 +176,12 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         this._initialized = true;
     }
 
+    update() {
+        super.update();
+
+        this._refresh();
+    }
+
     /**
      * Creates a new Path based on some vertices and save it to the server.
      * @param vertices {Object}

@@ -705,6 +705,13 @@ class EnemyVisual extends Signalable {
         }
     }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisual';
+    }
+
     cleanup() {
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);

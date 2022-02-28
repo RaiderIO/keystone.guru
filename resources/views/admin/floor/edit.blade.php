@@ -40,6 +40,13 @@ if (isset($floor)) {
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
+    <div class="form-group{{ $errors->has('mdt_sub_level') ? ' has-error' : '' }}">
+        {!! Form::label('mdt_sub_level', __('views/admin.floor.edit.mdt_sub_level'), ['class' => 'font-weight-bold']) !!}
+        <span class="form-required">*</span>
+        {!! Form::text('mdt_sub_level', optional($floor)->mdt_sub_level, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'mdt_sub_level'])
+    </div>
+
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('views/admin.floor.edit.floor_name'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>

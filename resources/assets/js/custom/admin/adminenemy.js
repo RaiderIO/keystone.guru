@@ -216,6 +216,17 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         console.assert(enemy instanceof AdminEnemy, 'enemy is not an AdminEnemy', enemy);
 
+        this.connectToEnemy(enemy);
+
+        // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
+        this.map.setMapState(null);
+    }
+
+    /**
+     *
+     * @param mdtEnemy
+     */
+    connectToEnemy(mdtEnemy) {
         // Keep track of what we had
         this._previousConnectedEnemyId = this.enemy_id;
 
@@ -230,21 +241,18 @@ class AdminEnemy extends Enemy {
 
         // We couple the enemy to ourselves (MDT enemy), not the other way around
         // This helps with drawing the lines
-        enemy.mdt_id = this.mdt_id;
-        this.enemy_id = enemy.id;
+        mdtEnemy.mdt_id = this.mdt_id;
+        this.enemy_id = mdtEnemy.id;
         // Couple this as well (one way) so that the visual knows the npc ids don't match
-        this.mdt_npc_id = enemy.mdt_npc_id;
+        this.mdt_npc_id = mdtEnemy.mdt_npc_id;
 
         // Fire an event to notify everyone an enemy has been selected for this
-        this.signal('mdt_connected', {target: enemy});
-        enemy.signal('mdt_connected', {target: this});
+        this.signal('mdt_connected', {target: mdtEnemy});
+        mdtEnemy.signal('mdt_connected', {target: this});
 
         // Redraw ourselves
         this.redrawConnectionToMDTEnemy();
         this.visual.refresh();
-
-        // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
-        this.map.setMapState(null);
     }
 
     /**
@@ -357,52 +365,46 @@ class AdminEnemy extends Enemy {
         let template = Handlebars.templates['map_enemy_tooltip_template'];
 
         let data = {};
-        if (this.npc !== null) {
-            // Determine what to show for enemy forces based on override or not
-            let enemy_forces = this.npc.enemy_forces;
+        // Determine what to show for enemy forces based on override or not
+        let enemy_forces = this.npc === null ? -1 : this.npc.enemy_forces;
 
-            // Admin maps have 0 enemy forces
-            if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
-                // @TODO This HTML probably needs to go somewhere else
-                if (this.enemy_forces_override >= 0) {
-                    enemy_forces = '<s>' + enemy_forces + '</s> ' +
-                        '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
-                } else if (enemy_forces >= 1) {
-                    enemy_forces += ' ' + this._getPercentageString(enemy_forces);
-                }
-            } else if (enemy_forces === -1) {
-                enemy_forces = 'unknown';
+        // Admin maps have 0 enemy forces
+        if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+            // @TODO This HTML probably needs to go somewhere else
+            if (this.enemy_forces_override >= 0) {
+                enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                    '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
+            } else if (enemy_forces >= 1) {
+                enemy_forces += ' ' + this._getPercentageString(enemy_forces);
             }
-
-            data = $.extend({}, getHandlebarsDefaultVariables(), {
-                npc_name: this.npc.name,
-                enemy_forces: enemy_forces,
-                base_health: this.npc.base_health,
-                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-                is_teeming: this.teeming === 'visible',
-                id: this.id,
-                size: c.map.enemy.calculateSize(
-                    this.npc.base_health,
-                    this.map.options.npcsMinHealth,
-                    this.map.options.npcsMaxHealth
-                ),
-                faction: this.faction,
-                seasonal_type: this.seasonal_type,
-                seasonal_index: this.seasonal_index,
-                npc_id: this.npc_id,
-                npc_id_type: typeof this.npc_id,
-                is_mdt: this.is_mdt,
-                mdt_id: this.mdt_id,
-                mdt_npc_id: this.mdt_npc_id,
-                enemy_id: this.enemy_id,
-                attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
-                visual: this.visual !== null ? this.visual.constructor.name : 'undefined'
-            });
-        } else {
-            template = function (data) {
-                return lang.get('messages.no_npc_found_label');
-            }
+        } else if (enemy_forces === -1) {
+            enemy_forces = 'unknown';
         }
+
+        data = $.extend({}, getHandlebarsDefaultVariables(), {
+            npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
+            enemy_forces: enemy_forces,
+            base_health: this.npc === null ? '-' : this.npc.base_health,
+            teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
+            is_teeming: this.teeming === 'visible',
+            id: this.id,
+            size: c.map.enemy.calculateSize(
+                this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health,
+                this.map.options.npcsMinHealth,
+                this.map.options.npcsMaxHealth
+            ),
+            faction: this.faction,
+            seasonal_type: this.seasonal_type,
+            seasonal_index: this.seasonal_index,
+            npc_id: this.npc_id,
+            npc_id_type: typeof this.npc_id,
+            is_mdt: this.is_mdt,
+            mdt_id: this.mdt_id,
+            mdt_npc_id: this.mdt_npc_id,
+            enemy_id: this.enemy_id,
+            attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
+            visual: this.visual !== null ? this.visual.getName() : 'undefined'
+        });
 
         // Remove any previous tooltip
         if (this.layer !== null) {

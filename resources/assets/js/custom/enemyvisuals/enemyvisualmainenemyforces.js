@@ -72,6 +72,13 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         return true;
     }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainEnemyForces';
+    }
+
     cleanup() {
         super.cleanup();
 

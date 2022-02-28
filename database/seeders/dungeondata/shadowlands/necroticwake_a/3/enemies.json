@@ -1,7 +1,7 @@
 [
     {
         "id": 4752,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1440,
         "npc_id": 162693,
         "floor_id": 91,
         "mdt_id": 1,
@@ -20,6 +20,75 @@
         "enemyactiveauras": [],
         "npc": {
             "id": 162693
+        }
+    },
+    {
+        "id": 7524,
+        "enemy_pack_id": 1440,
+        "npc_id": 185680,
+        "floor_id": 91,
+        "mdt_id": 12,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -105.75204230691,
+        "lng": 182.57124479734,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 185680
+        }
+    },
+    {
+        "id": 7525,
+        "enemy_pack_id": 1440,
+        "npc_id": 185683,
+        "floor_id": 91,
+        "mdt_id": 12,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -117.38261315126,
+        "lng": 194.99154576075,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 185683
+        }
+    },
+    {
+        "id": 7526,
+        "enemy_pack_id": 1440,
+        "npc_id": 185685,
+        "floor_id": 91,
+        "mdt_id": 12,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -105.89562960129,
+        "lng": 206.33494201634,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 185685
         }
     }
 ]

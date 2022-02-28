@@ -3,6 +3,12 @@
  */
 class MapObjectGroup extends Signalable {
 
+    /**
+     *
+     * @param {MapObjectGroupManager} manager
+     * @param {Array} names
+     * @param {Boolean} editable
+     */
     constructor(manager, names, editable = false) {
         super();
         // Ensure its an array
@@ -289,6 +295,7 @@ class MapObjectGroup extends Signalable {
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('save:beforesend', this, (this._onObjectSaveBeforeSend).bind(this));
         mapObject.register('save:success', this, (this._onObjectSaveSuccess).bind(this));
 
         return mapObject;
@@ -339,7 +346,7 @@ class MapObjectGroup extends Signalable {
                         !oldTooltip.options.className.includes('user_color_') &&
                         // And only if the layer is still the same - don't start adding ghost tooltips
                         // The layer COULD have been changed at this time (killzones are notorious for this)
-                        (localMapObject.layer !== null && localMapObject.layer._leaflet_id === oldTooltipLayerId) ) {
+                        (localMapObject.layer !== null && localMapObject.layer._leaflet_id === oldTooltipLayerId)) {
                         // Rebind killzone pull index tooltip
                         localMapObject.layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
@@ -432,16 +439,27 @@ class MapObjectGroup extends Signalable {
         mapObject.unregister('object:initialized', this);
         mapObject.unregister('object:changed', this);
         mapObject.unregister('object:deleted', this);
+        mapObject.unregister('save:beforesend', this);
         mapObject.unregister('save:success', this);
     }
 
     /**
      * Called when an object in our map object group is saved to the server
-     * @param objectSaveSuccess {object}
+     * @param mapObjectBeforeSendEvent {object}
      * @private
      */
-    _onObjectSaveSuccess(objectSaveSuccess) {
-        this.signal('save:success', {object: objectSaveSuccess.context, objectgroup: this});
+    _onObjectSaveBeforeSend(mapObjectBeforeSendEvent) {
+        this.signal('save:beforesend', {object: mapObjectBeforeSendEvent.context, objectgroup: this});
+    }
+
+
+    /**
+     * Called when an object in our map object group is saved to the server
+     * @param mapObjectSaveSuccessEvent {object}
+     * @private
+     */
+    _onObjectSaveSuccess(mapObjectSaveSuccessEvent) {
+        this.signal('save:success', {object: mapObjectSaveSuccessEvent.context, objectgroup: this});
     }
 
     /**
@@ -469,7 +487,7 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     *
+     * Called whenever the floor is changed and the map object groups need to update their elements to show new ones.
      */
     update() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);

@@ -31,16 +31,17 @@ class CoverageService implements CoverageServiceInterface
         return DungeonRoute::with(['affixes'])
             ->selectRaw('dungeon_routes.*, IF(dungeons.enemy_forces_required > dungeon_routes.enemy_forces, 0, 1) as has_enemy_forces')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
-            ->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.id', 'dungeon_routes.id')
+            ->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', 'dungeon_routes.id')
             ->join('affix_groups', 'affix_groups.id', 'dungeon_route_affix_groups.affix_group_id')
             ->where('dungeon_routes.author_id', $user->id)
             ->where('dungeons.expansion_id', $currentExpansion->id)
             ->where('affix_groups.season_id', $currentExpansion->currentseason->id)
+            ->whereNull('expires_at')
             ->groupBy('dungeon_routes.id')
             ->get()
             ->groupBy('dungeon_id');
 
-//            SELECT dungeon_routes.*
+//            SELECT dungeon_routes.*, IF(dungeons.enemy_forces_required > dungeon_routes.enemy_forces, 0, 1) as has_enemy_forces
 //            FROM dungeon_routes
 //            INNER JOIN dungeons ON dungeons.id = dungeon_routes.dungeon_id
 //            INNER JOIN dungeon_route_affix_groups ON dungeon_route_affix_groups.dungeon_route_id = dungeon_routes.id
@@ -48,6 +49,7 @@ class CoverageService implements CoverageServiceInterface
 //            WHERE dungeon_routes.author_id = 1
 //            AND dungeons.expansion_id = 3
 //            AND affix_groups.season_id = 6;
+//            GROUP BY dungeon_routes.id
     }
 
 }

@@ -97,6 +97,10 @@ class LayoutsApp extends InlineCode {
                 Cookies.set('route_coverage_new_route_style', newRouteStyle);
             }
         });
+
+        if (typeof Cookies.get('route_coverage_new_route_style') === 'undefined') {
+            Cookies.set('route_coverage_new_route_style', 'search');
+        }
     }
 
     /**
