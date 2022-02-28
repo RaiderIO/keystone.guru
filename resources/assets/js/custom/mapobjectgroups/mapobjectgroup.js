@@ -3,6 +3,12 @@
  */
 class MapObjectGroup extends Signalable {
 
+    /**
+     *
+     * @param {MapObjectGroupManager} manager
+     * @param {Array} names
+     * @param {Boolean} editable
+     */
     constructor(manager, names, editable = false) {
         super();
         // Ensure its an array
