@@ -395,7 +395,7 @@
         "enemy_pack_id": 1394,
         "npc_id": 176394,
         "floor_id": 103,
-        "mdt_id": -1,
+        "mdt_id": 5,
         "mdt_npc_id": null,
         "seasonal_type": null,
         "seasonal_index": null,
