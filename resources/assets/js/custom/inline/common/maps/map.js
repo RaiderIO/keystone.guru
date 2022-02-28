@@ -680,7 +680,7 @@ class CommonMapsMap extends InlineCode {
             if (closestValidMdtEnemy !== null) {
                 console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${closestValidMdtEnemy.npc.name}`);
                 closestValidMdtEnemy.connectToEnemy(enemyToSolve);
-                // enemyToSolve.save();
+                enemyToSolve.save();
             } else {
                 console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${enemyToSolve.npc.name}`);
             }
