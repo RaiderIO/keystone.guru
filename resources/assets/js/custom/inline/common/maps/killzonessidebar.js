@@ -468,7 +468,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
-            console.warn('object:deleted');
             let isMassDelete = killZoneDeletedEvent.data.hasOwnProperty('mass_delete') && killZoneDeletedEvent.data.mass_delete;
 
             let killZone = killZoneDeletedEvent.data.object;

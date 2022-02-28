@@ -62,7 +62,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
             let closestDistance = 999999999999999;
 
             for (let i = 0; i < shortlist.length; i++) {
-                let distance = getDistance(shortlist[i].layer.getLatLng(), latLng);
+                let distance = getLatLngDistance(shortlist[i].layer.getLatLng(), latLng);
                 if (closestDistance > distance) {
                     result = shortlist[i];
                     closestDistance = distance;
