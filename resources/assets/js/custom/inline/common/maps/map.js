@@ -87,6 +87,8 @@ class CommonMapsMap extends InlineCode {
                 );
             });
 
+            $('#map_enemy_visuals_mdt_auto_solve').bind('click', this._mdtAutoSolve.bind(this));
+
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
                 $('#view_dungeonroute_group_setup').html(
@@ -659,6 +661,79 @@ class CommonMapsMap extends InlineCode {
         // Make sure that the sidebar's select picker gets updated with the newly selected value
         refreshSelectPickers();
     }
+
+    /**
+     *
+     * @private
+     */
+    _mdtAutoSolve() {
+        let enemiesToSolve = this._getMDTUnmappedEnemies();
+        console.log(enemiesToSolve);
+
+        for (let index in enemiesToSolve) {
+            let enemyToSolve = enemiesToSolve[index];
+            if (enemyToSolve.npc === null) {
+                continue;
+            }
+
+            let closestValidMdtEnemy = this._getClosestMDTEnemyForEnemy(enemyToSolve);
+            if (closestValidMdtEnemy !== null) {
+                console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${closestValidMdtEnemy.npc.name}`);
+                closestValidMdtEnemy.connectToEnemy(enemyToSolve);
+                // enemyToSolve.save();
+            } else {
+                console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${enemyToSolve.npc.name}`);
+            }
+        }
+    }
+
+    /**
+     * @returns {AdminEnemy[]}
+     * @private
+     */
+    _getMDTUnmappedEnemies() {
+        let result = [];
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let index in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[index];
+            if (!enemy.is_mdt && enemy.mdt_id === -1) {
+                result.push(enemy);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param {AdminEnemy} targetEnemy
+     * @returns {AdminEnemy}
+     * @private
+     */
+    _getClosestMDTEnemyForEnemy(targetEnemy) {
+        let result = null;
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        let closestEnemyDistance = 99999999;
+        for (let index in enemyMapObjectGroup.objects) {
+            let enemyCandidate = enemyMapObjectGroup.objects[index];
+            let distance = getDistance([enemyCandidate.lat, enemyCandidate.lng], [targetEnemy.lat, targetEnemy.lng]);
+            if (enemyCandidate.is_mdt && targetEnemy.npc_id === enemyCandidate.npc_id && targetEnemy.floor_id === enemyCandidate.floor_id && closestEnemyDistance > distance) {
+                result = enemyCandidate;
+                closestEnemyDistance = distance;
+            }
+        }
+
+        // Make sure we don't match something very far away
+        if (closestEnemyDistance > 30) {
+            console.warn(`Closest enemy is at ${closestEnemyDistance} - it's too far!`);
+            result = null;
+        }
+
+        return result;
+    }
+
 
     cleanup() {
         super.cleanup();

@@ -216,6 +216,17 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         console.assert(enemy instanceof AdminEnemy, 'enemy is not an AdminEnemy', enemy);
 
+        this.connectToEnemy(enemy);
+
+        // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
+        this.map.setMapState(null);
+    }
+
+    /**
+     *
+     * @param mdtEnemy
+     */
+    connectToEnemy(mdtEnemy) {
         // Keep track of what we had
         this._previousConnectedEnemyId = this.enemy_id;
 
@@ -230,21 +241,18 @@ class AdminEnemy extends Enemy {
 
         // We couple the enemy to ourselves (MDT enemy), not the other way around
         // This helps with drawing the lines
-        enemy.mdt_id = this.mdt_id;
-        this.enemy_id = enemy.id;
+        mdtEnemy.mdt_id = this.mdt_id;
+        this.enemy_id = mdtEnemy.id;
         // Couple this as well (one way) so that the visual knows the npc ids don't match
-        this.mdt_npc_id = enemy.mdt_npc_id;
+        this.mdt_npc_id = mdtEnemy.mdt_npc_id;
 
         // Fire an event to notify everyone an enemy has been selected for this
-        this.signal('mdt_connected', {target: enemy});
-        enemy.signal('mdt_connected', {target: this});
+        this.signal('mdt_connected', {target: mdtEnemy});
+        mdtEnemy.signal('mdt_connected', {target: this});
 
         // Redraw ourselves
         this.redrawConnectionToMDTEnemy();
         this.visual.refresh();
-
-        // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
-        this.map.setMapState(null);
     }
 
     /**

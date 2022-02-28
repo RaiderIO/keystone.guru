@@ -229,6 +229,9 @@ return [
     ],
     'maps'         => [
         'controls' => [
+            'draw'      => [
+                'admin' => 'Admin',
+            ],
             'elements'  => [
                 'dungeonrouteinfo'         => [
                     'timer'            => 'Timer',
@@ -256,7 +259,8 @@ return [
                     'hide_labels' => 'Hide',
                 ],
                 'mdtclones'                => [
-                    'mdt' => 'MDT',
+                    'mdt'        => 'Show MDT',
+                    'auto_solve' => 'Auto solve',
                 ],
                 'rating'                   => [
                     'rate_this_route'          => 'Rate',

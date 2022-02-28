@@ -14,7 +14,7 @@
             <div id="view_route_actions_container" class="mb-2">
                 @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
             </div>
-    @endisset
+        @endisset
 
     <!-- Draw actions are injected here through drawcontrols.js -->
         <div id="edit_route_draw_actions_container" class="mb-2">
@@ -27,11 +27,18 @@
             @include('common.maps.controls.elements.enemyvisualtype')
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
-
-            @if( $isAdmin )
-                @include('common.maps.controls.elements.mdtclones')
-            @endif
         </div>
+
+        @if( $isAdmin )
+            <div id="edit_route_draw_admin_map_actions_container" class="mb-2">
+                <div class="row">
+                    <div class="col">
+                        {{ __('views/common.maps.controls.draw.admin') }}
+                    </div>
+                </div>
+                @include('common.maps.controls.elements.mdtclones')
+            </div>
+        @endif
 
         <div id="edit_route_misc_actions_container">
             @include('common.maps.controls.elements.labeltoggle')

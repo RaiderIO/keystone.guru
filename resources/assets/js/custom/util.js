@@ -42,12 +42,12 @@ function convertToSlug(text) {
         .replace(/ +/g, '-');
 }
 
-function getDistanceSquared(xy1, xy2) {
-    return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
+function getDistance(xy1, xy2) {
+    return Math.sqrt(getDistanceSquared(xy1, xy2));
 }
 
-function getDistance(latLng1, latLng2) {
-    return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
+function getDistanceSquared(xy1, xy2) {
+    return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
 }
 
 function getLatLngDistanceSquared(latLng1, latLng2) {
