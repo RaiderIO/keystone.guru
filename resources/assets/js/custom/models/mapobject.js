@@ -872,7 +872,7 @@ class MapObject extends Signalable {
                         }
 
                         data[name] = obj;
-                    } else if (attribute.type === 'bool' ) {
+                    } else if (attribute.type === 'bool') {
                         data[name] = this._getValue(name) ? 1 : 0;
                     } else {
                         // Multiple select means send as an array
@@ -901,6 +901,7 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
+        self.signal('save:beforesend');
 
         $.ajax({
             type: 'POST',
@@ -910,7 +911,6 @@ class MapObject extends Signalable {
             data: this.getSaveData(),
             beforeSend: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
-                self.signal('save:beforesend');
             },
             success: function (json) {
                 // Apply all saved properties back our object

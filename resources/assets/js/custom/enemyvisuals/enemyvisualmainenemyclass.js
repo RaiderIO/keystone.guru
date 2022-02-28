@@ -91,6 +91,13 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
     // }
 
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainEnemyClass';
+    }
+
     cleanup() {
         super.cleanup();
 

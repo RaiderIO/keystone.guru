@@ -1,5 +1,10 @@
 class MapObjectGroupManager extends Signalable {
 
+    /**
+     *
+     * @param {DungeonMap} map
+     * @param {Array} mapObjectGroupNames
+     */
     constructor(map, mapObjectGroupNames) {
         super();
         let self = this;
