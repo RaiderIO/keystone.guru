@@ -26,7 +26,7 @@ class MDTBase
      * Gets a Lua instance and load all the required files in it.
      * @return Lua
      */
-    protected function _getLua()
+    protected function _getLua() : Lua
     {
         $lua = new Lua();
 

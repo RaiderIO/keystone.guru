@@ -88,6 +88,9 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('object:changed', this, this._onObjectChanged.bind(this));
+        this.register('object:initialized', this, function () {
+            self.bindTooltip();
+        });
 
         // If we added or removed NPCs, we clear the cache
         getState().getMapContext().register(['npc:added', 'npc:removed'], this, function (event) {
@@ -173,6 +176,23 @@ class Enemy extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'is_mdt',
+                type: 'bool',
+                edit: false, // Not directly changeable by user
+                default: false,
+                setter: function(value){
+                    // Exception for MDT enemies
+                    self.is_mdt = value;
+                }
+            }),
+            // // Whatever enemy this MDT enemy is linked to
+            new Attribute({
+                name: 'enemy_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
             }),
             new Attribute({
                 name: 'mdt_id',
@@ -582,7 +602,6 @@ class Enemy extends MapObject {
             this.npc_id = -1;
         }
 
-        this.bindTooltip();
         this.signal('enemy:set_npc', {npc: npc});
     }
 
@@ -901,6 +920,7 @@ class Enemy extends MapObject {
         // If we added or removed NPCs, we clear the cache
         getState().getMapContext().unregister(['npc:added', 'npc:removed'], this);
 
+        this.unregister('object:initialized', this);
         this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);
 

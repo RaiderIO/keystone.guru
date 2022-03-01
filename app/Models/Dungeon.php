@@ -143,7 +143,7 @@ class Dungeon extends CacheModel
      * https://stackoverflow.com/a/34485411/771270
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
@@ -151,7 +151,7 @@ class Dungeon extends CacheModel
     /**
      * @return int The amount of floors this dungeon has.
      */
-    public function getFloorCountAttribute()
+    public function getFloorCountAttribute(): int
     {
         return $this->floors->count();
     }
@@ -159,7 +159,7 @@ class Dungeon extends CacheModel
     /**
      * Gets the amount of enemy forces that this dungeon has mapped (non-zero enemy_forces on NPCs)
      */
-    public function getEnemyForcesMappedStatusAttribute()
+    public function getEnemyForcesMappedStatusAttribute(): array
     {
         $result = [];
         $npcs   = [];
@@ -273,7 +273,7 @@ class Dungeon extends CacheModel
      */
     public function scopeSiegeOfBoralus($query)
     {
-        return $query->where('key', 'siegeofboralus');
+        return $query->where('key', self::DUNGEON_SIEGE_OF_BORALUS);
     }
 
     /**
@@ -302,7 +302,7 @@ class Dungeon extends CacheModel
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      */
-    public function getNpcsMinHealth()
+    public function getNpcsMinHealth(): int
     {
         return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
@@ -312,7 +312,7 @@ class Dungeon extends CacheModel
     /**
      * Get the maximum amount of health of all NPCs in this dungeon.
      */
-    public function getNpcsMaxHealth()
+    public function getNpcsMaxHealth(): int
     {
         return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
@@ -325,9 +325,9 @@ class Dungeon extends CacheModel
      *
      * @return bool
      */
-    public function isSiegeOfBoralus()
+    public function isSiegeOfBoralus(): bool
     {
-        return $this->key === 'siegeofboralus';
+        return $this->key === self::DUNGEON_SIEGE_OF_BORALUS;
     }
 
     /**
@@ -335,17 +335,23 @@ class Dungeon extends CacheModel
      *
      * @return bool
      */
-    public function isTolDagor()
+    public function isTolDagor(): bool
     {
-        return $this->key === 'toldagor';
+        return $this->key === self::DUNGEON_TOL_DAGOR;
     }
 
-    public function getTimerUpgradePlusTwoSeconds()
+    /**
+     * @return int
+     */
+    public function getTimerUpgradePlusTwoSeconds(): int
     {
         return $this->timer_max_seconds * config('keystoneguru.timer.plustwofactor');
     }
 
-    public function getTimerUpgradePlusThreeSeconds()
+    /**
+     * @return int
+     */
+    public function getTimerUpgradePlusThreeSeconds(): int
     {
         return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
     }

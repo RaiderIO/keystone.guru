@@ -35,6 +35,7 @@
     "php": ">=7.4",
     "ext-curl": "*",
     "ext-json": "*",
+    "ext-lua": "*",
     "akaunting/laravel-language": "^1.0",
     "barryvdh/laravel-ide-helper": "^2.4",
     "beyondcode/laravel-server-timing": "^1.2",
