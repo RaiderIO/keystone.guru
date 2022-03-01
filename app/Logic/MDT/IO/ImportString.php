@@ -15,8 +15,8 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\Brushline;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemies\PridefulEnemy;
@@ -260,6 +260,10 @@ class ImportString extends MDTBase
                             } else if ($dungeonRoute->dungeon->isTolDagor()) {
                                 if ($npcIndex === 11) {
                                     $cloneIndex += 2;
+                                }
+                            } else if ($dungeonRoute->dungeon->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
+                                if ($npcIndex === 23) {
+                                    $cloneIndex += 5;
                                 }
                             }
 
@@ -609,7 +613,7 @@ class ImportString extends MDTBase
      */
     public function getDecoded()
     {
-        $lua = $this->_getLua();
+//        $lua = $this->_getLua();
         // Import it to a table
 //        return $lua->call("StringToTable", [$this->_encodedString, true]);
         return $this->decode($this->encodedString);
@@ -648,6 +652,9 @@ class ImportString extends MDTBase
         $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
         $dungeonRoute->title              = $decoded['text'];
         $dungeonRoute->difficulty         = 'Casual';
+        $dungeonRoute->level_min          = $decoded['difficulty'];
+        $dungeonRoute->level_max          = $decoded['difficulty'];
+
         // Must expire if we're trying
         if ($sandbox) {
             $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();

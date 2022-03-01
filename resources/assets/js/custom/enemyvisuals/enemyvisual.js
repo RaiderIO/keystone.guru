@@ -709,7 +709,7 @@ class EnemyVisual extends Signalable {
      * @returns {string}
      */
     getName() {
-        return 'EnemyVisual';
+        return this.mainVisual !== null ? this.mainVisual.getName() : 'EnemyVisual';
     }
 
     cleanup() {

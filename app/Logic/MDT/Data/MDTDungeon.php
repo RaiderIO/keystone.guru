@@ -133,7 +133,7 @@ class MDTDungeon
 
             try {
                 $mdtNpcs = $this->getMDTNPCs();
-            } catch (Exception $exception){
+            } catch (Exception $exception) {
                 return $enemies;
             }
 
