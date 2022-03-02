@@ -100,6 +100,15 @@ const NPC_CLASSIFICATION_ID_ELITE = 2;
 const NPC_CLASSIFICATION_ID_BOSS = 3;
 const NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
 
+// Leaflet constants
+const LEAFLET_PANE_MAP = 'mapPane';
+const LEAFLET_PANE_TILE = 'tilePane';
+const LEAFLET_PANE_OVERLAY = 'overlayPane';
+const LEAFLET_PANE_SHADOW = 'shadowPane';
+const LEAFLET_PANE_MARKER = 'markerPane';
+const LEAFLET_PANE_TOOLTIP = 'tooltipPane';
+const LEAFLET_PANE_POPUP = 'popupPane';
+
 /**
  * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.
  * @returns {(function(): *)|(function(): string)|*}
