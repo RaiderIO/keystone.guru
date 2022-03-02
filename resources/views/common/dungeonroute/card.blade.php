@@ -72,9 +72,6 @@ ob_start(); ?>
                 </div>
                 @if( $showAffixes )
                     <div class="col-auto">
-                        <?php
-                        ob_start();
-                        ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div class="row no-gutters">
                                 @include('common.affixgroup.affixgroup', [
@@ -191,6 +188,9 @@ ob_start(); ?>
 <?php
 return ob_get_clean();
 };
+
+// Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
+$cache = false;
 
 if ($cache) {
 // Echo the result of this function

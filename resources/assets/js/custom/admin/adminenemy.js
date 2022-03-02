@@ -46,6 +46,11 @@ class AdminEnemy extends Enemy {
 
         // Register for changes to the selection event
         this.map.register('map:mapstatechanged', this, this._mapStateChangedEvent.bind(this));
+        getState().register('mdtmappingmodeenabled:changed', this, function () {
+            if (self.is_mdt) {
+                self.bindTooltip();
+            }
+        });
     }
 
     /**
@@ -398,7 +403,7 @@ class AdminEnemy extends Enemy {
             seasonal_index: this.seasonal_index,
             npc_id: this.npc_id,
             npc_id_type: typeof this.npc_id,
-            is_mdt: this.is_mdt,
+            is_mdt: this.is_mdt ? 'true' : 'false',
             mdt_id: this.mdt_id,
             mdt_npc_id: this.mdt_npc_id,
             enemy_id: this.enemy_id,

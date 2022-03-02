@@ -29,7 +29,9 @@ class MapObjectGroup extends Signalable {
         this._visible = true;
 
         this.objects = [];
-        this.layerGroup = new L.LayerGroup();
+        this.layerGroup = new L.LayerGroup([], {
+            pane: this._getMapPane()
+        });
 
         let self = this;
 
@@ -69,6 +71,14 @@ class MapObjectGroup extends Signalable {
                 }
             }
         }
+    }
+
+    /**
+     * @returns {string}
+     * @protected
+     */
+    _getMapPane() {
+        return LEAFLET_PANE_MARKER;
     }
 
     /**

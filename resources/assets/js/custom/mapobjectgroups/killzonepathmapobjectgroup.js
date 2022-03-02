@@ -7,6 +7,20 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     }
 
     /**
+     * @returns {string}
+     * @protected
+     */
+    _getMapPane() {
+        if (this.manager.map.options.noUI) {
+            // Draw it above everything
+            return LEAFLET_PANE_TOOLTIP;
+        } else {
+            // Draw it below everything
+            return LEAFLET_PANE_OVERLAY;
+        }
+    }
+
+    /**
      * @inheritDoc
      **/
     _getRawObjects() {
@@ -17,7 +31,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      * @inheritDoc
      */
     _createLayer(remoteMapObject) {
-        return L.polyline(this._restorePoints(remoteMapObject), {pane: 'tooltipPane'});
+        return L.polyline(this._restorePoints(remoteMapObject), {pane: this._getMapPane()});
     }
 
     /**
@@ -161,8 +175,17 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         // Bring all layers we just created to the front
         for (let i = 0; i < this.objects.length; i++) {
-            this.objects[i].layer.bringToFront();
-            this.setMapObjectVisibility(this.objects[i], true);
+            let mapObject = this.objects[i];
+            // if () {
+            //     console.log('bringing to front');
+            //     this.layerGroup.bringToFront();
+            //     mapObject.layer.bringToFront();
+            // } else {
+            //     console.log('bringing to back');
+            //     this.layerGroup.bringToBack();
+            //     mapObject.layer.bringToBack();
+            // }
+            this.setMapObjectVisibility(mapObject, true);
         }
     }
 
