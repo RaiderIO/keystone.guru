@@ -72,6 +72,9 @@ ob_start(); ?>
                 </div>
                 @if( $showAffixes )
                     <div class="col-auto">
+                        <?php
+                        ob_start();
+                        ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div class="row no-gutters">
                                 @include('common.affixgroup.affixgroup', [
