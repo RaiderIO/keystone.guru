@@ -222,7 +222,8 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
-                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'}
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
+                    {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value;
