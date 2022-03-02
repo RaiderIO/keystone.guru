@@ -1,0 +1,47 @@
+{
+    "id": 123,
+    "release_changelog_id": 130,
+    "version": "v4.5.2",
+    "title": "",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-03-02T08:57:22+00:00",
+    "updated_at": "2022-03-02T08:57:22+00:00",
+    "changelog": {
+        "id": 130,
+        "release_id": 123,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 130,
+                "release_changelog_category_id": 1,
+                "ticket_id": 983,
+                "change": "Disabled route card caching to prevent translations from being cached when they shouldn't be,",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 130,
+                "release_changelog_category_id": 3,
+                "ticket_id": 981,
+                "change": "Pull connections are now always rendered at the back instead of over all other",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 130,
+                "release_changelog_category_id": 6,
+                "ticket_id": null,
+                "change": "Fixed certain Mistveil Stingers not importing correctly in Mists of Tirna Scithe (thanks Dratnos!)",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}
