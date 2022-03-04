@@ -19,7 +19,7 @@ $dungeonSelectId = 'dungeon_id_select';
         <input id="{{ $dungeonSelectId }}" type="hidden" value="{{ $dungeonroute->dungeon_id }}">
     @endif
 
-    @include('common.team.select', ['required' => false])
+    @include('common.team.select', ['required' => false, 'selectedId' => optional($dungeonroute)->team_id])
 
     <div class="form-group">
         <label for="dungeon_route_title">
