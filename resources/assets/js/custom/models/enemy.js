@@ -182,7 +182,7 @@ class Enemy extends MapObject {
                 type: 'bool',
                 edit: false, // Not directly changeable by user
                 default: false,
-                setter: function(value){
+                setter: function (value) {
                     // Exception for MDT enemies
                     self.is_mdt = value;
                 }
@@ -825,7 +825,7 @@ class Enemy extends MapObject {
      */
     isInspiring() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING && getState().getMapContext().hasAffix(AFFIX_INSPIRING);
     }
 
     /**
