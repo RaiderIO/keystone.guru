@@ -186,8 +186,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
-        console.log(enemyIds, afterIndex);
-
         // Construct an object equal to that received from the server
         let killZoneEnemies = [];
         for (let i = 0; i < enemyIds.length; i++) {
