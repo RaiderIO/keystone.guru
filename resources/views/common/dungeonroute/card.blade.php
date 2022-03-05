@@ -173,8 +173,8 @@ ob_start(); ?>
                             <i class="fas fa-flag"></i> {{ __('views/common.dungeonroute.card.report') }}
                         </a>
                         @auth
-                            <div class="dropdown-divider"></div>
                             @if(Auth::user()->hasRole('admin'))
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item refresh_thumbnail"
                                    data-publickey="{{ $dungeonroute->public_key }}">
                                     <i class="fas fa-sync"></i> {{ __('views/common.dungeonroute.card.refresh_thumbnail') }}
