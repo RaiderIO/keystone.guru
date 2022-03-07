@@ -279,21 +279,21 @@ return [
             ],
         ],
         'tazavesh_streets_of_wonder' => [
-            'name'   => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.name',
+            'name'   => 'Тазавеш: улицы Чудес',
             'floors' => [
-                'the_veiled_market'   => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_veiled_market',
-                'the_grand_menagerie' => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie',
-                'the_post'            => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.the_post',
-                'myzas_oasis'         => '@todo ru: .shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis',
+                'the_veiled_market'   => 'Тайный рынок',
+                'the_grand_menagerie' => 'Большой зверинец',
+                'the_post'            => 'Отделение ПОЧТ',
+                'myzas_oasis'         => '\"Оазис Мизы\""',
             ]
         ],
         'tazavesh_so_leahs_gambit'   => [
-            'name'   => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.name',
+            'name'   => 'Тазавеш: гамбит Со\'леи',
             'floors' => [
-                'stormheim'         => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.stormheim',
-                'aggramars_vault'   => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.aggramars_vault',
-                'boralus_harbor'    => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.boralus_harbor',
-                'the_opulent_nexus' => '@todo ru: .shadowlands.tazavesh_so_leahs_gambit.floors.the_opulent_nexus',
+                'stormheim'         => 'Штормхейм',
+                'aggramars_vault'   => 'Хранилище Агграммара',
+                'boralus_harbor'    => 'Гавань Боралуса',
+                'the_opulent_nexus' => 'Блистательный Нексус',
             ],
         ],
     ],
