@@ -74,6 +74,16 @@
             },
             {
                 "release_changelog_id": 131,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Removed various Relics around the 3rd boss in Plaguefall (Blizzard removed them).",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 131,
                 "release_changelog_category_id": 5,
                 "ticket_id": 990,
                 "change": "Subcreation tier list for Tazavesh: So'leah's Gambit now shows up properly in the Shadowlands routes overview and other locations.",
