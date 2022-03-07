@@ -1655,10 +1655,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
-                        "id": 124,
+                        "id": 233,
                         "floor1_id": 75,
                         "floor2_id": 73,
                         "direction": "right"
@@ -1724,16 +1724,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 127,
+                        "id": 234,
                         "floor1_id": 78,
                         "floor2_id": 77,
                         "direction": "right"
                     },
                     {
-                        "id": 128,
+                        "id": 235,
                         "floor1_id": 78,
                         "floor2_id": 79,
                         "direction": "up"
@@ -1748,10 +1748,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 129,
+                        "id": 236,
                         "floor1_id": 79,
                         "floor2_id": 78,
                         "direction": "down"
@@ -1781,7 +1781,7 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 2,
                 "floorcouplings": []
             }
         ]
@@ -1825,10 +1825,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 131,
+                        "id": 237,
                         "floor1_id": 82,
                         "floor2_id": 81,
                         "direction": "up"
@@ -1876,10 +1876,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
-                        "id": 133,
+                        "id": 238,
                         "floor1_id": 84,
                         "floor2_id": 83,
                         "direction": "up"
@@ -1909,10 +1909,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 134,
+                        "id": 239,
                         "floor1_id": 85,
                         "floor2_id": 86,
                         "direction": "up"
@@ -1927,16 +1927,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
-                        "id": 135,
+                        "id": 240,
                         "floor1_id": 86,
                         "floor2_id": 85,
                         "direction": "down"
                     },
                     {
-                        "id": 136,
+                        "id": 241,
                         "floor1_id": 86,
                         "floor2_id": 87,
                         "direction": "up"
@@ -1951,16 +1951,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 137,
+                        "id": 242,
                         "floor1_id": 87,
                         "floor2_id": 86,
                         "direction": "down"
                     },
                     {
-                        "id": 138,
+                        "id": 243,
                         "floor1_id": 87,
                         "floor2_id": 88,
                         "direction": "up"
@@ -1975,10 +1975,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 139,
+                        "id": 244,
                         "floor1_id": 88,
                         "floor2_id": 87,
                         "direction": "down"
@@ -2008,10 +2008,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
-                        "id": 140,
+                        "id": 245,
                         "floor1_id": 89,
                         "floor2_id": 90,
                         "direction": "up"
@@ -2026,16 +2026,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 141,
+                        "id": 246,
                         "floor1_id": 90,
                         "floor2_id": 89,
                         "direction": "down"
                     },
                     {
-                        "id": 142,
+                        "id": 247,
                         "floor1_id": 90,
                         "floor2_id": 91,
                         "direction": "up"
@@ -2050,10 +2050,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 143,
+                        "id": 248,
                         "floor1_id": 91,
                         "floor2_id": 90,
                         "direction": "down"
@@ -2083,10 +2083,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 144,
+                        "id": 249,
                         "floor1_id": 92,
                         "floor2_id": 93,
                         "direction": "down"
@@ -2101,22 +2101,22 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 145,
+                        "id": 250,
                         "floor1_id": 93,
                         "floor2_id": 92,
                         "direction": "up"
                     },
                     {
-                        "id": 146,
+                        "id": 251,
                         "floor1_id": 93,
                         "floor2_id": 94,
                         "direction": "up"
                     },
                     {
-                        "id": 147,
+                        "id": 252,
                         "floor1_id": 93,
                         "floor2_id": 96,
                         "direction": "left"
@@ -2131,10 +2131,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 148,
+                        "id": 253,
                         "floor1_id": 94,
                         "floor2_id": 93,
                         "direction": "down"
@@ -2149,16 +2149,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 151,
+                        "id": 256,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 152,
+                        "id": 257,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
@@ -2173,16 +2173,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 149,
+                        "id": 254,
                         "floor1_id": 95,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 150,
+                        "id": 255,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
@@ -2242,10 +2242,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 221,
+                        "id": 224,
                         "floor1_id": 102,
                         "floor2_id": 101,
                         "direction": "left"
@@ -2260,10 +2260,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 218,
+                        "id": 225,
                         "floor1_id": 103,
                         "floor2_id": 101,
                         "direction": "right"
@@ -2278,10 +2278,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 222,
+                        "id": 223,
                         "floor1_id": 104,
                         "floor2_id": 101,
                         "direction": "right"
@@ -2314,7 +2314,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 205,
+                        "id": 232,
                         "floor1_id": 97,
                         "floor2_id": 98,
                         "direction": "right"
@@ -2329,16 +2329,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 206,
+                        "id": 227,
                         "floor1_id": 98,
                         "floor2_id": 97,
                         "direction": "left"
                     },
                     {
-                        "id": 207,
+                        "id": 228,
                         "floor1_id": 98,
                         "floor2_id": 99,
                         "direction": "down"
@@ -2353,16 +2353,16 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 209,
+                        "id": 229,
                         "floor1_id": 99,
                         "floor2_id": 98,
                         "direction": "up"
                     },
                     {
-                        "id": 210,
+                        "id": 230,
                         "floor1_id": 99,
                         "floor2_id": 100,
                         "direction": "left"
@@ -2377,10 +2377,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "percentage_display_zoom": null,
+                "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 211,
+                        "id": 231,
                         "floor1_id": 100,
                         "floor2_id": 99,
                         "direction": "right"
