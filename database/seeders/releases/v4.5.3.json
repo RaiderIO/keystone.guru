@@ -24,6 +24,16 @@
             },
             {
                 "release_changelog_id": 131,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Updated Russian localization (thanks raikuxq!)",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 131,
                 "release_changelog_category_id": 3,
                 "ticket_id": 989,
                 "change": "Enemies are no longer marked as Inspiring on the map if your route does not have the Inspiring affix assigned to it.",
@@ -47,6 +57,16 @@
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
                 "change": "Added various missing Relics in Mists and Sanguine Depths.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 131,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Both Tazavesh dungeons now have support for the Overpulled Enemies feature when using Live Sessions.",
                 "category": {
                     "id": 4,
                     "category": "Mapping changes"
