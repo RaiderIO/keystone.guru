@@ -230,7 +230,8 @@ return [
     'maps'         => [
         'controls' => [
             'draw'      => [
-                'admin' => 'Admin',
+                'admin'           => 'Admin',
+                'view_this_route' => 'View',
             ],
             'elements'  => [
                 'dungeonrouteinfo'         => [
