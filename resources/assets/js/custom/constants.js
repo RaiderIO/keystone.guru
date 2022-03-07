@@ -292,7 +292,10 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
-            percentage_display_zoom: 3,
+            percentage_display_zoom_default: 3,
+            getCurrentFloorPercentageDisplayZoom: function() {
+                return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;
+            },
             colors: {
                 unsavedBorder: '#E25D5D',
 

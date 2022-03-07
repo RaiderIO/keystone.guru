@@ -12,11 +12,12 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $index
- * @property int $mdt_sub_level
+ * @property int|null $mdt_sub_level
  * @property string $name
  * @property boolean $default
  * @property int $min_enemy_size
  * @property int $max_enemy_size
+ * @property int|null $percentage_display_zoom
  *
  * @property Dungeon $dungeon
  *

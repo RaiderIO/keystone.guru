@@ -66,6 +66,12 @@ if (isset($floor)) {
         @include('common.forms.form-error', ['key' => 'max_enemy_size'])
     </div>
 
+    <div class="form-group{{ $errors->has('percentage_display_zoom') ? ' has-error' : '' }}">
+        {!! Form::label('percentage_display_zoom', __('views/admin.floor.edit.percentage_display_zoom'), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('percentage_display_zoom', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'percentage_display_zoom'])
+    </div>
+
     <div class="form-group{{ $errors->has('default') ? ' has-error' : '' }}">
         {!! Form::label('default', __('views/admin.floor.edit.default'), ['class' => 'font-weight-bold']) !!}
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
