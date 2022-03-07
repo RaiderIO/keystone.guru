@@ -20,7 +20,7 @@ return [
             'caches_dropped_successfully' => 'Кеш сброшен успешно',
             'releases_exported'           => 'Релизы экспортированы',
             'exception'                   => [
-                'token_mismatch'        => '@todo ru: .admintools.flash.exception.token_mismatch',
+                'token_mismatch'        => 'Несоответствие токена',
                 'internal_server_error' => 'Дополнение добавлено в админ панель',
             ],
         ],

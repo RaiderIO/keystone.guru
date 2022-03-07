@@ -58,7 +58,7 @@ return [
     'brushline_map_object_group_label'                => 'Нарисовать Линию',
     'mapicon_map_object_group_label'                  => 'Иконки',
     'killzone_map_object_group_label'                 => 'Пул',
-    'killzonepath_map_object_group_label'             => '@todo ru: .killzonepath_map_object_group_label',
+    'killzonepath_map_object_group_label'             => 'Цепочка пулов',
 
     'publish_state_title_unpublished'   => 'Не опубликовано',
     'publish_state_subtext_unpublished' => 'Только вы можете просматривать этот маршрут',
@@ -184,7 +184,7 @@ return [
     'delete_user_label'                                              => 'Удалить пользователя',
 
     // Home page
-    'export_notes_label'                                             => '@todo ru: .export_notes_label',
+    'export_notes_label'                                             => 'Экспорт заметок',
     'warnings_label'                                                 => 'Предупреждения',
     'category_label'                                                 => 'Категории',
     'message_label'                                                  => 'Сообщение',
@@ -381,7 +381,7 @@ return [
     'moderator_label'                                               => 'Модерировать',
     'admin_label'                                                   => 'Собственный',
     'change_role_success'                                           => 'Разрешения обновлены',
-    'change_default_role_success'                                   => '@todo ru: .change_default_role_success',
+    'change_default_role_success'                                   => 'Роль по умолчанию обновлена',
 
     'team_admin'                    => 'Управление командой',
     'team_moderator'                => 'Модерировать команду',
@@ -466,7 +466,7 @@ return [
     'filter_input_level_header'             => 'Уровень: :value',
     'filter_input_rating_header'            => 'Рейтинг: :value и выше',
     'filter_input_title_header'             => 'Название: :value',
-    'filter_input_expansion_header'         => '@todo ru: .filter_input_expansion_header',
+    'filter_input_expansion_header'         => 'Дополнение: :value',
     'filter_input_user_header'              => 'Пользователь: :value',
 
     // Group composition

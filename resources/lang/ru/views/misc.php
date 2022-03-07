@@ -3,7 +3,7 @@
 return [
     'table'     => [
         'affixrowtable' => [
-            'expansion_timewalking' => '@todo ru: .table.affixrowtable.expansion_timewalking',
+            'expansion_timewalking' => 'Путешествие во времени: %s',
         ],
     ],
     'about'     => [
