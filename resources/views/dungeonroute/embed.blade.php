@@ -33,7 +33,7 @@ if (count($affixes) == 0) {
 
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [
     'dependencies' => ['common/maps/map'],
-    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
     'defaultSelectedFloorId' => $floor->id
 ]])
 

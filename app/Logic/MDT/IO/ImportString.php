@@ -325,6 +325,11 @@ class ImportString extends MDTBase
                                 continue;
                             }
 
+                            // Skip mdt placeholders - we found it, great, but we don't show this on our mapping so get rid of it
+                            if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
+                                continue;
+                            }
+
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 $kzEnemy               = new KillZoneEnemy();
@@ -638,7 +643,7 @@ class ImportString extends MDTBase
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
         if (!$isValid) {
-            throw new InvalidMDTString();
+            throw new InvalidMDTString('Unable to validate MDT import string in Lua');
         }
 
         // Create a dungeon route

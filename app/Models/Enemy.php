@@ -46,6 +46,22 @@ class Enemy extends CacheModel
     public $hidden = ['laravel_through_key'];
     public $timestamps = false;
 
+    const SEASONAL_TYPE_AWAKENED        = 'awakened';
+    const SEASONAL_TYPE_INSPIRING       = 'inspiring';
+    const SEASONAL_TYPE_PRIDEFUL        = 'prideful';
+    const SEASONAL_TYPE_TORMENTED       = 'tormented';
+    const SEASONAL_TYPE_ENCRYPTED       = 'encrypted';
+    const SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
+
+    const SEASONAL_TYPE_ALL = [
+        self::SEASONAL_TYPE_AWAKENED,
+        self::SEASONAL_TYPE_INSPIRING,
+        self::SEASONAL_TYPE_PRIDEFUL,
+        self::SEASONAL_TYPE_TORMENTED,
+        self::SEASONAL_TYPE_ENCRYPTED,
+        self::SEASONAL_TYPE_MDT_PLACEHOLDER,
+    ];
+
     /**
      * @return array
      */

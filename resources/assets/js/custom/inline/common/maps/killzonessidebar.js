@@ -175,8 +175,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             /** @type KillZone */
             let previousKillZone = null;
-            let previousKillZoneFloorIds = null;
-            let killZoneFloorIds = null;
+            let previousKillZoneFloorIds = [];
+            let killZoneFloorIds = [];
             let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];

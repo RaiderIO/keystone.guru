@@ -23,6 +23,6 @@ class AddEncryptedToSeasonalTypeInEnemiesTable extends Migration
      */
     public function down()
     {
-        DB::statement("ALTER TABLE enemies CHANGE COLUMN seasonal_type seasonal_type ENUM('awakened', 'inspiring', 'prideful', 'tormented', 'encrypted') NULL DEFAULT NULL");
+        DB::statement("ALTER TABLE enemies CHANGE COLUMN seasonal_type seasonal_type ENUM('awakened', 'inspiring', 'prideful', 'tormented') NULL DEFAULT NULL");
     }
 }

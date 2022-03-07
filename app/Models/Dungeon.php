@@ -306,6 +306,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
+                ->where('aggressiveness', '<>', 'friendly')
                 ->min('base_health') ?? 10000;
     }
 
@@ -316,6 +317,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
+                ->where('aggressiveness', '<>', 'friendly')
                 ->max('base_health') ?? 100000;
     }
 

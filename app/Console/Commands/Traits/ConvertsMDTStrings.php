@@ -68,6 +68,7 @@ trait ConvertsMDTStrings
         $result = null;
 
         // Save a temp file so that the parser can handle it
+        $fileName = null;
         try {
             $fileName = $this->saveFile($string);
 
@@ -84,7 +85,7 @@ trait ConvertsMDTStrings
                     // Give output to the artisan command
                     $this->error($errorOutput);
 
-                    // Only interested in decode - we're really only interested if it was a encoded, which would indicate some issue
+                    // Only interested in decode - we're really only interested if it wasn't encoded, which would indicate some issue
                     // with either the string or a new format the tool I use can't handle. We don't care for things that aren't
                     // MDT strings - they should be ignored
                     if (!$encode && $this->shouldErrorLog($string)) {
