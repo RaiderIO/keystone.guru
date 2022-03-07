@@ -100,6 +100,11 @@ const NPC_CLASSIFICATION_ID_ELITE = 2;
 const NPC_CLASSIFICATION_ID_BOSS = 3;
 const NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
 
+// Expansions
+const EXPANSION_LEGION = 'legion';
+const EXPANSION_BFA = 'bfa';
+const EXPANSION_SHADOWLANDS = 'shadowlands';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';
@@ -287,7 +292,10 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
-            percentage_display_zoom: 3,
+            percentage_display_zoom_default: 3,
+            getCurrentFloorPercentageDisplayZoom: function() {
+                return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;
+            },
             colors: {
                 unsavedBorder: '#E25D5D',
 

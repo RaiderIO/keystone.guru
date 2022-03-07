@@ -128,6 +128,18 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can migrate a dungeon route.
+     *
+     * @param User $user
+     * @param DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function migrate(User $user, DungeonRoute $dungeonroute)
+    {
+        return $dungeonroute->mayUserEdit($user);
+    }
+
+    /**
      * Determine whether the user can update the dungeon route.
      *
      * @param User|null $user

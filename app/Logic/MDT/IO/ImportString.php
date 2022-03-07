@@ -325,11 +325,17 @@ class ImportString extends MDTBase
                                 continue;
                             }
 
+                            // Skip mdt placeholders - we found it, great, but we don't show this on our mapping so get rid of it
+                            if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
+                                continue;
+                            }
+
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
-                                $kzEnemy               = new KillZoneEnemy();
-                                $kzEnemy->enemy_id     = $enemy->id;
-                                $kzEnemy->kill_zone_id = $killZone->id;
+                                $kzEnemy = new KillZoneEnemy([
+                                    'enemy_id'     => $enemy->id,
+                                    'kill_zone_id' => $killZone->id,
+                                ]);
 
                                 // Couple the KillZoneEnemy to its KillZone
                                 if ($save) {
@@ -394,9 +400,10 @@ class ImportString extends MDTBase
                         $dungeonRoute->pridefulenemies->push($pridefulEnemy);
 
                         // Couple the prideful enemy to this pull
-                        $kzEnemy               = new KillZoneEnemy();
-                        $kzEnemy->enemy_id     = $pridefulEnemy->enemy_id;
-                        $kzEnemy->kill_zone_id = $killZone->id;
+                        $kzEnemy = new KillZoneEnemy([
+                            'enemy_id'     => $pridefulEnemy->id,
+                            'kill_zone_id' => $killZone->id,
+                        ]);
 
                         // Couple the KillZoneEnemy to its KillZone
                         $kzEnemy->save();
@@ -638,7 +645,7 @@ class ImportString extends MDTBase
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
         if (!$isValid) {
-            throw new InvalidMDTString();
+            throw new InvalidMDTString('Unable to validate MDT import string in Lua');
         }
 
         // Create a dungeon route

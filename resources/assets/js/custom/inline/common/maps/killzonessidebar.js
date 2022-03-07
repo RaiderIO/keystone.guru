@@ -102,9 +102,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
             // If there's a difference in floors then we should display a floor switch row
             if (previousKillZone !== null) {
-                let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
-                if (floorDifference.length > 0) {
-                    this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
+                let killZoneFloorIds = killZone.getFloorIds();
+                let previousKillZoneFloorIds = previousKillZone.getFloorIds();
+                // Only if they had enemies assigned to them
+                if (killZoneFloorIds.length > 0 && previousKillZoneFloorIds.length > 0) {
+                    let floorDifference = _.difference(killZoneFloorIds, previousKillZoneFloorIds);
+                    if (floorDifference.length > 0) {
+                        this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
+                    }
                 }
             }
         }
@@ -170,19 +175,26 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             /** @type KillZone */
             let previousKillZone = null;
+            let previousKillZoneFloorIds = [];
+            let killZoneFloorIds = [];
             let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];
                 if (i === 0) {
                     this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
                 } else {
-                    let floorDifference = _.difference(killZone.getFloorIds(), previousKillZone.getFloorIds());
-                    if (floorDifference.length > 0) {
-                        this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
+                    // Don't insert a floor switch if we happen to have an empty pull
+                    killZoneFloorIds = killZone.getFloorIds();
+                    if (killZoneFloorIds.length > 0 && previousKillZoneFloorIds.length > 0) {
+                        let floorDifference = _.difference(killZoneFloorIds, previousKillZoneFloorIds);
+                        if (floorDifference.length > 0) {
+                            this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
+                        }
                     }
                 }
 
                 previousKillZone = killZone;
+                previousKillZoneFloorIds = killZoneFloorIds;
             }
         }
     }
@@ -427,6 +439,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // This must be the longest variable name I've ever made :)
         $(this.options.killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector).bind('change', function () {
+            console.log(this, $(this).is(':checked'));
             getState().setPullsSidebarFloorSwitchVisibility($(this).is(':checked'));
         });
 

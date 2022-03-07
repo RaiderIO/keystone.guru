@@ -91,10 +91,10 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
         }
 
-        for (let i = 0; i < killzoneMapObjectGroup.objects.length; i++) {
+        let sortedObjects = _.sortBy(killzoneMapObjectGroup.objects, 'index');
+        for (let i = 0; i < sortedObjects.length; i++) {
+            let killZone = sortedObjects[i];
 
-
-            let killZone = killzoneMapObjectGroup.objects[i];
             // @TODO centeroid does not take floors into account
             let killZoneCenteroid = killZone.getLayerCenteroid();
             let killZoneFloorIds = killZone.getFloorIds();
@@ -143,7 +143,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                             polyline: {
                                 // From red to green, add one to compensate for the dungeon start to
                                 color: pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
-                                    ((i + dungeonStartOffset)) / (killzoneMapObjectGroup.objects.length + dungeonStartOffset) * 100
+                                    ((i + dungeonStartOffset)) / (sortedObjects.length + dungeonStartOffset) * 100
                                 )
                             }
                         });

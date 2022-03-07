@@ -29,6 +29,7 @@ let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
+let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
 
 /**
  * @property {Number} floor_id
@@ -182,7 +183,7 @@ class Enemy extends MapObject {
                 type: 'bool',
                 edit: false, // Not directly changeable by user
                 default: false,
-                setter: function(value){
+                setter: function (value) {
                     // Exception for MDT enemies
                     self.is_mdt = value;
                 }
@@ -222,7 +223,9 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
-                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'}
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
+                    {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value;
@@ -661,7 +664,9 @@ class Enemy extends MapObject {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
                 if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
-                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED))) {
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
+                    // MDT placeholders are only to suppress warnings when importing - don't show these on the map
+                    this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
                     return false;
                 }
@@ -824,7 +829,7 @@ class Enemy extends MapObject {
      */
     isInspiring() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING && getState().getMapContext().hasAffix(AFFIX_INSPIRING);
     }
 
     /**

@@ -7,6 +7,8 @@ class CommonMapsMap extends InlineCode {
         this.settingsTabRoute = new SettingsTabRoute(options);
         this.settingsTabMap = new SettingsTabMap(options);
         this.settingsTabPull = new SettingsTabPull(options);
+
+        this._floorIdChangeSource = null;
     }
 
     /**
@@ -629,7 +631,12 @@ class CommonMapsMap extends InlineCode {
         if (this._floorIdChangeSource === null) {
             this._floorIdChangeSource = 'external';
 
-            $(this.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
+            $('#map_floor_selection_dropdown a').removeClass('active').each(function (index, element) {
+                let $element = $(element);
+                if (parseInt($element.data('value')) === floorIdChangedEvent.data.floorId) {
+                    $element.addClass('active');
+                }
+            });
             this._floorIdChangeSource = null;
         }
 

@@ -5,20 +5,20 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <h6 class="dropdown-header">{{sharing_label}}</h6>
-        <a class="dropdown-item dungeonroute-publishedstate text-warning cursor-pointer" data-publickey="{{public_key}}"
-           data-publishedstate="unpublished">
+        <a class="dropdown-item dungeonroute-publishedstate text-warning cursor-pointer {{#ifCond published '==' 'unpublished'}} active {{/ifCond}}"
+           data-publickey="{{public_key}}" data-publishedstate="unpublished">
             <i class="fas fa-plane-arrival"></i> {{publish_state_title_unpublished}}
         </a>
-        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer" data-publickey="{{public_key}}"
-           data-publishedstate="team">
+        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '==' 'team'}} active {{/ifCond}}"
+           data-publickey="{{public_key}}" data-publishedstate="team">
             <i class="fas fa-users"></i> {{publish_state_title_team}}
         </a>
-        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer" data-publickey="{{public_key}}"
-           data-publishedstate="world">
+        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '==' 'world'}} active {{/ifCond}}"
+           data-publickey="{{public_key}}" data-publishedstate="world">
             <i class="fas fa-globe"></i> {{publish_state_title_world}}
         </a>
-        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer" data-publickey="{{public_key}}"
-           data-publishedstate="world_with_link">
+        <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '==' 'world_with_link'}} active {{/ifCond}}"
+           data-publickey="{{public_key}}" data-publishedstate="world_with_link">
             <i class="fas fa-link"></i> {{publish_state_title_world_with_link}}
         </a>
 
@@ -34,6 +34,12 @@
         <a class="dropdown-item dungeonroute-clone-to-team cursor-pointer" data-publickey="{{public_key}}">
             <i class="fas fa-clone"></i> {{clone_to_team_label}}
         </a>
+        {{#if show_migrate_to_encrypted }}
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item dungeonroute-migrate-to-encrypted cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-fast-forward"></i> {{migrate_to_encrypted_label}}
+        </a>
+        {{/if}}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}">
             <i class="fas fa-trash"></i> {{delete_label}}
