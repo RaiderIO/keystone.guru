@@ -332,9 +332,10 @@ class ImportString extends MDTBase
 
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
-                                $kzEnemy               = new KillZoneEnemy();
-                                $kzEnemy->enemy_id     = $enemy->id;
-                                $kzEnemy->kill_zone_id = $killZone->id;
+                                $kzEnemy = new KillZoneEnemy([
+                                    'enemy_id'     => $enemy->id,
+                                    'kill_zone_id' => $killZone->id,
+                                ]);
 
                                 // Couple the KillZoneEnemy to its KillZone
                                 if ($save) {
@@ -399,9 +400,10 @@ class ImportString extends MDTBase
                         $dungeonRoute->pridefulenemies->push($pridefulEnemy);
 
                         // Couple the prideful enemy to this pull
-                        $kzEnemy               = new KillZoneEnemy();
-                        $kzEnemy->enemy_id     = $pridefulEnemy->enemy_id;
-                        $kzEnemy->kill_zone_id = $killZone->id;
+                        $kzEnemy = new KillZoneEnemy([
+                            'enemy_id'     => $pridefulEnemy->id,
+                            'kill_zone_id' => $killZone->id,
+                        ]);
 
                         // Couple the KillZoneEnemy to its KillZone
                         $kzEnemy->save();

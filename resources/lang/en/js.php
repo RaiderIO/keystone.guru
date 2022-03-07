@@ -58,7 +58,7 @@ return [
     'brushline_map_object_group_label'                => 'Drawn lines',
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
-    'killzonepath_map_object_group_label'                 => 'Pull connections',
+    'killzonepath_map_object_group_label'             => 'Pull connections',
 
     'publish_state_title_unpublished'   => 'Unpublished',
     'publish_state_subtext_unpublished' => 'Only you may view this route',
@@ -73,13 +73,14 @@ return [
     'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route (Patreon only)',
 
 
-    'publish_label'          => 'Publish',
-    'unpublish_label'        => 'Unpublish',
-    'add_remove_tag_label'   => 'Add/remove tags',
-    'clone_label'            => 'Clone',
-    'clone_to_profile_label' => 'Clone to my profile',
-    'clone_to_team_label'    => 'Clone to Team',
-    'delete_label'           => 'Delete',
+    'publish_label'              => 'Publish',
+    'unpublish_label'            => 'Unpublish',
+    'add_remove_tag_label'       => 'Add/remove tags',
+    'clone_label'                => 'Clone',
+    'clone_to_profile_label'     => 'Clone to my profile',
+    'clone_to_team_label'        => 'Clone to Team',
+    'migrate_to_encrypted_label' => 'Migrate to Encrypted',
+    'delete_label'               => 'Delete',
 
     'placeholder_new_tag_label' => 'new tag',
     'no_tags_assigned_label'    => 'No tags assigned',
@@ -205,6 +206,11 @@ return [
     'route_delete_confirm'                                           => 'Are you sure you wish to delete this route?',
     'route_delete_successful'                                        => 'Route deleted successfully',
     'route_clone_successful'                                         => 'Route cloned successfully',
+    'route_migration_confirm_warning'                                => 'The following changes will be performed to your route:
+        the affixes assigned to the route will be dropped in favor of the current active affix for your region,
+        enemies specific to previous seasons assigned to your pulls (Tormented Lieutenants for example) will be removed from all pulls,
+        if an existing pull contains a pack with Encrypted Relics they will be added to that pull. Are you sure you wish to continue with the migration?',
+    'route_migration_successful'                                     => 'Route migrated successfully',
     'sharing_label'                                                  => 'Sharing',
     'route_table_published_state_unpublished'                        => 'This route is unpublished',
     'route_table_published_state_team'                               => 'This route is visible for all members of teams you are in',

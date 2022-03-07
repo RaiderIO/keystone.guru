@@ -229,6 +229,10 @@ return [
     ],
     'maps'         => [
         'controls' => [
+            'draw'      => [
+                'admin'           => '@todo ru: .maps.controls.draw.admin',
+                'view_this_route' => '@todo ru: .maps.controls.draw.view_this_route',
+            ],
             'elements'  => [
                 'dungeonrouteinfo'         => [
                     'timer'            => 'Таймер',
@@ -256,7 +260,8 @@ return [
                     'hide_labels' => 'Скрыть',
                 ],
                 'mdtclones'                => [
-                    'mdt' => 'MDT',
+                    'mdt'        => 'MDT',
+                    'auto_solve' => '@todo ru: .maps.controls.elements.mdtclones.auto_solve',
                 ],
                 'rating'                   => [
                     'rate_this_route'          => 'Оцените этот маршрут',

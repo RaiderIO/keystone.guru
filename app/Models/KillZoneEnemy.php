@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $id int
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property KillZone $killzone
  * @property Enemy $enemy
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class KillZoneEnemy extends Model
 {
@@ -20,18 +22,23 @@ class KillZoneEnemy extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'kill_zone_id',
+        'enemy_id',
+    ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function killzone()
+    public function killzone(): BelongsTo
     {
         return $this->belongsTo('App\Models\KillZone');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function enemy()
+    public function enemy(): BelongsTo
     {
         return $this->belongsTo('App\Models\Enemy');
     }

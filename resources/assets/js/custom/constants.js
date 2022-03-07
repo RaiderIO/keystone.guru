@@ -100,6 +100,11 @@ const NPC_CLASSIFICATION_ID_ELITE = 2;
 const NPC_CLASSIFICATION_ID_BOSS = 3;
 const NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
 
+// Expansions
+const EXPANSION_LEGION = 'legion';
+const EXPANSION_BFA = 'bfa';
+const EXPANSION_SHADOWLANDS = 'shadowlands';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';
