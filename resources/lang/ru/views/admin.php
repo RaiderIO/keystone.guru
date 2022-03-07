@@ -80,7 +80,7 @@ return [
             'title_edit'             => 'Редактировать этаж - %s',
             'header_edit'            => 'Редактировать этаж - %s',
             'index'                  => 'Индекс',
-            'mdt_sub_level'          => '@todo ru: .floor.edit.mdt_sub_level',
+            'mdt_sub_level'          => 'MDT подуровень',
             'floor_name'             => 'Название этажа',
             'min_enemy_size'         => 'Минимальное количество врагов (пусто по умолчанию (%s))',
             'max_enemy_size'         => 'Максимальное количество врагов (пусто по умолчанию (%s))',
@@ -231,10 +231,10 @@ return [
             ],
         ],
         'enemyforces'  => [
-            'title'                    => '@todo ru: .tools.enemyforces.title',
-            'header'                   => '@todo ru: .tools.enemyforces.header',
-            'paste_mennos_export_json' => '@todo ru: .tools.enemyforces.paste_mennos_export_json',
-            'submit'                   => '@todo ru: .tools.enemyforces.submit',
+            'title'                    => 'Импорт силы врага',
+            'header'                   => 'Импорт силы врага',
+            'paste_mennos_export_json' => 'Вставить Menno\'s экспортированный Json',
+            'submit'                   => 'Отправить',
         ],
         'exception'    => [
             'select' => [
@@ -295,13 +295,13 @@ return [
             'view_dungeonroute_details' => 'Показать детали маршрута подземелья',
 
             'subheader_mdt'                   => 'MDT',
-            'view_mdt_string'                 => '@todo ru: .tools.list.view_mdt_string',
+            'view_mdt_string'                 => 'Просмотреть содержимое строки MDT',
             'view_mdt_string_as_dungeonroute' => 'Просмотреть строку MDT как маршрут подземелья',
             'view_dungeonroute_as_mdt_string' => 'Просмотреть маршрут подземелья как строку MDT',
             'view_mdt_diff'                   => 'Просмотр различия с MDT',
 
-            'subheader_enemy_forces' => '@todo ru: .tools.list.subheader_enemy_forces',
-            'enemy_forces_import'    => '@todo ru: .tools.list.enemy_forces_import',
+            'subheader_enemy_forces' => 'Силы врага',
+            'enemy_forces_import'    => 'Импорт силы врага',
 
             'subheader_misc'     => 'Разное',
             'drop_caches'        => 'Сбросить кеш',

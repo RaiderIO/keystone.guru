@@ -27,7 +27,7 @@
         "map_icon_type_id": 42,
         "lat": -127.3125,
         "lng": 223.1875,
-        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 42,
         "lat": -159.5625,
         "lng": 175.125,
-        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -49,7 +49,7 @@
         "map_icon_type_id": 42,
         "lat": -188.0625,
         "lng": 268.6875,
-        "comment": "mapping.map_icons.shadowlands.theater_of_pain.pick_one",
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

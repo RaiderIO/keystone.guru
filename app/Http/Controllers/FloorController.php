@@ -49,6 +49,8 @@ class FloorController extends Controller
         $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
         $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
 
+        $floor->percentage_display_zoom = $request->get('percentage_display_zoom');
+
         // Update or insert it
         if ($floor->save()) {
             // Delete all directly connected floors

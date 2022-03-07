@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
  * @property string $vertices_json
  *
  * @property Floor $floor
- * @property Collection $enemies
+ * @property Collection|Enemy[] $enemies
  *
  * @mixin Eloquent
  */
@@ -27,7 +27,7 @@ class EnemyPack extends CacheModel
     /**
      * @return BelongsTo
      */
-    function floor()
+    public function floor(): BelongsTo
     {
         return $this->belongsTo('App\Models\Floor');
     }
@@ -35,8 +35,17 @@ class EnemyPack extends CacheModel
     /**
      * @return HasMany
      */
-    function enemies()
+    public function enemies(): HasMany
     {
         return $this->hasMany('App\Models\Enemy');
+    }
+
+    /**
+     * @param string $seasonalType
+     * @return Collection
+     */
+    public function getEnemiesWithSeasonalType(string $seasonalType): Collection
+    {
+        return $this->enemies()->where('seasonal_type', $seasonalType)->get();
     }
 }

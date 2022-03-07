@@ -532,11 +532,12 @@ class KillZone extends MapObject {
             let currZoomLevel = parseInt(mapZoomLevelChangedEvent.data.mapZoomLevel);
             let prevZoomLevel = parseInt(mapZoomLevelChangedEvent.data.previousMapZoomLevel);
 
+            let currentFloorPercentageDisplayZoom = c.map.killzone.getCurrentFloorPercentageDisplayZoom();
             // Don't do any unnecessary redrawings, they are costly
             if (// Zoomed out
-                (prevZoomLevel === c.map.killzone.percentage_display_zoom && prevZoomLevel > currZoomLevel) ||
+                (prevZoomLevel === currentFloorPercentageDisplayZoom && prevZoomLevel > currZoomLevel) ||
                 // Zoomed in
-                (currZoomLevel === c.map.killzone.percentage_display_zoom && currZoomLevel > prevZoomLevel)
+                (currZoomLevel === currentFloorPercentageDisplayZoom && currZoomLevel > prevZoomLevel)
             ) {
                 this.redrawConnectionsToEnemies();
             }
@@ -566,7 +567,7 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         // Refresh percentages of killzone text should the need arise
         if (killZoneChangedEvent.data.killzone.index < this.index &&
-            getState().getMapZoomLevel() >= c.map.killzone.percentage_display_zoom) {
+            getState().getMapZoomLevel() >= c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
             this.bindTooltip();
         }
     }
@@ -1019,7 +1020,7 @@ class KillZone extends MapObject {
             if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
                 let tooltipText = this.index + '';
 
-                if (getState().getMapZoomLevel() > c.map.killzone.percentage_display_zoom) {
+                if (getState().getMapZoomLevel() > c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
                     if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
                         let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.enemyForcesManager.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;

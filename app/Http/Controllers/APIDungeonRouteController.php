@@ -37,6 +37,8 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -345,7 +347,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Apply an offset and a limit by default for all subsequent queries
-        $closure         = function (Builder $builder) use ($offset, $limit) {
+        $closure = function (Builder $builder) use ($offset, $limit) {
             $builder->offset($offset)->limit($limit);
         };
 
@@ -512,6 +514,23 @@ class APIDungeonRouteController extends Controller
         } else {
             return response(['result' => 'error']);
         }
+    }
+
+    /**
+     * @param ExpansionServiceInterface $expansionService
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param string $seasonalType
+     * @return Application|ResponseFactory|Response
+     * @throws AuthorizationException
+     */
+    function migrateToSeasonalType(ExpansionServiceInterface $expansionService, Request $request, DungeonRoute $dungeonroute, string $seasonalType)
+    {
+        $this->authorize('migrate', $dungeonroute);
+
+        $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
+
+        return response('', Http::NO_CONTENT);
     }
 
     /**

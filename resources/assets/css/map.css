@@ -149,6 +149,7 @@ html, body, #map, #app, .wrapper {
     padding: 10px 20px;
     text-shadow: black 2px 2px;
 }
+
 .header_embed {
     padding: 0 20px 10px 20px;
     text-shadow: black 2px 2px;
@@ -413,6 +414,7 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools .bg-header {
     margin-left: 0 !important;
+    background-color: unset !important;
     /*padding: 0 0.5rem 0 0 !important;*/
 }
 
@@ -1156,6 +1158,7 @@ html, body, #map, #app, .wrapper {
     animation-name: flash-animation;
     animation-duration: 0.75s;
 }
+
 @keyframes flash-animation {
     from {
         color: #9DFF56;
@@ -1169,6 +1172,7 @@ html, body, #map, #app, .wrapper {
     animation-name: flash-animation-to-warning;
     animation-duration: 0.75s;
 }
+
 @keyframes flash-animation-to-warning {
     from {
         color: #9DFF56;

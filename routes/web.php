@@ -379,7 +379,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::post('/raidmarker/{enemy}', [APIEnemyController::class, 'setRaidMarker']);
 
-            // Clone a route from the 'my routes' section
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
@@ -399,6 +398,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/rate', [APIDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
                 Route::delete('/rate', [APIDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
+
+                Route::post('/migrate/{seasonalType}', [APIDungeonRouteController::class, 'migrateToSeasonalType']);
 
                 Route::group(['prefix' => '/live/{livesession}'], function () {
                     Route::delete('/', [APILiveSessionController::class, 'delete']);

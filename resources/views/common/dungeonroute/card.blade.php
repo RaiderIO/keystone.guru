@@ -72,6 +72,9 @@ ob_start(); ?>
                 </div>
                 @if( $showAffixes )
                     <div class="col-auto">
+                        <?php
+                        ob_start();
+                        ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div class="row no-gutters">
                                 @include('common.affixgroup.affixgroup', [
@@ -170,8 +173,8 @@ ob_start(); ?>
                             <i class="fas fa-flag"></i> {{ __('views/common.dungeonroute.card.report') }}
                         </a>
                         @auth
-                            <div class="dropdown-divider"></div>
                             @if(Auth::user()->hasRole('admin'))
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item refresh_thumbnail"
                                    data-publickey="{{ $dungeonroute->public_key }}">
                                     <i class="fas fa-sync"></i> {{ __('views/common.dungeonroute.card.refresh_thumbnail') }}

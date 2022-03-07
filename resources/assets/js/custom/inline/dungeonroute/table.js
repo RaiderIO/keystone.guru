@@ -182,16 +182,16 @@ class DungeonrouteTable extends InlineCode {
             });
 
             let $cloneBtns = $('.dungeonroute-clone');
-            $cloneBtns.unbind('click');
-            $cloneBtns.bind('click', self._cloneDungeonRouteClicked);
+            $cloneBtns.unbind('click').bind('click', self._cloneDungeonRouteClicked);
 
             let $cloneToTeamBtns = $('.dungeonroute-clone-to-team');
-            $cloneToTeamBtns.unbind('click');
-            $cloneToTeamBtns.bind('click', self._promptCloneToTeamClicked.bind(self));
+            $cloneToTeamBtns.unbind('click').bind('click', self._promptCloneToTeamClicked.bind(self));
+
+            let $migrateToEncryptedBtns = $('.dungeonroute-migrate-to-encrypted');
+            $migrateToEncryptedBtns.unbind('click').bind('click', self._migrateToEncryptedClicked);
 
             let $deleteBtns = $('.dungeonroute-delete');
-            $deleteBtns.unbind('click');
-            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
+            $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
 
             $('.owl-carousel').owlCarousel({
                 // True to enable overlayed buttons (custom styled, wasted time :( )
@@ -390,9 +390,29 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
+                    let showMigrateToEncrypted = row.dungeon.expansion.shortname === EXPANSION_SHADOWLANDS;
+
+                    // Check if the route does not contain any affixes with encrypted - if it has, don't allow migration
+                    if (showMigrateToEncrypted) {
+
+                        for (let index in row.affixes) {
+                            let affixGroup = row.affixes[index];
+                            for (let affixGroupIndex in affixGroup.affixes) {
+                                let affix = affixGroup.affixes[affixGroupIndex];
+
+                                // If the affix group contains an affix with encrypted, it's not possible to migrate
+                                if (affix.key === AFFIX_ENCRYPTED) {
+                                    showMigrateToEncrypted = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
-                        published: row.published
+                        published: row.published,
+                        show_migrate_to_encrypted: showMigrateToEncrypted
                     }));
                 }
             },
@@ -531,6 +551,33 @@ class DungeonrouteTable extends InlineCode {
         }, null, {closeWith: ['button']});
 
         refreshSelectPickers();
+    }
+
+    /**
+     *
+     * @param clickEvent
+     * @returns {boolean}
+     * @private
+     */
+    _migrateToEncryptedClicked(clickEvent) {
+        let publicKey = $(clickEvent.target).data('publickey');
+
+        showConfirmYesCancel(lang.get('messages.route_migration_confirm_warning'), function () {
+            $.ajax({
+                type: 'POST',
+                url: `/ajax/${publicKey}/migrate/encrypted`,
+                dataType: 'json',
+                success: function (json) {
+                    showSuccessNotification(lang.get('messages.route_migration_successful'));
+                    // Refresh the table
+                    $('#dungeonroute_filter').trigger('click');
+                }
+            });
+        }, null, {closeWith: ['button']});
+
+        // Prevent clicking clone from opening the route after it returns
+        clickEvent.preventDefault();
+        return false;
     }
 
     /**
