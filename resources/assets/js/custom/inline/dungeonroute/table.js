@@ -390,10 +390,29 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
+                    let showMigrateToEncrypted = row.dungeon.expansion.shortname === EXPANSION_SHADOWLANDS;
+
+                    // Check if the route does not contain any affixes with encrypted - if it has, don't allow migration
+                    if (showMigrateToEncrypted) {
+
+                        for (let index in row.affixes) {
+                            let affixGroup = row.affixes[index];
+                            for (let affixGroupIndex in affixGroup.affixes) {
+                                let affix = affixGroup.affixes[affixGroupIndex];
+
+                                // If the affix group contains an affix with encrypted, it's not possible to migrate
+                                if (affix.key === AFFIX_ENCRYPTED) {
+                                    showMigrateToEncrypted = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
                         published: row.published,
-                        show_migrate_to_encrypted: row.dungeon.expansion.shortname === EXPANSION_SHADOWLANDS
+                        show_migrate_to_encrypted: showMigrateToEncrypted
                     }));
                 }
             },

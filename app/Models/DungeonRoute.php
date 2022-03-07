@@ -877,7 +877,7 @@ class DungeonRoute extends Model
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->killzoneenemies as $kzEnemy) {
-                if ($kzEnemy->enemy->seasonal_type !== null) {
+                if (in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
                     $kzEnemy->delete();
                 }
             }
