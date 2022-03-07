@@ -71,6 +71,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _addKillZone(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
+        if (killZone.id <= 0) {
+            console.error(`Unable to add a killzone that hasn't synced yet!`, killZone);
+            return;
+        }
+
         let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
 
         if (showFloorSwitches && this.rowElements.length === 0) {
@@ -211,6 +216,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Update this particular row element to refresh enemy lists etc
         let rowElement = this._getRowElementKillZone(killZone);
+
+        if (rowElement === null) {
+            console.log(`Unable to refresh killzone - cannot find row element for it!`, killZone);
+            return;
+        }
+
         rowElement.refresh();
 
         if (cascadeRefresh) {
@@ -302,6 +313,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
+                // Ignore killzones that haven't saved yet
+                if (killZoneChangedEvent.context.id <= 0) {
+                    return;
+                }
+
                 // Don't perform this when mass-saving - that is handled already and causes a big slowdown
                 let isMassSave = killZoneChangedEvent.data.hasOwnProperty('mass_save') && killZoneChangedEvent.data.mass_save;
 
@@ -439,7 +455,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // This must be the longest variable name I've ever made :)
         $(this.options.killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector).bind('change', function () {
-            console.log(this, $(this).is(':checked'));
             getState().setPullsSidebarFloorSwitchVisibility($(this).is(':checked'));
         });
 
@@ -477,6 +492,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
         killZoneMapObjectGroup.register(['object:add', 'save:success'], this, function (killZoneSaveSuccessEvent) {
+            // Ignore killzones that haven't saved yet
+            if (killZoneSaveSuccessEvent.context.id <= 0) {
+                return;
+            }
+
             self._onKillZoneSaved(killZoneSaveSuccessEvent.data.object);
         });
         // If the killzone was deleted, get rid of our display too
