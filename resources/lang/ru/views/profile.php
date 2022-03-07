@@ -67,8 +67,8 @@ return [
         'tags'                     => 'Теги',
         'teams'                    => 'Команды',
         'profile'                  => 'Профиль',
-        'route_coverage'           => '@todo ru: .overview.route_coverage',
-        'route_overview'           => '@todo ru: .overview.route_overview',
+        'route_coverage'           => 'Таблица готовности маршрутов',
+        'route_overview'           => 'Список маршрутов',
         'welcome_text'             => 'Добро пожаловать на Keystone.guru! Начните с создания маршрута или создайте новую команду для совместного создания маршрутов с друзьями.',
         'create_route'             => 'Создать Маршрут',
         'create_route_description' => 'Маршрут - это путь через подземелье, чтоб достичь конечной цели набрав 100% треша и убив всех боссов.
