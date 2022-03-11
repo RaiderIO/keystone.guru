@@ -281,6 +281,7 @@ return [
                 'edit_route'                     => 'Edit route',
                 'view_route'                     => 'View route',
                 'save_to_profile'                => 'Save to profile',
+                'edit_route_settings'            => 'Route settings',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
@@ -295,7 +296,7 @@ return [
                 'review_live_session'            => 'Review live session',
             ],
             'pulls'     => [
-                'settings_title'         => 'Settings',
+                'settings_title'         => 'Map/pull settings',
                 'new_pull'               => 'New pull',
                 'delete_all_pulls_title' => 'Delete all pulls',
                 'loading'                => 'Loading...',
@@ -324,7 +325,7 @@ return [
         ],
     ],
     'modal'        => [
-        'userreport'  => [
+        'userreport'    => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -342,19 +343,22 @@ return [
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute' => [
+        'createroute'   => [
             'create_route'           => 'Create route',
             'create_temporary_route' => 'Create temporary route',
             'import_from_mdt'        => 'Import from MDT',
         ],
-        'legal'       => [
+        'legal'         => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'share'       => [
+        'routesettings' => [
+            'title' => 'Route settings',
+        ],
+        'share'         => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',

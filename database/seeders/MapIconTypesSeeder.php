@@ -100,7 +100,7 @@ class MapIconTypesSeeder extends Seeder
             'nw_item_shield'  => ['name' => 'Shield', 'width' => 32, 'height' => 32, 'admin_only' => true],
             'nw_item_spear'   => ['name' => 'Spear', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
-            'spell_incarnation' => ['name' => 'Incarnation'],
+            'spell_incarnation' => ['name' => 'Incarnation', 'width' => 32, 'height' => 32, ],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {

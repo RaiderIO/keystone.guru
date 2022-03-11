@@ -9,7 +9,7 @@
 
 // By default, show it if we're not mobile, but allow overrides
 $defaultState = $defaultState ?? !$isMobile;
-$hideOnMove = $hideOnMove ?? $isMobile;
+$hideOnMove   = $hideOnMove ?? $isMobile;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'defaultState' => $defaultState,
@@ -46,8 +46,7 @@ $hideOnMove = $hideOnMove ?? $isMobile;
                     <div class="row pr-2 mb-2 no-gutters">
                         <div class="col-auto" data-toggle="tooltip"
                              title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
-                            <button class="btn btn-info w-100" data-toggle="modal"
-                                    data-target="#route_settings_modal">
+                            <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
@@ -71,10 +70,10 @@ $hideOnMove = $hideOnMove ?? $isMobile;
                     <div id="edit_route_enemy_forces_container"></div>
                 </div>
             @else
-                <div class="row pr-2 mb-2 no-gutters">
+                <div class="row p-1 pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip"
                          title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
-                        <button class="btn btn-info w-100" data-toggle="modal" data-target="#route_settings_modal">
+                        <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
                     </div>
