@@ -79,9 +79,6 @@ if ($isAdmin) {
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
-    'dungeonroute' => $dungeonroute ?? null,
-    'levelMin' => config('keystoneguru.levels.min'),
-    'levelMax' => config('keystoneguru.levels.max'),
 ], $adminOptions)])
 
 @section('scripts')
@@ -138,6 +135,7 @@ if ($isAdmin) {
         @include('common.maps.controls.header', [
             'title' => isset($dungeonroute) ? $dungeonroute->title : __($dungeon->name),
             'echo' => $echo,
+            'edit' => $edit,
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession
         ])
@@ -204,10 +202,6 @@ if ($isAdmin) {
         @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
             @include('common.modal.userreport.enemy')
         @endcomponent
-
-        @component('common.general.modal', ['id' => 'share_modal'])
-            @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
-        @endcomponent
     @endisset
 
 
@@ -215,46 +209,31 @@ if ($isAdmin) {
 
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
-        @component('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'xl'])
-            <?php $hasRouteSettings = isset($dungeonroute) && !$dungeonroute->isSandbox() && $edit; ?>
+        @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             <ul class="nav nav-tabs" role="tablist">
-                @if( $hasRouteSettings )
-                    <li class="nav-item">
-                        <a class="nav-link active" id="edit_route_tab" data-toggle="tab" href="#edit" role="tab"
-                           aria-controls="edit_route" aria-selected="true">
-                            {{ __('views/common.maps.map.route') }}
-                        </a>
-                    </li>
-                @endisset
                 <li class="nav-item">
-                    <a class="nav-link {{ $hasRouteSettings ? '' : 'active' }}"
-                       id="edit_route_map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
-                       aria-controls="edit_route_map_settings" aria-selected="false">
+                    <a class="nav-link active"
+                       id="map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
+                       aria-controls="map_settings" aria-selected="false">
                         {{ __('views/common.maps.map.map_settings') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="edit_route_pull_settings_tab" data-toggle="tab" href="#pull-settings"
+                    <a class="nav-link" id="pull_settings_tab" data-toggle="tab" href="#pull-settings"
                        role="tab"
-                       aria-controls="edit_route_pull_settings" aria-selected="false">
+                       aria-controls="pull_settings" aria-selected="false">
                         {{ __('views/common.maps.map.pull_settings') }}
                     </a>
                 </li>
             </ul>
 
             <div class="tab-content">
-                @if($hasRouteSettings)
-                    <div id="edit" class="tab-pane fade show active mt-3" role="tabpanel"
-                         aria-labelledby="edit_route_tab">
-                        @include('common.forms.createroute', ['dungeonroute' => $dungeonroute])
-                    </div>
-                @endisset
-                <div id="map-settings" class="tab-pane fade {{ $hasRouteSettings ? '' : 'show active' }} mt-3"
-                     role="tabpanel" aria-labelledby="edit_route_map_settings_tab">
+                <div id="map-settings" class="tab-pane fade show active mt-3"
+                     role="tabpanel" aria-labelledby="map_settings_tab">
                     @include('common.forms.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
                 </div>
                 <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel"
-                     aria-labelledby="edit_route_pull_settings_tab">
+                     aria-labelledby="pull_settings_tab">
                     @include('common.forms.pullsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
                 </div>
             </div>

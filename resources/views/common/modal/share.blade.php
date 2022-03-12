@@ -28,7 +28,7 @@ $showPublish   = $show['publish'] ?? true;
         <div class="row">
             <div class="col">
                 {!! sprintf(__('views/common.modal.share.review_route_settings'),
-                    sprintf('<a href="#" data-toggle="modal" data-target="#route_settings_modal">%s</a>', __('views/common.modal.share.route_settings'))
+                    sprintf('<a href="#" data-toggle="modal" data-target="#edit_route_settings_modal">%s</a>', __('views/common.modal.share.route_settings'))
                 ) !!}
             </div>
         </div>

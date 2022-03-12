@@ -40,17 +40,6 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
 ])
 
 <div id="dungeonroute_coverage_affixgroup">
-    {{--    <h5 class="mb-0 text-center">--}}
-    {{--        <a href="#" class="btn btn-link" data-toggle="collapse"--}}
-    {{--           data-target="#dungeonroute_coverage_affixgroup_collapse"--}}
-    {{--           aria-expanded="false" aria-controls="dungeonroute_coverage_affixgroup_collapse">--}}
-    {{--            {{ __('Affix coverage') }}--}}
-    {{--        </a>--}}
-    {{--    </h5>--}}
-
-    {{--    <div id="dungeonroute_coverage_affixgroup_collapse" class="collapse show"--}}
-    {{--         aria-labelledby="dungeonroute_coverage_affixgroup_header"--}}
-    {{--         data-parent="#dungeonroute_coverage_affixgroup">--}}
     <table id="dungeonroute_coverage_affixgroup_table" class="bg-secondary" style="width: 100%">
         <thead>
         <tr>
@@ -70,16 +59,20 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
                     {{ __($dungeon->name) }}
                 </td>
                 @foreach($affixgroups as $affixGroup)
-                    <td>
-                        <?php
-                        /** @var \App\Models\Dungeon $dungeon */
-                        /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                    <?php
+                    /** @var \App\Models\Dungeon $dungeon */
+                    /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
 
-                        $availableDungeonRoutes = getDungeonRoutesByDungeonIdAndAffixGroupId($dungeonRoutes, $dungeon, $affixGroup);
-                        $hasEnemyForces = $availableDungeonRoutes->filter(function (\App\Models\DungeonRoute $dungeonRoute) {
-                            return (bool)$dungeonRoute->has_enemy_forces;
-                        })->isNotEmpty();
-                        ?>
+                    $availableDungeonRoutes = getDungeonRoutesByDungeonIdAndAffixGroupId($dungeonRoutes, $dungeon, $affixGroup);
+                    $hasEnemyForces = $availableDungeonRoutes->filter(function (\App\Models\DungeonRoute $dungeonRoute) {
+                        return (bool)$dungeonRoute->has_enemy_forces;
+                    })->isNotEmpty();
+                    ?>
+                    <td
+                        @if($availableDungeonRoutes->isNotEmpty())
+                        class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
+                        @endif
+                    >
                         @if($availableDungeonRoutes->isNotEmpty())
                             <div class="dungeonroute_coverage_filter_select">
                                 <button class="btn btn-sm w-100"
@@ -124,5 +117,4 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
         @endforeach
         </tbody>
     </table>
-    {{--    </div>--}}
 </div>

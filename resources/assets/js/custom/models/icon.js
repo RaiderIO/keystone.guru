@@ -139,6 +139,7 @@ class Icon extends MapObject {
                 type: 'select',
                 values: editableMapIconTypes,
                 default: -1,
+                live_search: true,
                 setter: this.setMapIconTypeId.bind(this)
             }),
             new Attribute({
