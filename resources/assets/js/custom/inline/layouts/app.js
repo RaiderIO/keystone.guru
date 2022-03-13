@@ -30,7 +30,7 @@ class LayoutsApp extends InlineCode {
         this.$warnings = this.$root.find('.mdt_string_warnings');
         this.$importString = this.$root.find('.import_string');
         this.$submitBtn = this.$root.find('input[type="submit"]');
-        this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').bind('click', this._resetMdtModal.bind(this));
+        this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').unbind('click').bind('click', this._resetMdtModal.bind(this));
 
 
         if (this.options.guest) {
@@ -38,7 +38,7 @@ class LayoutsApp extends InlineCode {
             this._newPassword('#modal-register_password');
         }
 
-        $('.close,.close_alternative').bind('click', function () {
+        $('.close,.close_alternative').unbind('click').bind('click', function () {
             let dismissId = $(this).data('alert-dismiss-id');
             // Cookie is now set to dismiss this alert permanently
             Cookies.set(`alert-dismiss-${dismissId}`, true, {expires: 30});
@@ -53,7 +53,7 @@ class LayoutsApp extends InlineCode {
         }
 
         // Theme switch button
-        $('.theme_switch_btn').bind('click', function () {
+        $('.theme_switch_btn').unbind('click').bind('click', function () {
             let theme = $(this).data('theme');
             let previousTheme = Cookies.get('theme');
 
@@ -84,7 +84,7 @@ class LayoutsApp extends InlineCode {
         });
 
         // Theme switch button
-        $('.new_route_style_switch_btn').bind('click', function () {
+        $('.new_route_style_switch_btn').unbind('click').bind('click', function () {
             let newRouteStyle = $(this).data('new-route-style');
             let previousNewRouteStyle = Cookies.get('route_coverage_new_route_style');
 

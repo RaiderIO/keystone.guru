@@ -45,7 +45,7 @@ class SettingsTabMap extends SettingsTab {
                 instance.hide();
             });
 
-            $editRouteFreedrawOptionsColor.bind('click', function () {
+            $editRouteFreedrawOptionsColor.unbind('click').bind('click', function () {
                 self._colorPicker.show();
             });
         }

@@ -16,17 +16,17 @@ class TeamEdit extends InlineCode {
         let tableView = code.getTableView();
         tableView.setIsUserModerator(this.options.userIsModerator);
 
-        $('#team_invite_link_copy_to_clipboard').bind('click', function () {
+        $('#team_invite_link_copy_to_clipboard').unbind('click').bind('click', function () {
             copyToClipboard($('#team_members_invite_link').val());
         });
 
         // Refresh invite link
-        $('#team_invite_link_refresh').bind('click', function () {
+        $('#team_invite_link_refresh').unbind('click').bind('click', function () {
             self.refreshInviteLink();
         });
 
         // Add route to team button - only if enabled (user is Moderator)
-        $('#add_route_btn:enabled').bind('click', function () {
+        $('#add_route_btn:enabled').unbind('click').bind('click', function () {
             tableView.setAddMode(true);
 
             code.refreshTable();
@@ -35,7 +35,7 @@ class TeamEdit extends InlineCode {
         });
 
         // Cancel button when done adding routes
-        $('#view_existing_routes').bind('click', function () {
+        $('#view_existing_routes').unbind('click').bind('click', function () {
             tableView.setAddMode(false);
 
             code.refreshTable();
@@ -43,7 +43,7 @@ class TeamEdit extends InlineCode {
             $('#add_route_btn').show();
         });
 
-        $('#delete_team').bind('click', function (clickEvent) {
+        $('#delete_team').unbind('click').bind('click', function (clickEvent) {
             showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function () {
                 // Change the method to DELETE
                 $('#details [name="_method"]').val('DELETE');
@@ -295,14 +295,14 @@ class TeamEdit extends InlineCode {
             }
         });
 
-        $('.remove_user_btn').bind('click', function (e) {
+        $('.remove_user_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
                 self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
 
-        $('.leave_team_btn').bind('click', function (e) {
+        $('.leave_team_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get(self.options.data.length === 1 ?
                 'messages.leave_team_disband_confirm_label' :

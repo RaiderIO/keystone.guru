@@ -433,7 +433,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this.sidebar.activate();
 
         // Setup new pull button
-        $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
+        $(this.options.newKillZoneSelector).unbind('click').bind('click', this._newPullClicked.bind(this));
 
 
         $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
@@ -444,7 +444,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             getState().setKillZonesNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);
         });
 
-        $(this.options.killZonesPullsSettingsDeleteAllSelector).bind('click', function () {
+        $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', function () {
             showConfirmYesCancel(lang.get('messages.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 

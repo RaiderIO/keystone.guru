@@ -318,10 +318,8 @@ class EnemyVisual extends Signalable {
         // Force open the menu
         self._circleMenu.circleMenu('open');
 
-        // Unbind this function so we don't get repeat clicks
-        $enemyDiv.unbind('click');
         // Give the user a way to close the menu by clicking the enemy again
-        $enemyDiv.bind('click', function () {
+        $enemyDiv.unbind('click').bind('click', function () {
             self._circleMenu.circleMenu('close', false);
             // Prevent multiple clicks triggering the close
             $enemyDiv.unbind('click');

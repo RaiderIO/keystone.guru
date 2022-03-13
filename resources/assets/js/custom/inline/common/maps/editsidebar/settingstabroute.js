@@ -16,7 +16,7 @@ class SettingsTabRoute extends SettingsTab {
                 }));
 
             // Save settings in the modal
-            $('#save_route_settings').bind('click', this._saveRouteSettings);
+            $('#save_route_settings').unbind('click').bind('click', this._saveRouteSettings);
         }
     }
 

@@ -8,10 +8,10 @@ class CommonTagTagmanager extends InlineCode {
         super.activate();
 
         let $saveTag = $('.tag_save');
-        $saveTag.bind('click', this._onTagSaveClicked);
+        $saveTag.unbind('click').bind('click', this._onTagSaveClicked);
 
         let $deleteTag = $('.tag_delete');
-        $deleteTag.bind('click', this._onTagDeleteClicked);
+        $deleteTag.unbind('click').bind('click', this._onTagDeleteClicked);
     }
 
     /**

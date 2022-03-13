@@ -5,7 +5,7 @@ class ProfileEdit extends InlineCode {
         super.activate();
 
         let $classColors = $('.profile_class_color');
-        $classColors.bind('click', function () {
+        $classColors.unbind('click').bind('click', function () {
             $('#echo_color').val($(this).data('color'));
         });
 

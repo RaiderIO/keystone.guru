@@ -15,7 +15,7 @@ class CommonMapsEmbedtopbar extends InlineCode {
 
         this.sidebar.activate();
 
-        $('#embed_copy_mdt_string').bind('click', this._fetchMdtExportStringAndCopy.bind(this));
+        $('#embed_copy_mdt_string').unbind('click').bind('click', this._fetchMdtExportStringAndCopy.bind(this));
 
         refreshTooltips();
     }

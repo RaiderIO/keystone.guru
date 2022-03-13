@@ -8,12 +8,10 @@ class DungeonRouteTableTeam {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
         let $addToThisTeam = $('.dungeonroute-add-to-this-team');
-        $addToThisTeam.unbind('click');
-        $addToThisTeam.bind('click', this._addToThisTeam.bind(this));
+        $addToThisTeam.unbind('click').bind('click', this._addToThisTeam.bind(this));
 
         let $removeFromThisTeam = $('.dungeonroute-remove-from-this-team');
-        $removeFromThisTeam.unbind('click');
-        $removeFromThisTeam.bind('click', this._removeFromThisTeam.bind(this));
+        $removeFromThisTeam.unbind('click').bind('click', this._removeFromThisTeam.bind(this));
     }
 
     /**

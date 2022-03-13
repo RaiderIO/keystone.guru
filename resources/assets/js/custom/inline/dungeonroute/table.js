@@ -29,7 +29,7 @@ class DungeonrouteTable extends InlineCode {
 
         let self = this;
 
-        $('#dungeonroute_filter').bind('click', function () {
+        $('#dungeonroute_filter').unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $('#dungeonroute_search_dungeon_id').val();
             if (parseInt(dungeonId) < 1) {
@@ -52,7 +52,7 @@ class DungeonrouteTable extends InlineCode {
             self._dt.draw();
         });
 
-        $('.table_list_view_toggle').bind('click', function () {
+        $('.table_list_view_toggle').unbind('click').bind('click', function () {
             // Display the correct table
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
@@ -172,12 +172,10 @@ class DungeonrouteTable extends InlineCode {
             self._teamsHandler.activate();
 
             let $publishBtns = $('.dungeonroute-publish');
-            $publishBtns.unbind('click');
-            $publishBtns.bind('click', self._publishDungeonRouteClicked);
+            $publishBtns.unbind('click').bind('click', self._publishDungeonRouteClicked);
 
             let $publishedStateBtns = $('.dungeonroute-publishedstate');
-            $publishedStateBtns.unbind('click');
-            $publishedStateBtns.bind('click', function (clickEvent) {
+            $publishedStateBtns.unbind('click').bind('click', function (clickEvent) {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
             });
 

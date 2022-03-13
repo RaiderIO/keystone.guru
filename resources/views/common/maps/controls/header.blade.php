@@ -4,7 +4,8 @@
 /** @var $livesession \App\Models\LiveSession|null */
 /** @var $edit bool */
 $echo = $echo ?? false;
-$mayUserEdit = $dungeonroute->mayUserEdit(Auth::user());
+$mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
+
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -237,7 +238,7 @@ $mayUserEdit = $dungeonroute->mayUserEdit(Auth::user());
                 </button>
             </div>
             <div class="col">
-                @if($dungeonroute->mayUserEdit(Auth::user()))
+                @if($mayUserEdit)
                     <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                        class="btn btn-success w-100">
                         <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}

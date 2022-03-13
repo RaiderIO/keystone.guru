@@ -37,7 +37,7 @@ class CommonGroupComposition extends InlineCode {
             }
         });
 
-        $('#reload_button').bind('click', function (e) {
+        $('#reload_button').unbind('click').bind('click', function (e) {
             e.preventDefault();
             self._loadDungeonRouteDefaults();
         });

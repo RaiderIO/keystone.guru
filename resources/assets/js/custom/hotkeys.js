@@ -16,7 +16,7 @@ class Hotkeys extends Signalable {
         console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
         let self = this;
 
-        this.map.leafletMap.on('keydown', function (event) {
+        this.map.leafletMap.off('keydown').on('keydown', function (event) {
             // Ignore keypress events in a text area
             if (!self.map.hasPopupOpen()) {
                 self.onKeyPressed.call(self, event);
@@ -64,6 +64,9 @@ class Hotkeys extends Signalable {
                 key: keyObj,
                 event: event
             });
+        } else if (keyEvent.key === 'Escape') {
+            // Provide a way to cancel the current map state always
+            getState().getDungeonMap().setMapState(null);
         }
     }
 
