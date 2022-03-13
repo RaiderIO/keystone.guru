@@ -4,7 +4,6 @@ class CommonMapsMap extends InlineCode {
         super(options);
         this._dungeonMap = null;
 
-        this.settingsTabRoute = new SettingsTabRoute(options);
         this.settingsTabMap = new SettingsTabMap(options);
         this.settingsTabPull = new SettingsTabPull(options);
 
@@ -41,10 +40,11 @@ class CommonMapsMap extends InlineCode {
             // We start at 1 since it's possible there is no number found. We then default to the default floor
             let targetFloor = 1;
             for (let i = urlParts.length - 1; i >= 0; i--) {
-                let urlPart = urlParts[i];
+                // Remove anchors
+                let urlPart = urlParts[i].replace('#', '');
 
                 // Give us up to 999 indices to have floors for indices/ids
-                if (!isNaN(urlPart) && urlPart.length <= 3) {
+                if (!isNaN(urlPart) && isNumeric(urlPart) && urlPart.length <= 3) {
                     targetFloor = parseInt(urlPart);
                     break;
                 }
@@ -54,17 +54,16 @@ class CommonMapsMap extends InlineCode {
             if (getState().isMapAdmin()) {
                 getState().setFloorId(targetFloor);
             } else {
-                getState().setFloorId(
-                    getState().getMapContext().getFloorByIndex(targetFloor).id
-                );
+                let newFloorId = getState().getMapContext().getFloorByIndex(targetFloor).id;
+                if (getState().getCurrentFloor().id !== newFloorId) {
+                    getState().setFloorId(newFloorId);
+                }
             }
-
         }, false);
 
         this._initDungeonMap();
 
         if (!this.options.noUI) {
-            this.settingsTabRoute.activate();
             this.settingsTabMap.activate();
             this.settingsTabPull.activate();
 
@@ -89,7 +88,7 @@ class CommonMapsMap extends InlineCode {
                 );
             });
 
-            $('#map_enemy_visuals_mdt_auto_solve').bind('click', this._mdtAutoSolve.bind(this));
+            $('#map_enemy_visuals_mdt_auto_solve').unbind('click').bind('click', this._mdtAutoSolve.bind(this));
 
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
@@ -103,7 +102,7 @@ class CommonMapsMap extends InlineCode {
             // Enemy info should be set on mouseover
             getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
 
-            $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
+            $('#userreport_enemy_modal_submit').unbind('click').bind('click', this._submitEnemyUserReport.bind(this));
 
             this._dungeonMap.leafletMap.on('move', function () {
                 $('#enemy_info_container').hide();
@@ -130,7 +129,7 @@ class CommonMapsMap extends InlineCode {
         }
 
         if (this.options.sandbox) {
-            $('#start_tutorial').bind('click', function () {
+            $('#start_tutorial').unbind('click').bind('click', function () {
                 introjs().start();
             });
 
@@ -194,7 +193,7 @@ class CommonMapsMap extends InlineCode {
 
         // Rating
         let $mapRatingDropdown = $('#map_rating_dropdown');
-        $mapRatingDropdown.find('a:not(.disabled)').bind('click', function () {
+        $mapRatingDropdown.find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);
 
             self._rate($this.data('rating'));
@@ -217,7 +216,7 @@ class CommonMapsMap extends InlineCode {
     _setupFloorSelection() {
         // Floor selection
         let $mapFloorSelectionDropdown = $('#map_floor_selection_dropdown');
-        $mapFloorSelectionDropdown.find('a:not(.disabled)').bind('click', function () {
+        $mapFloorSelectionDropdown.find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);
             getState().setFloorId($this.data('value'));
 
@@ -289,7 +288,7 @@ class CommonMapsMap extends InlineCode {
         }
 
         // Trigger the change event now to initialize the map object groups
-        $mapObjectGroupVisibilityDropdown.find('a:not(.disabled)').bind('click', function () {
+        $mapObjectGroupVisibilityDropdown.find('a:not(.disabled)').unbind('click').bind('click', function () {
             $(this).toggleClass('active');
             self._mapObjectGroupVisibilityChanged();
         });
@@ -302,7 +301,7 @@ class CommonMapsMap extends InlineCode {
      */
     _setupEnemyVisualTypes() {
         // Enemy visual types
-        $('#map_enemy_visuals_dropdown').find('a:not(.disabled)').bind('click', function () {
+        $('#map_enemy_visuals_dropdown').find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);
             getState().setEnemyDisplayType($this.data('value'));
 
@@ -326,11 +325,11 @@ class CommonMapsMap extends InlineCode {
             self._favorite($('#favorite').is(':checked'));
         });
 
-        $('.favorite_star').bind('mouseenter', function () {
+        $('.favorite_star').unbind('mouseenter').bind('mouseenter', function () {
             $(this).toggleClass('favorited');
-        }).bind('mouseout', function () {
+        }).unbind('mouseout').bind('mouseout', function () {
             $(this).toggleClass('favorited');
-        }).bind('click', function () {
+        }).unbind('click').bind('click', function () {
             // If it was not favorited, it is now
             let $favorite = $('#favorite');
             let favorited = parseInt($favorite.val()) === 0;

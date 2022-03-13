@@ -158,12 +158,10 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
             // Disable pather if we were doing it
             self.togglePather(false);
-            // @TODO Start a new map state
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
-            // @TODO Stop the new map state
         });
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -766,13 +764,18 @@ class DungeonMap extends Signalable {
         if (this.pather !== null) {
             //  When enabled, add to the map
             if (enabled) {
-                this.setMapState(new PatherMapState(this));
-                this.signal('map:pathertoggled', {enabled: enabled});
-            }
-            // Only disable it when we're actively in the pather map state
-            else if (this.getMapState() instanceof PatherMapState) {
-                this.setMapState(null);
-                this.signal('map:pathertoggled', {enabled: enabled});
+                this.pather.setMode(L.Pather.MODE.CREATE);
+                if (!(this.getMapState() instanceof PatherMapState)) {
+                    this.setMapState(new PatherMapState(this));
+                    this.signal('map:pathertoggled', {enabled: enabled});
+                }
+            } else {
+                this.pather.setMode(L.Pather.MODE.VIEW);
+                // Only disable it when we're actively in the pather map state
+                if (this.getMapState() instanceof PatherMapState) {
+                    this.setMapState(null);
+                    this.signal('map:pathertoggled', {enabled: enabled});
+                }
             }
         }
     }

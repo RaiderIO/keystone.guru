@@ -4,9 +4,9 @@
     "version": "v4.5",
     "title": "9.2 preparation: Added Tazavesh mapping, added new route coverage overview and many bugfixes",
     "silent": 0,
-    "spotlight": 1,
+    "spotlight": 0,
     "created_at": "2022-02-21T22:33:28+00:00",
-    "updated_at": "2022-02-21T22:35:59+00:00",
+    "updated_at": "2022-03-13T13:27:56+00:00",
     "changelog": {
         "id": 128,
         "release_id": 121,

@@ -9,7 +9,7 @@ class SearchFilterImageSelect extends SearchFilter {
 
         let self = this;
 
-        $(this.options.selector).bind('click', function () {
+        $(this.options.selector).unbind('click').bind('click', function () {
             $(this).toggleClass('selected');
 
             self.options.onChange();

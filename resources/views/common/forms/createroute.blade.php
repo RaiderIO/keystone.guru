@@ -52,6 +52,16 @@ $dungeonSelectId = 'dungeon_id_select';
         </div>
     @endisset
 
+    <p>{{ __('views/common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
+
+    @include('common.group.affixes', [
+        'dungeonroute'     => $dungeonroute ?? null,
+        'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
+        'teemingSelector'  => '#teeming',
+        'collapseSelector' => '#createRouteAdvancedCollapse',
+        'defaultSelected'  => $defaultSelectedAffixes
+        ])
+
     <div class="form-group">
         <div id="create_route">
             <div class="card">
@@ -68,16 +78,6 @@ $dungeonSelectId = 'dungeon_id_select';
                 <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_heading"
                      data-parent="#create_route">
                     <div class="card-body">
-
-                        <p>{{ __('views/common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
-
-                        @include('common.group.affixes', [
-                            'dungeonroute'     => $dungeonroute ?? null,
-                            'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
-                            'teemingSelector'  => '#teeming',
-                            'collapseSelector' => '#createRouteAdvancedCollapse',
-                            'defaultSelected'  => $defaultSelectedAffixes
-                            ])
 
                         @include('common.dungeonroute.attributes')
 

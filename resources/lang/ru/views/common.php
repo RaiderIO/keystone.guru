@@ -295,7 +295,7 @@ return [
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
             'pulls'     => [
-                'settings_title'         => 'Настройки',
+                'settings_title'         => 'Настройки карты/пула',
                 'new_pull'               => 'Новый пул',
                 'delete_all_pulls_title' => 'Удалить все пулы',
                 'loading'                => 'Загрузка...',

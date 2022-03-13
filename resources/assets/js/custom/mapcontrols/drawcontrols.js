@@ -399,7 +399,7 @@ class DrawControls extends MapControl {
 
         let $originalDrawActions = $container.find('.leaflet-draw-actions');
 
-        this.map.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+        this.map.leafletMap.off(L.Draw.Event.TOOLBAROPENED).on(L.Draw.Event.TOOLBAROPENED, function (e) {
             // Ensure that pather is disabled now
             self.map.togglePather(false);
 
@@ -430,7 +430,7 @@ class DrawControls extends MapControl {
             });
         });
 
-        this.map.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+        this.map.leafletMap.off(L.Draw.Event.TOOLBARCLOSED).on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             let snackbar = $(`#${self.drawControlSnackbarId}`);
 
             if (snackbar.length > 0) {
@@ -466,7 +466,7 @@ class DrawControls extends MapControl {
                 lang.get('messages.brushline_title')
             )
         );
-        $brushlineButton.bind('click', function () {
+        $brushlineButton.unbind('click').bind('click', function () {
             // Check if it's enabled now
             let wasEnabled = self.map.getMapState() instanceof PatherMapState;
             // Enable it now
@@ -498,7 +498,7 @@ class DrawControls extends MapControl {
             });
 
             // On click, disable pather
-            $button.bind('click', function () {
+            $button.unbind('click').bind('click', function () {
                 self.map.togglePather(false);
             });
 

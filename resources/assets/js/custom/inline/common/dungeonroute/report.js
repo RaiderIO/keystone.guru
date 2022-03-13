@@ -7,7 +7,7 @@ class CommonDungeonrouteReport extends InlineCode {
         let self = this;
 
         // Make the user report modal actually do something
-        $(this.options.selectorRoot).find('.dungeonroute_report_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
+        $(this.options.selectorRoot).find('.dungeonroute_report_submit').unbind('click').bind('click', this._submitDungeonRouteUserReport.bind(this));
 
         if (this.options.publicKey === 'auto') {
             // Attempt to find the public key from the element that we clicked

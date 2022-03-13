@@ -2,7 +2,10 @@
 /** @var $theme string */
 /** @var $dungeonroute \App\Models\DungeonRoute|null */
 /** @var $livesession \App\Models\LiveSession|null */
+/** @var $edit bool */
 $echo = $echo ?? false;
+$mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
+
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -45,7 +48,7 @@ $echo = $echo ?? false;
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    @if($dungeonroute->mayUserEdit(Auth::user()))
+                                                    @if($mayUserEdit)
                                                         <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                                                            class="btn-sm btn-success w-100">
                                                             <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
@@ -126,10 +129,29 @@ $echo = $echo ?? false;
                         </li>
                     @endif
                 @endauth
+                @if( isset($dungeonroute) && !$dungeonroute->isSandbox() && $edit )
+                <li class="nav-item mr-2">
+                    <div class="d-flex h-100">
+                        <div class="row justify-content-center align-self-center">
+                            <div class="col">
+                                <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_route_settings_modal">
+                                    <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                @endif
                 <li class="nav-item">
-                    <button class="btn btn-info h-100" data-toggle="modal" data-target="#share_modal">
-                        <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
-                    </button>
+                    <div class="d-flex h-100">
+                        <div class="row justify-content-center align-self-center">
+                            <div class="col">
+                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
+                                    <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item nav-item-divider">
 
@@ -142,6 +164,15 @@ $echo = $echo ?? false;
 </nav>
 
 @isset($dungeonroute)
+
+    @component('common.general.modal', ['id' => 'share_modal'])
+        @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
+        @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
+    @endcomponent
+
     @component('common.general.modal', ['id' => 'start_live_session_modal'])
         <h3 class="card-title">{{ __('views/common.maps.controls.header.start_live_session') }}</h3>
 
@@ -207,7 +238,7 @@ $echo = $echo ?? false;
                 </button>
             </div>
             <div class="col">
-                @if($dungeonroute->mayUserEdit(Auth::user()))
+                @if($mayUserEdit)
                     <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
                        class="btn btn-success w-100">
                         <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}

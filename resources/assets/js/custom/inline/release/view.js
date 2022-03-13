@@ -17,17 +17,17 @@ class ReleaseView extends InlineCode {
 
         if (typeof this.options.releases === 'object') {
             let $copyReleaseReddit = $('.copy_release_format_reddit');
-            $copyReleaseReddit.bind('click', function () {
+            $copyReleaseReddit.unbind('click').bind('click', function () {
                 self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_reddit');
             });
 
             let $copyReleaseDiscord = $('.copy_release_format_discord');
-            $copyReleaseDiscord.bind('click', function () {
+            $copyReleaseDiscord.unbind('click').bind('click', function () {
                 self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_discord');
             });
 
             let $copyReleaseGithub = $('.copy_release_format_github');
-            $copyReleaseGithub.bind('click', function () {
+            $copyReleaseGithub.unbind('click').bind('click', function () {
                 self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_github');
             });
         }

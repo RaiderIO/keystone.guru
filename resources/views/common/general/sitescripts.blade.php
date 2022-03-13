@@ -15,7 +15,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 
     document.addEventListener("DOMContentLoaded", function (event) {
         $('#legal_modal').modal('show');
-        $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
+        $('#legal_confirm_btn').unbind('click').bind('click', _agreeLegalBtnClicked);
     });
 
     /**

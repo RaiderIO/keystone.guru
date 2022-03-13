@@ -9,7 +9,12 @@ $sandbox = $dungeonroute->isSandbox();
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
-    'dependencies' => ['common/maps/map']
+    'dependencies' => ['common/maps/map'],
+    'options' => [
+        'dungeonroute' => $dungeonroute,
+        'levelMin' => config('keystoneguru.levels.min'),
+        'levelMax' => config('keystoneguru.levels.max'),
+    ]
 ])
 
 @section('content')
