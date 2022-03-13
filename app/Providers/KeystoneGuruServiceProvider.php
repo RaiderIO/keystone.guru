@@ -254,7 +254,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
-            $view->with('teams', Auth::check() ? Auth::user()->teams : []);
+            $view->with('teams', Auth::check() ? Auth::user()->teams : collect());
         });
 
         // Profile pages
