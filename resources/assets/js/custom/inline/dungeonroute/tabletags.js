@@ -11,8 +11,7 @@ class DungeonRouteTableTagsHandler {
         console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
 
         let $addTagBtns = $('.dungeonroute-add-tag');
-        $addTagBtns.unbind('click');
-        $addTagBtns.bind('click', this._promptAddTagClicked.bind(this));
+        $addTagBtns.unbind('click').bind('click', this._promptAddTagClicked.bind(this));
     }
 
     /**

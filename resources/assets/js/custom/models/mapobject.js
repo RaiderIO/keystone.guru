@@ -260,8 +260,7 @@ class MapObject extends Signalable {
                 let popupOpenFn = function (event) {
                     // Prevent multiple binds to click
                     let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
-                    $submitBtn.unbind('click');
-                    $submitBtn.bind('click', function () {
+                    $submitBtn.unbind('click').bind('click', function () {
                         self._popupSubmitClicked();
                     });
 

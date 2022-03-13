@@ -18,7 +18,7 @@ class AdminReleaseEdit extends InlineCode {
         this._addChangeRow();
 
         // Add a new row when the button is pressed
-        $('#add_change_button').bind('click', function () {
+        $('#add_change_button').unbind('click').bind('click', function () {
             self._addChangeRow();
         });
     }
@@ -38,7 +38,7 @@ class AdminReleaseEdit extends InlineCode {
         let $container = $('#changes_container');
         $container.append(html);
 
-        $('.change_delete_btn').bind('click', function () {
+        $('.change_delete_btn').unbind('click').bind('click', function () {
             // Remove the row
             $($(this).closest('.row')).remove();
         });

@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $('.apply_btn').bind('click', function () {
+            $('.apply_btn').unbind('click').bind('click', function () {
                 var $this = $(this);
                 console.log($this, $this.data('id'));
 

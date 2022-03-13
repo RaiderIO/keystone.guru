@@ -62,7 +62,7 @@ class SettingsTabPull extends SettingsTab {
             this._grapick.on('handler:remove', onChange);
             this._grapick.on('handler:color:change', onChange);
 
-            $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls').unbind('click').bind('click', function () {
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
 

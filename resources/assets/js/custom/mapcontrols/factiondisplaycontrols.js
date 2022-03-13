@@ -30,7 +30,7 @@ class FactionDisplayControls extends MapControl {
                 // Build the status bar from the template
                 self.domElement = $(template(data));
 
-                self.domElement.find('.map_faction_display_control').bind('click', function (e) {
+                self.domElement.find('.map_faction_display_control').unbind('click').bind('click', function (e) {
                     let root = $(e.currentTarget);
                     let allRadios = $('#map_faction_display_controls .radiobutton');
                     let checkbox = root.find('.radiobutton');

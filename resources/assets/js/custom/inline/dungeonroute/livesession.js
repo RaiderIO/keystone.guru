@@ -13,7 +13,7 @@ class DungeonrouteLivesession extends InlineCode {
             this.startExpiresCountdown();
         }
 
-        $('#stop_live_session').bind('click', this._stopLiveSession.bind(this));
+        $('#stop_live_session').unbind('click').bind('click', this._stopLiveSession.bind(this));
     }
 
     /**
