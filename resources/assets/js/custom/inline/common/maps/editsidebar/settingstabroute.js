@@ -32,6 +32,7 @@ class SettingsTabRoute extends SettingsTab {
             url: `/ajax/${getState().getMapContext().getPublicKey()}`,
             dataType: 'json',
             data: {
+                team_id: $('#team_id_select').val(),
                 dungeon_route_title: $('#dungeon_route_title').val(),
                 dungeon_route_description: $('#dungeon_route_description').val(),
                 level_min: levelSplit[0],
