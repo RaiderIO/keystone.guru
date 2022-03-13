@@ -71,6 +71,16 @@
                     "id": 5,
                     "category": "Bugfixes"
                 }
+            },
+            {
+                "release_changelog_id": 132,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1012,
+                "change": "Editing a route's team through the route settings does not work in the map.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             }
         ]
     }
