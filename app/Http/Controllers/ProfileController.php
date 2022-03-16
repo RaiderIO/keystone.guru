@@ -168,7 +168,7 @@ class ProfileController extends Controller
             }
         }
 
-        return redirect()->route('profile.tags');
+        return redirect()->route('profile.edit');
     }
 
     /**
