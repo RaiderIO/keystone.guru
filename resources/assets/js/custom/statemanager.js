@@ -529,14 +529,14 @@ class StateManager extends Signalable {
      * @returns {String}
      */
     getMapNumberStyle() {
-        return Cookies.get('map_number_style');
+        return Cookies.get('map_number_style') ?? NUMBER_STYLE_PERCENTAGE;
     }
 
     /**
      * @returns {String}
      */
     getKillZonesNumberStyle() {
-        return Cookies.get('kill_zones_number_style');
+        return Cookies.get('kill_zones_number_style') ?? NUMBER_STYLE_PERCENTAGE;
     }
 
     /**
