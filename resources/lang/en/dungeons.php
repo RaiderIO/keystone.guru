@@ -288,7 +288,7 @@ return [
             ]
         ],
         'tazavesh_so_leahs_gambit'   => [
-            'name'   => 'Tazavesh: So\'Leah\'s Gambit',
+            'name'   => 'Tazavesh: So\'leah\'s Gambit',
             'floors' => [
                 'stormheim'         => 'Stormheim',
                 'aggramars_vault'   => 'Aggramar\'s Vault',
