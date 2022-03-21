@@ -262,22 +262,33 @@ class APIDungeonRouteController extends Controller
         // Affixes
         $hasAffixGroups = $request->has('affixgroups');
         $hasAffixes     = $request->has('affixes');
+
+        $affixGroups = $request->get('affixgroups');
+
+        if (!$hasAffixGroups && !$hasAffixes) {
+            // Always include this season's affixes if the user hasn't selected any
+            $affixGroups    = $expansionService->getCurrentSeason($expansion)->affixgroups->pluck(['id'])->toArray();
+            $hasAffixGroups = true;
+        }
+
         if ($hasAffixGroups || $hasAffixes) {
             $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
 
-            if ($hasAffixGroups) {
-                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $request->get('affixgroups'));
-            }
-
-            if ($hasAffixes) {
-                $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
-                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
-                    ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
-                    ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
-                    ->groupBy('affix_group_couplings.affix_group_id')
-                    ->having('affixMatches', '>=', count($request->get('affixes')));
+            if (!empty($affixGroups)) {
+                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $affixGroups);
             }
         }
+
+        if ($hasAffixes) {
+            $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
+            /** @noinspection UnknownColumnInspection */
+            $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
+                ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
+                ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
+                ->groupBy('affix_group_couplings.affix_group_id')
+                ->having('affixMatches', '>=', count($request->get('affixes')));
+        }
+
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
