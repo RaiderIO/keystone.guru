@@ -612,10 +612,11 @@ class DungeonRoute extends Model
      *
      * @param Request $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @return bool
      * @throws Exception
      */
-    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService): bool
+    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService): bool
     {
         $result = false;
 
@@ -753,7 +754,7 @@ class DungeonRoute extends Model
 
             // Instantly generate a placeholder thumbnail for new routes.
             if ($new) {
-                $this->queueRefreshThumbnails();
+                $thumbnailService->queueThumbnailRefresh($this);
 
                 // If the user requested a template route..
                 if ($request->get('template', false)) {
@@ -954,25 +955,6 @@ class DungeonRoute extends Model
     {
         // Use relationship caching instead of favorites() to save some queries
         return Auth::check() && $this->favorites()->where('user_id', Auth::id())->exists();
-    }
-
-    /**
-     * Queues this dungeon route for refreshing of the thumbnails as soon as possible.
-     */
-    public function queueRefreshThumbnails()
-    {
-        foreach ($this->dungeon->floors as $floor) {
-            /** @var Floor $floor */
-            // Set it for processing in a queue
-            ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
-        }
-
-        // Temporarily disable timestamps since we don't want this action to update the updated_at
-        $this->timestamps                  = false;
-        $this->thumbnail_refresh_queued_at = Carbon::now()->toDateTimeString();
-        $this->save();
-        // Re-enable them
-        $this->timestamps = true;
     }
 
 

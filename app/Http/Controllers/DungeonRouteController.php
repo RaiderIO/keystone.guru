@@ -136,18 +136,19 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService, $thumbnailService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 

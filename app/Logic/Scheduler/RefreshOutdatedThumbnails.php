@@ -9,8 +9,10 @@
 namespace App\Logic\Scheduler;
 
 use App\Models\DungeonRoute;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class RefreshOutdatedThumbnails
@@ -38,8 +40,10 @@ class RefreshOutdatedThumbnails
         Log::channel('scheduler')->debug(sprintf('Scheduling %s routes for thumbnail generation', $routes->count()));
 
         // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
+        /** @var ThumbnailServiceInterface $thumbnailService */
+        $thumbnailService = App::make(ThumbnailServiceInterface::class);
         foreach ($routes as $dungeonRoute) {
-            $dungeonRoute->queueRefreshThumbnails();
+            $thumbnailService->queueThumbnailRefresh($dungeonRoute);
         }
 
         Log::channel('scheduler')->debug('OK Finding thumbnails');
