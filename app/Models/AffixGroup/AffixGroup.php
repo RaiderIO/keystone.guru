@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $season_id
  * @property int $expansion_id
  * @property int|null $seasonal_index
+ * @property bool $confirmed
  *
  * @property Season $season
  * @property Expansion $expansion
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AffixGroup extends AffixGroupBase
 {
-    public $fillable = ['season_id', 'seasonal_index'];
+    public $fillable = ['season_id', 'seasonal_index', 'confirmed'];
 
 
     protected function getAffixGroupCouplingsTableName(): string
