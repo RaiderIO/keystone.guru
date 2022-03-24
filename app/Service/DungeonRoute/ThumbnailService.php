@@ -103,7 +103,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         foreach ($dungeonRoute->dungeon->floors as $floor) {
             /** @var Floor $floor */
             // Set it for processing in a queue
-            ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index);
+            ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);
         }
 
         // Temporarily disable timestamps since we don't want this action to update the updated_at
