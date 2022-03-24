@@ -11,6 +11,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -173,19 +174,19 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
      */
-    function clone(Request $request, DungeonRoute $dungeonroute)
+    function clone(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('clone', $dungeonroute);
 
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute()) {
-
-            $newRoute = $dungeonroute->cloneRoute();
+            $newRoute = $dungeonroute->cloneRoute($thumbnailService);
 
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
 

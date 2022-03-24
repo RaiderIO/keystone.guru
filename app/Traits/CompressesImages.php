@@ -6,7 +6,7 @@
  * Time: 14:56
  */
 
-namespace App\Jobs;
+namespace App\Traits;
 
 trait CompressesImages
 {
@@ -16,30 +16,30 @@ trait CompressesImages
      * You need to install pngquant 1.8 on the server (ancient version 1.0 won't work).
      * There's package for Debian/Ubuntu and RPM for other distributions on http://pngquant.org
      *
-     * @param $path_to_png_file string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
-     * @param $max_quality int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
+     * @param $pathToPngFile string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
+     * @param $maxQuality int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
      * @return string - content of PNG file after conversion
      * @throws \Exception
      */
-    private function _compressPng($path_to_png_file, $max_quality = 90)
+    private function _compressPng(string $pathToPngFile, int $maxQuality = 90)
     {
-        if (!file_exists($path_to_png_file)) {
-            throw new \Exception("File does not exist: $path_to_png_file");
+        if (!file_exists($pathToPngFile)) {
+            throw new \Exception("File does not exist: $pathToPngFile");
         }
 
         // guarantee that quality won't be worse than that.
-        $min_quality = 60;
+        $minQuality = 60;
 
         // '-' makes it use stdout, required to save to $compressed_png_content variable
         // '<' makes it read from the given file path
         // escapeshellarg() makes this safe to use with any path
-        $compressed_png_content = shell_exec("pngquant --quality=$min_quality-$max_quality - < " . escapeshellarg($path_to_png_file));
+        $compressedPngContent = shell_exec("pngquant --quality=$minQuality-$maxQuality - < " . escapeshellarg($pathToPngFile));
 
-        if (!$compressed_png_content) {
+        if (!$compressedPngContent) {
             throw new \Exception("Conversion to compressed PNG failed. Is pngquant 1.8+ installed on the server?");
         }
 
-        return $compressed_png_content;
+        return $compressedPngContent;
     }
 
     /**
@@ -49,9 +49,9 @@ trait CompressesImages
      * @param $target string
      * @throws \Exception
      */
-    public function compressPng($source, $target)
+    public function compressPng(string $source, string $target)
     {
-        // this will ensure that $path_to_compressed_file points to compressed file
+        // this will ensure that $pathToPngFile points to compressed file
         // and avoid re-compressing if it's been done already
         if (!file_exists($target)) {
             file_put_contents($target, $this->_compressPng($source));

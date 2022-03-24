@@ -33,6 +33,7 @@ use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -506,19 +507,20 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @param Team $team
      * @return Response
      * @throws AuthorizationException
      */
-    function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team)
+    function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute, Team $team)
     {
         $this->authorize('clone', $dungeonroute);
 
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonroute->cloneRoute(false);
+            $newRoute = $dungeonroute->cloneRoute($thumbnailService, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);
@@ -694,12 +696,12 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
+     * @param DungeonRoute $dungeonroute
      * @return array|void
      * @throws Throwable
      */
-    function mdtExport(Request $request, DungeonRoute $dungeonroute, SeasonService $seasonService)
+    function mdtExport(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
         $this->authorize('view', $dungeonroute);
 
@@ -733,12 +735,13 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Response
      */
-    function refreshThumbnail(Request $request, DungeonRoute $dungeonroute): Response
+    function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
     {
-        $dungeonroute->queueRefreshThumbnails();
+        $thumbnailService->queueThumbnailRefresh($dungeonroute);
 
         return response()->noContent();
     }
