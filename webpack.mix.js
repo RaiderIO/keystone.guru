@@ -203,14 +203,9 @@ let scripts = [
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifieractiveaura.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierawakened.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierclassification.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierencrypted.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierinspiring.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierprideful.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierteeming.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifiertormented.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifiertruesight.js',
 
     'resources/assets/js/custom/mapcontrols/mapcontrol.js',
