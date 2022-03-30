@@ -100,6 +100,11 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             let killZoneFloorIds = killZone.getFloorIds();
             let killZoneOnCurrentFloor = killZoneFloorIds.includes(currentFloorId);
 
+            // If a pull is empty one way or another (no enemies, or all enemies marked obsolete)
+            if( killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 ) {
+                continue;
+            }
+
             // Only if we have something to connect..
             if (killZone.enemies.length > 0) {
                 // Only if the indices are next to each other
