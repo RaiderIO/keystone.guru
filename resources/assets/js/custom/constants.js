@@ -226,6 +226,17 @@ let c = {
 
                 // Return the correct size
                 return Math.ceil(result);
+            },
+            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false) {
+                let keyLevelFactor = Math.pow(1.08, (keyLevel - 1));
+
+                if (fortified) {
+                    keyLevelFactor *= 1.2;
+                } else if (tyrannical) {
+                    keyLevelFactor *= 1.3;
+                }
+
+                return Math.ceil(baseHealth * keyLevelFactor);
             }
         },
         adminenemy: {
@@ -293,7 +304,7 @@ let c = {
         },
         killzone: {
             percentage_display_zoom_default: 3,
-            getCurrentFloorPercentageDisplayZoom: function() {
+            getCurrentFloorPercentageDisplayZoom: function () {
                 return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;
             },
             colors: {

@@ -258,6 +258,8 @@ return [
     'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Только Усиливающие',
     'sidebar_enemy_spell_label'                                     => 'Способность',
     'sidebar_enemy_skippable_label'                                 => 'Возможно пропустить ',
+    'sidebar_enemy_health_fortified_label'                          => '@todo ru: .sidebar_enemy_health_fortified_label',
+    'sidebar_enemy_health_tyrannical_label'                         => '@todo ru: .sidebar_enemy_health_tyrannical_label',
     'sidebar_enemy_skippable_info_label'                            => 'Пропускаемый враг  - это враг, которого можно пропустить, не используя зелья невидимости или Скрывающий покров Разбойников. Эти враги могут быть исключены из вашего маршрута после того, как вы выберете пак для пула.',
     'user_report_enemy_success'                                     => 'Отчет успешно отправлен. Спасибо за помощь в улучшении Keystone.guru!',
     'dungeonroute_report_enemy_success'                             => 'Отчет успешно отправлен. Спасибо за помощь в улучшении Keystone.guru!',
