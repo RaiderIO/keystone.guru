@@ -392,11 +392,25 @@ class Enemy extends MapObject {
         let result = null;
 
         if (this.npc !== null) {
+            let scaledHealth = this.npc.base_health;
+            let hasFortified = false;
+            let hasTyrannical = false;
+
+            let mapContext = getState().getMapContext();
+            if (mapContext instanceof MapContextDungeonRoute) {
+                hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
+                hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
+
+                scaledHealth = c.map.enemy.calculateHealthForKey(parseInt(scaledHealth), mapContext.getLevelMin(), hasFortified, hasTyrannical);
+            }
+
             result = {info: [], custom: []};
             // @formatter:off
             result.info.push({
-                key: lang.get('messages.sidebar_enemy_health_label'),
-                value: this.npc.base_health.toLocaleString()
+                key: lang.get('messages.sidebar_enemy_health_label') + ` (+${mapContext.getLevelMin()})`,
+                value: scaledHealth.toLocaleString(),
+                warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
+                    (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
             });
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});

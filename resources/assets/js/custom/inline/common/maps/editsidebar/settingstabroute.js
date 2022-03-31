@@ -73,14 +73,19 @@ class SettingsTabRoute extends SettingsTab {
                     $title.html(json.title);
                 }
 
+                let mapContext = getState().getMapContext();
+
                 let $seasonalIndex = $('#seasonal_index');
                 if ($seasonalIndex.length > 0) {
-                    getState().getMapContext().setSeasonalIndex(parseInt($seasonalIndex.val()));
+                    mapContext.setSeasonalIndex(parseInt($seasonalIndex.val()));
                 }
                 let $teeming = $('#teeming');
                 if ($teeming.length > 0) {
-                    getState().getMapContext().setTeeming($teeming.is(':checked'));
+                    mapContext.setTeeming($teeming.is(':checked'));
                 }
+
+                mapContext.setLevelMin(levelSplit[0]);
+                mapContext.setLevelMax(levelSplit[1]);
             },
             complete: function () {
                 $('#save_route_settings').show();
