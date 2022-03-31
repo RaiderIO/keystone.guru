@@ -37,19 +37,26 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     * Get the closest floor switch marker to a specific floor, on a lat lng on the current floor
-     * @param floorId {Number}
+     *
+     * @param sourceFloorId {Number}
      * @param targetFloorId {Number}
-     * @param latLng {L.latLng}
+     * @param latLng {L.latLng|null}
+     * @private
      */
-    getClosestMarker(floorId, targetFloorId, latLng) {
+    _findMarkerByTargetFloorId(sourceFloorId, targetFloorId, latLng) {
+        if (latLng === null) {
+            // Center of the map
+            latLng = new L.latLng(-128, 192);
+        }
+
         let result = null;
+
         let shortlist = [];
 
         for (let i = 0; i < this.objects.length; i++) {
             let object = this.objects[i];
 
-            if (object.floor_id === floorId && object.target_floor_id === targetFloorId) {
+            if (object.floor_id === sourceFloorId && object.target_floor_id === targetFloorId) {
                 shortlist.push(object);
             }
         }
@@ -67,6 +74,49 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
                     result = shortlist[i];
                     closestDistance = distance;
                 }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the closest floor switch marker to a specific floor, on a lat lng on the current floor
+     * @param floorId {Number}
+     * @param targetFloorId {Number}
+     * @param latLng {L.latLng|null}
+     */
+    getClosestMarker(floorId, targetFloorId, latLng = null) {
+        let result = this._findMarkerByTargetFloorId(floorId, targetFloorId, latLng);
+
+        let foundPath = false;
+
+        // If not found, try to find it across all objects we have
+        if (result === null) {
+            let path = [];
+
+            for (let i = 0; i < this.objects.length; i++) {
+                let object = this.objects[i];
+                let onSameFloor = object.floor_id === floorId;
+                let toTargetFloor = object.target_floor_id === targetFloorId;
+
+                // Only consider those objects that originate from our floor
+                if (onSameFloor) {
+                    // Find the marker from the target of that marker, to what we're looking for
+                    let foundMarkerOnTargetFloor = this._findMarkerByTargetFloorId(object.target_floor_id, targetFloorId, {
+                        lat: object.lat,
+                        lng: object.lng
+                    });
+
+                    if (foundMarkerOnTargetFloor !== null) {
+                        result = object;
+                        // path.push(object);
+                        // path.push(foundMarkerOnTargetFloor);
+                        foundPath = true;
+                        break;
+                    }
+                }
+
             }
         }
 
