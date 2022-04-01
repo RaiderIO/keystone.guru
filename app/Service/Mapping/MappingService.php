@@ -59,26 +59,27 @@ class MappingService implements MappingServiceInterface
 
             // Only if we actually decoded something; prevents crashes
             if ($decoded !== false) {
+                $dungeon = null;
                 if (isset($decoded['dungeon_id']) && (int)$decoded['dungeon_id'] > 0) {
-                    $result->add(Dungeon::find($decoded['dungeon_id']));
+                    $dungeon = Dungeon::find($decoded['dungeon_id']);
                 } else if (isset($decoded['floor_id']) && (int)$decoded['floor_id'] > 0) {
-                    $changedFloor = Floor::find($decoded['floor_id']);
+                    $dungeon = Floor::find($decoded['floor_id'])->dungeon;
+                }
 
-                    // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there
-                    if ($changedFloor !== null) {
-                        $exists = false;
+                // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there
+                if ($dungeon !== null) {
+                    $exists = false;
 
-                        foreach ($result as $dungeon) {
-                            if ($dungeon->id === $changedFloor->dungeon_id) {
-                                $exists = true;
-                                break;
-                            }
+                    foreach ($result as $changedDungeon) {
+                        if ($changedDungeon->id === $dungeon->id) {
+                            $exists = true;
+                            break;
                         }
+                    }
 
 
-                        if (!$exists) {
-                            $result->add($changedFloor->dungeon);
-                        }
+                    if (!$exists) {
+                        $result->add($dungeon);
                     }
                 }
             }
