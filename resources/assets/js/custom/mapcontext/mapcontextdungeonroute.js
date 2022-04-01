@@ -144,4 +144,33 @@ class MapContextDungeonRoute extends MapContext {
     getEnemyRaidMarkers() {
         return this._options.enemyRaidMarkers;
     }
+
+    /**
+     * @returns {Number}
+     */
+    getLevelMin() {
+        return this._options.levelMin;
+    }
+
+    /**
+     * @param levelMin {Number}
+     */
+    setLevelMin(levelMin) {
+        this._options.levelMin = levelMin;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getLevelMax() {
+        return this._options.levelMax;
+    }
+
+    /**
+     * @param levelMax {Number}
+     */
+    setLevelMax(levelMax) {
+        this._options.levelMax = levelMax;
+    }
 }

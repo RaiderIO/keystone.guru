@@ -14,9 +14,12 @@
                 {{/ifCond}}
             {{/ifCond}}
         </div>
-        <div class="col-2 text-right" data-toggle="tooltip" title="{{ info }}">
+        <div class="col-2 text-right" data-toggle="tooltip" title="{{ info }}{{ warning }}">
             {{#if info}}
-                <i class="fas fa-info-circle"></i>
+                <i class="fas fa-info-circle text-info"></i>
+            {{/if}}
+            {{#if warning}}
+                <i class="fas fa-exclamation-circle text-warning"></i>
             {{/if}}
         </div>
     </div>
