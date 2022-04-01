@@ -211,7 +211,7 @@
     {
         "id": 185680,
         "dungeon_id": -1,
-        "classification_id": 2,
+        "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Vy Relic",
@@ -230,7 +230,7 @@
     {
         "id": 185683,
         "dungeon_id": -1,
-        "classification_id": 2,
+        "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Wo Relic",
@@ -249,7 +249,7 @@
     {
         "id": 185685,
         "dungeon_id": -1,
-        "classification_id": 2,
+        "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Urh Relic",
