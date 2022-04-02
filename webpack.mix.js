@@ -1,7 +1,7 @@
 const mix = require('laravel-mix');
 const argv = require('yargs').argv;
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 let gitRevisionPlugin = null; // Init in the config below
 
 mix.options({
@@ -33,7 +33,7 @@ mix.options({
         }),
 
         // // Compile handlebars
-        new WebpackShellPlugin({
+        new WebpackShellPluginNext({
             onBuildStart: [
                 // Update version file. Required by PHP version library to get the proper version
                 // See https://stackoverflow.com/a/39611938/771270
@@ -73,16 +73,16 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
 
-let precompile = [
-    // Translations
-    'resources/assets/js/messages.js'
-];
-
-mix.js(precompile, 'resources/assets/js/precompile.js');
+// let precompile = [
+//     // Translations
+//     'resources/assets/js/messages.js'
+// ];
+//
+// mix.js(precompile, 'resources/assets/js/precompile.js');
 
 let scripts = [
     // Include the precompiled scripts
-    'resources/assets/js/precompile.js',
+    'resources/assets/js/messages.js',
 
     // Home page only
     'resources/assets/js/custom/home.js',
@@ -251,7 +251,7 @@ mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.versio
     .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')
     // Lib processing
-    .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
+    // .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
     .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
 
 mix.sourceMaps();
@@ -259,33 +259,33 @@ mix.sourceMaps();
 if (images) {
     // if (mix.inProduction()) {
     // Copies all tiles as well which takes a while
-    // mix.copy('resources/assets/images', 'public/images', false);
+    // mix.copy('resources/assets/images', 'public/images');
     // } else {
     // Allow import of pure JS
-    // mix.copy('resources/assets/js/custom', 'public/js/custom', false);
+    // mix.copy('resources/assets/js/custom', 'public/js/custom');
 
-    mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
-    mix.copy('resources/assets/images/classes', 'public/images/classes', false);
-    mix.copy('resources/assets/images/dungeons', 'public/images/dungeons', false);
-    mix.copy('resources/assets/images/echo', 'public/images/echo', false);
-    mix.copy('resources/assets/images/enemyclasses', 'public/images/enemyclasses', false);
-    mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);
-    mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers', false);
-    mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits', false);
-    mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
-    mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
-    mix.copy('resources/assets/images/external', 'public/images/external', false);
-    mix.copy('resources/assets/images/factions', 'public/images/factions', false);
-    mix.copy('resources/assets/images/flags', 'public/images/flags', false);
-    mix.copy('resources/assets/images/home', 'public/images/home', false);
-    mix.copy('resources/assets/images/icon', 'public/images/icon', false);
-    mix.copy('resources/assets/images/lib', 'public/images/lib', false);
-    mix.copy('resources/assets/images/logo', 'public/images/logo', false);
-    mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
-    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
-    mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
-    mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
-    mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
-    mix.copy('resources/assets/images/spells', 'public/images/spells', false);
+    mix.copy('resources/assets/images/affixes', 'public/images/affixes');
+    mix.copy('resources/assets/images/classes', 'public/images/classes');
+    mix.copy('resources/assets/images/dungeons', 'public/images/dungeons');
+    mix.copy('resources/assets/images/echo', 'public/images/echo');
+    mix.copy('resources/assets/images/enemyclasses', 'public/images/enemyclasses');
+    mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications');
+    mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers');
+    mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits');
+    mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes');
+    mix.copy('resources/assets/images/expansions', 'public/images/expansions');
+    mix.copy('resources/assets/images/external', 'public/images/external');
+    mix.copy('resources/assets/images/factions', 'public/images/factions');
+    mix.copy('resources/assets/images/flags', 'public/images/flags');
+    mix.copy('resources/assets/images/home', 'public/images/home');
+    mix.copy('resources/assets/images/icon', 'public/images/icon');
+    mix.copy('resources/assets/images/lib', 'public/images/lib');
+    mix.copy('resources/assets/images/logo', 'public/images/logo');
+    mix.copy('resources/assets/images/mapicon', 'public/images/mapicon');
+    mix.copy('resources/assets/images/oauth', 'public/images/oauth');
+    mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers');
+    mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes');
+    mix.copy('resources/assets/images/specializations', 'public/images/specializations');
+    mix.copy('resources/assets/images/spells', 'public/images/spells');
     // }
 }

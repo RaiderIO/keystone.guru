@@ -2,12 +2,12 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch": "npm run development -- --watch",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "mix --production"
     },
     "resolutions": {
         "terser": "3.14.1"
@@ -15,16 +15,16 @@
     "devDependencies": {
         "axios": "^0.21",
         "cross-env": "^5.2.1",
-        "git-revision-webpack-plugin": "^3.0.3",
+        "git-revision-webpack-plugin": "^5.0.0",
         "jquery": "^3.5.0",
         "laravel-localization-loader": "^1.0.5",
-        "laravel-mix": "^4.0.15",
+        "laravel-mix": "^6.0.43",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^2.3.2",
         "sass": "^1.18.0",
         "sass-loader": "^7.1.0",
         "vue-template-compiler": "^2.6.10",
-        "webpack-shell-plugin": "^0.5.0"
+        "webpack-shell-plugin-next": "^2.2.2"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.8.1",
@@ -54,8 +54,8 @@
         "jquery-visible": "^1.2.0",
         "js-cookie": "^3.0.1",
         "lang.js": "^1.1.14",
-        "laravel-echo": "^1.6.1",
-        "laravel-echo-server": "^1.6.2",
+        "laravel-echo": "^1.11.4",
+        "laravel-echo-server": "^1.6.3",
         "lazysizes": "^5.3.0",
         "leaflet": "^1.7.0",
         "leaflet-ant-path": "^1.3.0",
@@ -73,7 +73,7 @@
         "popper.js": "^1.15.0",
         "puppeteer": "^1.20.0",
         "simplebar": "^5.2.0",
-        "socket.io-client": "^2.2.0",
+        "socket.io-client": "^4.4.1",
         "zikes-circlemenu": "^0.1.1"
     }
 }
