@@ -75,6 +75,7 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
 }
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
+mix.copy('resources/assets/webfonts', 'public/webfonts');
 
 let precompile = [
     // Translations
