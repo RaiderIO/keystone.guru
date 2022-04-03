@@ -37,15 +37,19 @@ mix.options({
 
         // // Compile handlebars
         new WebpackShellPluginNext({
-            onBuildStart: [
-                // Update version file. Required by PHP version library to get the proper version
-                // See https://stackoverflow.com/a/39611938/771270
-                // This is now handled by ./compile.sh, it was either missing -l or saying it doesn't exist as an option
-                // 'git tag | sort -V | (tail -n 1) > version',
-                // Compile handlebars
-                'handlebars ' + (mix.inProduction() ? '-m ' : '') +
-                'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
-            ],
+            onBuildStart: {
+                scripts: [
+                    // Update version file. Required by PHP version library to get the proper version
+                    // See https://stackoverflow.com/a/39611938/771270
+                    // This is now handled by ./compile.sh, it was either missing -l or saying it doesn't exist as an option
+                    // 'git tag | sort -V | (tail -n 1) > version',
+                    // Compile handlebars
+                    'handlebars ' + (mix.inProduction() ? '-m ' : '') +
+                    'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
+                ],
+                blocking: true,
+                parallel: false
+            },
             onBuildEnd: []
         })
     ]
@@ -88,14 +92,14 @@ let scripts = [
     // Include the precompiled scripts
     'public/resources/assets/js/precompile.js',
 
+    // Pre-compiled handlebars
+    'resources/assets/js/handlebars.js',
+
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
-
-    // Pre-compiled handlebars
-    'resources/assets/js/handlebars.js',
 
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
