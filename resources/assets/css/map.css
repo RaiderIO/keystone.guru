@@ -384,6 +384,7 @@ html, body, #map, #app, .wrapper {
     width: 30px;
     height: 30px;
     font-size: 1.15rem;
+    border-radius: 16px;
 }
 
 .theme .echo_user {
