@@ -1,6 +1,6 @@
 const mix = require('laravel-mix');
 const argv = require('yargs').argv;
-const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
+const {GitRevisionPlugin} = require('git-revision-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 let gitRevisionPlugin = null; // Init in the config below
 
@@ -8,6 +8,9 @@ mix.options({
     // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
     processCssUrls: false
 }).webpackConfig({
+    output: {
+        publicPath: '/',
+    },
     watchOptions: {
         ignored: ['node_modules', 'vendor', 'storage'],
         poll: 2000 // Check for changes every two seconds
@@ -73,16 +76,16 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
 
-// let precompile = [
-//     // Translations
-//     'resources/assets/js/messages.js'
-// ];
-//
-// mix.js(precompile, 'resources/assets/js/precompile.js');
+let precompile = [
+    // Translations
+    'resources/assets/js/messages.js'
+];
+
+mix.js(precompile, 'resources/assets/js/precompile.js');
 
 let scripts = [
     // Include the precompiled scripts
-    'resources/assets/js/messages.js',
+    'public/resources/assets/js/precompile.js',
 
     // Home page only
     'resources/assets/js/custom/home.js',
