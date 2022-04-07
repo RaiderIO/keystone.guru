@@ -132,16 +132,16 @@ class DungeonFloorSwitchMarker extends Icon {
                 },
                 setter: function (value) {
                     let mapping = {
-                        'down': 'mapicontypes.door_down',
-                        'left': 'mapicontypes.door_left',
-                        'right': 'mapicontypes.door_right',
-                        'up': 'mapicontypes.door_up',
+                        'down': 'door_down',
+                        'left': 'door_left',
+                        'right': 'door_right',
+                        'up': 'door_up',
                     };
 
-                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByName(mapping[value]));
+                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
 
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByName(mapping[value])
+                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
                     );
 
                     self.direction = value;
