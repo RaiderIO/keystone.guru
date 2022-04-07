@@ -11,6 +11,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -135,18 +136,19 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService, $thumbnailService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -173,19 +175,19 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
      */
-    function clone(Request $request, DungeonRoute $dungeonroute)
+    function clone(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('clone', $dungeonroute);
 
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute()) {
-
-            $newRoute = $dungeonroute->cloneRoute();
+            $newRoute = $dungeonroute->cloneRoute($thumbnailService);
 
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
 
@@ -296,18 +298,18 @@ class DungeonRouteController extends Controller
      *
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
-     * @throws Exception
      */
-    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $seasonService);
+        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
@@ -319,13 +321,14 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService);
+        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));

@@ -291,6 +291,14 @@
     padding: 0;
 }
 
+.affixes_overview_table .table_row.even.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.7);
+}
+
+.affixes_overview_table .table_row.odd.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.6);
+}
+
 .affixes_overview_table .affix_row {
     padding: 6px;
 }

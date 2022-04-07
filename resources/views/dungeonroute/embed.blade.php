@@ -87,7 +87,7 @@ if (count($affixes) == 0) {
             <div class="col-auto pr-2">
                 <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
                 @if($dungeon->floors()->count() > 1)
-                    {!! Form::select('map_floor_selection', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                    {!! Form::select('map_floor_selection_dropdown', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
                 @endif
             </div>
             <div class="col-auto">

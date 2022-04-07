@@ -7,7 +7,6 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\RaidMarker;
-use App\Models\Timewalking\TimewalkingEventAffixGroup;
 
 /**
  * Trait DungeonRouteTrait
@@ -32,6 +31,8 @@ trait DungeonRouteTrait
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
             'faction'                 => strtolower($dungeonRoute->faction->name),
             'enemyForces'             => $dungeonRoute->enemy_forces,
+            'levelMin'                => $dungeonRoute->level_min,
+            'levelMax'                => $dungeonRoute->level_max,
 
             // Relations
             'killZones'               => $dungeonRoute->killzones,

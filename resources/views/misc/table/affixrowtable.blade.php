@@ -23,7 +23,7 @@ $isOdd = $isOdd ?? false;
 
 $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->shortname : '';
 ?>
-<tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ $timewalkingClasses }}">
+<tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ !$affixGroup->confirmed ? 'unconfirmed' : '' }} {{ $timewalkingClasses }}">
     <?php
     // Current week if we found the current affix group for this region
     $currentWeekClass = $isCurrentWeek ? 'current_week ' : '';

@@ -281,6 +281,7 @@ return [
                 'edit_route'                     => 'Редактировать маршрут',
                 'view_route'                     => 'Показать маршрут',
                 'save_to_profile'                => 'Сохранить в профиль',
+                'edit_route_settings'            => '@todo ru: .maps.controls.header.edit_route_settings',
                 'share'                          => 'Поделиться',
                 'start_live_session'             => 'Начать живую сессию',
                 'start_live_session_paragraph_1' => 'После запуска маршрута в игре вы можете создать сеанс в реальном времени, в котором Keystone.guru поможет вам пройти M+ ключ. Вы можете следить за перемещениями карты другого пользователя, щелкнув на иконку вверху.',
@@ -324,7 +325,7 @@ return [
         ],
     ],
     'modal'        => [
-        'userreport'  => [
+        'userreport'    => [
             'dungeonroute' => [
                 'report_route'           => 'Отправить жалобу',
                 'your_name'              => 'Ваше имя',
@@ -342,19 +343,22 @@ return [
                 'submit'                 => 'Отправить',
             ],
         ],
-        'createroute' => [
+        'createroute'   => [
             'create_route'           => 'Создать маршрут',
             'create_temporary_route' => 'Создать временный маршрут',
             'import_from_mdt'        => 'Импорт из MDT',
         ],
-        'legal'       => [
+        'legal'         => [
             'welcome_back_agree' => 'С возвращением! Чтобы продолжить, вы должны согласиться с нашими %s, %s и %s.',
             'terms_of_service'   => 'Условиями использования',
             'privacy_policy'     => 'Политикой конфиденциальности',
             'cookie_policy'      => 'Политикой в отношении файлов cookie',
             'i_agree'            => 'Согласен',
         ],
-        'share'       => [
+        'routesettings' => [
+            'title' => '@todo ru: .modal.routesettings.title',
+        ],
+        'share'         => [
             'share'                            => 'Поделиться',
             'publish'                          => 'Опубликовать',
             'review_route_settings'            => 'Предпросмотр %s перед публикацией маршрута',

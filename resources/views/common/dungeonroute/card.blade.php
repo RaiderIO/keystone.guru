@@ -76,12 +76,11 @@ ob_start(); ?>
                         ob_start();
                         ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
-                            <div class="row no-gutters">
+                            <div class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
                                 @include('common.affixgroup.affixgroup', [
                                     'affixgroup' => $affixgroup,
                                     'showText' => false,
                                     'dungeon' => $dungeonroute->dungeon,
-                                    'highlight' => isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id,
                                 ])
                             </div>
                         @endforeach

@@ -124,24 +124,24 @@ class DungeonFloorSwitchMarker extends Icon {
                 edit: false, // Not directly changeable by user, should be done in the dungeon edit page
                 values: function () {
                     return [
-                        {id: 'down', name: 'Down'},
-                        {id: 'left', name: 'Left'},
-                        {id: 'right', name: 'Right'},
-                        {id: 'up', name: 'Up'},
+                        {id: 'down', name: 'mapicontypes.door_down'},
+                        {id: 'left', name: 'mapicontypes.door_left'},
+                        {id: 'right', name: 'mapicontypes.door_right'},
+                        {id: 'up', name: 'mapicontypes.door_up'},
                     ];
                 },
                 setter: function (value) {
                     let mapping = {
-                        'down': 'Door Down',
-                        'left': 'Door Left',
-                        'right': 'Door Right',
-                        'up': 'Door Up',
+                        'down': 'door_down',
+                        'left': 'door_left',
+                        'right': 'door_right',
+                        'up': 'door_up',
                     };
 
-                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByName(mapping[value]));
+                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
 
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByName(mapping[value])
+                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
                     );
 
                     self.direction = value;
@@ -234,9 +234,9 @@ class DungeonFloorSwitchMarker extends Icon {
         let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
-            return `Go to ${lang.get(targetFloor.name)}`;
+            return `${lang.get('messages.dungeonfloorswitchmarker_go_to_label')} ${lang.get(targetFloor.name)}`;
         } else {
-            return `Unknown`;
+            return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
         }
     }
 

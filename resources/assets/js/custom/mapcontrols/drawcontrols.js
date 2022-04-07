@@ -469,10 +469,12 @@ class DrawControls extends MapControl {
         $brushlineButton.unbind('click').bind('click', function () {
             // Check if it's enabled now
             let wasEnabled = self.map.getMapState() instanceof PatherMapState;
-            // Enable it now
-            if (!wasEnabled) {
-                self.map.togglePather(true);
+            // Don't do anything to make it consistent with other draw tools. Cancel with escape, not hitting the key again
+            if (wasEnabled) {
+                return;
             }
+            // Enable it now
+            self.map.togglePather(true);
 
             // Check if we were drawing anything else at this point, otherwise click the cancel button
             let $mainDrawActions = $('.leaflet-draw-actions:not(.leaflet-draw-actions-pather):visible');

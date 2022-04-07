@@ -55,7 +55,7 @@ return [
     ],
     'tyrannical'            => [
         'name'        => 'Tyrannical',
-        'description' => 'Boss enemies have 40% more health and inflict up to 15% increased damage.',
+        'description' => 'Boss enemies have 30% more health and inflict up to 15% increased damage.',
     ],
     'volcanic'              => [
         'name'        => 'Volcanic',

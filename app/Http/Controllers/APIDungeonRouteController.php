@@ -33,6 +33,7 @@ use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -262,22 +263,33 @@ class APIDungeonRouteController extends Controller
         // Affixes
         $hasAffixGroups = $request->has('affixgroups');
         $hasAffixes     = $request->has('affixes');
+
+        $affixGroups = $request->get('affixgroups');
+
+        if (!$hasAffixGroups && !$hasAffixes) {
+            // Always include this season's affixes if the user hasn't selected any
+            $affixGroups    = $expansionService->getCurrentSeason($expansion)->affixgroups->pluck(['id'])->toArray();
+            $hasAffixGroups = true;
+        }
+
         if ($hasAffixGroups || $hasAffixes) {
             $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
 
-            if ($hasAffixGroups) {
-                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $request->get('affixgroups'));
-            }
-
-            if ($hasAffixes) {
-                $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
-                $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
-                    ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
-                    ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
-                    ->groupBy('affix_group_couplings.affix_group_id')
-                    ->having('affixMatches', '>=', count($request->get('affixes')));
+            if (!empty($affixGroups)) {
+                $query->whereIn('dungeon_route_affix_groups.affix_group_id', $affixGroups);
             }
         }
+
+        if ($hasAffixes) {
+            $selectRaw .= ', COUNT(affix_group_couplings.affix_id) as affixMatches';
+            /** @noinspection UnknownColumnInspection */
+            $query->join('affix_groups', 'affix_groups.id', '=', 'dungeon_route_affix_groups.affix_group_id')
+                ->join('affix_group_couplings', 'affix_group_couplings.affix_group_id', '=', 'affix_groups.id')
+                ->whereIn('affix_group_couplings.affix_id', $request->get('affixes'))
+                ->groupBy('affix_group_couplings.affix_group_id')
+                ->having('affixMatches', '>=', count($request->get('affixes')));
+        }
+
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
@@ -407,11 +419,13 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APIDungeonRouteFormRequest $request
      * @param SeasonService $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws AuthorizationException
+     * @throws Exception
      */
-    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -420,7 +434,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService, $thumbnailService)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -495,19 +509,20 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @param Team $team
      * @return Response
      * @throws AuthorizationException
      */
-    function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team)
+    function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute, Team $team)
     {
         $this->authorize('clone', $dungeonroute);
 
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonroute->cloneRoute(false);
+            $newRoute = $dungeonroute->cloneRoute($thumbnailService, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);
@@ -683,12 +698,12 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
+     * @param DungeonRoute $dungeonroute
      * @return array|void
      * @throws Throwable
      */
-    function mdtExport(Request $request, DungeonRoute $dungeonroute, SeasonService $seasonService)
+    function mdtExport(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
         $this->authorize('view', $dungeonroute);
 
@@ -722,12 +737,13 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Response
      */
-    function refreshThumbnail(Request $request, DungeonRoute $dungeonroute): Response
+    function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
     {
-        $dungeonroute->queueRefreshThumbnails();
+        $thumbnailService->queueThumbnailRefresh($dungeonroute);
 
         return response()->noContent();
     }

@@ -10,6 +10,8 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\ThumbnailService;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
@@ -35,6 +37,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Internals
+        $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -254,7 +257,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
-            $view->with('teams', Auth::check() ? Auth::user()->teams : []);
+            $view->with('teams', Auth::check() ? Auth::user()->teams : collect());
         });
 
         // Profile pages

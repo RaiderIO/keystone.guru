@@ -384,6 +384,7 @@ html, body, #map, #app, .wrapper {
     width: 30px;
     height: 30px;
     font-size: 1.15rem;
+    border-radius: 16px;
 }
 
 .theme .echo_user {
@@ -897,6 +898,26 @@ html, body, #map, #app, .wrapper {
 
 .dangerous {
     border: 3px dashed #ff9900;
+}
+
+.inspiring {
+    border: 3px solid #ffd500;
+}
+
+.awakened {
+    border: 3px solid #810098;
+}
+
+.encrypted {
+    border: 3px solid #d000ff;
+}
+
+.tormented {
+    border: 3px solid #ffffff;
+}
+
+.prideful {
+    border: 3px solid #ff9900;
 }
 
 .modifier_external {

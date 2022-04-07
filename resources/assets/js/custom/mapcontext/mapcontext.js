@@ -55,13 +55,13 @@ class MapContext extends Signalable {
 
     /**
      * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
-     * @param mapIconTypeName {String}
+     * @param mapIconTypeKey {String}
      * @returns {MapIconType}
      */
-    getMapIconTypeByName(mapIconTypeName) {
+    getMapIconTypeByKey(mapIconTypeKey) {
         let mapIconType = this.getUnknownMapIconType();
         for (let i = 0; i < this.mapIconTypes.length; i++) {
-            if (this.mapIconTypes[i].name === mapIconTypeName) {
+            if (this.mapIconTypes[i].key === mapIconTypeKey) {
                 mapIconType = this.mapIconTypes[i];
                 break;
             }

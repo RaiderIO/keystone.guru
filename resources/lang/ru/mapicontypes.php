@@ -1,0 +1,86 @@
+<?php
+
+return [
+    'unknown'                   => '@todo ru: .unknown',
+    'comment'                   => '@todo ru: .comment',
+    'door'                      => '@todo ru: .door',
+    'door_down'                 => '@todo ru: .door_down',
+    'door_left'                 => '@todo ru: .door_left',
+    'door_locked'               => '@todo ru: .door_locked',
+    'door_right'                => '@todo ru: .door_right',
+    'door_up'                   => '@todo ru: .door_up',
+    'dot_yellow'                => '@todo ru: .dot_yellow',
+    'dungeon_start'             => '@todo ru: .dungeon_start',
+    'gateway'                   => '@todo ru: .gateway',
+    'graveyard'                 => '@todo ru: .graveyard',
+    'greasebot'                 => '@todo ru: .greasebot',
+    'shockbot'                  => '@todo ru: .shockbot',
+    'warlock_gateway'           => '@todo ru: .warlock_gateway',
+    'weldingbot'                => '@todo ru: .weldingbot',
+    'awakened_obelisk_brutal'   => '@todo ru: .awakened_obelisk_brutal',
+    'awakened_obelisk_cursed'   => '@todo ru: .awakened_obelisk_cursed',
+    'awakened_obelisk_defiled'  => '@todo ru: .awakened_obelisk_defiled',
+    'awakened_obelisk_entropic' => '@todo ru: .awakened_obelisk_entropic',
+
+    'skip_flight'   => '@todo ru: .skip_flight',
+    'skip_teleport' => '@todo ru: .skip_teleport',
+    'skip_walk'     => '@todo ru: .skip_walk',
+
+    'raid_marker_star'     => '@todo ru: .raid_marker_star',
+    'raid_marker_circle'   => '@todo ru: .raid_marker_circle',
+    'raid_marker_diamond'  => '@todo ru: .raid_marker_diamond',
+    'raid_marker_triangle' => '@todo ru: .raid_marker_triangle',
+    'raid_marker_moon'     => '@todo ru: .raid_marker_moon',
+    'raid_marker_square'   => '@todo ru: .raid_marker_square',
+    'raid_marker_cross'    => '@todo ru: .raid_marker_cross',
+    'raid_marker_skull'    => '@todo ru: .raid_marker_skull',
+
+    'spell_bloodlust'             => '@todo ru: .spell_bloodlust',
+    'spell_heroism'               => '@todo ru: .spell_heroism',
+    'spell_shadowmeld'            => '@todo ru: .spell_shadowmeld',
+    'spell_shroud_of_concealment' => '@todo ru: .spell_shroud_of_concealment',
+
+    'item_invisibility' => '@todo ru: .item_invisibility',
+
+    'question_yellow' => '@todo ru: .question_yellow',
+    'question_blue'   => '@todo ru: .question_blue',
+    'question_orange' => '@todo ru: .question_orange',
+
+    'exclamation_yellow' => '@todo ru: .exclamation_yellow',
+    'exclamation_blue'   => '@todo ru: .exclamation_blue',
+    'exclamation_orange' => '@todo ru: .exclamation_orange',
+
+    'neonbutton_blue'      => '@todo ru: .neonbutton_blue',
+    'neonbutton_cyan'      => '@todo ru: .neonbutton_cyan',
+    'neonbutton_green'     => '@todo ru: .neonbutton_green',
+    'neonbutton_orange'    => '@todo ru: .neonbutton_orange',
+    'neonbutton_pink'      => '@todo ru: .neonbutton_pink',
+    'neonbutton_purple'    => '@todo ru: .neonbutton_purple',
+    'neonbutton_red'       => '@todo ru: .neonbutton_red',
+    'neonbutton_yellow'    => '@todo ru: .neonbutton_yellow',
+    'neonbutton_darkred'   => '@todo ru: .neonbutton_darkred',
+    'neonbutton_darkgreen' => '@todo ru: .neonbutton_darkgreen',
+    'neonbutton_darkblue'  => '@todo ru: .neonbutton_darkblue',
+
+    'spell_mind_soothe' => '@todo ru: .spell_mind_soothe',
+    'spell_combustion'  => '@todo ru: .spell_combustion',
+
+    'covenant_kyrian'     => '@todo ru: .covenant_kyrian',
+    'covenant_necrolords' => '@todo ru: .covenant_necrolords',
+    'covenant_nightfae'   => '@todo ru: .covenant_nightfae',
+    'covenant_venthyr'    => '@todo ru: .covenant_venthyr',
+
+    'portal_blue'   => '@todo ru: .portal_blue',
+    'portal_green'  => '@todo ru: .portal_green',
+    'portal_orange' => '@todo ru: .portal_orange',
+    'portal_pink'   => '@todo ru: .portal_pink',
+    'portal_red'    => '@todo ru: .portal_red',
+
+    'nw_item_anima'   => '@todo ru: .nw_item_anima',
+    'nw_item_goliath' => '@todo ru: .nw_item_goliath',
+    'nw_item_hammer'  => '@todo ru: .nw_item_hammer',
+    'nw_item_shield'  => '@todo ru: .nw_item_shield',
+    'nw_item_spear'   => '@todo ru: .nw_item_spear',
+
+    'spell_incarnation' => '@todo ru: .spell_incarnation',
+];

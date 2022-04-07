@@ -31,6 +31,11 @@ use Throwable;
  */
 class Release extends CacheModel
 {
+    /**
+     * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
+     */
+    private const DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
+
     use SerializesDates;
 
     protected $with = ['changelog'];
@@ -87,12 +92,12 @@ class Release extends CacheModel
         ])->render());
         $footerLength = strlen($footer);
 
-        // 2000 is the limit, but give it some additional padding just in case
-        $truncatedBody       = substr($body, 0, 1990 - $footerLength);
+        // Subtract additional characters to account for the strings added below, to make sure the footer doesn't get cut into
+        $truncatedBody       = substr($body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT - 50 - $footerLength);
         $truncatedBodyLength = strlen($truncatedBody);
 
         if ($bodyLength !== $truncatedBodyLength) {
-            $result = sprintf('%s (%d characters truncated) \n\n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
+            $result = sprintf('%s (%d more) \n\n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
         } else {
             $result = sprintf('%s\n\n%s', $truncatedBody, $footer);
         }
@@ -159,20 +164,11 @@ class Release extends CacheModel
 ////            ]
 ////        ];
 
-        // Quick fix to get the release body to always show up in the #a
-        // https://discord.com/developers/docs/resources/channel#embed-limits limit is 2048 characters
-        $discordBody          = $this->discord_body;
-        $truncatedDiscordBody = substr($discordBody, 0, 2000);
-
-        if (strlen($discordBody) !== strlen($truncatedDiscordBody)) {
-            $discordBody = sprintf('%s (%d characters truncated)', $truncatedDiscordBody, strlen($discordBody) - strlen($truncatedDiscordBody));
-        }
-
         return [
             [
                 'color'       => 14641434, // '#DF691A'
                 'title'       => $this->getFormattedTitle(),
-                'description' => $discordBody,
+                'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
                 'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
@@ -197,9 +193,9 @@ class Release extends CacheModel
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isMajorUpgrade()
+    public function isMajorUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
     }
 
     /**
@@ -207,9 +203,9 @@ class Release extends CacheModel
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isMinorUpgrade()
+    public function isMinorUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
     }
 
     /**
@@ -217,8 +213,8 @@ class Release extends CacheModel
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isBugfixUpgrade()
+    public function isBugfixUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
     }
 }

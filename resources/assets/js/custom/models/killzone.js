@@ -1020,7 +1020,7 @@ class KillZone extends MapObject {
             if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
                 let tooltipText = this.index + '';
 
-                if (getState().getMapZoomLevel() > c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
+                if (getState().getMapZoomLevel() >= c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
                     if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
                         let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.enemyForcesManager.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;

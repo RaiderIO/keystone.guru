@@ -26,6 +26,16 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
             if (getState().hasEnemyDangerousBorder() && npc.dangerous) {
                 mainVisualInnerClasses.push('dangerous');
+            } else if(this.enemyvisual.enemy.isAwakenedNpc() ) {
+                mainVisualInnerClasses.push('awakened');
+            } if(this.enemyvisual.enemy.isPridefulNpc() ) {
+                mainVisualInnerClasses.push('prideful');
+            } if(this.enemyvisual.enemy.isInspiring() ) {
+                mainVisualInnerClasses.push('inspiring');
+            } if(this.enemyvisual.enemy.isTormented() ) {
+                mainVisualInnerClasses.push('tormented');
+            } if(this.enemyvisual.enemy.isEncrypted() ) {
+                mainVisualInnerClasses.push('encrypted');
             }
         }
 

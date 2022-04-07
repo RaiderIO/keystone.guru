@@ -58,15 +58,20 @@ class MappingService implements MappingServiceInterface
             $decoded = json_decode(!empty($mappingChange->after_model) ? $mappingChange->after_model : $mappingChange->before_model, true);
 
             // Only if we actually decoded something; prevents crashes
-            if ($decoded !== false && isset($decoded['floor_id'])) {
-                $changedFloor = Floor::find($decoded['floor_id']);
+            if ($decoded !== false) {
+                $dungeon = null;
+                if (isset($decoded['dungeon_id']) && (int)$decoded['dungeon_id'] > 0) {
+                    $dungeon = Dungeon::find($decoded['dungeon_id']);
+                } else if (isset($decoded['floor_id']) && (int)$decoded['floor_id'] > 0) {
+                    $dungeon = Floor::find($decoded['floor_id'])->dungeon;
+                }
 
                 // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there
-                if ($changedFloor !== null) {
+                if ($dungeon !== null) {
                     $exists = false;
 
-                    foreach ($result as $dungeon) {
-                        if ($dungeon->id === $changedFloor->dungeon_id) {
+                    foreach ($result as $changedDungeon) {
+                        if ($changedDungeon->id === $dungeon->id) {
                             $exists = true;
                             break;
                         }
@@ -74,7 +79,7 @@ class MappingService implements MappingServiceInterface
 
 
                     if (!$exists) {
-                        $result->add($changedFloor->dungeon);
+                        $result->add($dungeon);
                     }
                 }
             }

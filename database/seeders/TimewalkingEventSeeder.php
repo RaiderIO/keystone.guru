@@ -30,7 +30,7 @@ class TimewalkingEventSeeder extends Seeder
                 'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_LEGION,
                 'start'                => '2021-12-07 00:00:00',
                 'start_duration_weeks' => 4,
-                'week_interval'        => 14,
+                'week_interval'        => 18,
             ],
             //            [
             //                'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_BFA)->first()->id,
