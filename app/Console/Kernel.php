@@ -14,6 +14,7 @@ use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Mapping\Save as MappingSave;
+use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\Random;
@@ -26,10 +27,8 @@ use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
-use App\Console\Commands\Test;
 use App\Console\Commands\View\Cache;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
-use App\Logic\Scheduler\SynchronizeMapping;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -67,6 +66,7 @@ class Kernel extends ConsoleKernel
         MappingMerge::class,
         MappingSave::class,
         MappingRestore::class,
+        MappingSync::class,
 
         // MDT
         Encode::class,
@@ -107,7 +107,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
         if ($appType === 'mapping') {
-            $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
+            $schedule->command('mapping:sync')->everyFiveMinutes();
         }
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
