@@ -119,7 +119,7 @@ class Icon extends MapObject {
                         let template = Handlebars.templates['map_map_icon_select_option_template'];
 
                         // Direct assign to the object that is in the array so we're sure this change sticks for others
-                        mapIconType.name = lang.get(`mapicontypes.${mapIconType.name}`);
+                        mapIconType.name = lang.get(`${mapIconType.name}`);
                         mapIconTypes[i].html = template(mapIconType);
                     }
 
