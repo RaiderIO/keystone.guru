@@ -397,17 +397,19 @@ class Enemy extends MapObject {
             let hasTyrannical = false;
 
             let mapContext = getState().getMapContext();
+            let levelLabel = '';
             if (mapContext instanceof MapContextDungeonRoute) {
                 hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
                 hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
 
                 scaledHealth = c.map.enemy.calculateHealthForKey(parseInt(scaledHealth), mapContext.getLevelMin(), hasFortified, hasTyrannical);
+                levelLabel = ` (+${mapContext.getLevelMin()})`;
             }
 
             result = {info: [], custom: []};
             // @formatter:off
             result.info.push({
-                key: lang.get('messages.sidebar_enemy_health_label') + ` (+${mapContext.getLevelMin()})`,
+                key: lang.get('messages.sidebar_enemy_health_label') + levelLabel,
                 value: scaledHealth.toLocaleString(),
                 warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
                     (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
