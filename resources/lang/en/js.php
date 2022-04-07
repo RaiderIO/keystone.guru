@@ -375,6 +375,8 @@ return [
     'dungeonfloorswitchmarker_target_floor_id_label'                => 'Target floor',
     'dungeonfloorswitchmarker_direction_label'                      => 'Direction',
     'dungeonfloorswitchmarker_target_floor_id_select_default_label' => 'Select floor',
+    'dungeonfloorswitchmarker_go_to_label'                          => 'Go to',
+    'dungeonfloorswitchmarker_unknown_label'                        => 'Unknown',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Actions',

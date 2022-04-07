@@ -66,13 +66,13 @@ mix.options({
  |
  */
 
-// npm run dev -- --env.full true
+// npm run dev --env.full true
 // false if not defined, true if defined
 let full = false;
 if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
-// npm run dev -- --env.images false
+// npm run dev --env.images false
 let images = true;
 if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
