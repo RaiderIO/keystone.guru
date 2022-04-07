@@ -1910,7 +1910,7 @@
     },
     {
         "id": 7312,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1407,
         "npc_id": 180348,
         "floor_id": 101,
         "mdt_id": 6,
@@ -1923,8 +1923,8 @@
         "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -121.25,
-        "lng": 190.90625,
+        "lat": -121.28125,
+        "lng": 190.96875,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
