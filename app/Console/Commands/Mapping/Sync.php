@@ -16,7 +16,7 @@ class Sync extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:sync {force}';
+    protected $signature = 'mapping:sync {--force}';
 
     /**
      * The console command description.
@@ -33,7 +33,7 @@ class Sync extends Command
     public function handle(MappingService $mappingService)
     {
         Log::channel('scheduler')->debug('>> Synchronizing mapping');
-        $force = $this->argument('force') === '--force';
+        $force = $this->option('force');
 
         if ($mappingService->shouldSynchronizeMapping() || $force) {
             if ($this->call('mapping:save') === 0 &&
