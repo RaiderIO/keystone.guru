@@ -5,6 +5,7 @@ namespace App\Console\Commands\Mapping;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Service\Mapping\MappingService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class Sync extends Command
 {
@@ -15,7 +16,7 @@ class Sync extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:sync';
+    protected $signature = 'mapping:sync {force}';
 
     /**
      * The console command description.
@@ -31,18 +32,18 @@ class Sync extends Command
      */
     public function handle(MappingService $mappingService)
     {
-        logger()->debug('>> Synchronizing mapping');
+        Log::channel('scheduler')->debug('>> Synchronizing mapping');
+        $force = $this->argument('force') === '--force';
 
-        if ($mappingService->shouldSynchronizeMapping()) {
+        if ($mappingService->shouldSynchronizeMapping() || $force) {
             if ($this->call('mapping:save') === 0 &&
                 $this->call('mapping:commit') === 0 &&
                 $this->call('mapping:merge') === 0) {
-
-                logger()->debug('Successfully synchronized mapping with Github!');
+                Log::channel('scheduler')->debug('Successfully synchronized mapping with Github!');
             }
         }
 
-        logger()->debug('OK Synchronizing mapping');
+        Log::channel('scheduler')->debug('OK Synchronizing mapping');
 
         return 0;
     }
