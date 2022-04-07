@@ -298,18 +298,18 @@ class DungeonRouteController extends Controller
      *
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
-     * @throws Exception
      */
-    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $seasonService);
+        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
@@ -321,13 +321,14 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ThumbnailServiceInterface $thumbnailService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService);
+        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
