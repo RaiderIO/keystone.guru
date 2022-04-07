@@ -16,7 +16,7 @@ class Sync extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:sync {--force}';
+    protected $signature = 'mapping:sync {--force=}';
 
     /**
      * The console command description.
