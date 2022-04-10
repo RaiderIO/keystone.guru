@@ -106,17 +106,5 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-107.905852,\"lng\":281.646478},{\"lat\":-153.279437,\"lng\":189.894197}]"
         }
-    },
-    {
-        "id": 348,
-        "floor_id": 101,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#E25D5D",
-            "color_animated": null,
-            "weight": 3,
-            "vertices_json": "[{\"lat\":-123.46875,\"lng\":190.375},{\"lat\":-119.71875,\"lng\":188.875},{\"lat\":-120.875,\"lng\":176.65625},{\"lat\":-123.5625,\"lng\":172.875}]"
-        }
     }
 ]
