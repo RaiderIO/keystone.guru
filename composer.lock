@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b75c507059df17a61d9102014401504c",
+    "content-hash": "41d5db1062f8f679e3acab1d13d50b07",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -1973,16 +1973,16 @@
         },
         {
             "name": "genealabs/laravel-model-caching",
-            "version": "0.11.3",
+            "version": "0.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GeneaLabs/laravel-model-caching.git",
-                "reference": "b8ffa347f6269f32dbd4b74ed7cb0bcd700e0793"
+                "reference": "ff303d782cb63a9c44bcd76a28bde73a67040c7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GeneaLabs/laravel-model-caching/zipball/b8ffa347f6269f32dbd4b74ed7cb0bcd700e0793",
-                "reference": "b8ffa347f6269f32dbd4b74ed7cb0bcd700e0793",
+                "url": "https://api.github.com/repos/GeneaLabs/laravel-model-caching/zipball/ff303d782cb63a9c44bcd76a28bde73a67040c7e",
+                "reference": "ff303d782cb63a9c44bcd76a28bde73a67040c7e",
                 "shasum": ""
             },
             "require": {
@@ -2036,9 +2036,9 @@
             "description": "Automatic caching for Eloquent models.",
             "support": {
                 "issues": "https://github.com/GeneaLabs/laravel-model-caching/issues",
-                "source": "https://github.com/GeneaLabs/laravel-model-caching/tree/0.11.3"
+                "source": "https://github.com/GeneaLabs/laravel-model-caching/tree/0.11.7"
             },
-            "time": "2021-04-13T14:47:33+00:00"
+            "time": "2022-02-03T13:21:28+00:00"
         },
         {
             "name": "genealabs/laravel-pivot-events",
@@ -2477,12 +2477,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2539,12 +2539,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3063,16 +3063,16 @@
         },
         {
             "name": "kkszymanowski/traitor",
-            "version": "0.2.5",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KKSzymanowski/Traitor.git",
-                "reference": "9770fc7de72ff585601dc9c42b31715d9fc40a24"
+                "reference": "c16d90149e807d71562953eb5c9279e75170b63f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KKSzymanowski/Traitor/zipball/9770fc7de72ff585601dc9c42b31715d9fc40a24",
-                "reference": "9770fc7de72ff585601dc9c42b31715d9fc40a24",
+                "url": "https://api.github.com/repos/KKSzymanowski/Traitor/zipball/c16d90149e807d71562953eb5c9279e75170b63f",
+                "reference": "c16d90149e807d71562953eb5c9279e75170b63f",
                 "shasum": ""
             },
             "require": {
@@ -3080,7 +3080,7 @@
                 "php": ">=5.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.1"
+                "phpunit/phpunit": "8.*"
             },
             "type": "library",
             "autoload": {
@@ -3109,7 +3109,7 @@
                 "issues": "https://github.com/kkszymanowski/traitor/issues",
                 "source": "https://github.com/kkszymanowski/traitor"
             },
-            "time": "2018-04-19T12:24:36+00:00"
+            "time": "2022-03-02T17:32:19+00:00"
         },
         {
             "name": "knplabs/github-api",
@@ -3605,30 +3605,30 @@
         },
         {
             "name": "laravel/socialite",
-            "version": "v5.2.6",
+            "version": "v5.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-                "reference": "b5c67f187ddcf15529ff7217fa735b132620dfac"
+                "reference": "68afb03259b82d898c68196cbcacd48596a9dd72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/b5c67f187ddcf15529ff7217fa735b132620dfac",
-                "reference": "b5c67f187ddcf15529ff7217fa735b132620dfac",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/68afb03259b82d898c68196cbcacd48596a9dd72",
+                "reference": "68afb03259b82d898c68196cbcacd48596a9dd72",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.0|^7.0",
-                "illuminate/http": "^6.0|^7.0|^8.0",
-                "illuminate/support": "^6.0|^7.0|^8.0",
+                "illuminate/http": "^6.0|^7.0|^8.0|^9.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0",
                 "league/oauth1-client": "^1.0",
                 "php": "^7.2|^8.0"
             },
             "require-dev": {
-                "illuminate/contracts": "^6.0|^7.0",
+                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0",
                 "mockery/mockery": "^1.0",
-                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
                 "phpunit/phpunit": "^8.0|^9.3"
             },
             "type": "library",
@@ -3670,7 +3670,7 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
-            "time": "2021-12-07T16:32:57+00:00"
+            "time": "2022-03-10T15:26:19+00:00"
         },
         {
             "name": "laravel/telescope",
@@ -3942,16 +3942,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.2.3",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "47b015bc4e50fd4438c1ffef6139a1fb65d2ab71"
+                "reference": "32a49eb2b38fe5e5c417ab748a45d0beaab97955"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/47b015bc4e50fd4438c1ffef6139a1fb65d2ab71",
-                "reference": "47b015bc4e50fd4438c1ffef6139a1fb65d2ab71",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/32a49eb2b38fe5e5c417ab748a45d0beaab97955",
+                "reference": "32a49eb2b38fe5e5c417ab748a45d0beaab97955",
                 "shasum": ""
             },
             "require": {
@@ -3960,17 +3960,19 @@
                 "php": "^7.4 || ^8.0",
                 "psr/event-dispatcher": "^1.0",
                 "symfony/deprecation-contracts": "^2.1 || ^3.0",
-                "symfony/polyfill-php80": "^1.15"
+                "symfony/polyfill-php80": "^1.16"
             },
             "require-dev": {
                 "cebe/markdown": "^1.0",
                 "commonmark/cmark": "0.30.0",
                 "commonmark/commonmark.js": "0.30.0",
                 "composer/package-versions-deprecated": "^1.8",
+                "embed/embed": "^4.4",
                 "erusev/parsedown": "^1.0",
                 "ext-json": "*",
                 "github/gfm": "0.29.0",
                 "michelf/php-markdown": "^1.4",
+                "nyholm/psr7": "^1.5",
                 "phpstan/phpstan": "^0.12.88 || ^1.0.0",
                 "phpunit/phpunit": "^9.5.5",
                 "scrutinizer/ocular": "^1.8.1",
@@ -3985,7 +3987,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.3-dev"
+                    "dev-main": "2.4-dev"
                 }
             },
             "autoload": {
@@ -4042,7 +4044,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-26T21:24:45+00:00"
+            "time": "2022-04-07T22:37:05+00:00"
         },
         {
             "name": "league/config",
@@ -4222,16 +4224,16 @@
         },
         {
             "name": "league/mime-type-detection",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/mime-type-detection.git",
-                "reference": "aa70e813a6ad3d1558fc927863d47309b4c23e69"
+                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/aa70e813a6ad3d1558fc927863d47309b4c23e69",
-                "reference": "aa70e813a6ad3d1558fc927863d47309b4c23e69",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/3e4a35d756eedc67096f30240a68a3149120dae7",
+                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7",
                 "shasum": ""
             },
             "require": {
@@ -4262,7 +4264,7 @@
             "description": "Mime-type detection for Flysystem",
             "support": {
                 "issues": "https://github.com/thephpleague/mime-type-detection/issues",
-                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.9.0"
+                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.10.0"
             },
             "funding": [
                 {
@@ -4274,7 +4276,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-21T11:48:40+00:00"
+            "time": "2022-04-11T12:49:04+00:00"
         },
         {
             "name": "league/oauth1-client",
@@ -4354,22 +4356,22 @@
         },
         {
             "name": "marvinlabs/laravel-discord-logger",
-            "version": "v1.1.8",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/marvinlabs/laravel-discord-logger.git",
-                "reference": "c17c92b460093dffca425bcaec187bbd9ad2e47a"
+                "reference": "52466f47f2c5512369cdf8e43053d222eec56312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/c17c92b460093dffca425bcaec187bbd9ad2e47a",
-                "reference": "c17c92b460093dffca425bcaec187bbd9ad2e47a",
+                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/52466f47f2c5512369cdf8e43053d222eec56312",
+                "reference": "52466f47f2c5512369cdf8e43053d222eec56312",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
-                "illuminate/support": "^7.0|^8.0",
+                "illuminate/support": "^7.0|^8.0|^9.0",
                 "php": ">=7.3 | ^8.0"
             },
             "require-dev": {
@@ -4412,7 +4414,7 @@
             ],
             "support": {
                 "issues": "https://github.com/marvinlabs/laravel-discord-logger/issues",
-                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.1.8"
+                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.2.0"
             },
             "funding": [
                 {
@@ -4420,7 +4422,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-17T13:37:37+00:00"
+            "time": "2022-02-10T08:45:00+00:00"
         },
         {
             "name": "maxmind-db/reader",
@@ -4601,16 +4603,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "d7fd7450628561ba697b7097d86db72662f54aef"
+                "reference": "4192345e260f1d51b365536199744b987e160edc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/d7fd7450628561ba697b7097d86db72662f54aef",
-                "reference": "d7fd7450628561ba697b7097d86db72662f54aef",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/4192345e260f1d51b365536199744b987e160edc",
+                "reference": "4192345e260f1d51b365536199744b987e160edc",
                 "shasum": ""
             },
             "require": {
@@ -4684,7 +4686,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.4.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.5.0"
             },
             "funding": [
                 {
@@ -4696,7 +4698,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-14T12:44:37+00:00"
+            "time": "2022-04-08T15:43:54+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -6684,26 +6686,26 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "6.3.2",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "9ab3bfdc06afe18b17f69b77cb77291c36dae9f6"
+                "reference": "8a18c70bb1ced09baed361b68c432b0bedb74f16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/9ab3bfdc06afe18b17f69b77cb77291c36dae9f6",
-                "reference": "9ab3bfdc06afe18b17f69b77cb77291c36dae9f6",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/8a18c70bb1ced09baed361b68c432b0bedb74f16",
+                "reference": "8a18c70bb1ced09baed361b68c432b0bedb74f16",
                 "shasum": ""
             },
             "require": {
-                "kkszymanowski/traitor": "^0.2.0",
-                "laravel/framework": "~6.0|~7.0|~8.0",
+                "kkszymanowski/traitor": "^1.0",
+                "laravel/framework": "~6.0|~7.0|~8.0|^9.0",
                 "php": ">=7.2"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3.2",
-                "orchestra/testbench": "4.*|5.*|6.*",
+                "orchestra/testbench": "4.*|5.*|6.*|7.*",
                 "phpunit/phpunit": "^7.5.15|^8.4|^9.0"
             },
             "type": "library",
@@ -6747,7 +6749,7 @@
             ],
             "support": {
                 "issues": "https://github.com/santigarcor/laratrust/issues",
-                "source": "https://github.com/santigarcor/laratrust/tree/6.3.2"
+                "source": "https://github.com/santigarcor/laratrust/tree/7.1.0"
             },
             "funding": [
                 {
@@ -6755,7 +6757,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-03T13:34:32+00:00"
+            "time": "2022-03-04T15:28:43+00:00"
         },
         {
             "name": "seld/jsonlint",
@@ -10732,16 +10734,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.4.4",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "e01123a0e847d52d186c5eb4b9bf58b0c6d00346"
+                "reference": "c10a5f6e06fc2470ab1822fa13fa2a7380f8fbac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/e01123a0e847d52d186c5eb4b9bf58b0c6d00346",
-                "reference": "e01123a0e847d52d186c5eb4b9bf58b0c6d00346",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/c10a5f6e06fc2470ab1822fa13fa2a7380f8fbac",
+                "reference": "c10a5f6e06fc2470ab1822fa13fa2a7380f8fbac",
                 "shasum": ""
             },
             "require": {
@@ -10798,9 +10800,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mockery/mockery/issues",
-                "source": "https://github.com/mockery/mockery/tree/1.4.4"
+                "source": "https://github.com/mockery/mockery/tree/1.5.0"
             },
-            "time": "2021-09-13T15:28:59+00:00"
+            "time": "2022-01-20T13:18:17+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -12614,5 +12616,5 @@
         "ext-lua": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
