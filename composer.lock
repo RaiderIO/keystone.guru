@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b75c507059df17a61d9102014401504c",
+    "content-hash": "41d5db1062f8f679e3acab1d13d50b07",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -3063,16 +3063,16 @@
         },
         {
             "name": "kkszymanowski/traitor",
-            "version": "0.2.5",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KKSzymanowski/Traitor.git",
-                "reference": "9770fc7de72ff585601dc9c42b31715d9fc40a24"
+                "reference": "c16d90149e807d71562953eb5c9279e75170b63f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KKSzymanowski/Traitor/zipball/9770fc7de72ff585601dc9c42b31715d9fc40a24",
-                "reference": "9770fc7de72ff585601dc9c42b31715d9fc40a24",
+                "url": "https://api.github.com/repos/KKSzymanowski/Traitor/zipball/c16d90149e807d71562953eb5c9279e75170b63f",
+                "reference": "c16d90149e807d71562953eb5c9279e75170b63f",
                 "shasum": ""
             },
             "require": {
@@ -3080,7 +3080,7 @@
                 "php": ">=5.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.1"
+                "phpunit/phpunit": "8.*"
             },
             "type": "library",
             "autoload": {
@@ -3109,7 +3109,7 @@
                 "issues": "https://github.com/kkszymanowski/traitor/issues",
                 "source": "https://github.com/kkszymanowski/traitor"
             },
-            "time": "2018-04-19T12:24:36+00:00"
+            "time": "2022-03-02T17:32:19+00:00"
         },
         {
             "name": "knplabs/github-api",
@@ -6686,26 +6686,26 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "6.3.2",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "9ab3bfdc06afe18b17f69b77cb77291c36dae9f6"
+                "reference": "8a18c70bb1ced09baed361b68c432b0bedb74f16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/9ab3bfdc06afe18b17f69b77cb77291c36dae9f6",
-                "reference": "9ab3bfdc06afe18b17f69b77cb77291c36dae9f6",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/8a18c70bb1ced09baed361b68c432b0bedb74f16",
+                "reference": "8a18c70bb1ced09baed361b68c432b0bedb74f16",
                 "shasum": ""
             },
             "require": {
-                "kkszymanowski/traitor": "^0.2.0",
-                "laravel/framework": "~6.0|~7.0|~8.0",
+                "kkszymanowski/traitor": "^1.0",
+                "laravel/framework": "~6.0|~7.0|~8.0|^9.0",
                 "php": ">=7.2"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3.2",
-                "orchestra/testbench": "4.*|5.*|6.*",
+                "orchestra/testbench": "4.*|5.*|6.*|7.*",
                 "phpunit/phpunit": "^7.5.15|^8.4|^9.0"
             },
             "type": "library",
@@ -6749,7 +6749,7 @@
             ],
             "support": {
                 "issues": "https://github.com/santigarcor/laratrust/issues",
-                "source": "https://github.com/santigarcor/laratrust/tree/6.3.2"
+                "source": "https://github.com/santigarcor/laratrust/tree/7.1.0"
             },
             "funding": [
                 {
@@ -6757,7 +6757,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-03T13:34:32+00:00"
+            "time": "2022-03-04T15:28:43+00:00"
         },
         {
             "name": "seld/jsonlint",
