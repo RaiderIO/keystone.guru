@@ -2477,12 +2477,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2539,12 +2539,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4356,22 +4356,22 @@
         },
         {
             "name": "marvinlabs/laravel-discord-logger",
-            "version": "v1.1.8",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/marvinlabs/laravel-discord-logger.git",
-                "reference": "c17c92b460093dffca425bcaec187bbd9ad2e47a"
+                "reference": "52466f47f2c5512369cdf8e43053d222eec56312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/c17c92b460093dffca425bcaec187bbd9ad2e47a",
-                "reference": "c17c92b460093dffca425bcaec187bbd9ad2e47a",
+                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/52466f47f2c5512369cdf8e43053d222eec56312",
+                "reference": "52466f47f2c5512369cdf8e43053d222eec56312",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
-                "illuminate/support": "^7.0|^8.0",
+                "illuminate/support": "^7.0|^8.0|^9.0",
                 "php": ">=7.3 | ^8.0"
             },
             "require-dev": {
@@ -4414,7 +4414,7 @@
             ],
             "support": {
                 "issues": "https://github.com/marvinlabs/laravel-discord-logger/issues",
-                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.1.8"
+                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.2.0"
             },
             "funding": [
                 {
@@ -4422,7 +4422,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-17T13:37:37+00:00"
+            "time": "2022-02-10T08:45:00+00:00"
         },
         {
             "name": "maxmind-db/reader",
