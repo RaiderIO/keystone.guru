@@ -16,7 +16,7 @@
         "axios": "^0.21",
         "cross-env": "^5.2.1",
         "git-revision-webpack-plugin": "^5.0.0",
-        "jquery": "^3.5.0",
+        "jquery": "^3.6.0",
         "laravel-localization-loader": "^1.0.5",
         "laravel-mix": "^6.0.43",
         "lodash": "^4.17.21",
