@@ -1722,18 +1722,18 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.shadowlands.halls_of_atonement.floors.the_nave_of_pain",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 18,
+                "max_enemy_size": 38,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 234,
+                        "id": 260,
                         "floor1_id": 78,
                         "floor2_id": 77,
                         "direction": "right"
                     },
                     {
-                        "id": 235,
+                        "id": 261,
                         "floor1_id": 78,
                         "floor2_id": 79,
                         "direction": "up"
@@ -1746,12 +1746,12 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.shadowlands.halls_of_atonement.floors.the_sanctuary_of_souls",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 18,
+                "max_enemy_size": 38,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 236,
+                        "id": 262,
                         "floor1_id": 79,
                         "floor2_id": 78,
                         "direction": "down"
