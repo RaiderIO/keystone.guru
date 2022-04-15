@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41d5db1062f8f679e3acab1d13d50b07",
+    "content-hash": "790cb80f98437e245159764c18821f1b",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -1148,28 +1148,28 @@
         },
         {
             "name": "diglactic/laravel-breadcrumbs",
-            "version": "v6.1.1",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/diglactic/laravel-breadcrumbs.git",
-                "reference": "8f73674f9c5403625154768f8e123a620fc2d7a5"
+                "reference": "0bed6e928023c7d0228e9404661bab5470dfb778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/diglactic/laravel-breadcrumbs/zipball/8f73674f9c5403625154768f8e123a620fc2d7a5",
-                "reference": "8f73674f9c5403625154768f8e123a620fc2d7a5",
+                "url": "https://api.github.com/repos/diglactic/laravel-breadcrumbs/zipball/0bed6e928023c7d0228e9404661bab5470dfb778",
+                "reference": "0bed6e928023c7d0228e9404661bab5470dfb778",
                 "shasum": ""
             },
             "require": {
                 "facade/ignition-contracts": "^1.0",
-                "laravel/framework": "^6.0 || ^7.0 || ^8.0",
+                "laravel/framework": "^6.0 || ^7.0 || ^8.0 || ^9.0",
                 "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "davejamesmiller/laravel-breadcrumbs": "*"
             },
             "require-dev": {
-                "orchestra/testbench": "^4.10 || ^5.9 || ^6.4",
+                "orchestra/testbench": "^4.10 || ^5.9 || ^6.4 || ^7.0",
                 "php-coveralls/php-coveralls": "^2.4",
                 "phpunit/phpunit": "^8.5 || ^9.4",
                 "spatie/phpunit-snapshot-assertions": "^2.2 || ^4.2"
@@ -1188,10 +1188,7 @@
             "autoload": {
                 "psr-4": {
                     "Diglactic\\Breadcrumbs\\": "src/"
-                },
-                "files": [
-                    "src/deprecated.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1216,9 +1213,9 @@
             ],
             "support": {
                 "issues": "https://github.com/diglactic/laravel-breadcrumbs/issues",
-                "source": "https://github.com/diglactic/laravel-breadcrumbs/tree/v6.1.1"
+                "source": "https://github.com/diglactic/laravel-breadcrumbs/tree/v7.1.1"
             },
-            "time": "2021-04-12T18:06:07+00:00"
+            "time": "2022-01-12T18:19:26+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -3240,16 +3237,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.83.7",
+            "version": "v8.83.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "0706abf5c99d3b14149fcf79c95074dadd40b203"
+                "reference": "cf430301ad17656b3d918995bcdd0454c3c119b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/0706abf5c99d3b14149fcf79c95074dadd40b203",
-                "reference": "0706abf5c99d3b14149fcf79c95074dadd40b203",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/cf430301ad17656b3d918995bcdd0454c3c119b9",
+                "reference": "cf430301ad17656b3d918995bcdd0454c3c119b9",
                 "shasum": ""
             },
             "require": {
@@ -3409,7 +3406,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-04-05T15:08:10+00:00"
+            "time": "2022-04-12T13:49:56+00:00"
         },
         {
             "name": "laravel/horizon",
