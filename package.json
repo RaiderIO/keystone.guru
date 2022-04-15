@@ -72,7 +72,7 @@
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
         "puppeteer": "^1.20.0",
-        "simplebar": "^5.2.0",
+        "simplebar": "^5.3.6",
         "socket.io-client": "^2.4.0",
         "zikes-circlemenu": "^0.1.1"
     }
