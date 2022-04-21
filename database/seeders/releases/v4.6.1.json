@@ -1,0 +1,27 @@
+{
+    "id": 127,
+    "release_changelog_id": 134,
+    "version": "v4.6.1",
+    "title": "Tazavesh mapping updates",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-04-13T22:09:53+00:00",
+    "updated_at": "2022-04-13T22:09:53+00:00",
+    "changelog": {
+        "id": 134,
+        "release_id": 127,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 134,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1062,
+                "change": "Updated Tazavesh mapping further and corrected enemy forces.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}

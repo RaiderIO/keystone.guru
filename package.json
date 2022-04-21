@@ -63,7 +63,7 @@
         "leaflet-draw": "^1.0.4",
         "leaflet-editable": "^1.2.0",
         "leaflet-gesture-handling": "^1.2.2",
-        "leaflet-pather": "^0.1.17",
+        "leaflet-pather": "github:Wotuu/L.Pather#7e885ee28ec5f946ae97c1cd8aedc56a4b5e23c2",
         "leaflet-polylinedecorator": "^1.6.0",
         "noty": "^3.2.0-beta",
         "npm-force-resolutions": "0.0.2",
