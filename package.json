@@ -54,7 +54,7 @@
         "jquery-visible": "^1.2.0",
         "js-cookie": "^3.0.1",
         "lang.js": "^1.1.14",
-        "laravel-echo": "^1.11.5",
+        "laravel-echo": "^1.11.7",
         "laravel-echo-server": "^1.6.3",
         "lazysizes": "^5.3.2",
         "leaflet": "^1.7.0",
