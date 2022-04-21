@@ -680,19 +680,22 @@ class ImportString extends MDTBase
 
         // Set the affix for this route
         $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon->expansion, $decoded['week']);
-        if ($save) {
-            // Something we can save to the
-            DungeonRouteAffixGroup::create([
-                'affix_group_id'   => $affixGroup->id,
-                'dungeon_route_id' => $dungeonRoute->id,
-            ]);
-        } else {
-            // Something we can just return and have the user read
-            $dungeonRoute->affixes->push($affixGroup);
-        }
 
-        // Apply the seasonal index to the route
-        $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
+        if ($affixGroup !== null) {
+            if ($save) {
+                // Something we can save to the database
+                DungeonRouteAffixGroup::create([
+                    'affix_group_id'   => $affixGroup->id,
+                    'dungeon_route_id' => $dungeonRoute->id,
+                ]);
+            } else {
+                // Something we can just return and have the user read
+                $dungeonRoute->affixes->push($affixGroup);
+            }
+
+            // Apply the seasonal index to the route
+            $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
+        }
 
         // Update seasonal index
         if ($save) {

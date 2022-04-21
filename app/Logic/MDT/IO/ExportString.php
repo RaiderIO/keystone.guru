@@ -177,7 +177,7 @@ class ExportString extends MDTBase
             }
 
             // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
-            if ($enemiesAdded === 0) {
+            if ($killZone->enemies->count() !== 0 && $enemiesAdded === 0) {
                 $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                     __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'),
                 ));
