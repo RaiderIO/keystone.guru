@@ -13,7 +13,7 @@
         "terser": "3.14.1"
     },
     "devDependencies": {
-        "axios": "^0.21",
+        "axios": "^0.26",
         "cross-env": "^7.0.3",
         "git-revision-webpack-plugin": "^5.0.0",
         "jquery": "^3.6.0",
@@ -30,7 +30,7 @@
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@shopify/draggable": "^1.0.0-beta.12",
         "@simonwep/pickr": "^1.8.2",
-        "ajv": "^6.12.3",
+        "ajv": "^8.11.0",
         "bootstrap": "^4.3.1",
         "bootstrap-4-autocomplete": "^1.3.2",
         "bootstrap-select": "^1.13.12",
@@ -43,7 +43,7 @@
         "geojson-utils": "^1.1.0",
         "grapick": "^0.1.13",
         "handlebars": "^4.7.7",
-        "hull.js": "^0.2.10",
+        "hull.js": "^1.0.2",
         "imports-loader": "^3.1.1",
         "intro.js": "github:Wotuu/intro.js",
         "ion-rangeslider": "^2.3.1",
@@ -72,7 +72,7 @@
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
         "puppeteer": "^1.20.0",
-        "simplebar": "^5.2.0",
+        "simplebar": "^5.3.6",
         "socket.io-client": "^2.4.0",
         "zikes-circlemenu": "^0.1.1"
     }
