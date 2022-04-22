@@ -66,7 +66,7 @@
         "leaflet-pather": "github:Wotuu/L.Pather#7e885ee28ec5f946ae97c1cd8aedc56a4b5e23c2",
         "leaflet-polylinedecorator": "^1.6.0",
         "noty": "^3.2.0-beta",
-        "npm-force-resolutions": "0.0.2",
+        "npm-force-resolutions": "0.0.10",
         "owl.carousel": "^2.3.4",
         "password-strength-meter": "^2.1.0",
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
