@@ -278,7 +278,9 @@ class Icon extends MapObject {
                         direction: 'top'
                     }, this.getTooltipOptions())
                 );
-            } else {
+            }
+            // In case translation is empty (which happens with unknown icons for example)
+            else if (text.length > 0) {
                 this.layer.bindTooltip(text, $.extend({
                     direction: 'top'
                 }, this.getTooltipOptions()));

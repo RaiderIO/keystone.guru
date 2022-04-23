@@ -28,6 +28,9 @@ class EnemyVisual extends Signalable {
 
         this._circleMenu = null;
 
+        // Can be set to force the building of a visual when it's shown again
+        this._forceBuildVisualOnShow = false;
+
         // Default visual (after modifiers!)
         this.setVisualType(getState().getEnemyDisplayType());
 
@@ -35,7 +38,7 @@ class EnemyVisual extends Signalable {
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
             if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
-                if (self._divIcon === null) {
+                if (self._divIcon === null || self._forceBuildVisualOnShow) {
                     self.buildVisual();
                 } else {
                     self.refreshJQuerySelectors();
@@ -676,6 +679,9 @@ class EnemyVisual extends Signalable {
             // Don't do this on page load - it's pointless since show/hidden events will do this again
             if (this.enemy.isVisible()) {
                 this.buildVisual();
+            } else {
+                // Schedule the building of the visual to when this enemy is shown again
+                this._forceBuildVisualOnShow = true;
             }
 
             this.visualType = name;
