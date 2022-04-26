@@ -105,6 +105,31 @@ class LiveSessionController extends Controller
             abort(StatusCode::GONE);
         }
 
+        // In case someone edits the url to something funky
+        if ($dungeonroute->id !== $livesession->id) {
+            logger()->debug('Passed dungeonroute does not match dungeonroute attached to live sessions!', [
+                'dungeon_route_id'              => $dungeonroute->id,
+                'dungeon_route_public_key'      => $dungeonroute->public_key,
+                'live_session_id'               => $livesession->id,
+                'live_session_public_key'       => $livesession->public_key,
+                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
+            ]);
+
+            abort(404);
+        }
+
+        // It's broken - get rid of it
+        if ($livesession->dungeonroute === null) {
+            logger()->debug('Live session is attached to a deleted dungeon route - deleting live session', [
+                'live_session_id'               => $livesession->id,
+                'live_session_public_key'       => $livesession->public_key,
+                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
+            ]);
+
+            $livesession->delete();
+            abort(404);
+        }
+
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }

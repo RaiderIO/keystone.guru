@@ -92,6 +92,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|DungeonRouteAffixGroup[] $affixgroups
  * @property Collection|DungeonRouteRating[] $ratings
  * @property Collection|DungeonRouteFavorite[] $favorites
+ * @property Collection|LiveSession[] $livesessions
  *
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
@@ -295,6 +296,14 @@ class DungeonRoute extends Model
     public function favorites(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteFavorite');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function livesessions(): HasMany
+    {
+        return $this->hasMany('App\Models\LiveSession');
     }
 
     /**
@@ -1172,6 +1181,7 @@ class DungeonRoute extends Model
             // External
             $item->ratings()->delete();
             $item->favorites()->delete();
+            $item->livesessions()->delete();
 
             $item->mdtImport()->delete();
         });
