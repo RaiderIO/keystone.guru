@@ -106,7 +106,7 @@ class LiveSessionController extends Controller
         }
 
         // In case someone edits the url to something funky
-        if ($dungeonroute->id !== $livesession->id) {
+        if ($dungeonroute->id !== $livesession->dungeon_route_id) {
             logger()->debug('Passed dungeonroute does not match dungeonroute attached to live sessions!', [
                 'dungeon_route_id'              => $dungeonroute->id,
                 'dungeon_route_public_key'      => $dungeonroute->public_key,

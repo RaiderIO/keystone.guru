@@ -122,7 +122,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                     @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
                         <li class="nav-item mr-2">
                             <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $dungeonroute]) }}">
-                                <button class="btn btn-success h-100">
+                                <button class="btn btn-success btn-sm h-100">
                                     <i class="fas fa-save"></i> {{ __('views/common.maps.controls.header.save_to_profile') }}
                                 </button>
                             </a>
