@@ -74,7 +74,7 @@ class EnemyForcesControls extends MapControl {
         let $enemyForcesStatus = $('#map_enemy_forces_status');
 
         $enemyForces.removeClass('map_enemy_forces_too_much_warning map_enemy_forces_ok');
-        $enemyForcesStatus.removeAttr('title');
+        $enemyForcesStatus.attr('title', '');
 
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         if (!killZoneMapObjectGroup.hasKilledAllRequiredEnemies()) {
@@ -110,6 +110,8 @@ class EnemyForcesControls extends MapControl {
             $mapEnemyForcesPercent.attr('title', `${currentEnemyForces}/${enemyForcesRequired}`)
                 .refreshTooltips();
         }
+
+        $enemyForcesStatus.toggleTooltips($enemyForcesStatus.attr('title') !== '');
 
         $('#map_enemy_forces_count').html(currentEnemyForces);
         $('#map_enemy_forces_count_total').html(enemyForcesRequired);

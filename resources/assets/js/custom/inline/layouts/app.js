@@ -284,6 +284,30 @@ $.fn.refreshTooltips = function () {
 }
 
 /**
+ * @param enabled {Boolean}
+ * @param $element
+ */
+function toggleTooltips(enabled = true, $element = null) {
+    if (!isMobile()) {
+        if ($element === null) {
+            disableTooltips($('[data-toggle="tooltip"]'));
+            disableTooltips($('[data-tooltip="tooltip"]'));
+        } else {
+            $('.tooltip').remove();
+            $element.unbind('click', _hideTooltips.bind(this))
+                .tooltip(enabled ? 'enable' : 'disable');
+        }
+    }
+}
+
+/**
+ * Does the same as above, but then on a jQuery function
+ */
+$.fn.toggleTooltips = function (enabled = true) {
+    return toggleTooltips(enabled, $(this));
+}
+
+/**
  *
  * @param condition {Boolean}
  * @param closure {Function}
