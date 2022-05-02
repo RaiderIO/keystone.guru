@@ -134,16 +134,35 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): void
+    function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool
     {
         // If the dungeons don't match then this doesn't make sense
         if (!$sourceDungeonRoute->has_thumbnail || $sourceDungeonRoute->dungeon_id !== $targetDungeonRoute->dungeon_id) {
-            return;
+            return false;
         }
+        
+        $result = true;
 
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeon->floors as $floor) {
-            File::copy($this->getTargetFilePath($sourceDungeonRoute, $floor->index), $this->getTargetFilePath($targetDungeonRoute, $floor->index));
+            $sourcePath = $this->getTargetFilePath($sourceDungeonRoute, $floor->index);
+            $targetPath = $this->getTargetFilePath($targetDungeonRoute, $floor->index);
+
+            if (!File::exists($sourcePath) || !File::exists($targetPath)) {
+                continue;
+            }
+
+            try {
+                $result = $result && File::copy($sourcePath, $targetPath);
+            } catch (\Exception $exception) {
+                $result = false;
+
+                logger()->error($exception->getMessage(), [
+                    'exception' => $exception,
+                ]);
+            }
         }
+
+        return $result;
     }
 }

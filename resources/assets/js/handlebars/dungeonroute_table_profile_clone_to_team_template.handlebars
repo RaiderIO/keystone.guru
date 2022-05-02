@@ -1,8 +1,9 @@
 <h3>{{clone_to_team_label}}</h3>
 <div class="form-group">
-    <select id="clone-to-teams-{{publicKey}}" class="selectpicker">
-        {{#each teams }}
-            <option value="{{public_key}}">{{name}}</option>
-        {{/each}}
-    </select>
+    {{#each teams }}
+        <input id="clone-to-team-{{../publicKey}}" type="radio" value="{{public_key}}" name="clone-to-team-{{../publicKey}}">
+        <label for="clone-to-team-{{../publicKey}}">
+            {{name}}
+        </label>
+    {{/each}}
 </div>

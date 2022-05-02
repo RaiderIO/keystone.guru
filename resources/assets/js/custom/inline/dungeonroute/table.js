@@ -534,7 +534,12 @@ class DungeonrouteTable extends InlineCode {
             publicKey: publicKey,
             teams: this.options.teams
         })), function () {
-            let targetTeam = $('#clone-to-teams-' + publicKey).val();
+            let targetTeam = $(`input[type='radio'][name='clone-to-team-${publicKey}']:checked`).val();
+
+            if( typeof targetTeam === 'undefined' ) {
+                showErrorNotification(lang.get('messages.route_clone_select_team'));
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
