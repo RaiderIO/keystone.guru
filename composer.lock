@@ -684,16 +684,16 @@
         },
         {
             "name": "diglactic/laravel-breadcrumbs",
-            "version": "v7.1.1",
+            "version": "v7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/diglactic/laravel-breadcrumbs.git",
-                "reference": "0bed6e928023c7d0228e9404661bab5470dfb778"
+                "reference": "309ec597d047b763d1df3c5113a3932cc771500f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/diglactic/laravel-breadcrumbs/zipball/0bed6e928023c7d0228e9404661bab5470dfb778",
-                "reference": "0bed6e928023c7d0228e9404661bab5470dfb778",
+                "url": "https://api.github.com/repos/diglactic/laravel-breadcrumbs/zipball/309ec597d047b763d1df3c5113a3932cc771500f",
+                "reference": "309ec597d047b763d1df3c5113a3932cc771500f",
                 "shasum": ""
             },
             "require": {
@@ -749,9 +749,9 @@
             ],
             "support": {
                 "issues": "https://github.com/diglactic/laravel-breadcrumbs/issues",
-                "source": "https://github.com/diglactic/laravel-breadcrumbs/tree/v7.1.1"
+                "source": "https://github.com/diglactic/laravel-breadcrumbs/tree/v7.2.0"
             },
-            "time": "2022-01-12T18:19:26+00:00"
+            "time": "2022-05-03T05:40:37+00:00"
         },
         {
             "name": "doctrine/cache",
