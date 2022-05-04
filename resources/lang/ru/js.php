@@ -206,6 +206,7 @@ return [
     'route_delete_confirm'                                           => 'Вы уверены, что хотите удалить этот маршрут?',
     'route_delete_successful'                                        => 'Маршрут успешно удален',
     'route_clone_successful'                                         => 'Маршрут успешно клонирован',
+    'route_clone_select_team'                                        => '@todo ru: .route_clone_select_team',
     'route_migration_confirm_warning'                                => '@todo ru: .route_migration_confirm_warning',
     'route_migration_successful'                                     => '@todo ru: .route_migration_successful',
     'sharing_label'                                                  => 'Поделиться',
@@ -372,6 +373,8 @@ return [
     'dungeonfloorswitchmarker_target_floor_id_label'                => 'Цель на уровне',
     'dungeonfloorswitchmarker_direction_label'                      => 'Направление',
     'dungeonfloorswitchmarker_target_floor_id_select_default_label' => 'Выбрать уровень',
+    'dungeonfloorswitchmarker_go_to_label'                          => '@todo ru: .dungeonfloorswitchmarker_go_to_label',
+    'dungeonfloorswitchmarker_unknown_label'                        => '@todo ru: .dungeonfloorswitchmarker_unknown_label',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Действия',
