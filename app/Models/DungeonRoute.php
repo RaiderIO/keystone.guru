@@ -897,7 +897,7 @@ class DungeonRoute extends Model
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->killzoneenemies as $kzEnemy) {
-                if (in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
+                if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
                     $kzEnemy->delete();
                 }
             }
@@ -920,6 +920,11 @@ class DungeonRoute extends Model
         $checkedEnemyPacks = collect();
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->enemies as $enemy) {
+                // Just in case the mapping was changed since then
+                if ($enemy === null) {
+                    continue;
+                }
+
                 $enemy->load('enemypack');
 
                 $enemyPackId = $enemy->enemy_pack_id;
