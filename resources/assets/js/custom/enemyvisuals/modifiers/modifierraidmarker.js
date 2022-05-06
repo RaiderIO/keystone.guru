@@ -47,7 +47,7 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
         console.assert(this instanceof EnemyVisualModifierRaidMarker, 'this is not an EnemyVisualModifierRaidMarker!', this);
 
         return $.extend({}, super._getTemplateData(width, height, margin), this._getLocation(width, height, margin), {
-            classes: this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon',
+            classes: this.iconName === '' || this.iconName === null ? '' : `raid_marker_enemy_icon ${this.iconName}_enemy_icon`,
         });
     }
 }
