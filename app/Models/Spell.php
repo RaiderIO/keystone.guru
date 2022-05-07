@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * @property int $id
@@ -54,7 +56,10 @@ class Spell extends CacheModel
     public $hidden = ['pivot'];
     protected $appends = ['icon_url'];
 
-    public function getSchoolsAsArray()
+    /**
+     * @return array
+     */
+    public function getSchoolsAsArray(): array
     {
         $result = [];
 
@@ -65,6 +70,9 @@ class Spell extends CacheModel
         return $result;
     }
 
+    /**
+     * @return Application|UrlGenerator|string
+     */
     public function getIconUrlAttribute()
     {
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
