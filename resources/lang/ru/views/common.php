@@ -224,6 +224,7 @@ return [
             'my_tags'           => 'Мои теги',
             'my_teams'          => 'Моя команда',
             'my_profile'        => 'Мой профиль',
+            'account_settings'  => '@todo ru: .layout.navuser.account_settings',
             'logout'            => 'Выйти',
         ],
     ],

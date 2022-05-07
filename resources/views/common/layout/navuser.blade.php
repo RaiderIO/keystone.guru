@@ -57,8 +57,8 @@ $user = Auth::user();
                 </a>
                 <div class="dropdown-divider"></div>
             @endif
-            <a class="dropdown-item" href="{{ route('profile.routes') }}">
-                <i class="fa fa-route"></i> {{ __('views/common.layout.navuser.my_routes') }}
+            <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
+                <i class="fa fa-route"></i> {{ __('views/common.layout.navuser.my_profile') }}
             </a>
             <a class="dropdown-item" href="{{ route('profile.favorites') }}">
                 <i class="fa fa-star"></i> {{ __('views/common.layout.navuser.my_favorites') }}
@@ -69,8 +69,9 @@ $user = Auth::user();
             <a class="dropdown-item" href="{{ route('team.list') }}">
                 <i class="fa fa-users"></i> {{ __('views/common.layout.navuser.my_teams') }}
             </a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                <i class="fa fa-user"></i> {{ __('views/common.layout.navuser.my_profile') }}
+                <i class="fa fa-cog"></i> {{ __('views/common.layout.navuser.account_settings') }}
             </a>
             <div class="dropdown-divider"></div>
 
