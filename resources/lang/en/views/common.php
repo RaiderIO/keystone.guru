@@ -224,6 +224,7 @@ return [
             'my_tags'           => 'My tags',
             'my_teams'          => 'My teams',
             'my_profile'        => 'My profile',
+            'account_settings'  => 'Account settings',
             'logout'            => 'Logout',
         ],
     ],

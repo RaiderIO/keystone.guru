@@ -13,12 +13,12 @@
         my website
         and hopefully contributing something nice, or use it to help coordinate your Mythic Plus keystones between your
         friends or PUGs. I truly hope it improves the quality of your playtime, I have had a lot of fun and learnt a LOT
-        making this website, and having a finished product that I can expand upon is great. I play on Lightbringer-EU -
+        making this website, and having a finished product that I can expand upon is great. I play on Tarren Mill-EU -
         Horde
-        as a Resto Druid in a fabulous casual guild called <a href="https://darkwolves.eu/">Dark Wolves</a> with my
+        as a Guardian Druid in a fabulous casual guild called <a href="https://darkwolves.eu/">Dark Wolves</a> with my
         girlfriend and a
         bunch of (RL) friends. The guild is always looking for new members, so feel free to check out the website.
-        <a href="https://worldofwarcraft.com/en-gb/character/lightbringer/laronia">Check me out</a> as well!
+        <a href="https://worldofwarcraft.com/en-gb/character/eu/tarren-mill/Laroni%C3%A1">Check me out</a> as well!
     </p>
     <h5>
         Some history

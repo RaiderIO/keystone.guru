@@ -206,6 +206,7 @@ return [
     'route_delete_confirm'                                           => 'Are you sure you wish to delete this route?',
     'route_delete_successful'                                        => 'Route deleted successfully',
     'route_clone_successful'                                         => 'Route cloned successfully',
+    'route_clone_select_team'                                        => 'Unable to clone route - select a team to clone to first',
     'route_migration_confirm_warning'                                => 'The following changes will be performed to your route:
         the affixes assigned to the route will be dropped in favor of the current active affix for your region,
         enemies specific to previous seasons assigned to your pulls (Tormented Lieutenants for example) will be removed from all pulls,

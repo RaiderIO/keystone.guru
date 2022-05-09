@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
-use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
@@ -92,6 +91,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|DungeonRouteAffixGroup[] $affixgroups
  * @property Collection|DungeonRouteRating[] $ratings
  * @property Collection|DungeonRouteFavorite[] $favorites
+ * @property Collection|LiveSession[] $livesessions
  *
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
@@ -295,6 +295,14 @@ class DungeonRoute extends Model
     public function favorites(): HasMany
     {
         return $this->hasMany('App\Models\DungeonRouteFavorite');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function livesessions(): HasMany
+    {
+        return $this->hasMany('App\Models\LiveSession');
     }
 
     /**
@@ -802,15 +810,14 @@ class DungeonRoute extends Model
         $dungeonroute->faction_id         = $this->faction_id;
         $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
-        $dungeonroute->team_id                     = null;
-        $dungeonroute->title                       = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
-        $dungeonroute->seasonal_index              = $this->seasonal_index;
-        $dungeonroute->teeming                     = $this->teeming;
-        $dungeonroute->enemy_forces                = $this->enemy_forces;
-        $dungeonroute->level_min                   = $this->level_min;
-        $dungeonroute->level_max                   = $this->level_max;
-        $dungeonroute->thumbnail_refresh_queued_at = $this->thumbnail_refresh_queued_at;
-        $dungeonroute->thumbnail_updated_at        = $this->thumbnail_updated_at;
+        $dungeonroute->team_id        = null;
+        $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
+        $dungeonroute->seasonal_index = $this->seasonal_index;
+        $dungeonroute->teeming        = $this->teeming;
+        $dungeonroute->enemy_forces   = $this->enemy_forces;
+        $dungeonroute->level_min      = $this->level_min;
+        $dungeonroute->level_max      = $this->level_max;
+
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.
@@ -828,7 +835,12 @@ class DungeonRoute extends Model
         ]);
 
         // Copy the thumbnails to this newly cloned route
-        $thumbnailService->copyThumbnails($this, $dungeonroute);
+        if ($thumbnailService->copyThumbnails($this, $dungeonroute)) {
+            $dungeonroute->update([
+                'thumbnail_refresh_queued_at' => $this->thumbnail_refresh_queued_at,
+                'thumbnail_updated_at'        => $this->thumbnail_updated_at,
+            ]);
+        }
 
         return $dungeonroute;
     }
@@ -885,7 +897,7 @@ class DungeonRoute extends Model
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->killzoneenemies as $kzEnemy) {
-                if (in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
+                if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
                     $kzEnemy->delete();
                 }
             }
@@ -908,6 +920,11 @@ class DungeonRoute extends Model
         $checkedEnemyPacks = collect();
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->enemies as $enemy) {
+                // Just in case the mapping was changed since then
+                if ($enemy === null) {
+                    continue;
+                }
+
                 $enemy->load('enemypack');
 
                 $enemyPackId = $enemy->enemy_pack_id;
@@ -1172,6 +1189,7 @@ class DungeonRoute extends Model
             // External
             $item->ratings()->delete();
             $item->favorites()->delete();
+            $item->livesessions()->delete();
 
             $item->mdtImport()->delete();
         });

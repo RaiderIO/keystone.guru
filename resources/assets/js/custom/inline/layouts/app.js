@@ -23,7 +23,7 @@ class LayoutsApp extends InlineCode {
         $('#create_route_modal').on('hidden.bs.modal', this._resetMdtModal.bind(this));
 
         this.$importStringTextArea = $('.import_mdt_string_textarea').bind('paste', this._importStringPasted.bind(this));
-        this.$root = this.$importStringTextArea.closest('.modal');
+        this.$root = this.$importStringTextArea.closest('.tab-pane');
 
         this.$loader = this.$root.find('.import_mdt_string_loader');
         this.$details = this.$root.find('.import_mdt_string_details');
@@ -281,6 +281,30 @@ function refreshTooltips($element = null) {
  */
 $.fn.refreshTooltips = function () {
     return refreshTooltips($(this));
+}
+
+/**
+ * @param enabled {Boolean}
+ * @param $element
+ */
+function toggleTooltips(enabled = true, $element = null) {
+    if (!isMobile()) {
+        if ($element === null) {
+            disableTooltips($('[data-toggle="tooltip"]'));
+            disableTooltips($('[data-tooltip="tooltip"]'));
+        } else {
+            $('.tooltip').remove();
+            $element.unbind('click', _hideTooltips.bind(this))
+                .tooltip(enabled ? 'enable' : 'disable');
+        }
+    }
+}
+
+/**
+ * Does the same as above, but then on a jQuery function
+ */
+$.fn.toggleTooltips = function (enabled = true) {
+    return toggleTooltips(enabled, $(this));
 }
 
 /**

@@ -154,6 +154,10 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                                 color: polylineColor
                             }
                         });
+                    } else {
+                        // The current killzone does not have any enemies assigned to it - skip this pull and keep the
+                        // previous killzone the same, so we draw a line from say pull 2 to pull 4 if pull 3 is empty
+                        continue;
                     }
                 } else {
                     // Current killzone is not on this floor, previous killzone is also not on this floor.

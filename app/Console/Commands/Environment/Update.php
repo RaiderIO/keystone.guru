@@ -102,6 +102,9 @@ class Update extends Command
         $this->call('discover:cache');
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
+        // Bit of a nasty hack to fix permission issues
+        $this->shell(sprintf('chown www-data:www-data %s/storage/framework/cache/* -R', base_path()));
+
         return 0;
     }
 }

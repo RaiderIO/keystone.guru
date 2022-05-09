@@ -21,8 +21,12 @@ use App\Models\DungeonRoute;
 use App\Models\LiveSession;
 use App\User;
 
-$dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute)
-{
+$dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonroute) {
+    // Shouldn't happen - but it may if the route was deleted and someone left their browser window open
+    if ($dungeonroute === null) {
+        return false;
+    }
+
     $result = false;
 
     if (Auth::check()) {
@@ -30,7 +34,7 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
             // If we didn't create this route, don't show our name
             $dungeonroute->author_id !== $user->id &&
             // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
-            ($dungeonroute->team === null || ($dungeonroute->team !== null && !$dungeonroute->team->isUserMember($user)))) {
+            ($dungeonroute->team === null || (!$dungeonroute->team->isUserMember($user)))) {
 
             $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
@@ -52,7 +56,7 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
                 'color'      => $user->echo_color,
                 'avatar_url' => optional($user->iconfile)->getURL(),
                 'anonymous'  => false,
-                'url'        => route('profile.view', $user)
+                'url'        => route('profile.view', $user),
             ];
         }
     }
@@ -61,14 +65,12 @@ $dungeonRouteChannelCallback = function (?User $user, DungeonRoute $dungeonroute
 };
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback)
-{
+Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback) {
     // Validate live sessions the same way as a dungeon route
     return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon)
-{
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
     $result = false;
     if ($user->hasRole('admin')) {
         $result = [

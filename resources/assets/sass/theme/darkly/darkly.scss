@@ -4,6 +4,9 @@
   @import "~bootstrap/scss/bootstrap";
   @import "~bootswatch/dist/darkly/bootswatch";
 
+  body, .form-control, .dropdown-menu, .btn {
+    font-size: 0.9375rem;
+  }
 
   .form-control {
     border: 1px solid #222;

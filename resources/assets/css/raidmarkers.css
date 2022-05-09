@@ -78,50 +78,40 @@
     height: 32px;
 }
 
+.raid_marker_enemy_icon {
+    width: 24px !important;
+    height: 24px !important;
+    background-color: white;
+}
+
 .star_enemy_icon {
     background-position: -0px -0px;
-    width: 22px;
-    height: 22px;
 }
 
 .circle_enemy_icon {
     background-position: -22px -0px;
-    width: 22px;
-    height: 22px;
 }
 
 .diamond_enemy_icon {
     background-position: -44px -0px;
-    width: 22px;
-    height: 22px;
 }
 
 .triangle_enemy_icon {
     background-position: -66px -0px;
-    width: 22px;
-    height: 22px;
 }
 
 .moon_enemy_icon {
     background-position: -0px -22px;
-    width: 22px;
-    height: 22px;
 }
 
 .square_enemy_icon {
     background-position: -22px -22px;
-    width: 22px;
-    height: 22px;
 }
 
 .cross_enemy_icon {
     background-position: -44px -22px;
-    width: 22px;
-    height: 22px;
 }
 
 .skull_enemy_icon {
     background-position: -66px -22px;
-    width: 22px;
-    height: 22px;
 }

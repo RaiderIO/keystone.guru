@@ -171,9 +171,10 @@ class Conversion
      * @param SeasonService $seasonService
      * @param Expansion $expansion
      * @param int $mdtWeek
-     * @return AffixGroup
+     * @return AffixGroup|null
+     * @throws Exception
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, Expansion $expansion, int $mdtWeek): AffixGroup
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, Expansion $expansion, int $mdtWeek): ?AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
         $weekMapping = [
@@ -190,7 +191,18 @@ class Conversion
             11 => 2,
             12 => 3,
         ];
-        return $seasonService->getCurrentSeason($expansion)->affixgroups->get($weekMapping[$mdtWeek] - 1);
+
+        $season = $seasonService->getCurrentSeason($expansion);
+
+        $affixGroup = $season->affixgroups->get($weekMapping[$mdtWeek] - 1);
+        if ($affixGroup === null) {
+            logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [
+                '$mdtWeek' => $mdtWeek,
+            ]);
+
+            $affixGroup = $season->getCurrentAffixGroup();
+        }
+        return $affixGroup;
     }
 
     /**

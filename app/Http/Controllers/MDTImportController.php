@@ -89,6 +89,7 @@ class MDTImportController extends Controller
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
             }
+            Log::error($error->getMessage(), ['string' => $string]);
 
             throw $error;
         }

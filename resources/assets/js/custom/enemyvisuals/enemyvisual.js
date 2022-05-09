@@ -28,6 +28,9 @@ class EnemyVisual extends Signalable {
 
         this._circleMenu = null;
 
+        // Can be set to force the building of a visual when it's shown again
+        this._forceBuildVisualOnShow = false;
+
         // Default visual (after modifiers!)
         this.setVisualType(getState().getEnemyDisplayType());
 
@@ -35,7 +38,7 @@ class EnemyVisual extends Signalable {
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
             if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
-                if (self._divIcon === null) {
+                if (self._divIcon === null || self._forceBuildVisualOnShow) {
                     self.buildVisual();
                 } else {
                     self.refreshJQuerySelectors();
@@ -55,7 +58,9 @@ class EnemyVisual extends Signalable {
         });
 
         // If it changed, refresh the entire visual
-        this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
+        this.enemy.register(['enemy:set_raid_marker'], this, function (raidMarkerChangedEvent) {
+            self.buildVisual.bind(self, false);
+        });
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
@@ -352,8 +357,9 @@ class EnemyVisual extends Signalable {
     /**
      * Constructs the structure for the visuals and re-fetches the main visual's and modifier's data to re-apply to
      * the interface.
+     * @param reopenCircleMenu {Boolean} If the circle menu was open, re-open it or keep it closed?
      */
-    buildVisual() {
+    buildVisual(reopenCircleMenu = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // If the object is invisible, don't build the visual
@@ -457,7 +463,7 @@ class EnemyVisual extends Signalable {
             $enemyIcon.unbind('contextmenu').bind('contextmenu', this._visualRightClicked.bind(this));
 
             // Restore circle menu
-            if (hadCircleMenu) {
+            if (hadCircleMenu && reopenCircleMenu) {
                 this._initCircleMenu(false);
             }
 
@@ -676,6 +682,9 @@ class EnemyVisual extends Signalable {
             // Don't do this on page load - it's pointless since show/hidden events will do this again
             if (this.enemy.isVisible()) {
                 this.buildVisual();
+            } else {
+                // Schedule the building of the visual to when this enemy is shown again
+                this._forceBuildVisualOnShow = true;
             }
 
             this.visualType = name;

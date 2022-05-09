@@ -4,6 +4,10 @@
   @import "~bootstrap/scss/bootstrap";
   @import "~bootswatch/dist/lux/bootswatch";
 
+  body {
+    font-size: 0.9375rem;
+  }
+
   /** Lux special - make sure the top header has the same height as the one in Darkly */
   .navbar {
     padding: 1rem 1rem;
