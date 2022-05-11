@@ -1,0 +1,127 @@
+{
+    "id": 128,
+    "release_changelog_id": 135,
+    "version": "v4.6.2",
+    "title": "Various bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-05-07T19:26:30+00:00",
+    "updated_at": "2022-05-07T19:26:30+00:00",
+    "changelog": {
+        "id": 135,
+        "release_id": 128,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1154,
+                "change": "Your public profile is now more easily accessible when you're logged in under the \"My profile\" option. This replaces the \"My routes\" option which redirected to the home page.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Moved a set of relics in the first room to the correct pack (the room that everyone skips with Night Fae - thanks Omicron)",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1106,
+                "change": "Mouse cursors with an image in shared route editing are now always displayed as a circle, instead of a square if the user uploaded a square image.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1139,
+                "change": "Changing enemy visual type will no longer always revert back to portrait enemy visual type when changing floors.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1140,
+                "change": "If you try to clone your route to a specific team (using the Clone to Team dropdown option) the displayed modal no longer has too little space to select your team if you're a member of more than 2 teams. It's been reworked and now displays all teams you're a part of properly.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1142,
+                "change": "[Hotfixed] Deleting a dungeonroute now also deletes any existing live sessions for that route. Visiting a live session of a deleted route will now show a 404 not found because of this, instead of causing a crash.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1149,
+                "change": "Create route button is no longer disabled after closing the modal and re-opening it (thanks Omicron).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1151,
+                "change": "Hovering your mouse over the enemy forces while viewing\/editing a route now always shows the correct tooltip (thanks Jaxeek).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1155,
+                "change": "Route info while viewing a route now works again when you click it.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1156,
+                "change": "[Hotfixed] Migrating a route to encrypted which kills enemies which have since been deleted from the mapping no longer causes a crash.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 135,
+                "release_changelog_category_id": 6,
+                "ticket_id": 1124,
+                "change": "[Hotfixed] MDT Importer could crash if a non-supported week was found in the import string.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}

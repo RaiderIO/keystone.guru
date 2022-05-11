@@ -2,7 +2,7 @@
     {
         "id": 333293,
         "dispel_type": "Magic",
-        "icon_name": "ability_deathknight_boneshield",
+        "icon_name": "spell_deathknight_boneshield",
         "name": "Bone Shield",
         "schools_mask": 0,
         "aura": 1
