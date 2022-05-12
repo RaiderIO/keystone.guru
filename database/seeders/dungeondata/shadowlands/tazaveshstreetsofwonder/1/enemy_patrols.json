@@ -178,5 +178,29 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-152.035099,\"lng\":155.447685},{\"lat\":-148.659905,\"lng\":158.821068},{\"lat\":-146.645677,\"lng\":160.290122},{\"lat\":-143.651555,\"lng\":161.976814},{\"lat\":-141.79069,\"lng\":163.500278}]"
         }
+    },
+    {
+        "id": 369,
+        "floor_id": 101,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-157.34375,\"lng\":210.46875},{\"lat\":-145.3125,\"lng\":189.34375},{\"lat\":-144.9375,\"lng\":176.875}]"
+        }
+    },
+    {
+        "id": 370,
+        "floor_id": 101,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#f52222",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-111.136566,\"lng\":297.010318},{\"lat\":-86.367758,\"lng\":158.520373}]"
+        }
     }
 ]
