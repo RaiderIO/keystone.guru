@@ -1162,7 +1162,7 @@
         "faction": "any",
         "required": 0,
         "skippable": 1,
-        "enemy_forces_override": 0,
+        "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -177.78,
         "lng": 216.56,
