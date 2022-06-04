@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
@@ -47,6 +48,9 @@ class Kernel extends ConsoleKernel
         CreateGithubReleasePullRequest::class,
         StartSupervisor::class,
         StopSupervisor::class,
+
+        // Cache
+        RedisClearIdleKeys::class,
 
         // Discover
         DiscoverCache::class,
@@ -126,6 +130,9 @@ class Kernel extends ConsoleKernel
             $schedule->command('discover:cache')->hourly();
             $schedule->command('keystoneguru:view', ['operation' => 'cache'])->everyTenMinutes();
         }
+
+        // Ensure redis remains healthy
+        $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->hourly();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }
