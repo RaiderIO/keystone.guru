@@ -365,6 +365,7 @@ return [
             'review_route_settings'            => 'Review your %s before publishing your route',
             'route_settings'                   => 'route settings',
             'link'                             => 'Link',
+            'short_link'                       => 'Short link',
             'copy_shareable_link_to_clipboard' => 'Copy shareable link to clipboard',
             'embed'                            => 'Embed',
             'copy_embed_code_to_clipboard'     => 'Copy embed code to clipboard',

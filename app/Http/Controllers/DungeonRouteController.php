@@ -64,6 +64,7 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string $title
      * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
@@ -77,16 +78,13 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        $titleSlug = Str::slug($dungeonroute->title);
-        if (!isset($title) || $titleSlug !== $title) {
-            return redirect()->route('dungeonroute.view.floor', [
+        if (!isset($title) || Str::slug($title) !== $title) {
+            return redirect()->route('dungeonroute.view', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $titleSlug,
-                'floorindex'   => $floorIndex,
+                'title'        => Str::slug($dungeonroute->title),
             ]);
         }
-
 
         $currentReport = null;
         if (Auth::check()) {
@@ -368,7 +366,7 @@ class DungeonRouteController extends Controller
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
 
         // Display the edit page
-        return $this->edit($request, $dungeonroute);
+        return $this->edit($request, $dungeonroute->dungeon, $dungeonroute, Str::slug($dungeonroute->title));
     }
 
     /**
