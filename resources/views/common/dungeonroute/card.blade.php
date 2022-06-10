@@ -65,7 +65,7 @@ ob_start(); ?>
             <div class="row no-gutters p-2 header">
                 <div class="col">
                     <h4 class="mb-0">
-                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]) }}">
+                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}">
                             {{ $dungeonroute->title }}
                         </a>
                     </h4>

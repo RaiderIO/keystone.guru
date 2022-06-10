@@ -44,7 +44,7 @@ if (count($affixes) == 0) {
             <div class="col-8 pt-2">
                 <div class="row no-gutters">
                     <div class="col">
-                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
                            target="_blank">
                             <h4 class="mb-0">
                                 {{ $dungeonroute->title }}
@@ -55,9 +55,9 @@ if (count($affixes) == 0) {
                 <div class="row no-gutters">
                     <div class="col">
                         {{ __('views/dungeonroute.embed.create_or_view_at') }}
-                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
                            target="_blank">
-                            {{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}
+                            {{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}
                         </a>
                     </div>
                 </div>

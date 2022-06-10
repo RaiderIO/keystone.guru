@@ -9,6 +9,7 @@ use App\Models\Floor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\Process\Process;
 
@@ -38,7 +39,9 @@ class ThumbnailService implements ThumbnailServiceInterface
             resource_path('assets/puppeteer/route_thumbnail.js'),
             // First argument; where to navigate
             route('dungeonroute.preview', [
+                'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute->public_key,
+                'title'        => Str::slug($dungeonRoute->title),
                 'floorindex'   => $floorIndex,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
             ]),
@@ -140,7 +143,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         if (!$sourceDungeonRoute->has_thumbnail || $sourceDungeonRoute->dungeon_id !== $targetDungeonRoute->dungeon_id) {
             return false;
         }
-        
+
         $result = true;
 
         // Copy over all thumbnails

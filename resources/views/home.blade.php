@@ -285,7 +285,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     loading="lazy"
                     class="lazyload"
                     style="border:0; top: 0; left: 0; position: absolute;"
-                    data-src="{{ route('dungeonroute.view', ['dungeonroute' => $demoRoutes->first()]) }}"
+                    data-src="{{ route('dungeonroute.view', ['dungeon' => $demoRoutes->first()->dungeon, 'dungeonroute' => $demoRoutes->first(), 'title' => $demoRoutes->first()->title]) }}"
                     allowfullscreen=""></iframe>
         </div>
     </section>

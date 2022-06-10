@@ -10,7 +10,7 @@
                 @if($dungeonroute->mayUserEdit(Auth::user()))
                     <div class="row no-gutters">
                         <div class="col">
-                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]) }}"
+                            <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
                                class="btn btn-info">
                                 <i class="fas fa-edit"></i>
                                 <span class="map_controls_element_label_toggle" style="display: none;">
@@ -23,7 +23,7 @@
                 @if($dungeonroute->dungeon->active)
                     <div class="row no-gutters">
                         <div class="col">
-                            <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $dungeonroute]) }}"
+                            <a href="{{ route('dungeonroute.clone', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
                                class="btn btn-info">
                                 <i class="fas fa-clone"></i>
                                 <span class="map_controls_element_label_toggle" style="display: none;">
