@@ -48,6 +48,17 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @hasSection('linkpreview')
+        @yield('linkpreview')
+    @endif
+
+    @sectionMissing('linkpreview')
+        @include('common.general.linkpreview', [
+            'url' => URL::current(),
+            'title' => __('views/layouts.app.linkpreview_title'),
+            'description' => __('views/layouts.app.linkpreview_description'),
+        ])
+    @endif
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -57,7 +68,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     <!-- Styles -->
     <link href="{{ asset('css/app-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-{{--    <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">--}}
+    {{--    <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">--}}
     <link href="{{ asset('css/theme-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset('css/home-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ url("/images/icon/favicon.ico") }}">
