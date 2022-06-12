@@ -5,7 +5,7 @@
 /** @var string|null $image */
 
 $url = $url ?? URL::current();
-$image = $image ?? url('/images/logo/logo_and_text.png');
+$image = $image ?? url('/images/external/linkpreview/logo_and_text_big.png');
 ?>
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ $url }}">

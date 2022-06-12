@@ -59,10 +59,10 @@ $showPublish   = $show['publish'] ?? true;
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_short_link', route('dungeonroute.viewold', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]),
+                {!! Form::text('map_shareable_short_link', route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute]),
                 ['id' => 'map_shareable_short_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
-                    <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
+                    <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
                             data-toggle="tooltip"
                             title="{{ __('views/common.modal.share.copy_shareable_link_to_clipboard') }}">
                         <i class="far fa-copy"></i>

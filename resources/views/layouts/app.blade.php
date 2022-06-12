@@ -53,7 +53,10 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     @endif
 
     @sectionMissing('linkpreview')
-        @include('common.general.linkpreview')
+        @include('common.general.linkpreview', [
+            'title' => __('views/layouts.app.linkpreview_title'),
+            'description' => __('views/layouts.app.linkpreview_description')
+        ])
     @endif
 
     <!-- CSRF Token -->
