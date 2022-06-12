@@ -5,7 +5,9 @@
 /** @var string|null $image */
 
 $url = $url ?? URL::current();
-$image = $image ?? url('/images/external/linkpreview/logo_and_text_big.png');
+$description = $description ?? '';
+$image = $image ?? url('/images/logo/logo_and_text_big.png');
+$imageTwitter = $image ?? url('/images/external/twitter/logo_and_text_big.png');
 ?>
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ $url }}">
@@ -19,5 +21,5 @@ $image = $image ?? url('/images/external/linkpreview/logo_and_text_big.png');
 <meta name="twitter:title" content="{{ $title . __('views/common.general.linkpreview.twitter_title_suffix')}}">
 <meta name="twitter:description" content="{{ $description . __('views/common.general.linkpreview.twitter_description_suffix')}}">
 @isset($image)
-    <meta name="twitter:image" content="{{ $image }}">
+    <meta name="twitter:image" content="{{ $imageTwitter }}">
 @endif
