@@ -358,6 +358,38 @@ class Dungeon extends CacheModel
         return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
     }
 
+    /**
+     * @return string
+     */
+    public function getImageUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage32Url(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageTransparentUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_transparent.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageWallpaperUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
+    }
+
 
     public static function boot()
     {

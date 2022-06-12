@@ -5,6 +5,7 @@ $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 
 $sandbox = $dungeonroute->isSandbox();
 ?>
+
 @extends('layouts.map', ['title' => sprintf(__('views/dungeonroute.edit.title'), $dungeonroute->title)])
 
 @include('common.general.inline', [
@@ -16,6 +17,16 @@ $sandbox = $dungeonroute->isSandbox();
         'levelMax' => config('keystoneguru.levels.max'),
     ]
 ])
+
+@section('linkpreview')
+    @include('common.general.linkpreview', [
+        'title' => sprintf(__('views/dungeonroute.edit.linkpreview_title'), $dungeonroute->title),
+        'description' => !empty($dungeonroute->description) ?
+            $dungeonroute->description :
+            sprintf(__('views/dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name),
+            'image' => $dungeonroute->dungeon->getImageUrl()
+    ])
+@endsection
 
 @section('content')
     <div class="wrapper">
