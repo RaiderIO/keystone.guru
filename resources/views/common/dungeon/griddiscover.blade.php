@@ -33,7 +33,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                         {{ __($dungeon->name) }}
                     </h5>
                     <img class="card-img-top"
-                         src="{{ url(sprintf('images/dungeons/%s/%s.jpg', $dungeon->expansion->shortname, $dungeon->key)) }}"
+                         src="{{ $dungeon->getImageUrl() }}"
                          style="width: 100%; height: 100%" alt="{{ __($dungeon->name) }}"/>
                 </a>
             </div>

@@ -1086,7 +1086,7 @@ class DungeonRoute extends Model
             $subTitle = __('models.dungeonroute.subtitle_clone_of', [
                 'routeLink' => sprintf(
                     ' <a href="%s">%s</a>',
-                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of]),
+                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of, 'dungeon' => $this->dungeon, 'title' => $this->title]),
                     $this->clone_of
                 ),
             ]);

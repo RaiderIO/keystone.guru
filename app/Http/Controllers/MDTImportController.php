@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Teapot\StatusCode;
 use Throwable;
@@ -113,17 +114,17 @@ class MDTImportController extends Controller
             $importString = new ImportString($seasonService);
 
             try {
-                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
+                $dungeonroute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
 
                 // Ensure team_id is set
                 if (!$sandbox) {
-                    $dungeonRoute->team_id = $request->get('team_id');
-                    $dungeonRoute->save();
+                    $dungeonroute->team_id = $request->get('team_id');
+                    $dungeonroute->save();
                 }
 
                 // Keep track of the import
                 $mdtImport                   = new MDTImport();
-                $mdtImport->dungeon_route_id = $dungeonRoute->id;
+                $mdtImport->dungeon_route_id = $dungeonroute->id;
                 $mdtImport->import_string    = $string;
                 $mdtImport->save();
             } catch (InvalidMDTString $ex) {
@@ -150,7 +151,11 @@ class MDTImportController extends Controller
                 throw $error;
             }
 
-            $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
+            $result = redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => Str::slug($dungeonroute->title),
+            ]);
         } else if ($user === null) {
             return abort(StatusCode::UNAUTHORIZED, __('controller.mdtimport.error.cannot_create_route_must_be_logged_in'));
         } else {
