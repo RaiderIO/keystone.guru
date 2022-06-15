@@ -304,9 +304,10 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMinHealth(): int
     {
-        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+        return $this->npcs()->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
+                ->where('enemy_forces', '>', 0)
                 ->min('base_health') ?? 10000;
     }
 
@@ -315,9 +316,10 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMaxHealth(): int
     {
-        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+        return $this->npcs()->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
+                ->where('enemy_forces', '>', 0)
                 ->max('base_health') ?? 100000;
     }
 
