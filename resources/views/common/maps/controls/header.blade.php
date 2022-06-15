@@ -121,11 +121,19 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @auth
                     @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
                         <li class="nav-item mr-2">
-                            <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $dungeonroute]) }}">
-                                <button class="btn btn-success btn-sm h-100">
-                                    <i class="fas fa-save"></i> {{ __('views/common.maps.controls.header.save_to_profile') }}
-                                </button>
-                            </a>
+                            <div class="d-flex h-100">
+                                <div class="row justify-content-center align-self-center">
+                                    <a class="col" href="{{ route('dungeonroute.claim', [
+                                            'dungeon' => $dungeonroute->dungeon,
+                                            'title' => \Illuminate\Support\Str::slug($dungeonroute->title),
+                                            'dungeonroute' => $dungeonroute]
+                                        ) }}">
+                                        <button class="btn btn-success btn-sm">
+                                            <i class="fas fa-save"></i> {{ __('views/common.maps.controls.header.save_to_profile') }}
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
                         </li>
                     @endif
                 @endauth

@@ -43,9 +43,10 @@ return [
         ],
     ],
     'edit'           => [
-        'title'                           => 'Edit %s',
-        'linkpreview_title'               => '%s | Keystone.guru',
-        'linkpreview_default_description' => 'Edit M+ route for dungeon %s by %s',
+        'title'                                   => 'Edit %s',
+        'linkpreview_title'                       => '%s | Keystone.guru',
+        'linkpreview_default_description'         => 'Edit M+ route for dungeon %s by %s',
+        'linkpreview_default_description_sandbox' => 'Edit M+ route for dungeon %s',
     ],
     'embed'          => [
         'title'             => 'Embed :routeTitle',

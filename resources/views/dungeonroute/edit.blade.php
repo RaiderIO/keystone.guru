@@ -23,7 +23,9 @@ $sandbox = $dungeonroute->isSandbox();
         'title' => sprintf(__('views/dungeonroute.edit.linkpreview_title'), $dungeonroute->title),
         'description' => !empty($dungeonroute->description) ?
             $dungeonroute->description :
-            sprintf(__('views/dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name),
+            ($dungeonroute->isSandbox() ?
+            sprintf(__('views/dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
+            sprintf(__('views/dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
             'image' => $dungeonroute->dungeon->getImageUrl()
     ])
 @endsection

@@ -232,10 +232,12 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string $title
      * @return RedirectResponse
      */
-    public function claim(Request $request, DungeonRoute $dungeonroute)
+    public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title)
     {
         // Regardless of the result, try to claim the route
         $dungeonroute->claim(Auth::id());
