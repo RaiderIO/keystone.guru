@@ -29,6 +29,9 @@ return [
                         The personal tags that may or may not have been attached by the route owner will not be visible.',
     ],
     'invite' => [
+        'linkpreview_title' => 'Invitation to join team %s',
+        'linkpreview_description' => 'You have been invited to join team %s. Login or register on Keystone.guru to join the team, it\'s free!',
+
         'title'        => 'Invitation to join team %s',
         'header'       => 'Invitation to join team %s',
         'invalid_team' => 'Invalid team',

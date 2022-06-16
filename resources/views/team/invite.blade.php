@@ -1,4 +1,6 @@
 <?php
+/** @var \App\Models\Team $team */
+
 $title  = isset($team) ? sprintf(__('views/team.invite.title'), $team->name) : __('views/team.invite.invalid_team');
 $header = isset($team) ? sprintf(__('views/team.invite.header'), $team->name) : __('views/team.invite.invalid_team');
 // Checks if you're already a member or not
@@ -6,6 +8,14 @@ $member = $member ?? false;
 ?>
 @extends('layouts.sitepage', ['breadcrumbsParams' => [$team], 'showAds' => false, 'title' => $title])
 @section('header-title', $header)
+
+@section('linkpreview')
+    @include('common.general.linkpreview', [
+        'title' => sprintf(__('views/team.invite.linkpreview_title'), $team->name),
+        'description' => sprintf(__('views/team.invite.linkpreview_description'), $team->name),
+        'image' => optional($team->iconfile)->getURL()
+    ])
+@endsection
 
 @section('content')
     <div class="container text-center">

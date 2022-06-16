@@ -309,7 +309,6 @@ class Dungeon extends CacheModel
     public function getNpcsMinHealth(): int
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
                 ->where('enemy_forces', '>', 0)
                 ->min('base_health') ?? 10000;
@@ -321,7 +320,6 @@ class Dungeon extends CacheModel
     public function getNpcsMaxHealth(): int
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
                 ->where('enemy_forces', '>', 0)
                 ->max('base_health') ?? 100000;
@@ -329,7 +327,7 @@ class Dungeon extends CacheModel
 
     /**
      * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
-     * hence this function so we can use it differentiate between the two.
+     * hence this function, so we can use it to differentiate between the two.
      *
      * @return bool
      */
