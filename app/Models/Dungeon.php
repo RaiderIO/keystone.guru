@@ -6,7 +6,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -218,11 +218,15 @@ class Dungeon extends CacheModel
     }
 
     /**
+     * @param bool $includeGlobalNpcs
      * @return HasMany
      */
-    public function npcs(): HasMany
+    public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
-        return $this->hasMany('App\Models\Npc')->orWhere('dungeon_id', -1);
+        return $this->hasMany('App\Models\Npc')
+            ->when($includeGlobalNpcs, function(Builder $builder){
+                $builder->orWhere('dungeon_id', -1);
+            });
     }
 
     /**
@@ -304,7 +308,7 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMinHealth(): int
     {
-        return $this->npcs()->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
                 ->where('enemy_forces', '>', 0)
@@ -316,7 +320,7 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMaxHealth(): int
     {
-        return $this->npcs()->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('dungeon_id', '<>', -1)
                 ->where('aggressiveness', '<>', 'friendly')
                 ->where('enemy_forces', '>', 0)
