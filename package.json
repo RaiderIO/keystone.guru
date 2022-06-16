@@ -22,7 +22,7 @@
         "lodash": "^4.17.21",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.51.0",
-        "sass-loader": "^12.6.0",
+        "sass-loader": "^13.0.0",
         "vue-template-compiler": "^2.6.14",
         "webpack-shell-plugin-next": "^2.2.2"
     },
@@ -72,7 +72,7 @@
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
         "puppeteer": "^1.20.0",
-        "simplebar": "^5.3.6",
+        "simplebar": "^5.3.8",
         "socket.io-client": "^2.4.0",
         "zikes-circlemenu": "^0.1.1"
     }
