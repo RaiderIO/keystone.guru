@@ -39,7 +39,7 @@
         "color-interpolate": "^1.0.4",
         "d3": "7.4.4",
         "datatables": "^1.10.18",
-        "dotenv": "^16.0.0",
+        "dotenv": "^16.0.1",
         "geojson-utils": "^1.1.0",
         "grapick": "^0.1.13",
         "handlebars": "^4.7.7",
