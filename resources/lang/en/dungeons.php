@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'wod'         => [
+        'iron_docs'      => [
+            'name'   => 'Iron Docks',
+            'floors' => [
+                'iron_docks' => 'Iron Docks',
+            ],
+        ],
+        'grimrail_depot' => [
+            'name'   => 'Grimrail Depot',
+            'floors' => [
+                'grimrail_depot'     => 'Grimrail Depot',
+                'rafters'            => 'Rafters',
+                'rear_train_cars'    => 'Rear Train Cars',
+                'forward_train_cars' => 'Forward Train Cars',
+            ],
+        ],
+    ],
     'legion'      => [
         'arcway'               => [
             'name'   => 'Arcway',
@@ -285,7 +302,7 @@ return [
                 'the_grand_menagerie' => 'The Grand Menagerie',
                 'the_post'            => 'The P.O.S.T',
                 'myzas_oasis'         => 'Myza\'s Oasis',
-            ]
+            ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'leah\'s Gambit',

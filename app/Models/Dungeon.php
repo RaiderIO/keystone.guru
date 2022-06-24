@@ -53,6 +53,10 @@ class Dungeon extends CacheModel
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
+    // Warlords of Draenor
+    const DUNGEON_IRON_DOCKS     = 'iron_docks';
+    const DUNGEON_GRIMRAIL_DEPOT = 'grimrail_depot';
+
     // Legion
     const DUNGEON_ARCWAY                      = 'arcway';
     const DUNGEON_BLACK_ROOK_HOLD             = 'blackrookhold';
@@ -93,6 +97,11 @@ class Dungeon extends CacheModel
     const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
     const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
     const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
+
+    const ALL_WOD = [
+        self::DUNGEON_IRON_DOCKS,
+        self::DUNGEON_GRIMRAIL_DEPOT,
+    ];
 
     const ALL_LEGION = [
         self::DUNGEON_ARCWAY,
@@ -224,7 +233,7 @@ class Dungeon extends CacheModel
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany('App\Models\Npc')
-            ->when($includeGlobalNpcs, function(Builder $builder){
+            ->when($includeGlobalNpcs, function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });
     }

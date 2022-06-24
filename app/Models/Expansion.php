@@ -45,14 +45,26 @@ class Expansion extends CacheModel
         'updated_at',
     ];
 
+    const EXPANSION_VANILLA     = 'vanilla';
+    const EXPANSION_TBC         = 'tbc';
+    const EXPANSION_WOTLK       = 'wotlk';
+    const EXPANSION_CATACLYSM   = 'cata';
+    const EXPANSION_MOP         = 'mop';
+    const EXPANSION_WOD         = 'wod';
     const EXPANSION_LEGION      = 'legion';
     const EXPANSION_BFA         = 'bfa';
     const EXPANSION_SHADOWLANDS = 'shadowlands';
 
     const ALL = [
-        'Legion'             => self::EXPANSION_LEGION,
-        'Battle for Azeroth' => self::EXPANSION_BFA,
-        'Shadowlands'        => self::EXPANSION_SHADOWLANDS,
+        'Classic'                => self::EXPANSION_VANILLA,
+        'The Burning Crusade'    => self::EXPANSION_TBC,
+        'Wrath of the Lich King' => self::EXPANSION_WOTLK,
+        'Cataclysm'              => self::EXPANSION_CATACLYSM,
+        'Mists of Pandaria'      => self::EXPANSION_MOP,
+        'Warlords of Draenor'    => self::EXPANSION_WOD,
+        'Legion'                 => self::EXPANSION_LEGION,
+        'Battle for Azeroth'     => self::EXPANSION_BFA,
+        'Shadowlands'            => self::EXPANSION_SHADOWLANDS,
     ];
 
     /**

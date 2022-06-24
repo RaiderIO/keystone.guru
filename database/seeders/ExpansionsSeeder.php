@@ -37,6 +37,36 @@ class ExpansionsSeeder extends Seeder
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.vanilla.name'            => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_VANILLA,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.tbc.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_TBC,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.wotlk.name'              => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_WOTLK,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.cata.name'               => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_CATACLYSM,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.mop.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_MOP,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.wod.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_WOD,
+                'color'       => '#5832a8',
+                'released_at' => Carbon::make('2020-11-24 00:00:00'),
             ]),
         ];
 
