@@ -2389,103 +2389,60 @@
             }
         ]
     },
-  {
-    "id": 38,
-    "expansion_id": 3,
-    "zone_id": 13577,
-    "mdt_id": 38,
-    "key": "tazaveshsoleahsgambit",
-    "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
-    "slug": "tazavesh-so-leahs-gambit",
-    "enemy_forces_required": 346,
-    "enemy_forces_required_teeming": 0,
-    "timer_max_seconds": 1800,
-    "floor_count": 4,
-    "floors": [
-      {
-        "id": 97,
-        "index": 1,
-        "mdt_sub_level": null,
-        "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.stormheim",
-        "default": 1,
-        "min_enemy_size": null,
-        "max_enemy_size": null,
-        "percentage_display_zoom": null,
-        "floorcouplings": [
-          {
-            "id": 232,
-            "floor1_id": 97,
-            "floor2_id": 98,
-            "direction": "right"
-          }
-        ]
-      },
-      {
-        "id": 98,
-        "index": 2,
-        "mdt_sub_level": null,
-        "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.aggramars_vault",
-        "default": 0,
-        "min_enemy_size": null,
-        "max_enemy_size": null,
-        "percentage_display_zoom": 1,
-        "floorcouplings": [
-          {
-            "id": 227,
-            "floor1_id": 98,
-            "floor2_id": 97,
-            "direction": "left"
-          },
-          {
-            "id": 228,
-            "floor1_id": 98,
-            "floor2_id": 99,
-            "direction": "down"
-          }
-        ]
-      },
-      {
-        "id": 99,
-        "index": 3,
-        "mdt_sub_level": null,
-        "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.boralus_harbor",
-        "default": 0,
-        "min_enemy_size": null,
-        "max_enemy_size": null,
-        "percentage_display_zoom": 1,
-        "floorcouplings": [
-          {
-            "id": 229,
-            "floor1_id": 99,
-            "floor2_id": 98,
-            "direction": "up"
-          },
-          {
-            "id": 230,
-            "floor1_id": 99,
-            "floor2_id": 100,
-            "direction": "left"
-          }
-        ]
-      },
-      {
-        "id": 100,
-        "index": 4,
-        "mdt_sub_level": null,
-        "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.floors.the_opulent_nexus",
-        "default": 0,
-        "min_enemy_size": null,
-        "max_enemy_size": null,
-        "percentage_display_zoom": 1,
-        "floorcouplings": [
-          {
-            "id": 231,
-            "floor1_id": 100,
-            "floor2_id": 99,
-            "direction": "right"
-          }
-        ]
-      }
-    ]
-  }
+    {
+        "id": 38,
+        "expansion_id": 9,
+        "zone_id": 6912,
+        "mdt_id": 0,
+        "key": "auchindoun",
+        "name": "dungeons.wod.auchindoun.name",
+        "slug": "auchindoun",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 39,
+        "expansion_id": 9,
+        "zone_id": 6874,
+        "mdt_id": 0,
+        "key": "bloodmaw_slag_mines",
+        "name": "dungeons.wod.bloodmaw_slag_mines.name",
+        "slug": "bloodmaw-slag-mines",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 40,
+        "expansion_id": 9,
+        "zone_id": 6951,
+        "mdt_id": 0,
+        "key": "irondocks",
+        "name": "dungeons.wod.iron_docks.name",
+        "slug": "iron-docks",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 41,
+        "expansion_id": 9,
+        "zone_id": 6984,
+        "mdt_id": 0,
+        "key": "grimraildepot",
+        "name": "dungeons.wod.grimrail_depot.name",
+        "slug": "grimrail-depot",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    }
 ]

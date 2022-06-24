@@ -45,15 +45,16 @@ class Expansion extends CacheModel
         'updated_at',
     ];
 
-    const EXPANSION_VANILLA     = 'vanilla';
-    const EXPANSION_TBC         = 'tbc';
-    const EXPANSION_WOTLK       = 'wotlk';
-    const EXPANSION_CATACLYSM   = 'cata';
-    const EXPANSION_MOP         = 'mop';
-    const EXPANSION_WOD         = 'wod';
-    const EXPANSION_LEGION      = 'legion';
-    const EXPANSION_BFA         = 'bfa';
-    const EXPANSION_SHADOWLANDS = 'shadowlands';
+    const EXPANSION_VANILLA      = 'vanilla';
+    const EXPANSION_TBC          = 'tbc';
+    const EXPANSION_WOTLK        = 'wotlk';
+    const EXPANSION_CATACLYSM    = 'cata';
+    const EXPANSION_MOP          = 'mop';
+    const EXPANSION_WOD          = 'wod';
+    const EXPANSION_LEGION       = 'legion';
+    const EXPANSION_BFA          = 'bfa';
+    const EXPANSION_SHADOWLANDS  = 'shadowlands';
+    const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
     const ALL = [
         'Classic'                => self::EXPANSION_VANILLA,
@@ -65,6 +66,7 @@ class Expansion extends CacheModel
         'Legion'                 => self::EXPANSION_LEGION,
         'Battle for Azeroth'     => self::EXPANSION_BFA,
         'Shadowlands'            => self::EXPANSION_SHADOWLANDS,
+        'Dragonflight'           => self::EXPANSION_DRAGONFLIGHT,
     ];
 
     /**

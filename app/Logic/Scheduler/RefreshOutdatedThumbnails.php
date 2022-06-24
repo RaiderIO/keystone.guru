@@ -29,7 +29,7 @@ class RefreshOutdatedThumbnails
                     ->orWhere(function (Builder $builder) {
                         // If it is in the queue to be refreshed
                         $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
-                            ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours')));
+                            ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                     });
             })
             ->where(function (Builder $builder) {
