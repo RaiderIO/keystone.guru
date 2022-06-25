@@ -2,7 +2,19 @@
 
 return [
     'wod'         => [
-        'iron_docs'      => [
+        'auchindoun'      => [
+            'name'   => 'Auchindoun',
+            'floors' => [
+                'auchindoun' => 'Auchindoun',
+            ],
+        ],
+        'bloodmaw_slag_mines'      => [
+            'name'   => 'Bloodmaw Slag Mines',
+            'floors' => [
+                'bloodmaw_slag_mines' => 'Bloodmaw Slag Mines',
+            ],
+        ],
+        'iron_docks'      => [
             'name'   => 'Iron Docks',
             'floors' => [
                 'iron_docks' => 'Iron Docks',

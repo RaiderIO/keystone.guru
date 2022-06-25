@@ -29,6 +29,9 @@ return [
                          Персональные теги, которые могли быть прикреплены или не были прикреплены владельцем маршрута, не будут видны.',
     ],
     'invite' => [
+        'linkpreview_title' => '@todo ru: .invite.linkpreview_title',
+        'linkpreview_description' => '@todo ru: .invite.linkpreview_description',
+
         'title'        => 'Приглашение в команду %s',
         'header'       => 'Приглашение в команду %s',
         'invalid_team' => 'Неверная команда',

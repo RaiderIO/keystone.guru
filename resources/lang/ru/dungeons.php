@@ -1,6 +1,35 @@
 <?php
 
 return [
+    'wod'         => [
+        'auchindoun'      => [
+            'name'   => '@todo ru: .wod.auchindoun.name',
+            'floors' => [
+                'auchindoun' => '@todo ru: .wod.auchindoun.floors.auchindoun',
+            ],
+        ],
+        'bloodmaw_slag_mines'      => [
+            'name'   => '@todo ru: .wod.bloodmaw_slag_mines.name',
+            'floors' => [
+                'bloodmaw_slag_mines' => '@todo ru: .wod.bloodmaw_slag_mines.floors.bloodmaw_slag_mines',
+            ],
+        ],
+        'iron_docks'      => [
+            'name'   => '@todo ru: .wod.iron_docks.name',
+            'floors' => [
+                'iron_docks' => '@todo ru: .wod.iron_docks.floors.iron_docks',
+            ],
+        ],
+        'grimrail_depot' => [
+            'name'   => '@todo ru: .wod.grimrail_depot.name',
+            'floors' => [
+                'grimrail_depot'     => '@todo ru: .wod.grimrail_depot.floors.grimrail_depot',
+                'rafters'            => '@todo ru: .wod.grimrail_depot.floors.rafters',
+                'rear_train_cars'    => '@todo ru: .wod.grimrail_depot.floors.rear_train_cars',
+                'forward_train_cars' => '@todo ru: .wod.grimrail_depot.floors.forward_train_cars',
+            ],
+        ],
+    ],
     'legion'      => [
         'arcway'               => [
             'name'   => 'Катакомбы Сурамара',
@@ -285,7 +314,7 @@ return [
                 'the_grand_menagerie' => 'Большой зверинец',
                 'the_post'            => 'Отделение ПОЧТ',
                 'myzas_oasis'         => '\"Оазис Мизы\""',
-            ]
+            ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Тазавеш: гамбит Со\'леи',
