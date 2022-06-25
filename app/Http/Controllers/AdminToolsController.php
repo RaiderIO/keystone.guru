@@ -121,8 +121,9 @@ class AdminToolsController extends Controller
                 }
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
+                $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    if ($npcCandidate->exists) {
+                    if ($existed) {
                         $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     } else {
                         $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
