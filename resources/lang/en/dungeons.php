@@ -2,29 +2,29 @@
 
 return [
     'wod'         => [
-        'auchindoun'      => [
+        'auchindoun'          => [
             'name'   => 'Auchindoun',
             'floors' => [
                 'auchindoun' => 'Auchindoun',
             ],
         ],
-        'bloodmaw_slag_mines'      => [
+        'bloodmaw_slag_mines' => [
             'name'   => 'Bloodmaw Slag Mines',
             'floors' => [
                 'bloodmaw_slag_mines' => 'Bloodmaw Slag Mines',
             ],
         ],
-        'iron_docks'      => [
+        'iron_docks'          => [
             'name'   => 'Iron Docks',
             'floors' => [
                 'iron_docks' => 'Iron Docks',
             ],
         ],
-        'grimrail_depot' => [
+        'grimrail_depot'      => [
             'name'   => 'Grimrail Depot',
             'floors' => [
-                'grimrail_depot'     => 'Grimrail Depot',
                 'rafters'            => 'Rafters',
+                'train_depot'        => 'Train Depot',
                 'rear_train_cars'    => 'Rear Train Cars',
                 'forward_train_cars' => 'Forward Train Cars',
             ],

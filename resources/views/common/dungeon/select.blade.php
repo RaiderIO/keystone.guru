@@ -25,11 +25,12 @@ if (!isset($dungeons)) {
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
 // Group the dungeons by expansion
+// @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     /** @var \App\Models\Expansion $expansion */
     $expansion = $allExpansions->where('id', $expansionId)->first();
 
-    if ($expansion->active) {
+    if ($expansion->active || !$activeOnly) {
         $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansion->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
             return [$id => __($name)];
         })->toArray();
