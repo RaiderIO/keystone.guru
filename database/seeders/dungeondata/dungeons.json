@@ -2454,7 +2454,44 @@
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "timer_max_seconds": 1800,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 106,
+                "index": 1,
+                "mdt_sub_level": 1,
+                "name": "dungeons.wod.grimrail_depot.floors.grimrail_depot",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 264,
+                        "floor1_id": 106,
+                        "floor2_id": 107,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 107,
+                "index": 2,
+                "mdt_sub_level": 2,
+                "name": "dungeons.wod.grimrail_depot.floors.rafters",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 263,
+                        "floor1_id": 107,
+                        "floor2_id": 106,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     }
 ]
