@@ -2460,17 +2460,17 @@
                 "id": 106,
                 "index": 1,
                 "mdt_sub_level": 1,
-                "name": "dungeons.wod.grimrail_depot.floors.rafters",
+                "name": "dungeons.wod.grimrail_depot.floors.train_depot",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 267,
+                        "id": 277,
                         "floor1_id": 106,
                         "floor2_id": 107,
-                        "direction": "down"
+                        "direction": "up"
                     }
                 ]
             },
@@ -2478,23 +2478,23 @@
                 "id": 107,
                 "index": 2,
                 "mdt_sub_level": 2,
-                "name": "dungeons.wod.grimrail_depot.floors.train_depot",
+                "name": "dungeons.wod.grimrail_depot.floors.rafters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 270,
+                        "id": 278,
                         "floor1_id": 107,
                         "floor2_id": 106,
-                        "direction": "up"
+                        "direction": "down"
                     },
                     {
-                        "id": 271,
+                        "id": 279,
                         "floor1_id": 107,
                         "floor2_id": 108,
-                        "direction": "right"
+                        "direction": "down"
                     }
                 ]
             },
@@ -2509,16 +2509,16 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 272,
+                        "id": 282,
                         "floor1_id": 108,
                         "floor2_id": 107,
-                        "direction": "left"
+                        "direction": "up"
                     },
                     {
-                        "id": 273,
+                        "id": 283,
                         "floor1_id": 108,
                         "floor2_id": 109,
-                        "direction": "right"
+                        "direction": "left"
                     }
                 ]
             },
@@ -2533,10 +2533,10 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 269,
+                        "id": 284,
                         "floor1_id": 109,
                         "floor2_id": 108,
-                        "direction": "left"
+                        "direction": "right"
                     }
                 ]
             }
