@@ -22,12 +22,14 @@ class NpcClassification extends CacheModel
     const NPC_CLASSIFICATION_ELITE      = 'elite';
     const NPC_CLASSIFICATION_BOSS       = 'boss';
     const NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
+    const NPC_CLASSIFICATION_RARE       = 'rare';
 
     const ALL = [
         self::NPC_CLASSIFICATION_NORMAL     => 1,
         self::NPC_CLASSIFICATION_ELITE      => 2,
         self::NPC_CLASSIFICATION_BOSS       => 3,
         self::NPC_CLASSIFICATION_FINAL_BOSS => 4,
+        self::NPC_CLASSIFICATION_RARE       => 5,
     ];
 
     /**
