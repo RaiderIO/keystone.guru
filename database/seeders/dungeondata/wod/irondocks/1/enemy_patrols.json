@@ -1,0 +1,134 @@
+[
+    {
+        "id": 378,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-96.295368,\"lng\":134.046184},{\"lat\":-95.395411,\"lng\":135.088239},{\"lat\":-91.227191,\"lng\":133.525156},{\"lat\":-81.65923,\"lng\":134.756676},{\"lat\":-91.085092,\"lng\":134.661944},{\"lat\":-94.827018,\"lng\":136.130294},{\"lat\":-96.4375,\"lng\":134.0625}]"
+        }
+    },
+    {
+        "id": 379,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-95.869073,\"lng\":172.270661},{\"lat\":-96.011171,\"lng\":159.055507},{\"lat\":-93.027104,\"lng\":156.545102}]"
+        }
+    },
+    {
+        "id": 380,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-47.24022,\"lng\":200.663244},{\"lat\":-47.312013,\"lng\":208.991307},{\"lat\":-31.589205,\"lng\":208.704132}]"
+        }
+    },
+    {
+        "id": 381,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-66.911679,\"lng\":215.237354},{\"lat\":-77.680726,\"lng\":215.596323},{\"lat\":-82.634488,\"lng\":209.709243}]"
+        }
+    },
+    {
+        "id": 382,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-145.166755,\"lng\":149.617961},{\"lat\":-173.81242,\"lng\":149.761548}]"
+        }
+    },
+    {
+        "id": 383,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-169.70295,\"lng\":181.346564},{\"lat\":-139.777775,\"lng\":181.455383}]"
+        }
+    },
+    {
+        "id": 384,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-165.513426,\"lng\":209.585048},{\"lat\":-187.494828,\"lng\":209.857095}]"
+        }
+    },
+    {
+        "id": 385,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-201.695684,\"lng\":225.146139},{\"lat\":-201.314818,\"lng\":218.780238},{\"lat\":-191.521124,\"lng\":210.020323}]"
+        }
+    },
+    {
+        "id": 386,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-156.581945,\"lng\":328.74311},{\"lat\":-188.601911,\"lng\":328.814904}]"
+        }
+    },
+    {
+        "id": 387,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-156.366564,\"lng\":333.696872},{\"lat\":-188.889086,\"lng\":333.768666}]"
+        }
+    },
+    {
+        "id": 388,
+        "floor_id": 105,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-80.91144,\"lng\":336.748102},{\"lat\":-73.337211,\"lng\":336.173753},{\"lat\":-68.70652,\"lng\":331.722547},{\"lat\":-73.767972,\"lng\":329.209769},{\"lat\":-80.875544,\"lng\":329.281563}]"
+        }
+    }
+]
