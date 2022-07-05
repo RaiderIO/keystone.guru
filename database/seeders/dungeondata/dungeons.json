@@ -417,7 +417,20 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 285,
+                        "floor1_id": 24,
+                        "floor2_id": 23,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 286,
+                        "floor1_id": 24,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 23,
@@ -428,7 +441,26 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 287,
+                        "floor1_id": 23,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 288,
+                        "floor1_id": 23,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 289,
+                        "floor1_id": 23,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 22,
@@ -439,7 +471,26 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 290,
+                        "floor1_id": 22,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 291,
+                        "floor1_id": 22,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 292,
+                        "floor1_id": 22,
+                        "floor2_id": 21,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 21,
@@ -450,7 +501,32 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 293,
+                        "floor1_id": 21,
+                        "floor2_id": 24,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 294,
+                        "floor1_id": 21,
+                        "floor2_id": 22,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 295,
+                        "floor1_id": 21,
+                        "floor2_id": 20,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 296,
+                        "floor1_id": 21,
+                        "floor2_id": 19,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 20,
@@ -461,18 +537,50 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 297,
+                        "floor1_id": 20,
+                        "floor2_id": 21,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 298,
+                        "floor1_id": 20,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 19,
                 "index": 6,
                 "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.netherspace",
+                "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 299,
+                        "floor1_id": 19,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 300,
+                        "floor1_id": 19,
+                        "floor2_id": 21,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 301,
+                        "floor1_id": 19,
+                        "floor2_id": 20,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -592,91 +700,183 @@
         "floors": [
             {
                 "id": 29,
-                "index": 7,
+                "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.lower_broken_stair",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 316,
+                        "floor1_id": 29,
+                        "floor2_id": 30,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 30,
-                "index": 8,
+                "index": 2,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_broken_stair",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 317,
+                        "floor1_id": 30,
+                        "floor2_id": 29,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 318,
+                        "floor1_id": 30,
+                        "floor2_id": 31,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 31,
-                "index": 9,
+                "index": 3,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.the_menagerie",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 319,
+                        "floor1_id": 31,
+                        "floor2_id": 30,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 320,
+                        "floor1_id": 31,
+                        "floor2_id": 32,
+                        "direction": "right"
+                    }
+                ]
             },
             {
                 "id": 32,
-                "index": 10,
+                "index": 4,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.guardians_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 321,
+                        "floor1_id": 32,
+                        "floor2_id": 31,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 322,
+                        "floor1_id": 32,
+                        "floor2_id": 33,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 33,
-                "index": 11,
+                "index": 5,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.library_floor",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 323,
+                        "floor1_id": 33,
+                        "floor2_id": 32,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 324,
+                        "floor1_id": 33,
+                        "floor2_id": 34,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 34,
-                "index": 12,
+                "index": 6,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 325,
+                        "floor1_id": 34,
+                        "floor2_id": 33,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 326,
+                        "floor1_id": 34,
+                        "floor2_id": 35,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 35,
-                "index": 13,
+                "index": 7,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.gamesmans_hall",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 327,
+                        "floor1_id": 35,
+                        "floor2_id": 34,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 328,
+                        "floor1_id": 35,
+                        "floor2_id": 36,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 36,
-                "index": 14,
+                "index": 8,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.netherspace",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 329,
+                        "floor1_id": 36,
+                        "floor2_id": 35,
+                        "direction": "right"
+                    }
+                ]
             }
         ]
     },
