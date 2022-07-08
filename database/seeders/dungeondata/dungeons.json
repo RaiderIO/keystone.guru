@@ -419,16 +419,22 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 285,
+                        "id": 330,
                         "floor1_id": 24,
                         "floor2_id": 23,
                         "direction": "up"
                     },
                     {
-                        "id": 286,
+                        "id": 331,
                         "floor1_id": 24,
                         "floor2_id": 22,
                         "direction": "up"
+                    },
+                    {
+                        "id": 332,
+                        "floor1_id": 24,
+                        "floor2_id": 21,
+                        "direction": "right"
                     }
                 ]
             },
@@ -438,24 +444,24 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.upper_livery_stables",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 40,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 287,
+                        "id": 338,
                         "floor1_id": 23,
                         "floor2_id": 24,
                         "direction": "down"
                     },
                     {
-                        "id": 288,
+                        "id": 339,
                         "floor1_id": 23,
                         "floor2_id": 22,
                         "direction": "up"
                     },
                     {
-                        "id": 289,
+                        "id": 340,
                         "floor1_id": 23,
                         "floor2_id": 19,
                         "direction": "up"
@@ -534,18 +540,18 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.opera_hall_balcony",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 44,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 297,
+                        "id": 336,
                         "floor1_id": 20,
                         "floor2_id": 21,
                         "direction": "left"
                     },
                     {
-                        "id": 298,
+                        "id": 337,
                         "floor1_id": 20,
                         "floor2_id": 19,
                         "direction": "up"
@@ -558,24 +564,24 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 16,
+                "max_enemy_size": 34,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 299,
+                        "id": 333,
                         "floor1_id": 19,
                         "floor2_id": 23,
                         "direction": "down"
                     },
                     {
-                        "id": 300,
+                        "id": 334,
                         "floor1_id": 19,
                         "floor2_id": 21,
                         "direction": "right"
                     },
                     {
-                        "id": 301,
+                        "id": 335,
                         "floor1_id": 19,
                         "floor2_id": 20,
                         "direction": "down"
