@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "id": 194,
+        "floor_id": 35,
+        "target_floor_id": 34,
+        "lat": -32.82,
+        "lng": 187.86
+    },
+    {
+        "id": 195,
+        "floor_id": 35,
+        "target_floor_id": 36,
+        "lat": -230.75,
+        "lng": 176.48
+    }
+]

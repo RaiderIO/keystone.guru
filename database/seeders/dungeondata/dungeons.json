@@ -403,9 +403,9 @@
         "key": "lowerkarazhan",
         "name": "dungeons.legion.lower_karazhan.name",
         "slug": "lower-karazhan",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2340,
         "floor_count": 6,
         "floors": [
             {
@@ -699,9 +699,9 @@
         "key": "upperkarazhan",
         "name": "dungeons.legion.upper_karazhan.name",
         "slug": "upper-karazhan",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 169,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "floor_count": 8,
         "floors": [
             {
@@ -757,13 +757,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 319,
+                        "id": 343,
                         "floor1_id": 31,
                         "floor2_id": 30,
                         "direction": "right"
                     },
                     {
-                        "id": 320,
+                        "id": 344,
                         "floor1_id": 31,
                         "floor2_id": 32,
                         "direction": "right"

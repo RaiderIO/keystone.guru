@@ -1,1 +1,163 @@
-[]
+[
+    {
+        "id": 8471,
+        "enemy_pack_id": -1,
+        "npc_id": 115401,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -72.36451557399,
+        "lng": 182.81561829219,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115401
+        }
+    },
+    {
+        "id": 8472,
+        "enemy_pack_id": -1,
+        "npc_id": 115406,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -72.375466050871,
+        "lng": 191.31185037923,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115406
+        }
+    },
+    {
+        "id": 8473,
+        "enemy_pack_id": -1,
+        "npc_id": 115406,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -72.517564478982,
+        "lng": 195.62216936525,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115406
+        }
+    },
+    {
+        "id": 8474,
+        "enemy_pack_id": -1,
+        "npc_id": 115388,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -77.112080321216,
+        "lng": 191.31185037923,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115388
+        }
+    },
+    {
+        "id": 8475,
+        "enemy_pack_id": -1,
+        "npc_id": 115395,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -76.969981893106,
+        "lng": 195.57480322254,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115395
+        }
+    },
+    {
+        "id": 8476,
+        "enemy_pack_id": -1,
+        "npc_id": 115407,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -86.152376624778,
+        "lng": 187.23783186452,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115407
+        }
+    },
+    {
+        "id": 8477,
+        "enemy_pack_id": -1,
+        "npc_id": 115401,
+        "floor_id": 35,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -76.388440607303,
+        "lng": 174.17138807643,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 115401
+        }
+    }
+]
