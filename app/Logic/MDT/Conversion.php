@@ -17,6 +17,12 @@ use Exception;
 class Conversion
 {
     const EXPANSION_NAME_MAPPING = [
+        Expansion::EXPANSION_VANILLA     => null,
+        Expansion::EXPANSION_TBC         => null,
+        Expansion::EXPANSION_WOTLK       => null,
+        Expansion::EXPANSION_CATACLYSM   => null,
+        Expansion::EXPANSION_MOP         => null,
+        Expansion::EXPANSION_WOD         => null,
         Expansion::EXPANSION_LEGION      => 'Legion',
         Expansion::EXPANSION_BFA         => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS => 'Shadowlands',
@@ -100,7 +106,7 @@ class Conversion
      */
     public static function getMDTExpansionName(string $dungeonKey): ?string
     {
-        return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)];
+        return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)] ?? null;
     }
 
     /**

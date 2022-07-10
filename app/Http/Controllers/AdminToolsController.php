@@ -334,7 +334,7 @@ class AdminToolsController extends Controller
         $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
-        foreach (Dungeon::active()->get() as $dungeon) {
+        foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
             $mdtNpcs = (new MDTDungeon($dungeon->key))->getMDTNPCs();
 
