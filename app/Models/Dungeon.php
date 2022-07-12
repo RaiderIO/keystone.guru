@@ -495,6 +495,14 @@ class Dungeon extends CacheModel
         return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
     }
 
+    /**
+     * @return bool
+     */
+    public function hasImageWallpaper(): bool
+    {
+        return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
+    }
+
 
     public static function boot()
     {
