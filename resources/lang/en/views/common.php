@@ -211,7 +211,7 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'routes'                  => ':expansion routes',
+            'routes'                  => ':expansion',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],

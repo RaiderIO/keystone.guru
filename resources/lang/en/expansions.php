@@ -29,4 +29,7 @@ return [
     'shadowlands'        => [
         'name' => 'Shadowlands',
     ],
+    'dragonflight'        => [
+        'name' => 'Dragonflight',
+    ],
 ];

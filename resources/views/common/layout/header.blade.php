@@ -8,11 +8,17 @@ $navs = [
     ]
 ];
 
+$expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
-    $navs[route('dungeonroutes.expansion', ['expansion' => $expansion])] = [
-        'text' => __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
-    ];
+    $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
+        sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
+            url(sprintf('images/expansions/%s.png', $expansion->shortname),
+            ),
+            __($expansion->name),
+            __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+        );
 }
+$navs[__('Expansion routes')] = $expansionRoutes;
 
 $navs[route('misc.affixes')] = [
     'text' => __('views/common.layout.header.affixes')
@@ -46,7 +52,7 @@ $navs[route('misc.affixes')] = [
                 @foreach($navs as $route => $opts)
                     @if($opts === 'divider')
                         <li class="nav-item nav-item-divider"></li>
-                    @else
+                    @elseif(filter_var($route, FILTER_VALIDATE_URL) !== false)
                         <li class="nav-item">
                             <a class="nav-link pr-3 {{ strpos(Request::url(), $route) === 0 ? 'active' : '' }}"
                                href="{{ $route }}">
@@ -58,6 +64,23 @@ $navs[route('misc.affixes')] = [
                                     <sup class="text-success">{{ __('views/common.layout.header.new') }}</sup>
                                 @endif
                             </a>
+                        </li>
+                    @else
+                        <?php
+                        /** @noinspection PhpUndefinedVariableInspection */
+                        $headerText = $route;
+                        $dropdownId = \Illuminate\Support\Str::slug($headerText)
+                        ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="{{ $dropdownId }}" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ $headerText }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="{{ $dropdownId }}">
+                                @foreach($opts as $route => $text)
+                                    <a class="dropdown-item" href="{{ $route }}">{!! $text !!}</a>
+                                @endforeach
+                            </div>
                         </li>
                     @endif
                 @endforeach
