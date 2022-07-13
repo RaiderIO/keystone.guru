@@ -173,4 +173,13 @@
     </ul>
     </p>
 
+    <h4>
+        Warlords of Draenor artwork by Liang xing (used with permission)
+    </h4>
+    <ul>
+        <li>
+            <a href="https://www.artstation.com/artwork/QzNqL">https://www.artstation.com/artwork/QzNqL</a>
+        </li>
+    </ul>
+
 @endsection
