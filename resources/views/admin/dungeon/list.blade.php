@@ -53,10 +53,10 @@
                     </td>
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
-                    <img src="{{ $dungeon->expansion->iconfile->getUrl() }}"
-                         title="{{ $dungeon->expansion->name }}"
+                    <img src="{{ url(sprintf('images/expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                         title="{{ __($dungeon->expansion->name) }}"
                          data-toggle="tooltip"
-                         style="width: 32px; height: 32px;"/>
+                         style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>
                 <td>{{ $dungeon->enemy_forces_required }}</td>
