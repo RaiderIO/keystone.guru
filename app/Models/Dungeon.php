@@ -141,13 +141,13 @@ class Dungeon extends CacheModel
 
     // Warlords of Draenor
     const DUNGEON_AUCHINDOUN                = 'auchindoun';
-    const DUNGEON_BLOODMAW_SLAG_MINES       = 'bloodmaw_slag_mines';
-    const DUNGEON_IRON_DOCKS                = 'iron_docks';
-    const DUNGEON_GRIMRAIL_DEPOT            = 'grimrail_depot';
-    const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoon_burial_grounds';
+    const DUNGEON_BLOODMAW_SLAG_MINES       = 'bloodmawslagmines';
+    const DUNGEON_IRON_DOCKS                = 'irondocks';
+    const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
+    const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
     const DUNGEON_SKYREACH                  = 'skyreach';
-    const DUNGEON_THE_EVERBLOOM             = 'the_everbloom';
-    const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upper_blackrock_spire';
+    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom';
+    const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upperblackrockspire';
 
     // Legion
     const DUNGEON_ARCWAY                      = 'arcway';

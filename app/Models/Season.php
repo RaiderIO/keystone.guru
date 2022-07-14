@@ -10,6 +10,7 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Log;
  *
  * @property Expansion $expansion
  * @property Collection|AffixGroup[] $affixgroups
+ * @property Collection|Dungeon[] $dungeons
  *
  * @mixin Eloquent
  */
@@ -51,6 +53,22 @@ class Season extends CacheModel
     public function affixgroups(): HasMany
     {
         return $this->hasMany('App\Models\AffixGroup\AffixGroup');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function dungeons(): HasManyThrough
+    {
+        return $this->hasManyThrough(Dungeon::class, SeasonDungeon::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function seasondungeons(): HasMany
+    {
+        return $this->hasMany(SeasonDungeon::class);
     }
 
     /**

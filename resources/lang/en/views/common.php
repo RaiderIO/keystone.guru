@@ -168,8 +168,8 @@ return [
     ],
     'general'      => [
         'linkpreview' => [
-            'title_suffix'       => ' | Keystone.guru',
-            'description_suffix' => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
+            'title_suffix'               => ' | Keystone.guru',
+            'description_suffix'         => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
             'twitter_title_suffix'       => ' | Keystone.guru',
             'twitter_description_suffix' => ' Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
@@ -211,6 +211,7 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
+            'season'                  => 'Season :season',
             'routes'                  => ':expansion',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',

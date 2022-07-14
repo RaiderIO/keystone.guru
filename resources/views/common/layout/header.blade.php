@@ -18,6 +18,10 @@ foreach ($activeExpansions as $expansion) {
             __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
+//$navs[route('dungeonroutes.season', ['season' => \App\Models\Season::find(10)])] = [
+//    'text' => __('views/common.layout.header.season', ['season' => 4])
+//];
+
 $navs[__('Expansion routes')] = $expansionRoutes;
 
 $navs[route('misc.affixes')] = [
