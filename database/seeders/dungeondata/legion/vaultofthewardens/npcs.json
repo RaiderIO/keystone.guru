@@ -193,7 +193,7 @@
         "id": 97677,
         "dungeon_id": 13,
         "classification_id": 2,
-        "npc_type_id": 2,
+        "npc_type_id": 4,
         "npc_class_id": 1,
         "name": "Barbed Spiderling",
         "base_health": 12345,
