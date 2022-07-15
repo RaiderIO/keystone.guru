@@ -4,19 +4,6 @@
 
 @section('content')
 
-    <?php
-        dd(\App\Models\Dungeon::whereIn('key', [
-                    \App\Models\Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
-                    \App\Models\Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
-                    \App\Models\Dungeon::DUNGEON_MECHAGON_JUNKYARD,
-                    \App\Models\Dungeon::DUNGEON_MECHAGON_WORKSHOP,
-                    \App\Models\Dungeon::DUNGEON_LOWER_KARAZHAN,
-                    \App\Models\Dungeon::DUNGEON_UPPER_KARAZHAN,
-                    \App\Models\Dungeon::DUNGEON_GRIMRAIL_DEPOT,
-                    \App\Models\Dungeon::DUNGEON_IRON_DOCKS,
-                ])->get());
-    ?>
-
     <p>
         This website could not exist without the help of talented developers around the world, offering their hard work
         for free for usage in projects such as these. The following packages/images deserve credit for being integrated

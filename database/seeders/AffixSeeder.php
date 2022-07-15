@@ -61,7 +61,7 @@ class AffixSeeder extends Seeder
         ]);
 
         foreach ($affixes as $affix) {
-            /** @var $affix Affix */
+            /** @var $affix Model */
             $affix->save();
 
             $iconName          = strtolower(str_replace(' ', '', $affix->key));

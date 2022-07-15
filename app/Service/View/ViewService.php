@@ -76,7 +76,7 @@ class ViewService implements ViewServiceInterface
                 )->latest()->first();
 
             $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::orderBy('released_at', 'desc')->get();
+            $allExpansions = Expansion::all();
 
             /** @var Collection|ExpansionData[] $expansionsData */
             $expansionsData = collect();
@@ -85,7 +85,7 @@ class ViewService implements ViewServiceInterface
             }
 
             /** @var Collection|Expansion[] $activeExpansions */
-            $activeExpansions = Expansion::active()->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->orderBy('id', 'desc')->get();
 
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();

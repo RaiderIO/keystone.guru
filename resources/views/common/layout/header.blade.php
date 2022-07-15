@@ -18,9 +18,11 @@ foreach ($activeExpansions as $expansion) {
             __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
-//$navs[route('dungeonroutes.season', ['season' => \App\Models\Season::find(10)])] = [
-//    'text' => __('views/common.layout.header.season', ['season' => 4])
-//];
+// @TODO This needs to be changed to 'current season' when Season 4 is actually live
+$currentSeason = \App\Models\Season::find(9);
+$navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
+    'text' => __('views/common.layout.header.season', ['season' => 4])
+];
 
 $navs[__('Expansion routes')] = $expansionRoutes;
 

@@ -80,7 +80,7 @@
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
-                            {{ __($dungeonName) }}
+                            {{ $dungeonName }}
                         </td>
                         <td>
                             {{

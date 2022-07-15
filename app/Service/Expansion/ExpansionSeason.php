@@ -39,7 +39,6 @@ class ExpansionSeason
             $this->isPrideful  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id;
             $this->isTormented = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id;
             $this->isInfernal  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id;
-
         }
 
         $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $this);

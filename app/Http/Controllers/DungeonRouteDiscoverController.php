@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -33,6 +34,56 @@ class DungeonRouteDiscoverController extends Controller
     public function discover(ExpansionService $expansionService)
     {
         return redirect()->route('dungeonroutes.expansion', ['expansion' => $expansionService->getCurrentExpansion()]);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param int $seasonIndex
+     * @param ExpansionServiceInterface $expansionService
+     * @param DiscoverServiceInterface $discoverService
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeason(
+        Expansion                 $expansion,
+        int                       $seasonIndex,
+        ExpansionServiceInterface $expansionService,
+        DiscoverServiceInterface  $discoverService
+    )
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        $discoverService = $discoverService->withExpansion($expansion);
+
+        // Redirect to the current expansion
+        if (!$expansion->active) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $userRegion = GameServerRegion::getUserOrDefaultRegion();
+
+        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+
+        return view('dungeonroute.discover.discover', [
+            'breadcrumbs'   => 'dungeonroutes.discover',
+            'gridDungeons'  => $season->dungeons()->active()->get(),
+            'expansion'     => $expansion,
+            'dungeonroutes' => [
+                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
+                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'new'      => $discoverService->new(),
+                'popular'  => $discoverService->popularGroupedByDungeon(),
+            ],
+        ]);
     }
 
     /**

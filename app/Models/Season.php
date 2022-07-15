@@ -9,8 +9,8 @@ use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
  * @property $id int
  * @property $expansion_id int
  * @property $seasonal_affix_id int
+ * @property $index int
  * @property $start datetime
  * @property $presets int
  *
@@ -32,7 +33,7 @@ class Season extends CacheModel
 {
     use HasStart;
 
-    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'start', 'presets'];
+    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets'];
     public $with = ['expansion', 'affixgroups'];
     public $timestamps = false;
 
@@ -56,11 +57,11 @@ class Season extends CacheModel
     }
 
     /**
-     * @return HasManyThrough
+     * @return BelongsToMany
      */
-    public function dungeons(): HasManyThrough
+    public function dungeons(): BelongsToMany
     {
-        return $this->hasManyThrough(Dungeon::class, SeasonDungeon::class);
+        return $this->belongsToMany('App\Models\Dungeon', 'season_dungeons');
     }
 
     /**

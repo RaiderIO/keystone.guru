@@ -204,7 +204,7 @@ class SeasonService implements SeasonServiceInterface
         $simulatedTime        = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
         for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
-            if ($nextSeason !== null) {
+            if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {
                     // Move to the next season

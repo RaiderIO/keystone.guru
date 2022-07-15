@@ -34,60 +34,63 @@ class SeasonsSeeder extends Seeder
             [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id' => 6,
+                'index'             => 1,
                 'start'             => '2018-09-04 00:00:00',
                 'presets'           => 3,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id' => 16,
+                'index'             => 2,
                 'start'             => '2019-01-23 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id' => 17,
+                'index'             => 3,
                 'start'             => '2019-07-10 00:00:00',
                 'presets'           => 3,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id' => 18,
+                'index'             => 4,
                 'start'             => '2020-01-21 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 22,
+                'index'             => 1,
                 'start'             => '2020-12-08 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 23,
+                'index'             => 2,
                 'start'             => '2021-07-06 00:00:00',
                 'presets'           => 2,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_LEGION),
                 'seasonal_affix_id' => 25,
+                'index'             => 1,
                 'start'             => '2021-12-28 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 26,
+                'index'             => 3,
                 'start'             => '2022-03-01 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 26,
-                'start'             => '2022-03-01 00:00:00',
-                'presets'           => 0,
-                'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
-            ], [
-                'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
-                'seasonal_affix_id' => 26,
+                'index'             => 4,
                 'start'             => '2022-08-02 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => Dungeon::whereIn('key', [
@@ -123,5 +126,6 @@ class SeasonsSeeder extends Seeder
     private function _rollback()
     {
         DB::table('seasons')->truncate();
+        DB::table('season_dungeons')->truncate();
     }
 }
