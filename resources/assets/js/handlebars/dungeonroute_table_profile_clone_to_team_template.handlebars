@@ -1,9 +1,13 @@
 <h3>{{clone_to_team_label}}</h3>
 <div class="form-group">
     {{#each teams }}
-        <input id="clone-to-team-{{../publicKey}}" type="radio" value="{{public_key}}" name="clone-to-team-{{../publicKey}}">
-        <label for="clone-to-team-{{../publicKey}}">
-            {{name}}
-        </label>
+        <div class="row">
+            <div class="col">
+                <input id="clone-to-team-{{../publicKey}}" type="radio" value="{{public_key}}" name="clone-to-team-{{../publicKey}}">
+                <label for="clone-to-team-{{../publicKey}}">
+                    {{name}}
+                </label>
+            </div>
+        </div>
     {{/each}}
 </div>
