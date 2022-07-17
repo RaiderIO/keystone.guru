@@ -105,5 +105,9 @@ return [
         'name'        => 'Encrypted',
         'description' => 'Enemies throughout the dungeon possess relics of the First Ones. Destroy the relics to summon the First Ones\' Automa and gain powerful bonuses, based on the order in which they were destroyed.',
     ],
+    'shrouded'              => [
+        'name'        => 'Shrouded',
+        'description' => 'Nathrezim infiltrators have disguised themselves among enemies throughout the dungeon. Cartel Ta will reward you handsomely for assisting in their capture.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 ];

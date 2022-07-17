@@ -29,4 +29,7 @@ return [
     'shadowlands'        => [
         'name' => 'Темные земли',
     ],
+    'dragonflight'        => [
+        'name' => '@todo ru: .dragonflight.name',
+    ],
 ];

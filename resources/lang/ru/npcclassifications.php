@@ -5,4 +5,5 @@ return [
     'elite'     => 'Элитный',
     'boss'      => 'Босс',
     'finalboss' => 'Последний босс',
+    'rare'      => '@todo ru: .rare',
 ];

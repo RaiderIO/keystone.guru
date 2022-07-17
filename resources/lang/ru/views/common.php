@@ -168,8 +168,8 @@ return [
     ],
     'general'      => [
         'linkpreview' => [
-            'title_suffix'       => '@todo ru: .general.linkpreview.title_suffix',
-            'description_suffix' => '@todo ru: .general.linkpreview.description_suffix',
+            'title_suffix'               => '@todo ru: .general.linkpreview.title_suffix',
+            'description_suffix'         => '@todo ru: .general.linkpreview.description_suffix',
             'twitter_title_suffix'       => '@todo ru: .general.linkpreview.twitter_title_suffix',
             'twitter_description_suffix' => '@todo ru: .general.linkpreview.twitter_description_suffix',
         ],
@@ -211,6 +211,7 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
+            'season'                  => '@todo ru: .layout.header.season',
             'routes'                  => ':expansion',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
