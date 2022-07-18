@@ -9,6 +9,7 @@ use App\Models\Expansion;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Models\Release;
+use App\Models\Season;
 use App\Models\Spell;
 use App\Models\Team;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -48,6 +49,14 @@ Breadcrumbs::for('dungeonroutes.expansion', function (Generator $trail, Expansio
 Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail) {
     $trail->parent('dungeonroutes');
     $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeonroutes.search'));
+});
+
+/**
+ * Season
+ */
+Breadcrumbs::for('dungeonroutes.season', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season]));
 });
 
 /**

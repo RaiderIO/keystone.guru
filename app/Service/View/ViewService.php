@@ -60,7 +60,7 @@ class ViewService implements ViewServiceInterface
             $dungeonsSelectQuery = Dungeon::select('dungeons.*')
                 ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
                 ->where('expansions.active', true)
-                ->orderByRaw('expansion_id DESC, dungeons.name');
+                ->orderByRaw('expansions.released_at DESC, dungeons.name');
 
             $allDungeonsByExpansionId = $dungeonsSelectQuery
                 ->get();
@@ -76,7 +76,7 @@ class ViewService implements ViewServiceInterface
                 )->latest()->first();
 
             $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::all();
+            $allExpansions = Expansion::orderBy('released_at', 'desc')->get();
 
             /** @var Collection|ExpansionData[] $expansionsData */
             $expansionsData = collect();
@@ -85,7 +85,7 @@ class ViewService implements ViewServiceInterface
             }
 
             /** @var Collection|Expansion[] $activeExpansions */
-            $activeExpansions = Expansion::active()->orderBy('id', 'desc')->get();
+            $activeExpansions = Expansion::active()->orderBy('released_at', 'desc')->get();
 
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();
@@ -145,7 +145,7 @@ class ViewService implements ViewServiceInterface
                 // Misc
                 'activeExpansions'                 => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                    => $allExpansions,
-                'dungeonsByExpansionIdDesc'        => Dungeon::orderByRaw('expansion_id DESC, name')->get(),
+                'dungeonsByExpansionIdDesc'        => $allDungeonsByExpansionId,
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc'  => $activeDungeonsByExpansionId,
                 'siegeOfBoralus'                   => Dungeon::siegeOfBoralus()->first(),
