@@ -1,0 +1,107 @@
+{
+    "id": 130,
+    "release_changelog_id": 137,
+    "version": "v4.7",
+    "title": "Season 4",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-07-18T20:51:39+00:00",
+    "updated_at": "2022-07-18T20:51:39+00:00",
+    "changelog": {
+        "id": 137,
+        "release_id": 130,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1189,
+                "change": "Updated the URLs for all route pages to be more descriptive than just the route key. The short versions will still work - but they will expand to bigger urls containing the dungeon name etc.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1190,
+                "change": "Added link previews to the majority of the site.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1218,
+                "change": "Added support for all expansions (old and new) and dungeons.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1228,
+                "change": "Added graphics for the new dungeons and expansions.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1233,
+                "change": "Added support for Shrouded affix.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1234,
+                "change": "Main navigation now shows Season 4 and optionally routes for all expansions & dungeons (that I have mappings for).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1217,
+                "change": "Added Grimrail Depot and Iron Docks mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1219,
+                "change": "Added Lower Karazhan and Upper Karazhan mapping.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 137,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1185,
+                "change": "Fixed an issue having the server run out of memory periodically.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

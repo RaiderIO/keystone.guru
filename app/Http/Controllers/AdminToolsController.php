@@ -440,6 +440,15 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @return void
+     */
+    public function mappingForceSync(Request $request)
+    {
+        Artisan::call('mapping:sync', ['--force' => true]);
+    }
+
+    /**
+     * @param Request $request
      * @return array
      */
     public function applychange(Request $request)

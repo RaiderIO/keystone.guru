@@ -97,16 +97,29 @@ class NpcController extends Controller
             if ($oldId > 0) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
+
+            // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
-            if ($npc->dungeon === null) {
+            $npcAllDungeon       = ($npc->dungeon === null);
+            $npcBeforeAllDungeon = ($npcBefore->dungeon === null);
+            if ($npcAllDungeon || $npcBeforeAllDungeon) {
                 // Broadcast the event for all dungeons
                 foreach (Dungeon::all() as $dungeon) {
-                    broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                    if ($npc->dungeon === null) {
+                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                    }
+                    if ($npcBefore->dungeon === null) {
+                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
+                    }
                 }
-            } else {
-                // Let previous dungeon know that this NPC is no longer available
-                broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
+            }
+
+            // Let previous dungeon know that this NPC is no longer available
+            if (!$npcAllDungeon) {
                 broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+            }
+            if (!$npcBeforeAllDungeon) {
+                broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
