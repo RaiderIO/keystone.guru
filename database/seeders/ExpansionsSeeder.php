@@ -28,7 +28,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00'),
             ]), 'expansions.battle_for_azeroth.name' => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
                 'released_at' => Carbon::make('2018-08-14 00:00:00'),
@@ -63,7 +63,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#34bf06',
                 'released_at' => Carbon::make('2012-09-25 00:00:00'),
             ]), 'expansions.wod.name'                => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_WOD,
                 'color'       => '#875f03',
                 'released_at' => Carbon::make('2014-11-13 00:00:00'),
