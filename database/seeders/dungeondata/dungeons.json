@@ -2668,12 +2668,12 @@
                 "mdt_sub_level": 1,
                 "name": "dungeons.wod.grimrail_depot.floors.train_depot",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 36,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 277,
+                        "id": 346,
                         "floor1_id": 106,
                         "floor2_id": 107,
                         "direction": "up"
@@ -2686,18 +2686,18 @@
                 "mdt_sub_level": 2,
                 "name": "dungeons.wod.grimrail_depot.floors.rafters",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 36,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 278,
+                        "id": 347,
                         "floor1_id": 107,
                         "floor2_id": 106,
                         "direction": "down"
                     },
                     {
-                        "id": 279,
+                        "id": 348,
                         "floor1_id": 107,
                         "floor2_id": 108,
                         "direction": "down"
