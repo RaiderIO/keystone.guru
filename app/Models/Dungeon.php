@@ -484,7 +484,7 @@ class Dungeon extends CacheModel
      */
     public function getImageTransparentUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_transparent.jpg', $this->expansion->shortname, $this->key));
+        return url(sprintf('images/dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
     }
 
     /**
