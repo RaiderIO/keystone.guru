@@ -12,6 +12,7 @@ use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -163,19 +164,20 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService, $thumbnailService)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -185,15 +187,16 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return DungeonRoute
      * @throws Exception
      */
-    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): DungeonRoute
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): DungeonRoute
     {
         $dungeonroute = new DungeonRoute();
 
         // May fail
-        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService, $expansionService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -351,18 +354,19 @@ class DungeonRouteController extends Controller
      *
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
+        $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
@@ -374,14 +378,15 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
+        $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
@@ -392,13 +397,14 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService)
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->storetemporary($request, $seasonService);
+        $dungeonroute = $this->storetemporary($request, $seasonService, $expansionService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
