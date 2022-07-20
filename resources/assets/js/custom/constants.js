@@ -93,6 +93,7 @@ const AFFIX_TORMENTED = 'Tormented';
 const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
+const AFFIX_SHROUDED = 'Shrouded';
 
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;

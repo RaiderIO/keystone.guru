@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -37,6 +38,57 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @param Expansion $expansion
+     * @param int $seasonIndex
+     * @param ExpansionServiceInterface $expansionService
+     * @param DiscoverServiceInterface $discoverService
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeason(
+        Expansion                 $expansion,
+        int                       $seasonIndex,
+        ExpansionServiceInterface $expansionService,
+        DiscoverServiceInterface  $discoverService
+    )
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        $discoverService = $discoverService->withExpansion($expansion);
+
+        // Redirect to the current expansion
+        if (!$expansion->active) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $userRegion = GameServerRegion::getUserOrDefaultRegion();
+
+        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+
+        return view('dungeonroute.discover.discover', [
+            'breadcrumbs'       => 'dungeonroutes.season',
+            'breadcrumbsParams' => [$expansion, $season],
+            'gridDungeons'      => $season->dungeons()->active()->get(),
+            'expansion'         => $expansion,
+            'dungeonroutes'     => [
+                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
+                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'new'      => $discoverService->new(),
+                'popular'  => $discoverService->popularGroupedByDungeon(),
+            ],
+        ]);
+    }
+
+    /**
+     * @param Expansion $expansion
      * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
@@ -63,10 +115,11 @@ class DungeonRouteDiscoverController extends Controller
         $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
 
         return view('dungeonroute.discover.discover', [
-            'breadcrumbs'   => 'dungeonroutes.discover',
-            'gridDungeons'  => $expansion->dungeons()->active()->get(),
-            'expansion'     => $expansion,
-            'dungeonroutes' => [
+            'breadcrumbs'       => 'dungeonroutes.expansion',
+            'breadcrumbsParams' => [$expansion],
+            'gridDungeons'      => $expansion->dungeons()->active()->get(),
+            'expansion'         => $expansion,
+            'dungeonroutes'     => [
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
                 'new'      => $discoverService->new(),
@@ -96,9 +149,9 @@ class DungeonRouteDiscoverController extends Controller
         $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
 
         return view('dungeonroute.discover.dungeon.overview', [
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
             'expansion'     => $expansion,
             'dungeon'       => $dungeon,
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
             'dungeonroutes' => [
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
@@ -119,10 +172,10 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
 
         return view('dungeonroute.discover.category', [
+            'breadcrumbs'   => 'dungeonroutes.popular',
             'expansion'     => $expansion,
             'category'      => 'popular',
             'title'         => __('controller.dungeonroutediscover.popular'),
-            'breadcrumbs'   => 'dungeonroutes.popular',
             'dungeonroutes' => $discoverService->withExpansion($expansion)->withLimit(config('keystoneguru.discover.limits.category'))->popular(),
         ]);
     }
@@ -141,10 +194,10 @@ class DungeonRouteDiscoverController extends Controller
         $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.category', [
+            'breadcrumbs'   => 'dungeonroutes.thisweek',
             'expansion'     => $expansion,
             'category'      => 'thisweek',
             'title'         => __('controller.dungeonroutediscover.this_week_affixes'),
-            'breadcrumbs'   => 'dungeonroutes.thisweek',
             'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
@@ -167,10 +220,10 @@ class DungeonRouteDiscoverController extends Controller
         $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.category', [
+            'breadcrumbs'   => 'dungeonroutes.nextweek',
             'expansion'     => $expansion,
             'category'      => 'nextweek',
             'title'         => __('controller.dungeonroutediscover.next_week_affixes'),
-            'breadcrumbs'   => 'dungeonroutes.nextweek',
             'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
@@ -190,10 +243,10 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
 
         return view('dungeonroute.discover.category', [
+            'breadcrumbs'   => 'dungeonroutes.new',
             'expansion'     => $expansion,
             'category'      => 'new',
             'title'         => __('controller.dungeonroutediscover.new'),
-            'breadcrumbs'   => 'dungeonroutes.new',
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
@@ -215,10 +268,10 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
             'expansion'     => $expansion,
             'category'      => 'popular',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.popular'), __($dungeon->name)),
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)
@@ -243,10 +296,10 @@ class DungeonRouteDiscoverController extends Controller
         $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.dungeon.category', [
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
             'expansion'     => $expansion,
             'category'      => 'thisweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
@@ -272,10 +325,10 @@ class DungeonRouteDiscoverController extends Controller
         $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
 
         return view('dungeonroute.discover.dungeon.category', [
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
             'expansion'     => $expansion,
             'category'      => 'nextweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
@@ -298,10 +351,10 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
+            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
             'expansion'     => $expansion,
             'category'      => 'new',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withExpansion($expansion)

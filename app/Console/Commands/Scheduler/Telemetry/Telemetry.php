@@ -5,6 +5,7 @@ namespace App\Console\Commands\Scheduler\Telemetry;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\DungeonRouteCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\MachineStats;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\Measurement;
+use App\Console\Commands\Scheduler\Telemetry\Measurement\QueueSize;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\TeamCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\UserCount;
 use Exception;
@@ -45,6 +46,7 @@ class Telemetry extends Command
             new UserCount(),
             new TeamCount(),
             new DungeonRouteCount(),
+            new QueueSize(),
 
             // Machine
             new MachineStats(),

@@ -586,10 +586,11 @@ class DungeonRoute extends Model
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return bool
      * @throws Exception
      */
-    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): bool
+    public function saveTemporaryFromRequest(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): bool
     {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
@@ -609,7 +610,7 @@ class DungeonRoute extends Model
 
         $saveResult = $this->save();
         if ($saveResult) {
-            $this->ensureAffixGroup($seasonService);
+            $this->ensureAffixGroup($seasonService, $expansionService);
         }
 
         return $saveResult;
@@ -620,11 +621,12 @@ class DungeonRoute extends Model
      *
      * @param Request $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @return bool
      * @throws Exception
      */
-    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService): bool
+    public function saveFromRequest(Request $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService): bool
     {
         $result = false;
 
@@ -757,7 +759,7 @@ class DungeonRoute extends Model
                 // Reload the affixes relation
                 $this->load('affixes');
             } else if ($new) {
-                $this->ensureAffixGroup($seasonService);
+                $this->ensureAffixGroup($seasonService, $expansionService);
             }
 
             // Instantly generate a placeholder thumbnail for new routes.
@@ -1086,7 +1088,7 @@ class DungeonRoute extends Model
             $subTitle = __('models.dungeonroute.subtitle_clone_of', [
                 'routeLink' => sprintf(
                     ' <a href="%s">%s</a>',
-                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of]),
+                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of, 'dungeon' => $this->dungeon, 'title' => $this->title]),
                     $this->clone_of
                 ),
             ]);
@@ -1121,13 +1123,14 @@ class DungeonRoute extends Model
     /**
      * Creates a missing
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return void
      * @throws Exception
      */
-    private function ensureAffixGroup(SeasonServiceInterface $seasonService)
+    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
     {
         if ($this->affixgroups()->count() === 0) {
-            $currentSeason = $seasonService->getCurrentSeason($this->dungeon->expansion);
+            $currentSeason = $seasonService->getCurrentSeason($this->dungeon->expansion) ?? $seasonService->getCurrentSeason($expansionService->getCurrentExpansion());
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
                 'affix_group_id'   => optional($currentSeason->getCurrentAffixGroup())->id ?? $currentSeason->affixgroups->first()->id,

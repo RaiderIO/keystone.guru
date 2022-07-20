@@ -1,6 +1,35 @@
 <?php
 
 return [
+    'wod'         => [
+        'auchindoun'          => [
+            'name'   => 'Auchindoun',
+            'floors' => [
+                'auchindoun' => 'Auchindoun',
+            ],
+        ],
+        'bloodmaw_slag_mines' => [
+            'name'   => 'Bloodmaw Slag Mines',
+            'floors' => [
+                'bloodmaw_slag_mines' => 'Bloodmaw Slag Mines',
+            ],
+        ],
+        'iron_docks'          => [
+            'name'   => 'Iron Docks',
+            'floors' => [
+                'iron_docks' => 'Iron Docks',
+            ],
+        ],
+        'grimrail_depot'      => [
+            'name'   => 'Grimrail Depot',
+            'floors' => [
+                'rafters'            => 'Rafters',
+                'train_depot'        => 'Train Depot',
+                'rear_train_cars'    => 'Rear Train Cars',
+                'forward_train_cars' => 'Forward Train Cars',
+            ],
+        ],
+    ],
     'legion'      => [
         'arcway'               => [
             'name'   => 'Arcway',
@@ -285,7 +314,7 @@ return [
                 'the_grand_menagerie' => 'The Grand Menagerie',
                 'the_post'            => 'The P.O.S.T',
                 'myzas_oasis'         => 'Myza\'s Oasis',
-            ]
+            ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'leah\'s Gambit',

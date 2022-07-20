@@ -19,7 +19,7 @@ class ExpansionService implements ExpansionServiceInterface
     public function getExpansionAt(Carbon $carbon): ?Expansion
     {
         return Expansion::where('released_at', '<', $carbon->toDateTimeString())
-            ->orderBy('id', 'desc')
+            ->orderBy('released_at', 'desc')
             ->first();
     }
 
@@ -42,7 +42,7 @@ class ExpansionService implements ExpansionServiceInterface
     /**
      * @inheritDoc
      */
-    public function getCurrentSeason(Expansion $expansion): Season
+    public function getCurrentSeason(Expansion $expansion): ?Season
     {
         return $expansion->currentseason;
     }
@@ -61,7 +61,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
     {
-        return $this->getCurrentSeason($expansion)->getCurrentAffixGroupInRegion($gameServerRegion);
+        return optional($this->getCurrentSeason($expansion))->getCurrentAffixGroupInRegion($gameServerRegion);
     }
 
     /**
@@ -70,7 +70,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getNextAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
     {
-        return $this->getCurrentSeason($expansion)->getNextAffixGroupInRegion($gameServerRegion);
+        return optional($this->getCurrentSeason($expansion))->getNextAffixGroupInRegion($gameServerRegion);
     }
 
     /**
@@ -78,8 +78,9 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeasonAffixGroups(Expansion $expansion): Collection
     {
-        return $this->getCurrentSeason($expansion)->affixgroups()
+        $currentSeason = $this->getCurrentSeason($expansion);
+        return $currentSeason !== null ? $currentSeason->affixgroups()
             ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
-            ->get();
+            ->get() : collect();
     }
 }

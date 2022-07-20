@@ -1,4 +1,4 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $dungeonroute->title, 'showAds' => false, 'analytics' => false])
+@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $dungeonroute->title, 'analytics' => false])
 <?php
 /** @var \App\Models\DungeonRoute $dungeonroute */
 /** @var int $floorId */

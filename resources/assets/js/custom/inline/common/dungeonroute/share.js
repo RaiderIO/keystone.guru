@@ -10,6 +10,10 @@ class CommonDungeonrouteShare extends InlineCode {
             let $shareableLink = $('#map_shareable_link');
             copyToClipboard($shareableLink.val(), $shareableLink);
         });
+        $('#map_shareable_short_link_copy_to_clipboard').unbind('click').bind('click', function () {
+            let $shareableLink = $('#map_shareable_short_link');
+            copyToClipboard($shareableLink.val(), $shareableLink);
+        });
         $('#map_embedable_link_copy_to_clipboard').unbind('click').bind('click', function () {
             let $embedableLink = $('#map_embedable_link');
             copyToClipboard($embedableLink.val(), $embedableLink);

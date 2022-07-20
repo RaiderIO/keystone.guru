@@ -32,7 +32,7 @@ class ExpansionSeasonAffixGroups
     {
         $allRegions = GameServerRegion::all();
 
-        $this->featuredAffixes = $expansionSeason->getSeason()->getFeaturedAffixes();
+        $this->featuredAffixes = optional($expansionSeason->getSeason())->getFeaturedAffixes() ?? collect();
 
         $this->currentAffixGroups = $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansionService, $expansion) {
             return [$region->short => $expansionService->getCurrentAffixGroup($expansion, $region)];
@@ -42,9 +42,13 @@ class ExpansionSeasonAffixGroups
             return [$region->short => $expansionService->getNextAffixGroup($expansion, $region)];
         });
 
-        $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
-            ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
-            ->get();
+        if ($expansionSeason->getSeason() !== null) {
+            $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
+                ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
+                ->get();
+        } else {
+            $this->allAffixGroups = collect();
+        }
     }
 
     /**

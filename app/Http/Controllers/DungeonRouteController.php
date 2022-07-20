@@ -12,6 +12,7 @@ use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -21,6 +22,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
@@ -46,31 +48,43 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
-     * @return Factory|View
+     * @param string|null $title
+     * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function view(Request $request, DungeonRoute $dungeonroute)
+    public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null)
     {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
-        return $this->viewfloor($request, $dungeonroute, optional($defaultFloor)->index ?? '1');
+        return $this->viewfloor($request, $dungeon, $dungeonroute, $title, optional($defaultFloor)->index ?? '1');
     }
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string $title
      * @param string $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function viewfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
+    public function viewfloor(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, string $floorIndex)
     {
         $this->authorize('view', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
+        }
+
+        if (!isset($title) || Str::slug($title) !== $title) {
+            return redirect()->route('dungeonroute.view', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => Str::slug($dungeonroute->title),
+            ]);
         }
 
         $currentReport = null;
@@ -97,10 +111,12 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]);
+            return redirect()->route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
         } else {
             return view('dungeonroute.view', [
+                'dungeon'        => $dungeonroute->dungeon,
                 'dungeonroute'   => $dungeonroute,
+                'title'          => Str::slug($dungeonroute->title),
                 'current_report' => $currentReport,
                 'floor'          => $floor,
                 'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
@@ -110,22 +126,34 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string $floorindex
-     * @return Factory|View
+     * @param string $title
+     * @param string $floorIndex
+     * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function preview(Request $request, DungeonRoute $dungeonroute, string $floorindex)
+    public function preview(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, string $floorIndex)
     {
         $this->authorize('preview', [$dungeonroute, $request->get('secret', '')]);
 
-        if (!is_numeric($floorindex)) {
-            $floorindex = '1';
+        if (!is_numeric($floorIndex)) {
+            $floorIndex = '1';
+        }
+
+        $titleSlug = Str::slug($dungeonroute->title);
+        if (!isset($title) || $titleSlug !== $title) {
+            return redirect()->route('dungeonroute.preview', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $titleSlug,
+                'floorindex'   => $floorIndex,
+            ]);
         }
 
         /** @var FLoor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
         return view('dungeonroute.preview', [
             'dungeonroute' => $dungeonroute,
             'floorId'      => $floor->id,
@@ -136,19 +164,20 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute|null $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService, $thumbnailService)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -158,15 +187,16 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return DungeonRoute
      * @throws Exception
      */
-    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService): DungeonRoute
+    public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): DungeonRoute
     {
         $dungeonroute = new DungeonRoute();
 
         // May fail
-        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService)) {
+        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService, $expansionService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -175,12 +205,14 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param ThumbnailServiceInterface $thumbnailService
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string $title
+     * @param ThumbnailServiceInterface $thumbnailService
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
      */
-    function clone(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
+    function clone(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
     {
         $this->authorize('clone', $dungeonroute);
 
@@ -191,7 +223,11 @@ class DungeonRouteController extends Controller
 
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
 
-            return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
+            return redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $newRoute->dungeon,
+                'dungeonroute' => $newRoute,
+                'title'        => $newRoute->title,
+            ]);
         } else {
             return view('dungeonroute.limitreached');
         }
@@ -199,40 +235,46 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string $title
      * @return RedirectResponse
      */
-    public function claim(Request $request, DungeonRoute $dungeonroute)
+    public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title)
     {
         // Regardless of the result, try to claim the route
         $dungeonroute->claim(Auth::id());
 
-        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
     }
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string|null $title
      * @return Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function edit(Request $request, DungeonRoute $dungeonroute)
+    public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null)
     {
         /** @var Floor $defaultFloor */
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
-        return $this->editfloor($request, $dungeonroute, optional($defaultFloor)->index ?? '1');
+        return $this->editfloor($request, $dungeon, $dungeonroute, $title, optional($defaultFloor)->index ?? '1');
     }
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
+     * @param string|null $title
+     * @param string|null $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
+    public function editfloor(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, ?string $floorIndex)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -240,14 +282,26 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
+        $titleSlug = Str::slug($dungeonroute->title);
+        if (!isset($title) || $titleSlug !== $title) {
+            return redirect()->route('dungeonroute.edit.floor', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $titleSlug,
+                'floorindex'   => $floorIndex,
+            ]);
+        }
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+            return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
         } else {
             return view('dungeonroute.edit', [
+                'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
+                'title'        => Str::slug($dungeonroute->title),
                 'floor'        => $floor,
                 'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             ]);
@@ -279,7 +333,9 @@ class DungeonRouteController extends Controller
         $enemyinfo         = $request->get('enemyinfo');
 
         return view('dungeonroute.embed', [
+            'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
+            'title'        => Str::slug($dungeonroute->title),
             'floor'        => $floor,
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             'embedOptions' => [
@@ -298,58 +354,61 @@ class DungeonRouteController extends Controller
      *
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
      * @return Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
+        $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
 
         // Display the edit page
-        return $this->edit($request, $dungeonroute);
+        return $this->edit($request, $dungeonroute->dungeon, $dungeonroute, Str::slug($dungeonroute->title));
     }
 
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ThumbnailServiceInterface $thumbnailService)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService, $thumbnailService);
+        $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
-        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
+        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
     }
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
      * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return RedirectResponse
      * @throws Exception
      */
-    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService)
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->storetemporary($request, $seasonService);
+        $dungeonroute = $this->storetemporary($request, $seasonService, $expansionService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
-        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
+        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
     }
 }

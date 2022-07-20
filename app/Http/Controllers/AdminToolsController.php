@@ -121,8 +121,9 @@ class AdminToolsController extends Controller
                 }
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
+                $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    if ($npcCandidate->exists) {
+                    if ($existed) {
                         $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     } else {
                         $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
@@ -333,7 +334,7 @@ class AdminToolsController extends Controller
         $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
-        foreach (Dungeon::active()->get() as $dungeon) {
+        foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
             $mdtNpcs = (new MDTDungeon($dungeon->key))->getMDTNPCs();
 
@@ -435,6 +436,15 @@ class AdminToolsController extends Controller
         Session::flash('status', __('controller.admintools.flash.caches_dropped_successfully'));
 
         return redirect()->route('admin.tools');
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function mappingForceSync(Request $request)
+    {
+        Artisan::call('mapping:sync', ['--force' => true]);
     }
 
     /**

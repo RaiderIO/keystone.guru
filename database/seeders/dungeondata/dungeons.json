@@ -403,9 +403,9 @@
         "key": "lowerkarazhan",
         "name": "dungeons.legion.lower_karazhan.name",
         "slug": "lower-karazhan",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2340,
         "floor_count": 6,
         "floors": [
             {
@@ -417,7 +417,26 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 330,
+                        "floor1_id": 24,
+                        "floor2_id": 23,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 331,
+                        "floor1_id": 24,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 332,
+                        "floor1_id": 24,
+                        "floor2_id": 21,
+                        "direction": "right"
+                    }
+                ]
             },
             {
                 "id": 23,
@@ -425,10 +444,29 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.upper_livery_stables",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 40,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 338,
+                        "floor1_id": 23,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 339,
+                        "floor1_id": 23,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 340,
+                        "floor1_id": 23,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 22,
@@ -439,7 +477,26 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 290,
+                        "floor1_id": 22,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 291,
+                        "floor1_id": 22,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 292,
+                        "floor1_id": 22,
+                        "floor2_id": 21,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 21,
@@ -450,7 +507,32 @@
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 293,
+                        "floor1_id": 21,
+                        "floor2_id": 24,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 294,
+                        "floor1_id": 21,
+                        "floor2_id": 22,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 295,
+                        "floor1_id": 21,
+                        "floor2_id": 20,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 296,
+                        "floor1_id": 21,
+                        "floor2_id": 19,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 20,
@@ -458,21 +540,53 @@
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.opera_hall_balcony",
                 "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 44,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 336,
+                        "floor1_id": 20,
+                        "floor2_id": 21,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 337,
+                        "floor1_id": 20,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 19,
                 "index": 6,
                 "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.netherspace",
+                "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 16,
+                "max_enemy_size": 34,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 333,
+                        "floor1_id": 19,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 334,
+                        "floor1_id": 19,
+                        "floor2_id": 21,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 335,
+                        "floor1_id": 19,
+                        "floor2_id": 20,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -585,98 +699,190 @@
         "key": "upperkarazhan",
         "name": "dungeons.legion.upper_karazhan.name",
         "slug": "upper-karazhan",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 169,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "floor_count": 8,
         "floors": [
             {
                 "id": 29,
-                "index": 7,
+                "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.lower_broken_stair",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 316,
+                        "floor1_id": 29,
+                        "floor2_id": 30,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 30,
-                "index": 8,
+                "index": 2,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_broken_stair",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 317,
+                        "floor1_id": 30,
+                        "floor2_id": 29,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 318,
+                        "floor1_id": 30,
+                        "floor2_id": 31,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 31,
-                "index": 9,
+                "index": 3,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.the_menagerie",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 343,
+                        "floor1_id": 31,
+                        "floor2_id": 30,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 344,
+                        "floor1_id": 31,
+                        "floor2_id": 32,
+                        "direction": "right"
+                    }
+                ]
             },
             {
                 "id": 32,
-                "index": 10,
+                "index": 4,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.guardians_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 321,
+                        "floor1_id": 32,
+                        "floor2_id": 31,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 322,
+                        "floor1_id": 32,
+                        "floor2_id": 33,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 33,
-                "index": 11,
+                "index": 5,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.library_floor",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 323,
+                        "floor1_id": 33,
+                        "floor2_id": 32,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 324,
+                        "floor1_id": 33,
+                        "floor2_id": 34,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 34,
-                "index": 12,
+                "index": 6,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_library",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 325,
+                        "floor1_id": 34,
+                        "floor2_id": 33,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 326,
+                        "floor1_id": 34,
+                        "floor2_id": 35,
+                        "direction": "down"
+                    }
+                ]
             },
             {
                 "id": 35,
-                "index": 13,
+                "index": 7,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.gamesmans_hall",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 327,
+                        "floor1_id": 35,
+                        "floor2_id": 34,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 328,
+                        "floor1_id": 35,
+                        "floor2_id": 36,
+                        "direction": "left"
+                    }
+                ]
             },
             {
                 "id": 36,
-                "index": 14,
+                "index": 8,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.upper_karazhan.floors.netherspace",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 329,
+                        "floor1_id": 36,
+                        "floor2_id": 35,
+                        "direction": "right"
+                    }
+                ]
             }
         ]
     },
@@ -2072,7 +2278,7 @@
         "slug": "theater-of-pain",
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 2220,
+        "timer_max_seconds": 2280,
         "floor_count": 5,
         "floors": [
             {
@@ -2383,6 +2589,159 @@
                         "id": 231,
                         "floor1_id": 100,
                         "floor2_id": 99,
+                        "direction": "right"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "expansion_id": 9,
+        "zone_id": 6912,
+        "mdt_id": 0,
+        "key": "auchindoun",
+        "name": "dungeons.wod.auchindoun.name",
+        "slug": "auchindoun",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 39,
+        "expansion_id": 9,
+        "zone_id": 6874,
+        "mdt_id": 0,
+        "key": "bloodmaw_slag_mines",
+        "name": "dungeons.wod.bloodmaw_slag_mines.name",
+        "slug": "bloodmaw-slag-mines",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 40,
+        "expansion_id": 9,
+        "zone_id": 6951,
+        "mdt_id": 0,
+        "key": "irondocks",
+        "name": "dungeons.wod.iron_docks.name",
+        "slug": "iron-docks",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 105,
+                "index": 1,
+                "mdt_sub_level": 1,
+                "name": "dungeons.wod.iron_docks.floors.iron_docks",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": []
+            }
+        ]
+    },
+    {
+        "id": 41,
+        "expansion_id": 9,
+        "zone_id": 6984,
+        "mdt_id": 0,
+        "key": "grimraildepot",
+        "name": "dungeons.wod.grimrail_depot.name",
+        "slug": "grimrail-depot",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "timer_max_seconds": 1800,
+        "floor_count": 4,
+        "floors": [
+            {
+                "id": 106,
+                "index": 1,
+                "mdt_sub_level": 1,
+                "name": "dungeons.wod.grimrail_depot.floors.train_depot",
+                "default": 1,
+                "min_enemy_size": 20,
+                "max_enemy_size": 36,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 346,
+                        "floor1_id": 106,
+                        "floor2_id": 107,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 107,
+                "index": 2,
+                "mdt_sub_level": 2,
+                "name": "dungeons.wod.grimrail_depot.floors.rafters",
+                "default": 0,
+                "min_enemy_size": 20,
+                "max_enemy_size": 36,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 347,
+                        "floor1_id": 107,
+                        "floor2_id": 106,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 348,
+                        "floor1_id": 107,
+                        "floor2_id": 108,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 108,
+                "index": 3,
+                "mdt_sub_level": 3,
+                "name": "dungeons.wod.grimrail_depot.floors.rear_train_cars",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 282,
+                        "floor1_id": 108,
+                        "floor2_id": 107,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 283,
+                        "floor1_id": 108,
+                        "floor2_id": 109,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 109,
+                "index": 4,
+                "mdt_sub_level": 4,
+                "name": "dungeons.wod.grimrail_depot.floors.forward_train_cars",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 284,
+                        "floor1_id": 109,
+                        "floor2_id": 108,
                         "direction": "right"
                     }
                 ]

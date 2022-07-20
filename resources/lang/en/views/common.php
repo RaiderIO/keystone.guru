@@ -166,6 +166,14 @@ return [
             'timezone'   => 'Timezone',
         ],
     ],
+    'general'      => [
+        'linkpreview' => [
+            'title_suffix'               => ' | Keystone.guru',
+            'description_suffix'         => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
+            'twitter_title_suffix'       => ' | Keystone.guru',
+            'twitter_description_suffix' => ' Keystone.guru is the one place to find, manage and share your M+ routes.',
+        ],
+    ],
     'group'        => [
         'affixes'     => [
             'seasonal_index_preset'    => 'Preset :count',
@@ -203,7 +211,8 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'routes'                  => ':expansion routes',
+            'season'                  => 'Season :season',
+            'routes'                  => ':expansion',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],
@@ -365,6 +374,7 @@ return [
             'review_route_settings'            => 'Review your %s before publishing your route',
             'route_settings'                   => 'route settings',
             'link'                             => 'Link',
+            'short_link'                       => 'Short link',
             'copy_shareable_link_to_clipboard' => 'Copy shareable link to clipboard',
             'embed'                            => 'Embed',
             'copy_embed_code_to_clipboard'     => 'Copy embed code to clipboard',

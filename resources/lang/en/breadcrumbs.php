@@ -9,6 +9,7 @@ return [
         'routes_expansion' => ':expansion routes',
 
         'dungeonroutes' => [
+            'season'            => 'Season :season',
             'search'            => 'Search',
             'popular'           => 'Popular',
             'next_week_affixes' => 'Next week\'s affixes',

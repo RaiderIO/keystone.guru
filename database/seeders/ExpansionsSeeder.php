@@ -28,7 +28,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00'),
             ]), 'expansions.battle_for_azeroth.name' => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
                 'released_at' => Carbon::make('2018-08-14 00:00:00'),
@@ -37,6 +37,41 @@ class ExpansionsSeeder extends Seeder
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00'),
+            ]), 'expansions.vanilla.name'            => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_VANILLA,
+                'color'       => '#ebbd34',
+                'released_at' => Carbon::make('2004-11-23 00:00:00'),
+            ]), 'expansions.tbc.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_TBC,
+                'color'       => '#198033',
+                'released_at' => Carbon::make('2007-01-16 00:00:00'),
+            ]), 'expansions.wotlk.name'              => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_WOTLK,
+                'color'       => '#11dff2',
+                'released_at' => Carbon::make('2008-11-13 00:00:00'),
+            ]), 'expansions.cata.name'               => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_CATACLYSM,
+                'color'       => '#bf5006',
+                'released_at' => Carbon::make('2010-12-07 00:00:00'),
+            ]), 'expansions.mop.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_MOP,
+                'color'       => '#34bf06',
+                'released_at' => Carbon::make('2012-09-25 00:00:00'),
+            ]), 'expansions.wod.name'                => new Expansion([
+                'active'      => 1,
+                'shortname'   => Expansion::EXPANSION_WOD,
+                'color'       => '#875f03',
+                'released_at' => Carbon::make('2014-11-13 00:00:00'),
+            ]), 'expansions.dragonflight.name'                => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_DRAGONFLIGHT,
+                'color'       => '#b0a497',
+                'released_at' => Carbon::make('2022-12-31 00:00:00'),
             ]),
         ];
 

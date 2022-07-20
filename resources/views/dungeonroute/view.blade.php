@@ -17,6 +17,17 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
     @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
 
 @endsection
+
+@section('linkpreview')
+    @include('common.general.linkpreview', [
+        'title' => sprintf(__('views/dungeonroute.view.linkpreview_title'), $dungeonroute->title),
+        'description' => !empty($dungeonroute->description) ?
+            $dungeonroute->description :
+            sprintf(__('views/dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name),
+        'image' => $dungeonroute->dungeon->getImageUrl()
+    ])
+@endsection
+
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [

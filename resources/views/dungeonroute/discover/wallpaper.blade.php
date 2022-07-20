@@ -7,11 +7,11 @@ if( isset($dungeon) || isset($expansion) ) {
 ?>
 <div class="dungeon_wallpaper"
      @if(isset($dungeon))
-         @if($dungeon->expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION)
+         @if(!$dungeon->hasImageWallpaper())
             style="background-image: url('{{ url(sprintf('/images/dungeons/%s/wallpaper.jpg', $dungeon->expansion->shortname)) }}')">
          @else
              style="background-image:
-            url('{{ url(sprintf('/images/dungeons/%s/%s_wallpaper.jpg', $dungeon->expansion->shortname, $dungeon->key)) }}')">
+            url('{{ $dungeon->getImageWallpaperUrl() }}')">
          @endif
      @elseif(isset($expansion))
         style="background-image: url('{{ url(sprintf('/images/dungeons/%s/wallpaper.jpg', $expansion->shortname)) }}')">

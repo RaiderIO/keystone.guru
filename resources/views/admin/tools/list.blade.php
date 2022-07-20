@@ -35,12 +35,22 @@
 
     <h4>{{ __('views/admin.tools.list.subheader_misc') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.cache.drop') }}">{{ __('views/admin.tools.list.drop_caches') }}</a>
-    </div>
-    <div class="form-group">
         <a href="{{ route('admin.tools.exception.select') }}">{{ __('views/admin.tools.list.throw_an_exception') }}</a>
     </div>
+
+    @if(config('app.type') === 'mapping')
+        <h4>{{ __('views/admin.tools.list.subheader_mapping') }}</h4>
+        <div class="form-group">
+            <a class="btn btn-primary"
+               href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('views/admin.tools.list.force_sync_mapping') }}</a>
+        </div>
+    @endif
+
     <h3>{{ __('views/admin.tools.list.subheader_actions') }}</h3>
+    <div class="form-group">
+        <a class="btn btn-primary"
+           href="{{ route('admin.tools.cache.drop') }}">{{ __('views/admin.tools.list.drop_caches') }}</a>
+    </div>
     <div class="form-group">
         <a class="btn btn-primary"
            href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('views/admin.tools.list.export_dungeon_data') }}</a>

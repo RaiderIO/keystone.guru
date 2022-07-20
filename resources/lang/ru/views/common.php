@@ -166,6 +166,14 @@ return [
             'timezone'   => 'Временная зона',
         ],
     ],
+    'general'      => [
+        'linkpreview' => [
+            'title_suffix'               => '@todo ru: .general.linkpreview.title_suffix',
+            'description_suffix'         => '@todo ru: .general.linkpreview.description_suffix',
+            'twitter_title_suffix'       => '@todo ru: .general.linkpreview.twitter_title_suffix',
+            'twitter_description_suffix' => '@todo ru: .general.linkpreview.twitter_description_suffix',
+        ],
+    ],
     'group'        => [
         'affixes'     => [
             'seasonal_index_preset'    => 'Задано :count',
@@ -203,7 +211,8 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
-            'routes'                  => ':expansion mаршруты',
+            'season'                  => '@todo ru: .layout.header.season',
+            'routes'                  => ':expansion',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
         ],
@@ -365,6 +374,7 @@ return [
             'review_route_settings'            => 'Предпросмотр %s перед публикацией маршрута',
             'route_settings'                   => 'Настройки маршрута',
             'link'                             => 'Ссылка',
+            'short_link'                       => '@todo ru: .modal.share.short_link',
             'copy_shareable_link_to_clipboard' => 'Скопировать ссылку в буфер обмена',
             'embed'                            => 'Встраивание',
             'copy_embed_code_to_clipboard'     => 'Скопируйте код для встраивания в буфер обмена',

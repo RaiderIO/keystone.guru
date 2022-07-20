@@ -54,7 +54,12 @@ class CommonGroupAffixes extends InlineCode {
                 if (currentAffix !== null) {
                     this.currentSelection = [currentAffix];
                 } else {
-                    this.currentSelection = [this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey).id];
+                    let firstAffixGroupForExpansion =this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
+                    if( firstAffixGroupForExpansion !== null ) {
+                        this.currentSelection = [firstAffixGroupForExpansion.id];
+                    } else {
+                        this.currentSelection = [];
+                    }
                 }
             }
 

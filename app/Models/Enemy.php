@@ -52,6 +52,7 @@ class Enemy extends CacheModel
     const SEASONAL_TYPE_TORMENTED       = 'tormented';
     const SEASONAL_TYPE_ENCRYPTED       = 'encrypted';
     const SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
+    const SEASONAL_TYPE_SHROUDED        = 'shrouded';
 
     const SEASONAL_TYPE_ALL = [
         self::SEASONAL_TYPE_AWAKENED,
@@ -60,6 +61,7 @@ class Enemy extends CacheModel
         self::SEASONAL_TYPE_TORMENTED,
         self::SEASONAL_TYPE_ENCRYPTED,
         self::SEASONAL_TYPE_MDT_PLACEHOLDER,
+        self::SEASONAL_TYPE_SHROUDED,
     ];
 
     /**

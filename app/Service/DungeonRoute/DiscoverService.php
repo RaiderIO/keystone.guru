@@ -32,7 +32,7 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        $currentSeasonAffixGroups = $this->expansionService->getCurrentSeason($this->expansion)->affixgroups;
+        $currentSeasonAffixGroups = $this->expansionService->getCurrentSeason($this->expansion)->affixgroups ?? collect();
 
         return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
@@ -41,13 +41,22 @@ class DiscoverService extends BaseDiscoverService
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
             // It also applies a big penalty for routes that do not belong to the current season
-            ->selectRaw(sprintf('dungeon_routes.*, dungeon_routes.popularity * (13 - (
-                    SELECT IF(COUNT(*) = 0, 13, COUNT(*))
-                    FROM dungeon_route_affix_groups
-                    WHERE dungeon_route_id = `dungeon_routes`.`id`
-                    AND affix_group_id BETWEEN %d AND %d
-                )) as weightedPopularity', $currentSeasonAffixGroups->first()->id, $currentSeasonAffixGroups->last()->id)
-            )
+            ->when($currentSeasonAffixGroups->isNotEmpty(), function (Builder $builder) use ($currentSeasonAffixGroups) {
+                $builder
+                    ->selectRaw(
+                        sprintf(
+                            '
+                            dungeon_routes.*, dungeon_routes.popularity * (13 - (
+                                SELECT IF(COUNT(*) = 0, 13, COUNT(*))
+                                FROM dungeon_route_affix_groups
+                                WHERE dungeon_route_id = `dungeon_routes`.`id`
+                                AND affix_group_id BETWEEN %d AND %d
+                            )) as weightedPopularity',
+                            $currentSeasonAffixGroups->first()->id, $currentSeasonAffixGroups->last()->id
+                        )
+                    )
+                    ->orderBy('weightedPopularity', 'desc');
+            })
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->where('dungeons.expansion_id', $this->expansion->id)
             ->where('dungeons.active', true)
@@ -56,8 +65,7 @@ class DiscoverService extends BaseDiscoverService
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
-            ->groupBy('dungeon_routes.id')
-            ->orderBy('weightedPopularity', 'desc');
+            ->groupBy('dungeon_routes.id');
     }
 
     /**

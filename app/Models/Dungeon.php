@@ -6,7 +6,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -53,6 +53,102 @@ class Dungeon extends CacheModel
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
+
+    // Classic
+    const DUNGEON_BLACKFANTHOM_DEEPS        = 'blackfanthom_deeps';
+    const DUNGEON_BLACKROCK_DEPTHS          = 'blackrock_depths';
+    const DUNGEON_DEADMINES                 = 'deadmines';
+    const DUNGEON_DIRE_MAUL                 = 'dire_maul';
+    const DUNGEON_GNOMEREGAN                = 'gnomeregan';
+    const DUNGEON_LOWER_BLACKROCK_SPIRE     = 'lower_blackrock_spire';
+    const DUNGEON_MARAUDON                  = 'maraudon';
+    const DUNGEON_RAGEFIRE_CHASM            = 'ragefire_chasm';
+    const DUNGEON_RAZORFEN_DOWNS            = 'razorfen_downs';
+    const DUNGEON_RAZORFEN_KRAUL            = 'razorfen_kraul';
+    const DUNGEON_SCARLET_HALLS             = 'scarlet_halls';
+    const DUNGEON_SCARLET_MONASTERY         = 'scarlet_monastery';
+    const DUNGEON_SCHOLOMANCE               = 'scholomance';
+    const DUNGEON_SHADOWFANG_KEEP           = 'shadowfang_keep';
+    const DUNGEON_STRATHOLME                = 'stratholme';
+    const DUNGEON_THE_STOCKADE              = 'the_stockade';
+    const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR = 'the_temple_of_atal_hakkar';
+    const DUNGEON_ULDAMAN                   = 'uldaman';
+    const DUNGEON_WAILING_CAVERNS           = 'wailing_caverns';
+    const DUNGEON_ZUL_FARRAK                = 'zul_farrak';
+
+    // The Burning Crusade
+    const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
+    const DUNGEON_HELLFIRE_RAMPARTS       = 'hellfire_ramparts';
+    const DUNGEON_MAGISTERS_TERRACE       = 'magisters_terrace';
+    const DUNGEON_MANA_TOMBS              = 'mana_tombs';
+    const DUNGEON_OLD_HILLSBRAD_FOOTHILLS = 'old_hillsbrad_foothills';
+    const DUNGEON_SETHEKK_HALLS           = 'sethekk_halls';
+    const DUNGEON_SHADOW_LABYRINTH        = 'shadow_labyrinth';
+    const DUNGEON_THE_ARCATRAZ            = 'the_arcatraz';
+    const DUNGEON_THE_BLACK_MORASS        = 'the_black_morass';
+    const DUNGEON_THE_BLOOD_FURNACE       = 'the_blood_furnace';
+    const DUNGEON_THE_BOTANICA            = 'the_botanica';
+    const DUNGEON_THE_MECHANAR            = 'the_mechanar';
+    const DUNGEON_THE_SHATTERED_HALLS     = 'the_shattered_halls';
+    const DUNGEON_THE_SLAVE_PENS          = 'the_slave_pens';
+    const DUNGEON_THE_STEAMVAULT          = 'the_steamvault';
+    const DUNGEON_THE_UNDERBOG            = 'the_underbog';
+
+    // Wrath of the Lich King
+    const DUNGEON_AHN_KAHET_THE_OLD_KINGDOM = 'ahn_kahet_the_old_kingdom';
+    const DUNGEON_AZJOL_NERUB               = 'azjol_nerub';
+    const DUNGEON_DRAK_THARON_KEEP          = 'drak_tharon_keep';
+    const DUNGEON_GUNDRAK                   = 'gundrak';
+    const DUNGEON_HALLS_OF_LIGHTNING        = 'halls_of_lightning';
+    const DUNGEON_HALLS_OF_REFLECTION       = 'halls_of_reflection';
+    const DUNGEON_HALLS_OF_STONE            = 'halls_of_stone';
+    const DUNGEON_PIT_OF_SARON              = 'pit_of_saron';
+    const DUNGEON_THE_CULLING_OF_STRATHOLME = 'the_culling_of_stratholme';
+    const DUNGEON_THE_FORGE_OF_SOULS        = 'the_forge_of_souls';
+    const DUNGEON_THE_NEXUS                 = 'the_nexus';
+    const DUNGEON_THE_OCULUS                = 'the_oculus';
+    const DUNGEON_THE_VIOLET_HOLD           = 'the_violet_hold';
+    const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trial_of_the_champion';
+    const DUNGEON_UTGARDE_KEEP              = 'utgarde_keep';
+    const DUNGEON_UTGARDE_PINNACLE          = 'utgarde_pinnacle';
+
+    // Cataclysm
+    const DUNGEON_BLACKROCK_CAVERNS        = 'blackrock_caverns';
+    const DUNGEON_DEADMINES_CATACLYSM      = 'deadmines_cataclysm';
+    const DUNGEON_END_TIME                 = 'end_time';
+    const DUNGEON_GRIM_BATOL               = 'grim_batol';
+    const DUNGEON_HALLS_OF_ORIGINATION     = 'halls_of_origination';
+    const DUNGEON_HOUR_OF_TWILIGHT         = 'hour_of_twilight';
+    const DUNGEON_LOST_CITY_OF_THE_TOL_VIR = 'lost_city_of_the_tol_vir';
+    const DUNGEON_SHADOWFANG_KEEP_CATA     = 'shadowfang_keep_cataclysm';
+    const DUNGEON_THE_STONECORE            = 'the_stonecore';
+    const DUNGEON_THE_VORTEX_PINNACLE      = 'the_vortex_pinnacle';
+    const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides';
+    const DUNGEON_WELL_OF_ETERNITY         = 'well_of_eternity';
+    const DUNGEON_ZUL_AMAN                 = 'zul_aman';
+    const DUNGEON_ZUL_GURUB                = 'zul_gurub';
+
+    // Mists of Pandaria
+    const DUNGEON_GATE_OF_THE_SETTING_SUN    = 'gate_of_the_setting_sun';
+    const DUNGEON_MOGU_SHAN_PALACE           = 'mogu_shan palace';
+    const DUNGEON_SCARLET_HALLS_MOP          = 'scarlet_halls_mop';
+    const DUNGEON_SCARLET_MONASTERY_MOP      = 'scarlet_monastery_mop';
+    const DUNGEON_SCHOLOMANCE_MOP            = 'scholomance_mop';
+    const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery';
+    const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     = 'siege_of_niu_zao_temple';
+    const DUNGEON_STORMSTOUT_BREWERY         = 'stormstout_brewery';
+    const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'temple_of_the_jade_serpent';
+
+    // Warlords of Draenor
+    const DUNGEON_AUCHINDOUN                = 'auchindoun';
+    const DUNGEON_BLOODMAW_SLAG_MINES       = 'bloodmawslagmines';
+    const DUNGEON_IRON_DOCKS                = 'irondocks';
+    const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
+    const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
+    const DUNGEON_SKYREACH                  = 'skyreach';
+    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom';
+    const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upperblackrockspire';
+
     // Legion
     const DUNGEON_ARCWAY                      = 'arcway';
     const DUNGEON_BLACK_ROOK_HOLD             = 'blackrookhold';
@@ -93,6 +189,11 @@ class Dungeon extends CacheModel
     const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
     const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
     const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
+
+    const ALL_WOD = [
+        self::DUNGEON_IRON_DOCKS,
+        self::DUNGEON_GRIMRAIL_DEPOT,
+    ];
 
     const ALL_LEGION = [
         self::DUNGEON_ARCWAY,
@@ -218,11 +319,15 @@ class Dungeon extends CacheModel
     }
 
     /**
+     * @param bool $includeGlobalNpcs
      * @return HasMany
      */
-    public function npcs(): HasMany
+    public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
-        return $this->hasMany('App\Models\Npc')->orWhere('dungeon_id', -1);
+        return $this->hasMany('App\Models\Npc')
+            ->when($includeGlobalNpcs, function (Builder $builder) {
+                $builder->orWhere('dungeon_id', -1);
+            });
     }
 
     /**
@@ -304,9 +409,9 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMinHealth(): int
     {
-        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('dungeon_id', '<>', -1)
+        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('aggressiveness', '<>', 'friendly')
+                ->where('enemy_forces', '>', 0)
                 ->min('base_health') ?? 10000;
     }
 
@@ -315,15 +420,15 @@ class Dungeon extends CacheModel
      */
     public function getNpcsMaxHealth(): int
     {
-        return $this->npcs->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('dungeon_id', '<>', -1)
+        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
                 ->where('aggressiveness', '<>', 'friendly')
+                ->where('enemy_forces', '>', 0)
                 ->max('base_health') ?? 100000;
     }
 
     /**
      * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
-     * hence this function so we can use it differentiate between the two.
+     * hence this function, so we can use it to differentiate between the two.
      *
      * @return bool
      */
@@ -356,6 +461,46 @@ class Dungeon extends CacheModel
     public function getTimerUpgradePlusThreeSeconds(): int
     {
         return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage32Url(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageTransparentUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageWallpaperUrl(): string
+    {
+        return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasImageWallpaper(): bool
+    {
+        return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
     }
 
 

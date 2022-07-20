@@ -8,23 +8,23 @@ use App\Models\Season;
 
 class ExpansionSeason
 {
-    /** @var Season */
-    private Season $season;
+    /** @var Season|null */
+    private ?Season $season = null;
 
     /** @var ExpansionSeasonAffixGroups */
     private ExpansionSeasonAffixGroups $affixGroups;
 
     /** @var bool */
-    private bool $isAwakened;
+    private bool $isAwakened = false;
 
     /** @var bool */
-    private bool $isPrideful;
+    private bool $isPrideful = false;
 
     /** @var bool */
-    private bool $isTormented;
+    private bool $isTormented = false;
 
     /** @var bool */
-    private bool $isInfernal;
+    private bool $isInfernal = false;
 
     /**
      * @param ExpansionServiceInterface $expansionService
@@ -34,18 +34,20 @@ class ExpansionSeason
     {
         $this->season = $expansionService->getCurrentSeason($expansion);
 
-        $this->isAwakened  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id;
-        $this->isPrideful  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id;
-        $this->isTormented = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id;
-        $this->isInfernal  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id;
+        if ($this->season !== null) {
+            $this->isAwakened  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id;
+            $this->isPrideful  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id;
+            $this->isTormented = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id;
+            $this->isInfernal  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id;
+        }
 
         $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $this);
     }
 
     /**
-     * @return Season
+     * @return Season|null
      */
-    public function getSeason(): Season
+    public function getSeason(): ?Season
     {
         return $this->season;
     }

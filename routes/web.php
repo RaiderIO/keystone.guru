@@ -37,9 +37,11 @@ use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
+use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\LiveSessionController;
+use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\PatreonController;
@@ -124,6 +126,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discovernextweek'])->name('dungeonroutes.nextweek');
             Route::get('new', [DungeonRouteDiscoverController::class, 'discovernew'])->name('dungeonroutes.new');
 
+            Route::group(['prefix' => 'season/{season}'], function () {
+                Route::get('/', [DungeonRouteDiscoverController::class, 'discoverSeason'])->name('dungeonroutes.season');
+            });
+
             Route::get('{dungeon}', [DungeonRouteDiscoverController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
             Route::get('{dungeon}/popular', [DungeonRouteDiscoverController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
             Route::get('{dungeon}/affixes/current', [DungeonRouteDiscoverController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
@@ -136,28 +142,49 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
 
     // May not be logged in - we have anonymous routes
+    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
+        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
+
+        Route::group(['prefix' => '{title?}'], function () {
+            // Edit your own dungeon routes
+            Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
+            Route::get('edit/{floorindex}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
+            // Submit a patch for your own dungeon route
+            Route::patch('edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
+
+            Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+                // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
+                Route::get('live', [LiveSessionController::class, 'create'])->name('dungeonroute.livesession.create');
+                Route::get('live/{livesession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
+                Route::get('live/{livesession}/{floorIndex}', [LiveSessionController::class, 'viewfloor'])->name('dungeonroute.livesession.viewfloor');
+
+                // Clone a route
+                Route::get('clone', [DungeonRouteController::class, 'clone'])->name('dungeonroute.clone');
+                // Claiming a route that was made by /sandbox functionality
+                Route::get('claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
+            });
+        });
+    });
+
+
     Route::group(['prefix' => '{dungeonroute}'], function () {
         // Edit your own dungeon routes
-        Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
-        Route::get('edit/{floor}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
-        // Submit a patch for your own dungeon route
-        Route::patch('edit', [DungeonRouteController::class, 'update'])->name('dungeonroute.update');
+        Route::get('edit', [DungeonRouteLegacyController::class, 'edit']);
+        Route::get('edit/{floorindex}', [DungeonRouteLegacyController::class, 'editfloor']);
+
+        Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+            // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
+            Route::get('live/{livesession}', [LiveSessionLegacyController::class, 'view']);
+            Route::get('live/{livesession}/{floorIndex}', [LiveSessionLegacyController::class, 'viewfloor']);
+
+            // Clone a route
+            Route::get('clone', [DungeonRouteLegacyController::class, 'clone']);
+            // Claiming a route that was made by /sandbox functionality
+            Route::get('claim', [DungeonRouteLegacyController::class, 'claim']);
+        });
     });
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-        Route::group(['prefix' => '{dungeonroute}'], function () {
-
-            // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-            Route::get('live', [LiveSessionController::class, 'create'])->name('dungeonroute.livesession.create');
-            Route::get('live/{livesession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
-            Route::get('live/{livesession}/{floorIndex}', [LiveSessionController::class, 'viewfloor'])->name('dungeonroute.livesession.viewfloor');
-
-            // Clone a route
-            Route::get('clone', [DungeonRouteController::class, 'clone'])->name('dungeonroute.clone');
-            // Claiming a route that was made by /sandbox functionality
-            Route::get('claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
-        });
-
         // Profile routes
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -294,6 +321,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::get('mdt/diff', [AdminToolsController::class, 'mdtdiff'])->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', [AdminToolsController::class, 'dropcache'])->name('admin.tools.cache.drop');
+                Route::get('mapping/forcesync', [AdminToolsController::class, 'mappingForceSync'])->name('admin.tools.mapping.forcesync');
+
 
                 Route::get('datadump/exportdungeondata', [AdminToolsController::class, 'exportdungeondata'])->name('admin.tools.datadump.exportdungeondata');
                 Route::get('datadump/exportreleases', [AdminToolsController::class, 'exportreleases'])->name('admin.tools.datadump.exportreleases');
@@ -431,13 +460,26 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     // View any dungeon route (catch all)
 
+    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
+        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.viewnotitle');
+
+        Route::group(['prefix' => '{title?}'], function () {
+            Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
+            Route::get('embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
+            Route::get('embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+            Route::get('{floorindex}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
+            // Preview of a route for image capturing library
+            Route::get('preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
+        });
+    });
+
     Route::group(['prefix' => '{dungeonroute}'], function () {
-        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
-        Route::get('embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
-        Route::get('embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
-        Route::get('{floor}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
+        Route::get('/', [DungeonRouteLegacyController::class, 'viewold'])->name('dungeonroute.viewold');
+        Route::get('embed/', [DungeonRouteLegacyController::class, 'embedold']);
+        Route::get('embed/{floorindex}', [DungeonRouteLegacyController::class, 'embedold']);
+        Route::get('{floorindex}', [DungeonRouteLegacyController::class, 'viewfloorold']);
         // Preview of a route for image capturing library
-        Route::get('preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
+        Route::get('preview/{floorindex}', [DungeonRouteLegacyController::class, 'previewold']);
     });
 });
 

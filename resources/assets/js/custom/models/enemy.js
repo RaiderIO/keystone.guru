@@ -30,6 +30,7 @@ let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
+let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
 
 /**
  * @property {Number} floor_id

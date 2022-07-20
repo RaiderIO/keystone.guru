@@ -31,9 +31,9 @@ interface ExpansionServiceInterface
 
     /**
      * @param Expansion $expansion
-     * @return Season
+     * @return Season|null
      */
-    public function getCurrentSeason(Expansion $expansion): Season;
+    public function getCurrentSeason(Expansion $expansion): ?Season;
 
     /**
      * @param Expansion $expansion

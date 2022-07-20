@@ -1,5 +1,24 @@
 [
     {
+        "id": 114626,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "name": "Forlorn Spirit",
+        "base_health": 17000,
+        "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
         "id": 161124,
         "dungeon_id": -1,
         "classification_id": 2,
@@ -262,6 +281,25 @@
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
+        "id": 188112,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Motion Sick Peon",
+        "base_health": 12345,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": []
     }

@@ -1,6 +1,7 @@
 <?php
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
+/** @var \App\Models\DungeonRoute $dungeonroute */
 ?>
 <nav class="route_manipulation_tools left h-100 row no-gutters map_fade_out">
     <div class="bg-header" style="background-color: unset !important;">
@@ -14,7 +15,7 @@
             <div id="view_route_actions_container" class="mb-2">
                 <div class="row no-gutters">
                     <div class="col">
-                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => $dungeonroute]) }}"
+                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
                            class="btn btn-info">
                             <i class="fas fa-eye"></i>
                             <span class="map_controls_element_label_toggle" style="display: none;">

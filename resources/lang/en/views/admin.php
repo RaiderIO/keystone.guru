@@ -308,6 +308,9 @@ return [
             'drop_caches'        => 'Drop caches',
             'throw_an_exception' => 'Throw an exception',
 
+            'subheader_mapping' => 'Mapping',
+            'force_sync_mapping' => 'Force sync mapping',
+
             'subheader_actions'   => 'Actions',
             'export_dungeon_data' => 'Export dungeon data',
             'export_releases'     => 'Export releases',

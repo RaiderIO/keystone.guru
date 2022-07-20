@@ -43,7 +43,10 @@ return [
         ],
     ],
     'edit'           => [
-        'title' => 'Edit %s',
+        'title'                                   => 'Edit %s',
+        'linkpreview_title'                       => '%s | Keystone.guru',
+        'linkpreview_default_description'         => 'Edit M+ route for dungeon %s by %s',
+        'linkpreview_default_description_sandbox' => 'Edit M+ route for dungeon %s',
     ],
     'embed'          => [
         'title'             => 'Embed :routeTitle',
@@ -77,6 +80,8 @@ return [
         'unavailable_description' => 'You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.',
     ],
     'view'           => [
-        'any' => 'Any',
+        'any'                             => 'Any',
+        'linkpreview_title'               => '%s',
+        'linkpreview_default_description' => 'M+ route for dungeon %s by %s.',
     ],
 ];
