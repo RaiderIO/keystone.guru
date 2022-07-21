@@ -268,8 +268,11 @@ class APIDungeonRouteController extends Controller
 
         if (!$hasAffixGroups && !$hasAffixes) {
             // Always include this season's affixes if the user hasn't selected any
-            $affixGroups    = $expansionService->getCurrentSeason($expansion)->affixgroups->pluck(['id'])->toArray();
-            $hasAffixGroups = true;
+            $currentSeason = $expansionService->getCurrentSeason($expansion);
+            if ($currentSeason !== null) {
+                $affixGroups    = $currentSeason->affixgroups->pluck(['id'])->toArray();
+                $hasAffixGroups = true;
+            }
         }
 
         if ($hasAffixGroups || $hasAffixes) {

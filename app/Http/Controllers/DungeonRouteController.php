@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
+use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
@@ -58,7 +59,7 @@ class DungeonRouteController extends Controller
     public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null)
     {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
-        return $this->viewfloor($request, $dungeon, $dungeonroute, $title, optional($defaultFloor)->index ?? '1');
+        return $this->viewfloor($request, $dungeon, $dungeonroute, $title ?? '', optional($defaultFloor)->index ?? '1');
     }
 
     /**
@@ -316,8 +317,14 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function embed(EmbedFormRequest $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
+    public function embed(EmbedFormRequest $request, $dungeonroute, string $floorIndex = '1')
     {
+        if (!is_numeric($floorIndex)) {
+            $dungeonroute = DungeonRoute::where('public_key', $floorIndex)->first();
+            if ($dungeonroute === null) {
+                return response('Not found', Http::NOT_FOUND);
+            }
+        }
         $this->authorize('embed', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {

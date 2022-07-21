@@ -70,7 +70,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.embed', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->title,
+            'title'        => Str::slug($dungeonroute->title),
             'floorindex'   => $floorIndex,
         ]);
     }
@@ -107,4 +107,31 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return RedirectResponse
+     */
+    public function cloneold(Request $request, DungeonRoute $dungeonroute)
+    {
+        return redirect()->route('dungeonroute.clone', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => Str::slug($dungeonroute->title),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return RedirectResponse
+     */
+    public function claimold(Request $request, DungeonRoute $dungeonroute)
+    {
+        return redirect()->route('dungeonroute.claim', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => Str::slug($dungeonroute->title),
+        ]);
+    }
 }

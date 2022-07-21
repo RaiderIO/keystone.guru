@@ -178,9 +178,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::get('live/{livesession}/{floorIndex}', [LiveSessionLegacyController::class, 'viewfloor']);
 
             // Clone a route
-            Route::get('clone', [DungeonRouteLegacyController::class, 'clone']);
+            Route::get('clone', [DungeonRouteLegacyController::class, 'cloneold']);
             // Claiming a route that was made by /sandbox functionality
-            Route::get('claim', [DungeonRouteLegacyController::class, 'claim']);
+            Route::get('claim', [DungeonRouteLegacyController::class, 'claimold']);
         });
     });
 
