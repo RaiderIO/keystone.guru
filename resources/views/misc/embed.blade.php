@@ -11,12 +11,15 @@
             <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
-                        'title' => $model->title,
+                        'title' => \Illuminate\Support\Str::slug($model->title),
                         'pulls' => 1,
                         'pullsDefaultState' => 0,
                         'enemyinfo' => 1
                     ]) }}"
                     style="width: 800px; height: 600px; border: none;"></iframe>
+
+{{--            <iframe src="{{url(sprintf('%s/embed', $model->public_key))}}"--}}
+{{--                    style="width: 800px; height: 600px; border: none;"></iframe>--}}
         </div>
     </div>
     {{--    <div class="row">--}}

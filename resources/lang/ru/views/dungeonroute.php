@@ -80,8 +80,9 @@ return [
         'unavailable_description' => 'У вас нет прав для просмотра этого маршрута. Попросите автора маршрута изменить настройки общего доступа к маршруту, чтобы вы могли его просмотреть.',
     ],
     'view'           => [
-        'any'                             => 'Все',
-        'linkpreview_title'               => '@todo ru: .view.linkpreview_title',
-        'linkpreview_default_description' => '@todo ru: .view.linkpreview_default_description',
+        'any'                                             => 'Все',
+        'linkpreview_title'                               => '@todo ru: .view.linkpreview_title',
+        'linkpreview_default_description'                 => '@todo ru: .view.linkpreview_default_description',
+        'linkpreview_default_description_sandbox' => '@todo ru: .view.linkpreview_default_description_sandbox',
     ],
 ];

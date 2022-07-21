@@ -74,7 +74,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Dungeon $dungeon
  * @property Path $route
  * @property Faction $faction
- * @property User $author
+ * @property User|null $author Can be null in case of temporary route
  * @property MDTImport $mdtImport
  * @property Team $team
  * @property PublishedState $publishedState

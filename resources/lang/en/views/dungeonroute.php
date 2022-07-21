@@ -80,8 +80,9 @@ return [
         'unavailable_description' => 'You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.',
     ],
     'view'           => [
-        'any'                             => 'Any',
-        'linkpreview_title'               => '%s',
-        'linkpreview_default_description' => 'M+ route for dungeon %s by %s.',
+        'any'                                             => 'Any',
+        'linkpreview_title'                               => '%s',
+        'linkpreview_default_description'                 => 'M+ route for dungeon %s by %s.',
+        'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
     ],
 ];
