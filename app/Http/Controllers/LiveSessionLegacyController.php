@@ -28,40 +28,34 @@ class LiveSessionLegacyController extends Controller
 {
     /**
      * @param Request $request
-     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string|null $title
-     * @param LiveSession $liveSession
+     * @param LiveSession $livesession
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
-    public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, LiveSession $liveSession)
+    public function view(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
     {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => Str::slug($dungeonroute->title),
-            'livesession'  => $liveSession,
+            'livesession'  => $livesession,
         ]);
     }
 
     /**
      * @param Request $request
-     * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string|null $title
-     * @param LiveSession $liveSession
+     * @param LiveSession $livesession
      * @param string $floorIndex
      * @return RedirectResponse
-     * @throws InvalidArgumentException
      */
-    public function viewfloor(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, LiveSession $liveSession, string $floorIndex)
+    public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex)
     {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => Str::slug($dungeonroute->title),
-            'livesession'  => $liveSession,
+            'livesession'  => $livesession,
             'floorindex'   => $floorIndex,
         ]);
     }
