@@ -38,7 +38,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @param Expansion $expansion
-     * @param int $seasonIndex
+     * @param string $seasonIndex
      * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
@@ -46,7 +46,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverSeason(
         Expansion                 $expansion,
-        int                       $seasonIndex,
+        string                    $seasonIndex,
         ExpansionServiceInterface $expansionService,
         DiscoverServiceInterface  $discoverService
     )
