@@ -32,7 +32,8 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        $currentSeasonAffixGroups = optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ?? collect();
+        // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
+        $currentSeasonAffixGroups = optional($this->season)->affixgroups ?? optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ?? collect();
 
         return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
