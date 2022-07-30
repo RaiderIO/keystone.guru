@@ -48,7 +48,7 @@ class Season extends CacheModel
      */
     public function getNameAttribute(): string
     {
-        return __('seasons.name', ['season' => $this->index]);
+        return __('seasons.name', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
     }
 
     /**

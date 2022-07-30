@@ -30,6 +30,7 @@ use App\Models\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PublishedState;
+use App\Models\Season;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
@@ -215,16 +216,26 @@ class APIDungeonRouteController extends Controller
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
         // May be modified/adjusted later on
         $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
+        $season    = null;
+        $expansion = null;
 
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
+        } else if ($request->has('season')) {
+            $season = Season::find($request->get('season'))->first();
         } else {
             $expansion = $expansionService->getCurrentExpansion();
         }
 
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $expansion->id)
+            ->when($expansion !== null, function (Builder $builder) use ($expansion) {
+                return $builder->where('dungeons.expansion_id', $expansion->id);
+            })
+            ->when($season !== null, function (Builder $builder) use ($season) {
+                return $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
+                    ->where('season_dungeons.season_id', $season->id);
+            })
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -268,9 +279,9 @@ class APIDungeonRouteController extends Controller
 
         if (!$hasAffixGroups && !$hasAffixes) {
             // Always include this season's affixes if the user hasn't selected any
-            $currentSeason = $expansionService->getCurrentSeason($expansion);
-            if ($currentSeason !== null) {
-                $affixGroups    = $currentSeason->affixgroups->pluck(['id'])->toArray();
+            $season = $season ?? $expansionService->getCurrentSeason($expansion);
+            if ($season !== null) {
+                $affixGroups    = $season->affixgroups->pluck(['id'])->toArray();
                 $hasAffixGroups = true;
             }
         }
@@ -327,8 +338,10 @@ class APIDungeonRouteController extends Controller
         if ($result->isEmpty()) {
             return response()->noContent();
         } else {
+            $userRegion = GameServerRegion::getUserOrDefaultRegion();
+
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion()),
+                'currentAffixGroup' => optional($season)->getCurrentAffixGroupInRegion($userRegion) ?? $expansionService->getCurrentAffixGroup($expansion, $userRegion),
                 'dungeonroutes'     => $result,
                 'showAffixes'       => true,
                 'showDungeonImage'  => true,
@@ -728,7 +741,9 @@ class APIDungeonRouteController extends Controller
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonroute]);
             return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Throwable $error) {
-            Log::critical($error->getMessage());
+            Log::critical($error->getMessage(), [
+                'dungeonroute' => $dungeonroute->public_key
+            ]);
 
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, __('controller.apidungeonroute.mdt_generate_no_lua'));

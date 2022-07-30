@@ -169,6 +169,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allAffixGroupsByActiveExpansion', $globalViewVariables['allAffixGroupsByActiveExpansion']);
             $view->with('featuredAffixesByActiveExpansion', $globalViewVariables['featuredAffixesByActiveExpansion']);
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
 
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
