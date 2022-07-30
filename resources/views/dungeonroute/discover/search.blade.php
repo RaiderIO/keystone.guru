@@ -14,11 +14,14 @@
 /** @var $allAffixGroupsByActiveExpansion \Illuminate\Support\Collection|\App\Models\AffixGroup[] */
 /** @var $featuredAffixesByActiveExpansion \Illuminate\Support\Collection|\App\Models\Affix[] */
 /** @var $seasonService \App\Service\Season\SeasonService */
+/** @var $currentSeason \App\Models\Season */
+/** @var $nextSeason \App\Models\Season|null */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/search', 'options' =>  [
         'levelMin' => config('keystoneguru.levels.min'),
         'levelMax' => config('keystoneguru.levels.max'),
         'limit' => config('keystoneguru.discover.limits.search'),
+        'currentSeason' => $currentSeason->id,
         'currentExpansion' => $currentExpansion->shortname,
     ]
 ])
@@ -35,26 +38,65 @@
 @endsection
 
 @section('content')
-    <div id="search_expansion_dungeon">
-        <ul id="search_expansion_select_tabs" class="nav nav-tabs" role="tablist">
+    <div id="search_dungeon">
+        <ul id="search_dungeon_select_tabs" class="nav nav-tabs" role="tablist">
+            @if($nextSeason !== null)
+                <li class="nav-item">
+                    <a id="season-{{ $nextSeason->id }}-search-tab"
+                       class="nav-link active"
+                       href="#season-{{ $nextSeason->id }}-search-content"
+                       role="tab"
+                       aria-controls="season-{{ $nextSeason->id }}-search-content"
+                       aria-selected="true"
+                       data-toggle="tab"
+                       data-season="{{ $nextSeason->id }}"
+                    >{{ $nextSeason->name }}</a>
+                </li>
+            @endif
+            <li class="nav-item">
+                <a id="season-{{ $currentSeason->id }}-search-tab"
+                   class="nav-link {{ $nextSeason === null ? 'active' : '' }}"
+                   href="#season-{{ $currentSeason->id }}-search-content"
+                   role="tab"
+                   aria-controls="season-{{ $currentSeason->id }}-search-content"
+                   aria-selected="{{ $nextSeason === null ? 'true' : 'false' }}"
+                   data-toggle="tab"
+                   data-season="{{ $currentSeason->id }}"
+                >{{ $currentSeason->name }}</a>
+            </li>
             @foreach($activeExpansions as $expansion)
                 <li class="nav-item">
                     <a id="{{ $expansion->shortname }}-search-tab"
-                       class="nav-link {{ $loop->index === 0 ? 'active' : '' }}"
+                       class="nav-link"
                        href="#{{ $expansion->shortname }}-search-content"
                        role="tab"
                        aria-controls="{{ $expansion->shortname }}-search-content"
-                       aria-selected="{{ $loop->index === 0 ? 'true' : 'false' }}"
+                       aria-selected="false"
                        data-toggle="tab"
                        data-expansion="{{ $expansion->shortname }}"
                     >{{ __($expansion->name) }}</a>
                 </li>
             @endforeach
         </ul>
+
         <div class="tab-content">
+            @if($nextSeason !== null)
+                <div id="season-{{ $nextSeason->id }}-search-content"
+                     class="tab-pane fade show active"
+                     role="tabpanel"
+                     aria-labelledby="season-{{ $nextSeason->id }}-search-content">
+                    @include('common.dungeon.grid', ['dungeons' => $nextSeason->dungeons, 'names' => true, 'selectable' => true])
+                </div>
+            @endif
+            <div id="season-{{ $currentSeason->id }}-search-content"
+                 class="tab-pane fade show {{ $nextSeason === null ? 'active' : '' }}"
+                 role="tabpanel"
+                 aria-labelledby="season-{{ $currentSeason->id }}-search-content">
+                @include('common.dungeon.grid', ['dungeons' => $currentSeason->dungeons, 'names' => true, 'selectable' => true])
+            </div>
             @foreach($activeExpansions as $expansion)
                 <div id="{{ $expansion->shortname }}-search-content"
-                     class="tab-pane fade show {{ $loop->index === 0 ? 'active' : '' }}"
+                     class="tab-pane fade show"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-search-content">
                     @include('common.dungeon.grid', ['expansion' => $expansion, 'names' => true, 'selectable' => true])

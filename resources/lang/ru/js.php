@@ -472,6 +472,7 @@ return [
     'filter_input_rating_header'            => 'Рейтинг: :value и выше',
     'filter_input_title_header'             => 'Название: :value',
     'filter_input_expansion_header'         => 'Дополнение: :value',
+    'filter_input_season_header'            => '@todo ru: .filter_input_season_header',
     'filter_input_user_header'              => 'Пользователь: :value',
 
     // Group composition

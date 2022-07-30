@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
  * @property $index int
  * @property $start datetime
  * @property $presets int
+ * @property $name string Dynamic attribute
  *
  * @property Expansion $expansion
  * @property Collection|AffixGroup[] $affixgroups
@@ -34,11 +35,21 @@ class Season extends CacheModel
     use HasStart;
 
     protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets'];
-    public $with = ['expansion', 'affixgroups'];
+    public $with = ['expansion', 'affixgroups', 'dungeons'];
     public $timestamps = false;
+
+    protected $appends = ['name'];
 
     /** @var boolean|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;
+
+    /**
+     * @return string
+     */
+    public function getNameAttribute(): string
+    {
+        return __('seasons.name', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+    }
 
     /**
      * @return BelongsTo

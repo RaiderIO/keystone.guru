@@ -13,6 +13,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.hasMore = true;
 
         this.filters = {
+            'season': new SearchFilterManualSeason(this._search.bind(this)),
             'expansion': new SearchFilterManualExpansion(this._search.bind(this)),
             'dungeons': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
             'title': new SearchFilterTitle('#title', this._search.bind(this)),
@@ -56,10 +57,17 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         }
 
         // Whenever the tab is changed, apply the new filter
-        $('#search_expansion_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
-            self._selectExpansion(expansion);
+            if (typeof expansion !== 'undefined') {
+                self._selectSeason(null);
+                self._selectExpansion(expansion);
+            } else {
+                let season = $(e.target).data('season');
+                self._selectSeason(season);
+                self._selectExpansion(null);
+            }
         });
 
         this.$loadMore = $('#route_list_load_more');
@@ -72,7 +80,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
-        this._selectExpansion(this.options.currentExpansion);
+        this._selectSeason(this.options.currentSeason);
 
         // Show some not very useful routes to get people to start using the filters
         this._search();
@@ -80,18 +88,41 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
     /**
      *
-     * @param expansion {String}
+     * @param expansion {String|null}
      * @private
      */
     _selectExpansion(expansion) {
-        $(`#search_expansion_dungeon .grid_dungeon`).removeClass('selectable').filter(`.${expansion}`).addClass('selectable');
+        if (expansion !== null) {
+            $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
+            $(`#${expansion}-search-content .grid_dungeon`).addClass('selectable');
+
+            // Update the affix group list
+            this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
+            this.filters.affixgroups.activate();
+
+            $(`.filter_affix`).hide().filter(`.${expansion}`).show();
+        }
         this.filters.expansion.setValue(expansion);
+    }
+
+    /**
+     *
+     * @param season {String|null}
+     * @private
+     */
+    _selectSeason(season) {
+        if (season !== null) {
+            $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
+            $(`#season-${season}-search-content .grid_dungeon`).addClass('selectable');
+        }
+        this.filters.season.setValue(season);
 
         // Update the affix group list
-        this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
+        // @TODO #1252
+        this.filters.affixgroups.options.selector = `.filter_affix.shadowlands select`;
         this.filters.affixgroups.activate();
 
-        $(`.filter_affix`).hide().filter(`.${expansion}`).show();
+        $(`.filter_affix`).hide().filter(`.shadowlands`).show();
     }
 
     /**

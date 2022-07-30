@@ -211,7 +211,6 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
-            'season'                  => '@todo ru: .layout.header.season',
             'routes'                  => ':expansion',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',

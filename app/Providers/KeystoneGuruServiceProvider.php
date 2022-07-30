@@ -169,6 +169,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allAffixGroupsByActiveExpansion', $globalViewVariables['allAffixGroupsByActiveExpansion']);
             $view->with('featuredAffixesByActiveExpansion', $globalViewVariables['featuredAffixesByActiveExpansion']);
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
 
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
@@ -188,6 +190,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $currentAffixes[$expansionShortname] = optional($currentAffixGroupByRegion[$userOrDefaultRegion->short] ?? null)->id;
             }
 
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
             $view->with('currentAffixes', $currentAffixes);
             $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
             $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
@@ -223,6 +227,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allExpansions', $globalViewVariables['allExpansions']);
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
         });
 

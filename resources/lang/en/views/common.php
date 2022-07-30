@@ -211,7 +211,6 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'season'                  => 'Season :season',
             'routes'                  => ':expansion',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',

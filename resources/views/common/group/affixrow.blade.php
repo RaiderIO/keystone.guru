@@ -1,12 +1,16 @@
 <?php
 /** @var $affixGroup \App\Models\AffixGroup\AffixGroup */
+/** @var $season \App\Models\Season|null */
 /** @var $expansionKey string */
 
 $isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
 $cssClasses = $cssClasses ?? '';
 ?>
 <div
-    class="row affix_list_row expansion {{$expansionKey}} {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+    class="row affix_list_row expansion {{$expansionKey}}
+    {{ $isTeeming ? 'affix_row_teeming' : 'affix_row_no_teeming' }}
+    {{ isset($season) ? 'season season-' . $season->id : '' }}
+    "
     {{ $isTeeming ? 'style="display: none;"' : '' }} data-id="{{ $affixGroup->id }}">
     <?php
     $count = 0;

@@ -3,12 +3,14 @@
 /** @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
 /** @var $siegeOfBoralus \App\Models\Dungeon */
+/** @var $currentSeason \App\Models\Season */
+/** @var $nextSeason \App\Models\Season|null */
 
-$id               = $id ?? 'dungeon_id_select';
-$name             = $name ?? 'dungeon_id';
-$label            = $label ?? __('views/common.dungeon.select.dungeon');
-$required         = $required ?? true;
-$showAll          = !isset($showAll) || $showAll;
+$id       = $id ?? 'dungeon_id_select';
+$name     = $name ?? 'dungeon_id';
+$label    = $label ?? __('views/common.dungeon.select.dungeon');
+$required = $required ?? true;
+$showAll  = !isset($showAll) || $showAll;
 // Show all dungeons if we're debugging
 $activeOnly       = $activeOnly ?? !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
@@ -24,6 +26,19 @@ if (!isset($dungeons)) {
 }
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
+// Build a list of seasons that we use to make selections of
+$seasons = [];
+if ($nextSeason !== null) {
+    $seasons[] = $nextSeason;
+}
+$seasons[] = $currentSeason;
+
+foreach ($seasons as $season) {
+    $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+        return [$id => __($name)];
+    })->toArray();
+}
+
 // Group the dungeons by expansion
 // @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
@@ -36,27 +51,26 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
         })->toArray();
     }
 }
-
 ?>
 
 @if($showSiegeWarning && $siegeOfBoralus)
-@section('scripts')
-    @parent
+    @section('scripts')
+        @parent
 
-    <script>
-        $(function () {
-            let $dungeonIdSelect = $('#{{ $id }}');
-            $dungeonIdSelect.bind('change', function () {
-                let $factionWarning = $('#siege_of_boralus_faction_warning');
-                if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }}) {
-                    $factionWarning.show();
-                } else {
-                    $factionWarning.hide();
-                }
-            });
-        })
-    </script>
-@endsection
+        <script>
+            $(function () {
+                let $dungeonIdSelect = $('#{{ $id }}');
+                $dungeonIdSelect.bind('change', function () {
+                    let $factionWarning = $('#siege_of_boralus_faction_warning');
+                    if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }}) {
+                        $factionWarning.show();
+                    } else {
+                        $factionWarning.hide();
+                    }
+                });
+            })
+        </script>
+    @endsection
 @endif
 
 <div class="form-group">

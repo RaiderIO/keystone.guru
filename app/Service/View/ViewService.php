@@ -16,6 +16,7 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
+use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -67,6 +68,10 @@ class ViewService implements ViewServiceInterface
 
             $activeDungeonsByExpansionId = $allDungeonsByExpansionId
                 ->where('active', true);
+
+            $currentExpansion = $this->expansionService->getCurrentExpansion();
+            $currentSeason = $currentExpansion->currentseason;
+            $nextSeason = $currentExpansion->nextseason;
 
             /** @var Release $latestRelease */
             $latestRelease          = Release::latest()->first();
@@ -146,6 +151,8 @@ class ViewService implements ViewServiceInterface
                 'activeExpansions'                 => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                    => $allExpansions,
                 'dungeonsByExpansionIdDesc'        => $allDungeonsByExpansionId,
+                'currentSeason'                    => $currentSeason,
+                'nextSeason'                       => $nextSeason,
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc'  => $activeDungeonsByExpansionId,
                 'siegeOfBoralus'                   => Dungeon::siegeOfBoralus()->first(),
@@ -153,7 +160,7 @@ class ViewService implements ViewServiceInterface
                 // Search
                 'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
                 'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
-                'currentExpansion'                 => $this->expansionService->getCurrentExpansion(),
+                'currentExpansion'                 => $currentExpansion,
 
                 // Discover
                 'affixGroupEaseTiersByAffixGroup'  => $this->easeTierService->getTiers()->groupBy(['affix_group_id', 'dungeon_id']),

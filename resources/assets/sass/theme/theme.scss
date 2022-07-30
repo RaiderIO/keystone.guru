@@ -365,9 +365,9 @@ body {
     color: var($--theme-primary) !important;
   }
 
-  .dropdown-item.selected {
-    background-color: var($--theme-dark) !important;
-  }
+  //.dropdown-item.selected {
+  //  background-color: var($--theme-dark) !important;
+  //}
 
   #map .dropdown-item:hover, .dropdown-item:focus {
     color: black;

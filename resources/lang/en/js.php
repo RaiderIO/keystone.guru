@@ -475,6 +475,7 @@ return [
     'filter_input_rating_header'            => 'Rating: :value and higher',
     'filter_input_title_header'             => 'Title: :value',
     'filter_input_expansion_header'         => 'Expansion: :value',
+    'filter_input_season_header'            => 'Season: :value',
     'filter_input_user_header'              => 'User: :value',
 
     // Group composition
