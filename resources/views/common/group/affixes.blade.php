@@ -26,6 +26,10 @@ else if (empty($defaultSelected)) {
 $teemingSelector = $teemingSelector ?? null;
 $names = $names ?? true;
 $id = $id ?? 'route_select_affixes';
+
+$allAffixGroupsWithSeasons = $allAffixGroups
+    ->merge($currentSeason->affixgroups)
+    ->merge(optional($nextSeason)->affixgroups ?? collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -45,7 +49,7 @@ $id = $id ?? 'route_select_affixes';
 
 <?php // @formatter:off ?>
 <div class="form-group">
-    {!! Form::select($id . '[]', $allAffixGroups->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
+    {!! Form::select($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)
             @foreach($nextSeason->affixgroups as $affixGroup)

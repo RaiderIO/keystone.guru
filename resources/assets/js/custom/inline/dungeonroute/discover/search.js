@@ -118,10 +118,11 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.filters.season.setValue(season);
 
         // Update the affix group list
-        // this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
-        // this.filters.affixgroups.activate();
-        //
-        // $(`.filter_affix`).hide().filter(`.${expansion}`).show();
+        // @TODO #1252
+        this.filters.affixgroups.options.selector = `.filter_affix.shadowlands select`;
+        this.filters.affixgroups.activate();
+
+        $(`.filter_affix`).hide().filter(`.shadowlands`).show();
     }
 
     /**

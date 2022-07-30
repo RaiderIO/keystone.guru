@@ -737,10 +737,12 @@ class DungeonRoute extends Model
                 $this->affixgroups()->delete();
 
                 foreach ($newAffixes as $value) {
+                    // Check disabled to support dungeons not being tied to expansions but to seasons instead.
+                    // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
                     // Skip any affixes that don't exist, and don't match our current expansion
-                    if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
-                        continue;
-                    }
+                    // if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                    //     continue;
+                    // }
 
                     /** @var AffixGroup $affixGroup */
                     $affixGroup = AffixGroup::find($value);

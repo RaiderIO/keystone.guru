@@ -222,7 +222,7 @@ class APIDungeonRouteController extends Controller
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
         } else if ($request->has('season')) {
-            $season = Season::find($request->get('season'))->first();
+            $season = Season::find($request->get('season'));
         } else {
             $expansion = $expansionService->getCurrentExpansion();
         }
