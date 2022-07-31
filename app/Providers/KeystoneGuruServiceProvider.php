@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PaidTier;
+use App\Models\Season;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -255,10 +256,22 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var ExpansionData $expansionsData */
             $expansionsData = $globalViewVariables['expansionsData']->get($currentExpansion->shortname);
 
-            $view->with('dungeons', $allActiveDungeons->where('expansion_id', $currentExpansion->id));
-            $view->with('currentExpansion', $currentExpansion);
-            $view->with('affixgroups', $expansionsData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
-            $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup($userOrDefaultRegion));
+            /** @var Season $selectedSeason */
+            $selectedSeason         = $globalViewVariables['currentSeason'];
+            $cookieSelectedSeasonId = (int)$_COOKIE['dungeonroute_coverage_season_id'] ?? 0;
+
+            if ($cookieSelectedSeasonId !== $globalViewVariables['currentSeason']->id &&
+                $globalViewVariables['nextSeason'] !== null &&
+                $cookieSelectedSeasonId === $globalViewVariables['nextSeason']->id) {
+                $selectedSeason = $globalViewVariables['nextSeason'];
+            }
+
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
+            $view->with('selectedSeason', $selectedSeason);
+            $view->with('currentAffixGroup', $selectedSeason->getCurrentAffixGroup());
+            $view->with('affixgroups', $selectedSeason->affixgroups);
+            $view->with('dungeons', $selectedSeason->dungeons);
         });
 
         // Team selector
