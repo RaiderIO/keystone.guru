@@ -22,6 +22,7 @@
         'levelMax' => config('keystoneguru.levels.max'),
         'limit' => config('keystoneguru.discover.limits.search'),
         'currentSeason' => $currentSeason->id,
+        'nextSeason' => optional($nextSeason)->id,
         'currentExpansion' => $currentExpansion->shortname,
     ]
 ])
