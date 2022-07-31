@@ -80,7 +80,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
-        this._selectSeason(this.options.currentSeason);
+        this._selectSeason(this.options.nextSeason ?? this.options.currentSeason);
 
         // Show some not very useful routes to get people to start using the filters
         this._search();
