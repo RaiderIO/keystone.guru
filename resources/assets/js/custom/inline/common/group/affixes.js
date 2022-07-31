@@ -41,8 +41,6 @@ class CommonGroupAffixes extends InlineCode {
 
         // Don't mess with it if it's not working for whatever reason
         if (typeof expansionKey !== 'undefined' && expansionKey.length > 0) {
-            this.currentSelection = [];
-
             // Hide everything
             let $affixListRows = $(`${this.options.selectSelector}_list_custom .affix_list_row`).hide();
 
@@ -52,7 +50,6 @@ class CommonGroupAffixes extends InlineCode {
             this.currentSelectionExpansionKey = expansionKey;
 
             if (seasonForSelectedDungeon !== null) {
-
                 // Try to select the affix based on the currently active expansion + season
                 if (seasonForSelectedDungeon.id === this.options.currentSeason.id) {
                     let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
