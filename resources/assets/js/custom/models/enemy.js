@@ -878,7 +878,7 @@ class Enemy extends MapObject {
      */
     isShrouded() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED;
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
     }
 
     /**
@@ -887,7 +887,7 @@ class Enemy extends MapObject {
      */
     isShroudedZulGamux() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX;
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
     }
 
     /**
@@ -896,7 +896,7 @@ class Enemy extends MapObject {
      */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc() || this.isTormented();
+        return this.isBossNpc() || this.isInspiring() || this.isShrouded() || this.isShroudedZulGamux() || this.isTormented() || this.isPridefulNpc() || this.isAwakenedNpc();
     }
 
     /**

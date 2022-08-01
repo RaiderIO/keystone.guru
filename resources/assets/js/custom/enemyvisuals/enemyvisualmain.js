@@ -34,15 +34,15 @@ class EnemyVisualMain extends EnemyVisualIcon {
             let mapContext = state.getMapContext();
             if (this.enemyvisual.enemy.isShrouded() && mapContext.hasAffix(AFFIX_SHROUDED)) {
                 mainVisualInnerClasses.push('shrouded');
-            } else if (this.enemyvisual.enemy.isShroudedZulGamux() && mapContext.hasAffix(AFFIX_SHROUDED)) {
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux()) {
                 mainVisualInnerClasses.push('shrouded_zul_gamux');
-            } else if (this.enemyvisual.enemy.isInspiring() && mapContext.hasAffix(AFFIX_INSPIRING)) {
+            } else if (this.enemyvisual.enemy.isInspiring()) {
                 mainVisualInnerClasses.push('inspiring');
-            } else if (this.enemyvisual.enemy.isEncrypted() && mapContext.hasAffix(AFFIX_ENCRYPTED)) {
+            } else if (this.enemyvisual.enemy.isEncrypted()) {
                 mainVisualInnerClasses.push('encrypted');
-            } else if (this.enemyvisual.enemy.isPridefulNpc() && mapContext.hasAffix(AFFIX_PRIDEFUL)) {
+            } else if (this.enemyvisual.enemy.isPridefulNpc()) {
                 mainVisualInnerClasses.push('prideful');
-            } else if (this.enemyvisual.enemy.isTormented() && mapContext.hasAffix(AFFIX_TORMENTED)) {
+            } else if (this.enemyvisual.enemy.isTormented()) {
                 mainVisualInnerClasses.push('tormented');
             }
         }
