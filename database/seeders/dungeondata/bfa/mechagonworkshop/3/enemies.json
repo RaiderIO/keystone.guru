@@ -1,7 +1,7 @@
 [
     {
         "id": 4255,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1622,
         "npc_id": 144293,
         "floor_id": 68,
         "mdt_id": 1,
@@ -530,7 +530,7 @@
     },
     {
         "id": 8480,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1622,
         "npc_id": 144295,
         "floor_id": 68,
         "mdt_id": -1,
