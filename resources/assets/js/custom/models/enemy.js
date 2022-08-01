@@ -581,6 +581,8 @@ class Enemy extends MapObject {
                 }
             } else if (this.enemy_forces_override >= 0) {
                 result = this.enemy_forces_override;
+            } else if ((this.isShrouded() || this.isShroudedZulGamux()) && getState().getMapContext().hasAffix(AFFIX_SHROUDED)) {
+                result = 0;
             }
         }
 

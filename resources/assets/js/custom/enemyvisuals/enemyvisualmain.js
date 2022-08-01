@@ -20,27 +20,29 @@ class EnemyVisualMain extends EnemyVisualIcon {
         // Handle Teeming display
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            if (getState().hasEnemyAggressivenessBorder()) {
+            let state = getState();
+            if (state.hasEnemyAggressivenessBorder()) {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
 
-            if (getState().hasEnemyDangerousBorder() && npc.dangerous) {
+            if (state.hasEnemyDangerousBorder() && npc.dangerous) {
                 mainVisualInnerClasses.push('dangerous');
             } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
                 mainVisualInnerClasses.push('awakened');
             }
 
-            if (this.enemyvisual.enemy.isShrouded()) {
+            let mapContext = state.getMapContext();
+            if (this.enemyvisual.enemy.isShrouded() && mapContext.hasAffix(AFFIX_SHROUDED)) {
                 mainVisualInnerClasses.push('shrouded');
-            } else if (this.enemyvisual.enemy.isShroudedZulGamux()) {
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux() && mapContext.hasAffix(AFFIX_SHROUDED)) {
                 mainVisualInnerClasses.push('shrouded_zul_gamux');
-            } else if (this.enemyvisual.enemy.isInspiring()) {
+            } else if (this.enemyvisual.enemy.isInspiring() && mapContext.hasAffix(AFFIX_INSPIRING)) {
                 mainVisualInnerClasses.push('inspiring');
-            } else if (this.enemyvisual.enemy.isEncrypted()) {
+            } else if (this.enemyvisual.enemy.isEncrypted() && mapContext.hasAffix(AFFIX_ENCRYPTED)) {
                 mainVisualInnerClasses.push('encrypted');
-            } else if (this.enemyvisual.enemy.isPridefulNpc()) {
+            } else if (this.enemyvisual.enemy.isPridefulNpc() && mapContext.hasAffix(AFFIX_PRIDEFUL)) {
                 mainVisualInnerClasses.push('prideful');
-            } else if (this.enemyvisual.enemy.isTormented()) {
+            } else if (this.enemyvisual.enemy.isTormented() && mapContext.hasAffix(AFFIX_TORMENTED)) {
                 mainVisualInnerClasses.push('tormented');
             }
         }
