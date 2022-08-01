@@ -2,7 +2,7 @@
     {
         "id": 8437,
         "enemy_pack_id": -1,
-        "npc_id": 115419,
+        "npc_id": 0,
         "floor_id": 33,
         "mdt_id": -1,
         "mdt_npc_id": null,
@@ -11,16 +11,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 1,
+        "skippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -228.41070404482,
         "lng": 197.3973402274,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": {
-            "id": 115419
-        }
+        "npc": null
     },
     {
         "id": 8438,
