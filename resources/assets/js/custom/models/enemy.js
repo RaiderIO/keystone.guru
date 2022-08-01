@@ -226,6 +226,7 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
                 ],
                 setter: function (value) {
@@ -865,6 +866,15 @@ class Enemy extends MapObject {
     isEncrypted() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isShrouded() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED;
     }
 
     /**

@@ -258,7 +258,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             /** @var Season $selectedSeason */
             $selectedSeason         = $globalViewVariables['currentSeason'];
-            $cookieSelectedSeasonId = (int)$_COOKIE['dungeonroute_coverage_season_id'] ?? 0;
+            $cookieSelectedSeasonId = isset($_COOKIE['dungeonroute_coverage_season_id']) ? (int)$_COOKIE['dungeonroute_coverage_season_id'] : 0;
 
             if ($cookieSelectedSeasonId !== $globalViewVariables['currentSeason']->id &&
                 $globalViewVariables['nextSeason'] !== null &&
