@@ -32,6 +32,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
             if (this.enemyvisual.enemy.isShrouded()) {
                 mainVisualInnerClasses.push('shrouded');
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux()) {
+                mainVisualInnerClasses.push('shrouded_zul_gamux');
             } else if (this.enemyvisual.enemy.isInspiring()) {
                 mainVisualInnerClasses.push('inspiring');
             } else if (this.enemyvisual.enemy.isEncrypted()) {

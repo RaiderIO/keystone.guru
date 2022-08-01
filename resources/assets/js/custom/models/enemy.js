@@ -31,6 +31,7 @@ let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
 let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
+let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
 
 /**
  * @property {Number} floor_id
@@ -227,6 +228,7 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
                 ],
                 setter: function (value) {
@@ -875,6 +877,15 @@ class Enemy extends MapObject {
     isShrouded() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isShroudedZulGamux() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX;
     }
 
     /**
