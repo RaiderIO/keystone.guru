@@ -1793,7 +1793,7 @@
         "npc_class_id": 1,
         "name": "The Big Bad Wolf",
         "base_health": 171010,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
