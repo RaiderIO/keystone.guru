@@ -34,10 +34,8 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
 $seasons = [];
 if ($nextSeason !== null) {
     $seasons[] = $nextSeason;
-    $routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $nextSeason->id;
-} else {
-    $routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $currentSeason->id;
 }
+$routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $currentSeason->id;
 $seasons[] = $currentSeason;
 
 $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
