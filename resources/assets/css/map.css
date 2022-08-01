@@ -916,6 +916,10 @@ html, body, #map, #app, .wrapper {
     border: 3px solid #810098;
 }
 
+.shrouded_zul_gamux {
+    border: 3px solid #d000ff;
+}
+
 .tormented {
     border: 3px solid #ffffff;
 }
