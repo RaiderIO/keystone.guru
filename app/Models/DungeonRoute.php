@@ -471,14 +471,26 @@ class DungeonRoute extends Model
                                       IF(
                                               enemies.enemy_forces_override_teeming >= 0,
                                               enemies.enemy_forces_override_teeming,
-                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                              IF(
+                                                  npcs.enemy_forces_teeming >= 0,
+                                                  npcs.enemy_forces_teeming,
+                                                  IF(
+                                                      enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
+                                                      0,
+                                                      npcs.enemy_forces
+                                                  )
+                                              )
                                           )
                                   ),
                               SUM(
                                       IF(
                                               enemies.enemy_forces_override >= 0,
                                               enemies.enemy_forces_override,
-                                              npcs.enemy_forces
+                                              IF(
+                                                  enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
+                                                  0,
+                                                  npcs.enemy_forces
+                                              )
                                           )
                                   )
                                ), 0
