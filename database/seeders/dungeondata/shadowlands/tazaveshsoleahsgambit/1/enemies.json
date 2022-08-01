@@ -98,7 +98,7 @@
         "floor_id": 97,
         "mdt_id": 3,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
