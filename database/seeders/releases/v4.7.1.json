@@ -41,6 +41,16 @@
                     "id": 1,
                     "category": "General changes"
                 }
+            },
+            {
+                "release_changelog_id": 138,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Updated mapping for all new dungeons. Shrouded affix partially mapped in some dungeons. Will complete as more information becomes available in the coming days.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             }
         ]
     }
