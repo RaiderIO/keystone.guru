@@ -55,11 +55,13 @@ class CommonGroupAffixes extends InlineCode {
                     let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
                     if (currentAffix !== null) {
                         this.currentSelection = [currentAffix];
+                    } else {
+                        this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
                     }
                 }
 
-                // But if it's for a next season, just select the first affix to have something selected
-                if (this.currentSelection.length === 0) {
+                // Try to select the affix based on the currently active expansion + season
+                if (this._hasNextSeason() && seasonForSelectedDungeon.id === this.options.nextSeason.id) {
                     this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
                 }
 
@@ -130,6 +132,15 @@ class CommonGroupAffixes extends InlineCode {
 
     /**
      *
+     * @returns {boolean}
+     * @private
+     */
+    _hasNextSeason() {
+        return typeof this.options.nextSeason !== 'undefined' && this.options.nextSeason !== null;
+    }
+
+    /**
+     *
      * @param {Number} id
      * @returns {Object|null}
      * @private
@@ -144,7 +155,7 @@ class CommonGroupAffixes extends InlineCode {
             }
         }
 
-        if (this.options.nextSeason !== null) {
+        if (this._hasNextSeason()) {
             for (let i = 0; i < this.options.nextSeason.dungeons.length; i++) {
                 if (this.options.nextSeason.dungeons[i].id === id) {
                     result = this.options.nextSeason;

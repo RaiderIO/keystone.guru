@@ -84,6 +84,15 @@ class Season extends CacheModel
     }
 
     /**
+     * @param Dungeon $dungeon
+     * @return bool
+     */
+    public function hasDungeon(Dungeon $dungeon): bool
+    {
+        return $this->seasondungeons()->where('dungeon_id', $dungeon->id)->exists();
+    }
+
+    /**
      * Get a list of unique affixes found in this season.
      *
      * @return Collection

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -292,6 +293,28 @@ class Dungeon extends CacheModel
         $result['percent']  = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
+    }
+
+    /**
+     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
+     * @param SeasonServiceInterface $seasonService
+     * @return Season|null
+     */
+    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
+    {
+        $nextSeason = $seasonService->getNextSeason();
+        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
+            return $nextSeason;
+        }
+
+        // $currentSeason cannot be null - there's always a season for the current expansion
+        $currentSeason = $seasonService->getCurrentSeason();
+        if ($currentSeason->hasDungeon($this)) {
+            return $currentSeason;
+        }
+
+        // Timewalking fallback
+        return $seasonService->getCurrentSeason($this->expansion);
     }
 
     /**

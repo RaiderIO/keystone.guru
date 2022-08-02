@@ -91,7 +91,6 @@ class SeasonsSeeder extends Seeder
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id' => 26,
                 'index'             => 4,
-                // @TODO Revert to 08-02 when that time has passed, this is just a temp hack to activate Season 4 earlier
                 'start'             => '2022-08-02 00:00:00',
                 'presets'           => 0,
                 'dungeons'          => Dungeon::whereIn('key', [

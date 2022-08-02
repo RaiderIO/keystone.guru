@@ -1,0 +1,47 @@
+{
+    "id": 132,
+    "release_changelog_id": 139,
+    "version": "v4.7.2",
+    "title": "Bugfixes for season 4",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-02T20:52:59+00:00",
+    "updated_at": "2022-08-02T20:52:59+00:00",
+    "changelog": {
+        "id": 139,
+        "release_id": 132,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 139,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1262,
+                "change": "Lower Karazhan floors are no longer in reverse order (ctrl + F5 if your map tiles aren't updated).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 139,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1259,
+                "change": "Temporary routes are now assigned the proper affixes upon creation (notably, Shrouding for Season 4).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 139,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1260,
+                "change": "Upon first load of the site, your route coverage is no longer empty (which is fixed by switching seasons).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

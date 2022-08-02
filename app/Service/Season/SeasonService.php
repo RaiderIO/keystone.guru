@@ -120,6 +120,20 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
+     * @param Expansion|null $expansion
+     * @return Season|null
+     */
+    function getNextSeason(?Expansion $expansion = null): ?Season
+    {
+        if ($expansion === null) {
+            $expansion = $this->expansionService->getCurrentExpansion();
+        }
+
+        return $expansion->nextseason;
+    }
+
+
+    /**
      * @param $date Carbon The date at which you want to know the full iterations that have been done since then.
      * @return int The amount of iterations done since all time starting Mythic Plus.
      */
