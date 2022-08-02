@@ -1144,10 +1144,21 @@ class DungeonRoute extends Model
     private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
     {
         if ($this->affixgroups()->count() === 0) {
-            $currentSeason = $seasonService->getCurrentSeason($this->dungeon->expansion) ?? $seasonService->getCurrentSeason($expansionService->getCurrentExpansion());
+            // Fallback to the current expansion's
+            $activeSeason = $this->dungeon->getActiveSeason($seasonService);
+
+            if ($activeSeason === null) {
+                logger()->warning('No active season found for dungeon; fallback on current season', [
+                    'dungeonroute' => $this->public_key,
+                    'dungeon'      => $this->dungeon->name,
+                ]);
+
+                $activeSeason = $seasonService->getCurrentSeason($expansionService->getCurrentExpansion());
+            }
+
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id'   => optional($currentSeason->getCurrentAffixGroup())->id ?? $currentSeason->affixgroups->first()->id,
+                'affix_group_id'   => optional($activeSeason->getCurrentAffixGroup())->id ?? $activeSeason->affixgroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);
 
