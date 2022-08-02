@@ -409,6 +409,36 @@
         "floor_count": 6,
         "floors": [
             {
+                "id": 19,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
+                "default": 1,
+                "min_enemy_size": 16,
+                "max_enemy_size": 34,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 350,
+                        "floor1_id": 19,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 351,
+                        "floor1_id": 19,
+                        "floor2_id": 21,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 352,
+                        "floor1_id": 19,
+                        "floor2_id": 20,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
                 "id": 24,
                 "index": 1,
                 "mdt_sub_level": null,
@@ -555,36 +585,6 @@
                         "floor1_id": 20,
                         "floor2_id": 19,
                         "direction": "up"
-                    }
-                ]
-            },
-            {
-                "id": 19,
-                "index": 6,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
-                "default": 1,
-                "min_enemy_size": 16,
-                "max_enemy_size": 34,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 333,
-                        "floor1_id": 19,
-                        "floor2_id": 23,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 334,
-                        "floor1_id": 19,
-                        "floor2_id": 21,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 335,
-                        "floor1_id": 19,
-                        "floor2_id": 20,
-                        "direction": "down"
                     }
                 ]
             }
