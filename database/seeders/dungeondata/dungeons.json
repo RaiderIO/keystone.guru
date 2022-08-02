@@ -409,158 +409,8 @@
         "floor_count": 6,
         "floors": [
             {
-                "id": 24,
-                "index": 1,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.servants_quarters",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 330,
-                        "floor1_id": 24,
-                        "floor2_id": 23,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 331,
-                        "floor1_id": 24,
-                        "floor2_id": 22,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 332,
-                        "floor1_id": 24,
-                        "floor2_id": 21,
-                        "direction": "right"
-                    }
-                ]
-            },
-            {
-                "id": 23,
-                "index": 2,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.upper_livery_stables",
-                "default": 0,
-                "min_enemy_size": 20,
-                "max_enemy_size": 40,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 338,
-                        "floor1_id": 23,
-                        "floor2_id": 24,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 339,
-                        "floor1_id": 23,
-                        "floor2_id": 22,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 340,
-                        "floor1_id": 23,
-                        "floor2_id": 19,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
-                "id": 22,
-                "index": 3,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.the_banquet_hall",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 290,
-                        "floor1_id": 22,
-                        "floor2_id": 24,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 291,
-                        "floor1_id": 22,
-                        "floor2_id": 23,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 292,
-                        "floor1_id": 22,
-                        "floor2_id": 21,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
-                "id": 21,
-                "index": 4,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.the_guest_chambers",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 293,
-                        "floor1_id": 21,
-                        "floor2_id": 24,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 294,
-                        "floor1_id": 21,
-                        "floor2_id": 22,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 295,
-                        "floor1_id": 21,
-                        "floor2_id": 20,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 296,
-                        "floor1_id": 21,
-                        "floor2_id": 19,
-                        "direction": "left"
-                    }
-                ]
-            },
-            {
-                "id": 20,
-                "index": 5,
-                "mdt_sub_level": null,
-                "name": "dungeons.legion.lower_karazhan.floors.opera_hall_balcony",
-                "default": 0,
-                "min_enemy_size": 20,
-                "max_enemy_size": 44,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 336,
-                        "floor1_id": 20,
-                        "floor2_id": 21,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 337,
-                        "floor1_id": 20,
-                        "floor2_id": 19,
-                        "direction": "up"
-                    }
-                ]
-            },
-            {
                 "id": 19,
-                "index": 6,
+                "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.legion.lower_karazhan.floors.masters_terrace",
                 "default": 1,
@@ -569,22 +419,172 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 333,
+                        "id": 350,
                         "floor1_id": 19,
                         "floor2_id": 23,
                         "direction": "down"
                     },
                     {
-                        "id": 334,
+                        "id": 351,
                         "floor1_id": 19,
                         "floor2_id": 21,
                         "direction": "right"
                     },
                     {
-                        "id": 335,
+                        "id": 352,
                         "floor1_id": 19,
                         "floor2_id": 20,
                         "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 20,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.opera_hall_balcony",
+                "default": 0,
+                "min_enemy_size": 20,
+                "max_enemy_size": 44,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 353,
+                        "floor1_id": 20,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 354,
+                        "floor1_id": 20,
+                        "floor2_id": 21,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 21,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.the_guest_chambers",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 355,
+                        "floor1_id": 21,
+                        "floor2_id": 19,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 356,
+                        "floor1_id": 21,
+                        "floor2_id": 24,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 357,
+                        "floor1_id": 21,
+                        "floor2_id": 20,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 358,
+                        "floor1_id": 21,
+                        "floor2_id": 22,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 22,
+                "index": 4,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.the_banquet_hall",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 359,
+                        "floor1_id": 22,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 360,
+                        "floor1_id": 22,
+                        "floor2_id": 23,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 361,
+                        "floor1_id": 22,
+                        "floor2_id": 21,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "index": 5,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.upper_livery_stables",
+                "default": 0,
+                "min_enemy_size": 20,
+                "max_enemy_size": 40,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 362,
+                        "floor1_id": 23,
+                        "floor2_id": 19,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 363,
+                        "floor1_id": 23,
+                        "floor2_id": 24,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 364,
+                        "floor1_id": 23,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 24,
+                "index": 6,
+                "mdt_sub_level": null,
+                "name": "dungeons.legion.lower_karazhan.floors.servants_quarters",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 365,
+                        "floor1_id": 24,
+                        "floor2_id": 21,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 366,
+                        "floor1_id": 24,
+                        "floor2_id": 22,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 367,
+                        "floor1_id": 24,
+                        "floor2_id": 23,
+                        "direction": "up"
                     }
                 ]
             }
