@@ -15,13 +15,15 @@ foreach ($activeExpansions as $expansion) {
             url(sprintf('images/expansions/%s.png', $expansion->shortname),
             ),
             __($expansion->name),
-            __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+//            $expansion->hasTimewalkingEvent() ?
+//                __('views/common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
+                __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
 // @TODO This needs to be changed to 'current season' when Season 4 is actually live
 $currentSeason = \App\Models\Season::find(9);
 $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
-    'text' => __('views/common.layout.header.season', ['season' => 4])
+    'text' => $currentSeason->name
 ];
 
 $navs[__('Expansion routes')] = $expansionRoutes;

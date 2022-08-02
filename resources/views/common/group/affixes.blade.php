@@ -9,6 +9,8 @@
 /** @var $allExpansions \Illuminate\Support\Collection */
 /** @var $currentAffixes array */
 /** @var $dungeonExpansions array */
+/** @var $currentSeason \Illuminate\Support\Collection|\App\Models\Season */
+/** @var $nextSeason \Illuminate\Support\Collection|\App\Models\Season|null */
 /** This is the display of affixes when selecting them when creating a new route */
 
 /** @var \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] $affixGroups */
@@ -24,6 +26,10 @@ else if (empty($defaultSelected)) {
 $teemingSelector = $teemingSelector ?? null;
 $names = $names ?? true;
 $id = $id ?? 'route_select_affixes';
+
+$allAffixGroupsWithSeasons = $allAffixGroups
+    ->merge($currentSeason->affixgroups)
+    ->merge(optional($nextSeason)->affixgroups ?? collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -33,16 +39,26 @@ $id = $id ?? 'route_select_affixes';
     'teemingSelector'   => $teemingSelector,
     'modal'             => $modal ?? false,
     'defaultSelected'   => $defaultSelected,
-    'allExpansions'    =>  $allExpansions,
+    'allExpansions'     => $allExpansions,
     'allAffixGroups'    => $allAffixGroups,
     'dungeonExpansions' => $dungeonExpansions,
-    'currentAffixes'    => $currentAffixes
+    'currentAffixes'    => $currentAffixes,
+    'currentSeason'     => $currentSeason,
+    'nextSeason'        => $nextSeason,
 ]])
 
 <?php // @formatter:off ?>
 <div class="form-group">
-    {!! Form::select($id . '[]', $allAffixGroups->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
+    {!! Form::select($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
+        @if($nextSeason !== null)
+            @foreach($nextSeason->affixgroups as $affixGroup)
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->shortname])
+            @endforeach
+        @endif
+        @foreach($currentSeason->affixgroups as $affixGroup)
+            @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $currentSeason, 'expansionKey' => $currentSeason->expansion->shortname])
+        @endforeach
         @foreach($expansionsData as $expansionData)
             @foreach($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups() as $affixGroup)
                 @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $expansionData->getExpansion()->shortname])

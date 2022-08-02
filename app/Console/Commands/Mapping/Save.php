@@ -59,7 +59,7 @@ class Save extends Command
 
         // If we should copy the result to another folder..
         if (!empty($mappingBackupDir)) {
-            $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d h:i:s'));
+            $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d H:i:s'));
 
             $this->info(sprintf('Saving backup of mapping to %s', $targetDir));
             $this->shell([

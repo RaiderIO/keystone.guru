@@ -1,0 +1,57 @@
+{
+    "id": 131,
+    "release_changelog_id": 138,
+    "version": "v4.7.1",
+    "title": "Season 4 corrections to various pages",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-07-31T21:08:06+00:00",
+    "updated_at": "2022-07-31T21:08:06+00:00",
+    "changelog": {
+        "id": 138,
+        "release_id": 131,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 138,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1243,
+                "change": "The search page no longer shows too much dungeons (inactive ones). Additionally, there are now tabs where you can show the current + next season (3 and 4 atm respectively). You can then select the dungeons that fall under that season instead of being forced to go expansion by expansion.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 138,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1251,
+                "change": "Creating a route now has the same logic of current and next seasons attached to it. Also corrected the seasonal affixes when creating a route in S4.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 138,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1254,
+                "change": "Route coverage now gives you the option to toggle between current and next season (if any).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 138,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Updated mapping for all new dungeons. Shrouded affix partially mapped in some dungeons. Will complete as more information becomes available in the coming days.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}

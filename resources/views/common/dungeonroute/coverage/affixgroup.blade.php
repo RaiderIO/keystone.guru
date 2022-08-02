@@ -3,8 +3,10 @@
 /** @var $dungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $affixgroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
 /** @var $dungeonRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
-/** @var $currentExpansion \App\Models\Expansion */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
+/** @var $currentSeason \App\Models\Season */
+/** @var $nextSeason \App\Models\Season|null */
+/** @var $selectedSeason \App\Models\Season|null */
 
 /**
  * @param \Illuminate\Support\Collection $dungeonRoutes
@@ -28,6 +30,17 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
     return $result;
 }
 
+// Build a list of seasons that we use to make selections of
+$seasons = [];
+if ($nextSeason !== null) {
+    $seasons[] = $nextSeason;
+}
+$routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $currentSeason->id;
+$seasons[] = $currentSeason;
+
+$seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+    return [$id => __($name)];
+})->toArray();
 ?>
 @include('common.general.inline', ['path' => 'common/dungeonroute/coverage/affixgroup',
     'dependencies' => [
@@ -43,7 +56,10 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
     <table id="dungeonroute_coverage_affixgroup_table" class="bg-secondary" style="width: 100%">
         <thead>
         <tr>
-            <th>
+            <th class="px-1">
+                {!! Form::select('dungeonroute_coverage_season_id', $seasonSelect, $routeCoverageSeasonId,
+                        ['id' => 'dungeonroute_coverage_season_id', 'class' => 'form-control selectpicker']
+                ) !!}
             </th>
             @foreach($affixgroups as $affixGroup)
                 <th class="p-1 {{ $currentAffixGroup->id === $affixGroup->id ? 'bg-success' : '' }}">
@@ -101,7 +117,7 @@ function getDungeonRoutesByDungeonIdAndAffixGroupId(\Illuminate\Support\Collecti
                                 <a class="btn btn-sm w-100 new_route_style_create_search"
                                    style="display: {{ $newRouteStyle === 'search' ? 'block' : 'none' }}"
                                    href="{{ route('dungeonroutes.search', [
-                                                'expansion' => $currentExpansion->shortname,
+                                                'season' => $selectedSeason->id,
                                                 'affixgroups' => $affixGroup->id,
                                                 ]) }}&dungeons={{ $dungeon->id }}"
                                 >

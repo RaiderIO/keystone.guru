@@ -4,6 +4,15 @@ class MapContextDungeon extends MapContext {
     }
 
     /**
+     * When mapping a dungeon assume we have all affixes so things show up properly
+     * @param affix {String}
+     * @returns {boolean}
+     */
+    hasAffix(affix) {
+        return true;
+    }
+
+    /**
      * Adds a new raw NPC to the map context
      * @param model {object}
      */

@@ -9,6 +9,7 @@ return [
         'routes_expansion' => ':expansion маршруты',
 
         'dungeonroutes' => [
+            'season'            => '@todo ru: .home.dungeonroutes.season',
             'search'            => 'Поиск',
             'popular'           => 'Популярные',
             'next_week_affixes' => 'Аффиксы следующей недели',

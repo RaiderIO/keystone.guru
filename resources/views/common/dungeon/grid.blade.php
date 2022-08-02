@@ -2,7 +2,7 @@
 /** @var $expansionService \App\Service\Expansion\ExpansionService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
-$dungeons = $dungeons ?? $expansion->dungeons;
+$dungeons = $dungeons ?? $expansion->dungeons()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
@@ -21,7 +21,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
             $link = $links->where('dungeon', $dungeon->key)->first();
             ?>
             <div
-                class="grid_dungeon {{ $expansion->shortname }} col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"
+                class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"
                 data-id="{{ $dungeon->id }}">
                 <div class="card-img-caption">
                     @if($names)

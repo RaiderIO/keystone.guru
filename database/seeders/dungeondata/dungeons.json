@@ -1608,12 +1608,12 @@
                 "mdt_sub_level": null,
                 "name": "Mechagon Island",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 9,
+                "max_enemy_size": 20,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 33,
+                        "id": 349,
                         "floor1_id": 65,
                         "floor2_id": 66,
                         "direction": "down"

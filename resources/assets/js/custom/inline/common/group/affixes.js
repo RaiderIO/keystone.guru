@@ -36,31 +36,52 @@ class CommonGroupAffixes extends InlineCode {
      * @private
      */
     _dungeonChanged() {
-        let selectedDungeonId = $(`${this.options.dungeonSelector}`).val();
+        let selectedDungeonId = parseInt($(`${this.options.dungeonSelector}`).val());
         let expansionKey = this.options.dungeonExpansions[selectedDungeonId];
 
         // Don't mess with it if it's not working for whatever reason
         if (typeof expansionKey !== 'undefined' && expansionKey.length > 0) {
-
             // Hide everything
             let $affixListRows = $(`${this.options.selectSelector}_list_custom .affix_list_row`).hide();
-            // Show the affixes for the expansion that was selected
-            $affixListRows.filter(`.${expansionKey}`).show();
 
+            // Check if the selected dungeon is part of the current or next season, if so, we need to offer a selection
+            // of affixes based on season, not on expansion
+            let seasonForSelectedDungeon = this._getSeasonForDungeon(selectedDungeonId);
+            this.currentSelectionExpansionKey = expansionKey;
+
+            if (seasonForSelectedDungeon !== null) {
+                // Try to select the affix based on the currently active expansion + season
+                if (seasonForSelectedDungeon.id === this.options.currentSeason.id) {
+                    let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
+                    if (currentAffix !== null) {
+                        this.currentSelection = [currentAffix];
+                    }
+                }
+
+                // But if it's for a next season, just select the first affix to have something selected
+                if (this.currentSelection.length === 0) {
+                    this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
+                }
+
+                // Show the affixes for the season that was selected
+                $affixListRows.filter(`.season.season-${seasonForSelectedDungeon.id}`).show();
+            }
             // If the expansion changed we need to change the default selection
-            if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
-                this.currentSelectionExpansionKey = expansionKey;
+            else if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
                 let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
                 if (currentAffix !== null) {
                     this.currentSelection = [currentAffix];
                 } else {
-                    let firstAffixGroupForExpansion =this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
-                    if( firstAffixGroupForExpansion !== null ) {
+                    let firstAffixGroupForExpansion = this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
+                    if (firstAffixGroupForExpansion !== null) {
                         this.currentSelection = [firstAffixGroupForExpansion.id];
                     } else {
                         this.currentSelection = [];
                     }
                 }
+
+                // Show the affixes for the expansion that was selected
+                $affixListRows.filter(`.${expansionKey}`).show();
             }
 
             // Show the correct presets for this expansion (if any)
@@ -113,9 +134,52 @@ class CommonGroupAffixes extends InlineCode {
      * @returns {Object|null}
      * @private
      */
+    _getSeasonForDungeon(id) {
+        let result = null;
+
+        for (let i = 0; i < this.options.currentSeason.dungeons.length; i++) {
+            if (this.options.currentSeason.dungeons[i].id === id) {
+                result = this.options.currentSeason;
+                break;
+            }
+        }
+
+        if (this.options.nextSeason !== null) {
+            for (let i = 0; i < this.options.nextSeason.dungeons.length; i++) {
+                if (this.options.nextSeason.dungeons[i].id === id) {
+                    result = this.options.nextSeason;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param {Number} id
+     * @returns {Object|null}
+     * @private
+     */
     _getAffixGroupById(id) {
         let result = null;
 
+        // Check seasons first
+        let seasons = [this.options.currentSeason, this.options.nextSeason];
+        for (let i = 0; i < seasons.length; i++) {
+            let season = seasons[i];
+            if (season !== null && typeof season !== 'undefined') {
+                for (let j = 0; j < season.affixgroups.length; j++) {
+                    if (season.affixgroups[j].id === id) {
+                        result = season.affixgroups[j];
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Check expansions next
         for (let i = 0; i < this.options.allAffixGroups.length; i++) {
             if (this.options.allAffixGroups[i].id === id) {
                 result = this.options.allAffixGroups[i];

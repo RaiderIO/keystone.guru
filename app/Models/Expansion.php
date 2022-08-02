@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Dungeon[] $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
  * @property Season|null $currentseason
+ * @property Season|null $nextseason
  *
  * @mixin Eloquent
  */
@@ -111,6 +112,18 @@ class Expansion extends CacheModel
             ->where('expansion_id', $this->id)
             ->where('start', '<', Carbon::now()->toDateString())
             ->orderBy('start', 'desc')
+            ->limit(1);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function nextseason(): HasOne
+    {
+        return $this->hasOne(Season::class)
+            ->where('expansion_id', $this->id)
+            ->where('start', '>=', Carbon::now()->toDateString())
+            ->orderBy('start')
             ->limit(1);
     }
 

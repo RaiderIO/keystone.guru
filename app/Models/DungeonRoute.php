@@ -74,7 +74,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Dungeon $dungeon
  * @property Path $route
  * @property Faction $faction
- * @property User $author
+ * @property User|null $author Can be null in case of temporary route
  * @property MDTImport $mdtImport
  * @property Team $team
  * @property PublishedState $publishedState
@@ -471,14 +471,26 @@ class DungeonRoute extends Model
                                       IF(
                                               enemies.enemy_forces_override_teeming >= 0,
                                               enemies.enemy_forces_override_teeming,
-                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                              IF(
+                                                  npcs.enemy_forces_teeming >= 0,
+                                                  npcs.enemy_forces_teeming,
+                                                  IF(
+                                                      enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
+                                                      0,
+                                                      npcs.enemy_forces
+                                                  )
+                                              )
                                           )
                                   ),
                               SUM(
                                       IF(
                                               enemies.enemy_forces_override >= 0,
                                               enemies.enemy_forces_override,
-                                              npcs.enemy_forces
+                                              IF(
+                                                  enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
+                                                  0,
+                                                  npcs.enemy_forces
+                                              )
                                           )
                                   )
                                ), 0
@@ -737,10 +749,12 @@ class DungeonRoute extends Model
                 $this->affixgroups()->delete();
 
                 foreach ($newAffixes as $value) {
+                    // Check disabled to support dungeons not being tied to expansions but to seasons instead.
+                    // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
                     // Skip any affixes that don't exist, and don't match our current expansion
-                    if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
-                        continue;
-                    }
+                    // if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                    //     continue;
+                    // }
 
                     /** @var AffixGroup $affixGroup */
                     $affixGroup = AffixGroup::find($value);

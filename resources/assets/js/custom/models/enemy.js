@@ -31,6 +31,7 @@ let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
 let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
+let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
 
 /**
  * @property {Number} floor_id
@@ -226,6 +227,8 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
                 ],
                 setter: function (value) {
@@ -570,7 +573,9 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (getState().getMapContext().getTeeming()) {
+            if (this.isShrouded() || this.isShroudedZulGamux()) {
+                result = 0;
+            } else if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -871,9 +876,27 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isShrouded() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isShroudedZulGamux() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isPridefulNpc() || this.isAwakenedNpc() || this.isTormented();
+        return this.isBossNpc() || this.isInspiring() || this.isShrouded() || this.isShroudedZulGamux() || this.isTormented() || this.isPridefulNpc() || this.isAwakenedNpc();
     }
 
     /**

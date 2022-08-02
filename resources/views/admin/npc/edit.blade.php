@@ -42,14 +42,14 @@
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('views/admin.npc.edit.classification'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('classification_id', $classifications, null, ['class' => 'form-control']) !!}
+        {!! Form::select('classification_id', $classifications, null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'classification_id'])
     </div>
 
     <div class="form-group{{ $errors->has('aggressiveness') ? ' has-error' : '' }}">
         {!! Form::label('aggressiveness', __('views/admin.npc.edit.aggressiveness'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control']) !!}
+        {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'aggressiveness'])
     </div>
 

@@ -308,6 +308,9 @@ return [
             'drop_caches'        => 'Сбросить кеш',
             'throw_an_exception' => 'Сбросить исключения',
 
+            'subheader_mapping' => '@todo ru: .tools.list.subheader_mapping',
+            'force_sync_mapping' => '@todo ru: .tools.list.force_sync_mapping',
+
             'subheader_actions'   => 'Действия',
             'export_dungeon_data' => 'Экспорт данных о подземельях',
             'export_releases'     => 'Экспорт релизов',

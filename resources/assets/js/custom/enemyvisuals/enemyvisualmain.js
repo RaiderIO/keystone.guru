@@ -20,27 +20,35 @@ class EnemyVisualMain extends EnemyVisualIcon {
         // Handle Teeming display
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            if (getState().hasEnemyAggressivenessBorder()) {
+            let state = getState();
+            if (state.hasEnemyAggressivenessBorder()) {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
 
-            if (getState().hasEnemyDangerousBorder() && npc.dangerous) {
+            if (state.hasEnemyDangerousBorder() && npc.dangerous) {
                 mainVisualInnerClasses.push('dangerous');
-            } else if(this.enemyvisual.enemy.isAwakenedNpc() ) {
+            } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
                 mainVisualInnerClasses.push('awakened');
-            } if(this.enemyvisual.enemy.isPridefulNpc() ) {
-                mainVisualInnerClasses.push('prideful');
-            } if(this.enemyvisual.enemy.isInspiring() ) {
+            }
+
+            let mapContext = state.getMapContext();
+            if (this.enemyvisual.enemy.isShrouded() && mapContext.hasAffix(AFFIX_SHROUDED)) {
+                mainVisualInnerClasses.push('shrouded');
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux()) {
+                mainVisualInnerClasses.push('shrouded_zul_gamux');
+            } else if (this.enemyvisual.enemy.isInspiring()) {
                 mainVisualInnerClasses.push('inspiring');
-            } if(this.enemyvisual.enemy.isTormented() ) {
-                mainVisualInnerClasses.push('tormented');
-            } if(this.enemyvisual.enemy.isEncrypted() ) {
+            } else if (this.enemyvisual.enemy.isEncrypted()) {
                 mainVisualInnerClasses.push('encrypted');
+            } else if (this.enemyvisual.enemy.isPridefulNpc()) {
+                mainVisualInnerClasses.push('prideful');
+            } else if (this.enemyvisual.enemy.isTormented()) {
+                mainVisualInnerClasses.push('tormented');
             }
         }
 
         // Any additional classes to add for when the enemy is selectable
-        let selectionClasses = [];
+        // let selectionClasses = [];
         // if (this.enemyvisual.enemy.isSelectable()) {
         //     selectionClasses.push('selected_enemy_icon');
         // }
@@ -49,7 +57,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
             // Set the main icon
             main_visual_outer_classes: mainVisualOuterClasses.join(' '),
             main_visual_inner_classes: mainVisualInnerClasses.join(' '),
-            selection_classes: selectionClasses.join(' ')
+            selection_classes: [] // selectionClasses.join(' ')
         });
     }
 

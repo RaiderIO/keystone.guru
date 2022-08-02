@@ -4,6 +4,7 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
+use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use Closure;
@@ -22,6 +23,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
     /** @var Closure|null */
     protected ?Closure $closure = null;
+
+    /** @var Season|null */
+    protected ?Season $season = null;
 
     /** @var Expansion|null */
     protected ?Expansion $expansion = null;
@@ -64,6 +68,16 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     function withBuilder(Closure $closure): DiscoverServiceInterface
     {
         $this->closure = $closure;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function withSeason(Season $season): DiscoverServiceInterface
+    {
+        $this->season = $season;
 
         return $this;
     }

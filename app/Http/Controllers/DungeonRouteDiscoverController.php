@@ -38,15 +38,16 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @param Expansion $expansion
-     * @param int $seasonIndex
+     * @param string $seasonIndex
      * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
+     * @throws \Exception
      */
     public function discoverSeason(
         Expansion                 $expansion,
-        int                       $seasonIndex,
+        string                    $seasonIndex,
         ExpansionServiceInterface $expansionService,
         DiscoverServiceInterface  $discoverService
     )
@@ -61,7 +62,9 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $season);
 
-        $discoverService = $discoverService->withExpansion($expansion);
+        $discoverService = $discoverService
+            ->withExpansion($expansion)
+            ->withSeason($season);
 
         // Redirect to the current expansion
         if (!$expansion->active) {
@@ -70,8 +73,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
-        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+        $currentAffixGroup = $season->getCurrentAffixGroupInRegion($userRegion);
+        $nextAffixGroup    = $season->getNextAffixGroupInRegion($userRegion);
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.season',

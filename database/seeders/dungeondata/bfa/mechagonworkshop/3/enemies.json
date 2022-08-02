@@ -1,7 +1,7 @@
 [
     {
         "id": 4255,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1622,
         "npc_id": 144293,
         "floor_id": 68,
         "mdt_id": 1,
@@ -190,7 +190,7 @@
         "floor_id": 68,
         "mdt_id": 6,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -526,6 +526,52 @@
         "enemyactiveauras": [],
         "npc": {
             "id": 144293
+        }
+    },
+    {
+        "id": 8480,
+        "enemy_pack_id": 1622,
+        "npc_id": 144295,
+        "floor_id": 68,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": "shrouded",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -180.27384808735,
+        "lng": 167.20740429926,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 144295
+        }
+    },
+    {
+        "id": 8481,
+        "enemy_pack_id": -1,
+        "npc_id": 144295,
+        "floor_id": 68,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": "shrouded_zul_gamux",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -123.05431127906,
+        "lng": 231.24733759034,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 144295
         }
     }
 ]

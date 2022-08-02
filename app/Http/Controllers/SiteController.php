@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
 use App\Models\Release;
+use App\Models\Season;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
-use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
@@ -36,11 +36,17 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(CoverageServiceInterface $coverageService)
+    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService)
     {
         if (Auth::check()) {
+            $season = null;
+            if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
+                $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
+            }
+            $season = $season ?? $seasonService->getCurrentSeason();
+
             return view('profile.overview', [
-                'dungeonRoutes' => $coverageService->getForUser(Auth::user())
+                'dungeonRoutes' => $coverageService->getForUser(Auth::user(), $season),
             ]);
         } else {
             return view('home');
