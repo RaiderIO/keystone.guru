@@ -573,7 +573,9 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (getState().getMapContext().getTeeming()) {
+            if (this.isShrouded() || this.isShroudedZulGamux()) {
+                result = 0;
+            } else if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -581,8 +583,6 @@ class Enemy extends MapObject {
                 }
             } else if (this.enemy_forces_override >= 0) {
                 result = this.enemy_forces_override;
-            } else if ((this.isShrouded() || this.isShroudedZulGamux()) && getState().getMapContext().hasAffix(AFFIX_SHROUDED)) {
-                result = 0;
             }
         }
 

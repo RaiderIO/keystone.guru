@@ -122,7 +122,7 @@ class Expansion extends CacheModel
     {
         return $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->where('start', '>', Carbon::now()->toDateString())
+            ->where('start', '>=', Carbon::now()->toDateString())
             ->orderBy('start')
             ->limit(1);
     }
