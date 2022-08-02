@@ -2631,9 +2631,9 @@
         "key": "irondocks",
         "name": "dungeons.wod.iron_docks.name",
         "slug": "iron-docks",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
-        "timer_max_seconds": 1800,
+        "timer_max_seconds": 1920,
         "floor_count": 1,
         "floors": [
             {
