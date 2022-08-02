@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
+use App\Traits\UserCurrentTime;
 use Carbon\Carbon;
 use Eloquent;
 use Exception;
@@ -35,6 +36,7 @@ use Illuminate\Support\Collection;
 class Expansion extends CacheModel
 {
     use HasIconFile;
+    use UserCurrentTime;
 
     public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
@@ -110,7 +112,7 @@ class Expansion extends CacheModel
     {
         return $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->where('start', '<', Carbon::now()->toDateString())
+            ->where('start', '<', $this->getUserNow())
             ->orderBy('start', 'desc')
             ->limit(1);
     }
@@ -122,7 +124,7 @@ class Expansion extends CacheModel
     {
         return $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->where('start', '>=', Carbon::now()->toDateString())
+            ->where('start', '>=', $this->getUserNow())
             ->orderBy('start')
             ->limit(1);
     }
