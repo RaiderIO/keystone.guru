@@ -75,7 +75,7 @@
         "floor_id": 108,
         "mdt_id": -1,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "inspiring",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -259,7 +259,7 @@
         "floor_id": 108,
         "mdt_id": -1,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "inspiring",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -600,11 +600,11 @@
     {
         "id": 7866,
         "enemy_pack_id": 1496,
-        "npc_id": 77483,
+        "npc_id": -1,
         "floor_id": 108,
         "mdt_id": -1,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "inspiring",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -616,8 +616,6 @@
         "lng": 36.424563738953,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": {
-            "id": 77483
-        }
+        "npc": null
     }
 ]
