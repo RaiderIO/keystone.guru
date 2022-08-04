@@ -600,7 +600,7 @@
     {
         "id": 7866,
         "enemy_pack_id": 1496,
-        "npc_id": -1,
+        "npc_id": 77483,
         "floor_id": 108,
         "mdt_id": -1,
         "mdt_npc_id": null,
@@ -616,6 +616,8 @@
         "lng": 36.424563738953,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": null
+        "npc": {
+            "id": 77483
+        }
     }
 ]
