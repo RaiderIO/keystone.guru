@@ -475,9 +475,13 @@ class DungeonRoute extends Model
                                                   npcs.enemy_forces_teeming >= 0,
                                                   npcs.enemy_forces_teeming,
                                                   IF(
-                                                      enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
-                                                      0,
-                                                      npcs.enemy_forces
+                                                      enemies.seasonal_type = "shrouded",
+                                                      6,
+                                                      IF(
+                                                          enemies.seasonal_type = "shrouded_zul_gamux",
+                                                          18,
+                                                          npcs.enemy_forces
+                                                      )
                                                   )
                                               )
                                           )
@@ -487,9 +491,13 @@ class DungeonRoute extends Model
                                               enemies.enemy_forces_override >= 0,
                                               enemies.enemy_forces_override,
                                               IF(
-                                                  enemies.seasonal_type = "shrouded" OR enemies.seasonal_type = "shrouded_zul_gamux",
-                                                  0,
-                                                  npcs.enemy_forces
+                                                  enemies.seasonal_type = "shrouded",
+                                                  6,
+                                                  IF(
+                                                      enemies.seasonal_type = "shrouded_zul_gamux",
+                                                      18,
+                                                      npcs.enemy_forces
+                                                  )
                                               )
                                           )
                                   )

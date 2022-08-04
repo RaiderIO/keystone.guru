@@ -1,0 +1,57 @@
+{
+    "id": 133,
+    "release_changelog_id": 140,
+    "version": "v4.7.3",
+    "title": "Mapping corrections to Grimrail Depot, Iron Docks and Tazavesh: So'leah's Gambit & Shrouded enemies now give enemy forces",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-04T14:06:59+00:00",
+    "updated_at": "2022-08-04T14:06:59+00:00",
+    "changelog": {
+        "id": 140,
+        "release_id": 133,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 140,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Grimrail Depot now has enemy forces and Inspiring enemies mapped (Shrouded was already done).",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 140,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Iron Docks now has all Shrouded and Inspiring enemies mapped. Some enemy forces are still missing after first boss.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 140,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Tazavesh: So'leah's Gambit now has all Shrouded enemies mapped.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 140,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1274,
+                "change": "Nathrezim Infiltrators now give 6 enemy forces - Zul'gamux 18",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
