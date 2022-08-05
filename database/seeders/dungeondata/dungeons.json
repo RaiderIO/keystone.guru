@@ -9,6 +9,8 @@
         "slug": "arcway",
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": 466,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -35,6 +37,8 @@
         "slug": "black-rook-hold",
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 6,
         "floors": [
@@ -182,6 +186,8 @@
         "slug": "cathedral-of-eternal-night",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 5,
         "floors": [
@@ -252,6 +258,8 @@
         "slug": "court-of-stars",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 60,
         "floor_count": 1,
         "floors": [
@@ -278,6 +286,8 @@
         "slug": "darkheart-thicket",
         "enemy_forces_required": 280,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -304,6 +314,8 @@
         "slug": "eye-of-azshara",
         "enemy_forces_required": 206,
         "enemy_forces_required_teeming": 242,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -330,6 +342,8 @@
         "slug": "halls-of-valor",
         "enemy_forces_required": 115,
         "enemy_forces_required_teeming": 151,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 3,
         "floors": [
@@ -405,6 +419,8 @@
         "slug": "lower-karazhan",
         "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 4,
+        "enemy_forces_shrouded_zul_gamux": 12,
         "timer_max_seconds": 2340,
         "floor_count": 6,
         "floors": [
@@ -600,6 +616,8 @@
         "slug": "maw-of-souls",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 3,
         "floors": [
@@ -675,6 +693,8 @@
         "slug": "neltharions-lair",
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -701,6 +721,8 @@
         "slug": "upper-karazhan",
         "enemy_forces_required": 169,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 6,
+        "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 2100,
         "floor_count": 8,
         "floors": [
@@ -896,6 +918,8 @@
         "slug": "the-seat-of-the-triumvirate",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -922,6 +946,8 @@
         "slug": "vault-of-the-wardens",
         "enemy_forces_required": 210,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 3,
         "floors": [
@@ -997,6 +1023,8 @@
         "slug": "ataldazar",
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
         "floor_count": 2,
         "floors": [
@@ -1048,6 +1076,8 @@
         "slug": "freehold",
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
         "floor_count": 1,
         "floors": [
@@ -1074,6 +1104,8 @@
         "slug": "kings-rest",
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2520,
         "floor_count": 1,
         "floors": [
@@ -1100,6 +1132,8 @@
         "slug": "shrine-of-the-storm",
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2520,
         "floor_count": 2,
         "floors": [
@@ -1151,6 +1185,8 @@
         "slug": "siege-of-boralus",
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
         "floor_count": 1,
         "floors": [
@@ -1177,6 +1213,8 @@
         "slug": "temple-of-sethraliss",
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
         "floor_count": 2,
         "floors": [
@@ -1228,6 +1266,8 @@
         "slug": "the-motherlode",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
         "floor_count": 1,
         "floors": [
@@ -1254,6 +1294,8 @@
         "slug": "the-underrot",
         "enemy_forces_required": 252,
         "enemy_forces_required_teeming": 286,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
         "floor_count": 2,
         "floors": [
@@ -1305,6 +1347,8 @@
         "slug": "tol-dagor",
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
         "floor_count": 7,
         "floors": [
@@ -1476,6 +1520,8 @@
         "slug": "waycrest-manor",
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
         "floor_count": 5,
         "floors": [
@@ -1599,6 +1645,8 @@
         "slug": "mechagon-junkyard",
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
+        "enemy_forces_shrouded": 7,
+        "enemy_forces_shrouded_zul_gamux": 21,
         "timer_max_seconds": 2280,
         "floor_count": 2,
         "floors": [
@@ -1650,6 +1698,8 @@
         "slug": "mechagon-workshop",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
+        "enemy_forces_shrouded": 4,
+        "enemy_forces_shrouded_zul_gamux": 12,
         "timer_max_seconds": 1920,
         "floor_count": 3,
         "floors": [
@@ -1725,6 +1775,8 @@
         "slug": "orgrimmar-horrific-vision",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 2,
         "floors": [
@@ -1776,6 +1828,8 @@
         "slug": "stormwind-city-horrific-vision",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "floor_count": 1,
         "floors": [
@@ -1802,6 +1856,8 @@
         "slug": "de-other-side",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2580,
         "floor_count": 4,
         "floors": [
@@ -1901,6 +1957,8 @@
         "slug": "halls-of-atonement",
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1860,
         "floor_count": 3,
         "floors": [
@@ -1976,6 +2034,8 @@
         "slug": "mists-of-tirna-scithe",
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
         "floor_count": 1,
         "floors": [
@@ -2002,6 +2062,8 @@
         "slug": "plaguefall",
         "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
         "floor_count": 2,
         "floors": [
@@ -2053,6 +2115,8 @@
         "slug": "sanguine-depths",
         "enemy_forces_required": 364,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2460,
         "floor_count": 2,
         "floors": [
@@ -2104,6 +2168,8 @@
         "slug": "spires-of-ascension",
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
         "floor_count": 4,
         "floors": [
@@ -2203,6 +2269,8 @@
         "slug": "the-necrotic-wake",
         "enemy_forces_required": 283,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
         "floor_count": 3,
         "floors": [
@@ -2278,6 +2346,8 @@
         "slug": "theater-of-pain",
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
         "floor_count": 5,
         "floors": [
@@ -2407,6 +2477,8 @@
         "slug": "tazavesh-streets-of-wonder",
         "enemy_forces_required": 290,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 3,
+        "enemy_forces_shrouded_zul_gamux": 9,
         "timer_max_seconds": 2280,
         "floor_count": 4,
         "floors": [
@@ -2506,6 +2578,8 @@
         "slug": "tazavesh-so-leahs-gambit",
         "enemy_forces_required": 346,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 6,
+        "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 1800,
         "floor_count": 4,
         "floors": [
@@ -2605,6 +2679,8 @@
         "slug": "auchindoun",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
         "floor_count": 0,
         "floors": []
@@ -2619,6 +2695,8 @@
         "slug": "bloodmaw-slag-mines",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
         "floor_count": 0,
         "floors": []
@@ -2627,12 +2705,14 @@
         "id": 40,
         "expansion_id": 9,
         "zone_id": 6951,
-        "mdt_id": 0,
+        "mdt_id": 41,
         "key": "irondocks",
         "name": "dungeons.wod.iron_docks.name",
         "slug": "iron-docks",
         "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 4,
+        "enemy_forces_shrouded_zul_gamux": 12,
         "timer_max_seconds": 1920,
         "floor_count": 1,
         "floors": [
@@ -2653,12 +2733,14 @@
         "id": 41,
         "expansion_id": 9,
         "zone_id": 6984,
-        "mdt_id": 0,
+        "mdt_id": 40,
         "key": "grimraildepot",
         "name": "dungeons.wod.grimrail_depot.name",
         "slug": "grimrail-depot",
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 6,
+        "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 1800,
         "floor_count": 4,
         "floors": [
