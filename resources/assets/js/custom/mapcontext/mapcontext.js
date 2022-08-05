@@ -337,4 +337,36 @@ class MapContext extends Signalable {
     getUserPublicKey() {
         return this._options.userPublicKey;
     }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesRequired() {
+        return this._options.dungeon.enemy_forces_required;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesRequiredTeeming() {
+        return this._options.dungeon.enemy_forces_required_teeming;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesShrouded() {
+        return this._options.dungeon.enemy_forces_shrouded;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesShroudedZulGamux() {
+        return this._options.dungeon.enemy_forces_shrouded_zul_gamux;
+    }
 }
