@@ -1,0 +1,57 @@
+{
+    "id": 134,
+    "release_changelog_id": 141,
+    "version": "v4.7.4",
+    "title": "Mapping corrections",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-05T19:21:39+00:00",
+    "updated_at": "2022-08-05T19:21:39+00:00",
+    "changelog": {
+        "id": 141,
+        "release_id": 134,
+        "description": "I am aware that the MDT importer\/exporter is not functioning properly - this is due to the mapping not being linked together yet since the MDT mapping only became available a day (or two) ago.",
+        "changes": [
+            {
+                "release_changelog_id": 141,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1285,
+                "change": "Awakened mini bosses should no longer show up in Mechagon if your route does not have Awakened affix set. Obelisks are a WIP still.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 141,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Shrouded Infiltrators and Zul'gamox now award the correct enemy forces per dungeon.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 141,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Iron Docks: added missing enemy forces & Shrouded\/Inspiring enemies.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 141,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Tazavesh: Streets of Wonder: Added all new Shrouded enemies.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
