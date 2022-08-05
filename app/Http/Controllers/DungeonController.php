@@ -34,15 +34,17 @@ class DungeonController extends Controller
         /** @var Dungeon $dungeon */
         // May not be set when editing
 //        $dungeon->expansion_id = $request->get('expansion_id');
-        $dungeon->zone_id                       = $request->get('zone_id');
-        $dungeon->mdt_id                        = $request->get('mdt_id');
-        $dungeon->name                          = $request->get('name');
-        $dungeon->slug                          = $request->get('slug');
-        $dungeon->key                           = $request->get('key');
-        $dungeon->enemy_forces_required         = $request->get('enemy_forces_required');
-        $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
-        $dungeon->timer_max_seconds             = $request->get('timer_max_seconds');
-        $dungeon->active                        = $request->get('active', 0);
+        $dungeon->zone_id                         = $request->get('zone_id');
+        $dungeon->mdt_id                          = $request->get('mdt_id');
+        $dungeon->name                            = $request->get('name');
+        $dungeon->slug                            = $request->get('slug');
+        $dungeon->key                             = $request->get('key');
+        $dungeon->enemy_forces_required           = $request->get('enemy_forces_required');
+        $dungeon->enemy_forces_required_teeming   = $request->get('enemy_forces_required_teeming');
+        $dungeon->enemy_forces_shrouded           = $request->get('enemy_forces_shrouded');
+        $dungeon->enemy_forces_shrouded_zul_gamux = $request->get('enemy_forces_shrouded_zul_gamux');
+        $dungeon->timer_max_seconds               = $request->get('timer_max_seconds');
+        $dungeon->active                          = $request->get('active', 0);
 
         // Update or insert it
         if ($dungeon->save()) {

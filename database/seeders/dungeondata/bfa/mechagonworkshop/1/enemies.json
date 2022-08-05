@@ -75,7 +75,7 @@
         "floor_id": 67,
         "mdt_id": 2,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "inspiring",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

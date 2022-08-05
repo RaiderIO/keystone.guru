@@ -3,20 +3,22 @@
 return [
     'dungeon'    => [
         'edit' => [
-            'title_new'                     => 'New dungeon',
-            'title_edit'                    => 'Edit dungeon',
-            'header_new'                    => 'New dungeon',
-            'header_edit'                   => 'Edit dungeon',
-            'active'                        => 'Active',
-            'zone_id'                       => 'Zone ID',
-            'mdt_id'                        => 'MDT ID',
-            'dungeon_name'                  => 'Dungeon name',
-            'key'                           => 'Key',
-            'slug'                          => 'Slug',
-            'enemy_forces_required'         => 'Enemy forces required',
-            'enemy_forces_required_teeming' => 'Enemy forces required (teeming)',
-            'timer_max_seconds'             => 'Timer (seconds)',
-            'submit'                        => 'Submit',
+            'title_new'                       => 'New dungeon',
+            'title_edit'                      => 'Edit dungeon',
+            'header_new'                      => 'New dungeon',
+            'header_edit'                     => 'Edit dungeon',
+            'active'                          => 'Active',
+            'zone_id'                         => 'Zone ID',
+            'mdt_id'                          => 'MDT ID',
+            'dungeon_name'                    => 'Dungeon name',
+            'key'                             => 'Key',
+            'slug'                            => 'Slug',
+            'enemy_forces_required'           => 'Enemy forces required',
+            'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
+            'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
+            'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
+            'timer_max_seconds'               => 'Timer (seconds)',
+            'submit'                          => 'Submit',
 
             'floor_management'     => 'Floor management',
             'add_floor'            => 'Add floor',
@@ -236,6 +238,11 @@ return [
             'header'                   => 'Import Enemy Forces',
             'paste_mennos_export_json' => 'Paste Menno\'s Export Json',
             'submit'                   => 'Submit',
+            'recalculate' => [
+                'title' => 'Recalculate enemy forces for dungeonroutes of dungeon',
+                'header' => 'Recalculate enemy forces for dungeonroutes of dungeon',
+                'submit' => 'Submit',
+            ]
         ],
         'exception'    => [
             'select' => [
@@ -308,7 +315,7 @@ return [
             'drop_caches'        => 'Drop caches',
             'throw_an_exception' => 'Throw an exception',
 
-            'subheader_mapping' => 'Mapping',
+            'subheader_mapping'  => 'Mapping',
             'force_sync_mapping' => 'Force sync mapping',
 
             'subheader_actions'   => 'Actions',

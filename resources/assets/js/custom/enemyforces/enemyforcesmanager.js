@@ -116,11 +116,11 @@ class EnemyForcesManager extends Signalable {
     getEnemyForcesRequired() {
         console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
-        let dungeonData = getState().getMapContext().getDungeon();
-        let result = dungeonData.enemy_forces_required;
+        let mapContext = getState().getMapContext();
+        let result = mapContext.getEnemyForcesRequired();
 
-        if (getState().getMapContext().getTeeming() && dungeonData.enemy_forces_required_teeming > 0) {
-            result = dungeonData.enemy_forces_required_teeming;
+        if (mapContext.getTeeming() && mapContext.getEnemyForcesRequiredTeeming() > 0) {
+            result = mapContext.getEnemyForcesRequiredTeeming();
         }
 
         return result;

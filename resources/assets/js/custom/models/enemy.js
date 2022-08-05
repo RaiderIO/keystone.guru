@@ -574,9 +574,9 @@ class Enemy extends MapObject {
 
             // Override first
             if (this.isShrouded()) {
-                result = 6;
+                result = getState().getMapContext().getEnemyForcesShrouded();
             } else if (this.isShroudedZulGamux()) {
-                result = 18;
+                result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
             } else if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
