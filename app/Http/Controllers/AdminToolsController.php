@@ -236,11 +236,13 @@ class AdminToolsController extends Controller
             });
 
         // All dungeons
+        $count = 0;
         foreach($builder->get() as $dungeonRoute) {
             RefreshEnemyForces::dispatch($dungeonRoute->id);
+            $count++;
         }
 
-        dd($dungeonId);
+        dd(sprintf('Dispatched %d jobs', $count));
     }
 
     /**
