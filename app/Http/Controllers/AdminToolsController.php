@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
+use App\Jobs\RefreshEnemyForces;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
@@ -20,6 +21,7 @@ use Artisan;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -211,6 +213,37 @@ class AdminToolsController extends Controller
     }
 
     /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesrecalculate()
+    {
+        return view('admin.tools.enemyforces.recalculate');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function enemyforcesrecalculatesubmit(Request $request)
+    {
+        $dungeonId = (int)$request->get('dungeon_id');
+
+
+        $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+            ->select('id')
+            ->when($dungeonId !== -1, function(Builder $builder) use($dungeonId) {
+                return $builder->where('dungeon_id', $dungeonId);
+            });
+
+        // All dungeons
+        foreach($builder->get() as $dungeonRoute) {
+            RefreshEnemyForces::dispatch($dungeonRoute->id);
+        }
+
+        dd($dungeonId);
+    }
+
+    /**
      * @return Factory|
      */
     public function mdtview()
@@ -242,7 +275,8 @@ class AdminToolsController extends Controller
      * @param Request $request
      * @param SeasonService $seasonService
      *
-     * @throws Exception
+     * @return never|void
+     * @throws InvalidMDTString
      * @throws Throwable
      */
     public function mdtviewasdungeonroutesubmit(Request $request, SeasonService $seasonService)
@@ -286,7 +320,7 @@ class AdminToolsController extends Controller
      * @param Request $request
      * @param SeasonService $seasonService
      *
-     * @throws Exception
+     * @return never|void
      * @throws Throwable
      */
     public function mdtviewasstringsubmit(Request $request, SeasonService $seasonService)
@@ -480,7 +514,6 @@ class AdminToolsController extends Controller
                 break;
             default:
                 abort(500, __('controller.admintools.error.mdt_invalid_category'));
-                break;
         }
 
         // Whatever
@@ -524,6 +557,7 @@ class AdminToolsController extends Controller
     /**
      * @param Request $request
      * @throws TokenMismatchException
+     * @throws Exception
      */
     public function exceptionselectsubmit(Request $request)
     {

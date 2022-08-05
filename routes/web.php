@@ -303,6 +303,11 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/import', [AdminToolsController::class, 'enemyforcesimport'])->name('admin.tools.enemyforces.import.view');
                 Route::post('enemyforces/import', [AdminToolsController::class, 'enemyforcesimportsubmit'])->name('admin.tools.enemyforces.import.submit');
 
+                Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
+                Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
+
+
+
                 // View string contents
                 Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
