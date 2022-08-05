@@ -476,10 +476,10 @@ class DungeonRoute extends Model
                                                   npcs.enemy_forces_teeming,
                                                   IF(
                                                       enemies.seasonal_type = "shrouded",
-                                                      6,
+                                                      dungeons.enemy_forces_shrouded,
                                                       IF(
                                                           enemies.seasonal_type = "shrouded_zul_gamux",
-                                                          18,
+                                                          dungeons.enemy_forces_shrouded_zul_gamux,
                                                           npcs.enemy_forces
                                                       )
                                                   )
@@ -492,10 +492,10 @@ class DungeonRoute extends Model
                                               enemies.enemy_forces_override,
                                               IF(
                                                   enemies.seasonal_type = "shrouded",
-                                                  6,
+                                                  dungeons.enemy_forces_shrouded,
                                                   IF(
                                                       enemies.seasonal_type = "shrouded_zul_gamux",
-                                                      18,
+                                                      dungeons.enemy_forces_shrouded_zul_gamux,
                                                       npcs.enemy_forces
                                                   )
                                               )

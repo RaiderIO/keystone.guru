@@ -78,6 +78,18 @@
             @include('common.forms.form-error', ['key' => 'enemy_forces_required_teeming'])
         </div>
 
+        <div class="form-group{{ $errors->has('enemy_forces_shrouded') ? ' has-error' : '' }}">
+            {!! Form::label('enemy_forces_shrouded', __('views/admin.dungeon.edit.enemy_forces_shrouded')) !!}
+            {!! Form::number('enemy_forces_shrouded', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'enemy_forces_shrouded'])
+        </div>
+
+        <div class="form-group{{ $errors->has('enemy_forces_shrouded_zul_gamux') ? ' has-error' : '' }}">
+            {!! Form::label('enemy_forces_shrouded_zul_gamux', __('views/admin.dungeon.edit.enemy_forces_shrouded_zul_gamux')) !!}
+            {!! Form::number('enemy_forces_shrouded_zul_gamux', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'enemy_forces_shrouded_zul_gamux'])
+        </div>
+
         <div class="form-group{{ $errors->has('timer_max_seconds') ? ' has-error' : '' }}">
             {!! Form::label('timer_max_seconds', __('views/admin.dungeon.edit.timer_max_seconds')) !!}
             {!! Form::number('timer_max_seconds', null, ['class' => 'form-control']) !!}
