@@ -22,7 +22,7 @@ class Conversion
         Expansion::EXPANSION_WOTLK       => null,
         Expansion::EXPANSION_CATACLYSM   => null,
         Expansion::EXPANSION_MOP         => null,
-        Expansion::EXPANSION_WOD         => null,
+        Expansion::EXPANSION_WOD         => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION      => 'Legion',
         Expansion::EXPANSION_BFA         => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS => 'Shadowlands',
@@ -61,6 +61,10 @@ class Conversion
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
+            //WoD dungeons
+            Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
+            Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
+            // Real SL dungeons
             Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
             Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
             Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
