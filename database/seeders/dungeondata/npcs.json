@@ -302,5 +302,43 @@
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": []
+    },
+    {
+        "id": 189878,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Nathrezim Infiltrator",
+        "base_health": 15000,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": 0,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
+        "id": 190128,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Zul'gamux",
+        "base_health": 20000,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": 0,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]
