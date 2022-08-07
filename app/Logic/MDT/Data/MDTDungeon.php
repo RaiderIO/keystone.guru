@@ -154,7 +154,7 @@ class MDTDungeon
                             // Set some additional props that come in handy when converting to an enemy
                             $clone['mdtNpcIndex'] = $mdtNpc->getIndex();
                             // Group ID
-                            $clone['g'] = isset($clone['g']) ? $clone['g'] : -1;
+                            $clone['g'] = $clone['g'] ?? -1;
 
                             $npcId = $mdtNpc->getId();
                             // Make sure array is set
@@ -186,6 +186,7 @@ class MDTDungeon
                         if ((int)$clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
                             $enemy = new Enemy();
                             // Dummy so we can ID them later on
+                            $enemy->id            = ($npcId * 100) + $mdtCloneIndex;
                             $enemy->is_mdt        = true;
                             $enemy->floor_id      = $floor->id;
                             $enemy->enemy_pack_id = (int)$clone['g'];
@@ -206,6 +207,14 @@ class MDTDungeon
 
                             if ($enemy->npc === null) {
                                 $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
+                            }
+
+                            if (isset($clone['inspiring']) && $clone['inspiring']) {
+                                $enemy->seasonal_type = Enemy::SEASONAL_TYPE_INSPIRING;
+                            }
+
+                            if (isset($clone['disguised']) && $clone['disguised']) {
+                                $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
                             }
 
                             $enemies->push($enemy);

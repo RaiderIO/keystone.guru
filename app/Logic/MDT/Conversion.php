@@ -179,12 +179,12 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      * @param SeasonService $seasonService
-     * @param Expansion $expansion
+     * @param Dungeon $dungeon
      * @param int $mdtWeek
      * @return AffixGroup|null
      * @throws Exception
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, Expansion $expansion, int $mdtWeek): ?AffixGroup
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
         $weekMapping = [
@@ -202,7 +202,7 @@ class Conversion
             12 => 3,
         ];
 
-        $season = $seasonService->getCurrentSeason($expansion);
+        $season = $dungeon->getActiveSeason($seasonService);
 
         $affixGroup = $season->affixgroups->get($weekMapping[$mdtWeek] - 1);
         if ($affixGroup === null) {
