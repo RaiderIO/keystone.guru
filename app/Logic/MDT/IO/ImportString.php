@@ -354,7 +354,13 @@ class ImportString extends MDTBase
                                 $kzEnemy->enemy = $enemy;
 
                                 // Keep track of our enemy forces
-                                $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+                                if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded;
+                                } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded_zul_gamux;
+                                } else {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+                                }
 
                                 // No point doing this if we're not saving
                                 if ($save && $isRoutePrideful) {
