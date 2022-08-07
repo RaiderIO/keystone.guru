@@ -196,6 +196,9 @@ class ImportString extends MDTBase
         $floors = $dungeonRoute->dungeon->floors;
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+        $enemies = $enemies->each(function (Enemy $enemy) {
+            $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
+        });
 
         // We only need to take the prideful enemies into account if the route is prideful
         $isRoutePrideful = $dungeonRoute->hasUniqueAffix(Affix::AFFIX_PRIDEFUL);
@@ -311,7 +314,11 @@ class ImportString extends MDTBase
                             if ($enemy === null) {
                                 // Teeming is gone, and its enemies have not always been mapped on purpose. So if we cannot find a Teeming enemy
                                 // we can skip this warning as to not alert people to something that shouldn't be there in the first place
-                                if (!$mdtEnemy->teeming) {
+                                // Secondly, MDT does something weird with shrouded enemies. It has both the normal enemy and a shrouded infiltrator
+                                // mapped. The shrouded infiltrator is what you kill in MDT, but the normal enemy is somehow put in other pulls.
+                                // Since an enemy on my side can only be mapped to one MDT enemy I now choose the Infiltrator and we can discard the other one.
+                                // The other enemy is marked as shrouded, so if we cannot find a shrouded normal mob we skip it and don't alert
+                                if (!$mdtEnemy->teeming && $mdtEnemy->seasonal_type !== Enemy::SEASONAL_TYPE_SHROUDED) {
                                     $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
                                         sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
                                         ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
@@ -347,7 +354,13 @@ class ImportString extends MDTBase
                                 $kzEnemy->enemy = $enemy;
 
                                 // Keep track of our enemy forces
-                                $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+                                if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded;
+                                } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded_zul_gamux;
+                                } else {
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+                                }
 
                                 // No point doing this if we're not saving
                                 if ($save && $isRoutePrideful) {
@@ -679,7 +692,7 @@ class ImportString extends MDTBase
         }
 
         // Set the affix for this route
-        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon->expansion, $decoded['week']);
+        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon, $decoded['week']);
 
         if ($affixGroup !== null) {
             if ($save) {

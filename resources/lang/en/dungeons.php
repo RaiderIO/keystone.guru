@@ -98,7 +98,7 @@ return [
         ],
 
         'lower_karazhan' => [
-            'name'   => 'Lower Karazhan',
+            'name'   => 'Return to Karazhan: Lower',
             'floors' => [
                 'servants_quarters'    => 'Servant\'s Quarters',
                 'upper_livery_stables' => 'Upper Livery Stables',
@@ -109,7 +109,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Upper Karazhan',
+            'name'   => 'Return to Karazhan: Upper',
             'floors' => [
                 'lower_broken_stair' => 'Lower Broken Stair',
                 'upper_broken_stair' => 'Upper Broken Stair',
@@ -215,13 +215,13 @@ return [
             ],
         ],
         'mechagon_junkyard'         => [
-            'name'   => 'Mechagon: Junkyard',
+            'name'   => 'Operation Mechagon: Junkyard',
             'floors' => [
                 'mechagon_island' => 'Mechagon Island',
             ],
         ],
         'mechagon_workshop'         => [
-            'name'   => 'Mechagon: Workshop',
+            'name'   => 'Operation Mechagon: Workshop',
             'floors' => [
                 'the_robodrome'  => 'The Robodrome',
                 'waste_pipes'    => 'Waste Pipes',
