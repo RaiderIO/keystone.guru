@@ -2765,7 +2765,7 @@
             {
                 "id": 107,
                 "index": 2,
-                "mdt_sub_level": 2,
+                "mdt_sub_level": -1,
                 "name": "dungeons.wod.grimrail_depot.floors.rafters",
                 "default": 0,
                 "min_enemy_size": 20,
@@ -2773,13 +2773,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 347,
+                        "id": 371,
                         "floor1_id": 107,
                         "floor2_id": 106,
                         "direction": "down"
                     },
                     {
-                        "id": 348,
+                        "id": 372,
                         "floor1_id": 107,
                         "floor2_id": 108,
                         "direction": "down"
