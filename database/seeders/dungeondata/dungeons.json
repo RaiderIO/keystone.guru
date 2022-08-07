@@ -2789,7 +2789,7 @@
             {
                 "id": 108,
                 "index": 3,
-                "mdt_sub_level": 3,
+                "mdt_sub_level": 2,
                 "name": "dungeons.wod.grimrail_depot.floors.rear_train_cars",
                 "default": 0,
                 "min_enemy_size": null,
@@ -2797,13 +2797,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 282,
+                        "id": 368,
                         "floor1_id": 108,
                         "floor2_id": 107,
                         "direction": "up"
                     },
                     {
-                        "id": 283,
+                        "id": 369,
                         "floor1_id": 108,
                         "floor2_id": 109,
                         "direction": "left"
@@ -2813,7 +2813,7 @@
             {
                 "id": 109,
                 "index": 4,
-                "mdt_sub_level": 4,
+                "mdt_sub_level": 3,
                 "name": "dungeons.wod.grimrail_depot.floors.forward_train_cars",
                 "default": 0,
                 "min_enemy_size": null,
@@ -2821,7 +2821,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 284,
+                        "id": 370,
                         "floor1_id": 109,
                         "floor2_id": 108,
                         "direction": "right"
