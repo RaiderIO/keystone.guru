@@ -1,0 +1,57 @@
+{
+    "id": 135,
+    "release_changelog_id": 142,
+    "version": "v4.7.5",
+    "title": "Enemy forces corrections and MDT importer available for Grimrail Depot",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-07T08:53:54+00:00",
+    "updated_at": "2022-08-07T08:53:54+00:00",
+    "changelog": {
+        "id": 142,
+        "release_id": 135,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 142,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1288,
+                "change": "Subcreation tiers now show up properly for Mechagon and Karazhan dungeons.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 142,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Corrected many changes to enemy forces in all new dungeons.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 142,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1273,
+                "change": "Removed some enemies in the first carriage that were there on PTR but not on live.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 142,
+                "release_changelog_category_id": 6,
+                "ticket_id": 1272,
+                "change": "Grimrail Depot can now be imported\/exported with MDT. Other dungeons will soon follow.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}
