@@ -747,7 +747,7 @@
             {
                 "id": 30,
                 "index": 2,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_broken_stair",
                 "default": 0,
                 "min_enemy_size": null,
@@ -755,13 +755,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 317,
+                        "id": 379,
                         "floor1_id": 30,
                         "floor2_id": 29,
                         "direction": "down"
                     },
                     {
-                        "id": 318,
+                        "id": 380,
                         "floor1_id": 30,
                         "floor2_id": 31,
                         "direction": "left"
@@ -771,7 +771,7 @@
             {
                 "id": 31,
                 "index": 3,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "name": "dungeons.legion.upper_karazhan.floors.the_menagerie",
                 "default": 0,
                 "min_enemy_size": null,
@@ -779,13 +779,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 343,
+                        "id": 377,
                         "floor1_id": 31,
                         "floor2_id": 30,
                         "direction": "right"
                     },
                     {
-                        "id": 344,
+                        "id": 378,
                         "floor1_id": 31,
                         "floor2_id": 32,
                         "direction": "right"
