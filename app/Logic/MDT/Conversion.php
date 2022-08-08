@@ -22,7 +22,7 @@ class Conversion
         Expansion::EXPANSION_WOTLK       => null,
         Expansion::EXPANSION_CATACLYSM   => null,
         Expansion::EXPANSION_MOP         => null,
-        Expansion::EXPANSION_WOD         => null,
+        Expansion::EXPANSION_WOD         => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION      => 'Legion',
         Expansion::EXPANSION_BFA         => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS => 'Shadowlands',
@@ -61,6 +61,10 @@ class Conversion
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
+            //WoD dungeons
+            Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
+            Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
+            // Real SL dungeons
             Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
             Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
             Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
@@ -175,32 +179,32 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      * @param SeasonService $seasonService
-     * @param Expansion $expansion
+     * @param Dungeon $dungeon
      * @param int $mdtWeek
      * @return AffixGroup|null
      * @throws Exception
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, Expansion $expansion, int $mdtWeek): ?AffixGroup
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
         // You can do this in a mathy way but tbh I can't be bothered right now.
-        $weekMapping = [
-            1  => 4,
-            2  => 5,
-            3  => 6,
-            4  => 7,
-            5  => 8,
-            6  => 9,
-            7  => 10,
-            8  => 11,
-            9  => 12,
-            10 => 1,
-            11 => 2,
-            12 => 3,
-        ];
+//        $weekMapping = [
+//            1  => 4,
+//            2  => 5,
+//            3  => 6,
+//            4  => 7,
+//            5  => 8,
+//            6  => 9,
+//            7  => 10,
+//            8  => 11,
+//            9  => 12,
+//            10 => 1,
+//            11 => 2,
+//            12 => 3,
+//        ];
 
-        $season = $seasonService->getCurrentSeason($expansion);
+        $season = $dungeon->getActiveSeason($seasonService);
 
-        $affixGroup = $season->affixgroups->get($weekMapping[$mdtWeek] - 1);
+        $affixGroup = $season->affixgroups->get($mdtWeek - 1);
         if ($affixGroup === null) {
             logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [
                 '$mdtWeek' => $mdtWeek,

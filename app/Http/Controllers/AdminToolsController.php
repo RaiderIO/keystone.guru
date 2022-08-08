@@ -21,7 +21,7 @@ use Artisan;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -231,16 +231,18 @@ class AdminToolsController extends Controller
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->select('id')
-            ->when($dungeonId !== -1, function(Builder $builder) use($dungeonId) {
+            ->when($dungeonId !== -1, function (Builder $builder) use ($dungeonId) {
                 return $builder->where('dungeon_id', $dungeonId);
             });
 
         // All dungeons
-        foreach($builder->get() as $dungeonRoute) {
+        $count = 0;
+        foreach ($builder->get() as $dungeonRoute) {
             RefreshEnemyForces::dispatch($dungeonRoute->id);
+            $count++;
         }
 
-        dd($dungeonId);
+        dd(sprintf('Dispatched %d jobs', $count));
     }
 
     /**

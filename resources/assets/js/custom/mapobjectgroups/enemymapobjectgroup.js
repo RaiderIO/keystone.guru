@@ -104,6 +104,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         super.load();
 
         let mapContext = getState().getMapContext();
+        let isRouteAwakened = mapContext.hasAffix(AFFIX_AWAKENED);
         let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
         // Couple awakened enemies to each other
@@ -112,7 +113,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             let enemy = this.objects[i];
 
             // Check only those Awakened mobs that are not part of the final boss pack
-            if (enemy.npc !== null && enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
+            if (isRouteAwakened && enemy.npc !== null && enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
                 for (let j = 0; j < this.objects.length; j++) {
                     let enemyCandidate = this.objects[j];
 

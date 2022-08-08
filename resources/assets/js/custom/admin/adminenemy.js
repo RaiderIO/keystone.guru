@@ -17,8 +17,6 @@ class AdminEnemy extends Enemy {
         this._previousConnectedEnemyId = -1;
         // Cached connected enemy
         this._connectedEnemy = null;
-        // Whatever enemy we're connected with if we're an MDT enemy
-        this.enemy_id = -1;
 
         this.setSynced(false);
 
@@ -238,6 +236,7 @@ class AdminEnemy extends Enemy {
         // Unset any previously connected enemy; detach them from this MDT enemy, it no longer wants you (sorry :c)
         if (this._previousConnectedEnemyId > 0) {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            /** @type AdminEnemy */
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
             // Remove its visual connection, probably better served using events but that'd add too much complexity for now
