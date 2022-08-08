@@ -1044,16 +1044,16 @@ class DungeonRoute extends Model
     {
         $result = true;
 
-        foreach ($this->dungeon->enemies as $enemy) {
-            if ($enemy->required &&
-                ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
-
-                if (!$this->isEnemyKilled($enemy->id)) {
-                    $result = false;
-                    break;
-                }
-            }
-        }
+//        foreach ($this->dungeon->enemies as $enemy) {
+//            if ($enemy->required &&
+//                ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
+//
+//                if (!$this->isEnemyKilled($enemy->id)) {
+//                    $result = false;
+//                    break;
+//                }
+//            }
+//        }
 
         return $result;
     }

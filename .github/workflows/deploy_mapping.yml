@@ -19,7 +19,7 @@ jobs:
           script: cd /var/www/html/keystone.guru.mapping/;
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
-            php artisan mapping:sync --force &&
+            php artisan mapping:sync --force=true &&
             php artisan environment:updateprepare mapping &&
             php artisan environment:update mapping;
             php artisan up
