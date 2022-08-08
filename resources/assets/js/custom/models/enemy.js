@@ -200,7 +200,8 @@ class Enemy extends MapObject {
             new Attribute({
                 name: 'mdt_id',
                 type: 'int',
-                edit: false, // Not directly changeable by user
+                admin: true,
+                // edit: false, // Not directly changeable by user
                 default: -1
             }),
             new Attribute({
