@@ -1,0 +1,27 @@
+{
+    "id": 136,
+    "release_changelog_id": 143,
+    "version": "v4.7.6",
+    "title": "MDT importer\/exporter available for all season 4 dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-09T18:53:54+00:00",
+    "updated_at": "2022-08-09T18:53:54+00:00",
+    "changelog": {
+        "id": 143,
+        "release_id": 136,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 143,
+                "release_changelog_category_id": 6,
+                "ticket_id": 1273,
+                "change": "MDT importer\/exporter available for all season 4 dungeons",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}
