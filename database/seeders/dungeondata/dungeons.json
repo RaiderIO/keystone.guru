@@ -2515,7 +2515,7 @@
             {
                 "id": 102,
                 "index": 2,
-                "mdt_sub_level": 4,
+                "mdt_sub_level": 1,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie",
                 "default": 0,
                 "min_enemy_size": 24,
@@ -2523,7 +2523,7 @@
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 224,
+                        "id": 390,
                         "floor1_id": 102,
                         "floor2_id": 101,
                         "direction": "left"
@@ -2533,7 +2533,7 @@
             {
                 "id": 103,
                 "index": 3,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_post",
                 "default": 0,
                 "min_enemy_size": 24,
@@ -2541,7 +2541,7 @@
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 225,
+                        "id": 391,
                         "floor1_id": 103,
                         "floor2_id": 101,
                         "direction": "right"
@@ -2551,7 +2551,7 @@
             {
                 "id": 104,
                 "index": 4,
-                "mdt_sub_level": 2,
+                "mdt_sub_level": 1,
                 "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis",
                 "default": 0,
                 "min_enemy_size": 24,
@@ -2559,7 +2559,7 @@
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
-                        "id": 223,
+                        "id": 392,
                         "floor1_id": 104,
                         "floor2_id": 101,
                         "direction": "right"
