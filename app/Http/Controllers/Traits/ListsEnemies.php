@@ -47,18 +47,15 @@ trait ListsEnemies
         $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
-        $filteredEnemies = collect();
+        $mdtEnemies = collect();
         if ($showMdtEnemies) {
             try {
                 $dungeon    = Dungeon::findOrFail($dungeonId);
                 $mdtEnemies = (new MDTDungeon($dungeon->key))->getClonesAsEnemies($dungeon->floors);
 
-                foreach ($mdtEnemies as $mdtEnemy) {
-                    // Skip Emissaries (Season 3), season is over
-                    if (!in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
-                        $filteredEnemies->push($mdtEnemy);
-                    }
-                }
+                $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy){
+                    return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);
+                });
 
             } // Thrown when Lua hasn't been configured
             catch (Error $ex) {
@@ -78,9 +75,11 @@ trait ListsEnemies
             }
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
-            foreach ($filteredEnemies as $mdtEnemy) {
+            foreach ($mdtEnemies as $mdtEnemy) {
                 // Match them
-                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->getMdtNpcId()) {
+                if ($mdtEnemy->floor_id === $enemy->floor_id &&
+                    $mdtEnemy->mdt_id === $enemy->mdt_id &&
+                    $mdtEnemy->npc_id === $enemy->getMdtNpcId()) {
                     // Match found, assign and quit
                     $mdtEnemy->enemy_id = $enemy->id;
                     break;
@@ -91,6 +90,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $filteredEnemies->toArray()];
+        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $mdtEnemies->toArray()];
     }
 }

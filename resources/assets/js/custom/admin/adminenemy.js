@@ -131,7 +131,9 @@ class AdminEnemy extends Enemy {
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
-                    if (mdtEnemy.is_mdt && self.getMdtNpcId() === mdtEnemy.npc_id && self.mdt_id === mdtEnemy.mdt_id) {
+                    if (mdtEnemy.floor_id === self.floor_id &&
+                        mdtEnemy.is_mdt && self.getMdtNpcId() === mdtEnemy.npc_id &&
+                        self.mdt_id === mdtEnemy.mdt_id) {
                         result = mdtEnemy;
                         return false;
                     }
