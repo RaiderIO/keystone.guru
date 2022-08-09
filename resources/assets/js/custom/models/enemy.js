@@ -680,6 +680,7 @@ class Enemy extends MapObject {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
+                // console.warn(`Hiding awakened enemy linked to last boss since it's already killed in the map ${this.id}`);
                 return false;
             }
         }
@@ -701,6 +702,7 @@ class Enemy extends MapObject {
 
         // Hide MDT enemies
         if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
+            // console.warn(`Hiding MDT enemy since MDT mapping mode is disabled ${this.id}`);
             return false;
         }
 

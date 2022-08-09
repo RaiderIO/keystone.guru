@@ -165,11 +165,12 @@ class MDTDungeon
                             // This fucks with the assignment below this if, because it'll overwrite the NPCs there.
                             // We don't want this; instead append it at the end of the current array at the proper index
                             // We calculate that at the hand of the current index in the second array ($cloneCount).
-                            if (isset($npcClones[$npcId][$mdtCloneIndex])) {
-                                $mdtCloneIndex += (count($npcClones[$npcId]) - $cloneCount);
+                            if (isset($npcClones[$npcId][$floor->id][$mdtCloneIndex])) {
+                                $mdtCloneIndex += (count($npcClones[$npcId][$floor->id]) - $cloneCount);
                             }
+
                             // Append this clone to the array
-                            $npcClones[$npcId][$mdtCloneIndex] = $clone;
+                            $npcClones[$npcId][$floor->id][$mdtCloneIndex] = $clone;
                         }
                     }
 
@@ -178,47 +179,46 @@ class MDTDungeon
             }
 
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
-            foreach ($floors as $floor) {
-                /** @var Collection|Npc[] $npcs */
-                $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
-                foreach ($npcClones as $npcId => $clones) {
+
+            /** @var Collection|Npc[] $npcs */
+            $npcs = Npc::whereIn('dungeon_id', [$floors->first()->dungeon->id, -1])->get();
+            foreach ($npcClones as $npcId => $floorIndexes) {
+                foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
-                        if ((int)$clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
-                            $enemy = new Enemy();
-                            // Dummy so we can ID them later on
-                            $enemy->id            = ($npcId * 100) + $mdtCloneIndex;
-                            $enemy->is_mdt        = true;
-                            $enemy->floor_id      = $floor->id;
-                            $enemy->enemy_pack_id = (int)$clone['g'];
-                            $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                            $enemy->npc_id        = $npcId;
-                            // All MDT_IDs are 1-indexed, because LUA
-                            $enemy->mdt_id                = $mdtCloneIndex;
-                            $enemy->enemy_id              = -1;
-                            $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                            $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
-                            $enemy->enemy_forces_override = -1;
+                        $enemy = new Enemy();
+                        // Dummy so we can ID them later on
+                        $enemy->id            = ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex;
+                        $enemy->is_mdt        = true;
+                        $enemy->floor_id      = $floorId;
+                        $enemy->enemy_pack_id = (int)$clone['g'];
+                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                        $enemy->npc_id        = $npcId;
+                        // All MDT_IDs are 1-indexed, because LUA
+                        $enemy->mdt_id                = $mdtCloneIndex;
+                        $enemy->enemy_id              = -1;
+                        $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                        $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
+                        $enemy->enemy_forces_override = -1;
 
-                            $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
-                            $enemy->lat = $latLng['lat'];
-                            $enemy->lng = $latLng['lng'];
+                        $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
+                        $enemy->lat = $latLng['lat'];
+                        $enemy->lng = $latLng['lng'];
 
-                            $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+                        $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
-                            if ($enemy->npc === null) {
-                                $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
-                            }
-
-                            if (isset($clone['inspiring']) && $clone['inspiring']) {
-                                $enemy->seasonal_type = Enemy::SEASONAL_TYPE_INSPIRING;
-                            }
-
-                            if (isset($clone['disguised']) && $clone['disguised']) {
-                                $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
-                            }
-
-                            $enemies->push($enemy);
+                        if ($enemy->npc === null) {
+                            $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
                         }
+
+                        if (isset($clone['inspiring']) && $clone['inspiring']) {
+                            $enemy->seasonal_type = Enemy::SEASONAL_TYPE_INSPIRING;
+                        }
+
+                        if (isset($clone['disguised']) && $clone['disguised']) {
+                            $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
+                        }
+
+                        $enemies->push($enemy);
                     }
                 }
             }
