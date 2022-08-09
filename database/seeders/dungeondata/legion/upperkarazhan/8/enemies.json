@@ -4,7 +4,7 @@
         "enemy_pack_id": -1,
         "npc_id": 114790,
         "floor_id": 36,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "mdt_npc_id": null,
         "seasonal_type": null,
         "seasonal_index": null,
