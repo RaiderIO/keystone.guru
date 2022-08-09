@@ -725,7 +725,11 @@ class CommonMapsMap extends InlineCode {
         for (let index in enemyMapObjectGroup.objects) {
             let enemyCandidate = enemyMapObjectGroup.objects[index];
             let distance = getDistance([enemyCandidate.lat, enemyCandidate.lng], [targetEnemy.lat, targetEnemy.lng]);
-            if (enemyCandidate.is_mdt && targetEnemy.npc_id === enemyCandidate.npc_id && targetEnemy.floor_id === enemyCandidate.floor_id && closestEnemyDistance > distance) {
+            if (enemyCandidate.is_mdt &&
+                targetEnemy.getMdtNpcId() === enemyCandidate.npc_id &&
+                targetEnemy.floor_id === enemyCandidate.floor_id &&
+                targetEnemy.teeming === enemyCandidate.teeming &&
+                closestEnemyDistance > distance) {
                 result = enemyCandidate;
                 closestEnemyDistance = distance;
             }
