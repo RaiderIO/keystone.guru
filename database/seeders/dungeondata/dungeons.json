@@ -729,7 +729,7 @@
             {
                 "id": 29,
                 "index": 1,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "name": "dungeons.legion.upper_karazhan.floors.lower_broken_stair",
                 "default": 1,
                 "min_enemy_size": null,
@@ -737,7 +737,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 316,
+                        "id": 389,
                         "floor1_id": 29,
                         "floor2_id": 30,
                         "direction": "up"
@@ -795,7 +795,7 @@
             {
                 "id": 32,
                 "index": 4,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 2,
                 "name": "dungeons.legion.upper_karazhan.floors.guardians_library",
                 "default": 0,
                 "min_enemy_size": null,
@@ -803,13 +803,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 321,
+                        "id": 381,
                         "floor1_id": 32,
                         "floor2_id": 31,
                         "direction": "left"
                     },
                     {
-                        "id": 322,
+                        "id": 382,
                         "floor1_id": 32,
                         "floor2_id": 33,
                         "direction": "down"
@@ -819,7 +819,7 @@
             {
                 "id": 33,
                 "index": 5,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 3,
                 "name": "dungeons.legion.upper_karazhan.floors.library_floor",
                 "default": 0,
                 "min_enemy_size": null,
@@ -827,13 +827,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 323,
+                        "id": 383,
                         "floor1_id": 33,
                         "floor2_id": 32,
                         "direction": "up"
                     },
                     {
-                        "id": 324,
+                        "id": 384,
                         "floor1_id": 33,
                         "floor2_id": 34,
                         "direction": "up"
@@ -843,7 +843,7 @@
             {
                 "id": 34,
                 "index": 6,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 4,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_library",
                 "default": 0,
                 "min_enemy_size": null,
@@ -851,13 +851,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 325,
+                        "id": 385,
                         "floor1_id": 34,
                         "floor2_id": 33,
                         "direction": "down"
                     },
                     {
-                        "id": 326,
+                        "id": 386,
                         "floor1_id": 34,
                         "floor2_id": 35,
                         "direction": "down"
@@ -867,7 +867,7 @@
             {
                 "id": 35,
                 "index": 7,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 5,
                 "name": "dungeons.legion.upper_karazhan.floors.gamesmans_hall",
                 "default": 0,
                 "min_enemy_size": null,
@@ -875,13 +875,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 327,
+                        "id": 387,
                         "floor1_id": 35,
                         "floor2_id": 34,
                         "direction": "up"
                     },
                     {
-                        "id": 328,
+                        "id": 388,
                         "floor1_id": 35,
                         "floor2_id": 36,
                         "direction": "left"
