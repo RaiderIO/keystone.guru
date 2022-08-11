@@ -211,7 +211,7 @@ class RowElementKillZone extends RowElement {
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
         // Show boss icon or not
-        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false;
+        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false, hasShroudedZulGamux = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.killZone.enemies.length; i++) {
@@ -223,21 +223,30 @@ class RowElementKillZone extends RowElement {
                         hasBoss = true;
                     } else if (!hasAwakened && enemy.isAwakenedNpc()) {
                         hasAwakened = true;
-                    } else if (!hasAwakened && enemy.isPridefulNpc()) {
+                    } else if (!hasPrideful && enemy.isPridefulNpc()) {
                         hasPrideful = true;
-                    } else if (!hasAwakened && enemy.isInspiring()) {
+                    } else if (!hasInspiring && enemy.isInspiring()) {
                         hasInspiring = true;
+                    } else if (!hasShrouded && enemy.isShrouded()) {
+                        hasShrouded = true;
+                    } else if (!hasShroudedZulGamux && enemy.isShroudedZulGamux()) {
+                        hasShroudedZulGamux = true;
                     }
                     break;
                 }
             }
         }
 
+        let cumulativeShroudedEnemyStacks = this.killZone.getShroudedEnemyStacksCumulative();
         // Reset any previous states
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).toggle(hasPrideful);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_inspiring:not(.draggable--original)`).toggle(hasInspiring);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_shrouded:not(.draggable--original)`).toggle(hasShrouded)
+            .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_shrouded_zul_gamux:not(.draggable--original)`).toggle(hasShroudedZulGamux)
+            .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
 
         // $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);

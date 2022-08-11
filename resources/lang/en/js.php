@@ -102,15 +102,18 @@ return [
     'remove_kill_area_label' => 'Remove kill area',
     'delete_killzone_label'  => 'Delete pull',
 
-    'kill_zone_has_boss_label'      => 'Boss in pull',
-    'kill_zone_has_awakened_label'  => 'Awakened enemy in pull',
-    'kill_zone_has_prideful_label'  => 'Prideful enemy in pull',
-    'kill_zone_has_inspiring_label' => 'Inspiring enemy in pull',
+    'kill_zone_has_boss_label'               => 'Boss in pull',
+    'kill_zone_has_awakened_label'           => 'Awakened enemy in pull',
+    'kill_zone_has_prideful_label'           => 'Prideful enemy in pull',
+    'kill_zone_has_inspiring_label'          => 'Inspiring enemy in pull',
+    'kill_zone_has_shrouded_label'           => 'Shrouded enemy in pull',
+    'kill_zone_has_shrouded_zul_gamux_label' => 'Zul\'gamux enemy in pull',
 
     'kill_zone_enemy_row_has_boss_label'          => 'Boss',
     'kill_zone_enemy_row_has_awakened_label'      => 'Awakened enemy',
     'kill_zone_enemy_row_has_prideful_label'      => 'Prideful enemy',
     'kill_zone_enemy_row_has_inspiring_label'     => 'Inspiring enemy',
+    'kill_zone_enemy_row_has_shrouded_label'      => 'Shrouded enemy',
     'kill_zone_enemy_row_has_dangerous_label'     => 'Dangerous enemy',
 
     // Route edit tools
