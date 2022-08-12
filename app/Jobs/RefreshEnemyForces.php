@@ -36,9 +36,10 @@ class RefreshEnemyForces implements ShouldQueue
     {
         Log::channel('scheduler')->info(sprintf('Started processing %s', $this->dungeonRouteId));
 
-        $dungeonRoute               = DungeonRoute::find($this->dungeonRouteId);
-        $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
-        $dungeonRoute->save();
+        $dungeonRoute = DungeonRoute::find($this->dungeonRouteId);
+        if ($dungeonRoute) {
+            $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+        }
 
         Log::channel('scheduler')->info(sprintf('Finished processing %s', $this->dungeonRouteId));
     }

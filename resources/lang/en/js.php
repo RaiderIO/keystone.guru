@@ -80,6 +80,7 @@ return [
     'clone_to_profile_label'     => 'Clone to my profile',
     'clone_to_team_label'        => 'Clone to Team',
     'migrate_to_encrypted_label' => 'Migrate to Encrypted',
+    'migrate_to_shrouded_label'  => 'Migrate to Shrouded',
     'delete_label'               => 'Delete',
 
     'placeholder_new_tag_label' => 'new tag',
@@ -107,7 +108,7 @@ return [
     'kill_zone_has_prideful_label'           => 'Prideful enemy in pull',
     'kill_zone_has_inspiring_label'          => 'Inspiring enemy in pull',
     'kill_zone_has_shrouded_label'           => 'Shrouded enemy in pull',
-    'kill_zone_has_shrouded_zul_gamux_label' => 'Zul\'gamux enemy in pull',
+    'kill_zone_has_shrouded_zul_gamux_label' => 'Zul\'gamux in pull',
 
     'kill_zone_enemy_row_has_boss_label'          => 'Boss',
     'kill_zone_enemy_row_has_awakened_label'      => 'Awakened enemy',
@@ -210,10 +211,14 @@ return [
     'route_delete_successful'                                        => 'Route deleted successfully',
     'route_clone_successful'                                         => 'Route cloned successfully',
     'route_clone_select_team'                                        => 'Unable to clone route - select a team to clone to first',
-    'route_migration_confirm_warning'                                => 'The following changes will be performed to your route:
+    'route_migration_to_encrypted_confirm_warning'                   => 'The following changes will be performed to your route:
         the affixes assigned to the route will be dropped in favor of the current active affix for your region,
         enemies specific to previous seasons assigned to your pulls (Tormented Lieutenants for example) will be removed from all pulls,
         if an existing pull contains a pack with Encrypted Relics they will be added to that pull. Are you sure you wish to continue with the migration?',
+    'route_migration_to_shrouded_confirm_warning'                    => 'The following changes will be performed to your route:
+        the affixes assigned to the route will be dropped in favor of the current active affix for your region,
+        enemies specific to previous seasons assigned to your pulls (Encrypted enemies for example) will be removed from all pulls.
+        Shrouded enemies will be added to your route if they were part of your existing pulls. Are you sure you wish to continue with the migration?',
     'route_migration_successful'                                     => 'Route migrated successfully',
     'sharing_label'                                                  => 'Sharing',
     'route_table_published_state_unpublished'                        => 'This route is unpublished',
