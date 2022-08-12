@@ -279,7 +279,7 @@ class APIDungeonRouteController extends Controller
 
         // Always prioritize routes of most recent seasons
         $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id')
-            ->orderBy('affix_group_id', 'desc');
+            ->orderBy('dungeon_route_affix_groups.affix_group_id', 'desc');
 
         if ($hasAffixGroups || $hasAffixes) {
             if (!empty($affixGroups)) {
