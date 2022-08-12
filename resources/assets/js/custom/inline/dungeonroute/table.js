@@ -186,7 +186,10 @@ class DungeonrouteTable extends InlineCode {
             $cloneToTeamBtns.unbind('click').bind('click', self._promptCloneToTeamClicked.bind(self));
 
             let $migrateToEncryptedBtns = $('.dungeonroute-migrate-to-encrypted');
-            $migrateToEncryptedBtns.unbind('click').bind('click', self._migrateToEncryptedClicked);
+            $migrateToEncryptedBtns.unbind('click').bind('click', self._migrateToEncryptedClicked.bind(self));
+
+            let $migrateToShroudedBtns = $('.dungeonroute-migrate-to-shrouded');
+            $migrateToShroudedBtns.unbind('click').bind('click', self._migrateToShroudedClicked.bind(self));
 
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
@@ -388,29 +391,27 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
-                    let showMigrateToEncrypted = row.dungeon.expansion.shortname === EXPANSION_SHADOWLANDS;
-
-                    // Check if the route does not contain any affixes with encrypted - if it has, don't allow migration
-                    if (showMigrateToEncrypted) {
-
+                    let rowHasAffix = function (row, targetAffix) {
                         for (let index in row.affixes) {
                             let affixGroup = row.affixes[index];
                             for (let affixGroupIndex in affixGroup.affixes) {
                                 let affix = affixGroup.affixes[affixGroupIndex];
 
                                 // If the affix group contains an affix with encrypted, it's not possible to migrate
-                                if (affix.key === AFFIX_ENCRYPTED) {
-                                    showMigrateToEncrypted = false;
-                                    break;
+                                if (affix.key === targetAffix) {
+                                    return true;
                                 }
                             }
                         }
+                        return false;
                     }
 
+                    // @TODO add an additional check to see if the current route's dungeon is part of previous season?
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
                         published: row.published,
-                        show_migrate_to_encrypted: showMigrateToEncrypted
+                        show_migrate_to_encrypted: !rowHasAffix(row, AFFIX_ENCRYPTED),
+                        show_migrate_to_shrouded: !rowHasAffix(row, AFFIX_SHROUDED)
                     }));
                 }
             },
@@ -536,7 +537,7 @@ class DungeonrouteTable extends InlineCode {
         })), function () {
             let targetTeam = $(`input[type='radio'][name='clone-to-team-${publicKey}']:checked`).val();
 
-            if( typeof targetTeam === 'undefined' ) {
+            if (typeof targetTeam === 'undefined') {
                 showErrorNotification(lang.get('messages.route_clone_select_team'));
                 return;
             }
@@ -563,12 +564,33 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _migrateToEncryptedClicked(clickEvent) {
+        this._migrateTo(clickEvent, 'encrypted');
+    }
+
+    /**
+     *
+     * @param clickEvent
+     * @returns {boolean}
+     * @private
+     */
+    _migrateToShroudedClicked(clickEvent) {
+        this._migrateTo(clickEvent, 'shrouded');
+    }
+
+    /**
+     *
+     * @param clickEvent
+     * @param affixName
+     * @returns {boolean}
+     * @private
+     */
+    _migrateTo(clickEvent, affixName) {
         let publicKey = $(clickEvent.target).data('publickey');
 
-        showConfirmYesCancel(lang.get('messages.route_migration_confirm_warning'), function () {
+        showConfirmYesCancel(lang.get(`messages.route_migration_to_${affixName}_confirm_warning`), function () {
             $.ajax({
                 type: 'POST',
-                url: `/ajax/${publicKey}/migrate/encrypted`,
+                url: `/ajax/${publicKey}/migrate/${affixName}_confirm_warning`,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.route_migration_successful'));

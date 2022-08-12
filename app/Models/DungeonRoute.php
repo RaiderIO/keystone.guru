@@ -921,7 +921,14 @@ class DungeonRoute extends Model
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killzones as $killZone) {
             foreach ($killZone->killzoneenemies as $kzEnemy) {
-                if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [Enemy::SEASONAL_TYPE_PRIDEFUL, Enemy::SEASONAL_TYPE_TORMENTED, Enemy::SEASONAL_TYPE_ENCRYPTED])) {
+                if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [
+                        Enemy::SEASONAL_TYPE_PRIDEFUL,
+                        Enemy::SEASONAL_TYPE_TORMENTED,
+                        Enemy::SEASONAL_TYPE_ENCRYPTED,
+                        // Do not include these as they are not new enemies but are a seasonal type on existing enemies
+                        // Enemy::SEASONAL_TYPE_SHROUDED,
+                        // Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
+                    ])) {
                     $kzEnemy->delete();
                 }
             }
@@ -954,16 +961,24 @@ class DungeonRoute extends Model
                 $enemyPackId = $enemy->enemy_pack_id;
 
                 if ($enemyPackId > 0 && !$checkedEnemyPacks->contains($enemyPackId) && $enemy->enemypack !== null) {
+                    // Get any new enemies in this pack that have the seasonal type we're migrating to
                     foreach ($enemy->enemypack->getEnemiesWithSeasonalType($seasonalType) as $seasonalTypeEnemy) {
-                        KillZoneEnemy::create([
-                            'enemy_id'     => $seasonalTypeEnemy->id,
-                            'kill_zone_id' => $killZone->id,
-                        ]);
+                        // But only create new enemies if these enemies are new to the pack
+                        if ($killZone->enemies->filter(function (Enemy $enemy) use ($seasonalTypeEnemy) {
+                            return $enemy->id === $seasonalTypeEnemy->id;
+                        })->isEmpty()) {
+                            KillZoneEnemy::create([
+                                'enemy_id'     => $seasonalTypeEnemy->id,
+                                'kill_zone_id' => $killZone->id,
+                            ]);
+                        }
                     }
                     $checkedEnemyPacks->push($enemyPackId);
                 }
             }
         }
+
+        $this->update(['enemy_forces' => $this->getEnemyForces()]);
 
         return true;
     }
