@@ -277,18 +277,11 @@ class APIDungeonRouteController extends Controller
 
         $affixGroups = $request->get('affixgroups');
 
-        if (!$hasAffixGroups && !$hasAffixes) {
-            // Always include this season's affixes if the user hasn't selected any
-            $season = $season ?? $expansionService->getCurrentSeason($expansion);
-            if ($season !== null) {
-                $affixGroups    = $season->affixgroups->pluck(['id'])->toArray();
-                $hasAffixGroups = true;
-            }
-        }
+        // Always prioritize routes of most recent seasons
+        $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id')
+            ->orderBy('affix_group_id', 'desc');
 
         if ($hasAffixGroups || $hasAffixes) {
-            $query->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', '=', 'dungeon_routes.id');
-
             if (!empty($affixGroups)) {
                 $query->whereIn('dungeon_route_affix_groups.affix_group_id', $affixGroups);
             }
