@@ -12,8 +12,13 @@ $showAffixes = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
 $cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
-$isTyrannical = $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL);
-$isFortified = $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED);
+$dominantAffix = 'keystone';
+if( $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED) ) {
+    $dominantAffix = strtolower(\App\Models\Affix::AFFIX_FORTIFIED);
+} else if( $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL) ) {
+    $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
+}
+$seasonalAffix = $dungeonroute->getSeasonalAffix();
 
 if (!isset($tierAffixGroup)) {
     // Try to come up with a sensible default
@@ -79,28 +84,18 @@ ob_start(); ?>
                             </div>
                         @endforeach
                         <?php $affixes = ob_get_clean(); ?>
-                        @if($isTyrannical && $isFortified)
-                            <div data-container="body" data-toggle="popover" data-placement="bottom"
+                            <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
                                  data-html="true"
                                  data-content="{{ $affixes }}" style="cursor: pointer;">
-                                <img class="select_icon"
-                                     src="{{ url('/images/affixes/keystone.jpg') }}"/>
+                                <div class="col">
+                                    <img class="select_icon" src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"/>
+                                </div>
+                                @if($seasonalAffix !== null)
+                                    <div class="col ml-1">
+                                        <img class="select_icon" src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"/>
+                                    </div>
+                                @endif
                             </div>
-                        @elseif($isTyrannical)
-                            <div data-container="body" data-toggle="popover" data-placement="bottom"
-                                 data-html="true"
-                                 data-content="{{ $affixes }}" style="cursor: pointer;">
-                                <img class="select_icon"
-                                     src="{{ url('/images/affixes/tyrannical.jpg') }}"/>
-                            </div>
-                        @elseif($isFortified)
-                            <div data-container="body" data-toggle="popover" data-placement="bottom"
-                                 data-html="true"
-                                 data-content="{{ $affixes }}" style="cursor: pointer;">
-                                <img class="select_icon"
-                                     src="{{ url('/images/affixes/fortified.jpg') }}"/>
-                            </div>
-                        @endif
                     </div>
                     <div class="col-auto px-1">
                         @if($tierAffixGroup !== null)

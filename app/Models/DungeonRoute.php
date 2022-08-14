@@ -1085,6 +1085,27 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return string|null
+     */
+    public function getSeasonalAffix(): ?string
+    {
+        $foundSeasonalAffix = null;
+
+        $this->affixes->each(function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
+            foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
+                if ($affixGroup->hasAffix($seasonalAffix)) {
+                    $foundSeasonalAffix = $seasonalAffix;
+                    return false; // break
+                }
+            }
+
+            return true;
+        });
+
+        return $foundSeasonalAffix;
+    }
+
+    /**
      * Returns a single affix group from the list of affix groups attached to this dungeon route and returns the most relevant
      * one based on what the current affix is. By default will return the first affix group.
      * @return AffixGroup|null
