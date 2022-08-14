@@ -937,7 +937,30 @@ class DungeonRoute extends Model
         // Remove all affixes of the route
         $this->affixgroups()->delete();
 
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($this->dungeon->expansion, GameServerRegion::getUserOrDefaultRegion());
+        /** @var Season $seasonOfSeasonalType */
+        $seasonOfSeasonalType = Season::where('seasonal_affix_id',
+            Affix::where('key', Affix::getAffixBySeasonalType($seasonalType))->first()->id
+        )->first();
+
+        $currentAffixGroup = null;
+        if ($seasonOfSeasonalType !== null) {
+            try {
+                $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion(GameServerRegion::getUserOrDefaultRegion());
+            } catch (Exception $e) {
+                // It's okay - we can recover in the next IF
+                logger()->error('Unable to find current affixgroup for seasonal type', [
+                    'season'       => $seasonOfSeasonalType->id,
+                    'seasonalType' => $seasonalType,
+                ]);
+            }
+        }
+
+        if ($currentAffixGroup === null) {
+            // Backup - grab the current affix group of the expansion
+            $currentAffixGroup = $expansionService->getCurrentAffixGroup($this->dungeon->expansion, GameServerRegion::getUserOrDefaultRegion())
+                // Last ditch attempt
+                ?? $expansionService->getCurrentAffixGroup($expansionService->getCurrentExpansion(), GameServerRegion::getUserOrDefaultRegion());
+        }
 
         if ($currentAffixGroup !== null) {
             // Add the current affix to the route (user will need to change this anyways)
