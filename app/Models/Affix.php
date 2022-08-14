@@ -43,7 +43,7 @@ class Affix extends CacheModel
     const AFFIX_UNKNOWN    = 'Unknown';
     const AFFIX_INFERNAL   = 'Infernal';
     const AFFIX_ENCRYPTED  = 'Encrypted';
-    const AFFIX_SHROUDED  = 'Shrouded';
+    const AFFIX_SHROUDED   = 'Shrouded';
 
     const ALL_AFFIXES = [
         self::AFFIX_BOLSTERING,
@@ -75,6 +75,17 @@ class Affix extends CacheModel
         self::AFFIX_SHROUDED,
     ];
 
+    const SEASONAL_AFFIXES = [
+        self::AFFIX_REAPING,
+        self::AFFIX_BEGUILING,
+        self::AFFIX_AWAKENED,
+        self::AFFIX_PRIDEFUL,
+        self::AFFIX_TORMENTED,
+        self::AFFIX_INFERNAL,
+        self::AFFIX_ENCRYPTED,
+        self::AFFIX_SHROUDED,
+    ];
+
     use HasIconFile;
 
     public $hidden = ['icon_file_id', 'pivot'];
@@ -84,7 +95,7 @@ class Affix extends CacheModel
     /**
      * @return BelongsToMany
      */
-    public function affixGroups()
+    public function affixGroups(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'affix_group_couplings');
     }
