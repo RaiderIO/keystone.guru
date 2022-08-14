@@ -25,10 +25,10 @@ interface DiscoverServiceInterface
     function withBuilder(Closure $closure): self;
 
     /**
-     * @param Season $season
+     * @param Season|null $season
      * @return $this
      */
-    function withSeason(Season $season): self;
+    function withSeason(?Season $season): self;
 
     /**
      * @param Expansion $expansion

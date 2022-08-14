@@ -75,7 +75,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /**
      * @inheritDoc
      */
-    function withSeason(Season $season): DiscoverServiceInterface
+    function withSeason(?Season $season): DiscoverServiceInterface
     {
         $this->season = $season;
 
