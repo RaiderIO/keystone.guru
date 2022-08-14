@@ -86,6 +86,14 @@ class Affix extends CacheModel
         self::AFFIX_SHROUDED,
     ];
 
+    private const SEASONAL_TYPE_AFFIX_MAPPING = [
+        Enemy::SEASONAL_TYPE_SHROUDED           => Affix::AFFIX_SHROUDED,
+        Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX => Affix::AFFIX_SHROUDED,
+        Enemy::SEASONAL_TYPE_ENCRYPTED          => Affix::AFFIX_ENCRYPTED,
+        Enemy::SEASONAL_TYPE_TORMENTED          => Affix::AFFIX_TORMENTED,
+        Enemy::SEASONAL_TYPE_PRIDEFUL           => Affix::AFFIX_PRIDEFUL,
+    ];
+
     use HasIconFile;
 
     public $hidden = ['icon_file_id', 'pivot'];
@@ -98,5 +106,14 @@ class Affix extends CacheModel
     public function affixGroups(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'affix_group_couplings');
+    }
+
+    /**
+     * @param string $seasonalType
+     * @return string|null
+     */
+    public static function getAffixBySeasonalType(string $seasonalType): ?string
+    {
+        return self::SEASONAL_TYPE_AFFIX_MAPPING[$seasonalType] ?? null;
     }
 }

@@ -62,6 +62,32 @@ $dungeonSelectId = 'dungeon_id_select';
         'defaultSelected'  => $defaultSelectedAffixes
         ])
 
+    @if(isset($dungeonroute))
+        <?php
+        $canMigrateToEncrypted = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_TORMENTED;
+        $canMigrateToShrouded = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_ENCRYPTED;
+
+        ?>
+        @if($canMigrateToEncrypted || $canMigrateToShrouded)
+            <?php $targetAffix = strtolower($canMigrateToEncrypted ? \App\Models\Affix::AFFIX_ENCRYPTED : \App\Models\Affix::AFFIX_SHROUDED); ?>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <a class="btn btn-info"
+                           href="{{ route('dungeonroute.migrate', [
+                                        'dungeon' => $dungeonroute->dungeon,
+                                        'dungeonroute' => $dungeonroute,
+                                        'title' => \Illuminate\Support\Str::slug($dungeonroute->title),
+                                        'seasonalType' => $targetAffix
+                                    ]) }}">
+                            {{ __('views/common.forms.createroute.migrate_to_seasonal_type', ['seasonalType' => __(sprintf('affixes.%s.name', $targetAffix))]) }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endisset
+
     <div class="form-group">
         <div id="create_route">
             <div class="card">

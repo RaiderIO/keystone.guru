@@ -162,6 +162,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('clone', [DungeonRouteController::class, 'clone'])->name('dungeonroute.clone');
                 // Claiming a route that was made by /sandbox functionality
                 Route::get('claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
+
+                Route::get('migrate/{seasonalType}', [DungeonRouteController::class, 'migrateToSeasonalType'])->name('dungeonroute.migrate');
             });
         });
     });
