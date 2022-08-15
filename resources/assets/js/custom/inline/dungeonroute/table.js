@@ -406,12 +406,15 @@ class DungeonrouteTable extends InlineCode {
                         return false;
                     }
 
+                    let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
+                    let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
+
                     // @TODO add an additional check to see if the current route's dungeon is part of previous season?
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
                         published: row.published,
-                        show_migrate_to_encrypted: !rowHasAffix(row, AFFIX_ENCRYPTED),
-                        show_migrate_to_shrouded: !rowHasAffix(row, AFFIX_SHROUDED)
+                        show_migrate_to_encrypted: !rowHasEncryptedAffix && !rowHasShroudedAffix,
+                        show_migrate_to_shrouded: !rowHasShroudedAffix
                     }));
                 }
             },
@@ -590,7 +593,7 @@ class DungeonrouteTable extends InlineCode {
         showConfirmYesCancel(lang.get(`messages.route_migration_to_${affixName}_confirm_warning`), function () {
             $.ajax({
                 type: 'POST',
-                url: `/ajax/${publicKey}/migrate/${affixName}_confirm_warning`,
+                url: `/ajax/${publicKey}/migrate/${affixName}`,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.route_migration_successful'));
