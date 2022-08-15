@@ -238,11 +238,11 @@ return [
             'header'                   => 'Import Enemy Forces',
             'paste_mennos_export_json' => 'Paste Menno\'s Export Json',
             'submit'                   => 'Submit',
-            'recalculate' => [
-                'title' => 'Recalculate enemy forces for dungeonroutes of dungeon',
+            'recalculate'              => [
+                'title'  => 'Recalculate enemy forces for dungeonroutes of dungeon',
                 'header' => 'Recalculate enemy forces for dungeonroutes of dungeon',
                 'submit' => 'Submit',
-            ]
+            ],
         ],
         'exception'    => [
             'select' => [
@@ -321,6 +321,8 @@ return [
             'subheader_actions'   => 'Actions',
             'export_dungeon_data' => 'Export dungeon data',
             'export_releases'     => 'Export releases',
+
+            'enemy_forces_recalculate' => 'Mass recalculate enemy forces for routes',
         ],
     ],
     'user'       => [
