@@ -40,6 +40,12 @@
             <i class="fas fa-fast-forward"></i> {{migrate_to_encrypted_label}}
         </a>
         {{/if}}
+        {{#if show_migrate_to_shrouded }}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item dungeonroute-migrate-to-shrouded cursor-pointer" data-publickey="{{public_key}}">
+                <i class="fas fa-fast-forward"></i> {{migrate_to_shrouded_label}}
+            </a>
+        {{/if}}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}">
             <i class="fas fa-trash"></i> {{delete_label}}

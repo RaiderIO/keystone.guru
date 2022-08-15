@@ -12,7 +12,7 @@ class CommonGroupAffixes extends InlineCode {
 
         let self = this;
 
-        this.currentSelection = this.options.defaultSelected;
+        this.currentSelection = null;
         this.currentSelectionExpansionKey = null;
         this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
 
@@ -37,53 +37,69 @@ class CommonGroupAffixes extends InlineCode {
      */
     _dungeonChanged() {
         let selectedDungeonId = parseInt($(`${this.options.dungeonSelector}`).val());
-        let expansionKey = this.options.dungeonExpansions[selectedDungeonId];
+        let expansionKeyOfDungeonAtRelease = this.options.dungeonExpansions[selectedDungeonId];
 
         // Don't mess with it if it's not working for whatever reason
-        if (typeof expansionKey !== 'undefined' && expansionKey.length > 0) {
+        if (typeof expansionKeyOfDungeonAtRelease !== 'undefined' && expansionKeyOfDungeonAtRelease.length > 0) {
+            let initialize = false;
             // Hide everything
             let $affixListRows = $(`${this.options.selectSelector}_list_custom .affix_list_row`).hide();
 
             // Check if the selected dungeon is part of the current or next season, if so, we need to offer a selection
             // of affixes based on season, not on expansion
             let seasonForSelectedDungeon = this._getSeasonForDungeon(selectedDungeonId);
-            this.currentSelectionExpansionKey = expansionKey;
+            // By default, assume that the currently selected expansion is the expansion that the dungeon released in
+            // This dungeon was from a season - so grab the expansion of the current season instead
+            this.currentSelectionExpansionKey = seasonForSelectedDungeon !== null ? seasonForSelectedDungeon.expansion.shortname : expansionKeyOfDungeonAtRelease;
+
+            // When initially loading the page, assign the default selected affixes
+            if (this.currentSelection === null) {
+                this.currentSelection = this.options.defaultSelected;
+                initialize = true;
+            }
 
             if (seasonForSelectedDungeon !== null) {
-                // Try to select the affix based on the currently active expansion + season
-                if (seasonForSelectedDungeon.id === this.options.currentSeason.id) {
-                    let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
-                    if (currentAffix !== null) {
-                        this.currentSelection = [currentAffix];
-                    } else {
+                // Don't override the default selection at the start
+                if (!initialize) {
+                    // Try to select the affix based on the currently active expansion + season
+                    if (seasonForSelectedDungeon.id === this.options.currentSeason.id) {
+                        let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
+                        if (currentAffix !== null) {
+                            this.currentSelection = [currentAffix];
+                        } else {
+                            this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
+                        }
+                    }
+
+                    // Try to select the affix based on the currently active expansion + season
+                    if (this._hasNextSeason() && seasonForSelectedDungeon.id === this.options.nextSeason.id) {
                         this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
                     }
-                }
-
-                // Try to select the affix based on the currently active expansion + season
-                if (this._hasNextSeason() && seasonForSelectedDungeon.id === this.options.nextSeason.id) {
-                    this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
                 }
 
                 // Show the affixes for the season that was selected
                 $affixListRows.filter(`.season.season-${seasonForSelectedDungeon.id}`).show();
             }
-            // If the expansion changed we need to change the default selection
-            else if (this.currentSelectionExpansionKey !== expansionKey && !this.hasDungeonRoute) {
-                let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
-                if (currentAffix !== null) {
-                    this.currentSelection = [currentAffix];
-                } else {
-                    let firstAffixGroupForExpansion = this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
-                    if (firstAffixGroupForExpansion !== null) {
-                        this.currentSelection = [firstAffixGroupForExpansion.id];
+                // If the expansion changed we need to change the default selection, OR if we initialize, that means we need to trigger the
+            // 'show affixgroups' jquery code
+            else if (initialize || (this.currentSelectionExpansionKey !== expansionKeyOfDungeonAtRelease && !this.hasDungeonRoute)) {
+                // Don't override the default selection at the start
+                if (!initialize) {
+                    let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
+                    if (currentAffix !== null) {
+                        this.currentSelection = [currentAffix];
                     } else {
-                        this.currentSelection = [];
+                        let firstAffixGroupForExpansion = this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
+                        if (firstAffixGroupForExpansion !== null) {
+                            this.currentSelection = [firstAffixGroupForExpansion.id];
+                        } else {
+                            this.currentSelection = [];
+                        }
                     }
                 }
 
                 // Show the affixes for the expansion that was selected
-                $affixListRows.filter(`.${expansionKey}`).show();
+                $affixListRows.filter(`.${expansionKeyOfDungeonAtRelease}:not(.season)`).show();
             }
 
             // Show the correct presets for this expansion (if any)
@@ -91,7 +107,7 @@ class CommonGroupAffixes extends InlineCode {
 
             this._applyAffixRowSelection();
         } else {
-            console.warn(`Could not find expansionKey`, expansionKey);
+            console.warn(`Could not find expansionKey`, expansionKeyOfDungeonAtRelease);
         }
     }
 

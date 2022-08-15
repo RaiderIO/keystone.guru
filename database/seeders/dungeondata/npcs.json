@@ -228,6 +228,25 @@
         "npcspells": []
     },
     {
+        "id": 180315,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Shady Dealer",
+        "base_health": 58168,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
         "id": 185680,
         "dungeon_id": -1,
         "classification_id": 1,

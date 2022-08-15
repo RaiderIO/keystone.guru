@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRoute\DungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\EmbedFormRequest;
+use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
@@ -160,6 +161,31 @@ class DungeonRouteController extends Controller
             'floorId'      => $floor->id,
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
         ]);
+    }
+
+    /**
+     * @param ExpansionServiceInterface $expansionService
+     * @param MigrateToSeasonalTypeRequest $request
+     * @param Dungeon $dungeon
+     * @param DungeonRoute $dungeonroute
+     * @param string $title
+     * @param string $seasonalType
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function migrateToSeasonalType(
+        ExpansionServiceInterface    $expansionService,
+        MigrateToSeasonalTypeRequest $request,
+        Dungeon                      $dungeon,
+        DungeonRoute                 $dungeonroute,
+        string                       $title,
+        string                       $seasonalType)
+    {
+        $this->authorize('migrate', $dungeonroute);
+
+        $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
+
+        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $title]);
     }
 
     /**

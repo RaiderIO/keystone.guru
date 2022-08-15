@@ -58,7 +58,7 @@ class KillZone extends MapObject {
 
         this.setSynced(false);
 
-        this.register('object:changed', this, function(objectChangedEvent){
+        this.register('object:changed', this, function (objectChangedEvent) {
             self.redrawConnectionsToEnemies();
         });
 
@@ -406,6 +406,7 @@ class KillZone extends MapObject {
         let currentEnemies = [...this.enemies];
         for (let i = 0; i < currentEnemies.length; i++) {
             let enemyId = currentEnemies[i];
+            /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             // When found, actually detach it
             if (enemy !== null) {
@@ -780,6 +781,25 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Get the amount of shrouded stacks that you will have after this pack has been killed.
+     * @returns {number}
+     */
+    getShroudedEnemyStacksCumulative() {
+        // You always get one bonus for some reason
+        let result = 1;
+
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+            let killZone = killZoneMapObjectGroup.objects[i];
+            if (killZone.getIndex() <= this.getIndex()) {
+                result += killZone.getShroudedEnemyStacks();
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Get the amount of enemy forces that will be killed after this pack has been killed.
      * @returns {number}
      */
@@ -996,6 +1016,27 @@ class KillZone extends MapObject {
     isVisible() {
         // Visible is not tied to having a layer here; we are visible if we're on the same floor
         return this._getVisibleEntitiesLatLngs(this.enemies).length > 0;
+    }
+
+    /**
+     * Get the amount of shrouded stacks in this pull
+     */
+    getShroudedEnemyStacks() {
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.enemies.length; i++) {
+            let enemyId = this.enemies[i];
+            /** @type {Enemy} */
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            if (enemy.isShrouded()) {
+                result += 1;
+            } else if (enemy.isShroudedZulGamux()) {
+                result += 3;
+            }
+        }
+
+        return result;
     }
 
     /**

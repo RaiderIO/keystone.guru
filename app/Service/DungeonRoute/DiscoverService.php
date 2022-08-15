@@ -20,7 +20,11 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        return sprintf('discover:%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
+        if ($this->season !== null) {
+            return sprintf('discover:%s:season-%s:%s:%d', $this->expansion->shortname, $this->season->index, $key, $this->limit);
+        } else {
+            return sprintf('discover:%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
+        }
     }
 
     /**
@@ -133,7 +137,7 @@ class DiscoverService extends BaseDiscoverService
                 $result = collect();
 
                 /** @var Collection|Dungeon[] $activeDungeons */
-                $activeDungeons = $this->expansion->dungeons()->active()->get();
+                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
                     $result = $result->merge($this->withLimit(2)->popularByDungeon($dungeon));
@@ -172,7 +176,7 @@ class DiscoverService extends BaseDiscoverService
                 $result = collect();
 
                 /** @var Collection|Dungeon[] $activeDungeons */
-                $activeDungeons = $this->expansion->dungeons()->active()->get();
+                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries to 2
                     $result = $result->merge($this->withLimit(2)->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
