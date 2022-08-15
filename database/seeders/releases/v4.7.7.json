@@ -1,0 +1,77 @@
+{
+    "id": 138,
+    "release_changelog_id": 145,
+    "version": "v4.7.7",
+    "title": "Many bugfixes related to Season 4",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-15T11:16:35+00:00",
+    "updated_at": "2022-08-15T11:16:35+00:00",
+    "changelog": {
+        "id": 145,
+        "release_id": 138,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1310,
+                "change": "Searching for a route outside of the current season's dungeons no longer returns an empty page (hotfixed a few days ago).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1311,
+                "change": "Route cards in the Discover Routes section now also show the seasonal affix assigned to that route (aside from Fortified\/Tyrannical routes).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 3,
+                "ticket_id": 1305,
+                "change": "Your pulls will now show Shrouded enemies and the amount of buffs that you have accumulated.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 3,
+                "ticket_id": 1309,
+                "change": "By accessing the Route Settings of your route, you can now migrate your route to Shrouded routes (you could already do this from the Actions menu in the route overview, through Shrouded migration is new).",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1306,
+                "change": "Creating a route that's not in Shadowlands officially, but is part of Season 4 no longer assigns the wrong affixes to the route. For example, Mechagon would be assigned Awakened affixes.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 145,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1312,
+                "change": "Routes that aren't in the current season now show their affixes selection again from the Route Settings menu.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
