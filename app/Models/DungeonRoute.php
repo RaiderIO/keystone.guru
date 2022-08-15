@@ -463,7 +463,22 @@ class DungeonRoute extends Model
 
         // May not exist in case of MDT import
         if ($this->exists) {
-            $result = DB::select('
+            $isShrouded = $this->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
+
+            // Ignore the shrouded query if we're not shrouded (make it fail)
+            $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
+                IF(
+                    enemies.seasonal_type = "shrouded",
+                    dungeons.enemy_forces_shrouded,
+                    IF(
+                        enemies.seasonal_type = "shrouded_zul_gamux",
+                        dungeons.enemy_forces_shrouded_zul_gamux,
+                        npcs.enemy_forces
+                    )
+                )
+            ' : 'npcs.enemy_forces';
+
+            $result = DB::select(sprintf('
                 select dungeon_routes.id,
                    CAST(IFNULL(
                            IF(dungeon_routes.teeming = 1,
@@ -474,15 +489,7 @@ class DungeonRoute extends Model
                                               IF(
                                                   npcs.enemy_forces_teeming >= 0,
                                                   npcs.enemy_forces_teeming,
-                                                  IF(
-                                                      enemies.seasonal_type = "shrouded",
-                                                      dungeons.enemy_forces_shrouded,
-                                                      IF(
-                                                          enemies.seasonal_type = "shrouded_zul_gamux",
-                                                          dungeons.enemy_forces_shrouded_zul_gamux,
-                                                          npcs.enemy_forces
-                                                      )
-                                                  )
+                                                  %s
                                               )
                                           )
                                   ),
@@ -490,15 +497,7 @@ class DungeonRoute extends Model
                                       IF(
                                               enemies.enemy_forces_override >= 0,
                                               enemies.enemy_forces_override,
-                                              IF(
-                                                  enemies.seasonal_type = "shrouded",
-                                                  dungeons.enemy_forces_shrouded,
-                                                  IF(
-                                                      enemies.seasonal_type = "shrouded_zul_gamux",
-                                                      dungeons.enemy_forces_shrouded_zul_gamux,
-                                                      npcs.enemy_forces
-                                                  )
-                                              )
+                                              %s
                                           )
                                   )
                                ), 0
@@ -511,7 +510,7 @@ class DungeonRoute extends Model
                      left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                 where `dungeon_routes`.id = :id
             group by `dungeon_routes`.id
-            ', ['id' => $this->id]);
+            ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['id' => $this->id]);
 
             $result = $result[0]->enemy_forces;
         }
@@ -937,21 +936,26 @@ class DungeonRoute extends Model
         // Remove all affixes of the route
         $this->affixgroups()->delete();
 
-        /** @var Season $seasonOfSeasonalType */
-        $seasonOfSeasonalType = Season::where('seasonal_affix_id',
-            Affix::where('key', Affix::getAffixBySeasonalType($seasonalType))->first()->id
-        )->first();
+        $seasonOfSeasonalType = null;
+        $currentAffixGroup    = null;
+        // Only if the seasonal type was valid and we could find the corresponding affix
+        $seasonalTypeAffix = Affix::getAffixBySeasonalType($seasonalType);
+        if ($seasonalTypeAffix !== null) {
+            /** @var Season $seasonOfSeasonalType */
+            $seasonOfSeasonalType = Season::where('seasonal_affix_id',
+                Affix::where('key', $seasonalTypeAffix)->first()->id
+            )->first();
 
-        $currentAffixGroup = null;
-        if ($seasonOfSeasonalType !== null) {
-            try {
-                $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion(GameServerRegion::getUserOrDefaultRegion());
-            } catch (Exception $e) {
-                // It's okay - we can recover in the next IF
-                logger()->error('Unable to find current affixgroup for seasonal type', [
-                    'season'       => $seasonOfSeasonalType->id,
-                    'seasonalType' => $seasonalType,
-                ]);
+            if ($seasonOfSeasonalType !== null) {
+                try {
+                    $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion(GameServerRegion::getUserOrDefaultRegion());
+                } catch (Exception $e) {
+                    // It's okay - we can recover in the next IF
+                    logger()->error('Unable to find current affixgroup for seasonal type', [
+                        'season'       => $seasonOfSeasonalType->id,
+                        'seasonalType' => $seasonalType,
+                    ]);
+                }
             }
         }
 
@@ -1000,6 +1004,9 @@ class DungeonRoute extends Model
                 }
             }
         }
+
+        // Reset the affixes so that the enemy forces calculation goes right
+        $this->load('affixes');
 
         $this->update(['enemy_forces' => $this->getEnemyForces()]);
 

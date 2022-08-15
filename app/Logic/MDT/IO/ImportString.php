@@ -670,7 +670,7 @@ class ImportString extends MDTBase
         $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED]; // Needs to be explicit otherwise redirect to edit will not have this value
         $dungeonRoute->public_key         = DungeonRoute::generateRandomPublicKey();
         $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
-        $dungeonRoute->title              = $decoded['text'];
+        $dungeonRoute->title              = empty($decoded['text']) ? 'No title' : $decoded['text'];
         $dungeonRoute->difficulty         = 'Casual';
         $dungeonRoute->level_min          = $decoded['difficulty'];
         $dungeonRoute->level_max          = $decoded['difficulty'];
