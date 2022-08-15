@@ -37,7 +37,9 @@ class DiscoverService extends BaseDiscoverService
         $this->ensureExpansion();
 
         // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        $currentSeasonAffixGroups = optional($this->season)->affixgroups ?? optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ?? collect();
+        $currentSeasonAffixGroups = optional($this->season)->affixgroups ??
+            optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ??
+            collect();
 
         return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
@@ -63,7 +65,13 @@ class DiscoverService extends BaseDiscoverService
                     ->orderBy('weightedPopularity', 'desc');
             })
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansion->id)
+            ->when($this->season === null, function(Builder $builder) {
+                $builder->where('dungeons.expansion_id', $this->expansion->id);
+            })
+            ->when($this->season !== null, function(Builder $builder) {
+                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
+                    ->where('season_dungeons.season_id', $this->season->id);
+            })
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
@@ -195,7 +203,7 @@ class DiscoverService extends BaseDiscoverService
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('%s:popular', $dungeon->key)), function () use ($dungeon) {
                 return $this->popularBuilder()
-                    ->where('dungeon_id', $dungeon->id)
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
                     ->get();
             }, config('keystoneguru.discover.service.popular.ttl')
         );
@@ -211,7 +219,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($dungeon, $affixGroup) {
                 return $this->applyAffixGroupCountPenalty(
                     $this->popularBuilder()
-                        ->where('dungeon_id', $dungeon->id)
+                        ->where('dungeon_routes.dungeon_id', $dungeon->id)
                         ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                         ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                 )->get();
@@ -254,7 +262,7 @@ class DiscoverService extends BaseDiscoverService
         return $this->cacheService->rememberWhen($this->closure === null,
             $this->getCacheKey(sprintf('%s:new', $dungeon->key)), function () use ($dungeon) {
                 return $this->newBuilder()
-                    ->where('dungeon_id', $dungeon->id)
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
                     ->get();
             }, config('keystoneguru.discover.service.popular.ttl')
         );
@@ -269,7 +277,7 @@ class DiscoverService extends BaseDiscoverService
             $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id)),
             function () use ($dungeon, $affixGroup) {
                 return $this->newBuilder()
-                    ->where('dungeon_id', $dungeon->id)
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
                     ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                     ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                     ->get();
