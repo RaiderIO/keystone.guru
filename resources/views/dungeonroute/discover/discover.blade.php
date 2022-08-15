@@ -28,7 +28,7 @@
             'dungeons' => $gridDungeons,
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup' => $nextAffixGroup,
-            'colCount' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION ? 3 : 4,
+            'colCount' => 4,
             'links' => $gridDungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
             })
