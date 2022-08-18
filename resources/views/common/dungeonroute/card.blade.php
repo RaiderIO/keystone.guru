@@ -47,7 +47,7 @@ ob_start(); ?>
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)
                         <img class="thumbnail"
-                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"/>
+                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $floor->index)) }}"/>
                     @endforeach
                 @else
                     <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
