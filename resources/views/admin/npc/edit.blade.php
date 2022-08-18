@@ -49,7 +49,13 @@
     <div class="form-group{{ $errors->has('aggressiveness') ? ' has-error' : '' }}">
         {!! Form::label('aggressiveness', __('views/admin.npc.edit.aggressiveness'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control selectpicker']) !!}
+        <?php
+        $aggressivenessSelect = [];
+        foreach (\App\Models\Npc::ALL_AGGRESSIVENESS as $aggressiveness) {
+            $aggressivenessSelect[$aggressiveness] = __(sprintf('npcaggressiveness.%s', $aggressiveness));
+        }
+        ?>
+        {!! Form::select('aggressiveness', $aggressivenessSelect, null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'aggressiveness'])
     </div>
 
