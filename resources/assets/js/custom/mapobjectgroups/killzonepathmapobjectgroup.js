@@ -77,9 +77,10 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         // Check if the current floor has a start marker or not
         let dungeonStartOffset = 0;
         let dungeonStartLatLng = null;
+        let dungeonStartLineDrawn = false;
 
         // Only on the first floor!
-        if (currentFloor.index === 1) {
+        if (currentFloor.default === 1) {
             for (let i = 0; i < mapIconMapObjectGroup.objects.length; i++) {
                 let mapIcon = mapIconMapObjectGroup.objects[i];
 
@@ -94,16 +95,18 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         let sortedObjects = _.sortBy(killzoneMapObjectGroup.objects, 'index');
         for (let i = 0; i < sortedObjects.length; i++) {
+            /** @type KillZone */
             let killZone = sortedObjects[i];
 
             // @TODO centeroid does not take floors into account
             let killZoneCenteroid = killZone.getLayerCenteroid();
             let killZoneFloorIds = killZone.getFloorIds();
             let killZoneOnCurrentFloor = killZoneFloorIds.includes(currentFloorId);
+            let killZoneHasEnemies = killZone.enemies.length !== 0;
 
             // If a pull is empty one way or another (no enemies, or all enemies marked obsolete).
-            // If the killzone is on another floor we can continue - we will draw a line to the next floor instead
-            if (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor) {
+            // If the killzone is on another floor we can go on - we will draw a line to the next floor instead
+            if (!killZoneHasEnemies || (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor)) {
                 continue;
             }
 
@@ -181,7 +184,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
 
             // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
-            if (previousKillZone === null && dungeonStartLatLng !== null && i === 0) {
+            if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
                 this.createNewPath([{
                     lat: dungeonStartLatLng.lat,
                     lng: dungeonStartLatLng.lng
@@ -194,6 +197,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                         color: '#ff0000'
                     }
                 });
+
+                dungeonStartLineDrawn = true;
             }
 
             previousKillZone = killZone;
