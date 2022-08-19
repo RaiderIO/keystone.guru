@@ -337,6 +337,7 @@ return [
     'enemy_faction_label'                                           => 'Faction',
     'enemy_teeming_label'                                           => 'Teeming',
     'enemy_npc_id_label'                                            => 'Npc',
+    'enemy_mdt_id_label'                                            => 'MDT ID (optional)',
     'enemy_mdt_npc_id_label'                                        => 'MDT Npc (optional)',
     'enemy_seasonal_type_label'                                     => 'Seasonal type',
     'enemy_seasonal_type_select_default_label'                      => 'Not set',
