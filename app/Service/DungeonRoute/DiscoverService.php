@@ -65,6 +65,7 @@ class DiscoverService extends BaseDiscoverService
                     ->orderBy('weightedPopularity', 'desc');
             })
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', 'dungeon_routes.id')
             ->when($this->season === null, function(Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
             })
@@ -78,7 +79,10 @@ class DiscoverService extends BaseDiscoverService
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
-            ->groupBy('dungeon_routes.id');
+            // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
+            // We want the most recent season's routes showing up for this if possible
+            ->orderBy('dungeon_route_affix_groups.affix_group_id', 'desc')
+            ->groupBy('dungeon_routes.id', 'dungeon_route_affix_groups.affix_group_id');
     }
 
     /**
@@ -166,7 +170,6 @@ class DiscoverService extends BaseDiscoverService
             function () use ($affixGroup) {
                 return $this->applyAffixGroupCountPenalty(
                     $this->popularBuilder()
-                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                         ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                 )->get();
             }, config('keystoneguru.discover.service.popular.ttl')
@@ -220,7 +223,6 @@ class DiscoverService extends BaseDiscoverService
                 return $this->applyAffixGroupCountPenalty(
                     $this->popularBuilder()
                         ->where('dungeon_routes.dungeon_id', $dungeon->id)
-                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                         ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                 )->get();
             }, config('keystoneguru.discover.service.popular.ttl')
