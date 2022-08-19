@@ -748,6 +748,7 @@ class KillZone extends MapObject {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         $.each(this.enemies, function (i, id) {
+            /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null && !result.includes(enemy.floor_id)) {
