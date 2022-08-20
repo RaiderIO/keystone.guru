@@ -26,8 +26,8 @@ class NpcChangedHandler extends MessageHandler {
 
         // Redraw all enemies that have this npc so that we're up-to-date
         let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
             if (enemy.npc_id === e.model.id) {
                 // Re-assign the enemy if it was just updated, unassign it if is no longer available
                 enemy.setNpc(isSameDungeon ? e.model : null);

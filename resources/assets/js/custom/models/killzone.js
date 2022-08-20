@@ -626,7 +626,7 @@ class KillZone extends MapObject {
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
             console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            if (floorSwitchMapObjectGroup.objects.length > 0) {
+            if (_.size(floorSwitchMapObjectGroup.objects) > 0) {
                 $.each(otherFloorsWithEnemies, function (i, floorId) {
                     // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
                     // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
@@ -790,8 +790,8 @@ class KillZone extends MapObject {
         let result = 1;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-            let killZone = killZoneMapObjectGroup.objects[i];
+        for (let key in killZoneMapObjectGroup.objects) {
+            let killZone = killZoneMapObjectGroup.objects[key];
             if (killZone.getIndex() <= this.getIndex()) {
                 result += killZone.getShroudedEnemyStacks();
             }
@@ -808,8 +808,8 @@ class KillZone extends MapObject {
         let result = 0;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-            let killZone = killZoneMapObjectGroup.objects[i];
+        for (let key in killZoneMapObjectGroup.objects) {
+            let killZone = killZoneMapObjectGroup.objects[key];
             if (killZone.getIndex() <= this.getIndex()) {
                 result += killZone.getEnemyForces();
             }
@@ -833,6 +833,7 @@ class KillZone extends MapObject {
         let currentEnemies = [...this.enemies];
         for (let i = 0; i < currentEnemies.length; i++) {
             let enemyId = currentEnemies[i];
+            /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
                 self._removeEnemy(enemy);
@@ -844,6 +845,7 @@ class KillZone extends MapObject {
 
         for (let i = 0; i < enemies.length; i++) {
             let enemyId = enemies[i];
+            /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
                 self._addEnemy(enemy);

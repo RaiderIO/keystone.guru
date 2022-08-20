@@ -71,8 +71,8 @@ class EnemyVisualManager extends Signalable {
 
         let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
 
             // Only refresh what we can see
             let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
@@ -105,8 +105,8 @@ class EnemyVisualManager extends Signalable {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
 
             // Only refresh what we can see
             if (enemy.id > 0 && enemy.isVisible() && enemy.visual.mainVisual.shouldRefreshOnNumberStyleChanged()) {
@@ -145,8 +145,8 @@ class EnemyVisualManager extends Signalable {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
 
             if (enemy.id > 0 && enemy.isVisible()) {
                 window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
@@ -163,8 +163,8 @@ class EnemyVisualManager extends Signalable {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
 
             if (enemy.id > 0 && enemy.isVisible() && enemy.npc !== null && enemy.npc.dangerous) {
                 window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
@@ -182,8 +182,8 @@ class EnemyVisualManager extends Signalable {
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
             console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', this);
             if (enemy.visual !== null) {
                 enemy.visual.setVisualType(enemyDisplayTypeChangedEvent.data.enemyDisplayType);
@@ -206,8 +206,8 @@ class EnemyVisualManager extends Signalable {
             // Once every 50 ms, calculation is expensive
             if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                    let enemy = enemyMapObjectGroup.objects[i];
+                for (let key in enemyMapObjectGroup.objects) {
+                    let enemy = enemyMapObjectGroup.objects[key];
 
                     if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
@@ -257,8 +257,8 @@ class EnemyVisualManager extends Signalable {
         // Once every 100 ms, calculation is expensive
         if (currTime - this._lastMapMoveDistanceCheckTime > 50) {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                let enemy = enemyMapObjectGroup.objects[i];
+            for (let key in enemyMapObjectGroup.objects) {
+                let enemy = enemyMapObjectGroup.objects[key];
 
                 if (enemy.id > 0) {
                     let isVisible = enemy.isVisibleOnScreen();

@@ -182,7 +182,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let previousKillZone = null;
             let previousKillZoneFloorIds = [];
             let killZoneFloorIds = [];
-            let sortedObjects = _.sortBy(killZoneMapObjectGroup.objects, 'index');
+            let sortedObjects = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];
                 if (i === 0) {
@@ -525,12 +525,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
 
         $('#killzones_loading').hide();
-        if (killZoneMapObjectGroup.objects.length === 0) {
+        if (_.size(killZoneMapObjectGroup.objects) === 0) {
             $('#killzones_no_pulls').show();
         } else {
             // Load all existing killzones
-            for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-                self._onKillZoneSaved(killZoneMapObjectGroup.objects[i]);
+            for (let key in killZoneMapObjectGroup.objects) {
+                self._onKillZoneSaved(killZoneMapObjectGroup.objects[key]);
             }
         }
 
@@ -574,8 +574,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     mapState instanceof ViewKillZoneEnemySelection) {
                     if (selectNext) {
                         // Search from the first to the end
-                        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-                            let killZone = killZoneMapObjectGroup.objects[i];
+                        for (let key in killZoneMapObjectGroup.objects) {
+                            let killZone = killZoneMapObjectGroup.objects[key];
                             if (killZone.index > mapState.getMapObject().index) {
                                 newSelectedKillZone = killZone;
                                 break;
@@ -583,8 +583,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                         }
                     } else {
                         // Search from the end to the first
-                        for (let i = killZoneMapObjectGroup.objects.length - 1; i >= 0; i--) {
-                            let killZone = killZoneMapObjectGroup.objects[i];
+                        let killZoneObjectsReversed = _.values(killZoneMapObjectGroup.objects).reverse();
+                        for (let i = 0; i < killZoneObjectsReversed.length; i++) {
+                            let killZone = killZoneObjectsReversed[i];
                             if (killZone.index < mapState.getMapObject().index) {
                                 newSelectedKillZone = killZone;
                                 break;
@@ -593,7 +594,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     }
                 } else if (mapState === null) {
                     // Grab the first
-                    newSelectedKillZone = killZoneMapObjectGroup.objects[0];
+                    newSelectedKillZone = _.first(killZoneMapObjectGroup.objects);
                 }
 
                 // Only if we have one to select
