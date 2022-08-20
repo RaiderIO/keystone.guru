@@ -105,8 +105,8 @@ class EditKillZoneEnemySelection extends EnemySelection {
 
         // Register to all existing killzones so that we may find if there have been changes to them or not
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-            let killZone = killZoneMapObjectGroup.objects[i];
+        for (let key in killZoneMapObjectGroup.objects) {
+            let killZone = killZoneMapObjectGroup.objects[key];
 
             // Keep track of all killzones that were ever changed
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved'], this, function (killZoneChangedEvent) {
@@ -121,8 +121,8 @@ class EditKillZoneEnemySelection extends EnemySelection {
     stop() {
         super.stop();
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-            let killZone = killZoneMapObjectGroup.objects[i];
+        for (let key in killZoneMapObjectGroup.objects) {
+            let killZone = killZoneMapObjectGroup.objects[key];
 
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved'], this);
         }

@@ -108,14 +108,14 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
         // Couple awakened enemies to each other
-        for (let i = 0; i < this.objects.length; i++) {
+        for (let key in this.objects) {
             /** @type {Enemy} */
-            let enemy = this.objects[i];
+            let enemy = this.objects[key];
 
             // Check only those Awakened mobs that are not part of the final boss pack
             if (isRouteAwakened && enemy.npc !== null && enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
-                for (let j = 0; j < this.objects.length; j++) {
-                    let enemyCandidate = this.objects[j];
+                for (let nestedKey in this.objects) {
+                    let enemyCandidate = this.objects[nestedKey];
 
                     // Don't check ourselves, only match those enemies with the same npc id and seasonal_index that are part of the final boss pack
                     if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
@@ -188,8 +188,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
      */
     getFinalBoss() {
         let finalBoss = null;
-        for (let i = 0; i < this.objects.length; i++) {
-            let enemy = this.objects[i];
+        for (let key in this.objects) {
+            let enemy = this.objects[key];
             if (enemy.npc !== null && enemy.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS) {
                 finalBoss = enemy;
                 break;
@@ -206,8 +206,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     getFreePridefulEnemy() {
         let result = null;
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let enemy = this.objects[i];
+        for (let key in this.objects) {
+            let enemy = this.objects[key];
             if (enemy instanceof PridefulEnemy) {
                 if (!enemy.isAssigned()) {
                     result = enemy;
@@ -226,8 +226,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     getAssignedPridefulEnemies() {
         let result = 0;
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let enemy = this.objects[i];
+        for (let key in this.objects) {
+            let enemy = this.objects[key];
             if (enemy instanceof PridefulEnemy) {
                 if (enemy.isAssigned()) {
                     result++;

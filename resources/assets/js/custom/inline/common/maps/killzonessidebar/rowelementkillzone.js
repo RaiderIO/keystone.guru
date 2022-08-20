@@ -211,13 +211,14 @@ class RowElementKillZone extends RowElement {
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
         // Show boss icon or not
-        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false, hasShroudedZulGamux = false;
+        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false,
+            hasShroudedZulGamux = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.killZone.enemies.length; i++) {
             let enemyId = this.killZone.enemies[i];
-            for (let j = 0; j < enemyMapObjectGroup.objects.length; j++) {
-                let enemy = enemyMapObjectGroup.objects[j];
+            for (let enemyKey in enemyMapObjectGroup.objects) {
+                let enemy = enemyMapObjectGroup.objects[enemyKey];
                 if (enemy.id === enemyId) {
                     if (!hasBoss && enemy.isBossNpc()) {
                         hasBoss = true;

@@ -53,8 +53,8 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         let shortlist = [];
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let object = this.objects[i];
+        for (let key in this.objects) {
+            let object = this.objects[key];
 
             if (object.floor_id === sourceFloorId && object.target_floor_id === targetFloorId) {
                 shortlist.push(object);
@@ -95,8 +95,8 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         if (result === null) {
             let path = [];
 
-            for (let i = 0; i < this.objects.length; i++) {
-                let object = this.objects[i];
+            for (let key in this.objects) {
+                let object = this.objects[key];
                 let onSameFloor = object.floor_id === floorId;
                 let toTargetFloor = object.target_floor_id === targetFloorId;
 

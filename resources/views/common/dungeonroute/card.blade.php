@@ -58,7 +58,7 @@ ob_start(); ?>
     <div class="col">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
-             style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover;"
+             style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
             @endif
         >
             <div class="row no-gutters p-2 header">
