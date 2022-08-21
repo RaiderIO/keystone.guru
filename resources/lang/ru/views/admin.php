@@ -3,20 +3,22 @@
 return [
     'dungeon'    => [
         'edit' => [
-            'title_new'                     => 'Новое подземелье',
-            'title_edit'                    => 'Редактировать подземелье',
-            'header_new'                    => 'Новое подземелье',
-            'header_edit'                   => 'Редактировать подземелье',
-            'active'                        => 'Действующий',
-            'zone_id'                       => 'ID зоны',
-            'mdt_id'                        => 'MDT ID',
-            'dungeon_name'                  => 'Название подземелья',
-            'key'                           => 'Ключ',
-            'slug'                          => 'Жетон',
-            'enemy_forces_required'         => 'Требуется больше сил врага',
-            'enemy_forces_required_teeming' => 'Требуется больше сил врага (Кишащий)',
-            'timer_max_seconds'             => 'Таймер (секунды)',
-            'submit'                        => 'Подтвердить',
+            'title_new'                       => 'Новое подземелье',
+            'title_edit'                      => 'Редактировать подземелье',
+            'header_new'                      => 'Новое подземелье',
+            'header_edit'                     => 'Редактировать подземелье',
+            'active'                          => 'Действующий',
+            'zone_id'                         => 'ID зоны',
+            'mdt_id'                          => 'MDT ID',
+            'dungeon_name'                    => 'Название подземелья',
+            'key'                             => 'Ключ',
+            'slug'                            => 'Жетон',
+            'enemy_forces_required'           => 'Требуется больше сил врага',
+            'enemy_forces_required_teeming'   => 'Требуется больше сил врага (Кишащий)',
+            'enemy_forces_shrouded'           => '@todo ru: .dungeon.edit.enemy_forces_shrouded',
+            'enemy_forces_shrouded_zul_gamux' => '@todo ru: .dungeon.edit.enemy_forces_shrouded_zul_gamux',
+            'timer_max_seconds'               => 'Таймер (секунды)',
+            'submit'                          => 'Подтвердить',
 
             'floor_management'     => 'Управление уровнями',
             'add_floor'            => 'Добавить уровень',
@@ -236,6 +238,11 @@ return [
             'header'                   => 'Импорт силы врага',
             'paste_mennos_export_json' => 'Вставить Menno\'s экспортированный Json',
             'submit'                   => 'Отправить',
+            'recalculate'              => [
+                'title'  => '@todo ru: .tools.enemyforces.recalculate.title',
+                'header' => '@todo ru: .tools.enemyforces.recalculate.header',
+                'submit' => '@todo ru: .tools.enemyforces.recalculate.submit',
+            ],
         ],
         'exception'    => [
             'select' => [
@@ -308,12 +315,14 @@ return [
             'drop_caches'        => 'Сбросить кеш',
             'throw_an_exception' => 'Сбросить исключения',
 
-            'subheader_mapping' => '@todo ru: .tools.list.subheader_mapping',
+            'subheader_mapping'  => '@todo ru: .tools.list.subheader_mapping',
             'force_sync_mapping' => '@todo ru: .tools.list.force_sync_mapping',
 
             'subheader_actions'   => 'Действия',
             'export_dungeon_data' => 'Экспорт данных о подземельях',
             'export_releases'     => 'Экспорт релизов',
+
+            'enemy_forces_recalculate' => '@todo ru: .tools.list.enemy_forces_recalculate',
         ],
     ],
     'user'       => [
