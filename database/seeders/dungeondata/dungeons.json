@@ -1698,8 +1698,8 @@
         "slug": "mechagon-workshop",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
-        "enemy_forces_shrouded": 4,
-        "enemy_forces_shrouded_zul_gamux": 12,
+        "enemy_forces_shrouded": 3,
+        "enemy_forces_shrouded_zul_gamux": 9,
         "timer_max_seconds": 1920,
         "floor_count": 3,
         "floors": [
