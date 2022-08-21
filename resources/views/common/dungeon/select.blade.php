@@ -11,16 +11,12 @@ $name     = $name ?? 'dungeon_id';
 $label    = $label ?? __('views/common.dungeon.select.dungeon');
 $required = $required ?? true;
 $showAll  = !isset($showAll) || $showAll;
+$showSeasons  = isset($showSeasons) && $showSeasons;
 // Show all dungeons if we're debugging
 $activeOnly       = $activeOnly ?? !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
 
-$dungeonsSelect = [];
-if ($showAll) {
-    $dungeonsSelect = [__('views/common.dungeon.select.all') => [-1 => __('views/common.dungeon.select.all_dungeons')]];
-}
-
-// If the user didn't pass us any dungeons, resort to some defaults we may have set
+// If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
@@ -32,6 +28,18 @@ if ($nextSeason !== null) {
     $seasons[] = $nextSeason;
 }
 $seasons[] = $currentSeason;
+
+$dungeonsSelect = [];
+// Show a selector to only show all dungeons in a specific season
+if ($showSeasons) {
+    foreach ($seasons as $season) {
+        $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [sprintf('season-%d', $season->id) => $season->name];
+    }
+}
+
+if ($showAll) {
+    $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
+}
 
 foreach ($seasons as $season) {
     $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {

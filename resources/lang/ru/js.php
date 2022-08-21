@@ -80,6 +80,7 @@ return [
     'clone_to_profile_label'     => 'Клонировать в мой профиль',
     'clone_to_team_label'        => 'Клонировать в команду',
     'migrate_to_encrypted_label' => '@todo ru: .migrate_to_encrypted_label',
+    'migrate_to_shrouded_label'  => '@todo ru: .migrate_to_shrouded_label',
     'delete_label'               => 'Удалить',
 
     'placeholder_new_tag_label' => 'Новый тег',
@@ -102,15 +103,18 @@ return [
     'remove_kill_area_label' => 'Удалить зону поражения',
     'delete_killzone_label'  => 'Удалить пул',
 
-    'kill_zone_has_boss_label'      => 'Босс в пуле',
-    'kill_zone_has_awakened_label'  => 'Пробудившийся в пуле',
-    'kill_zone_has_prideful_label'  => 'Полный гордыни в пуле',
-    'kill_zone_has_inspiring_label' => 'Воодушевляющий враг в пуле',
+    'kill_zone_has_boss_label'               => 'Босс в пуле',
+    'kill_zone_has_awakened_label'           => 'Пробудившийся в пуле',
+    'kill_zone_has_prideful_label'           => 'Полный гордыни в пуле',
+    'kill_zone_has_inspiring_label'          => 'Воодушевляющий враг в пуле',
+    'kill_zone_has_shrouded_label'           => '@todo ru: .kill_zone_has_shrouded_label',
+    'kill_zone_has_shrouded_zul_gamux_label' => '@todo ru: .kill_zone_has_shrouded_zul_gamux_label',
 
     'kill_zone_enemy_row_has_boss_label'          => 'Босс',
     'kill_zone_enemy_row_has_awakened_label'      => 'Пробудившийся ',
     'kill_zone_enemy_row_has_prideful_label'      => 'Полный гордыни',
     'kill_zone_enemy_row_has_inspiring_label'     => 'Воодушевляющий враг',
+    'kill_zone_enemy_row_has_shrouded_label'      => '@todo ru: .kill_zone_enemy_row_has_shrouded_label',
     'kill_zone_enemy_row_has_dangerous_label'     => 'Опасный враг',
 
     // Route edit tools
@@ -207,7 +211,8 @@ return [
     'route_delete_successful'                                        => 'Маршрут успешно удален',
     'route_clone_successful'                                         => 'Маршрут успешно клонирован',
     'route_clone_select_team'                                        => '@todo ru: .route_clone_select_team',
-    'route_migration_confirm_warning'                                => '@todo ru: .route_migration_confirm_warning',
+    'route_migration_to_encrypted_confirm_warning'                   => '@todo ru: .route_migration_to_encrypted_confirm_warning',
+    'route_migration_to_shrouded_confirm_warning'                    => '@todo ru: .route_migration_to_shrouded_confirm_warning',
     'route_migration_successful'                                     => '@todo ru: .route_migration_successful',
     'sharing_label'                                                  => 'Поделиться',
     'route_table_published_state_unpublished'                        => 'Этот маршрут не опубликован',
@@ -326,6 +331,7 @@ return [
     'enemy_faction_label'                                           => 'Фракция',
     'enemy_teeming_label'                                           => 'Кишащий',
     'enemy_npc_id_label'                                            => 'NPC',
+    'enemy_mdt_id_label'                                            => '@todo ru: .enemy_mdt_id_label',
     'enemy_mdt_npc_id_label'                                        => 'MDT Npc (Необязательно)',
     'enemy_seasonal_type_label'                                     => 'Тип сезона',
     'enemy_seasonal_type_select_default_label'                      => 'Не выбрано',
