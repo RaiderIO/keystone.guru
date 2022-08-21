@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\Npc;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,7 +31,7 @@ class NpcFormRequest extends FormRequest
             'name'                 => 'required',
             'dungeon_id'           => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
             'classification_id'    => 'required',
-            'aggressiveness'       => Rule::in(config('keystoneguru.aggressiveness')),
+            'aggressiveness'       => Rule::in(Npc::ALL_AGGRESSIVENESS),
             'base_health'          => [
                 'required',
                 'regex:/^[\d\s,]*$/',

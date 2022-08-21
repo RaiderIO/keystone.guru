@@ -126,14 +126,6 @@ return [
     'party_size'                        => 5,
 
     /**
-     * States of aggressiveness of NPCs. Aggressive = will aggro upon getting close, unfriendly = will not aggro,
-     * but will soon turn aggressive (not sure if it's going to be used), neutral = will not aggro unless provoked.
-     */
-    'aggressiveness'                    => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
-
-    'aggressiveness_pretty'              => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
-
-    /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
     'dungeonroute_difficulty'            => ['Casual', 'Dedicated', 'Hardcore'],

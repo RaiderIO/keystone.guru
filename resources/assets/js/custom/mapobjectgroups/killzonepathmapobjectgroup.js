@@ -49,13 +49,14 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      */
     _refresh(killZoneChangedEvent) {
         // Bring all layers we just created to the front
-        for (let i = 0; i < this.objects.length; i++) {
-            this.setLayerToMapObject(null, this.objects[i]);
-            this.objects[i].cleanup();
-            this.objects[i].localDelete();
+        for (let key in this.objects) {
+            this.setLayerToMapObject(null, this.objects[key]);
+            this.objects[key].cleanup();
+            this.objects[key].localDelete();
         }
 
         this.objects = [];
+        this.currentId = 1;
 
         let killzoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         /** @type DungeonFloorSwitchMarkerMapObjectGroup */
@@ -77,11 +78,12 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         // Check if the current floor has a start marker or not
         let dungeonStartOffset = 0;
         let dungeonStartLatLng = null;
+        let dungeonStartLineDrawn = false;
 
-        // Only on the first floor!
-        if (currentFloor.index === 1) {
-            for (let i = 0; i < mapIconMapObjectGroup.objects.length; i++) {
-                let mapIcon = mapIconMapObjectGroup.objects[i];
+        // Only on the default floor!
+        if (currentFloor.default === 1) {
+            for (let key in mapIconMapObjectGroup.objects) {
+                let mapIcon = mapIconMapObjectGroup.objects[key];
 
                 // 10 = dungeon start
                 if (mapIcon.floor_id === currentFloorId && mapIcon.map_icon_type_id === 10) {
@@ -92,18 +94,20 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
         }
 
-        let sortedObjects = _.sortBy(killzoneMapObjectGroup.objects, 'index');
+        let sortedObjects = _.sortBy(_.values(killzoneMapObjectGroup.objects), 'index');
         for (let i = 0; i < sortedObjects.length; i++) {
+            /** @type KillZone */
             let killZone = sortedObjects[i];
 
             // @TODO centeroid does not take floors into account
             let killZoneCenteroid = killZone.getLayerCenteroid();
             let killZoneFloorIds = killZone.getFloorIds();
             let killZoneOnCurrentFloor = killZoneFloorIds.includes(currentFloorId);
+            let killZoneHasEnemies = killZone.enemies.length !== 0;
 
             // If a pull is empty one way or another (no enemies, or all enemies marked obsolete).
-            // If the killzone is on another floor we can continue - we will draw a line to the next floor instead
-            if (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor) {
+            // If the killzone is on another floor we can go on - we will draw a line to the next floor instead
+            if (!killZoneHasEnemies || (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor)) {
                 continue;
             }
 
@@ -181,7 +185,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
 
             // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
-            if (previousKillZone === null && dungeonStartLatLng !== null && i === 0) {
+            if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
                 this.createNewPath([{
                     lat: dungeonStartLatLng.lat,
                     lng: dungeonStartLatLng.lng
@@ -194,6 +198,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                         color: '#ff0000'
                     }
                 });
+
+                dungeonStartLineDrawn = true;
             }
 
             previousKillZone = killZone;
@@ -203,8 +209,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         }
 
         // Bring all layers we just created to the front
-        for (let i = 0; i < this.objects.length; i++) {
-            let mapObject = this.objects[i];
+        for (let key in this.objects) {
+            let mapObject = this.objects[key];
             // if () {
             //     console.log('bringing to front');
             //     this.layerGroup.bringToFront();
@@ -244,6 +250,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
 
         let path = this._loadMapObject($.extend(true, {}, {
+            id: this.currentId++,
             polyline: {
                 color: c.map.polyline.killzonepath.color,
                 color_animated: null,

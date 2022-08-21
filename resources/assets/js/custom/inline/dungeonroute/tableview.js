@@ -24,7 +24,6 @@ class TableView {
 class RoutesTableView extends TableView {
     constructor() {
         super();
-
         this._columns = {
             list: [
                 {name: 'dungeon', width: '15%'},
@@ -57,10 +56,12 @@ class ProfileTableView extends TableView {
     constructor() {
         super();
 
+        let defaultDungeonId = $('#dungeonroute_search_dungeon_id').val();
+
         this._columns = {
             list: [
                 {name: 'title', width: '15%', className: 'pt-0 pb-0'},
-                {name: 'dungeon', width: '15%'},
+                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
@@ -72,7 +73,7 @@ class ProfileTableView extends TableView {
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
                 {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},

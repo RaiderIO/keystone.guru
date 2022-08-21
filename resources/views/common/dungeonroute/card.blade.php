@@ -47,7 +47,7 @@ ob_start(); ?>
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)
                         <img class="thumbnail"
-                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $loop->index + 1)) }}"/>
+                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $floor->index)) }}"/>
                     @endforeach
                 @else
                     <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
@@ -58,7 +58,7 @@ ob_start(); ?>
     <div class="col">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
-             style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover;"
+             style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
             @endif
         >
             <div class="row no-gutters p-2 header">

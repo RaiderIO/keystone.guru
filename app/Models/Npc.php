@@ -43,6 +43,21 @@ class Npc extends CacheModel
     protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
     protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
 
+    // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
+    public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
+    public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
+    public const AGGRESSIVENESS_NEUTRAL = 'neutral';
+    public const AGGRESSIVENESS_FRIENDLY = 'friendly';
+    public const AGGRESSIVENESS_AWAKENED = 'awakened';
+
+    public const ALL_AGGRESSIVENESS = [
+        self::AGGRESSIVENESS_AGGRESSIVE,
+        self::AGGRESSIVENESS_UNFRIENDLY,
+        self::AGGRESSIVENESS_NEUTRAL,
+        self::AGGRESSIVENESS_FRIENDLY,
+        self::AGGRESSIVENESS_AWAKENED,
+    ];
+
     /**
      * @return bool
      */

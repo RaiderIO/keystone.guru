@@ -17,6 +17,7 @@ return [
             'dungeon'                  => 'Dungeon',
             'all'                      => 'All',
             'all_dungeons'             => 'All dungeons',
+            'seasons'                  => 'Seasons',
             'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.',
         ],
     ],
