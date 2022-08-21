@@ -6,15 +6,22 @@
 /** @var $currentSeason \App\Models\Season */
 /** @var $nextSeason \App\Models\Season|null */
 
-$id       = $id ?? 'dungeon_id_select';
-$name     = $name ?? 'dungeon_id';
-$label    = $label ?? __('views/common.dungeon.select.dungeon');
-$required = $required ?? true;
-$showAll  = !isset($showAll) || $showAll;
-$showSeasons  = isset($showSeasons) && $showSeasons;
+$id          = $id ?? 'dungeon_id_select';
+$name        = $name ?? 'dungeon_id';
+$label       = $label ?? __('views/common.dungeon.select.dungeon');
+$required    = $required ?? true;
+$showAll     = !isset($showAll) || $showAll;
+$showSeasons = isset($showSeasons) && $showSeasons;
 // Show all dungeons if we're debugging
 $activeOnly       = $activeOnly ?? !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
+$selected         = $selected ?? null;
+
+if ($selected === null) {
+    if( $showSeasons ) {
+        $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
+    }
+}
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -85,7 +92,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     @if($label !== false)
         {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
     @endif
-    {!! Form::select($name, $dungeonsSelect, null, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
+    {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
             <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}

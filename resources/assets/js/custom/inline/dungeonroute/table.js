@@ -32,9 +32,6 @@ class DungeonrouteTable extends InlineCode {
         $('#dungeonroute_filter').unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $('#dungeonroute_search_dungeon_id').val();
-            if (parseInt(dungeonId) < 1) {
-                dungeonId = '';
-            }
             let affixes = $('#affixes').val();
             let attributes = $('#attributes').val();
 
@@ -160,6 +157,7 @@ class DungeonrouteTable extends InlineCode {
             // Order by affixes by default
             'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
             'columns': self._getColumns(),
+            'searchCols': self._getDefaultSearchColumns(),
             'language': {
                 'emptyTable': lang.get('messages.datatable_no_routes_in_table')
             }
@@ -218,6 +216,32 @@ class DungeonrouteTable extends InlineCode {
         self._dt.on('mouseleave', 'tbody tr', function () {
             $(this).removeClass('row_selected');
         });
+    }
+
+    /**
+     *
+     * @returns {*[]}
+     * @private
+     */
+    _getDefaultSearchColumns() {
+        // Get a list of strings of what columns we want
+        let viewColumns = this._tableView.getColumns(this._viewMode);
+
+        // Map the string columns to actual DT columns and return the result
+        let result = [];
+        for (let index in viewColumns) {
+            // Satisfy PhpStorm..
+            if (viewColumns.hasOwnProperty(index)) {
+                // Object containing name and width of the column
+                let viewColumn = viewColumns[index];
+
+                result.push(
+                    viewColumn.hasOwnProperty('defaultSearch') ? {'search': viewColumn.defaultSearch} : null
+                );
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -493,7 +517,7 @@ class DungeonrouteTable extends InlineCode {
 
             $.ajax({
                 type: 'DELETE',
-                url: '/ajax/' + publicKey,
+                url: `/ajax/${publicKey}`,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.route_delete_successful'));
