@@ -104,8 +104,8 @@
                             Form::select('scaled_health_type',
                             [
                                 'none' => __('views/admin.npc.edit.scaled_type_none'),
-                                'fortified' => __('affixes.fortified.name'),
-                                'tyrannical' => __('affixes.tyrannical.name')
+                                'fortified' => __('views/admin.npc.edit.scaled_type_fortified', ['affix' => __('affixes.fortified.name')]),
+                                'tyrannical' => __('views/admin.npc.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')])
                             ],
                             null,
                             ['id' => 'scaled_health_type', 'class' => 'form-control selectpicker'])

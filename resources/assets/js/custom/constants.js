@@ -229,7 +229,7 @@ let c = {
                 return Math.ceil(result);
             },
             getKeyScalingFactor(keyLevel, fortified, tyrannical) {
-                let keyLevelFactor = Math.pow(1.08, (keyLevel - 1));
+                let keyLevelFactor = Math.pow(1.08, (keyLevel - 2));
 
                 if (fortified) {
                     keyLevelFactor *= 1.2;
@@ -237,7 +237,7 @@ let c = {
                     keyLevelFactor *= 1.3;
                 }
 
-                return keyLevelFactor;
+                return Math.round(keyLevelFactor * 100) / 100;
             },
             calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false) {
                 return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));

@@ -126,6 +126,8 @@ return [
             'scaled_health_to_base_health_apply' => '<- Apply to Base Health',
             'scaled_health_placeholder'          => 'Enter scaled health',
             'scaled_type_none'                   => 'None',
+            'scaled_type_fortified'              => ':affix (trash only)',
+            'scaled_type_tyrannical'             => ':affix (bosses only)',
             'enemy_forces'                       => 'Enemy forces (-1 for unknown)',
             'enemy_forces_teeming'               => 'Enemy forces teeming (-1 for same as normal)',
             'dangerous'                          => 'Dangerous',
