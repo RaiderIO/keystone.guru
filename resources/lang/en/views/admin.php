@@ -125,6 +125,7 @@ return [
             'base_health'                        => 'Base health',
             'scaled_health_to_base_health_apply' => '<- Apply to Base Health',
             'scaled_health_placeholder'          => 'Enter scaled health',
+            'scaled_type_none'                   => 'None',
             'enemy_forces'                       => 'Enemy forces (-1 for unknown)',
             'enemy_forces_teeming'               => 'Enemy forces teeming (-1 for same as normal)',
             'dangerous'                          => 'Dangerous',

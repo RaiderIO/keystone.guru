@@ -19,8 +19,43 @@ class AdminNpcEdit extends InlineCode {
                 }
             });
 
+        // Restore previously set fortified/tyrannical values
+        $(this.options.scaledHealthTypeSelector)
+            .val(Cookies.get('npc_edit_scaled_type', 'none'))
+            .on('change', function () {
+                Cookies.set('npc_edit_scaled_type', $(this).val());
+            });
+
         $(this.options.scaledHealthToBaseHealthApplyBtnSelector).on('click', function () {
-            $(self.options.baseHealthSelector).val(0);
+            let scaledHealth = parseInt($(self.options.scaledHealthSelector).val());
+
+            if (scaledHealth <= 0) {
+                return;
+            }
+
+            $(self.options.baseHealthSelector).val(
+                c.map.enemy.calculateBaseHealthForKey(
+                    scaledHealth, $input.val(), self._isFortified(), self._isTyrannical()
+                )
+            );
         });
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     * @private
+     */
+    _isFortified() {
+        return $(this.options.scaledHealthTypeSelector).val() === 'fortified';
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     * @private
+     */
+    _isTyrannical() {
+        return $(this.options.scaledHealthTypeSelector).val() === 'tyrannical';
     }
 }

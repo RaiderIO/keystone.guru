@@ -6,8 +6,10 @@
 
 @include('common.general.inline', ['path' => 'admin/npc/edit', 'options' => [
     'baseHealthSelector' => '#base_health',
+    'scaledHealthSelector' => '#scaled_health',
+    'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn',
     'scaledHealthLevelSelector' => '#scaled_health_level',
-    'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn'
+    'scaledHealthTypeSelector' => '#scaled_health_type'
 ]])
 
 @section('header-title')
@@ -77,16 +79,16 @@
         {!! Form::label('base_health', __('views/admin.npc.edit.base_health'), [], false) !!}
         <span class="form-required">*</span>
         <div class="row">
-            <div class="col">
+            <div class="col-3">
                 {!! Form::text('base_health', null, ['id' => 'base_health', 'class' => 'form-control']) !!}
             </div>
-            <div class="col-auto">
-                <div id="scaled_health_to_base_health_apply_btn" class="btn btn-info">
-                    {{ __('views/admin.npc.edit.scaled_health_to_base_health_apply') }}
-                </div>
-            </div>
-            <div class="col">
+            <div class="col-9">
                 <div class="row">
+                    <div class="col-auto">
+                        <div id="scaled_health_to_base_health_apply_btn" class="btn btn-info">
+                            {{ __('views/admin.npc.edit.scaled_health_to_base_health_apply') }}
+                        </div>
+                    </div>
                     <div class="col">
                         {!! Form::text('scaled_health', null, [
                             'id' => 'scaled_health',
@@ -96,6 +98,18 @@
                     </div>
                     <div class="col">
                         {!! Form::text('scaled_health_level', null, ['id' => 'scaled_health_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+                    </div>
+                    <div class="col">
+                        {!!
+                            Form::select('scaled_health_type',
+                            [
+                                'none' => __('views/admin.npc.edit.scaled_type_none'),
+                                'fortified' => __('affixes.fortified.name'),
+                                'tyrannical' => __('affixes.tyrannical.name')
+                            ],
+                            null,
+                            ['id' => 'scaled_health_type', 'class' => 'form-control selectpicker'])
+                        !!}
                     </div>
                 </div>
             </div>
