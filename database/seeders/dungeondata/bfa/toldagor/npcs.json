@@ -329,7 +329,7 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "name": "Cutwater Striker",
-        "base_health": 768495,
+        "base_health": 768494,
         "enemy_forces": 6,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
