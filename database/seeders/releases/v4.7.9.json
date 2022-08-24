@@ -1,0 +1,27 @@
+{
+    "id": 140,
+    "release_changelog_id": 147,
+    "version": "v4.7.9",
+    "title": "",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-08-24T19:15:25+00:00",
+    "updated_at": "2022-08-24T19:15:25+00:00",
+    "changelog": {
+        "id": 147,
+        "release_id": 140,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 147,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1297,
+                "change": "Hotfixes for Lower Karazhan.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
