@@ -228,8 +228,8 @@ let c = {
                 // Return the correct size
                 return Math.ceil(result);
             },
-            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false) {
-                let keyLevelFactor = Math.pow(1.08, (keyLevel - 1));
+            getKeyScalingFactor(keyLevel, fortified, tyrannical) {
+                let keyLevelFactor = Math.pow(1.08, (keyLevel - 2));
 
                 if (fortified) {
                     keyLevelFactor *= 1.2;
@@ -237,7 +237,13 @@ let c = {
                     keyLevelFactor *= 1.3;
                 }
 
-                return Math.ceil(baseHealth * keyLevelFactor);
+                return Math.round(keyLevelFactor * 100) / 100;
+            },
+            calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false) {
+                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
+            },
+            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false) {
+                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
             }
         },
         adminenemy: {
