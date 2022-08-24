@@ -32,7 +32,7 @@
             "color": "#E25D5D",
             "color_animated": null,
             "weight": 3,
-            "vertices_json": "[{\"lat\":-39.645461,\"lng\":234.888702},{\"lat\":-42.392698,\"lng\":264.492541}]"
+            "vertices_json": "[{\"lat\":-71.807072,\"lng\":231.052044},{\"lat\":-39.361265,\"lng\":231.573072},{\"lat\":-42.392698,\"lng\":264.492541}]"
         }
     },
     {
@@ -45,6 +45,18 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-45.045202,\"lng\":236.688615},{\"lat\":-52.481686,\"lng\":282.870604}]"
+        }
+    },
+    {
+        "id": 425,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-71.143946,\"lng\":196.711591},{\"lat\":-73.464887,\"lng\":227.357485}]"
         }
     }
 ]
