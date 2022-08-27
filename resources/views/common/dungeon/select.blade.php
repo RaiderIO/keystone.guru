@@ -17,42 +17,40 @@ $activeOnly       = $activeOnly ?? !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
 $selected         = $selected ?? null;
 
-if ($selected === null) {
-    if( $showSeasons ) {
-        $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
-    }
-}
-
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
+    if ($selected === null && $showSeasons) {
+        $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
+    }
+    // Build a list of seasons that we use to make selections of
+    $seasons = [];
+    if ($nextSeason !== null) {
+        $seasons[] = $nextSeason;
+    }
+    $seasons[] = $currentSeason;
+
+    $dungeonsSelect = [];
+    // Show a selector to only show all dungeons in a specific season
+    if ($showSeasons) {
+        foreach ($seasons as $season) {
+            $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [sprintf('season-%d', $season->id) => $season->name];
+        }
+    }
+
+    if ($showAll) {
+        $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
+    }
+
+    foreach ($seasons as $season) {
+        $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => __($name)];
+        })->toArray();
+    }
+
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
-// Build a list of seasons that we use to make selections of
-$seasons = [];
-if ($nextSeason !== null) {
-    $seasons[] = $nextSeason;
-}
-$seasons[] = $currentSeason;
-
-$dungeonsSelect = [];
-// Show a selector to only show all dungeons in a specific season
-if ($showSeasons) {
-    foreach ($seasons as $season) {
-        $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [sprintf('season-%d', $season->id) => $season->name];
-    }
-}
-
-if ($showAll) {
-    $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
-}
-
-foreach ($seasons as $season) {
-    $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
-        return [$id => __($name)];
-    })->toArray();
-}
 
 // Group the dungeons by expansion
 // @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
