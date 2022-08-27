@@ -127,6 +127,7 @@ class MapIconTypesSeeder extends Seeder
             }
 
             MapIconType::create([
+                'id'         => MapIconType::ALL[$key],
                 'key'        => $key,
                 'name'       => $mapIconType['name'],
                 'width'      => $imageSize[0],

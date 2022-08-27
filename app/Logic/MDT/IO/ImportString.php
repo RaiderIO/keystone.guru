@@ -83,29 +83,22 @@ class ImportString extends MDTBase
                 $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
 
                 try {
-                    /** @var MapIconType $gatewayIconType */
-                    $gatewayIconType       = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_GATEWAY)->firstOrFail();
-                    $brutalSpireIconType   = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL)->firstOrFail();
-                    $cursedSpireIconType   = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_CURSED)->firstOrFail();
-                    $defiledSpireIconType  = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_DEFILED)->firstOrFail();
-                    $entropicSpireIconType = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_ENTROPIC)->firstOrFail();
-
                     $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute) {
                         $query->whereNull('seasonal_index')
                             ->orWhere('seasonal_index', $dungeonRoute->seasonal_index ?? 1);
                     };
 
                     $npcIdToMapIconMapping = [
-                        161124 => MapIcon::where('map_icon_type_id', $brutalSpireIconType->id)
+                        161124 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL])
                             ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
                             ->where($seasonalIndexWhere)->firstOrFail(),
-                        161241 => MapIcon::where('map_icon_type_id', $cursedSpireIconType->id)
+                        161241 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_CURSED])
                             ->whereIn('floor_id', $floorIds) // Cursed spire
                             ->where($seasonalIndexWhere)->firstOrFail(),
-                        161244 => MapIcon::where('map_icon_type_id', $defiledSpireIconType->id)
+                        161244 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_DEFILED])
                             ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
                             ->where($seasonalIndexWhere)->firstOrFail(),
-                        161243 => MapIcon::where('map_icon_type_id', $entropicSpireIconType->id)
+                        161243 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_ENTROPIC])
                             ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
                             ->where($seasonalIndexWhere)->firstOrFail(),
                     ];
@@ -139,7 +132,7 @@ class ImportString extends MDTBase
                         $mapIconEnd = new MapIcon(array_merge([
                             'floor_id'         => $enemy->floor_id,
                             'dungeon_route_id' => $dungeonRoute->id,
-                            'map_icon_type_id' => $gatewayIconType->id,
+                            'map_icon_type_id' => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
                             'comment'          => $obeliskMapIcon->mapicontype->name
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
