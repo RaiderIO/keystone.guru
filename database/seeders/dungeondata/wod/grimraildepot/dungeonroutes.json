@@ -55,14 +55,6 @@
             },
             {
                 "floor_id": 0,
-                "color": "",
-                "lat": null,
-                "lng": null,
-                "index": 2,
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 0,
                 "color": "#ff3e3e",
                 "lat": null,
                 "lng": null,
