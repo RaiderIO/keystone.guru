@@ -9,6 +9,9 @@ use Illuminate\Support\Collection;
 
 class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 {
+    const MAP_MAX_X = 384;
+    const MAP_MAX_Y = -256;
+
     /** @var SimulationCraftRaidEventsOptions */
     private SimulationCraftRaidEventsOptions $options;
 
@@ -87,19 +90,25 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     /**
      * @inheritDoc
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone): RaidEventPullInterface
+    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousLocation): RaidEventPullInterface
     {
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
-        foreach ($killZone->enemies->groupBy('npc_id') as $npcId => $enemies) {
 
+        foreach ($killZone->enemies->groupBy('npc_id') as $npcId => $enemies) {
+            /** @var Collection|Enemy[] $enemies */
             $enemyIndex = 1;
             foreach ($enemies as $enemy) {
                 $this->addEnemy($enemy, $enemyIndex);
                 $enemyIndex++;
             }
-
         }
+
+        // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
+        $killLocation = $killZone->getKillLocation();
+
+        $floor = $killZone->getDominantFloor();
+
         return $this;
     }
 

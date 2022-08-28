@@ -28,11 +28,19 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     {
         $this->raidEventPulls = collect();
 
+        $previousKillZone = null;
         foreach ($this->options->dungeonroute->killzones as $killZone) {
+            // Skip empty pulls
+            if ($killZone->enemies->count() === 0) {
+                continue;
+            }
+
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->options))
-                    ->calculateRaidEventPullEnemies($killZone)
+                    ->calculateRaidEventPullEnemies($killZone, $previousKillZone->getKillLocation())
             );
+
+            $previousKillZone = $killZone;
         }
 
         return $this;

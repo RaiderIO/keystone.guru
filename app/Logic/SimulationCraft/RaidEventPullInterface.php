@@ -9,9 +9,10 @@ interface RaidEventPullInterface
 {
     /**
      * @param KillZone $killZone
+     * @param array $previousLocation
      * @return $this
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone): self;
+    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousLocation): self;
 
     /**
      * @param Enemy $enemy
