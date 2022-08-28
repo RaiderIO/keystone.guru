@@ -418,6 +418,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
+            Route::post('/simulate', [APIDungeonRouteController::class, 'simulate'])->name('api.dungeonroute.simulate');
         });
 
         // Must be logged in to perform these actions

@@ -13,8 +13,12 @@ use App\Models\Season;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\EchoServerHttpApiService;
+use App\Service\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\SimulationCraft\RaidEventsService;
+use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
@@ -35,10 +39,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind the interface to the actual service
-        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
+        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
 
         // Internals
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
+        $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {

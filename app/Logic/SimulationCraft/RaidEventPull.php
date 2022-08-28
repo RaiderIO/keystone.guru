@@ -16,10 +16,10 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     private int $pullIndex;
 
     /** @var bool */
-    private bool $bloodLust;
+    private bool $bloodLust = false;
 
     /** @var int */
-    private int $delay;
+    private int $delay = 0;
 
     /** @var Collection|RaidEventPullEnemy[] */
     private Collection $raidEventPullEnemies;

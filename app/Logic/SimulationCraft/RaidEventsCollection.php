@@ -78,7 +78,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
 
         $result .= implode(PHP_EOL, $pullStrings);
 
-
-        return $result;
+        // Trims all individual lines: https://stackoverflow.com/a/1655181/771270
+        return preg_replace('/^\s+|\s+$/m', '', $result);
     }
 }
