@@ -1,1 +1,327 @@
-[]
+[
+    {
+        "public_key": "81NQAJg",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 41,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 3,
+        "title": "S4 GD by Dratnos",
+        "description": "",
+        "level_min": 10,
+        "level_max": 10,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 304,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "created_at": "2022-08-27T09:52:07+00:00",
+        "updated_at": "2022-08-27T09:52:32+00:00",
+        "playerspecializations": [],
+        "playerraces": [],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 87
+            }
+        ],
+        "brushlines": [],
+        "paths": [],
+        "killzones": [
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7823
+                    },
+                    {
+                        "enemy_id": 7824
+                    },
+                    {
+                        "enemy_id": 7825
+                    },
+                    {
+                        "enemy_id": 7826
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7830
+                    },
+                    {
+                        "enemy_id": 7831
+                    },
+                    {
+                        "enemy_id": 8504
+                    },
+                    {
+                        "enemy_id": 8505
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7834
+                    },
+                    {
+                        "enemy_id": 7835
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7836
+                    },
+                    {
+                        "enemy_id": 7837
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7838
+                    },
+                    {
+                        "enemy_id": 7839
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e9e",
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7840
+                    },
+                    {
+                        "enemy_id": 7841
+                    },
+                    {
+                        "enemy_id": 7842
+                    },
+                    {
+                        "enemy_id": 7843
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3effff",
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7848
+                    },
+                    {
+                        "enemy_id": 7849
+                    },
+                    {
+                        "enemy_id": 7850
+                    },
+                    {
+                        "enemy_id": 7851
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff9b3e",
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7852
+                    },
+                    {
+                        "enemy_id": 7853
+                    },
+                    {
+                        "enemy_id": 7854
+                    },
+                    {
+                        "enemy_id": 7855
+                    },
+                    {
+                        "enemy_id": 7856
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e3eff",
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7857
+                    },
+                    {
+                        "enemy_id": 7858
+                    },
+                    {
+                        "enemy_id": 7859
+                    },
+                    {
+                        "enemy_id": 7860
+                    },
+                    {
+                        "enemy_id": 7861
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#a1ff3e",
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7862
+                    },
+                    {
+                        "enemy_id": 7863
+                    },
+                    {
+                        "enemy_id": 7864
+                    },
+                    {
+                        "enemy_id": 7865
+                    },
+                    {
+                        "enemy_id": 7866
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7867
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7868
+                    },
+                    {
+                        "enemy_id": 7869
+                    },
+                    {
+                        "enemy_id": 7870
+                    },
+                    {
+                        "enemy_id": 7871
+                    },
+                    {
+                        "enemy_id": 7872
+                    },
+                    {
+                        "enemy_id": 7873
+                    },
+                    {
+                        "enemy_id": 7874
+                    },
+                    {
+                        "enemy_id": 7875
+                    },
+                    {
+                        "enemy_id": 7876
+                    },
+                    {
+                        "enemy_id": 7877
+                    },
+                    {
+                        "enemy_id": 7878
+                    },
+                    {
+                        "enemy_id": 7879
+                    },
+                    {
+                        "enemy_id": 7880
+                    },
+                    {
+                        "enemy_id": 7881
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 7882
+                    }
+                ]
+            }
+        ],
+        "enemyraidmarkers": [],
+        "pridefulenemies": [],
+        "mapicons": [
+            {
+                "floor_id": 106,
+                "map_icon_type_id": 2,
+                "lat": -164,
+                "lng": 180,
+                "comment": "You can pull this for the stat buff, especially if you have a way to skip a pack later, but otherwise you don't need the count, just hug the wall to avoid.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]
