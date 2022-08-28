@@ -18,7 +18,7 @@ return [
             'darkheart_thicket'    => [
 
             ],
-            'eye_of_aszhara'       => [
+            'eye_of_azshara'       => [
 
             ],
             'halls_of_valor'       => [

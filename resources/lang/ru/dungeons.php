@@ -8,10 +8,10 @@ return [
                 'auchindoun' => '@todo ru: .wod.auchindoun.floors.auchindoun',
             ],
         ],
-        'bloodmaw_slag_mines' => [
-            'name'   => '@todo ru: .wod.bloodmaw_slag_mines.name',
+        'bloodmaul_slag_mines' => [
+            'name'   => '@todo ru: .wod.bloodmaul_slag_mines.name',
             'floors' => [
-                'bloodmaw_slag_mines' => '@todo ru: .wod.bloodmaw_slag_mines.floors.bloodmaw_slag_mines',
+                'bloodmaul_slag_mines' => '@todo ru: .wod.bloodmaul_slag_mines.floors.bloodmaul_slag_mines',
             ],
         ],
         'iron_docks'          => [
@@ -60,10 +60,10 @@ return [
                 'darkheart_thicket' => 'Чаща Темного Сердца',
             ],
         ],
-        'eye_of_aszhara'       => [
+        'eye_of_azshara'       => [
             'name'   => 'Око Азшары',
             'floors' => [
-                'eye_of_aszhara' => 'Око Азшары',
+                'eye_of_azshara' => 'Око Азшары',
             ],
         ],
         'halls_of_valor'       => [

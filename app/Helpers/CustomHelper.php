@@ -32,7 +32,7 @@ function initials(string $name): string
             return !empty($element);
         });
 
-        $result  = join('', array_map(function ($element) {
+        $result = join('', array_map(function ($element) {
             return $element[0];
         }, $explode));
     } else {
@@ -50,4 +50,37 @@ function initials(string $name): string
 function isValidBase64(string $string): bool
 {
     return base64_encode(base64_decode($string, true)) === $string;
+}
+
+
+/**
+ * @param string $csv_string
+ * @param string $delimiter
+ * @param bool $skip_empty_lines
+ * @param bool $trim_fields
+ * @return array|array[][]|false[][]|string[][]|string[][][]
+ */
+function str_getcsv_assoc(string $csv_string, string $delimiter = ",", bool $skip_empty_lines = true, bool $trim_fields = true)
+{
+    $enc   = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
+    $enc   = preg_replace_callback(
+        '/"(.*?)"/s',
+        function ($field) {
+            return urlencode(utf8_encode($field[1]));
+        },
+        $enc
+    );
+    $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', $enc);
+    return array_map(
+        function ($line) use ($delimiter, $trim_fields) {
+            $fields = $trim_fields ? array_map('trim', explode($delimiter, $line)) : explode($delimiter, $line);
+            return array_map(
+                function ($field) {
+                    return str_replace('!!Q!!', '"', utf8_decode(urldecode($field)));
+                },
+                $fields
+            );
+        },
+        $lines
+    );
 }

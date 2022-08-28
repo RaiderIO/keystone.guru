@@ -42,6 +42,12 @@
             @include('common.forms.form-error', ['key' => 'zone_id'])
         </div>
 
+        <div class="form-group{{ $errors->has('map_id') ? ' has-error' : '' }}">
+            {!! Form::label('map_id', __('views/admin.dungeon.edit.map_id')) !!}
+            {!! Form::number('map_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'map_id'])
+        </div>
+
         <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
             {!! Form::label('mdt_id', __('views/admin.dungeon.edit.mdt_id')) !!}
             {!! Form::number('mdt_id', null, ['class' => 'form-control']) !!}

@@ -9,6 +9,7 @@ return [
             'header_edit'                     => 'Edit dungeon',
             'active'                          => 'Active',
             'zone_id'                         => 'Zone ID',
+            'map_id'                          => 'Map ID',
             'mdt_id'                          => 'MDT ID',
             'dungeon_name'                    => 'Dungeon name',
             'key'                             => 'Key',
@@ -316,6 +317,9 @@ return [
             'subheader_enemy_forces' => 'Enemy Forces',
             'enemy_forces_import'    => 'Import enemy forces',
 
+            'subheader_wowtools'                 => 'WoW.tools',
+            'wowtools_import_ingame_coordinates' => 'Import in-game coordinates',
+
             'subheader_misc'     => 'Misc',
             'drop_caches'        => 'Drop caches',
             'throw_an_exception' => 'Throw an exception',
@@ -328,6 +332,16 @@ return [
             'export_releases'     => 'Export releases',
 
             'enemy_forces_recalculate' => 'Mass recalculate enemy forces for routes',
+        ],
+        'wowtools'     => [
+            'importingamecoordinates' => [
+                'title'                   => 'Import in-game coordinates',
+                'header'                  => 'Import in-game coordinates',
+                'map_csv'                 => 'Map csv (dungeon data, see https://wow.tools/dbc/?dbc=map&build=10.0.0.45232)',
+                'ui_map_group_member_csv' => 'UI map group member csv (floor data, see https://wow.tools/dbc/?dbc=uimapgroupmember&build=10.0.0.45232)',
+                'ui_map_assignment_csv'   => 'UI map assignment csv (in-game coordinates to map coordinates per floor, see https://wow.tools/dbc/?dbc=uimapassignment&build=10.0.0.45232)',
+                'submit'                  => 'Submit',
+            ],
         ],
     ],
     'user'       => [

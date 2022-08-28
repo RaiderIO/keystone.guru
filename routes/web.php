@@ -308,8 +308,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
-
-
                 // View string contents
                 Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
@@ -321,6 +319,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 // View dungeonroute as string
                 Route::get('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
                 Route::post('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+                // Wow.tools
+                Route::get('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinates'])->name('admin.tools.wowtools.import_ingame_coordinates');
+                Route::post('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinatessubmit'])->name('admin.tools.wowtools.import_ingame_coordinates.submit');
 
                 // Exception thrower
                 Route::get('exception', [AdminToolsController::class, 'exceptionselect'])->name('admin.tools.exception.select');

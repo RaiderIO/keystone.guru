@@ -8,10 +8,10 @@ return [
                 'auchindoun' => 'Auchindoun',
             ],
         ],
-        'bloodmaw_slag_mines' => [
-            'name'   => 'Bloodmaw Slag Mines',
+        'bloodmaul_slag_mines' => [
+            'name'   => 'Bloodmaul Slag Mines',
             'floors' => [
-                'bloodmaw_slag_mines' => 'Bloodmaw Slag Mines',
+                'bloodmaul_slag_mines' => 'Bloodmaul Slag Mines',
             ],
         ],
         'iron_docks'          => [
@@ -32,9 +32,9 @@ return [
     ],
     'legion'      => [
         'arcway'               => [
-            'name'   => 'Arcway',
+            'name'   => 'The Arcway',
             'floors' => [
-                'arcway' => 'Arcway',
+                'arcway' => 'The Arcway',
             ],
         ],
         'black_rook_hold'      => [
@@ -60,10 +60,10 @@ return [
                 'darkheart_thicket' => 'Darkheart Thicket',
             ],
         ],
-        'eye_of_aszhara'       => [
-            'name'   => 'Eye of Aszhara',
+        'eye_of_azshara'       => [
+            'name'   => 'Eye of Azshara',
             'floors' => [
-                'eye_of_aszhara' => 'Eye of Azshara',
+                'eye_of_azshara' => 'Eye of Azshara',
             ],
         ],
         'halls_of_valor'       => [
@@ -78,7 +78,7 @@ return [
             'name'   => 'Maw of Souls',
             'floors' => [
                 'hellmouth_cliffs' => 'Hellmouth Cliffs',
-                'the_hold'         => 'Hellmouth Cliffs',
+                'the_hold'         => 'The Hold',
                 'the_naglfar'      => 'The Naglfar',
             ],
         ],
@@ -133,9 +133,9 @@ return [
             ],
         ],
         'the_seat_of_the_triumvirate' => [
-            'name'   => 'The Seat of the Triumvirate',
+            'name'   => 'Seat of the Triumvirate',
             'floors' => [
-                'the_seat_of_the_triumvirate' => 'The Seat of the Triumvirate',
+                'the_seat_of_the_triumvirate' => 'Seat of the Triumvirate',
             ],
         ],
     ],
@@ -154,9 +154,9 @@ return [
             ],
         ],
         'kings_rest'                => [
-            'name'   => 'King\'s Rest',
+            'name'   => 'Kings\' Rest',
             'floors' => [
-                'kings_rest' => 'King\'s Rest',
+                'kings_rest' => 'Kings\' Rest',
             ],
         ],
         'shrine_of_the_storm'       => [
@@ -312,7 +312,7 @@ return [
             'floors' => [
                 'the_veiled_market'   => 'The Veiled Market',
                 'the_grand_menagerie' => 'The Grand Menagerie',
-                'the_post'            => 'The P.O.S.T',
+                'the_post'            => 'The P.O.S.T.',
                 'myzas_oasis'         => 'Myza\'s Oasis',
             ],
         ],

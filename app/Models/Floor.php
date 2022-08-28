@@ -17,6 +17,10 @@ use Illuminate\Support\Collection;
  * @property boolean $default
  * @property int $min_enemy_size
  * @property int $max_enemy_size
+ * @property int $ingame_min_x
+ * @property int $ingame_min_y
+ * @property int $ingame_max_x
+ * @property int $ingame_max_y
  * @property int|null $percentage_display_zoom
  *
  * @property Dungeon $dungeon
@@ -33,6 +37,8 @@ use Illuminate\Support\Collection;
  */
 class Floor extends CacheModel
 {
+    protected $fillable = ['ingame_min_x', 'ingame_min_y', 'ingame_max_x', 'ingame_max_y'];
+
     public $timestamps = false;
 
     public $hidden = ['dungeon_id', 'created_at', 'updated_at'];
