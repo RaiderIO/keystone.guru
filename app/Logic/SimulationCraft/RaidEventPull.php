@@ -3,6 +3,7 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\Enemy;
+use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Collection;
@@ -90,7 +91,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     /**
      * @inheritDoc
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousLocation): RaidEventPullInterface
+    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousKillLocation, Floor $previousKillFloor): RaidEventPullInterface
     {
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
@@ -106,8 +107,14 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
         // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
         $killLocation = $killZone->getKillLocation();
+        $floor        = $killZone->getDominantFloor();
 
-        $floor = $killZone->getDominantFloor();
+        // If the floors have changed we need to first go through the
+        if ($previousKillFloor->id !== $floor->id) {
+
+        }
+
+        // @TODO If the previous location was on a different floor
 
         return $this;
     }

@@ -3,16 +3,18 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\Enemy;
+use App\Models\Floor;
 use App\Models\KillZone;
 
 interface RaidEventPullInterface
 {
     /**
      * @param KillZone $killZone
-     * @param array $previousLocation
+     * @param array $previousKillLocation
+     * @param Floor $previousKillFloor
      * @return $this
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousLocation): self;
+    public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousKillLocation, Floor $previousKillFloor): self;
 
     /**
      * @param Enemy $enemy

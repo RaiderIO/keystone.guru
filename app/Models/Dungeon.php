@@ -300,28 +300,6 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
-     * @param SeasonServiceInterface $seasonService
-     * @return Season|null
-     */
-    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
-    {
-        $nextSeason = $seasonService->getNextSeason();
-        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
-            return $nextSeason;
-        }
-
-        // $currentSeason cannot be null - there's always a season for the current expansion
-        $currentSeason = $seasonService->getCurrentSeason();
-        if ($currentSeason->hasDungeon($this)) {
-            return $currentSeason;
-        }
-
-        // Timewalking fallback
-        return $seasonService->getCurrentSeason($this->expansion);
-    }
-
-    /**
      * @return BelongsTo
      */
     public function expansion(): BelongsTo
@@ -428,6 +406,47 @@ class Dungeon extends CacheModel
     public function scopeInactive($query)
     {
         return $query->where('dungeons.active', 0);
+    }
+
+    /**
+     * @return MapIcon|null
+     */
+    public function getDungeonStart(): ?MapIcon
+    {
+        $result = null;
+
+        foreach ($this->floors as $floor) {
+            foreach ($floor->mapicons as $mapicon) {
+                if ($mapicon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
+                    $result = $mapicon;
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
+     * @param SeasonServiceInterface $seasonService
+     * @return Season|null
+     */
+    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
+    {
+        $nextSeason = $seasonService->getNextSeason();
+        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
+            return $nextSeason;
+        }
+
+        // $currentSeason cannot be null - there's always a season for the current expansion
+        $currentSeason = $seasonService->getCurrentSeason();
+        if ($currentSeason->hasDungeon($this)) {
+            return $currentSeason;
+        }
+
+        // Timewalking fallback
+        return $seasonService->getCurrentSeason($this->expansion);
     }
 
 

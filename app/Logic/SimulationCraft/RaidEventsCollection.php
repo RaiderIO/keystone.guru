@@ -2,6 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
+use App\Models\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Collection;
 
@@ -28,16 +29,22 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     {
         $this->raidEventPulls = collect();
 
+        /** @var KillZone|null $previousKillZone */
         $previousKillZone = null;
+        $dungeonStartIcon = $this->options->dungeonroute->dungeon->getDungeonStart();
+
         foreach ($this->options->dungeonroute->killzones as $killZone) {
             // Skip empty pulls
             if ($killZone->enemies->count() === 0) {
                 continue;
             }
 
+            $killLocation  = $previousKillZone === null ? ['lat' => $dungeonStartIcon->lat, 'lng' => $dungeonStartIcon->lng] : $previousKillZone->getKillLocation();
+            $dominantFloor = $previousKillZone === null ? $dungeonStartIcon->floor : $previousKillZone->getDominantFloor();
+
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->options))
-                    ->calculateRaidEventPullEnemies($killZone, $previousKillZone->getKillLocation())
+                    ->calculateRaidEventPullEnemies($killZone, $killLocation, $dominantFloor)
             );
 
             $previousKillZone = $killZone;

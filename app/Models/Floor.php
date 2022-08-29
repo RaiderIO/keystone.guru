@@ -25,13 +25,13 @@ use Illuminate\Support\Collection;
  *
  * @property Dungeon $dungeon
  *
- * @property Collection $enemies
- * @property Collection $enemypacks
- * @property Collection $enemypatrols
- * @property Collection $mapicons
- * @property Collection $connectedFloors
- * @property Collection $directConnectedFloors
- * @property Collection $reverseConnectedFloors
+ * @property Collection|Enemy[] $enemies
+ * @property Collection|EnemyPack[] $enemypacks
+ * @property Collection|EnemyPatrol[] $enemypatrols
+ * @property Collection|MapIcon[] $mapicons
+ * @property Collection|Floor[] $connectedFloors
+ * @property Collection|Floor[] $directConnectedFloors
+ * @property Collection|Floor[] $reverseConnectedFloors
  *
  * @mixin Eloquent
  */
@@ -92,7 +92,7 @@ class Floor extends CacheModel
     }
 
     /**
-     * @return Collection A list of all connected floors, regardless of direction
+     * @return Collection|Floor[] A list of all connected floors, regardless of direction
      */
     public function connectedFloors(): Collection
     {
