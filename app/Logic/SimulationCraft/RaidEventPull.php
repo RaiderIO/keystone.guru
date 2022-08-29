@@ -10,9 +10,6 @@ use Illuminate\Support\Collection;
 
 class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 {
-    const MAP_MAX_X = 384;
-    const MAP_MAX_Y = -256;
-
     /** @var SimulationCraftRaidEventsOptions */
     private SimulationCraftRaidEventsOptions $options;
 
@@ -109,8 +106,10 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $killLocation = $killZone->getKillLocation();
         $floor        = $killZone->getDominantFloor();
 
-        // If the floors have changed we need to first go through the
-        if ($previousKillFloor->id !== $floor->id) {
+        if ($previousKillFloor->id === $floor->id) {
+
+        } else {
+            // If the floors have changed we need to first go through the switch markers
 
         }
 

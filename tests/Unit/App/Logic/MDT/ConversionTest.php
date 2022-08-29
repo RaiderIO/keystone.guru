@@ -11,6 +11,7 @@ class ConversionTest extends TestCase
     /**
      * A basic test example.
      *
+     * @test
      * @return void
      * @dataProvider checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider
      * @group

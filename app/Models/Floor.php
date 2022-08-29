@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +38,14 @@ use Illuminate\Support\Collection;
  */
 class Floor extends CacheModel
 {
+    use HasFactory;
+
+    /** @var int Y */
+    const MAP_MAX_LAT = -256;
+
+    /** @var int X */
+    const MAP_MAX_LNG = 384;
+
     protected $fillable = ['ingame_min_x', 'ingame_min_y', 'ingame_max_x', 'ingame_max_y'];
 
     public $timestamps = false;
@@ -113,5 +122,24 @@ class Floor extends CacheModel
     public function reverseConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id');
+    }
+
+    /**
+     * @param float $lat
+     * @param float $lng
+     * @return array{x: float, y: float}
+     */
+    public function calculateIngameLocationForMapLocation(float $lat, float $lng): array
+    {
+        $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
+        $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
+
+        $factorLat = ($lat / self::MAP_MAX_LAT);
+        $factorLng = ($lng / self::MAP_MAX_LNG);
+
+        return [
+            'x' => ($ingameMapSizeX * $factorLng) + $this->ingame_min_x,
+            'y' => ($ingameMapSizeY * $factorLat) + $this->ingame_min_y,
+        ];
     }
 }
