@@ -35,9 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TagCategorySeeder::class);
         $this->call(PublishedStatesSeeder::class);
 
-        // Depends on ExpansionsSeeder
-        $this->call(SeasonsSeeder::class);
-
         // Depends on ExpansionsSeeder, SeasonsSeeder
         $this->call(AffixSeeder::class);
 
@@ -49,5 +46,8 @@ class DatabaseSeeder extends Seeder
 
         // Depends on Expansions
         $this->call(DungeonDataSeeder::class);
+
+        // Depends on ExpansionsSeeder, DungeonDataSeeder
+        $this->call(SeasonsSeeder::class);
     }
 }

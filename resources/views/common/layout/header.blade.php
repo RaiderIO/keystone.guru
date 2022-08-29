@@ -1,5 +1,6 @@
 <?php
 /** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
+/** @var \App\Models\Season $currentSeason */
 
 $navs = [
     route('dungeonroutes.search') => [
@@ -20,8 +21,6 @@ foreach ($activeExpansions as $expansion) {
                 __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
-// @TODO This needs to be changed to 'current season' when Season 4 is actually live
-$currentSeason = \App\Models\Season::find(9);
 $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
     'text' => $currentSeason->name
 ];

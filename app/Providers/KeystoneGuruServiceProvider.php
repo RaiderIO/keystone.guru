@@ -150,6 +150,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.layout.header', function (View $view) use ($globalViewVariables) {
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
 
         view()->composer([
