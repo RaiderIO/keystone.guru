@@ -32,8 +32,8 @@ class DungeonRouteFormRequest extends FormRequest
             'dungeon_route_title'       => 'nullable|string|max:80',
             'dungeon_route_description' => 'nullable|string|max:1000',
             'dungeon_route_sandbox'     => 'int',
-            'level_min'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.levels.min'), config('keystoneguru.levels.max')),
-            'level_max'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.levels.min'), config('keystoneguru.levels.max')),
+            'level_min'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.keystone.levels.min'), config('keystoneguru.keystone.levels.max')),
+            'level_max'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.keystone.levels.min'), config('keystoneguru.keystone.levels.max')),
             // Only active dungeons are allowed
             'dungeon_id'                => ['required', Rule::in(
                 Dungeon::select('dungeons.id')

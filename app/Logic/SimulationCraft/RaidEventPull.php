@@ -98,11 +98,20 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             /** @var Collection|Enemy[] $enemies */
             $enemyIndex = 1;
             foreach ($enemies as $enemy) {
-                $this->addEnemy($enemy, $enemyIndex);
-                $enemyIndex++;
+                $this->addEnemy($enemy, $enemyIndex++);
             }
         }
 
+        $this->delay = $this->calculateDelay($killZone, $previousKillLocation, $previousKillFloor);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function calculateDelay(KillZone $killZone, array $previousKillLocation, Floor $previousKillFloor): float
+    {
         // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
         $killLocation = $killZone->getKillLocation();
         $floor        = $killZone->getDominantFloor();
@@ -117,7 +126,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $ingameCoordinatesPreviousKillLocation['y'], $ingameCoordinatesKillLocation['y']
             );
 
-            $this->delay = $this->calculateDelayForDistance($ingameDistanceToNewKillZone);
+            $result = $this->calculateDelayForDistance($ingameDistanceToNewKillZone);
         } else {
             // Different floors are a bit tricky - we need to find the closest floor switch marker, calculate the distance to that
             // and then from that floor marker on the other side, calculate the distance to the pull. Add all up and you got the delay you're looking for
@@ -125,11 +134,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($previousKillLocation, $ingameCoordinatesPreviousKillLocation, $previousKillFloor, $floor) +
                 $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($killLocation, $ingameCoordinatesKillLocation, $floor, $previousKillFloor);
 
-            $this->delay = $this->calculateDelayForDistance($totalIngameDistance);
+            $result = $this->calculateDelayForDistance($totalIngameDistance);
         }
 
-        return $this;
+        return $result;
     }
+
 
     /**
      * @param array $killLocation
@@ -185,8 +195,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      */
     public function calculateDelayForDistance(float $ingameDistance): float
     {
-        // https://wowpedia.fandom.com/wiki/Movement
-        return $ingameDistance / 7;
+        return $ingameDistance / config('keystoneguru.character.default_movement_speed_yards_second');
     }
 
 

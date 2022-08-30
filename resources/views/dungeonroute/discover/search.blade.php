@@ -18,8 +18,8 @@
 /** @var $nextSeason \App\Models\Season|null */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/search', 'options' =>  [
-        'levelMin' => config('keystoneguru.levels.min'),
-        'levelMax' => config('keystoneguru.levels.max'),
+        'levelMin' => config('keystoneguru.keystone.levels.min'),
+        'levelMax' => config('keystoneguru.keystone.levels.max'),
         'limit' => config('keystoneguru.discover.limits.search'),
         'currentSeason' => $currentSeason->id,
         'nextSeason' => optional($nextSeason)->id,

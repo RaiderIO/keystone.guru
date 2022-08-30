@@ -299,6 +299,14 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {Number}
+     */
+    getKeystoneScalingFactor() {
+        return this._options.keystoneScalingFactor;
+    }
+
+    /**
+     *
      * @returns {[]}
      */
     getAuras() {

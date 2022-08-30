@@ -128,7 +128,7 @@ ob_start(); ?>
                         ) }}
                 </div>
                 <div class="col">
-                    @if( $dungeonroute->level_min !== config('keystoneguru.levels.min') && $dungeonroute->level_max !== config('keystoneguru.levels.max'))
+                    @if( $dungeonroute->level_min !== config('keystoneguru.keystone.levels.min') && $dungeonroute->level_max !== config('keystoneguru.keystone.levels.max'))
                         @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
                     @endif
                 </div>

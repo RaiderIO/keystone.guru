@@ -13,8 +13,8 @@ $sandbox = $dungeonroute->isSandbox();
     'dependencies' => ['common/maps/map'],
     'options' => [
         'dungeonroute' => $dungeonroute,
-        'levelMin' => config('keystoneguru.levels.min'),
-        'levelMax' => config('keystoneguru.levels.max'),
+        'levelMin' => config('keystoneguru.keystone.levels.min'),
+        'levelMax' => config('keystoneguru.keystone.levels.max'),
     ]
 ])
 

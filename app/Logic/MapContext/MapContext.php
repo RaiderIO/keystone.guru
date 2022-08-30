@@ -103,6 +103,8 @@ abstract class MapContext
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
 
+            'keystoneScalingFactor' => config('keystoneguru.keystone.scaling_factor'),
+
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null
             'userPublicKey'   => optional(Auth::user())->public_key,

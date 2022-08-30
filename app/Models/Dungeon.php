@@ -498,7 +498,7 @@ class Dungeon extends CacheModel
      */
     public function getTimerUpgradePlusTwoSeconds(): int
     {
-        return $this->timer_max_seconds * config('keystoneguru.timer.plustwofactor');
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
     }
 
     /**
@@ -506,7 +506,7 @@ class Dungeon extends CacheModel
      */
     public function getTimerUpgradePlusThreeSeconds(): int
     {
-        return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
     }
 
     /**

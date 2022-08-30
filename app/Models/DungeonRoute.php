@@ -679,8 +679,8 @@ class DungeonRoute extends Model
             $this->title = __($this->dungeon->name);
         }
 
-        $this->level_min = $request->get('level_min', config('keystoneguru.levels.min'));
-        $this->level_max = $request->get('level_max', config('keystoneguru.levels.max'));
+        $this->level_min = $request->get('level_min', config('keystoneguru.keystone.levels.min'));
+        $this->level_max = $request->get('level_max', config('keystoneguru.keystone.levels.max'));
 
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;

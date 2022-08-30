@@ -223,13 +223,12 @@ let c = {
                 let scale = Math.max(1, getState().getMapZoomLevel() / 2.0);
 
                 let result = (c.map.enemy.minSize() + ((health / maxHealth) * (c.map.enemy.maxSize() - c.map.enemy.minSize()))) * scale;
-                // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size
                 return Math.ceil(result);
             },
             getKeyScalingFactor(keyLevel, fortified, tyrannical) {
-                let keyLevelFactor = Math.pow(1.08, (keyLevel - 2));
+                let keyLevelFactor = Math.pow(getState().getMapContext().getKeystoneScalingFactor(), (keyLevel - 2));
 
                 if (fortified) {
                     keyLevelFactor *= 1.2;
