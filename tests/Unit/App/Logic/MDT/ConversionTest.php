@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\MDT;
+namespace Tests\Unit\App\Logic\MDT;
 
+use App\Logic\MDT\Conversion;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use Tests\TestCase;

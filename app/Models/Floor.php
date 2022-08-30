@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\Utils\MathUtils;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[] $connectedFloors
  * @property Collection|Floor[] $directConnectedFloors
  * @property Collection|Floor[] $reverseConnectedFloors
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
  *
  * @mixin Eloquent
  */
@@ -122,6 +124,44 @@ class Floor extends CacheModel
     public function reverseConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function dungeonfloorswitchmarkers(): HasMany
+    {
+        return $this->hasMany(DungeonFloorSwitchMarker::class);
+    }
+
+    /**
+     * @param float $lat
+     * @param float $lng
+     * @param int $targetFloorId
+     * @return DungeonFloorSwitchMarker|null
+     */
+    public function findClosestFloorSwitchMarker(float $lat, float $lng, int $targetFloorId): ?DungeonFloorSwitchMarker
+    {
+        $result = null;
+
+        /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+        $dungeonFloorSwitchMarkers = $this->dungeonfloorswitchmarkers()->where('target_floor_id', $targetFloorId)->get();
+
+        if ($dungeonFloorSwitchMarkers->count() > 1) {
+            // Find the closest floors switch marker with the same target floor
+            $distanceToClosestFloorSwitchMarker = 99999999999;
+            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints($lng, $dungeonFloorSwitchMarker->lng, $lat, $dungeonFloorSwitchMarker->lat);
+                if ($distanceToClosestFloorSwitchMarker < $distanceToFloorSwitchMarker) {
+                    $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
+                    $result                             = $dungeonFloorSwitchMarker;
+                }
+            }
+        } else {
+            $result = $dungeonFloorSwitchMarkers->first();
+        }
+
+        return $result;
     }
 
     /**

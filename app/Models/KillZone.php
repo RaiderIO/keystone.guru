@@ -77,7 +77,7 @@ class KillZone extends Model
      */
     public function getDominantFloor(): ?Floor
     {
-        if (isset($this->floor_id)) {
+        if (isset($this->floor_id) && $this->floor_id > 0) {
             return $this->floor;
         } else if ($this->enemies->count() > 0) {
             $floorTotals = [];

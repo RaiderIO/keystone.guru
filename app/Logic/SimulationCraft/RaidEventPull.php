@@ -2,6 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
+use App\Logic\Utils\MathUtils;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\KillZone;
@@ -106,16 +107,64 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $killLocation = $killZone->getKillLocation();
         $floor        = $killZone->getDominantFloor();
 
+        $ingameCoordinatesPreviousKillLocation = $previousKillFloor->calculateIngameLocationForMapLocation($previousKillLocation['lat'], $previousKillLocation['lng']);
+        $ingameCoordinatesKillLocation         = $floor->calculateIngameLocationForMapLocation($killLocation['lat'], $killLocation['lng']);
+
+        // On the same floor it's easy - just calculate the distance between
         if ($previousKillFloor->id === $floor->id) {
+            $ingameDistanceToNewKillZone = MathUtils::distanceBetweenPoints(
+                $ingameCoordinatesPreviousKillLocation['x'], $ingameCoordinatesKillLocation['x'],
+                $ingameCoordinatesPreviousKillLocation['y'], $ingameCoordinatesKillLocation['y']
+            );
 
+            $this->delay = $this->calculateDelayForDistance($ingameDistanceToNewKillZone);
         } else {
-            // If the floors have changed we need to first go through the switch markers
+            // Different floors are a bit tricky - we need to find the closest floor switch marker, calculate the distance to that
+            // and then from that floor marker on the other side, calculate the distance to the pull. Add all up and you got the delay you're looking for
+            $totalIngameDistance =
+                $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($previousKillLocation, $ingameCoordinatesPreviousKillLocation, $previousKillFloor, $floor) +
+                $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($killLocation, $ingameCoordinatesKillLocation, $floor, $previousKillFloor);
 
+            $this->delay = $this->calculateDelayForDistance($totalIngameDistance);
         }
 
-        // @TODO If the previous location was on a different floor
-
         return $this;
+    }
+
+    /**
+     * @param array $killLocation
+     * @param array $ingameCoordinatesKillLocation
+     * @param Floor $floor
+     * @param Floor $targetFloor
+     * @return float
+     */
+    private function calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker(array $killLocation, array $ingameCoordinatesKillLocation, Floor $floor, Floor $targetFloor): float
+    {
+        $result = 0;
+
+        $previousKillFloorClosestDungeonFloorSwitchMarker = $floor->findClosestFloorSwitchMarker(
+            $killLocation['lat'],
+            $killLocation['lng'],
+            $targetFloor->id
+        );
+
+        if ($previousKillFloorClosestDungeonFloorSwitchMarker !== null) {
+            // Calculate the in-game coordinates for the floor switch marker
+            $ingameCoordinatesDungeonFloorSwitchMarker = $floor->calculateIngameLocationForMapLocation(
+                $previousKillFloorClosestDungeonFloorSwitchMarker->lat,
+                $previousKillFloorClosestDungeonFloorSwitchMarker->lng
+            );
+
+            // From the previous kill location to the floor switch
+            $result = MathUtils::distanceBetweenPoints(
+                $ingameCoordinatesKillLocation['x'], $ingameCoordinatesDungeonFloorSwitchMarker['x'],
+                $ingameCoordinatesKillLocation['y'], $ingameCoordinatesDungeonFloorSwitchMarker['y']
+            );
+        } else {
+            dd(sprintf('There is no floor switch marker from %d to %d!', $floor->id, $targetFloor->id));
+        }
+
+        return $result;
     }
 
     /**
@@ -129,6 +178,17 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
         return $this;
     }
+
+    /**
+     * @param float $ingameDistance
+     * @return float
+     */
+    public function calculateDelayForDistance(float $ingameDistance): float
+    {
+        // https://wowpedia.fandom.com/wiki/Movement
+        return $ingameDistance / 7;
+    }
+
 
     /**
      * @return string

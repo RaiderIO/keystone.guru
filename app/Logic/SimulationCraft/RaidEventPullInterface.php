@@ -22,4 +22,10 @@ interface RaidEventPullInterface
      * @return self
      */
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self;
+
+    /**
+     * @param float $ingameDistance
+     * @return float
+     */
+    public function calculateDelayForDistance(float $ingameDistance): float;
 }

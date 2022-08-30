@@ -39,12 +39,12 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
                 continue;
             }
 
-            $killLocation  = $previousKillZone === null ? ['lat' => $dungeonStartIcon->lat, 'lng' => $dungeonStartIcon->lng] : $previousKillZone->getKillLocation();
-            $dominantFloor = $previousKillZone === null ? $dungeonStartIcon->floor : $previousKillZone->getDominantFloor();
+            $previousKillLocation  = $previousKillZone === null ? ['lat' => $dungeonStartIcon->lat, 'lng' => $dungeonStartIcon->lng] : $previousKillZone->getKillLocation();
+            $previousDominantFloor = $previousKillZone === null ? $dungeonStartIcon->floor : $previousKillZone->getDominantFloor();
 
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->options))
-                    ->calculateRaidEventPullEnemies($killZone, $killLocation, $dominantFloor)
+                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation, $previousDominantFloor)
             );
 
             $previousKillZone = $killZone;
