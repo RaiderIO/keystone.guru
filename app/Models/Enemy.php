@@ -41,6 +41,7 @@ class Enemy extends CacheModel
 {
     use Reportable;
 
+    protected $fillable = ['id', 'seasonal_type'];
     public $appends = ['active_auras'];
     public $with = ['npc', 'enemyactiveauras'];
     public $hidden = ['laravel_through_key'];
