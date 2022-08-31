@@ -6,22 +6,22 @@ use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 
-class RaidEventPullEnemy implements RaidEventOutputInterface
+class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
 {
     /** @var SimulationCraftRaidEventsOptions */
     private SimulationCraftRaidEventsOptions $options;
 
-    /** @var string */
-    private string $name;
+    /** @var Enemy */
+    private Enemy $enemy;
 
     /** @var int */
-    private int $health;
+    private int $enemyIndexInPull;
 
     public function __construct(SimulationCraftRaidEventsOptions $options, Enemy $enemy, int $enemyIndexInPull)
     {
-        $this->options = $options;
-        $this->name    = sprintf('%s_%s', $enemy->npc->name, $enemyIndexInPull);
-        $this->health  = $this->calculateHealth($options, $enemy->npc);
+        $this->options          = $options;
+        $this->enemy            = $enemy;
+        $this->enemyIndexInPull = $enemyIndexInPull;
     }
 
     /**
@@ -38,28 +38,21 @@ class RaidEventPullEnemy implements RaidEventOutputInterface
         );
     }
 
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHealth(): int
-    {
-        return $this->health;
-    }
-
     /**
      * @inheritDoc
      */
     public function toString(): string
     {
-        return sprintf('"%s"|%d', $this->name, $this->health);
+        $name = sprintf('%s_%s', $this->enemy->npc->name, $this->enemyIndexInPull);
+
+        if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
+            $name = sprintf('BOUNTY1_%s', $name);
+        } else if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+            $name = sprintf('BOUNTY3_%s', $name);
+        }
+
+        $health = $this->calculateHealth($this->options, $this->enemy->npc);
+
+        return sprintf('"%s"|%d', $name, $health);
     }
 }

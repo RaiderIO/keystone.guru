@@ -71,6 +71,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
             max_time=%s
             enemy="%s"
             enemy_health=999999
+            keystone_bounty=%s
             keystone_level=%d
             keystone_pct_hp=%d
             raid_events=/invulnerable,cooldown=5160,duration=5160,retarget=1
@@ -82,6 +83,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
             $this->options->chaos_brand,
             $this->options->dungeonroute->dungeon->timer_max_seconds,
             $this->options->dungeonroute->title,
+            $this->options->shrouded_bounty_type,
             $this->options->key_level,
             $this->options->hp_percent
         );

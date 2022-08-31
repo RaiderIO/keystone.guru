@@ -93,7 +93,7 @@ class Enemy extends CacheModel
      */
     function enemypack(): BelongsTo
     {
-        return $this->belongsTo('App\Models\EnemyPack', 'enemy_pack_id');
+        return $this->belongsTo(EnemyPack::class, 'enemy_pack_id');
     }
 
     /**
@@ -101,7 +101,7 @@ class Enemy extends CacheModel
      */
     function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
@@ -109,7 +109,7 @@ class Enemy extends CacheModel
      */
     function npc(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Npc');
+        return $this->belongsTo(Npc::class);
     }
 
     /**
@@ -117,6 +117,6 @@ class Enemy extends CacheModel
      */
     function enemyactiveauras(): HasMany
     {
-        return $this->hasMany('App\Models\EnemyActiveAura');
+        return $this->hasMany(EnemyActiveAura::class);
     }
 }
