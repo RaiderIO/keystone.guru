@@ -138,15 +138,12 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
 <div class="form-group row">
     <div class="col">
         <div id="simulate_get_string" class="btn btn-success">
-            <i class="fas fa-atom"></i> Get SimulationCraft string
+            <i class="fas fa-atom"></i> {{ __('views/common.modal.simulate.get_simulationcraft_string') }}
         </div>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="map_mdt_export">
-        {{ __('views/common.modal.simulate.simulationcraft_string') }}
-    </label>
 
     <div class="form-group">
         <div class="simulationcraft_export_loader_container" style="display: none;">
@@ -157,6 +154,9 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
             </div>
         </div>
         <div class="simulationcraft_export_result_container" style="display: none;">
+            <label for="simulationcraft_export_result">
+                {{ __('views/common.modal.simulate.simulationcraft_string') }}
+            </label>
             <textarea id="simulationcraft_export_result" class="w-100" style="height: 400px" readonly></textarea>
         </div>
     </div>

@@ -79,7 +79,6 @@ class CommonMapsMap extends InlineCode {
             this._setupLabelToggle();
 
             // Sharing
-            $('#simulate_get_string').unbind('click').bind('click', this._fetchSimulationCraftString.bind(this));
             $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
 
             // MDT clones button
@@ -518,42 +517,6 @@ class CommonMapsMap extends InlineCode {
             // Update our cookie so that we know upon page refresh
             Cookies.set('hidden_map_object_groups', hiddenMapObjectGroups);
         }
-    }
-
-    /**
-     *
-     * @private
-     */
-    _fetchSimulationCraftString() {
-        $.ajax({
-            type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/simulate`,
-            dataType: 'json',
-            data: {
-                key_level: $('#simulate_key_level').val(),
-                shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
-                affix: $('#simulate_affix').val(),
-                bloodlust: $('#simulate_bloodlust').is(':checked') ? 1 : 0,
-                arcane_intellect: $('#simulate_arcane_intellect').is(':checked') ? 1 : 0,
-                power_word_fortitude: $('#simulate_power_word_fortitude').is(':checked') ? 1 : 0,
-                battle_shout: $('#simulate_battle_shout').is(':checked') ? 1 : 0,
-                mystic_touch: $('#simulate_mystic_touch').is(':checked') ? 1 : 0,
-                chaos_brand: $('#simulate_chaos_brand').is(':checked') ? 1 : 0,
-                skill_loss_percent: $('#simulate_skill_loss_percent').val(),
-                hp_percent: $('#simulate_hp_percent').val(),
-            },
-            beforeSend: function () {
-                $('.simulationcraft_export_loader_container').show();
-                $('.simulationcraft_export_result_container').hide();
-            },
-            success: function (json) {
-                $('#simulationcraft_export_result').val(json.string);
-            },
-            complete: function () {
-                $('.simulationcraft_export_loader_container').hide();
-                $('.simulationcraft_export_result_container').show();
-            }
-        });
     }
 
     /**
