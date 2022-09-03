@@ -6,6 +6,7 @@ use Eloquent;
 
 /**
  * @property $id int
+ * @property $key string
  * @property $name string
  *
  * @mixin Eloquent

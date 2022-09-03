@@ -134,7 +134,7 @@ class PatreonController extends Controller
                 $pledgeData = $responseArray['data']['relationships']['pledges']['data'];
                 foreach ($pledgeData as $key => $item) {
                     /** @var PaidTier $paidTier */
-                    $paidTier = PaidTier::where('name', $key)->first();
+                    $paidTier = PaidTier::where('key', $key)->first();
 
                     // If the tier is found..
                     if ($paidTier !== null) {

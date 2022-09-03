@@ -173,17 +173,17 @@ class User extends Authenticatable
     /**
      * Checks if this user has paid for a certain tier one way or the other.
      *
-     * @param string $name
+     * @param string $key
      * @return bool
      */
-    function hasPaidTier(string $name): bool
+    function hasPaidTier(string $key): bool
     {
         // True for all admins
-        $result = $this->hasRole('admin');
+        $result = false; // $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreondata !== null) {
-            $result = $this->patreondata->paidtiers()->where('paid_tiers.id', PaidTier::ALL[$name])->exists();
+            $result = $this->patreondata->paidtiers()->where('paid_tiers.id', PaidTier::ALL[$key])->exists();
         }
 
         return $result;
@@ -200,7 +200,7 @@ class User extends Authenticatable
         if ($this->hasRole('admin')) {
             $result = collect(array_keys(PaidTier::ALL));
         } else if (isset($this->patreondata)) {
-            $result = $this->patreondata->paidtiers->pluck(['name']);
+            $result = $this->patreondata->paidtiers->pluck(['key']);
         } else {
             $result = collect();
         }
