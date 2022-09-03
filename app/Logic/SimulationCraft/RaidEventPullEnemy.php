@@ -53,6 +53,6 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
 
         $health = $this->calculateHealth($this->options, $this->enemy->npc);
 
-        return sprintf('"%s"|%d', $name, $health);
+        return sprintf('"%s":%d', $name, $health);
     }
 }
