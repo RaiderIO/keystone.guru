@@ -6,8 +6,7 @@
         {{ __('views/profile.edit.patreon') }}
     </h4>
     @isset($user->patreondata)
-        <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank"
-           rel="noopener noreferrer">
+        <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
             {{ __('views/profile.edit.unlink_from_patreon') }}
         </a>
 
@@ -44,9 +43,10 @@
                             ['response_type' => 'code',
                             'client_id' => config('keystoneguru.patreon.oauth.client_id'),
                             'redirect_uri' => route('patreon.link'),
+                            'scope' => config('keystoneguru.patreon.oauth.scope'),
                             'state' => csrf_token()
                             ])
-                        }}" target="_blank" rel="noopener noreferrer">
+                        }}">
             {{ __('views/profile.edit.link_to_patreon') }}
         </a>
 

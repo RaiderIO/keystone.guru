@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\PatreonTier;
-use Art4\JsonApiClient\Document;
+use App\Service\Patreon\PatreonApiServiceInterface;
+use App\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Patreon\API;
 use Patreon\OAuth;
+use Session;
 
 class PatreonController extends Controller
 {
@@ -18,7 +21,7 @@ class PatreonController extends Controller
      * Unlinks the user from Patreon.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function unlink(Request $request)
     {
@@ -30,9 +33,9 @@ class PatreonController extends Controller
             }
 
             $result = redirect()->route('profile.edit');
-            \Session::flash('status', 'Your Patreon account has successfully been unlinked,');
+            Session::flash('status', 'Your Patreon account has successfully been unlinked,');
         } else {
-            \Session::flash('warning', 'You need to be logged in to view this page.');
+            Session::flash('warning', 'You need to be logged in to view this page.');
             $result = redirect()->route('home');
         }
 
@@ -42,9 +45,10 @@ class PatreonController extends Controller
     /**
      * Checks if the incoming request is a save as new request or not.
      * @param Request $request
-     * @return bool
+     * @param PatreonApiServiceInterface $patreonAPIService
+     * @return RedirectResponse
      */
-    public function link(Request $request)
+    public function link(Request $request, PatreonApiServiceInterface $patreonAPIService)
     {
         $state = $request->get('state');
         $code  = $request->get('code');
@@ -65,23 +69,27 @@ class PatreonController extends Controller
              */
             $tokens = $oauth_client->get_tokens($code, $redirect_uri);
             if (!isset($tokens['error'])) {
+                $user = Auth::user();
                 // Save new tokens to database
                 // Delete existing, if any
-                $userId = Auth::user()->id;
-                PatreonData::where('user_id', $userId)->delete();
+                $user->patreondata()->delete();
 
-                $patreonData                = new PatreonData();
-                $patreonData->user_id       = $userId;
-                $patreonData->access_token  = $tokens['access_token'];
-                $patreonData->refresh_token = $tokens['refresh_token'];
-                $patreonData->expires_at    = date('Y-m-d H:i:s', time() + $tokens['expires_in']);
+                $patreonData = PatreonData::create([
+                    'user_id'       => $user->id,
+                    'access_token'  => $tokens['access_token'],
+                    'refresh_token' => $tokens['refresh_token'],
+                    'expires_at'    => date('Y-m-d H:i:s', time() + $tokens['expires_in']),
+                ]);
 
-                $patreonData->save();
+                $patreonApiClient = new API($patreonData->access_token);
+                // Yeah, honestly screw Patreon, their API client is so bad
+                $responseArray = $patreonApiClient->get_data(
+                    'identity?include=memberships,memberships.currently_entitled_tiers&fields' .
+                    urlencode('[user]') . '=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified&fields' .
+                    urlencode('[member]') . '=currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start'
+                );
 
-                $api_client = new API($patreonData->access_token);
-                /** @var Document $patron_response */
-                $patronResponse = $api_client->fetch_user();
-                $responseArray  = $patronResponse->asArray(true);
+                dd($responseArray);
                 /**
                  * array:2 [▼
                  * "data" => array:4 [▼
@@ -125,7 +133,7 @@ class PatreonController extends Controller
                  * ]
                  * ]
                  */
-                $user                            = Auth::user();
+                /** @var User $user */
                 $user->raw_patreon_response_data = json_encode($responseArray);
                 $user->patreon_data_id           = $patreonData->id;
                 $user->save();
@@ -139,10 +147,10 @@ class PatreonController extends Controller
                     // If the tier is found..
                     if ($paidTier !== null) {
                         // Save it in the database; the user now has access to that tier!
-                        $patreonTier                  = new PatreonTier();
-                        $patreonTier->paid_tier_id    = $paidTier->id;
-                        $patreonTier->patreon_data_id = $patreonData->id;
-                        $patreonTier->save();
+                        PatreonTier::create([
+                            'paid_tier_id'    => $paidTier->id,
+                            'patreon_data_id' => $patreonData->id,
+                        ]);
                     }
                 }
 
@@ -159,12 +167,12 @@ class PatreonController extends Controller
                  */
 
                 // Message to the user
-                \Session::flash('status', 'Your Patreon has been linked successfully. Thank you!');
+                Session::flash('status', 'Your Patreon has been linked successfully. Thank you!');
             } else {
-                \Session::flash('warning', 'Your Patreon session has expired. Please try again.');
+                Session::flash('warning', 'Your Patreon session has expired. Please try again.');
             }
         } else {
-            \Session::flash('warning', 'Your session has expired. Please try again.');
+            Session::flash('warning', 'Your session has expired. Please try again.');
         }
 
         return redirect()->route('profile.edit');

@@ -26,6 +26,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $id
  * @property string $public_key
  * @property int $game_server_region_id
+ * @property int $patreon_data_id
  * @property string $timezone
  * @property string $name
  * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
@@ -35,10 +36,12 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string $echo_color
  * @property boolean $echo_anonymous
  * @property string $password
+ * @property string $raw_patreon_response_data
  * @property boolean $legal_agreed
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $changed_username
+ *
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
  *

@@ -32,6 +32,8 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\Patreon\PatreonApiService;
+use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Season\SeasonService;
@@ -95,6 +97,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
         $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
         $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
+        $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
     }
 
     /**

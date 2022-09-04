@@ -18,6 +18,7 @@ use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
+use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
@@ -75,6 +76,9 @@ class Kernel extends ConsoleKernel
         // MDT
         Encode::class,
         Decode::class,
+
+        // Patreon
+        RefreshMembershipStatus::class,
 
         // Release
         GetCurrentRelease::class,

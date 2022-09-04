@@ -301,7 +301,10 @@ return [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
+            // https://docs.patreon.com/#scopes
+            'scope'     => 'identity identity[email] identity.memberships campaigns',
         ],
+        'campaign_id' => env('PATREON_CAMPAIGN_ID')
     ],
 
     'reddit' => [
