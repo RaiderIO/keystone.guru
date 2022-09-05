@@ -182,7 +182,7 @@ class User extends Authenticatable
     function hasPaidTier(string $key): bool
     {
         // True for all admins
-        $result = false; // $this->hasRole('admin');
+        $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreondata !== null) {

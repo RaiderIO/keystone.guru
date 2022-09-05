@@ -2,40 +2,44 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property $id int
  * @property $patreon_data_id int
  * @property $paid_tier_id int
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class PatreonTier extends Model
 {
     protected $fillable = ['patreon_data_id', 'paid_tier_id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function patreondata()
+    function patreondata(): BelongsTo
     {
-        return $this->belongsTo('App\Models\PatreonData');
+        return $this->belongsTo(PatreonData::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function tiers()
+    function tiers(): HasMany
     {
-        return $this->hasMany('App\Models\PatreonTier');
+        return $this->hasMany(PatreonTier::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return BelongsToMany
      */
-    function paidtiers()
+    function paidtiers(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\PaidTier', 'patreon_tiers');
+        return $this->belongsToMany(PaidTier::class, 'patreon_tiers');
     }
 }

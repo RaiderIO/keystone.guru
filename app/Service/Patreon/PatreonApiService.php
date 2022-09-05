@@ -12,15 +12,15 @@ class PatreonApiService implements PatreonApiServiceInterface
     /**
      * @param string $accessToken
      * @return array|null
-     * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{},"id":"2971575","type":"tier"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
+     * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
      */
     public function getCampaignTiersAndBenefits(string $accessToken): ?array
     {
         return $this->getAllData(
             $this->getApiClient($accessToken),
-            sprintf('campaigns/%d?include=tiers,benefits&%s=title',
+            sprintf('campaigns/%d?include=tiers,tiers.benefits&%s=title',
                 config('keystoneguru.patreon.campaign_id'),
-                urlencode('fields[benefits]')
+                urlencode('fields[benefit]')
             )
         );
     }
@@ -32,7 +32,13 @@ class PatreonApiService implements PatreonApiServiceInterface
      */
     public function getCampaignMembers(string $accessToken): ?array
     {
-        return $this->getAllData($this->getApiClient($accessToken), sprintf('campaigns/%d/members?include=currently_entitled_tiers', config('keystoneguru.patreon.campaign_id')));
+        return $this->getAllData(
+            $this->getApiClient($accessToken),
+            sprintf('campaigns/%d/members?include=currently_entitled_tiers&%s=email',
+                config('keystoneguru.patreon.campaign_id'),
+                urlencode('fields[member]')
+            )
+        );
     }
 
 

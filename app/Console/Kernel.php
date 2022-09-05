@@ -129,6 +129,9 @@ class Kernel extends ConsoleKernel
         // https://laravel.com/docs/8.x/telescope#data-pruning
         $schedule->command('telescope:prune --hours=48')->daily();
 
+        // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
+        $schedule->command('patreon:refreshmembers')->hourly();
+
         // We don't want the cache when we're debugging to ensure fresh data every time
         if (!$debug) {
             $schedule->command('discover:cache')->hourly();

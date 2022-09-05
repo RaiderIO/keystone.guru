@@ -5,17 +5,20 @@ namespace App\Models;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $user_id
+ * @property string $email
+ * @property string scope
  * @property string $access_token
  * @property string $refresh_token
+ * @property string $version
  * @property string $expires_at
  *
  * @property User $user
@@ -28,6 +31,7 @@ class PatreonData extends Model
     protected $table = 'patreon_data';
     protected $fillable = [
         'user_id',
+        'email',
         'access_token',
         'refresh_token',
         'expires_at',
@@ -36,11 +40,11 @@ class PatreonData extends Model
     protected $visible = ['paidtiers'];
 
     /**
-     * @return HasOne
+     * @return BelongsTo
      */
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
