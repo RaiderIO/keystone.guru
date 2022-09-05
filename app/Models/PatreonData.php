@@ -32,6 +32,7 @@ class PatreonData extends Model
     protected $fillable = [
         'user_id',
         'email',
+        'scope',
         'access_token',
         'refresh_token',
         'expires_at',

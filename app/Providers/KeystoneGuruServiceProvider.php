@@ -34,6 +34,8 @@ use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
+use App\Service\Patreon\PatreonService;
+use App\Service\Patreon\PatreonServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Season\SeasonService;
@@ -71,6 +73,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Internals
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
+        $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {

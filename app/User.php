@@ -73,7 +73,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'public_key', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
+        'id', 'patreon_data_id', 'public_key', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
     ];
 
     /**
@@ -185,7 +185,7 @@ class User extends Authenticatable
         $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
-        if (!$result && $this->patreondata !== null) {
+        if (!$result && $this->patreondata !== null && isset(PaidTier::ALL[$key])) {
             $result = $this->patreondata->paidtiers()->where('paid_tiers.id', PaidTier::ALL[$key])->exists();
         }
 

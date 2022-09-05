@@ -21,7 +21,7 @@
                     {{ __('views/profile.edit.paid_tier_table.header_active') }}
                 </th>
                 <th>
-                    {{ __('views/profile.edit.paid_tier_table.header_tier') }}
+                    {{ __('views/profile.edit.paid_tier_table.header_benefit') }}
                 </th>
             </tr>
             @foreach(\App\Models\PaidTier::all() as $paidTier)

@@ -12,6 +12,32 @@ class PatreonApiService implements PatreonApiServiceInterface
     /**
      * @param string $accessToken
      * @return array|null
+     */
+    public function getIdentity(string $accessToken): ?array
+    {
+        $identityResponse = $this->getApiClient($accessToken)->get_data(
+            sprintf('identity?include=memberships,memberships.currently_entitled_tiers' .
+                '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified' .
+                '&%s=email,currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start',
+                urlencode('fields[user]'),
+                urlencode('fields[member]')
+            )
+        );
+
+        // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
+        foreach ($identityResponse['included'] as &$included) {
+            if ($included['type'] === 'member') {
+                $included['attributes']['email'] = $identityResponse['data']['attributes']['email'];
+                break;
+            }
+        }
+
+        return $identityResponse;
+    }
+
+    /**
+     * @param string $accessToken
+     * @return array|null
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
      */
     public function getCampaignTiersAndBenefits(string $accessToken): ?array

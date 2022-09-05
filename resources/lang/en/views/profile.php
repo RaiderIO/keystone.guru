@@ -42,8 +42,8 @@ return [
         'link_to_patreon'             => 'Link to Patreon',
         'link_to_patreon_description' => 'In order to claim your Patreon rewards, you need to link your Patreon account',
         'paid_tier_table'             => [
-            'header_active' => 'Active',
-            'header_tier'   => 'Tier',
+            'header_active'  => 'Active',
+            'header_benefit' => 'Benefit',
         ],
 
         'current_password'     => 'Current password',

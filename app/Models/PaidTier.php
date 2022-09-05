@@ -21,7 +21,7 @@ class PaidTier extends CacheModel
 
     public const ALL = [
         self::AD_FREE                 => 1,
-        self::UNLIMITED_DUNGEONROUTES => 2,
+//        self::UNLIMITED_DUNGEONROUTES => 2, // This was removed - it's now active for everyone
         self::UNLISTED_ROUTES         => 3,
         self::ANIMATED_POLYLINES      => 4,
         self::ADVANCED_SIMULATION     => 5,
