@@ -90,7 +90,7 @@ return [
             'driver' => 'custom',
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
             'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level'  => 'debug',
+            'level'  => 'warning',
         ]
     ],
 ];
