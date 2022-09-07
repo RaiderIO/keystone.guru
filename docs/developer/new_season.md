@@ -1,5 +1,8 @@
 # Season
-*
+
+# Front page
+* Update images & references
+* Background image
 
 # Dungeons
 * New dungeon mapping (doh)
