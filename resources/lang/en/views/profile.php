@@ -41,7 +41,7 @@ return [
         'link_to_patreon_success'     => 'Your account is linked to Patreon. Thank you! Your active subscriptions are listed below. Anything missing? Let me know as soon as possible on Discord and I will look into it.',
         'link_to_patreon'             => 'Link to Patreon',
         'link_to_patreon_description' => 'In order to claim your Patreon rewards, you need to link your Patreon account',
-        'paid_tier_table'             => [
+        'patreon_benefit_table'             => [
             'header_active'  => 'Active',
             'header_benefit' => 'Benefit',
         ],

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PatreonData;
+use App\Models\Patreon\PatreonUserLink;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonServiceInterface;
 use App\User;
@@ -23,10 +23,10 @@ class PatreonController extends Controller
     public function unlink(Request $request)
     {
         // If it was linked, delete it
-        Auth::user()->patreondata()->delete();
+        Auth::user()->patreonUserLink->delete();
 
         Session::flash('status', __('controller.patreon.flash.unlink_successful'));
-        return redirect()->route('profile.edit');
+        return redirect()->route('profile.edit', ['#patreon']);
     }
 
     /**
@@ -52,9 +52,9 @@ class PatreonController extends Controller
 
                 // Save new tokens to database
                 // Delete existing patreon data, if any
-                $user->patreondata()->delete();
+                $user->patreonUserLink->delete();
 
-                $patreonDataAttributes = [
+                $patreonUserLinkAttributes = [
                     'user_id'       => $user->id,
                     'scope'         => $tokens['scope'],
                     'access_token'  => $tokens['access_token'],
@@ -66,8 +66,8 @@ class PatreonController extends Controller
                 // Special case for the admin user - since the service needs this account to exist we need to just create
                 // the PatreonData for this user and ignore the paid benefits (admins get everything, anyways)
                 if ($user->id === 1) {
-                    $patreonDataAttributes['email'] = 'admin@app.com';
-                    $this->createPatreonDataForUser($patreonDataAttributes, $user);
+                    $patreonUserLinkAttributes['email'] = 'admin@app.com';
+                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
                 } else {
                     // Fetch info we need to construct the PatreonData object/be able to link paid benefits
                     $campaignBenefits = $patreonService->loadCampaignBenefits($patreonApiService);
@@ -78,8 +78,8 @@ class PatreonController extends Controller
                         return $included['type'] === 'member';
                     })->first();
 
-                    $patreonDataAttributes['email'] = $identityResponse['data']['attributes']['email'];
-                    $this->createPatreonDataForUser($patreonDataAttributes, $user);
+                    $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
+                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
                     // Now that the PatreonData object was created, apply the correct paid benefits to the account
                     $patreonService->applyPaidBenefitsForMember(
@@ -104,18 +104,18 @@ class PatreonController extends Controller
     /**
      * @param array $attributes
      * @param User $user
-     * @return PatreonData
+     * @return PatreonUserLink
      */
-    private function createPatreonDataForUser(array $attributes, User $user): PatreonData
+    private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
     {
         // Create a new PatreonData object and assign it to the user
-        $patreonData = PatreonData::create($attributes);
+        $patreonUserLink = PatreonUserLink::create($attributes);
         $user->update([
-            'patreon_data_id' => $patreonData->id,
+            'patreon_user_link_id' => $patreonUserLink->id,
         ]);
-        $user->patreondata = $patreonData;
+        $user->patreonUserLink = $patreonUserLink;
 
-        return $patreonData;
+        return $patreonUserLink;
     }
 
     /**

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GameServerRegionsSeeder::class);
         $this->call(ExpansionsSeeder::class);
         $this->call(RouteAttributesSeeder::class);
-        $this->call(PaidTiersSeeder::class);
+        $this->call(PatreonBenefitsSeeder::class);
         $this->call(FactionsSeeder::class);
         $this->call(NpcClassificationsSeeder::class);
         $this->call(NpcClassesSeeder::class);

@@ -27,7 +27,7 @@ class StateManager extends Signalable {
         // List of static arrays
         this.mapIconTypes = [];
         this.classColors = [];
-        this.paidTiers = [];
+        this.patreonBenefits = [];
 
         this.snackbarIds = [];
         this.snackbarsAdded = 0;
@@ -93,10 +93,10 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param paidTiers
+     * @param patreonBenefits
      */
-    setPaidTiers(paidTiers) {
-        this.paidTiers = paidTiers;
+    setPatreonBenefits(patreonBenefits) {
+        this.patreonBenefits = patreonBenefits;
     }
 
     /**
@@ -426,14 +426,14 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Checks if the paid tier is enabled for the user or not.
+     * Checks if the patren benefit is enabled for the user or not.
      * @returns {boolean}
      */
-    hasPaidTier(paidTier) {
+    hasPatreonBenefit(patreonBenefit) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         let result = false;
-        for (let i = 0; i < this.paidTiers.length; i++) {
-            if (this.paidTiers[i] === paidTier) {
+        for (let i = 0; i < this.patreonBenefits.length; i++) {
+            if (this.patreonBenefits[i] === patreonBenefit) {
                 result = true;
                 break;
             }

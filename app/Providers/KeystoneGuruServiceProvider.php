@@ -8,7 +8,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
-use App\Models\PaidTier;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Season;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
@@ -142,7 +142,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
 
             if ($adFree === null) {
-                $adFree = Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE);
+                $adFree = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::AD_FREE);
             }
 
 

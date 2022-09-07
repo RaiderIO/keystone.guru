@@ -5,7 +5,7 @@
     <h4>
         {{ __('views/profile.edit.patreon') }}
     </h4>
-    @isset($user->patreondata)
+    @isset($user->patreonUserLink)
         <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
             {{ __('views/profile.edit.unlink_from_patreon') }}
         </a>
@@ -18,20 +18,20 @@
         <table class="default_table table-striped">
             <tr>
                 <th class="pl-1">
-                    {{ __('views/profile.edit.paid_tier_table.header_active') }}
+                    {{ __('views/profile.edit.patreon_benefit_table.header_active') }}
                 </th>
                 <th>
-                    {{ __('views/profile.edit.paid_tier_table.header_benefit') }}
+                    {{ __('views/profile.edit.patreon_benefit_table.header_benefit') }}
                 </th>
             </tr>
-            @foreach(\App\Models\PaidTier::all() as $paidTier)
-                    <?php /** @var $paidTier \App\Models\PaidTier */ ?>
+            @foreach(\App\Models\Patreon\PatreonBenefit::all() as $patreonBenefit)
+                    <?php /** @var $patreonBenefit \App\Models\Patreon\PatreonBenefit */ ?>
                 <tr>
                     <td class="pl-1">
-                        <i class="fas fa-{{ $user->hasPaidTier($paidTier->key) ? 'check-circle text-success' : 'times-circle text-danger' }}"></i>
+                        <i class="fas fa-{{ $user->hasPatreonBenefit($patreonBenefit->key) ? 'check-circle text-success' : 'times-circle text-danger' }}"></i>
                     </td>
                     <td>
-                        {{ __($paidTier->name) }}
+                        {{ __($patreonBenefit->name) }}
                     </td>
                 </tr>
             @endforeach

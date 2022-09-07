@@ -130,7 +130,7 @@ function polylineDefaultColor() {
 }
 
 let c = {
-    paidtiers: {
+    patreonbenefits: {
         ad_free: 'ad-free',
         unlimited_dungeonroutes: 'unlimited-dungeonroutes',
         unlimited_routes: 'unlimited-routes',

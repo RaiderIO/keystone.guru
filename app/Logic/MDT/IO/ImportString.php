@@ -27,8 +27,8 @@ use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\NpcClassification;
-use App\Models\PaidTier;
 use App\Models\Path;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
@@ -137,7 +137,7 @@ class ImportString extends MDTBase
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
-                        $hasAnimatedLines = Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES);
+                        $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
                         $polyLine = new Polyline([
                             'model_id'       => -1,

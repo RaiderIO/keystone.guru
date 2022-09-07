@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Patreon;
 
+use App\Models\CacheModel;
 use Eloquent;
 
 /**
@@ -11,7 +12,7 @@ use Eloquent;
  *
  * @mixin Eloquent
  */
-class PaidTier extends CacheModel
+class PatreonBenefit extends CacheModel
 {
     public const AD_FREE                 = 'ad-free';
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';
@@ -30,7 +31,7 @@ class PaidTier extends CacheModel
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'name',
+        'id', 'key', 'name',
     ];
 
     protected $hidden = ['pivot'];

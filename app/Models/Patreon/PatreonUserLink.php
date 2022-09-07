@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Patreon;
 
 use App\User;
 use Eloquent;
@@ -22,23 +22,23 @@ use Illuminate\Support\Collection;
  * @property string $expires_at
  *
  * @property User $user
- * @property Collection|PaidTier[] $paidtiers
+ * @property Collection|PatreonBenefit[] $patreonbenefits
  *
  * @mixin Eloquent
  */
-class PatreonData extends Model
+class PatreonUserLink extends Model
 {
-    protected $table = 'patreon_data';
     protected $fillable = [
         'user_id',
         'email',
         'scope',
         'access_token',
         'refresh_token',
+        'version',
         'expires_at',
     ];
-    protected $with = ['paidtiers'];
-    protected $visible = ['paidtiers'];
+    protected $with = ['patreonbenefits'];
+    protected $visible = ['patreonbenefits'];
 
     /**
      * @return BelongsTo
@@ -51,17 +51,17 @@ class PatreonData extends Model
     /**
      * @return HasMany
      */
-    public function tiers(): HasMany
+    public function patreonuserbenefits(): HasMany
     {
-        return $this->hasMany(PatreonTier::class);
+        return $this->hasMany(PatreonUserBenefit::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    public function paidtiers(): BelongsToMany
+    public function patreonbenefits(): BelongsToMany
     {
-        return $this->belongsToMany(PaidTier::class, 'patreon_tiers');
+        return $this->belongsToMany(PatreonBenefit::class, 'patreon_user_benefits');
     }
 
     /**
@@ -77,8 +77,8 @@ class PatreonData extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function (PatreonData $item) {
-            $item->tiers()->delete();
+        static::deleting(function (PatreonUserLink $item) {
+            $item->patreonuserbenefits()->delete();
         });
     }
 }

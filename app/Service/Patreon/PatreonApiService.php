@@ -24,11 +24,13 @@ class PatreonApiService implements PatreonApiServiceInterface
             )
         );
 
-        // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
-        foreach ($identityResponse['included'] as &$included) {
-            if ($included['type'] === 'member') {
-                $included['attributes']['email'] = $identityResponse['data']['attributes']['email'];
-                break;
+        if (!isset($identityResponse['errors'])) {
+            // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
+            foreach ($identityResponse['included'] as &$included) {
+                if ($included['type'] === 'member') {
+                    $included['attributes']['email'] = $identityResponse['data']['attributes']['email'];
+                    break;
+                }
             }
         }
 

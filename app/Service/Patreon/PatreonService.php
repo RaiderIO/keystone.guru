@@ -2,9 +2,9 @@
 
 namespace App\Service\Patreon;
 
-use App\Models\PaidTier;
-use App\Models\PatreonData;
-use App\Models\PatreonTier;
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserLink;
+use App\Models\Patreon\PatreonUserBenefit;
 use App\User;
 
 class PatreonService implements PatreonServiceInterface
@@ -23,7 +23,7 @@ class PatreonService implements PatreonServiceInterface
         }
 
         // Fetch the tiers and benefits of a campaign
-        $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreondata->access_token);
+        $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
         if (isset($tiersAndBenefitsResponse['errors'])) {
             logger()->error('Error retrieving tiers!');
             logger()->warning(json_encode($tiersAndBenefitsResponse));
@@ -46,7 +46,7 @@ class PatreonService implements PatreonServiceInterface
         }
 
         // Fetch the tiers and benefits of a campaign
-        $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreondata->access_token);
+        $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
         if (isset($tiersAndBenefitsResponse['errors'])) {
             logger()->error('Error retrieving tiers!');
             logger()->warning(json_encode($tiersAndBenefitsResponse));
@@ -69,7 +69,7 @@ class PatreonService implements PatreonServiceInterface
         }
 
         // Now that we have a valid token - perform the members request
-        $membersResponse = $patreonApiService->getCampaignMembers($adminUser->patreondata->access_token);
+        $membersResponse = $patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
         if (isset($membersResponse['errors'])) {
             logger()->error('Error retrieving members!');
             logger()->warning(json_encode($membersResponse));
@@ -98,15 +98,15 @@ class PatreonService implements PatreonServiceInterface
             return false;
         }
 
-        /** @var PatreonData $patreonData */
-        $patreonData = PatreonData::with(['user'])->where('email', $memberEmail)->first();
+        /** @var PatreonUserLink $patreonUserLink */
+        $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
 
-        if ($patreonData === null) {
+        if ($patreonUserLink === null) {
             logger()->debug(sprintf('Unable to find patreon data for e-mail %s', $memberEmail));
             return false;
         }
 
-        $user = $patreonData->user;
+        $user = $patreonUserLink->user;
         if ($user === null) {
             logger()->debug(sprintf('Unable to find user %s - user account may have deleted or e-mail changed', $memberEmail));
             return false;
@@ -123,28 +123,28 @@ class PatreonService implements PatreonServiceInterface
         // If the user has no benefits (maybe user unsubbed or didn't pay up)
         if ($newBenefits->isEmpty()) {
             // Remove all their tiers
-            $user->patreondata->tiers()->delete();
+            $user->patreonUserLink->patreonuserbenefits()->delete();
         } else {
-            // Update the paid tiers to their new status
+            // Update the patreon benefits to their new status
             foreach ($newBenefits as $benefit) {
-                if (!$user->hasPaidTier($benefit)) {
-                    PatreonTier::create([
-                        'patreon_data_id' => $user->patreon_data_id,
-                        'paid_tier_id'    => PaidTier::ALL[$benefit],
+                if (!$user->hasPatreonBenefit($benefit)) {
+                    PatreonUserBenefit::create([
+                        'patreon_user_link_id' => $user->patreon_user_link_id,
+                        'patreon_benefit_id'   => PatreonBenefit::ALL[$benefit],
                     ]);
-                    logger()->debug(sprintf('Created new paid tier %s for user %s', $benefit, $user->email));
+                    logger()->debug(sprintf('Created new patreon benefit %s for user %s', $benefit, $user->email));
                 }
             }
 
-            // Check if any paid tiers were removed, if so delete them
-            $removedBenefits = $user->getPaidTiers()->diff($newBenefits);
+            // Check if any patreon benefits were removed, if so delete them
+            $removedBenefits = $user->getPatreonBenefits()->diff($newBenefits);
             if ($removedBenefits->isNotEmpty()) {
                 foreach ($removedBenefits as $removedBenefit) {
-                    PatreonTier::where('patreon_data_id', $user->patreon_data_id)
-                        ->where('paid_tier_id', PaidTier::ALL[$removedBenefit])
+                    PatreonUserBenefit::where('patreon_user_link_id', $user->patreon_user_link_id)
+                        ->where('patreon_benefit_id', PatreonBenefit::ALL[$removedBenefit])
                         ->delete();
 
-                    logger()->debug(sprintf('Removed revoked paid tier %s for user %s', $removedBenefit, $user->email));
+                    logger()->debug(sprintf('Removed revoked patreon benefit %s for user %s', $removedBenefit, $user->email));
                 }
             }
         }
@@ -172,22 +172,22 @@ class PatreonService implements PatreonServiceInterface
         }
 
         // Check if admin was setup correctly
-        $adminUser->load(['patreondata']);
-        if ($adminUser->patreondata === null) {
+        $adminUser->load(['patreonUserLink']);
+        if ($adminUser->patreonUserLink === null) {
             logger()->error('Unable to refresh members - admin\'s Patreon data was not set! Login as admin and link the Patreon account');
             return null;
         }
 
         // Check if token is expired, if so refresh it
-        if ($adminUser->patreondata->isExpired()) {
+        if ($adminUser->patreonUserLink->isExpired()) {
             logger()->info('Admin tokens have expired!');
-            $tokens = $patreonApiService->getAccessTokenFromRefreshToken($adminUser->patreondata->refresh_token);
+            $tokens = $patreonApiService->getAccessTokenFromRefreshToken($adminUser->patreonUserLink->refresh_token);
 
             if (isset($tokens['errors'])) {
                 logger()->error('Unable to refresh expired access_token!');
                 return null;
             } else {
-                $adminUser->patreondata->update([
+                $adminUser->patreonUserLink->update([
                     'access_token'  => $tokens['access_token'],
                     'refresh_token' => $tokens['refresh_token'],
                     'expires_at'    => date('Y-m-d H:i:s', time() + $tokens['expires_in']),

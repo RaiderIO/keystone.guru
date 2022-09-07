@@ -394,7 +394,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::post('/tools/mdt/diff/apply', [AdminToolsController::class, 'applychange']);
 
-            Route::put('/user/{user}/patreon/paidtier', [UserController::class, 'storepaidtiers']);
+            Route::put('/user/{user}/patreon/benefits', [UserController::class, 'storePatreonBenefits']);
         });
 
         // May be performed without being logged in (sandbox functionality)

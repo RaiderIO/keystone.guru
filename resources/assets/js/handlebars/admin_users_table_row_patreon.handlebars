@@ -1,6 +1,6 @@
-<select class="form-control selectpicker patreon_paid_tiers" multiple="multiple" data-selected-text-format="count > 1"
-        data-count-selected-text="{0} paid tiers" data-userid="{{id}}" name="patreon_paid_tiers" tabindex="null">
-    {{#each paidtiers}}
+<select class="form-control selectpicker patreon_benefits" multiple="multiple" data-selected-text-format="count > 1"
+        data-count-selected-text="{0} patreon benefits" data-userid="{{id}}" name="patreon_benefits" tabindex="null">
+    {{#each patreonbenefits}}
         <option value="{{id}}"
             {{#if selected}}
                 selected="selected"

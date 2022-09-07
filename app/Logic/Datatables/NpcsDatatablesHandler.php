@@ -14,7 +14,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
 {
     protected function calculateRecordsTotal(): int
     {
-        $query = $this->_builder->getQuery()
+        $query = $this->builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *'));
 

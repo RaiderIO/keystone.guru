@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Patreon\PatreonBenefit;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -55,7 +56,7 @@ class PublishedState extends CacheModel
         $result->push(PublishedState::TEAM);
 
 
-        if ($user !== null && $user->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
+        if ($user !== null && $user->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES)) {
             $result->push(PublishedState::WORLD_WITH_LINK);
         }
 
