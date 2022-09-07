@@ -22,21 +22,11 @@ class PatreonController extends Controller
      */
     public function unlink(Request $request)
     {
-        $user = Auth::user();
-        if ($user !== null) {
-            // If it was linked, delete it
-            if ($user->patreondata !== null) {
-                $user->patreondata->delete();
-            }
+        // If it was linked, delete it
+        Auth::user()->patreondata()->delete();
 
-            $result = redirect()->route('profile.edit');
-            Session::flash('status', 'Your Patreon account has successfully been unlinked,');
-        } else {
-            Session::flash('warning', 'You need to be logged in to view this page.');
-            $result = redirect()->route('home');
-        }
-
-        return $result;
+        Session::flash('status', __('controller.patreon.flash.unlink_successful'));
+        return redirect()->route('profile.edit');
     }
 
     /**
@@ -100,12 +90,12 @@ class PatreonController extends Controller
                 }
 
                 // Message to the user
-                Session::flash('status', 'Your Patreon has been linked successfully. Thank you!');
+                Session::flash('status', __('controller.patreon.flash.link_successful'));
             } else {
-                Session::flash('warning', 'Your Patreon session has expired. Please try again.');
+                Session::flash('warning', __('controller.patreon.flash.patreon_session_expired'));
             }
         } else {
-            Session::flash('warning', 'Your session has expired. Please try again.');
+            Session::flash('warning', __('controller.patreon.flash.session_expired'));
         }
 
         return redirect()->route('profile.edit', ['#patreon']);

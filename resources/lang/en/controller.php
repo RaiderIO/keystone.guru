@@ -102,6 +102,14 @@ return [
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
         ],
     ],
+    'patreon'              => [
+        'flash' => [
+            'unlink_successful'       => 'Your Patreon account has successfully been unlinked.',
+            'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
+            'patreon_session_expired' => 'Your Patreon session has expired. Please try again.',
+            'session_expired'         => 'Your session has expired. Please try again.',
+        ],
+    ],
     'profile'              => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',

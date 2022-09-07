@@ -91,6 +91,10 @@ return [
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
             'via'    => MarvinLabs\DiscordLogger\Logger::class,
             'level'  => 'warning',
+//            'formatter' => Monolog\Formatter\LineFormatter::class,
+//            'formatter_with' => [
+//                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
+//            ],
         ]
     ],
 ];

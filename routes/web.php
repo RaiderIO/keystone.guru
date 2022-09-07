@@ -107,7 +107,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     Route::post('new/mdtimport', [MDTImportController::class, 'import'])->name('dungeonroute.new.mdtimport');
 
-    Route::get('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
     Route::get('patreon-link', [PatreonController::class, 'link'])->name('patreon.link');
     Route::get('patreon-oauth', [PatreonController::class, 'oauth_redirect'])->name('patreon.oauth.redirect');
 
@@ -187,6 +186,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     });
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        Route::get('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
+
         // Profile routes
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
