@@ -167,20 +167,10 @@ foreach ($team->teamusers as $teamuser) {
                 {{ __('views/team.edit.members') }}
             </h4>
             <div class="form-group">
-                <div class="row">
-                    @if(!isAlertDismissed('team-invite-info'))
-                        <div class="col">
-                            <div class="alert alert-info alert-dismissible">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close"
-                                   data-alert-dismiss-id="team-invite-info">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                                <i class="fas fa-info-circle"></i>
-                                {{ __('views/team.edit.invite_code_share_warning') }}
-                            </div>
-                        </div>
-                    @endif
-                </div>
+                @component('common.general.alert', ['type' => 'info', 'name' => 'team-invite-info'])
+                    {{ __('views/team.edit.invite_code_share_warning') }}
+                @endcomponent
+
                 <div class="row">
                     <div class="col-xl-6">
                         {!! Form::label('team_members_invite_link', __('views/team.edit.invite_new_members'), [], false) !!}

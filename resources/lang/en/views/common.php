@@ -337,7 +337,7 @@ return [
         ],
     ],
     'modal'        => [
-        'userreport'    => [
+        'userreport'      => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -355,22 +355,22 @@ return [
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute'   => [
+        'createroute'     => [
             'create_route'           => 'Create route',
             'create_temporary_route' => 'Create temporary route',
             'import_from_mdt'        => 'Import from MDT',
         ],
-        'legal'         => [
+        'legal'           => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'routesettings' => [
+        'routesettings'   => [
             'title' => 'Route settings',
         ],
-        'share'         => [
+        'share'           => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
@@ -384,10 +384,14 @@ return [
             'loading'                          => 'Loading...',
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
-        'simulate'      => [
+        'simulate'        => [
+            'intro'                      => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would!',
             'title'                      => 'Simulate route',
             'key_level'                  => 'Key level',
+            'key_level_title'            => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
             'shrouded_bounty_type'       => 'Shrouded bounty',
+            'shrouded_bounty_type_title' => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
             'shrouded_bounty_types'      => [
                 'crit'    => 'Crit',
                 'haste'   => 'Haste',
@@ -395,6 +399,7 @@ return [
                 'vers'    => 'Versatility',
             ],
             'affix'                      => 'Affix',
+            'affix_title'                => 'Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
             'affixes'                    => [
                 'fortified'  => 'Fortified',
                 'tyrannical' => 'Tyrannical',
@@ -406,11 +411,21 @@ return [
             'mystic_touch'               => 'Mystic Touch',
             'chaos_brand'                => 'Chaos Brand',
             'skill_loss_percent'         => 'Skill loss percentage',
+            'skill_loss_percent_title'   => 'The percentage that you\'re not playing optimally because you\'re not a robot. 20% means that you will perform 80% as good as you in theory can.
+                You may want to lower/increase this number based on your skill, but 20% is a good start.',
             'hp_percent'                 => 'HP percentage',
+            'hp_percent_title'           => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
             'get_simulationcraft_string' => 'Get SimulationCraft string',
             'simulationcraft_string'     => 'Simulationcraft string',
             'loading'                    => 'Loading...',
             'copy_to_clipboard'          => 'Copy to clipboard',
+        ],
+        'simulateoptions' => [
+            'advanced' => [
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
+                'advanced_options'  => 'Advanced options',
+            ],
         ],
     ],
     'release'      => [

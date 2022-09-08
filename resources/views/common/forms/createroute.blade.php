@@ -91,7 +91,7 @@ $dungeonSelectId = 'dungeon_id_select';
     <div class="form-group">
         <div id="create_route">
             <div class="card">
-                <div class="card-header" id="create_route_heading">
+                <div class="card-header" id="create_route_advanced_heading">
                     <h5 class="mb-0">
                         <a href="#" class="btn btn-link" data-toggle="collapse"
                            data-target="#create_route_advanced_collapse"
@@ -101,7 +101,7 @@ $dungeonSelectId = 'dungeon_id_select';
                     </h5>
                 </div>
 
-                <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_heading"
+                <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_advanced_heading"
                      data-parent="#create_route">
                     <div class="card-body">
 
