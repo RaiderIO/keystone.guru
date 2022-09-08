@@ -23,7 +23,7 @@ class PatreonController extends Controller
     public function unlink(Request $request)
     {
         // If it was linked, delete it
-        Auth::user()->patreonUserLink->delete();
+        optional(Auth::user()->patreonUserLink)->delete();
 
         Session::flash('status', __('controller.patreon.flash.unlink_successful'));
         return redirect()->route('profile.edit', ['#patreon']);
@@ -52,7 +52,7 @@ class PatreonController extends Controller
 
                 // Save new tokens to database
                 // Delete existing patreon data, if any
-                $user->patreonUserLink->delete();
+                optional($user->patreonUserLink)->delete();
 
                 $patreonUserLinkAttributes = [
                     'user_id'       => $user->id,
