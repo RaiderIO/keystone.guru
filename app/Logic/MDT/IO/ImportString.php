@@ -545,10 +545,21 @@ class ImportString extends MDTBase
                     }
 
                     // Get the proper index of the floor, validated for length
-                    $floorIndex = ((int)$details[2]) - 1;
-                    $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
+                    $mdtSubLevel = ((int)$details[2]);
+                    $mdtSubLevel = ($mdtSubLevel < $floors->count() ? $mdtSubLevel : 0);
+
                     /** @var Floor $floor */
-                    $floor = ($floors->all())[$floorIndex];
+                    $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
+                        return ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel;
+                    });
+
+                    if ($floor === null) {
+                        throw new ImportWarning(
+                            sprintf(__('logic.mdt.io.import_string.category.object'), $objectIndex),
+                            sprintf(__('logic.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
+                            ['details' => __('logic.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
+                        );
+                    }
 
                     // Only if shown/visible
                     if ($details[3]) {
