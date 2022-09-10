@@ -634,9 +634,9 @@ class ImportString extends MDTBase
                         }
                         // Triangles (t = triangle)
                         // MethodDungeonTools.lua:2554
-                        else if (isset($object['t']) && $object['t']) {
+                        // else if (isset($object['t']) && $object['t']) {
 
-                        }
+                        // }
                     }
                 } catch (ImportWarning $warning) {
                     $warnings->push($warning);
@@ -745,10 +745,11 @@ class ImportString extends MDTBase
         // Re-calculate the enemy forces
         if ($save) {
             $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
-        } else {
+        }
+        // else {
             // Do not do this - the enemy_forces are incremented while creating the route
             // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
-        }
+        // }
 
         return $dungeonRoute;
     }

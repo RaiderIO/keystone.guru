@@ -4,8 +4,10 @@ namespace App\Models\SimulationCraft;
 
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
 use App\Models\DungeonRoute;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\GeneratesPublicKey;
 use App\User;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -25,6 +27,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $chaos_brand
  * @property float $skill_loss_percent
  * @property float $hp_percent
+ * @property float $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
+ * don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
+ * @property bool $use_mounts Premium: yes to enable mount usage to further reduce delay between pulls
  *
  * @property DungeonRoute $dungeonroute
  *
@@ -49,6 +54,8 @@ class SimulationCraftRaidEventsOptions extends Model
         'chaos_brand',
         'skill_loss_percent',
         'hp_percent',
+        'ranged_pull_compensation_yards',
+        'use_mounts',
     ];
     protected $with = ['dungeonroute'];
 
@@ -96,9 +103,11 @@ class SimulationCraftRaidEventsOptions extends Model
     public static function fromRequest(APISimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
     {
         $result               = new SimulationCraftRaidEventsOptions(array_merge($request->validated(), [
-            'public_key'       => 'asdfasdf', // self::generateRandomPublicKey(),
-            'user_id'          => \Auth::id(),
-            'dungeon_route_id' => $dungeonRoute->id,
+            'public_key'                     => 'asdfasdf', // self::generateRandomPublicKey(),
+            'user_id'                        => Auth::id(),
+            'dungeon_route_id'               => $dungeonRoute->id,
+            // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
+            'ranged_pull_compensation_yards' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION) ? (int)$request->get('ranged_pull_compensation_yards') : 0,
         ]));
         $result->dungeonroute = $dungeonRoute;
         return $result;

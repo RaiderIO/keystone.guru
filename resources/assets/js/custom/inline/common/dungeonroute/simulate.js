@@ -5,6 +5,8 @@ class CommonDungeonrouteSimulate extends InlineCode {
     activate() {
         super.activate();
 
+        this._initialized = false;
+
         // Copy to clipboard functionality
         $('.copy_simulationcraft_string_to_clipboard').unbind('click').bind('click', function () {
             let $exportResult = $('#mdt_export_result');
@@ -39,6 +41,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             chaos_brand: $('#simulate_chaos_brand').is(':checked') ? 1 : 0,
             skill_loss_percent: $('#simulate_skill_loss_percent').val(),
             hp_percent: $('#simulate_hp_percent').val(),
+            ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val()
         };
     }
 
@@ -79,6 +82,10 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _simulateModalOpened() {
+        if (this._initialized) {
+            return;
+        }
+
         let self = this;
 
         let $keyLevelSlider = $('#simulate_key_level')
@@ -107,6 +114,17 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 min: 0,
                 max: 100
             });
+
+        let $rangedPullCompensationYards = $('#simulate_ranged_pull_compensation_yards')
+            .ionRangeSlider({
+                grid: true,
+                grid_snap: true,
+                type: 'single',
+                min: 0,
+                max: 50
+            });
+
+        this._initialized = true;
     }
 
     /**

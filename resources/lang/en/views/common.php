@@ -385,40 +385,48 @@ return [
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
         'simulate'        => [
-            'intro'                      => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+            'intro'                                => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
                 generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would!',
-            'title'                      => 'Simulate route',
-            'key_level'                  => 'Key level',
-            'key_level_title'            => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
-            'shrouded_bounty_type'       => 'Shrouded bounty',
-            'shrouded_bounty_type_title' => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
-            'shrouded_bounty_types'      => [
+            'title'                                => 'Simulate route',
+            'key_level'                            => 'Key level',
+            'key_level_title'                      => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+            'shrouded_bounty_type'                 => 'Shrouded bounty',
+            'shrouded_bounty_type_title'           => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
+            'shrouded_bounty_types'                => [
                 'crit'    => 'Crit',
                 'haste'   => 'Haste',
                 'mastery' => 'Mastery',
                 'vers'    => 'Versatility',
             ],
-            'affix'                      => 'Affix',
-            'affix_title'                => 'Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
-            'affixes'                    => [
+            'affix'                                => 'Affix',
+            'affix_title'                          => 'Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
+            'affixes'                              => [
                 'fortified'  => 'Fortified',
                 'tyrannical' => 'Tyrannical',
             ],
-            'bloodlust'                  => 'Bloodlust',
-            'arcane_intellect'           => 'Arcane Intellect',
-            'power_word_fortitude'       => 'PW: Fortitude',
-            'battle_shout'               => 'Battle Shout',
-            'mystic_touch'               => 'Mystic Touch',
-            'chaos_brand'                => 'Chaos Brand',
-            'skill_loss_percent'         => 'Skill loss percentage',
-            'skill_loss_percent_title'   => 'The percentage that you\'re not playing optimally because you\'re not a robot. 20% means that you will perform 80% as good as you in theory can.
+            'bloodlust'                            => 'Bloodlust',
+            'arcane_intellect'                     => 'Arcane Intellect',
+            'power_word_fortitude'                 => 'PW: Fortitude',
+            'battle_shout'                         => 'Battle Shout',
+            'mystic_touch'                         => 'Mystic Touch',
+            'chaos_brand'                          => 'Chaos Brand',
+            'skill_loss_percent'                   => 'Skill loss percentage',
+            'skill_loss_percent_title'             => 'The percentage that you\'re not playing optimally because you\'re not a robot. 20% means that you will perform 80% as good as you in theory can.
                 You may want to lower/increase this number based on your skill, but 20% is a good start.',
-            'hp_percent'                 => 'HP percentage',
-            'hp_percent_title'           => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-            'get_simulationcraft_string' => 'Get SimulationCraft string',
-            'simulationcraft_string'     => 'Simulationcraft string',
-            'loading'                    => 'Loading...',
-            'copy_to_clipboard'          => 'Copy to clipboard',
+            'hp_percent'                           => 'HP percentage',
+            'hp_percent_title'                     => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+            'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
+            'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
+                you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
+                and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
+                max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
+                unless you\'re literally chain pulling with no down time in between.',
+            'use_mounts'                           => 'Use mounts',
+            'use_mounts_title'                     => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull',
+            'get_simulationcraft_string'           => 'Get SimulationCraft string',
+            'simulationcraft_string'               => 'Simulationcraft string',
+            'loading'                              => 'Loading...',
+            'copy_to_clipboard'                    => 'Copy to clipboard',
         ],
         'simulateoptions' => [
             'advanced' => [

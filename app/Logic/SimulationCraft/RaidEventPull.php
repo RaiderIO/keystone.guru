@@ -126,7 +126,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $ingameCoordinatesPreviousKillLocation['y'], $ingameCoordinatesKillLocation['y']
             );
 
-            $result = $this->calculateDelayForDistance($ingameDistanceToNewKillZone);
+            $result = $this->calculateDelayForDistance($ingameDistanceToNewKillZone - $this->options->ranged_pull_compensation_yards);
         } else {
             // Different floors are a bit tricky - we need to find the closest floor switch marker, calculate the distance to that
             // and then from that floor marker on the other side, calculate the distance to the pull. Add all up and you got the delay you're looking for
@@ -134,7 +134,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($previousKillLocation, $ingameCoordinatesPreviousKillLocation, $previousKillFloor, $floor) +
                 $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($killLocation, $ingameCoordinatesKillLocation, $floor, $previousKillFloor);
 
-            $result = $this->calculateDelayForDistance($totalIngameDistance);
+            $result = $this->calculateDelayForDistance($totalIngameDistance - $this->options->ranged_pull_compensation_yards);
         }
 
         return $result;
@@ -195,7 +195,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      */
     public function calculateDelayForDistance(float $ingameDistance): float
     {
-        return $ingameDistance / config('keystoneguru.character.default_movement_speed_yards_second');
+        return max(0, $ingameDistance) / config('keystoneguru.character.default_movement_speed_yards_second');
     }
 
 

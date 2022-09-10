@@ -1,5 +1,5 @@
 <?php
-$hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::ADVANCED_SIMULATION);
+$hasAdvancedSimulation = false; // Auth::check() && Auth::user()->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::ADVANCED_SIMULATION);
 ?>
 <div class="form-group">
     <div id="simulate_route">
@@ -24,7 +24,43 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                                      ]) !!}
                     @endcomponent
 
-                    Content!
+
+                    <div class="form-group">
+                        <label for="simulate_hp_percent">
+                            {{ __('views/common.modal.simulate.ranged_pull_compensation_yards') }}
+                            <i class="fas fa-info-circle" data-toggle="tooltip"
+                               title="{{ __('views/common.modal.simulate.ranged_pull_compensation_yards_title') }}"></i>
+                        </label>
+                        <div class="row">
+                            <div class="col">
+                                {!! Form::text('simulate_ranged_pull_compensation_yards', '20', [
+                                         'id' => 'simulate_ranged_pull_compensation_yards',
+                                         'class' => 'form-control',
+                                         // http://ionden.com/a/plugins/ion.rangeSlider/api.html#a_ui
+                                         'data-block' => $hasAdvancedSimulation ? 'false' : 'true',
+                                         $hasAdvancedSimulation ? '' : 'readonly',
+                                         ]) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="simulate_use_mounts">
+                            {{ __('views/common.modal.simulate.use_mounts') }}
+                            <i class="fas fa-info-circle" data-toggle="tooltip"
+                               title="{{ __('views/common.modal.simulate.use_mounts_title') }}"></i>
+                        </label>
+                        <div class="row">
+                            <div class="col">
+                                {!! Form::checkbox('simulate_use_mounts', 1, true, [
+                                             'id' => 'simulate_use_mounts',
+                                             'class' => 'form-control left_checkbox',
+                                             $hasAdvancedSimulation ? '' : 'disabled',
+                                             ]) !!}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
