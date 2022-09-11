@@ -11,6 +11,7 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\MapIcon;
+use App\Models\MountableArea;
 use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
@@ -250,7 +251,8 @@ class Save extends Command
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
                 // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
                 $dungeonFloorSwitchMarkers->makeHidden(['direction']);
-                $mapIcons = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
+                $mapIcons       = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
+                $mountableAreas = MountableArea::where('floor_id', $floor->id)->get()->values();
                 // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
                 // at the end of the table instead.
                 $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
@@ -260,6 +262,7 @@ class Save extends Command
                 $result['enemy_patrols']                = $enemyPatrols;
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
                 $result['map_icons']                    = $mapIcons;
+                $result['mountable_areas']              = $mountableAreas;
 
                 foreach ($result as $category => $categoryData) {
                     // Save enemies, packs, patrols, markers on a per-floor basis

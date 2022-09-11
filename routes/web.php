@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Api\APIMountableAreaController;
 use App\Http\Controllers\APIBrushlineController;
 use App\Http\Controllers\APIDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\APIDungeonRouteController;
@@ -386,6 +387,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
                 Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'adminDelete']);
+
+                Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
+                Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
             });

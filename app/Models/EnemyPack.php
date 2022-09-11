@@ -29,7 +29,7 @@ class EnemyPack extends CacheModel
      */
     public function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class EnemyPack extends CacheModel
      */
     public function enemies(): HasMany
     {
-        return $this->hasMany('App\Models\Enemy');
+        return $this->hasMany(Enemy::class);
     }
 
     /**

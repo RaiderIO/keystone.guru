@@ -59,6 +59,7 @@ return [
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
     'killzonepath_map_object_group_label'             => 'Pull connections',
+    'mountablearea_map_object_group_label'            => 'Mountable area',
 
     'publish_state_title_unpublished'   => 'Unpublished',
     'publish_state_subtext_unpublished' => 'Only you may view this route',
@@ -119,35 +120,40 @@ return [
 
     // Route edit tools
     'path'                                        => 'Path',
-    'path_title'                                  => 'Draw a path. Hotkey: <b>1</b>',
+    'path_title'                                  => 'Draw a path. Hotkey: <b>:hotkey</b>',
     'killzone'                                    => 'Killzone',
     'mapicon'                                     => 'Icon',
-    'mapicon_title'                               => 'Create an icon. Hotkey: <b>2</b>',
+    'mapicon_title'                               => 'Create an icon. Hotkey: <b>:hotkey</b>',
     'brushline'                                   => 'Draw',
-    'brushline_title'                             => 'Draw a line. Hotkey: <b>3</b>',
+    'brushline_title'                             => 'Draw a line. Hotkey: <b>:hotkey</b>',
     'pridefulenemy'                               => 'Prideful',
-    'pridefulenemy_title'                         => 'Create a Prideful Enemy. Hotkey: <b>4</b>',
+    'pridefulenemy_title'                         => 'Create a Prideful Enemy. Hotkey: <b>:hotkey</b>',
     'pridefulenemy_disabled_title'                => 'Remove a Prideful Enemy first',
     'pridefulenemy_disabled_no_shadowlands_title' => 'Prideful Enemies are only available for Shadowlands dungeons!',
     'edit'                                        => 'Edit',
-    'edit_title'                                  => 'Edit objects on the map. Hotkey: <b>5</b>',
+    'edit_title'                                  => 'Edit objects on the map. Hotkey: <b>:hotkey</b>',
     'delete'                                      => 'Delete',
-    'delete_title'                                => 'Delete objects on the map. Hotkey: <b>6</b>',
+    'delete_title'                                => 'Delete objects on the map. Hotkey: <b>:hotkey</b>',
     'finish'                                      => 'Finish',
     'finish_drawing'                              => 'Finish drawing',
+    'enemypack'                                   => 'Pack',
+    'enemypack_title'                             => 'Draw an enemy pack. Hotkey: <b>:hotkey</b>',
+    'enemy'                                       => 'Enemy',
+    'enemy_title'                                 => 'Draw an enemy. Hotkey: <b>:hotkey</b>',
+    'enemypatrol'                                 => 'Patrol',
+    'enemypatrol_title'                           => 'Draw a patrol route for an enemy. Hotkey: <b>:hotkey</b>',
+    'dungeonfloorswitchmarker'                    => 'Floor',
+    'dungeonfloorswitchmarker_title'              => 'Draw a dungeon floor switch marker. Hotkey: <b>:hotkey</b>',
+    'mountablearea'                               => 'Mountable',
+    'mountablearea_title'                         => 'Draw an area in which players are allowed to mount. Hotkey: <b>:hotkey</b>',
 
     'draw_handler_route_tooltip_start' => 'Click to start drawing path.',
     'draw_handler_route_tooltip_cont'  => 'Click to continue drawing path.',
     'draw_handler_route_tooltip_end'   => 'Click the \'Finish\' button on the toolbar to complete your path.',
 
-    'draw_handler_brushline_tooltip_start' => 'Click to start drawing line.',
-    'draw_handler_brushline_tooltip_cont'  => 'Click and drag to continue drawing line.',
-    'draw_handler_brushline_tooltip_end'   => 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.',
-
-    'enemypack'                                   => 'Pack',
-    'enemy'                                       => 'Enemy',
-    'enemypatrol'                                 => 'Patrol',
-    'dungeonfloorswitchmarker'                    => 'Floor',
+    'draw_handler_brushline_tooltip_start'        => 'Click to start drawing line.',
+    'draw_handler_brushline_tooltip_cont'         => 'Click and drag to continue drawing line.',
+    'draw_handler_brushline_tooltip_end'          => 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.',
 
     // Raid markers
     'title_raid_marker_no_selection'              => 'No raid marker',
@@ -387,6 +393,10 @@ return [
     'dungeonfloorswitchmarker_target_floor_id_select_default_label' => 'Select floor',
     'dungeonfloorswitchmarker_go_to_label'                          => 'Go to',
     'dungeonfloorswitchmarker_unknown_label'                        => 'Unknown',
+
+    // Mountable area
+    'mountablearea_faction_label'                                   => 'Faction',
+    'mountablearea_teeming_label'                                   => 'Teeming',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Actions',

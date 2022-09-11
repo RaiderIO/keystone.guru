@@ -15,13 +15,13 @@ use Illuminate\Support\Collection;
 abstract class RelationMapping
 {
     /** @var string */
-    private $fileName;
+    private string $fileName;
 
     /** @var string */
-    private $class;
+    private string $class;
 
     /** @var boolean True if the model's data remains in the DB and needs to be updated instead of inserted blindly */
-    private $persistent;
+    private bool $persistent;
 
     /** @var Collection|RelationParser[] */
     private $preSaveAttributeParsers;

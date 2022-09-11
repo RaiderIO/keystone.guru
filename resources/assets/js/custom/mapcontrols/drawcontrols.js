@@ -45,7 +45,11 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             enabled: this.options.usermouseposition,
             handler: new L.Draw.UserMousePosition(map, this.options.usermouseposition),
             title: this.options.usermouseposition.title
-        }
+        }, {
+            enabled: this.options.mountablearea,
+            handler: new L.Draw.MountableArea(map, this.options.mountablearea),
+            title: this.options.mountablearea.title
+        },
     ];
 };
 
@@ -251,6 +255,12 @@ class DrawControls extends MapControl {
             weight = c.map.polyline.defaultWeight;
         }
 
+        let hotkeys = {
+            path: this._findHotkeyByCssClass('path'),
+            mapicon: this._findHotkeyByCssClass('icon'),
+            pridefulenemy: this._findHotkeyByCssClass('pridefulenemy'),
+        };
+
         return {
             position: 'topleft',
             // This now shows/hides the brushline icon
@@ -264,8 +274,8 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: lang.get('messages.path_title'),
-                    hotkey: this._findHotkeyByCssClass('path')
+                    title: lang.get('messages.path_title', {hotkey: hotkeys.path}),
+                    hotkey: hotkeys.path
                 },
                 killzone: {
                     repeatMode: false,
@@ -277,8 +287,8 @@ class DrawControls extends MapControl {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-icons',
-                    title: lang.get('messages.mapicon_title'),
-                    hotkey: this._findHotkeyByCssClass('icon')
+                    title: lang.get('messages.mapicon_title', {hotkey: hotkeys.mapicon}),
+                    hotkey: hotkeys.mapicon
                 },
                 awakenedobeliskgatewaymapicon: {
                     repeatMode: false,
@@ -290,8 +300,8 @@ class DrawControls extends MapControl {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-user',
-                    title: lang.get('messages.pridefulenemy_title'),
-                    hotkey: this._findHotkeyByCssClass('pridefulenemy')
+                    title: lang.get('messages.pridefulenemy_title', {hotkey: hotkeys.pridefulenemy}),
+                    hotkey: hotkeys.pridefulenemy
                 } : false,
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this
@@ -540,12 +550,14 @@ class DrawControls extends MapControl {
         // Add custom content for the edit and remove buttons
         let $buttons = $editRouteControls.find('a');
         let $editButton = $($buttons[0]);
-        $editButton.html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), this._findHotkeyByCssClass('edit'), lang.get('messages.edit_title')));
+        let editHotkey = this._findHotkeyByCssClass('edit');
+        $editButton.html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), editHotkey, lang.get('messages.edit_title', {hotkey: editHotkey})));
         $editButton.attr('title', '');
 
         let $deleteButton = $($buttons[1]);
+        let deleteHotkey = this._findHotkeyByCssClass('remove');
         $deleteButton.html(
-            this._getButtonHtml('fa-trash', lang.get('messages.delete'), this._findHotkeyByCssClass('delete'), lang.get('messages.delete_title'), 'btn-danger')
+            this._getButtonHtml('fa-trash', lang.get('messages.delete'), deleteHotkey, lang.get('messages.delete_title', {hotkey: deleteHotkey}), 'btn-danger')
         );
         $deleteButton.attr('title', '');
 

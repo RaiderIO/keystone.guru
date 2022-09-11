@@ -260,6 +260,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getMountableAreas() {
+        return this._options.dungeon.mountableAreas;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getNpcs() {
         return this._options.npcs;
     }

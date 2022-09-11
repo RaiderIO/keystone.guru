@@ -35,15 +35,16 @@ for (let name in cookieDefaults) {
 
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
+const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
-const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
-const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
+const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
+const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -59,7 +60,8 @@ const MAP_OBJECT_GROUP_NAMES = [
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE,
-    MAP_OBJECT_GROUP_KILLZONE_PATH
+    MAP_OBJECT_GROUP_KILLZONE_PATH,
+    MAP_OBJECT_GROUP_MOUNTABLE_AREA
 ];
 
 // Kill zones
@@ -355,6 +357,9 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
+        },
+        mountablearea: {
+            color: '#eb4934'
         },
         placeholderColors: {},
         editsidebar: {
