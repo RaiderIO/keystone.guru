@@ -320,6 +320,7 @@ class DrawControls extends MapControl {
                 enemy: false,
                 dungeonfloorswitchmarker: false,
                 usermouseposition: false,
+                mountablearea: false,
             },
             edit: {
                 featureGroup: this.editableItemsLayer, //REQUIRED!!

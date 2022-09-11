@@ -102,12 +102,15 @@ class SimulationCraftRaidEventsOptions extends Model
      */
     public static function fromRequest(APISimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
     {
+        $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
+
         $result               = new SimulationCraftRaidEventsOptions(array_merge($request->validated(), [
             'public_key'                     => 'asdfasdf', // self::generateRandomPublicKey(),
             'user_id'                        => Auth::id(),
             'dungeon_route_id'               => $dungeonRoute->id,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
-            'ranged_pull_compensation_yards' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION) ? (int)$request->get('ranged_pull_compensation_yards') : 0,
+            'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,
+            'use_mounts'                     => $hasAdvancedSimulation ? (int)$request->get('use_mounts') : 0,
         ]));
         $result->dungeonroute = $dungeonRoute;
         return $result;

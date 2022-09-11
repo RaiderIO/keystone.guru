@@ -84,3 +84,34 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ",", bool $ski
         $lines
     );
 }
+
+/**
+ * Source: https://www.holadevs.com/pregunta/97772/calculate-intersection-of-two-lines-in-php-gd
+ *
+ * @param $ax1
+ * @param $ay1
+ * @param $ax2
+ * @param $ay2
+ * @param $bx1
+ * @param $by1
+ * @param $bx2
+ * @param $by2
+ * @return float[]|int[]
+ */
+function intersection($ax1, $ay1, $ax2, $ay2, $bx1, $by1, $bx2, $by2): ?array
+{
+    $a1 = $ax1 - $ax2;
+    $a2 = $bx1 - $bx2;
+    $b1 = $ay1 - $ay2;
+    $b2 = $by1 - $by2;
+    $c  = ($a1 * $b2) - ($b1 * $a2);
+    if (abs($c) > 0.01) { // En caso de que haya interseccion
+        $a = ($ax1 * $ay2) - ($ay1 * $ax2);
+        $b = ($bx1 * $by2) - ($by1 * $bx2);
+        $x = ($a * $a2 - $b * $a1) / $c;
+        $y = ($a * $b2 - $b * $b1) / $c;
+        return ['x' => $x, 'y' => $y];
+    } else { // En caso de que no lo haya
+        return null;
+    }
+}

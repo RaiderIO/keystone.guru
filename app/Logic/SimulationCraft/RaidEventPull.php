@@ -6,6 +6,7 @@ use App\Logic\Utils\MathUtils;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\KillZone;
+use App\Models\MountableArea;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Collection;
 
@@ -125,6 +126,27 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $ingameCoordinatesPreviousKillLocation['x'], $ingameCoordinatesKillLocation['x'],
                 $ingameCoordinatesPreviousKillLocation['y'], $ingameCoordinatesKillLocation['y']
             );
+
+//            $clip = new \SutherlandHodgman(
+//                $ingameCoordinatesKillLocation['x'],
+//                $ingameCoordinatesKillLocation['y'],
+//                $ingameCoordinatesPreviousKillLocation['x'],
+//                $ingameCoordinatesPreviousKillLocation['y']
+//            );
+//
+//            dump($ingameCoordinatesPreviousKillLocation, $ingameCoordinatesKillLocation);
+//
+//            foreach ($floor->mountableareas as $mountablearea) {
+//                /** @var $mountablearea MountableArea */
+//                dump(
+//                    ['intersection:', $mountablearea->getIntersections(
+//                        $ingameCoordinatesKillLocation['x'],
+//                        $ingameCoordinatesKillLocation['y'],
+//                        $ingameCoordinatesPreviousKillLocation['x'],
+//                        $ingameCoordinatesPreviousKillLocation['y'])
+//                    ]
+//                );
+//            }
 
             $result = $this->calculateDelayForDistance($ingameDistanceToNewKillZone - $this->options->ranged_pull_compensation_yards);
         } else {

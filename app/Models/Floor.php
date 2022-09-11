@@ -35,6 +35,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[] $directConnectedFloors
  * @property Collection|Floor[] $reverseConnectedFloors
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
+ * @property Collection|MountableArea[] $mountableareas
  *
  * @mixin Eloquent
  */
@@ -59,47 +60,55 @@ class Floor extends CacheModel
      */
     public function dungeon(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Dungeon');
+        return $this->belongsTo(Dungeon::class);
     }
 
     /**
      * @return HasMany
      */
-    function enemies(): HasMany
+    public function enemies(): HasMany
     {
-        return $this->hasMany('App\Models\Enemy');
+        return $this->hasMany(Enemy::class);
     }
 
     /**
      * @return HasMany
      */
-    function enemypacks(): HasMany
+    public function enemypacks(): HasMany
     {
-        return $this->hasMany('App\Models\EnemyPack');
+        return $this->hasMany(EnemyPack::class);
     }
 
     /**
      * @return HasMany
      */
-    function enemypatrols(): HasMany
+    public function enemypatrols(): HasMany
     {
-        return $this->hasMany('App\Models\EnemyPatrol');
+        return $this->hasMany(EnemyPatrol::class);
     }
 
     /**
      * @return HasMany
      */
-    function mapicons(): HasMany
+    public function mapicons(): HasMany
     {
-        return $this->hasMany('App\Models\MapIcon')->where('dungeon_route_id', -1);
+        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', -1);
     }
 
     /**
      * @return HasMany
      */
-    function floorcouplings(): HasMany
+    public function mountableareas(): HasMany
     {
-        return $this->hasMany('App\Models\FloorCoupling', 'floor1_id');
+        return $this->hasMany(MountableArea::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floorcouplings(): HasMany
+    {
+        return $this->hasMany(FloorCoupling::class, 'floor1_id');
     }
 
     /**
@@ -115,7 +124,7 @@ class Floor extends CacheModel
      */
     public function directConnectedFloors(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor1_id', 'floor2_id');
+        return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor1_id', 'floor2_id');
     }
 
     /**
@@ -123,7 +132,7 @@ class Floor extends CacheModel
      */
     public function reverseConnectedFloors(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id');
+        return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 
     /**
@@ -180,6 +189,25 @@ class Floor extends CacheModel
         return [
             'x' => ($ingameMapSizeX * $factorLng) + $this->ingame_min_x,
             'y' => ($ingameMapSizeY * $factorLat) + $this->ingame_min_y,
+        ];
+    }
+
+    /**
+     * @param float $x
+     * @param float $y
+     * @return array{x: float, y: float}
+     */
+    public function calculateMapLocationForIngameLocation(float $x, float $y): array
+    {
+        $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
+        $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
+
+        $factorX = (($x - $this->ingame_min_x) / $ingameMapSizeX);
+        $factorY = (($y - $this->ingame_min_y) / $ingameMapSizeY);
+
+        return [
+            'lat' => (self::MAP_MAX_LAT * $factorY),
+            'lng' => (self::MAP_MAX_LNG * $factorX),
         ];
     }
 }
