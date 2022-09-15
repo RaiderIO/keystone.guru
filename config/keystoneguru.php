@@ -19,6 +19,8 @@ return [
     'character' => [
         /** // https://wowpedia.fandom.com/wiki/Movement */
         'default_movement_speed_yards_second' => 7,
+        'mounted_movement_speed_yards_second' => 7,
+        'mount_cast_time_seconds'             => 1.5,
     ],
 
     'keystone' => [
@@ -298,13 +300,13 @@ return [
     ],
 
     'patreon' => [
-        'oauth' => [
+        'oauth'       => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
             // https://docs.patreon.com/#scopes
             'scope'     => 'identity identity[email] identity.memberships campaigns',
         ],
-        'campaign_id' => env('PATREON_CAMPAIGN_ID')
+        'campaign_id' => env('PATREON_CAMPAIGN_ID'),
     ],
 
     'reddit' => [

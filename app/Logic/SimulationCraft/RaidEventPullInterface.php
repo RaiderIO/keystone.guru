@@ -28,7 +28,7 @@ interface RaidEventPullInterface
      * @param float $ingameDistance
      * @return float
      */
-    public function calculateDelayForDistance(float $ingameDistance): float;
+    public function calculateDelayForDistanceOnFoot(float $ingameDistance): float;
 
     /**
      * @param Enemy $enemy

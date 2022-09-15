@@ -46,4 +46,7 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <textarea id="simulationcraft_debug" class="w-100" style="height: 100px"></textarea>
+    </div>
 </div>

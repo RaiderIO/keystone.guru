@@ -15,6 +15,20 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         $('#simulate_get_string').unbind('click').bind('click', this._fetchSimulationCraftString.bind(this));
         $('#simulate_modal').on('show.bs.modal', this._simulateModalOpened.bind(this));
+        $('#simulationcraft_debug').on('change', function(){
+            let val = $(this).val();
+
+            if( val.length > 0 ) {
+                let latLngs = JSON.parse(val);
+
+                for(let i in latLngs){
+                    let latLng = latLngs[i];
+                    L.marker([latLng.lat, latLng.lng]).addTo(getState().getDungeonMap().leafletMap);
+                }
+
+                $(this).val('');
+            }
+        });
 
         // Whenever something changes in the screen, save the settings so that on page refresh we still remember it
         for (let key in this._getData()) {
@@ -41,7 +55,8 @@ class CommonDungeonrouteSimulate extends InlineCode {
             chaos_brand: $('#simulate_chaos_brand').is(':checked') ? 1 : 0,
             skill_loss_percent: $('#simulate_skill_loss_percent').val(),
             hp_percent: $('#simulate_hp_percent').val(),
-            ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val()
+            ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val(),
+            use_mounts: $('#simulate_use_mounts').is(':checked') ? 1 : 0,
         };
     }
 

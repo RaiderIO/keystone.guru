@@ -1,5 +1,5 @@
 <?php
-$hasAdvancedSimulation = false; // Auth::check() && Auth::user()->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::ADVANCED_SIMULATION);
+$hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::ADVANCED_SIMULATION);
 ?>
 <div class="form-group">
     <div id="simulate_route">

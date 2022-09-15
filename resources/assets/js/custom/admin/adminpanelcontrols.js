@@ -21,7 +21,7 @@ class AdminPanelControls extends MapControl {
 
         this.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
             $('#admin_panel_mouse_coordinates').html(
-                mouseMoveEvent.latlng.lat + ', ' + mouseMoveEvent.latlng.lng
+                _.round(mouseMoveEvent.latlng.lat, 3) + ', ' + _.round(mouseMoveEvent.latlng.lng, 3)
             );
         });
     }

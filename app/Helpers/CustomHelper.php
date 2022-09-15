@@ -1,5 +1,7 @@
 <?php
 
+use App\Logic\Utils\MathUtils;
+
 /**
  * Checks if a specific alert is already dismissed and thus should not be rendered anymore.
  *
@@ -86,32 +88,74 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ",", bool $ski
 }
 
 /**
- * Source: https://www.holadevs.com/pregunta/97772/calculate-intersection-of-two-lines-in-php-gd
- *
- * @param $ax1
- * @param $ay1
- * @param $ax2
- * @param $ay2
- * @param $bx1
- * @param $by1
- * @param $bx2
- * @param $by2
- * @return float[]|int[]
+ * @param array{lng: float, lat: float} $p1
+ * @param array{lng: float, lat: float} $p2
+ * @param array{lng: float, lat: float} $p3
+ * @param array{lng: float, lat: float} $p4
+ * @return array{lng: float, lat: float}|null
  */
-function intersection($ax1, $ay1, $ax2, $ay2, $bx1, $by1, $bx2, $by2): ?array
+function intersection(array $p1, array $p2, array $p3, array $p4): ?array
 {
-    $a1 = $ax1 - $ax2;
-    $a2 = $bx1 - $bx2;
-    $b1 = $ay1 - $ay2;
-    $b2 = $by1 - $by2;
-    $c  = ($a1 * $b2) - ($b1 * $a2);
-    if (abs($c) > 0.01) { // En caso de que haya interseccion
-        $a = ($ax1 * $ay2) - ($ay1 * $ax2);
-        $b = ($bx1 * $by2) - ($by1 * $bx2);
-        $x = ($a * $a2 - $b * $a1) / $c;
-        $y = ($a * $b2 - $b * $b1) / $c;
-        return ['x' => $x, 'y' => $y];
-    } else { // En caso de que no lo haya
+    // Line AB represented as a1lng + b1lat = c1
+    $a1 = $p2['lat'] - $p1['lat'];
+    $b1 = $p1['lng'] - $p2['lng'];
+    $c1 = $a1 * ($p1['lng']) + $b1 * ($p1['lat']);
+
+    // Line CD represented as a2lng + b2lat = c2
+    $a2 = $p4['lat'] - $p3['lat'];
+    $b2 = $p3['lng'] - $p4['lng'];
+    $c2 = $a2 * ($p3['lng']) + $b2 * ($p3['lat']);
+
+    $determinant = $a1 * $b2 - $a2 * $b1;
+
+    if ($determinant == 0) {
+        // The lines are parallel and will never intersect
         return null;
+    } else {
+        $lng = ($b2 * $c1 - $b1 * $c2) / $determinant;
+        $lat = ($a1 * $c2 - $a2 * $c1) / $determinant;
+
+        $l1Length = MathUtils::distanceBetweenPoints($p1['lng'], $p2['lng'], $p1['lat'], $p2['lat']);
+
+        // If the distance to the found point is greater than the length of the line, it's not a correct intersection!
+        // This means that the intersection occurred in the elngtended line past the points of $p1 and $p2. We don't want them.
+        if ($l1Length < MathUtils::distanceBetweenPoints($p1['lng'], $lng, $p1['lat'], $lat) ||
+            $l1Length < MathUtils::distanceBetweenPoints($p2['lng'], $lng, $p2['lat'], $lat)
+        ) {
+            return null;
+        }
+
+        return ['lat' => $lat, 'lng' => $lng];
     }
+}
+
+/**
+ * @param array $point
+ * @param array $polygon
+ * @return bool
+ */
+function polygonContainsPoint(array $point, array $polygon)
+{
+    if ($polygon[0] != $polygon[count($polygon) - 1]) {
+        $polygon[] = $polygon[0];
+    }
+    $j        = 0;
+    $oddNodes = false;
+    $lat      = $point['lat'];
+    $lng      = $point['lng'];
+    $n        = count($polygon);
+    for ($i = 0; $i < $n; $i++) {
+        $j++;
+        if ($j == $n) {
+            $j = 0;
+        }
+        if ((($polygon[$i]['lng'] < $lng) && ($polygon[$j]['lng'] >= $lng)) || (($polygon[$j]['lng'] < $lng) && ($polygon[$i]['lng'] >=
+                    $lng))) {
+            if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -
+                    $polygon[$i]['lat']) < $lat) {
+                $oddNodes = !$oddNodes;
+            }
+        }
+    }
+    return $oddNodes;
 }

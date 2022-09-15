@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class InviteEvent
@@ -55,6 +56,8 @@ class InviteEvent extends ContextEvent
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
             'invitees' => $this->invitees,
             'url'      => route('dungeonroute.livesession.view', [
+                'dungeon'      => $this->_context->dungeonroute->dungeon,
+                'title'        => Str::slug($this->_context->dungeonroute->title),
                 'dungeonroute' => $this->_context->dungeonroute,
                 'livesession'  => $this->_context,
             ]),
