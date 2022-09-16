@@ -117,86 +117,101 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $killLocation = $killZone->getKillLocation();
         $floor        = $killZone->getDominantFloor();
 
-        $ingameCoordinatesPreviousKillLocation = $previousKillFloor->calculateIngameLocationForMapLocation($previousKillLocation['lat'], $previousKillLocation['lng']);
-        $ingameCoordinatesKillLocation         = $floor->calculateIngameLocationForMapLocation($killLocation['lat'], $killLocation['lng']);
-
         // On the same floor it's easy - just calculate the distance between and then subtract any mounted speed
         if ($previousKillFloor->id === $floor->id) {
-            $ingameDistanceToNewKillZone = MathUtils::distanceBetweenPoints(
-                    $ingameCoordinatesPreviousKillLocation['x'], $ingameCoordinatesKillLocation['x'],
-                    $ingameCoordinatesPreviousKillLocation['y'], $ingameCoordinatesKillLocation['y']
-                ) - $this->options->ranged_pull_compensation_yards;
-
-            [$mountFactor, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
-                $floor,
-                $previousKillLocation,
-                $killLocation
-            );
-
-            $delayMounted = $this->calculateDelayForDistanceMounted(
-                $ingameDistanceToNewKillZone * $mountFactor
-            );
-            $delayOnFoot  = $this->calculateDelayForDistanceOnFoot(
-                $ingameDistanceToNewKillZone * (1 - $mountFactor)
-            );
-
-            // If we utilized the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
-            if ($mountFactor > 0) {
-                $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
-                    $ingameDistanceToNewKillZone
-                );
-                if ($delayOnFootWithoutMounting < $delayMounted + $delayOnFoot) {
-                    $mountCasts   = 0;
-                    $delayMounted = 0;
-                    $delayOnFoot  = $delayOnFootWithoutMounting;
-                }
-            }
-
-            // Calculate the final result
-            $result = $delayMounted + $delayOnFoot + $this->calculateDelayForMountCasts($mountCasts);
+            $result = $this->calculateDelayBetweenPoints($floor, $previousKillLocation, $killLocation);
         } else {
             // Different floors are a bit tricky - we need to find the closest floor switch marker, calculate the distance to that
             // and then from that floor marker on the other side, calculate the distance to the pull. Add all up and you got the delay you're looking for
-            $totalIngameDistance =
-                $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($previousKillLocation, $ingameCoordinatesPreviousKillLocation, $previousKillFloor, $floor) +
-                $this->calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker($killLocation, $ingameCoordinatesKillLocation, $floor, $previousKillFloor);
-
-            $result = $this->calculateDelayForDistanceOnFoot($totalIngameDistance - $this->options->ranged_pull_compensation_yards);
+            $result = $this->calculateDelayBetweenPointsOnDifferentFloors($previousKillFloor, $floor, $previousKillLocation, $killLocation);
         }
 
-        return $result;
+        // Increase all delays with the skill loss (1 + 0.2) (for 20% skill loss for example)
+        return $result * (1 + ($this->options->skill_loss_percent / 100));
+    }
+
+    /**
+     * @param Floor $floor
+     * @param array{lat: float, lng: float} $pointA
+     * @param array{lat: float, lng: float} $pointB
+     * @return float
+     */
+    public function calculateDelayBetweenPoints(Floor $floor, array $pointA, array $pointB): float
+    {
+        [$mountFactor, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
+            $floor,
+            $pointA,
+            $pointB
+        );
+
+        $pointAIngameCoordinates = $floor->calculateIngameLocationForMapLocation($pointA['lat'], $pointA['lng']);
+        $pointBIngameCoordinates = $floor->calculateIngameLocationForMapLocation($pointB['lat'], $pointB['lng']);
+
+        $ingameDistanceToPointB = MathUtils::distanceBetweenPoints(
+                $pointAIngameCoordinates['x'], $pointBIngameCoordinates['x'],
+                $pointAIngameCoordinates['y'], $pointBIngameCoordinates['y']
+            ) - $this->options->ranged_pull_compensation_yards;
+
+        $delayMounted    = $this->calculateDelayForDistanceMounted(
+            $ingameDistanceToPointB * $mountFactor
+        );
+        $delayMountCasts = $this->calculateDelayForMountCasts($mountCasts);
+        $delayOnFoot     = $this->calculateDelayForDistanceOnFoot(
+            $ingameDistanceToPointB * (1 - $mountFactor)
+        );
+
+        // If we utilized the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
+        if ($mountFactor > 0) {
+            $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
+                $ingameDistanceToPointB
+            );
+            if ($delayOnFootWithoutMounting < $delayMounted + $delayOnFoot + $delayMountCasts) {
+                $delayMountCasts = 0;
+                $delayMounted    = 0;
+                $delayOnFoot     = $delayOnFootWithoutMounting;
+            }
+        }
+
+        // Calculate the final result
+        return $delayMounted + $delayOnFoot + $delayMountCasts;
+    }
+
+    /**
+     * @param Floor $pointAFloor
+     * @param Floor $pointBFloor
+     * @param array{lat: float, lng: float} $pointA
+     * @param array{lat: float, lng: float} $pointB
+     * @return float
+     */
+    public function calculateDelayBetweenPointsOnDifferentFloors(Floor $pointAFloor, Floor $pointBFloor, array $pointA, array $pointB): float
+    {
+        return $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($pointAFloor, $pointBFloor, $pointA) +
+            $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($pointBFloor, $pointAFloor, $pointB);
     }
 
 
     /**
-     * @param array $killLocation
-     * @param array $ingameCoordinatesKillLocation
      * @param Floor $floor
      * @param Floor $targetFloor
+     * @param array{lat: float, lng: float} $point
      * @return float
      */
-    private function calculateDistanceBetweenKillLocationAndClosestFloorSwitchMarker(array $killLocation, array $ingameCoordinatesKillLocation, Floor $floor, Floor $targetFloor): float
+    private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(Floor $floor, Floor $targetFloor, array $point): float
     {
         $result = 0;
 
         $previousKillFloorClosestDungeonFloorSwitchMarker = $floor->findClosestFloorSwitchMarker(
-            $killLocation['lat'],
-            $killLocation['lng'],
+            $point['lat'],
+            $point['lng'],
             $targetFloor->id
         );
 
         if ($previousKillFloorClosestDungeonFloorSwitchMarker !== null) {
-            // Calculate the in-game coordinates for the floor switch marker
-            $ingameCoordinatesDungeonFloorSwitchMarker = $floor->calculateIngameLocationForMapLocation(
-                $previousKillFloorClosestDungeonFloorSwitchMarker->lat,
-                $previousKillFloorClosestDungeonFloorSwitchMarker->lng
-            );
-
-            // From the previous kill location to the floor switch
-            $result = MathUtils::distanceBetweenPoints(
-                $ingameCoordinatesKillLocation['x'], $ingameCoordinatesDungeonFloorSwitchMarker['x'],
-                $ingameCoordinatesKillLocation['y'], $ingameCoordinatesDungeonFloorSwitchMarker['y']
-            );
+            // Now that we know the location of the floor switch marker, we can
+            $result = $this->calculateDelayBetweenPoints($floor, $point, [
+                'lat' => $previousKillFloorClosestDungeonFloorSwitchMarker->lat,
+                'lng' => $previousKillFloorClosestDungeonFloorSwitchMarker->lng,
+            ]);
         } else {
             dd(sprintf('There is no floor switch marker from %d to %d!', $floor->id, $targetFloor->id));
         }
@@ -217,15 +232,19 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
+     * The mounted factor is a value between 0 and 1 which indicates how much of the way we can mount - where 0 means
+     * that we cannot mount, and 1 means we can mount all the way through. The mountCasts value indicates how many times
+     * the user was dismounted and needed to re-cast their mount spell, which takes some time.
+     *
      * @param Floor $floor
-     * @param array $previousKillLocation
-     * @param array $killLocation
+     * @param array{lat: float, lng: float} $pointA
+     * @param array{lat: float, lng: float} $pointB
      * @return array{mountedFactor: float, mountCasts: int}
      */
     public function calculateMountedFactorAndMountCastsBetweenPoints(
         Floor $floor,
-        array $previousKillLocation,
-        array $killLocation): array
+        array $pointA,
+        array $pointB): array
     {
         // 0% of the time on mounts, 0 mount casts
         if (!$this->options->use_mounts) {
@@ -239,13 +258,13 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $foundIntersections = collect();
         foreach ($floor->mountableareas as $mountableArea) {
             // Determine from which mountable area the location started
-            if ($startMountableArea === null && $mountableArea->contains($previousKillLocation)) {
+            if ($startMountableArea === null && $mountableArea->contains($pointA)) {
                 $startMountableArea = $mountableArea;
             }
 
             $mountableAreaIntersections = $mountableArea->getIntersections(
-                $previousKillLocation,
-                $killLocation
+                $pointA,
+                $pointB
             );
 
             // If we found some intersections, add them to the general list
@@ -258,7 +277,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         if ($foundIntersections->isEmpty()) {
             if ($startMountableArea !== null) {
                 // We are mounted 100% of the way, with 1 cast to mount up
-                return [100, 1];
+                return [1, 1];
             } else {
                 // We are mounted 0% of the way and will keep walking
                 return [0, 0];
@@ -267,18 +286,18 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
         // Now that we have a (randomly sorted) list of mountable areas and intersections, we need to sort the list and
         // then determine if an intersection causes a mount up, or a dismount
-        $foundIntersections = $foundIntersections->sortBy(function (array $foundIntersection) use ($previousKillLocation) {
+        $foundIntersections = $foundIntersections->sortBy(function (array $foundIntersection) use ($pointA) {
             return MathUtils::distanceBetweenPoints(
-                $previousKillLocation['lng'], $foundIntersection['lng'],
-                $previousKillLocation['lat'], $foundIntersection['lat'],
+                $pointA['lng'], $foundIntersection['lng'],
+                $pointA['lat'], $foundIntersection['lat'],
             );
         })->values();
 
         // Compile a list of all locations we know of, and then determine how much %-age is mounted, and how much %-age is on-foot
-        $allLatLngs    = collect($foundIntersections)->merge([$killLocation]);
+        $allLatLngs    = collect($foundIntersections)->merge([$pointB]);
         $totalDistance = MathUtils::distanceBetweenPoints(
-            $previousKillLocation['lng'], $killLocation['lng'],
-            $previousKillLocation['lat'], $killLocation['lat'],
+            $pointA['lng'], $pointB['lng'],
+            $pointA['lat'], $pointB['lat'],
         );
 
         $totalDistanceOnFoot = $totalDistanceMounted = 0;
@@ -288,7 +307,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $mountCasts = (int)$isMounted;
 
         // We start at where we're at now
-        $previousLatLng  = $previousKillLocation;
+        $previousLatLng  = $pointA;
         $allLatLngsCount = $allLatLngs->count();
 
         foreach ($allLatLngs as $index => $latLng) {
@@ -339,7 +358,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      */
     public function calculateDelayForMountCasts(int $mountCasts): float
     {
-        return max(0, $mountCasts) / config('keystoneguru.character.mount_cast_time_seconds');
+        return (max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds'));
     }
 
 

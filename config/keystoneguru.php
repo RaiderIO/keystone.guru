@@ -19,7 +19,7 @@ return [
     'character' => [
         /** // https://wowpedia.fandom.com/wiki/Movement */
         'default_movement_speed_yards_second' => 7,
-        'mounted_movement_speed_yards_second' => 7,
+        'mounted_movement_speed_yards_second' => 14,
         'mount_cast_time_seconds'             => 1.5,
     ],
 
