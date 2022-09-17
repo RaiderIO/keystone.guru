@@ -14,7 +14,7 @@ class SettingsTabMap extends SettingsTab {
 
             c.map.polyline.defaultWeight = weight;
 
-            Cookies.set('polyline_default_weight', weight);
+            Cookies.set('polyline_default_weight', weight, cookieDefaultAttributes);
 
             getState().getDungeonMap().refreshPather();
         })// -1 for value to index conversion
@@ -34,9 +34,9 @@ class SettingsTabMap extends SettingsTab {
                 }
             })).on('save', (color, instance) => {
                 if (color === null) {
-                    Cookies.set('polyline_default_color', null);
+                    Cookies.set('polyline_default_color', null, cookieDefaultAttributes);
                 } else {
-                    Cookies.set('polyline_default_color', '#' + color.toHEXA().join(''));
+                    Cookies.set('polyline_default_color', '#' + color.toHEXA().join(''), cookieDefaultAttributes);
                 }
 
                 getState().getDungeonMap().refreshPather();

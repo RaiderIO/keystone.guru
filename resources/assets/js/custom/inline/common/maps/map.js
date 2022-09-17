@@ -387,7 +387,7 @@ class CommonMapsMap extends InlineCode {
         $labels.hide().closest('.btn').removeClass('maximized');
         $toggleBtn.find('i').addClass('fa-chevron-right').removeClass('fa-chevron-left');
 
-        Cookies.set('map_controls_show_hide_labels', 0);
+        Cookies.set('map_controls_show_hide_labels', 0, cookieDefaultAttributes);
     }
 
     /**
@@ -401,7 +401,7 @@ class CommonMapsMap extends InlineCode {
         $labels.show().closest('.btn').addClass('maximized');
         $toggleBtn.find('i').removeClass('fa-chevron-right').addClass('fa-chevron-left');
 
-        Cookies.set('map_controls_show_hide_labels', 1);
+        Cookies.set('map_controls_show_hide_labels', 1, cookieDefaultAttributes);
     }
 
 
@@ -515,7 +515,7 @@ class CommonMapsMap extends InlineCode {
             hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
 
             // Update our cookie so that we know upon page refresh
-            Cookies.set('hidden_map_object_groups', hiddenMapObjectGroups);
+            Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
         }
     }
 

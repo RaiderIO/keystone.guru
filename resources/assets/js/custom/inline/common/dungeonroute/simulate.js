@@ -89,7 +89,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _saveSettings() {
-        Cookies.set('simulate_modal_settings', JSON.stringify(this._getData()));
+        Cookies.set('simulate_modal_settings', JSON.stringify(this._getData()), cookieDefaultAttributes);
     }
 
     /**

@@ -157,7 +157,7 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         this._enemyDisplayType = enemyDisplayType;
 
-        Cookies.set('enemy_display_type', this._enemyDisplayType);
+        Cookies.set('enemy_display_type', this._enemyDisplayType, cookieDefaultAttributes);
 
         // Let everyone know it's changed
         this.signal('enemydisplaytype:changed', {enemyDisplayType: this._enemyDisplayType});
@@ -169,7 +169,7 @@ class StateManager extends Signalable {
      */
     setUnkilledEnemyOpacity(unkilledEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        Cookies.set('map_unkilled_enemy_opacity', unkilledEnemyOpacity);
+        Cookies.set('map_unkilled_enemy_opacity', unkilledEnemyOpacity, cookieDefaultAttributes);
 
         // Let everyone know it's changed
         this.signal('unkilledenemyopacity:changed', {opacity: unkilledEnemyOpacity});
@@ -181,7 +181,7 @@ class StateManager extends Signalable {
      */
     setUnkilledImportantEnemyOpacity(unkilledImportantEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        Cookies.set('map_unkilled_important_enemy_opacity', unkilledImportantEnemyOpacity);
+        Cookies.set('map_unkilled_important_enemy_opacity', unkilledImportantEnemyOpacity, cookieDefaultAttributes);
 
         // Let everyone know it's changed
         this.signal('unkilledimportantenemyopacity:changed', {opacity: unkilledImportantEnemyOpacity});
@@ -193,7 +193,7 @@ class StateManager extends Signalable {
      */
     setEnemyAggressivenessBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        Cookies.set('map_enemy_aggressiveness_border', visible ? 1 : 0);
+        Cookies.set('map_enemy_aggressiveness_border', visible ? 1 : 0, cookieDefaultAttributes);
 
         // Let everyone know it's changed
         this.signal('enemyaggressivenessborder:changed', {visible: visible});
@@ -205,7 +205,7 @@ class StateManager extends Signalable {
      */
     setEnemyDangerousBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        Cookies.set('map_enemy_dangerous_border', visible ? 1 : 0);
+        Cookies.set('map_enemy_dangerous_border', visible ? 1 : 0, cookieDefaultAttributes);
 
         // Let everyone know it's changed
         this.signal('enemydangerousborder:changed', {visible: visible});
@@ -260,7 +260,7 @@ class StateManager extends Signalable {
      * @param numberStyle {string}
      */
     setMapNumberStyle(numberStyle) {
-        Cookies.set('map_number_style', numberStyle);
+        Cookies.set('map_number_style', numberStyle, cookieDefaultAttributes);
 
         this.signal('mapnumberstyle:changed');
     }
@@ -270,7 +270,7 @@ class StateManager extends Signalable {
      * @param numberStyle {string}
      */
     setKillZonesNumberStyle(numberStyle) {
-        Cookies.set('kill_zones_number_style', numberStyle);
+        Cookies.set('kill_zones_number_style', numberStyle, cookieDefaultAttributes);
 
         this.signal('killzonesnumberstyle:changed');
     }
@@ -280,7 +280,7 @@ class StateManager extends Signalable {
      * @param visible {boolean}
      */
     setPullsSidebarFloorSwitchVisibility(visible) {
-        Cookies.set('pulls_sidebar_floor_switch_visibility', visible ? 1 : 0);
+        Cookies.set('pulls_sidebar_floor_switch_visibility', visible ? 1 : 0, cookieDefaultAttributes);
 
         this.signal('pullssidebarfloorswitchvisibility:changed');
     }
@@ -290,7 +290,7 @@ class StateManager extends Signalable {
      * @param enabled {boolean}
      */
     setEchoCursorsEnabled(enabled) {
-        Cookies.set('echo_cursors_enabled', enabled ? 1 : 0);
+        Cookies.set('echo_cursors_enabled', enabled ? 1 : 0, cookieDefaultAttributes);
 
         this.signal('echocursorsenabled:changed');
     }

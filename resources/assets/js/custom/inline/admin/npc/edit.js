@@ -15,7 +15,7 @@ class AdminNpcEdit extends InlineCode {
                 min: 2,
                 max: 40,
                 onFinish: function (data) {
-                    Cookies.set('npc_edit_key_level', $input.val());
+                    Cookies.set('npc_edit_key_level', $input.val(), cookieDefaultAttributes);
                 }
             });
 
@@ -23,7 +23,7 @@ class AdminNpcEdit extends InlineCode {
         $(this.options.scaledHealthTypeSelector)
             .val(Cookies.get('npc_edit_scaled_type', 'none'))
             .on('change', function () {
-                Cookies.set('npc_edit_scaled_type', $(this).val());
+                Cookies.set('npc_edit_scaled_type', $(this).val(), cookieDefaultAttributes);
             });
 
         $(this.options.scaledHealthToBaseHealthApplyBtnSelector).on('click', function () {

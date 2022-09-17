@@ -41,7 +41,7 @@ class LayoutsApp extends InlineCode {
         $('.close,.close_alternative').unbind('click').bind('click', function () {
             let dismissId = $(this).data('alert-dismiss-id');
             // Cookie is now set to dismiss this alert permanently
-            Cookies.set(`alert-dismiss-${dismissId}`, true, {expires: 30});
+            Cookies.set(`alert-dismiss-${dismissId}`, true, $.extend({expires: 30}, cookieDefaultAttributes));
         });
 
         // When in a model-based layout with tabs, make sure the selected_modal_id actually moves the page to another when changed
@@ -73,7 +73,7 @@ class LayoutsApp extends InlineCode {
                 // Regenerate parallax effects (switches images around)
                 $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 
-                Cookies.set('theme', theme);
+                Cookies.set('theme', theme, cookieDefaultAttributes);
 
                 // Refresh the deme route
                 let elem = document.getElementById('demo_routes_iframe');
@@ -94,12 +94,12 @@ class LayoutsApp extends InlineCode {
                 $(`.new_route_style_create_${previousNewRouteStyle}`).hide()
                 $(`.new_route_style_create_${newRouteStyle}`).show();
 
-                Cookies.set('route_coverage_new_route_style', newRouteStyle);
+                Cookies.set('route_coverage_new_route_style', newRouteStyle, cookieDefaultAttributes);
             }
         });
 
         if (typeof Cookies.get('route_coverage_new_route_style') === 'undefined') {
-            Cookies.set('route_coverage_new_route_style', 'search');
+            Cookies.set('route_coverage_new_route_style', 'search', cookieDefaultAttributes);
         }
     }
 

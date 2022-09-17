@@ -7,7 +7,8 @@ Cookies.withAttributes(cookieDefaultAttributes);
 let cookieDefaults = {
     polyline_default_weight: 3,
     polyline_default_color: null,
-    hidden_map_object_groups: '[]',
+    hidden_map_object_groups: '["mountablearea"]',
+    hidden_map_object_groups_added_mountablearea: 0,
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
@@ -32,6 +33,19 @@ for (let name in cookieDefaults) {
         }
     }
 }
+
+// If we need to initially hide the mountable areas, we don't want it to be visible by default
+if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
+    try {
+        let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        hiddenMapObjectGroups.push('mountablearea');
+        Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+        Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
