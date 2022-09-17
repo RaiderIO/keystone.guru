@@ -2,7 +2,12 @@
 /** @var $dungeonroute App\Models\DungeonRoute|null */
 ?>
 
-@include('common.general.inline', ['path' => 'common/dungeonroute/simulate'])
+@include('common.general.inline', [
+    'path' => 'common/dungeonroute/simulate',
+    'options' => [
+        'dependencies' => ['common/maps/map'],
+    ]
+])
 
 <h3 class="card-title">{{ __('views/common.modal.simulate.title') }}</h3>
 
@@ -45,8 +50,5 @@
                 <i class="far fa-copy"></i> {{ __('views/common.modal.simulate.copy_to_clipboard') }}
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <textarea id="simulationcraft_debug" class="w-100" style="height: 100px"></textarea>
     </div>
 </div>

@@ -36,62 +36,13 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @return int
-     */
-    public function getPullIndex(): int
-    {
-        return $this->pullIndex;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBloodLust(): bool
-    {
-        return $this->bloodLust;
-    }
-
-    /**
-     * @param bool $bloodLust
-     * @return RaidEventPull
-     */
-    public function setBloodLust(bool $bloodLust): RaidEventPull
-    {
-        $this->bloodLust = $bloodLust;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDelay(): int
-    {
-        return $this->delay;
-    }
-
-    /**
-     * @param int $delay
-     * @return RaidEventPull
-     */
-    public function setDelay(int $delay): RaidEventPull
-    {
-        $this->delay = $delay;
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getRaidEventPullEnemies(): Collection
-    {
-        return $this->raidEventPullEnemies;
-    }
-
-    /**
      * @inheritDoc
      */
     public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousKillLocation, Floor $previousKillFloor): RaidEventPullInterface
     {
+        // If bloodlust is enabled, and if this pull has bloodlust active on it..
+        $this->bloodLust = $this->options->bloodlust && in_array($killZone->id, $this->options->simulate_bloodlust_per_pull);
+
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
 

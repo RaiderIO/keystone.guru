@@ -404,7 +404,8 @@ return [
                 'fortified'  => 'Fortified',
                 'tyrannical' => 'Tyrannical',
             ],
-            'bloodlust'                            => 'Bloodlust',
+            'bloodlust'                            => 'Bloodlust/Heroism',
+            'bloodlust_title'                      => 'Allows you to enable/disable Bloodlust/Heroism globally. Note: when disabled, Bloodlust/Heroism per pull does not do anything.',
             'arcane_intellect'                     => 'Arcane Intellect',
             'power_word_fortitude'                 => 'PW: Fortitude',
             'battle_shout'                         => 'Battle Shout',
@@ -415,6 +416,8 @@ return [
                 You may want to lower/increase this number based on your skill, but 20% is a good start.',
             'hp_percent'                           => 'HP percentage',
             'hp_percent_title'                     => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+            'bloodlust_per_pull'                   => 'Bloodlust/heroism per pull',
+            'bloodlust_per_pull_title'             => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust to the pull closest to the icon.',
             'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
             'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
@@ -433,6 +436,7 @@ return [
                 'patreon_link_text' => 'Patreon',
                 'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
                 'advanced_options'  => 'Advanced options',
+                'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
     ],

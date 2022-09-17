@@ -141,7 +141,7 @@ function isColorDark(hex) {
  */
 function getLuminance(hex) {
     // Catch in case the color is bad
-    if( hex.length === 0 ) {
+    if (hex.length === 0) {
         hex = '#000';
     }
 
@@ -248,7 +248,7 @@ function pickHexFromHandlers(handlers, weight) {
  * @returns {number}
  */
 function getFormattedPercentage(value, max) {
-    if( max === 0 ){
+    if (max === 0) {
         return 0;
     }
 
@@ -274,16 +274,17 @@ function copyToClipboard(value, $input = null, timeoutMS = null) {
     } else {
         $input.select();
     }
-    document.execCommand('copy');
-    if ($input === null) {
+    if (document.execCommand('copy')) {
+        let opts = {};
+        if (timeoutMS !== null) {
+            opts.timeout = timeoutMS;
+        }
+        showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
+    }
+    if ($input === null && $temp !== null) {
         $temp.remove();
     }
 
-    let opts = {};
-    if (timeoutMS !== null) {
-        opts.timeout = timeoutMS;
-    }
-    showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
 }
 
 /**

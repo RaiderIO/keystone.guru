@@ -122,6 +122,10 @@ const EXPANSION_LEGION = 'legion';
 const EXPANSION_BFA = 'bfa';
 const EXPANSION_SHADOWLANDS = 'shadowlands';
 
+// Map icons
+const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
+const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';

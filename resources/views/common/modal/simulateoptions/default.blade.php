@@ -51,10 +51,12 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
     </div>
 </div>
 
-<div class="form-group row">
+<div class="form-group row no-gutters">
     <div class="col">
         <label for="simulate_bloodlust">
             {{ __('views/common.modal.simulate.bloodlust') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip"
+               title="{{ __('views/common.modal.simulate.bloodlust_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -136,6 +138,19 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
     <div class="row">
         <div class="col">
             {!! Form::text('simulate_hp_percent', '27', ['id' => 'simulate_hp_percent', 'class' => 'form-control']) !!}
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="simulate_bloodlust_per_pull">
+        {{ __('views/common.modal.simulate.bloodlust_per_pull') }}
+        <i class="fas fa-info-circle" data-toggle="tooltip"
+           title="{{ __('views/common.modal.simulate.bloodlust_per_pull_title') }}"></i>
+    </label>
+    <div class="row">
+        <div class="col">
+            {!! Form::select('simulate_bloodlust_per_pull', [], null, ['id' => 'simulate_bloodlust_per_pull', 'class' => 'form-control selectpicker', 'multiple' => 'multiple']) !!}
         </div>
     </div>
 </div>

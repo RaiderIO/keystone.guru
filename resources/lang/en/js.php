@@ -124,6 +124,7 @@ return [
     'killzone'                                    => 'Killzone',
     'mapicon'                                     => 'Icon',
     'mapicon_title'                               => 'Create an icon. Hotkey: <b>:hotkey</b>',
+    'map_icon'                                    => 'Icon',
     'brushline'                                   => 'Draw',
     'brushline_title'                             => 'Draw a line. Hotkey: <b>:hotkey</b>',
     'pridefulenemy'                               => 'Prideful',
@@ -501,4 +502,7 @@ return [
     'specialization_select'                 => 'Specialization...',
     'class_select'                          => 'Class...',
     'race_select'                           => 'Race...',
+
+    // Simulate
+    'simulate_pull'                         => 'Pull :index',
 ];
