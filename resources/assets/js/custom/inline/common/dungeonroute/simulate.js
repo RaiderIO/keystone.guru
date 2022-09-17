@@ -15,26 +15,14 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         $('#simulate_get_string').unbind('click').bind('click', this._fetchSimulationCraftString.bind(this));
         $('#simulate_modal').on('show.bs.modal', this._simulateModalOpened.bind(this));
-        $('#simulationcraft_debug').on('change', function(){
-            let val = $(this).val();
-
-            if( val.length > 0 ) {
-                let latLngs = JSON.parse(val);
-
-                for(let i in latLngs){
-                    let latLng = latLngs[i];
-                    L.marker([latLng.lat, latLng.lng]).addTo(getState().getDungeonMap().leafletMap);
-                }
-
-                $(this).val('');
-            }
-        });
 
         // Whenever something changes in the screen, save the settings so that on page refresh we still remember it
         for (let key in this._getData()) {
             $(`#simulate_${key}`).on('change', this._saveSettings.bind(this));
         }
         this._loadSettings();
+
+        //
     }
 
     /**
@@ -81,6 +69,60 @@ class CommonDungeonrouteSimulate extends InlineCode {
                     $input.val(settings[key]);
                 }
             }
+        }
+
+        // If not filled yet, fill the bloodlust per pull selector
+        let $bloodlustPerPullSelect = $('#simulate_bloodlust_per_pull');
+        // Either didn't have any options yet, or none selected. Either is a candidate for re-building the select
+        if ($bloodlustPerPullSelect.val() === null || $bloodlustPerPullSelect.val().length === 0) {
+            // Remove existing options
+            $bloodlustPerPullSelect.find('option').remove();
+            let selectedPulls = [];
+
+            let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
+            for (let i = 0; i < sortedKillZones.length; i++) {
+                let killZone = sortedKillZones[i];
+
+                let $option = jQuery('<option>', {
+                    value: killZone.id,
+                    text: lang.get(`messages.simulate_pull`, {'index': killZone.index})
+                });
+
+                $bloodlustPerPullSelect.append($option);
+            }
+
+            let bloodlustKeys = [MAP_ICON_TYPE_SPELL_BLOODLUST, MAP_ICON_TYPE_SPELL_HEROISM];
+            let mapIconMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+            for (let index in mapIconMapObjectGroup.objects) {
+                let mapIcon = mapIconMapObjectGroup.objects[index];
+
+                // If we are a bloodlust icon...
+                if (bloodlustKeys.includes(mapIcon.map_icon_type.key)) {
+                    // Find the closest killzone
+                    let closestKillZone = null;
+                    let closestKillZoneDistance = 9999999;
+                    for (let i = 0; i < sortedKillZones.length; i++) {
+                        let killZone = sortedKillZones[i];
+                        // Killzone not on the same floor as the icon - ignore
+                        if (!killZone.getFloorIds().includes(mapIcon.floor_id)) {
+                            continue;
+                        }
+
+                        let distance = getLatLngDistance(killZone.getLayerCenteroid(), mapIcon.layer.getLatLng());
+                        if (closestKillZoneDistance > distance) {
+                            closestKillZone = killZone;
+                            closestKillZoneDistance = distance;
+                        }
+                    }
+
+                    if (closestKillZone !== null) {
+                        selectedPulls.push(closestKillZone.id);
+                    }
+                }
+            }
+
+            $bloodlustPerPullSelect.val(selectedPulls);
         }
     }
 
@@ -151,7 +193,10 @@ class CommonDungeonrouteSimulate extends InlineCode {
             type: 'POST',
             url: `/ajax/${getState().getMapContext().getPublicKey()}/simulate`,
             dataType: 'json',
-            data: this._getData(),
+            data: $.extend({
+                // This value is different per route - we don't want to save it to cookies nor have it be restored from cookies
+                simulate_bloodlust_per_pull: $('#simulate_bloodlust_per_pull').val()
+            }, this._getData()),
             beforeSend: function () {
                 $('.simulationcraft_export_loader_container').show();
                 $('.simulationcraft_export_result_container').hide();

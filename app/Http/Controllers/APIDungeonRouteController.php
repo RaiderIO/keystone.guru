@@ -753,10 +753,10 @@ class APIDungeonRouteController extends Controller
      * @param APISimulateFormRequest $request
      * @param RaidEventsServiceInterface $raidEventsService
      * @param DungeonRoute $dungeonroute
-     * @return array|void
+     * @return array
      * @throws AuthorizationException
      */
-    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonroute)
+    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonroute): array
     {
         $this->authorize('view', $dungeonroute);
 

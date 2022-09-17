@@ -32,6 +32,8 @@ class APISimulateFormRequest extends DungeonRouteFormRequest
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',
             'use_mounts'                     => 'in:0,1',
+            'simulate_bloodlust_per_pull'    => 'array',
+            'simulate_bloodlust_per_pull.*'  => 'int',
         ];
     }
 }

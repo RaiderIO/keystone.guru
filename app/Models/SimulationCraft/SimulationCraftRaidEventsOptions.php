@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $key_level
  * @property string $shrouded_bounty_type
  * @property string $affix
- * @property bool $bloodlust
+ * @property bool $bloodlust Override to say yes/no to Bloodlust/Heroism being available.
  * @property bool $arcane_intellect
  * @property bool $power_word_fortitude
  * @property bool $battle_shout
@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
  * don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
  * @property bool $use_mounts Premium: yes to enable mount usage to further reduce delay between pulls
+ * @property array $simulate_bloodlust_per_pull The killzone IDs that Bloodlust/Heroism should be used on
  *
  * @property DungeonRoute $dungeonroute
  *
@@ -54,6 +55,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'chaos_brand',
         'skill_loss_percent',
         'hp_percent',
+        'simulate_bloodlust_per_pull',
         'ranged_pull_compensation_yards',
         'use_mounts',
     ];
