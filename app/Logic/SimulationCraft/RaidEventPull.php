@@ -41,7 +41,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     public function calculateRaidEventPullEnemies(KillZone $killZone, array $previousKillLocation, Floor $previousKillFloor): RaidEventPullInterface
     {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
-        $this->bloodLust = $this->options->bloodlust && in_array($killZone->id, $this->options->simulate_bloodlust_per_pull);
+        $this->bloodLust = $this->options->bloodlust && in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
 
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
@@ -77,8 +77,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             $result = $this->calculateDelayBetweenPointsOnDifferentFloors($previousKillFloor, $floor, $previousKillLocation, $killLocation);
         }
 
-        // Increase all delays with the skill loss (1 + 0.2) (for 20% skill loss for example)
-        return $result * (1 + ($this->options->skill_loss_percent / 100));
+        return $result;
     }
 
     /**

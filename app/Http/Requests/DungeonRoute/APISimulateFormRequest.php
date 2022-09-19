@@ -28,7 +28,6 @@ class APISimulateFormRequest extends DungeonRouteFormRequest
             'battle_shout'                   => 'required|in:0,1',
             'mystic_touch'                   => 'required|in:0,1',
             'chaos_brand'                    => 'required|in:0,1',
-            'skill_loss_percent'             => 'required|int',
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',
             'use_mounts'                     => 'in:0,1',

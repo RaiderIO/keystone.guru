@@ -5,6 +5,7 @@ namespace App\Logic\SimulationCraft;
 use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use Illuminate\Support\Str;
 
 class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
 {
@@ -43,7 +44,7 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
      */
     public function toString(): string
     {
-        $name = sprintf('%s_%s', $this->enemy->npc->name, $this->enemyIndexInPull);
+        $name = sprintf('%s_%s', Str::slug($this->enemy->npc->name), $this->enemyIndexInPull);
 
         if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
             $name = sprintf('BOUNTY1_%s', $name);

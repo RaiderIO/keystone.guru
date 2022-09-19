@@ -25,18 +25,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $battle_shout
  * @property bool $mystic_touch
  * @property bool $chaos_brand
- * @property float $skill_loss_percent
  * @property float $hp_percent
  * @property float $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
  * don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
  * @property bool $use_mounts Premium: yes to enable mount usage to further reduce delay between pulls
- * @property array $simulate_bloodlust_per_pull The killzone IDs that Bloodlust/Heroism should be used on
+ * @property string $simulate_bloodlust_per_pull The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
  *
  * @property DungeonRoute $dungeonroute
  *
  * @package App\Models\SimulationCraft
  * @author Wouter
  * @since 27/08/2022
+ *
+ * @mixin \Eloquent
  */
 class SimulationCraftRaidEventsOptions extends Model
 {
@@ -44,6 +45,9 @@ class SimulationCraftRaidEventsOptions extends Model
 
     public $timestamps = true;
     protected $fillable = [
+        'public_key',
+        'dungeon_route_id',
+        'user_id',
         'key_level',
         'shrouded_bounty_type',
         'affix',
@@ -53,7 +57,6 @@ class SimulationCraftRaidEventsOptions extends Model
         'battle_shout',
         'mystic_touch',
         'chaos_brand',
-        'skill_loss_percent',
         'hp_percent',
         'simulate_bloodlust_per_pull',
         'ranged_pull_compensation_yards',
@@ -106,10 +109,15 @@ class SimulationCraftRaidEventsOptions extends Model
     {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
 
-        $result               = new SimulationCraftRaidEventsOptions(array_merge($request->validated(), [
-            'public_key'                     => 'asdfasdf', // self::generateRandomPublicKey(),
+        $validated = $request->validated();
+        $bloodLustPerPull = implode(',', $validated['simulate_bloodlust_per_pull']);
+        unset($validated['simulate_bloodlust_per_pull']);
+
+        $result               = SimulationCraftRaidEventsOptions::create(array_merge($validated, [
+            'public_key'                     => self::generateRandomPublicKey(),
             'user_id'                        => Auth::id(),
             'dungeon_route_id'               => $dungeonRoute->id,
+            'simulate_bloodlust_per_pull'    => $bloodLustPerPull,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
             'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,
             'use_mounts'                     => $hasAdvancedSimulation ? (int)$request->get('use_mounts') : 0,

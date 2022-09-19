@@ -117,19 +117,6 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
 </div>
 
 <div class="form-group">
-    <label for="simulate_skill_loss_percent">
-        {{ __('views/common.modal.simulate.skill_loss_percent') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.skill_loss_percent_title') }}"></i>
-    </label>
-    <div class="row">
-        <div class="col">
-            {!! Form::text('simulate_skill_loss_percent', '20', ['id' => 'simulate_skill_loss_percent', 'class' => 'form-control']) !!}
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
     <label for="simulate_hp_percent">
         {{ __('views/common.modal.simulate.hp_percent') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"

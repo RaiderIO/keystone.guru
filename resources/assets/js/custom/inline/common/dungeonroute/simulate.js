@@ -41,7 +41,6 @@ class CommonDungeonrouteSimulate extends InlineCode {
             battle_shout: $('#simulate_battle_shout').is(':checked') ? 1 : 0,
             mystic_touch: $('#simulate_mystic_touch').is(':checked') ? 1 : 0,
             chaos_brand: $('#simulate_chaos_brand').is(':checked') ? 1 : 0,
-            skill_loss_percent: $('#simulate_skill_loss_percent').val(),
             hp_percent: $('#simulate_hp_percent').val(),
             ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val(),
             use_mounts: $('#simulate_use_mounts').is(':checked') ? 1 : 0,
@@ -152,15 +151,6 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 type: 'single',
                 min: 2,
                 max: 40
-            });
-
-        let $skillLossPercent = $('#simulate_skill_loss_percent')
-            .ionRangeSlider({
-                grid: true,
-                grid_snap: true,
-                type: 'single',
-                min: 0,
-                max: 100
             });
 
         let $hpPercentage = $('#simulate_hp_percent')

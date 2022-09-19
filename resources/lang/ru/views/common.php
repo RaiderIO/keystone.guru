@@ -405,7 +405,6 @@ return [
             'battle_shout'               => '@todo ru: .modal.simulate.battle_shout',
             'mystic_touch'               => '@todo ru: .modal.simulate.mystic_touch',
             'chaos_brand'                => '@todo ru: .modal.simulate.chaos_brand',
-            'skill_loss_percent'         => '@todo ru: .modal.simulate.skill_loss_percent',
             'hp_percent'                 => '@todo ru: .modal.simulate.hp_percent',
             'get_simulationcraft_string' => '@todo ru: .modal.simulate.get_simulationcraft_string',
             'simulationcraft_string'     => '@todo ru: .modal.simulate.simulationcraft_string',

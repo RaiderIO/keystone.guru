@@ -386,7 +386,7 @@ return [
         ],
         'simulate'        => [
             'intro'                                => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
-                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would!',
+                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, enable SimC Expert Mode and paste the output in the Footer section.',
             'title'                                => 'Simulate route',
             'key_level'                            => 'Key level',
             'key_level_title'                      => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
@@ -411,13 +411,10 @@ return [
             'battle_shout'                         => 'Battle Shout',
             'mystic_touch'                         => 'Mystic Touch',
             'chaos_brand'                          => 'Chaos Brand',
-            'skill_loss_percent'                   => 'Skill loss percentage',
-            'skill_loss_percent_title'             => 'The percentage that you\'re not playing optimally because you\'re not a robot. 20% means that you will perform 80% as good as you in theory can.
-                You may want to lower/increase this number based on your skill, but 20% is a good start.',
             'hp_percent'                           => 'HP percentage',
             'hp_percent_title'                     => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-            'bloodlust_per_pull'                   => 'Bloodlust/heroism per pull',
-            'bloodlust_per_pull_title'             => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust to the pull closest to the icon.',
+            'bloodlust_per_pull'                   => 'Bloodlust/Heroism per pull',
+            'bloodlust_per_pull_title'             => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust/Heroism to the pull closest to the icon.',
             'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
             'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
