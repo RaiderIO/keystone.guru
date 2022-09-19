@@ -1,0 +1,27 @@
+{
+    "id": 142,
+    "release_changelog_id": 149,
+    "version": "v5.0.1",
+    "title": "",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-09-19T21:22:49+00:00",
+    "updated_at": "2022-09-19T21:22:49+00:00",
+    "changelog": {
+        "id": 149,
+        "release_id": 142,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 149,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1376,
+                "change": "Fixed various issues with the SimulationCraft implementation which brings it much closer to actual log results (thanks Finalslave for reporting).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

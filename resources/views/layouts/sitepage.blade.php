@@ -114,7 +114,7 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
 
             @if( !$adFree && $showAds && !$isMobile)
                 <div align="center" class="my-4">
-                    @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+                    @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'footer', 'reportAdPosition' => 'top-right'])
                 </div>
             @endif
 

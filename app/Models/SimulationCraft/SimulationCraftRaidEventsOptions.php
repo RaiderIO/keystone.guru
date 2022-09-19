@@ -110,7 +110,8 @@ class SimulationCraftRaidEventsOptions extends Model
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
 
         $validated = $request->validated();
-        $bloodLustPerPull = implode(',', $validated['simulate_bloodlust_per_pull']);
+
+        $bloodLustPerPull = implode(',', $validated['simulate_bloodlust_per_pull'] ?? []);
         unset($validated['simulate_bloodlust_per_pull']);
 
         $result               = SimulationCraftRaidEventsOptions::create(array_merge($validated, [

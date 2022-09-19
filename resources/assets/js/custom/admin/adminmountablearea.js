@@ -52,7 +52,7 @@ class AdminMountableArea extends MapObject {
     }
 
     isEditableByPopup() {
-        return true;
+        return getState().isMapAdmin();
     }
 
     /**

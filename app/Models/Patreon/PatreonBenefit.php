@@ -2,8 +2,8 @@
 
 namespace App\Models\Patreon;
 
-use App\Models\CacheModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int
@@ -11,8 +11,9 @@ use Eloquent;
  * @property $name string
  *
  * @mixin Eloquent
+ * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?
  */
-class PatreonBenefit extends CacheModel
+class PatreonBenefit extends Model
 {
     public const AD_FREE                 = 'ad-free';
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';
@@ -21,11 +22,11 @@ class PatreonBenefit extends CacheModel
     public const ADVANCED_SIMULATION     = 'advanced-simulation';
 
     public const ALL = [
-        self::AD_FREE                 => 1,
-//        self::UNLIMITED_DUNGEONROUTES => 2, // This was removed - it's now active for everyone
-        self::UNLISTED_ROUTES         => 3,
-        self::ANIMATED_POLYLINES      => 4,
-        self::ADVANCED_SIMULATION     => 5,
+        self::AD_FREE             => 1,
+        //        self::UNLIMITED_DUNGEONROUTES => 2, // This was removed - it's now active for everyone
+        self::UNLISTED_ROUTES     => 3,
+        self::ANIMATED_POLYLINES  => 4,
+        self::ADVANCED_SIMULATION => 5,
     ];
 
     public $timestamps = false;
