@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Logic\SimulationCraft;
 
 use App\Logic\SimulationCraft\RaidEventPullEnemy;
 use App\Models\Enemy;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
@@ -42,7 +43,7 @@ class RaidEventPullEnemyTest extends TestCase
         $string = $raidEventPullEnemy->toString();
 
         // Assert
-        Assert::assertEquals(sprintf('"%s_%d":%d', self::NPC_NAME, self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
+        Assert::assertEquals(sprintf('"%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
     }
 
     /**
@@ -63,7 +64,7 @@ class RaidEventPullEnemyTest extends TestCase
         $string = $raidEventPullEnemy->toString();
 
         // Assert
-        Assert::assertEquals(sprintf('"BOUNTY1_%s_%d":%d', self::NPC_NAME, self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
+        Assert::assertEquals(sprintf('"BOUNTY1_%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
     }
 
     /**
@@ -84,7 +85,7 @@ class RaidEventPullEnemyTest extends TestCase
         $string = $raidEventPullEnemy->toString();
 
         // Assert
-        Assert::assertEquals(sprintf('"BOUNTY3_%s_%d":%d', self::NPC_NAME, self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
+        Assert::assertEquals(sprintf('"BOUNTY3_%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
     }
 
     /**
