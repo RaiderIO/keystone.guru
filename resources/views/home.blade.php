@@ -259,11 +259,12 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row justify-content-center no-gutters">
                 <div class="col-xl-4">
                     @include('common.dungeon.select', [
-                        'id'       => $dungeonSelectId,
-                        'label'    => false,
-                        'dungeons' => $demoRouteDungeons,
-                        'showAll'  => false,
-                        'required' => false
+                        'id'          => $dungeonSelectId,
+                        'label'       => false,
+                        'dungeons'    => $demoRouteDungeons,
+                        'showAll'     => false,
+                        'showSeasons' => true,
+                        'required'    => false
                     ])
                 </div>
             </div>

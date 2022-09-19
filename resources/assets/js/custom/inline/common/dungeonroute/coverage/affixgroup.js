@@ -23,7 +23,7 @@ class CommonDungeonrouteCoverageAffixgroup extends InlineCode {
         $('#dungeonroute_coverage_season_id').on('change', function () {
             let newVal = $(this).val();
             if (Cookies.get('dungeonroute_coverage_season_id') !== newVal) {
-                Cookies.set('dungeonroute_coverage_season_id', newVal);
+                Cookies.set('dungeonroute_coverage_season_id', newVal, cookieDefaultAttributes);
                 // Refresh the page to show new season
                 window.location.href = '/';
             }

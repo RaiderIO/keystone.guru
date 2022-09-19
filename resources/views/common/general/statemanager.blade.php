@@ -4,7 +4,7 @@
     // Init it right away
     _stateManager = new StateManager();
     _stateManager.setMapContext({!! new \Illuminate\Support\Collection($mapContext) !!});
-    _stateManager.setPaidTiers({!! $paidTiers !!});
+    _stateManager.setPatreonBenefits({!! $patreonBenefits !!});
     @isset($userData)
     _stateManager.setUserData({!! $userData !!});
     @endisset

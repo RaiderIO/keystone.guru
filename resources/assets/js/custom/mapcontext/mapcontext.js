@@ -260,6 +260,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getMountableAreas() {
+        return this._options.dungeon.mountableAreas;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getNpcs() {
         return this._options.npcs;
     }
@@ -295,6 +303,14 @@ class MapContext extends Signalable {
      */
     getMaxEnemySizeDefault() {
         return this._options.maxEnemySizeDefault;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getKeystoneScalingFactor() {
+        return this._options.keystoneScalingFactor;
     }
 
     /**

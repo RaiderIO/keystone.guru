@@ -15,6 +15,7 @@ use Mockery\Exception;
  * @property int $id The ID of this Dungeon.
  * @property int $expansion_id The linked expansion to this dungeon.
  * @property int $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
  * @property int $mdt_id The ID that MDT has given this dungeon.
  * @property string $name The name of the dungeon.
  * @property string $slug The url friendly slug of the dungeon.
@@ -37,6 +38,7 @@ use Mockery\Exception;
  * @property Collection|EnemyPatrol[] $enemypatrols
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
+ * @property Collection|MountableArea[] $mountableareas
  *
  * @method static Builder active()
  * @method static Builder inactive()
@@ -51,8 +53,9 @@ class Dungeon extends CacheModel
      * @var array
      */
     protected $appends = ['floor_count'];
-    public $with = ['expansion', 'floors'];
+    protected $fillable = ['map_id'];
 
+    public $with = ['expansion', 'floors'];
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
@@ -144,7 +147,7 @@ class Dungeon extends CacheModel
 
     // Warlords of Draenor
     const DUNGEON_AUCHINDOUN                = 'auchindoun';
-    const DUNGEON_BLOODMAW_SLAG_MINES       = 'bloodmawslagmines';
+    const DUNGEON_BLOODMAUL_SLAG_MINES      = 'bloodmaulslagmines';
     const DUNGEON_IRON_DOCKS                = 'irondocks';
     const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
@@ -298,33 +301,11 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
-     * @param SeasonServiceInterface $seasonService
-     * @return Season|null
-     */
-    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
-    {
-        $nextSeason = $seasonService->getNextSeason();
-        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
-            return $nextSeason;
-        }
-
-        // $currentSeason cannot be null - there's always a season for the current expansion
-        $currentSeason = $seasonService->getCurrentSeason();
-        if ($currentSeason->hasDungeon($this)) {
-            return $currentSeason;
-        }
-
-        // Timewalking fallback
-        return $seasonService->getCurrentSeason($this->expansion);
-    }
-
-    /**
      * @return BelongsTo
      */
     public function expansion(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Expansion');
+        return $this->belongsTo(Expansion::class);
     }
 
     /**
@@ -332,7 +313,7 @@ class Dungeon extends CacheModel
      */
     public function floors(): HasMany
     {
-        return $this->hasMany('App\Models\Floor')->orderBy('index');
+        return $this->hasMany(Floor::class)->orderBy('index');
     }
 
     /**
@@ -360,7 +341,7 @@ class Dungeon extends CacheModel
      */
     public function enemies(): HasManyThrough
     {
-        return $this->hasManyThrough('App\Models\Enemy', 'App\Models\Floor');
+        return $this->hasManyThrough(Enemy::class, Floor::class);
     }
 
     /**
@@ -368,7 +349,7 @@ class Dungeon extends CacheModel
      */
     public function enemypacks(): HasManyThrough
     {
-        return $this->hasManyThrough('App\Models\EnemyPack', 'App\Models\Floor');
+        return $this->hasManyThrough(EnemyPack::class, Floor::class);
     }
 
     /**
@@ -376,7 +357,7 @@ class Dungeon extends CacheModel
      */
     public function enemypatrols(): HasManyThrough
     {
-        return $this->hasManyThrough('App\Models\EnemyPatrol', 'App\Models\Floor');
+        return $this->hasManyThrough(EnemyPatrol::class, Floor::class);
     }
 
     /**
@@ -384,7 +365,7 @@ class Dungeon extends CacheModel
      */
     public function mapicons(): HasManyThrough
     {
-        return $this->hasManyThrough('App\Models\MapIcon', 'App\Models\Floor')->where('dungeon_route_id', -1);
+        return $this->hasManyThrough(MapIcon::class, Floor::class)->where('dungeon_route_id', -1);
     }
 
     /**
@@ -392,7 +373,15 @@ class Dungeon extends CacheModel
      */
     public function floorswitchmarkers(): HasManyThrough
     {
-        return $this->hasManyThrough('App\Models\DungeonFloorSwitchMarker', 'App\Models\Floor');
+        return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function mountableareas(): HasManyThrough
+    {
+        return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
     /**
@@ -428,6 +417,47 @@ class Dungeon extends CacheModel
         return $query->where('dungeons.active', 0);
     }
 
+    /**
+     * @return MapIcon|null
+     */
+    public function getDungeonStart(): ?MapIcon
+    {
+        $result = null;
+
+        foreach ($this->floors as $floor) {
+            foreach ($floor->mapicons as $mapicon) {
+                if ($mapicon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
+                    $result = $mapicon;
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
+     * @param SeasonServiceInterface $seasonService
+     * @return Season|null
+     */
+    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
+    {
+        $nextSeason = $seasonService->getNextSeason();
+        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
+            return $nextSeason;
+        }
+
+        // $currentSeason cannot be null - there's always a season for the current expansion
+        $currentSeason = $seasonService->getCurrentSeason();
+        if ($currentSeason->hasDungeon($this)) {
+            return $currentSeason;
+        }
+
+        // Timewalking fallback
+        return $seasonService->getCurrentSeason($this->expansion);
+    }
+
 
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
@@ -435,9 +465,9 @@ class Dungeon extends CacheModel
     public function getNpcsMinHealth(): int
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('aggressiveness', '<>', 'friendly')
-                ->where('enemy_forces', '>', 0)
-                ->min('base_health') ?? 10000;
+            ->where('aggressiveness', '<>', 'friendly')
+            ->where('enemy_forces', '>', 0)
+            ->min('base_health') ?? 10000;
     }
 
     /**
@@ -446,9 +476,9 @@ class Dungeon extends CacheModel
     public function getNpcsMaxHealth(): int
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                ->where('aggressiveness', '<>', 'friendly')
-                ->where('enemy_forces', '>', 0)
-                ->max('base_health') ?? 100000;
+            ->where('aggressiveness', '<>', 'friendly')
+            ->where('enemy_forces', '>', 0)
+            ->max('base_health') ?? 100000;
     }
 
     /**
@@ -477,7 +507,7 @@ class Dungeon extends CacheModel
      */
     public function getTimerUpgradePlusTwoSeconds(): int
     {
-        return $this->timer_max_seconds * config('keystoneguru.timer.plustwofactor');
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
     }
 
     /**
@@ -485,7 +515,7 @@ class Dungeon extends CacheModel
      */
     public function getTimerUpgradePlusThreeSeconds(): int
     {
-        return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
     }
 
     /**

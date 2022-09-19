@@ -7,24 +7,24 @@
 /** @var array $show */
 /** @var bool $adFree */
 
-$user = Auth::user();
-$isAdmin = isset($admin) && $admin;
-$embed = isset($embed) && $embed;
-$edit = isset($edit) && $edit;
-$mapClasses = $mapClasses ?? '';
-$dungeonroute = $dungeonroute ?? null;
-$livesession = $livesession ?? null;
+$user             = Auth::user();
+$isAdmin          = isset($admin) && $admin;
+$embed            = isset($embed) && $embed;
+$edit             = isset($edit) && $edit;
+$mapClasses       = $mapClasses ?? '';
+$dungeonroute     = $dungeonroute ?? null;
+$livesession      = $livesession ?? null;
 $show['controls'] = $show['controls'] ?? [];
 
 // Set the key to 'sandbox' if sandbox mode is enabled
-$sandboxMode = isset($sandboxMode) && $sandboxMode;
-$enemyVisualType = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
-$unkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
-$unkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
+$sandboxMode                      = isset($sandboxMode) && $sandboxMode;
+$enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
+$unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 
 // Allow echo to be overridden
-$echo = $echo ?? Auth::check() && !$sandboxMode;
+$echo           = $echo ?? Auth::check() && !$sandboxMode;
 $zoomToContents = $zoomToContents ?? false;
 
 // Show ads or not
@@ -34,7 +34,7 @@ if ($embed || optional($dungeonroute)->demo === 1) {
     $showAds = false;
 }
 // No UI on the map
-$noUI = isset($noUI) && $noUI;
+$noUI            = isset($noUI) && $noUI;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
 $defaultZoom = $defaultZoom ?? 2;
@@ -90,7 +90,7 @@ if ($isAdmin) {
 
     @include('common.general.statemanager', [
         'echo' => $echo,
-        'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
+        'patreonBenefits' => Auth::check() ? $user->getPatreonBenefits() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,
     ])
@@ -110,9 +110,9 @@ if ($isAdmin) {
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
             <?php
-            $i = 0;
-            foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction) {
-            ?>
+                                                                                                             $i = 0;
+                                                                                                         foreach (\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction) {
+                                                                                                             ?>
             <a class="map_faction_display_control map_controls_custom" href="#"
                data-faction="{{ strtolower($faction->key) }}"
                        title="{{ __($faction->name) }}">
@@ -122,11 +122,12 @@ if ($isAdmin) {
                              data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                 </a>
                 <?php
-            $i++;
-            } ?>
+                                                                                                                                                                                                                                                                                                                                                                         $i++;
+                                                                                                                                                                                                                                                                                                                                                                     } ?>
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
+
         </script>
     @endif
 @endsection

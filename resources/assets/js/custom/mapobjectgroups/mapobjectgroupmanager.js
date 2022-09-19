@@ -58,9 +58,11 @@ class MapObjectGroupManager extends Signalable {
             result = new MapIconMapObjectGroup(this, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
             result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_MOUNTABLE_AREA) {
+            result = new MountableAreaMapObjectGroup(this, getState().isMapAdmin());
         }
 
-        console.assert(result !== null, 'Unable to find map object group ' + name, this);
+        console.assert(result !== null, `Unable to find map object group ${name}`, this);
 
         return result;
     }

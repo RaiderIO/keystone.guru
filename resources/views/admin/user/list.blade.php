@@ -7,7 +7,7 @@
 @section('scripts')
     <script type="text/javascript">
         /** @type object */
-        let paidTiers = {!! $paidTiers; !!};
+        let patreonBenefits = {!! $patreonBenefits; !!};
 
         $(function () {
             $('#admin_user_table').DataTable({
@@ -21,18 +21,18 @@
                     refreshSelectPickers();
 
                     // Add a new row when the button is pressed
-                    $('select.patreon_paid_tiers').bind('change', function () {
+                    $('select.patreon_benefits').bind('change', function () {
                         let $this = $(this);
 
                         $.ajax({
                             type: 'PUT',
-                            url: `/ajax/user/${$this.data('userid')}/patreon/paidtier`,
+                            url: `/ajax/user/${$this.data('userid')}/patreon/benefit`,
                             data: {
-                                paidtiers: $this.val()
+                                patreonBenefits: $this.val()
                             },
                             dataType: 'json',
                             success: function () {
-                                showSuccessNotification(lang.get('messages.updated_paid_tiers_successfully_label'));
+                                showSuccessNotification(lang.get('messages.updated_patreon_benefits_successfully_label'));
                             }
                         });
                     });
@@ -104,20 +104,25 @@
                         'searchable': false,
                         'render': function (data, type, row, meta) {
                             let result = '';
-                            if (row.patreondata !== null) {
+                            if (row.patreon_user_link !== null) {
                                 let template = Handlebars.templates['admin_users_table_row_patreon'];
 
-                                let paidTiersCopy = JSON.parse(JSON.stringify(paidTiers));
-                                for (let i = 0; i < row.patreondata.paidtiers.length; i++) {
-                                    let userPaidTier = row.patreondata.paidtiers[i];
-                                    for (let j = 0; j < paidTiersCopy.length; j++) {
-                                        if (paidTiersCopy[j].id === userPaidTier.id) {
-                                            paidTiersCopy[j].selected = true;
+                                console.log(row.patreon_user_link);
+
+                                let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
+                                for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
+                                    let userPaidTier = row.patreon_user_link.patreonbenefits[i];
+                                    for (let j = 0; j < patreonBenefitsCopy.length; j++) {
+                                        // Translate the patreon benefit's name
+                                        patreonBenefitsCopy[j].name = lang.get(patreonBenefitsCopy[j].name);
+
+                                        if (patreonBenefitsCopy[j].id === userPaidTier.id) {
+                                            patreonBenefitsCopy[j].selected = true;
                                         }
                                     }
                                 }
 
-                                result = template($.extend({}, getHandlebarsDefaultVariables(), row, {paidtiers: paidTiersCopy}));
+                                result = template($.extend({}, getHandlebarsDefaultVariables(), row, {paidtiers: patreonBenefitsCopy}));
                             }
 
                             return result;

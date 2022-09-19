@@ -3,6 +3,7 @@
         "id": 1,
         "expansion_id": 1,
         "zone_id": 7855,
+        "map_id": 1516,
         "mdt_id": 12,
         "key": "arcway",
         "name": "dungeons.legion.arcway.name",
@@ -22,6 +23,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -31,6 +36,7 @@
         "id": 2,
         "expansion_id": 1,
         "zone_id": 7805,
+        "map_id": 1501,
         "mdt_id": 1,
         "key": "blackrookhold",
         "name": "dungeons.legion.black_rook_hold.name",
@@ -50,6 +56,10 @@
                 "default": 1,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
+                "ingame_min_x": 3085.84,
+                "ingame_min_y": 7176.88,
+                "ingame_max_x": 3530,
+                "ingame_max_y": 7843.12,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -68,6 +78,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3000,
+                "ingame_min_y": 7168.69,
+                "ingame_max_x": 3215,
+                "ingame_max_y": 7491.19,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -92,6 +106,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
+                "ingame_min_x": 3124.33,
+                "ingame_min_y": 7267.49,
+                "ingame_max_x": 3267.67,
+                "ingame_max_y": 7482.51,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -116,6 +134,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
+                "ingame_min_x": 3115.99,
+                "ingame_min_y": 7193.75,
+                "ingame_max_x": 3337.65,
+                "ingame_max_y": 7526.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -140,6 +162,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
+                "ingame_min_x": 3120,
+                "ingame_min_y": 7289.5,
+                "ingame_max_x": 3240,
+                "ingame_max_y": 7469.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -164,6 +190,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 52,
+                "ingame_min_x": 3130,
+                "ingame_min_y": 7316.25,
+                "ingame_max_x": 3245,
+                "ingame_max_y": 7488.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -180,6 +210,7 @@
         "id": 3,
         "expansion_id": 1,
         "zone_id": 8527,
+        "map_id": 1677,
         "mdt_id": 2,
         "key": "cathedralofeternalnight",
         "name": "dungeons.legion.cathedral_of_eternal_night.name",
@@ -199,6 +230,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -745,
+                "ingame_min_y": 2175.31,
+                "ingame_max_x": -302.5,
+                "ingame_max_y": 2839.06,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             },
@@ -210,6 +245,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -725,
+                "ingame_min_y": 2238.44,
+                "ingame_max_x": -365,
+                "ingame_max_y": 2778.44,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             },
@@ -221,6 +260,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -675,
+                "ingame_min_y": 2295.81,
+                "ingame_max_x": -352.5,
+                "ingame_max_y": 2779.56,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             },
@@ -232,6 +275,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -725,
+                "ingame_min_y": 2279.28,
+                "ingame_max_x": -410,
+                "ingame_max_y": 2751.78,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             },
@@ -243,6 +290,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -650,
+                "ingame_min_y": 2405.03,
+                "ingame_max_x": -480,
+                "ingame_max_y": 2660.03,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -252,6 +303,7 @@
         "id": 4,
         "expansion_id": 1,
         "zone_id": 8079,
+        "map_id": 1571,
         "mdt_id": 3,
         "key": "courtofstars",
         "name": "dungeons.legion.court_of_stars.name",
@@ -271,6 +323,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 808.33,
+                "ingame_min_y": 2893.75,
+                "ingame_max_x": 1470.83,
+                "ingame_max_y": 3887.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -280,6 +336,7 @@
         "id": 5,
         "expansion_id": 1,
         "zone_id": 7673,
+        "map_id": 1466,
         "mdt_id": 4,
         "key": "darkheartthicket",
         "name": "dungeons.legion.darkheart_thicket.name",
@@ -299,6 +356,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -308,9 +369,10 @@
         "id": 6,
         "expansion_id": 1,
         "zone_id": 8040,
+        "map_id": 1456,
         "mdt_id": 5,
         "key": "eyeofazshara",
-        "name": "dungeons.legion.eye_of_aszhara.name",
+        "name": "dungeons.legion.eye_of_azshara.name",
         "slug": "eye-of-azshara",
         "enemy_forces_required": 206,
         "enemy_forces_required_teeming": 242,
@@ -323,10 +385,14 @@
                 "id": 15,
                 "index": 1,
                 "mdt_sub_level": null,
-                "name": "dungeons.legion.eye_of_aszhara.floors.eye_of_aszhara",
+                "name": "dungeons.legion.eye_of_azshara.floors.eye_of_azshara",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -336,6 +402,7 @@
         "id": 7,
         "expansion_id": 1,
         "zone_id": 7672,
+        "map_id": 1728,
         "mdt_id": 6,
         "key": "hallsofvalor",
         "name": "dungeons.legion.halls_of_valor.name",
@@ -355,6 +422,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -373,6 +444,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -397,6 +472,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -413,6 +492,7 @@
         "id": 8,
         "expansion_id": 1,
         "zone_id": 8443,
+        "map_id": 1651,
         "mdt_id": 9,
         "key": "lowerkarazhan",
         "name": "dungeons.legion.lower_karazhan.name",
@@ -432,6 +512,10 @@
                 "default": 1,
                 "min_enemy_size": 16,
                 "max_enemy_size": 34,
+                "ingame_min_x": -11190.6,
+                "ingame_min_y": -2205.77,
+                "ingame_max_x": -10802.9,
+                "ingame_max_y": -1624.23,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -462,6 +546,10 @@
                 "default": 0,
                 "min_enemy_size": 20,
                 "max_enemy_size": 44,
+                "ingame_min_x": -10969.3,
+                "ingame_min_y": -1932.58,
+                "ingame_max_x": -10813.2,
+                "ingame_max_y": -1698.43,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -486,6 +574,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11119.6,
+                "ingame_min_y": -2190.02,
+                "ingame_max_x": -10772.9,
+                "ingame_max_y": -1669.98,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -522,6 +614,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11066.3,
+                "ingame_min_y": -2132.57,
+                "ingame_max_x": -10836.2,
+                "ingame_max_y": -1787.43,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -552,6 +648,10 @@
                 "default": 0,
                 "min_enemy_size": 20,
                 "max_enemy_size": 40,
+                "ingame_min_x": -11189,
+                "ingame_min_y": -2081.42,
+                "ingame_max_x": -11017.1,
+                "ingame_max_y": -1823.56,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -582,6 +682,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11189.6,
+                "ingame_min_y": -2225.02,
+                "ingame_max_x": -10822.9,
+                "ingame_max_y": -1674.98,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -610,6 +714,7 @@
         "id": 9,
         "expansion_id": 1,
         "zone_id": 7812,
+        "map_id": 1492,
         "mdt_id": 7,
         "key": "mawofsouls",
         "name": "dungeons.legion.maw_of_souls.name",
@@ -629,6 +734,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -647,6 +756,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2816.67,
+                "ingame_min_y": 600,
+                "ingame_max_x": 3083.33,
+                "ingame_max_y": 1000,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -671,6 +784,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2816.67,
+                "ingame_min_y": 600,
+                "ingame_max_x": 3083.33,
+                "ingame_max_y": 1000,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -687,6 +804,7 @@
         "id": 10,
         "expansion_id": 1,
         "zone_id": 7546,
+        "map_id": 1458,
         "mdt_id": 8,
         "key": "neltharionslair",
         "name": "dungeons.legion.neltharions_lair.name",
@@ -706,6 +824,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2443.75,
+                "ingame_min_y": 939.58,
+                "ingame_max_x": 3329.17,
+                "ingame_max_y": 2266.67,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -715,6 +837,7 @@
         "id": 11,
         "expansion_id": 1,
         "zone_id": 8443,
+        "map_id": 1651,
         "mdt_id": 10,
         "key": "upperkarazhan",
         "name": "dungeons.legion.upper_karazhan.name",
@@ -734,6 +857,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11115.6,
+                "ingame_min_y": -2066.77,
+                "ingame_max_x": -10987.9,
+                "ingame_max_y": -1875.23,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -752,6 +879,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11105.2,
+                "ingame_min_y": -2037.68,
+                "ingame_max_x": -11012.3,
+                "ingame_max_y": -1898.33,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -776,6 +907,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -11229.6,
+                "ingame_min_y": -2110.02,
+                "ingame_max_x": -10942.9,
+                "ingame_max_y": -1679.98,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -800,6 +935,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -4800,
+                "ingame_min_y": -2668.75,
+                "ingame_max_x": -4425,
+                "ingame_max_y": -2106.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -824,6 +963,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -4850,
+                "ingame_min_y": -3056.25,
+                "ingame_max_x": -4175,
+                "ingame_max_y": -2043.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -848,6 +991,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3918,
+                "ingame_min_y": -2445.75,
+                "ingame_max_x": 4225,
+                "ingame_max_y": -1985.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -872,6 +1019,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3660,
+                "ingame_min_y": -2516.25,
+                "ingame_max_x": 4015,
+                "ingame_max_y": -1983.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -896,6 +1047,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3330,
+                "ingame_min_y": -2659.69,
+                "ingame_max_x": 4065,
+                "ingame_max_y": -1557.19,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -912,6 +1067,7 @@
         "id": 12,
         "expansion_id": 1,
         "zone_id": 8910,
+        "map_id": 1753,
         "mdt_id": 11,
         "key": "theseatofthetriumvirate",
         "name": "dungeons.legion.the_seat_of_the_triumvirate.name",
@@ -931,6 +1087,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -940,6 +1100,7 @@
         "id": 13,
         "expansion_id": 1,
         "zone_id": 7787,
+        "map_id": 1493,
         "mdt_id": 13,
         "key": "vaultofthewardens",
         "name": "dungeons.legion.vault_of_the_wardens.name",
@@ -959,6 +1120,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 4083.33,
+                "ingame_min_y": -963.75,
+                "ingame_max_x": 4535,
+                "ingame_max_y": -286.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -977,6 +1142,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 4096.49,
+                "ingame_min_y": -1000.38,
+                "ingame_max_x": 4783.83,
+                "ingame_max_y": 30.63,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1001,6 +1170,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3893.75,
+                "ingame_min_y": -809.38,
+                "ingame_max_x": 4575,
+                "ingame_max_y": 212.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1017,6 +1190,7 @@
         "id": 14,
         "expansion_id": 2,
         "zone_id": 9028,
+        "map_id": 1763,
         "mdt_id": 15,
         "key": "ataldazar",
         "name": "dungeons.bfa.atal_dazar.name",
@@ -1036,6 +1210,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1206.71,
+                "ingame_min_y": 1820,
+                "ingame_max_x": -508.28,
+                "ingame_max_y": 2867.64,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1054,6 +1232,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -950,
+                "ingame_min_y": 2106.25,
+                "ingame_max_x": -700,
+                "ingame_max_y": 2481.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1070,6 +1252,7 @@
         "id": 15,
         "expansion_id": 2,
         "zone_id": 9164,
+        "map_id": 1754,
         "mdt_id": 16,
         "key": "freehold",
         "name": "dungeons.bfa.freehold.name",
@@ -1089,6 +1272,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -1098,6 +1285,7 @@
         "id": 16,
         "expansion_id": 2,
         "zone_id": 9526,
+        "map_id": 1762,
         "mdt_id": 17,
         "key": "kingsrest",
         "name": "dungeons.bfa.kings_rest.name",
@@ -1117,6 +1305,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -1126,6 +1318,7 @@
         "id": 17,
         "expansion_id": 2,
         "zone_id": 9525,
+        "map_id": 1864,
         "mdt_id": 18,
         "key": "shrineofthestorm",
         "name": "dungeons.bfa.shrine_of_the_storm.name",
@@ -1145,6 +1338,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3500,
+                "ingame_min_y": -1831.25,
+                "ingame_max_x": 4225,
+                "ingame_max_y": -743.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1163,6 +1360,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3320.83,
+                "ingame_min_y": -1950,
+                "ingame_max_x": 3804.17,
+                "ingame_max_y": -1225,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1179,6 +1380,7 @@
         "id": 18,
         "expansion_id": 2,
         "zone_id": 9354,
+        "map_id": 1822,
         "mdt_id": 19,
         "key": "siegeofboralus",
         "name": "dungeons.bfa.siege_of_boralus.name",
@@ -1198,6 +1400,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -1207,6 +1413,7 @@
         "id": 19,
         "expansion_id": 2,
         "zone_id": 9527,
+        "map_id": 1877,
         "mdt_id": 20,
         "key": "templeofsethraliss",
         "name": "dungeons.bfa.temple_of_sethraliss.name",
@@ -1226,6 +1433,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3187.5,
+                "ingame_min_y": 2789.58,
+                "ingame_max_x": 3937.5,
+                "ingame_max_y": 3916.67,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1244,6 +1455,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1260,6 +1475,7 @@
         "id": 20,
         "expansion_id": 2,
         "zone_id": 8064,
+        "map_id": 1594,
         "mdt_id": 21,
         "key": "themotherlode",
         "name": "dungeons.bfa.the_motherlode.name",
@@ -1279,6 +1495,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -1288,6 +1508,7 @@
         "id": 21,
         "expansion_id": 2,
         "zone_id": 9391,
+        "map_id": 1841,
         "mdt_id": 22,
         "key": "theunderrot",
         "name": "dungeons.bfa.the_underrot.name",
@@ -1307,6 +1528,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 545.83,
+                "ingame_min_y": 697.92,
+                "ingame_max_x": 1227.08,
+                "ingame_max_y": 1718.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1325,6 +1550,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 1060,
+                "ingame_min_y": 1248.13,
+                "ingame_max_x": 1300,
+                "ingame_max_y": 1608.13,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1341,6 +1570,7 @@
         "id": 22,
         "expansion_id": 2,
         "zone_id": 9327,
+        "map_id": 1771,
         "mdt_id": 23,
         "key": "toldagor",
         "name": "dungeons.bfa.tol_dagor.name",
@@ -1360,6 +1590,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -118.75,
+                "ingame_min_y": -3097.92,
+                "ingame_max_x": 364.58,
+                "ingame_max_y": -2372.92,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1378,6 +1612,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 55,
+                "ingame_min_y": -2817.5,
+                "ingame_max_x": 225,
+                "ingame_max_y": -2562.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1402,6 +1640,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 76.48,
+                "ingame_min_y": -2817.34,
+                "ingame_max_x": 244.27,
+                "ingame_max_y": -2555.18,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1426,6 +1668,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 70,
+                "ingame_min_y": -2801.25,
+                "ingame_max_x": 225,
+                "ingame_max_y": -2568.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1450,6 +1696,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 70,
+                "ingame_min_y": -2801.25,
+                "ingame_max_x": 225,
+                "ingame_max_y": -2568.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1474,6 +1724,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 29.42,
+                "ingame_min_y": -2870,
+                "ingame_max_x": 275.58,
+                "ingame_max_y": -2500.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1498,6 +1752,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 70,
+                "ingame_min_y": -2808.75,
+                "ingame_max_x": 235,
+                "ingame_max_y": -2561.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1514,6 +1772,7 @@
         "id": 23,
         "expansion_id": 2,
         "zone_id": 9424,
+        "map_id": 1862,
         "mdt_id": 24,
         "key": "waycrestmanor",
         "name": "dungeons.bfa.waycrest_manor.name",
@@ -1533,6 +1792,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -665,
+                "ingame_min_y": -477.5,
+                "ingame_max_x": -365,
+                "ingame_max_y": -27.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1557,6 +1820,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -645.83,
+                "ingame_min_y": -415,
+                "ingame_max_x": -429.17,
+                "ingame_max_y": -90,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1575,6 +1842,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -555,
+                "ingame_min_y": -338.75,
+                "ingame_max_x": -450,
+                "ingame_max_y": -181.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1599,6 +1870,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -605,
+                "ingame_min_y": -347.5,
+                "ingame_max_x": -485,
+                "ingame_max_y": -167.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1623,6 +1898,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -508.33,
+                "ingame_min_y": -410,
+                "ingame_max_x": -405,
+                "ingame_max_y": -255,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1639,6 +1918,7 @@
         "id": 24,
         "expansion_id": 2,
         "zone_id": 10225,
+        "map_id": 2097,
         "mdt_id": 25,
         "key": "mechagonjunkyard",
         "name": "dungeons.bfa.mechagon_junkyard.name",
@@ -1658,6 +1938,10 @@
                 "default": 1,
                 "min_enemy_size": 9,
                 "max_enemy_size": 20,
+                "ingame_min_x": -10.48,
+                "ingame_min_y": -1050.07,
+                "ingame_max_x": 1547.85,
+                "ingame_max_y": 1287.43,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1676,6 +1960,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -10.48,
+                "ingame_min_y": -1050.07,
+                "ingame_max_x": 1547.85,
+                "ingame_max_y": 1287.43,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1692,6 +1980,7 @@
         "id": 25,
         "expansion_id": 2,
         "zone_id": 10225,
+        "map_id": 2097,
         "mdt_id": 26,
         "key": "mechagonworkshop",
         "name": "dungeons.bfa.mechagon_workshop.name",
@@ -1711,6 +2000,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 380,
+                "ingame_min_y": 19.77,
+                "ingame_max_x": 586.98,
+                "ingame_max_y": 330.23,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1729,6 +2022,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 396.67,
+                "ingame_min_y": -1.25,
+                "ingame_max_x": 715,
+                "ingame_max_y": 476.25,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1753,6 +2050,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 585,
+                "ingame_min_y": 180,
+                "ingame_max_x": 945,
+                "ingame_max_y": 720,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1769,6 +2070,7 @@
         "id": 26,
         "expansion_id": 2,
         "zone_id": 0,
+        "map_id": 0,
         "mdt_id": 0,
         "key": "orgrimmarhorrificvision",
         "name": "dungeons.bfa.orgrimmar_horrific_vision.name",
@@ -1788,6 +2090,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1806,6 +2112,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1822,6 +2132,7 @@
         "id": 27,
         "expansion_id": 2,
         "zone_id": 0,
+        "map_id": 0,
         "mdt_id": 0,
         "key": "stormwindcityhorrificvision",
         "name": "dungeons.bfa.stormwind_horrific_vision.name",
@@ -1841,6 +2152,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -1850,6 +2165,7 @@
         "id": 28,
         "expansion_id": 3,
         "zone_id": 13309,
+        "map_id": 2291,
         "mdt_id": 29,
         "key": "deotherside_ardenweald",
         "name": "dungeons.shadowlands.de_other_side.name",
@@ -1869,6 +2185,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2450,
+                "ingame_min_y": -2735,
+                "ingame_max_x": 3140,
+                "ingame_max_y": -1700,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1899,6 +2219,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2200,
+                "ingame_min_y": -2505,
+                "ingame_max_x": 2570,
+                "ingame_max_y": -1950,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1917,6 +2241,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2586.67,
+                "ingame_min_y": -2010,
+                "ingame_max_x": 2883.33,
+                "ingame_max_y": -1565,
                 "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
@@ -1935,6 +2263,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2510.42,
+                "ingame_min_y": -3241.67,
+                "ingame_max_x": 3068.75,
+                "ingame_max_y": -2404.17,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1951,6 +2283,7 @@
         "id": 29,
         "expansion_id": 3,
         "zone_id": 12831,
+        "map_id": 2287,
         "mdt_id": 30,
         "key": "hallsofatonement_a",
         "name": "dungeons.shadowlands.halls_of_atonement.name",
@@ -1970,6 +2303,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -2445.83,
+                "ingame_min_y": 4916.67,
+                "ingame_max_x": -1933.33,
+                "ingame_max_y": 5685.42,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -1988,6 +2325,10 @@
                 "default": 0,
                 "min_enemy_size": 18,
                 "max_enemy_size": 38,
+                "ingame_min_x": -2295,
+                "ingame_min_y": 5472.5,
+                "ingame_max_x": -2125,
+                "ingame_max_y": 5727.5,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2012,6 +2353,10 @@
                 "default": 0,
                 "min_enemy_size": 18,
                 "max_enemy_size": 38,
+                "ingame_min_x": -2312.5,
+                "ingame_min_y": 5450,
+                "ingame_max_x": -2112.5,
+                "ingame_max_y": 5750,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2028,6 +2373,7 @@
         "id": 30,
         "expansion_id": 3,
         "zone_id": 13334,
+        "map_id": 2290,
         "mdt_id": 31,
         "key": "mistsoftirnescithe",
         "name": "dungeons.shadowlands.mists_of_tirna_scithe.name",
@@ -2047,6 +2393,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -7618.75,
+                "ingame_min_y": 1733.33,
+                "ingame_max_x": -6741.67,
+                "ingame_max_y": 3047.92,
                 "percentage_display_zoom": 2,
                 "floorcouplings": []
             }
@@ -2056,6 +2406,7 @@
         "id": 31,
         "expansion_id": 3,
         "zone_id": 13228,
+        "map_id": 2289,
         "mdt_id": 32,
         "key": "plaguefall",
         "name": "dungeons.shadowlands.plaguefall.name",
@@ -2075,6 +2426,10 @@
                 "default": 1,
                 "min_enemy_size": 8,
                 "max_enemy_size": 22,
+                "ingame_min_x": 900,
+                "ingame_min_y": -4591.67,
+                "ingame_max_x": 2266.67,
+                "ingame_max_y": -2541.67,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2093,6 +2448,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 900,
+                "ingame_min_y": -3948.75,
+                "ingame_max_x": 1265,
+                "ingame_max_y": -3401.25,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2109,6 +2468,7 @@
         "id": 32,
         "expansion_id": 3,
         "zone_id": 12842,
+        "map_id": 2284,
         "mdt_id": 33,
         "key": "sanguinedepths_a",
         "name": "dungeons.shadowlands.sanguine_depths.name",
@@ -2128,6 +2488,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1620,
+                "ingame_min_y": 5945.63,
+                "ingame_max_x": -1155,
+                "ingame_max_y": 6643.13,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2146,6 +2510,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1635,
+                "ingame_min_y": 5997.5,
+                "ingame_max_x": -1225,
+                "ingame_max_y": 6612.5,
                 "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
@@ -2162,6 +2530,7 @@
         "id": 33,
         "expansion_id": 3,
         "zone_id": 12837,
+        "map_id": 2285,
         "mdt_id": 34,
         "key": "spiresofascension_a",
         "name": "dungeons.shadowlands.spires_of_ascension.name",
@@ -2181,6 +2550,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1430,
+                "ingame_min_y": -6383.12,
+                "ingame_max_x": -1139.17,
+                "ingame_max_y": -5946.88,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2199,6 +2572,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1410,
+                "ingame_min_y": -7352.5,
+                "ingame_max_x": -540,
+                "ingame_max_y": -6047.5,
                 "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
@@ -2223,6 +2600,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -670,
+                "ingame_min_y": -8150,
+                "ingame_max_x": 180,
+                "ingame_max_y": -6875,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2247,6 +2628,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -241.67,
+                "ingame_min_y": -7820,
+                "ingame_max_x": 71.67,
+                "ingame_max_y": -7350,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2263,6 +2648,7 @@
         "id": 34,
         "expansion_id": 3,
         "zone_id": 12916,
+        "map_id": 2286,
         "mdt_id": 35,
         "key": "necroticwake_a",
         "name": "dungeons.shadowlands.the_necrotic_wake.name",
@@ -2282,6 +2668,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -3575,
+                "ingame_min_y": -3945.83,
+                "ingame_max_x": -3143.75,
+                "ingame_max_y": -3300,
                 "percentage_display_zoom": 2,
                 "floorcouplings": [
                     {
@@ -2300,6 +2690,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1000000,
+                "ingame_min_y": -1500000,
+                "ingame_max_x": 1000000,
+                "ingame_max_y": 1500000,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2324,6 +2718,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -1000000,
+                "ingame_min_y": -1000000,
+                "ingame_max_x": 1000000,
+                "ingame_max_y": 1000000,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2340,6 +2738,7 @@
         "id": 35,
         "expansion_id": 3,
         "zone_id": 12841,
+        "map_id": 2293,
         "mdt_id": 36,
         "key": "theaterofpain",
         "name": "dungeons.shadowlands.theater_of_pain.name",
@@ -2359,6 +2758,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2550,
+                "ingame_min_y": -2981.25,
+                "ingame_max_x": 3137.5,
+                "ingame_max_y": -2100,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2377,6 +2780,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2610,
+                "ingame_min_y": -2892.5,
+                "ingame_max_x": 2950,
+                "ingame_max_y": -2382.5,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2407,6 +2814,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2855,
+                "ingame_min_y": -2733.75,
+                "ingame_max_x": 3290,
+                "ingame_max_y": -2081.25,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2425,6 +2836,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2791.67,
+                "ingame_min_y": -2540,
+                "ingame_max_x": 2995,
+                "ingame_max_y": -2235,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2449,6 +2864,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 2791.67,
+                "ingame_min_y": -2540,
+                "ingame_max_x": 2995,
+                "ingame_max_y": -2235,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2471,6 +2890,7 @@
         "id": 36,
         "expansion_id": 3,
         "zone_id": 13577,
+        "map_id": 2441,
         "mdt_id": 37,
         "key": "tazaveshstreetsofwonder",
         "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
@@ -2490,6 +2910,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3155,
+                "ingame_min_y": -1970.25,
+                "ingame_max_x": 4050,
+                "ingame_max_y": -627.75,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2520,6 +2944,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
+                "ingame_min_x": 3300,
+                "ingame_min_y": -1427.5,
+                "ingame_max_x": 3520,
+                "ingame_max_y": -1097.5,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2538,6 +2966,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
+                "ingame_min_x": 3625,
+                "ingame_min_y": -1201.25,
+                "ingame_max_x": 3750,
+                "ingame_max_y": -1013.75,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2556,6 +2988,10 @@
                 "default": 0,
                 "min_enemy_size": 24,
                 "max_enemy_size": 40,
+                "ingame_min_x": 3775,
+                "ingame_min_y": -1291.25,
+                "ingame_max_x": 3970,
+                "ingame_max_y": -998.75,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2572,6 +3008,7 @@
         "id": 37,
         "expansion_id": 3,
         "zone_id": 13577,
+        "map_id": 2441,
         "mdt_id": 38,
         "key": "tazaveshsoleahsgambit",
         "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
@@ -2591,6 +3028,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 12279.2,
+                "ingame_min_y": 13839.6,
+                "ingame_max_x": 12695.8,
+                "ingame_max_y": 14464.6,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2609,6 +3050,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 12327.5,
+                "ingame_min_y": 13838.8,
+                "ingame_max_x": 12512.5,
+                "ingame_max_y": 14116.3,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2633,6 +3078,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": -12887.5,
+                "ingame_min_y": -11927.1,
+                "ingame_max_x": -12287.5,
+                "ingame_max_y": -11027.1,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2657,6 +3106,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 3460,
+                "ingame_min_y": -975,
+                "ingame_max_x": 3690,
+                "ingame_max_y": -630,
                 "percentage_display_zoom": 1,
                 "floorcouplings": [
                     {
@@ -2673,6 +3126,7 @@
         "id": 38,
         "expansion_id": 9,
         "zone_id": 6912,
+        "map_id": 1182,
         "mdt_id": 0,
         "key": "auchindoun",
         "name": "dungeons.wod.auchindoun.name",
@@ -2689,10 +3143,11 @@
         "id": 39,
         "expansion_id": 9,
         "zone_id": 6874,
+        "map_id": 1175,
         "mdt_id": 0,
-        "key": "bloodmaw_slag_mines",
-        "name": "dungeons.wod.bloodmaw_slag_mines.name",
-        "slug": "bloodmaw-slag-mines",
+        "key": "bloodmaul_slag_mines",
+        "name": "dungeons.wod.bloodmaul_slag_mines.name",
+        "slug": "bloodmaul-slag-mines",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
@@ -2705,6 +3160,7 @@
         "id": 40,
         "expansion_id": 9,
         "zone_id": 6951,
+        "map_id": 1195,
         "mdt_id": 41,
         "key": "irondocks",
         "name": "dungeons.wod.iron_docks.name",
@@ -2724,6 +3180,10 @@
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 6327.5,
+                "ingame_min_y": -1332.5,
+                "ingame_max_x": 7082.5,
+                "ingame_max_y": -200,
                 "percentage_display_zoom": null,
                 "floorcouplings": []
             }
@@ -2733,6 +3193,7 @@
         "id": 41,
         "expansion_id": 9,
         "zone_id": 6984,
+        "map_id": 1208,
         "mdt_id": 40,
         "key": "grimraildepot",
         "name": "dungeons.wod.grimrail_depot.name",
@@ -2752,6 +3213,10 @@
                 "default": 1,
                 "min_enemy_size": 20,
                 "max_enemy_size": 36,
+                "ingame_min_x": 1593.75,
+                "ingame_min_y": 1465.63,
+                "ingame_max_x": 1806.25,
+                "ingame_max_y": 1784.38,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2770,6 +3235,10 @@
                 "default": 0,
                 "min_enemy_size": 20,
                 "max_enemy_size": 36,
+                "ingame_min_x": 1593.75,
+                "ingame_min_y": 1465.63,
+                "ingame_max_x": 1806.25,
+                "ingame_max_y": 1784.38,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2794,6 +3263,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 1544,
+                "ingame_min_y": 1470,
+                "ingame_max_x": 1750,
+                "ingame_max_y": 1760,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
@@ -2818,6 +3291,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
+                "ingame_min_x": 1541,
+                "ingame_min_y": 1763,
+                "ingame_max_x": 1720,
+                "ingame_max_y": 2056,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {

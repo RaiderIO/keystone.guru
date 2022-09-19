@@ -37,11 +37,14 @@ return [
         'account_delete_warning'                           => 'Ваша учетная запись будет удалена без возможности восстановления. Пути назад нет  .',
         'account_delete_confirm'                           => 'Удалить мою учетную запись на Keystone.guru',
 
-        'unlink_from_patreon'          => 'Отменить связь с Patreon',
-        'link_to_patreon_success'      => 'Ваша учетная запись привязана к Patreon. Спасибо!',
-        'link_to_patreon'              => 'Ссылка на Патреон',
-        'link_to_patreon_description'  => 'Чтобы получить бонусы подписчика Patreon, вам необходимо привязать свою учетную запись к Patreon.',
-        'link_to_patreon_experimental' => 'Реализация Patreon находиться в экспериментальном виде. Если ваши бонусы недоступны после связывания с Patreon, свяжитесь со мной напрямую в Discord или Patreon, и я исправлю это.',
+        'unlink_from_patreon'         => 'Отменить связь с Patreon',
+        'link_to_patreon_success'     => 'Ваша учетная запись привязана к Patreon. Спасибо!',
+        'link_to_patreon'             => 'Ссылка на Патреон',
+        'link_to_patreon_description' => 'Чтобы получить бонусы подписчика Patreon, вам необходимо привязать свою учетную запись к Patreon.',
+        'patreon_benefit_table'             => [
+            'header_active'  => '@todo ru: .edit.patreon_benefit_table.header_active',
+            'header_benefit' => '@todo ru: .edit.patreon_benefit_table.header_benefit',
+        ],
 
         'current_password'     => 'Текущий пароль',
         'new_password'         => 'Новый пароль',

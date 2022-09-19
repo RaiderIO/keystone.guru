@@ -5,10 +5,9 @@ return [
     // This is really only to give some admins more power than other admins - there's no point in changing this for nefarious reasons
     'super_admins' => [
         'Admin',
-        'gallypsa',
     ],
 
-    'db_backup_dir' => env('DB_BACKUP_DIR'),
+    'db_backup_dir'      => env('DB_BACKUP_DIR'),
     'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
 
     'github_username' => 'Wotuu',
@@ -17,14 +16,24 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
-    'timer' => [
-        'plustwofactor'   => 0.8,
-        'plusthreefactor' => 0.6,
+    'character' => [
+        /** // https://wowpedia.fandom.com/wiki/Movement */
+        'default_movement_speed_yards_second' => 7,
+        'mounted_movement_speed_yards_second' => 14,
+        'mount_cast_time_seconds'             => 1.5,
     ],
 
-    'levels' => [
-        'min' => 2,
-        'max' => 28,
+    'keystone' => [
+        'timer'  => [
+            'plustwofactor'   => 0.8,
+            'plusthreefactor' => 0.6,
+        ],
+        'levels' => [
+            'min' => 2,
+            'max' => 28,
+        ],
+
+        'scaling_factor' => 1.08,
     ],
 
     'cache' => [
@@ -51,7 +60,7 @@ return [
         ],
     ],
 
-    'echo'                              => [
+    'echo'                               => [
         'url'    => env('LARAVEL_ECHO_SERVER_URL'),
         'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
         'client' => [
@@ -106,24 +115,24 @@ return [
     /**
      * The minimum size for enemies for floors if none was set
      */
-    'min_enemy_size_default'            => 12,
+    'min_enemy_size_default'             => 12,
 
     /**
      * The maximum size for enemies for floors if none was set
      */
-    'max_enemy_size_default'            => 26,
+    'max_enemy_size_default'             => 26,
 
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
      */
-    'mapping_commit_after_change_hours' => 1,
+    'mapping_commit_after_change_hours'  => 1,
 
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size'                        => 5,
+    'party_size'                         => 5,
 
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
@@ -152,17 +161,17 @@ return [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)
          */
-        'preview_secret'       => env('THUMBNAIL_PREVIEW_SECRET'),
+        'preview_secret'        => env('THUMBNAIL_PREVIEW_SECRET'),
 
         /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
          */
-        'refresh_min'          => 30,
+        'refresh_min'           => 30,
 
         /**
          * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
          */
-        'refresh_anyways_days' => 30,
+        'refresh_anyways_days'  => 30,
 
         /**
          * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
@@ -177,7 +186,7 @@ return [
     'sandbox_dungeon_route_expires_hours' => 24,
 
     /**
-     * @var array Prideful enemy variables
+     * Prideful enemy variables
      */
     'prideful'                            => [
         'npc_id' => 173729,
@@ -291,10 +300,13 @@ return [
     ],
 
     'patreon' => [
-        'oauth' => [
+        'oauth'       => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
+            // https://docs.patreon.com/#scopes
+            'scope'     => 'identity identity[email] identity.memberships campaigns',
         ],
+        'campaign_id' => env('PATREON_CAMPAIGN_ID'),
     ],
 
     'reddit' => [

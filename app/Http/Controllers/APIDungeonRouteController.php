@@ -12,6 +12,7 @@ use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
+use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -31,12 +32,14 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\PublishedState;
 use App\Models\Season;
+use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
+use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -735,7 +738,7 @@ class APIDungeonRouteController extends Controller
             return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Throwable $error) {
             Log::critical($error->getMessage(), [
-                'dungeonroute' => $dungeonroute->public_key
+                'dungeonroute' => $dungeonroute->public_key,
             ]);
 
             if ($error->getMessage() === "Class 'Lua' not found") {
@@ -744,6 +747,26 @@ class APIDungeonRouteController extends Controller
 
             throw $error;
         }
+    }
+
+    /**
+     * @param APISimulateFormRequest $request
+     * @param RaidEventsServiceInterface $raidEventsService
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws AuthorizationException
+     */
+    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonroute): array
+    {
+        $this->authorize('view', $dungeonroute);
+
+        $raidEventsCollection = $raidEventsService->getRaidEvents(
+            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonroute)
+        );
+
+        return [
+            'string' => $raidEventsCollection->toString(),
+        ];
     }
 
     /**

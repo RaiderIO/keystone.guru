@@ -161,7 +161,7 @@ class Conversion
      */
     public static function convertMDTCoordinateToLatLng(array $xy): array
     {
-        // This seems to match my coordinate system for about 99%. Needs some more refinement but it should be very minor.
+        // This seems to match my coordinate system for about 99%. Needs some more refinement, but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
         return ['lat' => self::round($xy['y'] / 2.185), 'lng' => self::round($xy['x'] / 2.185)];
     }
@@ -186,22 +186,6 @@ class Conversion
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
-        // You can do this in a mathy way but tbh I can't be bothered right now.
-//        $weekMapping = [
-//            1  => 4,
-//            2  => 5,
-//            3  => 6,
-//            4  => 7,
-//            5  => 8,
-//            6  => 9,
-//            7  => 10,
-//            8  => 11,
-//            9  => 12,
-//            10 => 1,
-//            11 => 2,
-//            12 => 3,
-//        ];
-
         $season = $dungeon->getActiveSeason($seasonService);
 
         $affixGroup = $season->affixgroups->get($mdtWeek - 1);
@@ -222,24 +206,6 @@ class Conversion
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
         // We need to figure out which week it is in the rotation
-        $weekIndex = $affixGroup->id % config('keystoneguru.season_iteration_affix_group_count');
-
-        // KG to MDT
-        $weekMapping = [
-            3  => 11,
-            4  => 12,
-            5  => 1,
-            6  => 2,
-            7  => 3,
-            8  => 4,
-            9  => 5,
-            10 => 6,
-            11 => 7,
-            0  => 8,
-            1  => 9,
-            2  => 10,
-        ];
-
-        return $weekMapping[$weekIndex];
+        return ($affixGroup->id - 1) % config('keystoneguru.season_iteration_affix_group_count');
     }
 }

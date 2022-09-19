@@ -102,6 +102,14 @@ return [
             'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
         ],
     ],
+    'patreon'              => [
+        'flash' => [
+            'unlink_successful'       => '@todo ru: .patreon.flash.unlink_successful',
+            'link_successful'         => '@todo ru: .patreon.flash.link_successful',
+            'patreon_session_expired' => '@todo ru: .patreon.flash.patreon_session_expired',
+            'session_expired'         => '@todo ru: .patreon.flash.session_expired',
+        ],
+    ],
     'profile'              => [
         'flash' => [
             'email_already_in_use'             => 'Пользователь с таким электронным адресом уже существует',

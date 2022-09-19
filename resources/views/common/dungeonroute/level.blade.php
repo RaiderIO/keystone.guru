@@ -1,6 +1,6 @@
 <?php
-$min = config('keystoneguru.levels.min');
-$max = config('keystoneguru.levels.max');
+$min = config('keystoneguru.keystone.levels.min');
+$max = config('keystoneguru.keystone.levels.max');
 /** @var $levelMin int */
 /** @var $levelMax int */
 ?>

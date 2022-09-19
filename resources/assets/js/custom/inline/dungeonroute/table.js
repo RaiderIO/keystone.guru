@@ -110,7 +110,7 @@ class DungeonrouteTable extends InlineCode {
         let self = this;
 
         // Send cookie
-        Cookies.set('routes_viewmode', self._viewMode, {path: ''});
+        Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
 
         let $element = $('#routes_table');
 

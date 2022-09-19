@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Api\APIMountableAreaController;
 use App\Http\Controllers\APIBrushlineController;
 use App\Http\Controllers\APIDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\APIDungeonRouteController;
@@ -107,7 +108,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     Route::post('new/mdtimport', [MDTImportController::class, 'import'])->name('dungeonroute.new.mdtimport');
 
-    Route::get('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
     Route::get('patreon-link', [PatreonController::class, 'link'])->name('patreon.link');
     Route::get('patreon-oauth', [PatreonController::class, 'oauth_redirect'])->name('patreon.oauth.redirect');
 
@@ -187,6 +187,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     });
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        Route::get('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
+
         // Profile routes
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -308,8 +310,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
-
-
                 // View string contents
                 Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
@@ -321,6 +321,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 // View dungeonroute as string
                 Route::get('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
                 Route::post('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+                // Wow.tools
+                Route::get('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinates'])->name('admin.tools.wowtools.import_ingame_coordinates');
+                Route::post('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinatessubmit'])->name('admin.tools.wowtools.import_ingame_coordinates.submit');
 
                 // Exception thrower
                 Route::get('exception', [AdminToolsController::class, 'exceptionselect'])->name('admin.tools.exception.select');
@@ -384,6 +388,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
                 Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'adminDelete']);
 
+                Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
+                Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
+
                 Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
             });
 
@@ -391,7 +398,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::post('/tools/mdt/diff/apply', [AdminToolsController::class, 'applychange']);
 
-            Route::put('/user/{user}/patreon/paidtier', [UserController::class, 'storepaidtiers']);
+            Route::put('/user/{user}/patreon/benefits', [UserController::class, 'storePatreonBenefits']);
         });
 
         // May be performed without being logged in (sandbox functionality)
@@ -418,6 +425,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
 
             Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
+            Route::post('/simulate', [APIDungeonRouteController::class, 'simulate'])->name('api.dungeonroute.simulate');
         });
 
         // Must be logged in to perform these actions

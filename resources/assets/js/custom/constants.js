@@ -7,7 +7,8 @@ Cookies.withAttributes(cookieDefaultAttributes);
 let cookieDefaults = {
     polyline_default_weight: 3,
     polyline_default_color: null,
-    hidden_map_object_groups: '[]',
+    hidden_map_object_groups: '["mountablearea"]',
+    hidden_map_object_groups_added_mountablearea: 0,
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
@@ -33,17 +34,31 @@ for (let name in cookieDefaults) {
     }
 }
 
+// If we need to initially hide the mountable areas, we don't want it to be visible by default
+if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
+    try {
+        let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        hiddenMapObjectGroups.push('mountablearea');
+        Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+        Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
+const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
-const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
-const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
+const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
+const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -59,7 +74,8 @@ const MAP_OBJECT_GROUP_NAMES = [
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE,
-    MAP_OBJECT_GROUP_KILLZONE_PATH
+    MAP_OBJECT_GROUP_KILLZONE_PATH,
+    MAP_OBJECT_GROUP_MOUNTABLE_AREA
 ];
 
 // Kill zones
@@ -106,6 +122,10 @@ const EXPANSION_LEGION = 'legion';
 const EXPANSION_BFA = 'bfa';
 const EXPANSION_SHADOWLANDS = 'shadowlands';
 
+// Map icons
+const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
+const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';
@@ -130,7 +150,7 @@ function polylineDefaultColor() {
 }
 
 let c = {
-    paidtiers: {
+    patreonbenefits: {
         ad_free: 'ad-free',
         unlimited_dungeonroutes: 'unlimited-dungeonroutes',
         unlimited_routes: 'unlimited-routes',
@@ -223,13 +243,12 @@ let c = {
                 let scale = Math.max(1, getState().getMapZoomLevel() / 2.0);
 
                 let result = (c.map.enemy.minSize() + ((health / maxHealth) * (c.map.enemy.maxSize() - c.map.enemy.minSize()))) * scale;
-                // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size
                 return Math.ceil(result);
             },
             getKeyScalingFactor(keyLevel, fortified, tyrannical) {
-                let keyLevelFactor = Math.pow(1.08, (keyLevel - 2));
+                let keyLevelFactor = Math.pow(getState().getMapContext().getKeystoneScalingFactor(), (keyLevel - 2));
 
                 if (fortified) {
                     keyLevelFactor *= 1.2;
@@ -356,6 +375,9 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
+        },
+        mountablearea: {
+            color: '#eb4934'
         },
         placeholderColors: {},
         editsidebar: {

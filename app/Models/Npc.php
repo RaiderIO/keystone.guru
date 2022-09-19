@@ -46,9 +46,9 @@ class Npc extends CacheModel
     // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
     public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
-    public const AGGRESSIVENESS_NEUTRAL = 'neutral';
-    public const AGGRESSIVENESS_FRIENDLY = 'friendly';
-    public const AGGRESSIVENESS_AWAKENED = 'awakened';
+    public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
+    public const AGGRESSIVENESS_FRIENDLY   = 'friendly';
+    public const AGGRESSIVENESS_AWAKENED   = 'awakened';
 
     public const ALL_AGGRESSIVENESS = [
         self::AGGRESSIVENESS_AGGRESSIVE,
@@ -57,6 +57,74 @@ class Npc extends CacheModel
         self::AGGRESSIVENESS_FRIENDLY,
         self::AGGRESSIVENESS_AWAKENED,
     ];
+
+    /**
+     * Gets all derived enemies from this Npc.
+     *
+     * @return hasMany
+     */
+    function enemies(): HasMany
+    {
+        return $this->hasMany(Enemy::class);
+    }
+
+    /**
+     * @return hasMany
+     */
+    function npcbolsteringwhitelists(): HasMany
+    {
+        return $this->hasMany(NpcBolsteringWhitelist::class);
+    }
+
+    /**
+     * @return belongsTo
+     */
+    function dungeon(): BelongsTo
+    {
+        return $this->belongsTo(Dungeon::class);
+    }
+
+    /**
+     * @return belongsTo
+     */
+    function classification(): BelongsTo
+    {
+        return $this->belongsTo(NpcClassification::class);
+    }
+
+    /**
+     * @return belongsTo
+     */
+    function type(): BelongsTo
+    {
+        // Not sure why the foreign key declaration is required here, but it is
+        return $this->belongsTo(NpcType::class, 'npc_type_id');
+    }
+
+    /**
+     * @return belongsTo
+     */
+    function class(): BelongsTo
+    {
+        // Not sure why the foreign key declaration is required here, but it is
+        return $this->belongsTo(NpcClass::class, 'npc_class_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function spells(): BelongsToMany
+    {
+        return $this->belongsToMany(Spell::class, 'npc_spells');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function npcspells(): HasMany
+    {
+        return $this->hasMany(NpcSpell::class);
+    }
 
     /**
      * @return bool
@@ -83,71 +151,49 @@ class Npc extends CacheModel
     }
 
     /**
-     * Gets all derived enemies from this Npc.
-     *
-     * @return hasMany
+     * @return bool
      */
-    function enemies(): HasMany
+    public function isAffectedByFortified(): bool
     {
-        return $this->hasMany('App\Models\Enemy');
+        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]]);
     }
 
     /**
-     * @return hasMany
+     * @return bool
      */
-    function npcbolsteringwhitelists(): HasMany
+    public function isAffectedByTyrannical(): bool
     {
-        return $this->hasMany('App\Models\NpcBolsteringWhitelist');
+        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]);
     }
 
     /**
-     * @return belongsTo
+     * @param int $keyLevel
+     * @param bool $fortified
+     * @param bool $tyrannical
+     * @return float
      */
-    function dungeon(): BelongsTo
+    private function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical): float
     {
-        return $this->belongsTo('App\Models\Dungeon');
+        $keyLevelFactor = pow(config('keystoneguru.keystone.scaling_factor'), ($keyLevel - 2));
+
+        if ($fortified && $this->isAffectedByFortified()) {
+            $keyLevelFactor *= 1.2;
+        } else if ($tyrannical && $this->isAffectedByTyrannical()) {
+            $keyLevelFactor *= 1.3;
+        }
+
+        return round($keyLevelFactor * 100) / 100;
     }
 
     /**
-     * @return belongsTo
+     * @param int $keyLevel
+     * @param bool $fortified
+     * @param bool $tyrannical
+     * @return void
      */
-    function classification(): BelongsTo
+    public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical): float
     {
-        return $this->belongsTo('App\Models\NpcClassification');
-    }
-
-    /**
-     * @return belongsTo
-     */
-    function type(): BelongsTo
-    {
-        // Not sure why the foreign key declaration is required here, but it is
-        return $this->belongsTo('App\Models\NpcType', 'npc_type_id');
-    }
-
-    /**
-     * @return belongsTo
-     */
-    function class(): BelongsTo
-    {
-        // Not sure why the foreign key declaration is required here, but it is
-        return $this->belongsTo('App\Models\NpcClass', 'npc_class_id');
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function spells(): BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Spell', 'npc_spells');
-    }
-
-    /**
-     * @return HasMany
-     */
-    function npcspells(): HasMany
-    {
-        return $this->hasMany('App\Models\NpcSpell');
+        return round($this->base_health * $this->getScalingFactor($keyLevel, $fortified, $tyrannical));
     }
 
 

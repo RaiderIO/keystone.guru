@@ -292,6 +292,7 @@ return [
                 'edit_route'                     => 'Edit route',
                 'view_route'                     => 'View route',
                 'save_to_profile'                => 'Save to profile',
+                'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
@@ -336,7 +337,7 @@ return [
         ],
     ],
     'modal'        => [
-        'userreport'    => [
+        'userreport'      => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -354,22 +355,22 @@ return [
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute'   => [
+        'createroute'     => [
             'create_route'           => 'Create route',
             'create_temporary_route' => 'Create temporary route',
             'import_from_mdt'        => 'Import from MDT',
         ],
-        'legal'         => [
+        'legal'           => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'routesettings' => [
+        'routesettings'   => [
             'title' => 'Route settings',
         ],
-        'share'         => [
+        'share'           => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
@@ -382,6 +383,58 @@ return [
             'mdt_string'                       => 'MDT String',
             'loading'                          => 'Loading...',
             'copy_to_clipboard'                => 'Copy to clipboard',
+        ],
+        'simulate'        => [
+            'intro'                                => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, enable SimC Expert Mode and paste the output in the Footer section.',
+            'title'                                => 'Simulate route',
+            'key_level'                            => 'Key level',
+            'key_level_title'                      => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+            'shrouded_bounty_type'                 => 'Shrouded bounty',
+            'shrouded_bounty_type_title'           => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
+            'shrouded_bounty_types'                => [
+                'crit'    => 'Crit',
+                'haste'   => 'Haste',
+                'mastery' => 'Mastery',
+                'vers'    => 'Versatility',
+            ],
+            'affix'                                => 'Affix',
+            'affix_title'                          => 'Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
+            'affixes'                              => [
+                'fortified'  => 'Fortified',
+                'tyrannical' => 'Tyrannical',
+            ],
+            'bloodlust'                            => 'Bloodlust/Heroism',
+            'bloodlust_title'                      => 'Allows you to enable/disable Bloodlust/Heroism globally. Note: when disabled, Bloodlust/Heroism per pull does not do anything.',
+            'arcane_intellect'                     => 'Arcane Intellect',
+            'power_word_fortitude'                 => 'PW: Fortitude',
+            'battle_shout'                         => 'Battle Shout',
+            'mystic_touch'                         => 'Mystic Touch',
+            'chaos_brand'                          => 'Chaos Brand',
+            'hp_percent'                           => 'HP percentage',
+            'hp_percent_title'                     => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+            'bloodlust_per_pull'                   => 'Bloodlust/Heroism per pull',
+            'bloodlust_per_pull_title'             => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust/Heroism to the pull closest to the icon.',
+            'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
+            'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
+                you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
+                and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
+                max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
+                unless you\'re literally chain pulling with no down time in between.',
+            'use_mounts'                           => 'Use mounts',
+            'use_mounts_title'                     => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull',
+            'get_simulationcraft_string'           => 'Get SimulationCraft string',
+            'simulationcraft_string'               => 'Simulationcraft string',
+            'loading'                              => 'Loading...',
+            'copy_to_clipboard'                    => 'Copy to clipboard',
+        ],
+        'simulateoptions' => [
+            'advanced' => [
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
+                'advanced_options'  => 'Advanced options',
+                'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
+            ],
         ],
     ],
     'release'      => [

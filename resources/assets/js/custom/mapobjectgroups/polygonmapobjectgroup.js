@@ -1,6 +1,17 @@
 class PolygonMapObjectGroup extends MapObjectGroup {
     constructor(manager, names, editable) {
         super(manager, names, editable);
+
+        this.options = {};
+    }
+
+    /**
+     *
+     * @param color
+     * @protected
+     */
+    _setColor(color) {
+        this.options.color = color;
     }
 
     /**
@@ -30,7 +41,7 @@ class PolygonMapObjectGroup extends MapObjectGroup {
      */
     _createLayer(remoteMapObject) {
         let points = this._restorePoints(remoteMapObject);
-        return points.length > 0 ? L.polygon(points) : null;
+        return points.length > 0 ? L.polygon(points, this.options) : null;
     }
 
     /**

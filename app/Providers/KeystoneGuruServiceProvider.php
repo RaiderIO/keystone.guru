@@ -8,14 +8,47 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
-use App\Models\PaidTier;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Season;
 use App\Models\UserReport;
+use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Cache\DevCacheService;
+use App\Service\Discord\DiscordApiService;
+use App\Service\Discord\DiscordApiServiceInterface;
+use App\Service\DungeonRoute\CoverageService;
+use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\DungeonRoute\DevDiscoverService;
+use App\Service\DungeonRoute\DiscoverService;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\EchoServerHttpApiService;
+use App\Service\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
+use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\LiveSession\OverpulledEnemyService;
+use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\Mapping\MappingService;
+use App\Service\Mapping\MappingServiceInterface;
+use App\Service\Patreon\PatreonApiService;
+use App\Service\Patreon\PatreonApiServiceInterface;
+use App\Service\Patreon\PatreonService;
+use App\Service\Patreon\PatreonServiceInterface;
+use App\Service\Reddit\RedditApiService;
+use App\Service\Reddit\RedditApiServiceInterface;
+use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
+use App\Service\SimulationCraft\RaidEventsService;
+use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\Subcreation\AffixGroupEaseTierService;
 use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
+use App\Service\Subcreation\SubcreationApiService;
+use App\Service\Subcreation\SubcreationApiServiceInterface;
+use App\Service\TimewalkingEvent\TimewalkingEventService;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
@@ -35,36 +68,39 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind the interface to the actual service
-        $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
+        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
 
         // Internals
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
+        $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
+        $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
-            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\DevCacheService');
-            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DevDiscoverService');
+            $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
+            $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
         } else {
-            $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
-            $this->app->bind('App\Service\DungeonRoute\DiscoverServiceInterface', 'App\Service\DungeonRoute\DiscoverService');
+            $this->app->bind(CacheServiceInterface::class, CacheService::class);
+            $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         }
-        $this->app->bind('App\Service\Expansion\ExpansionServiceInterface', 'App\Service\Expansion\ExpansionService');
+        $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         // Depends on ExpansionService
-        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
-        $this->app->bind('App\Service\LiveSession\OverpulledEnemyServiceInterface', 'App\Service\LiveSession\OverpulledEnemyService');
-        $this->app->bind('App\Service\Mapping\MappingServiceInterface', 'App\Service\Mapping\MappingService');
-        $this->app->bind('App\Service\Subcreation\AffixGroupEaseTierServiceInterface', 'App\Service\Subcreation\AffixGroupEaseTierService');
-        $this->app->bind('App\Service\DungeonRoute\CoverageServiceInterface', 'App\Service\DungeonRoute\CoverageService');
+        $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
+        $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
+        $this->app->bind(MappingServiceInterface::class, MappingService::class);
+        $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
+        $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
         // Depends on SeasonService
-        $this->app->bind('App\Service\TimewalkingEvent\TimewalkingEventServiceInterface', 'App\Service\TimewalkingEvent\TimewalkingEventService');
+        $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
 
         // Depends on all of the above - pretty much
-        $this->app->bind('App\Service\View\ViewServiceInterface', 'App\Service\View\ViewService');
+        $this->app->bind(ViewServiceInterface::class, ViewService::class);
 
         // External communication
-        $this->app->bind('App\Service\Discord\DiscordApiServiceInterface', 'App\Service\Discord\DiscordApiService');
-        $this->app->bind('App\Service\Reddit\RedditApiServiceInterface', 'App\Service\Reddit\RedditApiService');
-        $this->app->bind('App\Service\Subcreation\SubcreationApiServiceInterface', 'App\Service\Subcreation\SubcreationApiService');
+        $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
+        $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
+        $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
+        $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
     }
 
     /**
@@ -106,7 +142,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
 
             if ($adFree === null) {
-                $adFree = Auth::check() && Auth::user()->hasPaidTier(PaidTier::AD_FREE);
+                $adFree = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::AD_FREE);
             }
 
 
@@ -145,6 +181,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.layout.header', function (View $view) use ($globalViewVariables) {
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
 
         view()->composer([

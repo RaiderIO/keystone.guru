@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute;
+use App\Models\EnemyPatrol;
 use App\Models\Expansion;
 use Database\Seeders\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use Database\Seeders\RelationImport\Mapping\DungeonRelationMapping;
@@ -12,6 +13,7 @@ use Database\Seeders\RelationImport\Mapping\EnemyPackRelationMapping;
 use Database\Seeders\RelationImport\Mapping\EnemyPatrolRelationMapping;
 use Database\Seeders\RelationImport\Mapping\EnemyRelationMapping;
 use Database\Seeders\RelationImport\Mapping\MapIconRelationMapping;
+use Database\Seeders\RelationImport\Mapping\MountableAreaRelationMapping;
 use Database\Seeders\RelationImport\Mapping\NpcRelationMapping;
 use Database\Seeders\RelationImport\Mapping\RelationMapping;
 use Database\Seeders\RelationImport\Mapping\SpellRelationMapping;
@@ -35,7 +37,7 @@ class DungeonDataSeeder extends Seeder
     public function run()
     {
         // Just a base class
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Starting import of dungeon data for all dungeons');
 
@@ -53,6 +55,7 @@ class DungeonDataSeeder extends Seeder
             new EnemyPatrolRelationMapping(),
             new DungeonFloorSwitchMarkerRelationMapping(),
             new MapIconRelationMapping(),
+            new MountableAreaRelationMapping(),
         ];
 
         $rootDir         = database_path('/seeders/dungeondata/');
@@ -77,7 +80,7 @@ class DungeonDataSeeder extends Seeder
                         // Parse loose files
                         if (!is_dir($floorDirFile)) {
                             // npcs, dungeon_routes
-                            $this->_parseRawFile($rootDir, $floorDirFile, $mappings, 2);
+                            $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
                         } // Parse floor dir
                         else {
                             $this->command->info('-- Importing floor ' . basename($floorDirFile));
@@ -85,14 +88,14 @@ class DungeonDataSeeder extends Seeder
                             $importFileIterator = new FilesystemIterator($floorDirFile);
                             // For each file inside a floor
                             foreach ($importFileIterator as $importFile) {
-                                $this->_parseRawFile($rootDir, $importFile, $mappings, 3);
+                                $this->parseRawFile($rootDir, $importFile, $mappings, 3);
                             }
                         }
                     }
                 }
             } // It's a 'global' file, parse it
             else if (strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5) { // 5 for length of .json
-                $this->_parseRawFile($rootDir, $rootDirChild, $mappings, 1);
+                $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
             }
         }
 
@@ -106,7 +109,7 @@ class DungeonDataSeeder extends Seeder
      * @param $depth integer
      * @throws Exception
      */
-    private function _parseRawFile(string $rootDir, string $filePath, array $mappings, int $depth = 1): void
+    private function parseRawFile(string $rootDir, string $filePath, array $mappings, int $depth = 1): void
     {
         $prefix = str_repeat('-', $depth) . ' ';
 
@@ -117,7 +120,7 @@ class DungeonDataSeeder extends Seeder
         $found = false;
         foreach ($mappings as $mapping) {
             if ($mapping->getFileName() === $fileName) {
-                $count = $this->_loadModelsFromFile($filePath, $mapping);
+                $count = $this->loadModelsFromFile($filePath, $mapping);
                 $this->command->info(sprintf(
                     $prefix . 'Imported %s (%s into %s)',
                     str_replace($rootDir, '', $fileName),
@@ -142,7 +145,7 @@ class DungeonDataSeeder extends Seeder
      * @return int The amount of models loaded from the file
      * @throws Exception
      */
-    private function _loadModelsFromFile(string $filePath, RelationMapping $mapping): int
+    private function loadModelsFromFile(string $filePath, RelationMapping $mapping): int
     {
         // Load contents
         $modelJson = file_get_contents($filePath);
@@ -240,7 +243,7 @@ class DungeonDataSeeder extends Seeder
         return count($modelsData);
     }
 
-    protected function _rollback()
+    protected function rollback()
     {
         $this->command->warn('Truncating all relevant data...');
 
@@ -267,10 +270,11 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_packs')->truncate();
         DB::table('enemy_patrols')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
+        DB::table('mountable_areas')->truncate();
         // Delete all map icons that are always there
         DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
         // Delete polylines related to enemy patrols
-        DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
+        DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
 
         // Truncating these before the above will cause some issues
         // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset

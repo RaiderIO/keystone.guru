@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\MDT;
+namespace Tests\Unit\App\Logic\MDT;
 
+use App\Logic\MDT\Conversion;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use Tests\TestCase;
@@ -11,6 +12,7 @@ class ConversionTest extends TestCase
     /**
      * A basic test example.
      *
+     * @test
      * @return void
      * @dataProvider checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider
      * @group

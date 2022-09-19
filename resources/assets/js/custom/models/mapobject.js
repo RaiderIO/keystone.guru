@@ -462,7 +462,8 @@ class MapObject extends Signalable {
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                 id: this.id,
                 html: result,
-                map_object_name: mapObjectName
+                map_object_name: mapObjectName,
+                map_object_name_pretty: lang.get(`messages.${mapObjectName}`)
             }));
         } else {
             return result;

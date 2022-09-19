@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaidTier;
-use App\Models\PatreonTier;
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserBenefit;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,7 +26,7 @@ class UserController extends Controller
     public function list()
     {
         return view('admin.user.list', [
-            'paidTiers' => PaidTier::all(),
+            'patreonBenefits' => PatreonBenefit::all(),
         ]);
     }
 
@@ -97,20 +97,19 @@ class UserController extends Controller
      * @param User $user
      * @return Application|ResponseFactory|Response
      */
-    public function storepaidtiers(Request $request, User $user)
+    public function storePatreonBenefits(Request $request, User $user)
     {
-        $newPaidTierIds = $request->get('paidtiers', []);
+        $newPatreonBenefitIds = $request->get('patreonBenefits', []);
 
-        if (isset($user->patreondata)) {
-            // Remove old paid tiers
-            $user->patreondata->tiers()->delete();
+        if (isset($user->patreonUserLink)) {
+            // Remove old patreon benefits
+            $user->patreonUserLink->patreonuserbenefits()->delete();
 
-            foreach ($newPaidTierIds as $newPaidTierId) {
-                $newPaidTier = new PatreonTier([
-                    'patreon_data_id' => $user->patreondata->id,
-                    'paid_tier_id'    => $newPaidTierId,
+            foreach ($newPatreonBenefitIds as $newPatreonBenefitId) {
+                PatreonUserBenefit::create([
+                    'patreon_user_link_id' => $user->patreonUserLink->id,
+                    'patreon_benefit_id'   => $newPatreonBenefitId,
                 ]);
-                $newPaidTier->save();
             }
 
             return response()->noContent();

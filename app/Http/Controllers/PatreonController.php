@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaidTier;
-use App\Models\PatreonData;
-use App\Models\PatreonTier;
-use Art4\JsonApiClient\Document;
+use App\Models\Patreon\PatreonUserLink;
+use App\Service\Patreon\PatreonApiServiceInterface;
+use App\Service\Patreon\PatreonServiceInterface;
+use App\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Patreon\API;
-use Patreon\OAuth;
+use Session;
 
 class PatreonController extends Controller
 {
@@ -18,156 +18,104 @@ class PatreonController extends Controller
      * Unlinks the user from Patreon.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function unlink(Request $request)
     {
-        $user = Auth::user();
-        if ($user !== null) {
-            // If it was linked, delete it
-            if ($user->patreondata !== null) {
-                $user->patreondata->delete();
-            }
+        // If it was linked, delete it
+        optional(Auth::user()->patreonUserLink)->delete();
 
-            $result = redirect()->route('profile.edit');
-            \Session::flash('status', 'Your Patreon account has successfully been unlinked,');
-        } else {
-            \Session::flash('warning', 'You need to be logged in to view this page.');
-            $result = redirect()->route('home');
-        }
-
-        return $result;
+        Session::flash('status', __('controller.patreon.flash.unlink_successful'));
+        return redirect()->route('profile.edit', ['#patreon']);
     }
 
     /**
      * Checks if the incoming request is a save as new request or not.
      * @param Request $request
-     * @return bool
+     * @param PatreonApiServiceInterface $patreonApiService
+     * @param PatreonServiceInterface $patreonService
+     * @return RedirectResponse
      */
-    public function link(Request $request)
+    public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService)
     {
         $state = $request->get('state');
         $code  = $request->get('code');
 
         // If session was not expired
         if (csrf_token() === $state) {
-            $client_id     = config('keystoneguru.patreon.oauth.client_id');
-            $client_secret = config('keystoneguru.patreon.oauth.secret');
-
-            $oauth_client = new OAuth($client_id, $client_secret);
-
             // Replace http://localhost:5000/oauth/redirect with your own uri
             $redirect_uri = route('patreon.link');
 
-            /*
-             * Make sure that you're using this snippet as Step 2 of the OAuth flow: https://www.patreon.com/platform/documentation/oauth
-             * so that you have the 'code' query parameter.
-             */
-            $tokens = $oauth_client->get_tokens($code, $redirect_uri);
+            $tokens = $patreonApiService->getAccessTokenFromCode($code, $redirect_uri);
             if (!isset($tokens['error'])) {
+                $user = Auth::user();
+
                 // Save new tokens to database
-                // Delete existing, if any
-                $userId = Auth::user()->id;
-                PatreonData::where('user_id', $userId)->delete();
+                // Delete existing patreon data, if any
+                optional($user->patreonUserLink)->delete();
 
-                $patreonData                = new PatreonData();
-                $patreonData->user_id       = $userId;
-                $patreonData->access_token  = $tokens['access_token'];
-                $patreonData->refresh_token = $tokens['refresh_token'];
-                $patreonData->expires_at    = date('Y-m-d H:i:s', time() + $tokens['expires_in']);
+                $patreonUserLinkAttributes = [
+                    'user_id'       => $user->id,
+                    'scope'         => $tokens['scope'],
+                    'access_token'  => $tokens['access_token'],
+                    'refresh_token' => $tokens['refresh_token'],
+                    'version'       => $tokens['version'],
+                    'expires_at'    => date('Y-m-d H:i:s', time() + $tokens['expires_in']),
+                ];
 
-                $patreonData->save();
+                // Special case for the admin user - since the service needs this account to exist we need to just create
+                // the PatreonData for this user and ignore the paid benefits (admins get everything, anyways)
+                if ($user->id === 1) {
+                    $patreonUserLinkAttributes['email'] = 'admin@app.com';
+                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
+                } else {
+                    // Fetch info we need to construct the PatreonData object/be able to link paid benefits
+                    $campaignBenefits = $patreonService->loadCampaignBenefits($patreonApiService);
+                    $campaignTiers    = $patreonService->loadCampaignTiers($patreonApiService);
 
-                $api_client = new API($patreonData->access_token);
-                /** @var Document $patron_response */
-                $patronResponse = $api_client->fetch_user();
-                $responseArray  = $patronResponse->asArray(true);
-                /**
-                 * array:2 [▼
-                 * "data" => array:4 [▼
-                 * "type" => "user"
-                 * "id" => "13821632"
-                 * "attributes" => array:25 [▼
-                 * "about" => "Hi! I'm a software developer from the Netherlands. I'm the author of a website called https://keystone.guru, if you're a World of Warcraft player you may want to check it out! ◀"
-                 * "can_see_nsfw" => null
-                 * "created" => "2018-09-27T14:40:22+00:00"
-                 * "default_country_code" => null
-                 * "discord_id" => null
-                 * "email" => "patreon.com@clearbits.nl"
-                 * "facebook" => null
-                 * "facebook_id" => null
-                 * "first_name" => "Wotuu"
-                 * "full_name" => "Wotuu"
-                 * "gender" => 0
-                 * "has_password" => true
-                 * "image_url" => "https://c10.patreonusercontent.com/3/eyJ3IjoyMDB9/patreon-media/p/user/13821632/ba4bc8404bdd455b8f48731ac1429781/1?token-time=2145916800&token-hash=6rniANTtsOu1 ▶"
-                 * "is_deleted" => false
-                 * "is_email_verified" => true
-                 * "is_nuked" => false
-                 * "is_suspended" => false
-                 * "last_name" => ""
-                 * "social_connections" => array:8 [▶]
-                 * "thumb_url" => "https://c10.patreonusercontent.com/3/eyJoIjoxMDAsInciOjEwMH0%3D/patreon-media/p/user/13821632/ba4bc8404bdd455b8f48731ac1429781/1?token-time=2145916800&token-has ▶"
-                 * "twitch" => null
-                 * "twitter" => null
-                 * "url" => "https://www.patreon.com/keystoneguru"
-                 * "vanity" => "keystoneguru"
-                 * "youtube" => null
-                 * ]
-                 * "relationships" => array:1 [▼
-                 * "pledges" => array:1 [▼
-                 * "data" => []
-                 * ]
-                 * ]
-                 * ]
-                 * "links" => array:1 [▼
-                 * "self" => "https://www.patreon.com/api/user/13821632"
-                 * ]
-                 * ]
-                 */
-                $user                            = Auth::user();
-                $user->raw_patreon_response_data = json_encode($responseArray);
-                $user->patreon_data_id           = $patreonData->id;
-                $user->save();
+                    $identityResponse = $patreonApiService->getIdentity($tokens['access_token']);
+                    $member           = collect($identityResponse['included'])->filter(function (array $included) {
+                        return $included['type'] === 'member';
+                    })->first();
 
-                // I pray this works. I have no reason to believe this will work
-                $pledgeData = $responseArray['data']['relationships']['pledges']['data'];
-                foreach ($pledgeData as $key => $item) {
-                    /** @var PaidTier $paidTier */
-                    $paidTier = PaidTier::where('name', $key)->first();
+                    $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
+                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
-                    // If the tier is found..
-                    if ($paidTier !== null) {
-                        // Save it in the database; the user now has access to that tier!
-                        $patreonTier                  = new PatreonTier();
-                        $patreonTier->paid_tier_id    = $paidTier->id;
-                        $patreonTier->patreon_data_id = $patreonData->id;
-                        $patreonTier->save();
-                    }
+                    // Now that the PatreonData object was created, apply the correct paid benefits to the account
+                    $patreonService->applyPaidBenefitsForMember(
+                        $campaignBenefits,
+                        $campaignTiers,
+                        $member
+                    );
                 }
 
-
-                /*
-                 $patron will have the authenticated user's user data, and
-                 $pledge will have their patronage data.
-                 Typically, you will save the relevant pieces of this data to your database,
-                 linked with their user account on your site,
-                 so your site can customize its experience based on their Patreon data.
-                 You will also want to save their $access_token and $refresh_token to your database,
-                 linked to their user account on your site,
-                 so that you can refresh their Patreon data on your own schedule.
-                 */
-
                 // Message to the user
-                \Session::flash('status', 'Your Patreon has been linked successfully. Thank you!');
+                Session::flash('status', __('controller.patreon.flash.link_successful'));
             } else {
-                \Session::flash('warning', 'Your Patreon session has expired. Please try again.');
+                Session::flash('warning', __('controller.patreon.flash.patreon_session_expired'));
             }
         } else {
-            \Session::flash('warning', 'Your session has expired. Please try again.');
+            Session::flash('warning', __('controller.patreon.flash.session_expired'));
         }
 
-        return redirect()->route('profile.edit');
+        return redirect()->route('profile.edit', ['#patreon']);
+    }
+
+    /**
+     * @param array $attributes
+     * @param User $user
+     * @return PatreonUserLink
+     */
+    private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
+    {
+        // Create a new PatreonData object and assign it to the user
+        $patreonUserLink = PatreonUserLink::create($attributes);
+        $user->update([
+            'patreon_user_link_id' => $patreonUserLink->id,
+        ]);
+        $user->patreonUserLink = $patreonUserLink;
+
+        return $patreonUserLink;
     }
 
     /**

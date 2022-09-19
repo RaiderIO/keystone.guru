@@ -137,19 +137,32 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         </li>
                     @endif
                 @endauth
-                @if( isset($dungeonroute) && !$dungeonroute->isSandbox() && $edit )
-                <li class="nav-item mr-2">
-                    <div class="d-flex h-100">
-                        <div class="row justify-content-center align-self-center">
-                            <div class="col">
-                                <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_route_settings_modal">
-                                    <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
-                                </button>
+                @isset($dungeonroute)
+                    <li class="nav-item mr-2">
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <div class="col">
+                                    <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#simulate_modal">
+                                        <i class="fas fa-atom"></i> {{ __('views/common.maps.controls.header.simulate_route') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                @endif
+                    </li>
+                    @if(!$dungeonroute->isSandbox() && $edit)
+                    <li class="nav-item mr-2">
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <div class="col">
+                                    <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_route_settings_modal">
+                                        <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    @endif
+                @endisset
                 <li class="nav-item">
                     <div class="d-flex h-100">
                         <div class="row justify-content-center align-self-center">
@@ -179,6 +192,10 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
     @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
         @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
+        @include('common.modal.simulate', ['dungeonroute' => $dungeonroute])
     @endcomponent
 
     @component('common.general.modal', ['id' => 'start_live_session_modal'])

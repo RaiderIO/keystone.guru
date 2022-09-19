@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GameServerRegionsSeeder::class);
         $this->call(ExpansionsSeeder::class);
         $this->call(RouteAttributesSeeder::class);
-        $this->call(PaidTiersSeeder::class);
+        $this->call(PatreonBenefitsSeeder::class);
         $this->call(FactionsSeeder::class);
         $this->call(NpcClassificationsSeeder::class);
         $this->call(NpcClassesSeeder::class);
@@ -34,9 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MapIconTypesSeeder::class);
         $this->call(TagCategorySeeder::class);
         $this->call(PublishedStatesSeeder::class);
-
-        // Depends on ExpansionsSeeder
-        $this->call(SeasonsSeeder::class);
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         $this->call(AffixSeeder::class);
@@ -49,5 +46,8 @@ class DatabaseSeeder extends Seeder
 
         // Depends on Expansions
         $this->call(DungeonDataSeeder::class);
+
+        // Depends on ExpansionsSeeder, DungeonDataSeeder
+        $this->call(SeasonsSeeder::class);
     }
 }

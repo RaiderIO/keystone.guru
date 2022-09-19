@@ -36,6 +36,11 @@
         <a href="{{ route('admin.tools.enemyforces.recalculate.view') }}">{{ __('views/admin.tools.list.enemy_forces_recalculate') }}</a>
     </div>
 
+    <h4>{{ __('views/admin.tools.list.subheader_wowtools') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.wowtools.import_ingame_coordinates') }}">{{ __('views/admin.tools.list.wowtools_import_ingame_coordinates') }}</a>
+    </div>
+
     <h4>{{ __('views/admin.tools.list.subheader_misc') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.exception.select') }}">{{ __('views/admin.tools.list.throw_an_exception') }}</a>

@@ -5,9 +5,10 @@ $name      = $name ?? 'default';
 $type      = $type ?? '';
 $dismiss   = $dismiss ?? true;
 $rootClass = $rootClass ?? '';
+$align = $align ?? 'left';
 ?>
 @if(!isAlertDismissed($name))
-    <div class="alert alert-{{ $type }} text-center mt-4 {{ $dismiss ? 'alert-dismissable' : '' }} {{ $rootClass }}"
+    <div class="alert alert-{{ $type }} text-{{$align}} mt-4 {{ $dismiss ? 'alert-dismissable' : '' }} {{ $rootClass }}"
          role="alert">
         @if($dismiss)
             <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="{{ $name }}">

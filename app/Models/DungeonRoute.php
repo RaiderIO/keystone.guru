@@ -34,24 +34,24 @@ use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @property $id int
- * @property $public_key string
- * @property $author_id int
- * @property $dungeon_id int
- * @property $faction_id int
- * @property $team_id int|null
- * @property $published_state_id int
+ * @property int $id
+ * @property string $public_key
+ * @property int $author_id
+ * @property int $dungeon_id
+ * @property int $faction_id
+ * @property int|null $team_id
+ * @property int $published_state_id
  *
- * @property $clone_of string
- * @property $title string
- * @property $description string
- * @property $level_min int
- * @property $level_max int
- * @property $difficulty string
- * @property $seasonal_index int
- * @property $enemy_forces int
- * @property $teeming boolean
- * @property $demo boolean
+ * @property string $clone_of
+ * @property string $title
+ * @property string $description
+ * @property int $level_min
+ * @property int $level_max
+ * @property string $difficulty
+ * @property int $seasonal_index
+ * @property int $enemy_forces
+ * @property boolean $teeming
+ * @property boolean $demo
  *
  * @property array $setup
  * @property double $avg_rating
@@ -679,8 +679,8 @@ class DungeonRoute extends Model
             $this->title = __($this->dungeon->name);
         }
 
-        $this->level_min = $request->get('level_min', config('keystoneguru.levels.min'));
-        $this->level_max = $request->get('level_max', config('keystoneguru.levels.max'));
+        $this->level_min = $request->get('level_min', config('keystoneguru.keystone.levels.min'));
+        $this->level_max = $request->get('level_max', config('keystoneguru.keystone.levels.max'));
 
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;

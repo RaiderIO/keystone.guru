@@ -59,7 +59,7 @@ abstract class MapContext
 
         // Get the DungeonData
         $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->floor->dungeon->id), function () {
-            $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
+            $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons', 'mountableareas']);
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
@@ -70,14 +70,15 @@ abstract class MapContext
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
                 'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers,
+                'mountableAreas'            => $dungeon->mountableareas,
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
         $static = $cacheService->remember('static_data', function () {
             return [
                 'mapIconTypes'                      => MapIconType::all(),
-                'unknownMapIconType'                => MapIconType::find(1),
-                'awakenedObeliskGatewayMapIconType' => MapIconType::find(11),
+                'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
+                'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
                 'classColors'                       => CharacterClass::all()->pluck('color'),
                 'raidMarkers'                       => RaidMarker::all(),
                 'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
@@ -102,6 +103,8 @@ abstract class MapContext
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
+
+            'keystoneScalingFactor' => config('keystoneguru.keystone.scaling_factor'),
 
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null

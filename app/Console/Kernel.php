@@ -18,6 +18,7 @@ use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
+use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
@@ -76,6 +77,9 @@ class Kernel extends ConsoleKernel
         Encode::class,
         Decode::class,
 
+        // Patreon
+        RefreshMembershipStatus::class,
+
         // Release
         GetCurrentRelease::class,
         GetReleaseBody::class,
@@ -124,6 +128,9 @@ class Kernel extends ConsoleKernel
 
         // https://laravel.com/docs/8.x/telescope#data-pruning
         $schedule->command('telescope:prune --hours=48')->daily();
+
+        // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
+        $schedule->command('patreon:refreshmembers')->hourly();
 
         // We don't want the cache when we're debugging to ensure fresh data every time
         if (!$debug) {

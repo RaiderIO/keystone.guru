@@ -27,8 +27,8 @@ use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\NpcClassification;
-use App\Models\PaidTier;
 use App\Models\Path;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
@@ -80,29 +80,36 @@ class ImportString extends MDTBase
 
             if (!empty($rifts)) {
                 // Loaded for the comment import
-                $floorIds           = $dungeonRoute->dungeon->floors->pluck('id');
-                $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute) {
-                    $query->whereNull('seasonal_index')
-                        ->orWhere('seasonal_index', $dungeonRoute->seasonal_index);
-                };
+                $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
 
-                $npcIdToMapIconMapping = [
-                    161124 => MapIcon::where('map_icon_type_id', 17)
-                        ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
-                        ->where($seasonalIndexWhere)->firstOrFail(),
-                    161241 => MapIcon::where('map_icon_type_id', 18)
-                        ->whereIn('floor_id', $floorIds) // Cursed spire
-                        ->where($seasonalIndexWhere)->firstOrFail(),
-                    161244 => MapIcon::where('map_icon_type_id', 19)
-                        ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
-                        ->where($seasonalIndexWhere)->firstOrFail(),
-                    161243 => MapIcon::where('map_icon_type_id', 20)
-                        ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
-                        ->where($seasonalIndexWhere)->firstOrFail(),
-                ];
+                try {
+                    $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute) {
+                        $query->whereNull('seasonal_index')
+                            ->orWhere('seasonal_index', $dungeonRoute->seasonal_index ?? 1);
+                    };
 
-                /** @var MapIconType $gatewayIconType */
-                $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
+                    $npcIdToMapIconMapping = [
+                        161124 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL])
+                            ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
+                            ->where($seasonalIndexWhere)->firstOrFail(),
+                        161241 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_CURSED])
+                            ->whereIn('floor_id', $floorIds) // Cursed spire
+                            ->where($seasonalIndexWhere)->firstOrFail(),
+                        161244 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_DEFILED])
+                            ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
+                            ->where($seasonalIndexWhere)->firstOrFail(),
+                        161243 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_ENTROPIC])
+                            ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
+                            ->where($seasonalIndexWhere)->firstOrFail(),
+                    ];
+
+                } catch (Exception $exception) {
+                    throw new ImportWarning('Awakened Obelisks',
+                        sprintf(
+                            'Cannot find Awakened Obelisks for your dungeon/week combination. Your Awakened Obelisk skips will not be imported.'
+                        )
+                    );
+                }
 
                 // From the built array, construct our map icons / paths
                 foreach ($rifts as $npcId => $mdtXy) {
@@ -125,12 +132,12 @@ class ImportString extends MDTBase
                         $mapIconEnd = new MapIcon(array_merge([
                             'floor_id'         => $enemy->floor_id,
                             'dungeon_route_id' => $dungeonRoute->id,
-                            'map_icon_type_id' => $gatewayIconType->id,
+                            'map_icon_type_id' => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
                             'comment'          => $obeliskMapIcon->mapicontype->name
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
-                        $hasAnimatedLines = Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES);
+                        $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
                         $polyLine = new Polyline([
                             'model_id'       => -1,
@@ -538,10 +545,21 @@ class ImportString extends MDTBase
                     }
 
                     // Get the proper index of the floor, validated for length
-                    $floorIndex = ((int)$details[2]) - 1;
-                    $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
+                    $mdtSubLevel = ((int)$details[2]);
+                    $mdtSubLevel = ($mdtSubLevel < $floors->count() ? $mdtSubLevel : 0);
+
                     /** @var Floor $floor */
-                    $floor = ($floors->all())[$floorIndex];
+                    $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
+                        return ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel;
+                    });
+
+                    if ($floor === null) {
+                        throw new ImportWarning(
+                            sprintf(__('logic.mdt.io.import_string.category.object'), $objectIndex),
+                            sprintf(__('logic.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
+                            ['details' => __('logic.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
+                        );
+                    }
 
                     // Only if shown/visible
                     if ($details[3]) {
@@ -598,7 +616,7 @@ class ImportString extends MDTBase
                             $mapComment           = new MapIcon();
                             $mapComment->floor_id = $floor->id;
                             // Bit hacky? But should work
-                            $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
+                            $mapComment->map_icon_type_id = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_COMMENT)->firstOrFail()->id;
                             $mapComment->comment          = $details[4];
 
                             $latLng          = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
@@ -616,9 +634,9 @@ class ImportString extends MDTBase
                         }
                         // Triangles (t = triangle)
                         // MethodDungeonTools.lua:2554
-                        else if (isset($object['t']) && $object['t']) {
+                        // else if (isset($object['t']) && $object['t']) {
 
-                        }
+                        // }
                     }
                 } catch (ImportWarning $warning) {
                     $warnings->push($warning);
@@ -727,10 +745,11 @@ class ImportString extends MDTBase
         // Re-calculate the enemy forces
         if ($save) {
             $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
-        } else {
+        }
+        // else {
             // Do not do this - the enemy_forces are incremented while creating the route
             // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
-        }
+        // }
 
         return $dungeonRoute;
     }

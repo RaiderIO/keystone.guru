@@ -12,7 +12,7 @@ class ReleaseView extends InlineCode {
 
         let lastReadRelease = Cookies.get(key);
         if (typeof lastReadRelease === 'undefined' || lastReadRelease < this.options.max_release) {
-            Cookies.set(key, this.options.max_release);
+            Cookies.set(key, this.options.max_release, cookieDefaultAttributes);
         }
 
         if (typeof this.options.releases === 'object') {

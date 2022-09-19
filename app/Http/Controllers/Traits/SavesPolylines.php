@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\PaidTier;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +29,7 @@ trait SavesPolylines
         $polyline->model_class = get_class($ownerModel);
         $polyline->color       = $data['color'] ?? '#f00';
         // Only set the animated color if the user has paid for it
-        if (Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES)) {
+        if (Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES)) {
             $colorAnimated            = $data['color_animated'] ?? null;
             $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
         }

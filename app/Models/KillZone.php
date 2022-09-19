@@ -72,6 +72,52 @@ class KillZone extends Model
     }
 
     /**
+     * The floor that we have a killzone on, or the floor that contains the most enemies (and thus most dominant floor)
+     * @return Floor
+     */
+    public function getDominantFloor(): ?Floor
+    {
+        if (isset($this->floor_id) && $this->floor_id > 0) {
+            return $this->floor;
+        } else if ($this->enemies->count() > 0) {
+            $floorTotals = [];
+            foreach ($this->enemies as $enemy) {
+                if (!isset($floorTotals[$enemy->floor_id])) {
+                    $floorTotals[$enemy->floor_id] = 0;
+                }
+                $floorTotals[$enemy->floor_id]++;
+            }
+
+            // Will get a random floor if there's equal counts on multiple floors, that's ok
+            $floorId = array_search(max($floorTotals), $floorTotals);
+
+            return Floor::findOrFail($floorId);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @return array{lat: float, lng: float}
+     */
+    public function getKillLocation(): array
+    {
+        if (isset($this->lat) && isset($this->lng)) {
+            return ['lat' => $this->lat, 'lng' => $this->lng];
+        } else {
+            $totalLng = 0;
+            $totalLat = 0;
+
+            foreach ($this->enemies as $enemy) {
+                $totalLat += $enemy->lat;
+                $totalLng += $enemy->lng;
+            }
+
+            return ['lat' => $totalLat / $this->enemies->count(), 'lng' => $totalLng / $this->enemies->count()];
+        }
+    }
+
+    /**
      * Gets a list of enemy forces per enemy that this kill zone kills.
      * @param bool $teeming
      * @return Collection

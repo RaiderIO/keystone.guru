@@ -118,6 +118,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/mountableareamapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -233,6 +234,7 @@ let scripts = [
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapicon.js',
+    'resources/assets/js/custom/admin/adminmountablearea.js',
 
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',

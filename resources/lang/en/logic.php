@@ -20,8 +20,11 @@ return [
             ],
             'import_string' => [
                 'category'                                             => [
-                    'pull' => 'Pull %s',
+                    'pull'   => 'Pull %d',
+                    'object' => 'Object %d',
                 ],
+                'unable_to_find_floor_for_object'                      => 'Unable to find Keystone.guru floor that matches MDT floor ID %d.',
+                'unable_to_find_floor_for_object_details'              => 'This indicates that MDT has a floor that Keystone.guru does not have.',
                 'unable_to_find_mdt_enemy_for_clone_index'             => 'Unable to find MDT enemy for clone index %s and npc index %s.',
                 'unable_to_find_mdt_enemy_for_clone_index_details'     => 'This indicates MDT has mapped an enemy that is not known in Keystone.guru yet.',
                 'unable_to_find_kg_equivalent_for_mdt_enemy'           => 'Unable to find Keystone.guru equivalent for MDT enemy %s with NPC %s (id: %s).',

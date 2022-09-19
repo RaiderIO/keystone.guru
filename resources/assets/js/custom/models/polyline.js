@@ -73,13 +73,13 @@ class Polyline extends MapObject {
                     new Attribute({
                         name: 'color_animated',
                         type: 'color',
-                        edit: getState().hasPaidTier(c.paidtiers.animated_polylines),
+                        edit: getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines),
                         setter: this.setPolylineColorAnimated.bind(this),
                         // This default sets enemy patrols to animate by default - do not want?
                         default: function () {
                             let result = null;
 
-                            if (self.id === null && getState().hasPaidTier(c.paidtiers.animated_polylines)) {
+                            if (self.id === null && getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines)) {
                                 result = c.map.polyline.defaultColorAnimated;
                             }
 
