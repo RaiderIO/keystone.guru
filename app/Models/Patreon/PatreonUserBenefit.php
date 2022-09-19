@@ -5,8 +5,6 @@ namespace App\Models\Patreon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\belongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property $id int
