@@ -24,7 +24,7 @@ class AffixSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known affixes');
 
@@ -214,7 +214,7 @@ class AffixSeeder extends Seeder
     /**
      *
      */
-    private function _rollback()
+    private function rollback()
     {
         DB::table('affixes')->truncate();
         DB::table('affix_groups')->truncate();

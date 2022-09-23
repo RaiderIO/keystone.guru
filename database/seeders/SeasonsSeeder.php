@@ -19,7 +19,7 @@ class SeasonsSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known Seasons');
 
@@ -103,6 +103,22 @@ class SeasonsSeeder extends Seeder
                     Dungeon::DUNGEON_GRIMRAIL_DEPOT,
                     Dungeon::DUNGEON_IRON_DOCKS,
                 ])->get(),
+            ], [
+                'expansion_id'      => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id' => 26,
+                'index'             => 1,
+                'start'             => '2022-12-13 00:00:00',
+                'presets'           => 0,
+                'dungeons'          => Dungeon::whereIn('key', [
+                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
+                    Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+                    Dungeon::DUNGEON_NOKHUD_OFFENSIVE,
+                    Dungeon::DUNGEON_THE_AZURE_VAULT,
+                    Dungeon::DUNGEON_COURT_OF_STARS,
+                    Dungeon::DUNGEON_HALLS_OF_VALOR,
+                    Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
+                    Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+                ])->get(),
             ],
         ];
 
@@ -123,7 +139,7 @@ class SeasonsSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('seasons')->truncate();
         DB::table('season_dungeons')->truncate();

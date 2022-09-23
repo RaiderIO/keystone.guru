@@ -15,7 +15,7 @@ class NpcTypesSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known Npc types');
 
@@ -27,7 +27,7 @@ class NpcTypesSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('npc_types')->truncate();
     }

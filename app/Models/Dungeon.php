@@ -101,22 +101,22 @@ class Dungeon extends CacheModel
     const DUNGEON_THE_UNDERBOG            = 'the_underbog';
 
     // Wrath of the Lich King
-    const DUNGEON_AHN_KAHET_THE_OLD_KINGDOM = 'ahn_kahet_the_old_kingdom';
-    const DUNGEON_AZJOL_NERUB               = 'azjol_nerub';
-    const DUNGEON_DRAK_THARON_KEEP          = 'drak_tharon_keep';
+    const DUNGEON_AHN_KAHET_THE_OLD_KINGDOM = 'ahnkahet';
+    const DUNGEON_AZJOL_NERUB               = 'azjolnerub';
+    const DUNGEON_DRAK_THARON_KEEP          = 'draktharonkeep';
     const DUNGEON_GUNDRAK                   = 'gundrak';
-    const DUNGEON_HALLS_OF_LIGHTNING        = 'halls_of_lightning';
-    const DUNGEON_HALLS_OF_REFLECTION       = 'halls_of_reflection';
-    const DUNGEON_HALLS_OF_STONE            = 'halls_of_stone';
-    const DUNGEON_PIT_OF_SARON              = 'pit_of_saron';
-    const DUNGEON_THE_CULLING_OF_STRATHOLME = 'the_culling_of_stratholme';
-    const DUNGEON_THE_FORGE_OF_SOULS        = 'the_forge_of_souls';
-    const DUNGEON_THE_NEXUS                 = 'the_nexus';
-    const DUNGEON_THE_OCULUS                = 'the_oculus';
-    const DUNGEON_THE_VIOLET_HOLD           = 'the_violet_hold';
-    const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trial_of_the_champion';
-    const DUNGEON_UTGARDE_KEEP              = 'utgarde_keep';
-    const DUNGEON_UTGARDE_PINNACLE          = 'utgarde_pinnacle';
+    const DUNGEON_HALLS_OF_LIGHTNING        = 'hallsoflightning';
+    const DUNGEON_HALLS_OF_REFLECTION       = 'hallsofreflection';
+    const DUNGEON_HALLS_OF_STONE            = 'hallsofstone'; // ulduar77
+    const DUNGEON_PIT_OF_SARON              = 'pitofsaron';
+    const DUNGEON_THE_CULLING_OF_STRATHOLME = 'thecullingofstratholme'; // cotstratholme
+    const DUNGEON_THE_FORGE_OF_SOULS        = 'theforgeofsouls';
+    const DUNGEON_THE_NEXUS                 = 'thenexus';
+    const DUNGEON_THE_OCULUS                = 'theoculus'; // nexus80
+    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold';
+    const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
+    const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
+    const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
 
     // Cataclysm
     const DUNGEON_BLACKROCK_CAVERNS        = 'blackrock_caverns';
@@ -143,7 +143,7 @@ class Dungeon extends CacheModel
     const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery';
     const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     = 'siege_of_niu_zao_temple';
     const DUNGEON_STORMSTOUT_BREWERY         = 'stormstout_brewery';
-    const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'temple_of_the_jade_serpent';
+    const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'templeofthejadeserpent';
 
     // Warlords of Draenor
     const DUNGEON_AUCHINDOUN                = 'auchindoun';
@@ -196,6 +196,35 @@ class Dungeon extends CacheModel
     const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
     const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
 
+    // Dragonflight
+    const DUNGEON_BRACKENHIDE_HOLLOW    = 'brackenhide';
+    const DUNGEON_HALLS_OF_INFUSION     = 'hallsofinfusion';
+    const DUNGEON_NELTHARUS             = 'neltharus';
+    const DUNGEON_RUBY_LIFE_POOLS       = 'rubylifepools';
+    const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
+    const DUNGEON_THE_AZURE_VAULT       = 'theazurevault';
+    const DUNGEON_NOKHUD_OFFENSIVE      = 'nokhudoffensive';
+    const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
+
+    const ALL_WOTLK = [
+        self::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM,
+        self::DUNGEON_AZJOL_NERUB,
+        self::DUNGEON_DRAK_THARON_KEEP,
+        self::DUNGEON_GUNDRAK,
+        self::DUNGEON_HALLS_OF_LIGHTNING,
+        self::DUNGEON_HALLS_OF_REFLECTION,
+        self::DUNGEON_HALLS_OF_STONE,
+        self::DUNGEON_PIT_OF_SARON,
+        self::DUNGEON_THE_CULLING_OF_STRATHOLME,
+        self::DUNGEON_THE_FORGE_OF_SOULS,
+        self::DUNGEON_THE_NEXUS,
+        self::DUNGEON_THE_OCULUS,
+        self::DUNGEON_THE_VIOLET_HOLD,
+        self::DUNGEON_TRIAL_OF_THE_CHAMPION,
+        self::DUNGEON_UTGARDE_KEEP,
+        self::DUNGEON_UTGARDE_PINNACLE,
+    ];
+
     const ALL_WOD = [
         self::DUNGEON_IRON_DOCKS,
         self::DUNGEON_GRIMRAIL_DEPOT,
@@ -245,6 +274,16 @@ class Dungeon extends CacheModel
         self::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
     ];
 
+    const ALL_DRAGONFLIGHT = [
+        self::DUNGEON_BRACKENHIDE_HOLLOW,
+        self::DUNGEON_HALLS_OF_INFUSION,
+        self::DUNGEON_NELTHARUS,
+        self::DUNGEON_RUBY_LIFE_POOLS,
+        self::DUNGEON_ALGETH_AR_ACADEMY,
+        self::DUNGEON_THE_AZURE_VAULT,
+        self::DUNGEON_NOKHUD_OFFENSIVE,
+        self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+    ];
 
     /**
      * https://stackoverflow.com/a/34485411/771270

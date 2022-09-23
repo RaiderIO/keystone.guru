@@ -15,7 +15,7 @@ class MapIconTypesSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
         $this->command->info('Adding known Map Icon Types');
 
         $mapIconTypes = [
@@ -137,7 +137,7 @@ class MapIconTypesSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('map_icon_types')->truncate();
     }

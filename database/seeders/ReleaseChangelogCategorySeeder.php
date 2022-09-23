@@ -15,7 +15,7 @@ class ReleaseChangelogCategorySeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
         $this->command->info('Adding known release changelog categories');
 
         $categories = [
@@ -35,7 +35,7 @@ class ReleaseChangelogCategorySeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('release_changelog_categories')->truncate();
     }

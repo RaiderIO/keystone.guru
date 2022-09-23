@@ -19,7 +19,7 @@ class TimewalkingEventSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known timewalking events');
 
@@ -58,7 +58,7 @@ class TimewalkingEventSeeder extends Seeder
     /**
      *
      */
-    private function _rollback()
+    private function rollback()
     {
         DB::table('timewalking_events')->truncate();
     }
