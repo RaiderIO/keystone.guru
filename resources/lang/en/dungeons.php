@@ -1,6 +1,75 @@
 <?php
 
 return [
+    'wotlk'         => [
+        'ahn_kahet_the_old_kingdom'          => [
+            'name'   => 'Ahn\'kahet: The Old Kingdom',
+            'floors' => [],
+        ],
+        'azjol_nerub' => [
+            'name'   => 'Azjol-Nerub',
+            'floors' => [],
+        ],
+        'drak_tharon_keep'          => [
+            'name'   => 'Drak\'Tharon Keep',
+            'floors' => [],
+        ],
+        'gundrak'      => [
+            'name'   => 'Gundrak',
+            'floors' => [],
+        ],
+
+        'halls_of_lightning'          => [
+            'name'   => 'Halls of Lightning',
+            'floors' => [],
+        ],
+        'halls_of_reflection' => [
+            'name'   => 'Halls of Reflection',
+            'floors' => [],
+        ],
+        'halls_of_stone'          => [
+            'name'   => 'Halls of Stone',
+            'floors' => [],
+        ],
+        'pit_of_saron'      => [
+            'name'   => 'Pit of Saron',
+            'floors' => [],
+        ],
+
+        'the_culling_of_stratholme'          => [
+            'name'   => 'The Culling of Stratholme',
+            'floors' => [],
+        ],
+        'the_forge_of_souls' => [
+            'name'   => 'The Forge of Souls',
+            'floors' => [],
+        ],
+        'the_nexus'          => [
+            'name'   => 'The Nexus',
+            'floors' => [],
+        ],
+        'the_oculus'      => [
+            'name'   => 'The Oculus',
+            'floors' => [],
+        ],
+
+        'the_violet_hold'          => [
+            'name'   => 'The Violet Hold',
+            'floors' => [],
+        ],
+        'trial_of_the_champion' => [
+            'name'   => 'Trial of the Champion',
+            'floors' => [],
+        ],
+        'utgarde_keep'          => [
+            'name'   => 'Utgarde Keep',
+            'floors' => [],
+        ],
+        'utgarde_pinnacle'      => [
+            'name'   => 'Utgarde Pinnacle',
+            'floors' => [],
+        ],
+    ],
     'wod'         => [
         'auchindoun'          => [
             'name'   => 'Auchindoun',

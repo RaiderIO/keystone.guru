@@ -17,7 +17,7 @@ class ExpansionsSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known Expansions');
 
@@ -95,7 +95,7 @@ class ExpansionsSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('expansions')->truncate();
         DB::table('files')->where('model_class', 'App\Models\Expansion')->delete();

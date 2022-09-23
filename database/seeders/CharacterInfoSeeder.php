@@ -20,7 +20,7 @@ class CharacterInfoSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known races');
 
@@ -248,7 +248,7 @@ class CharacterInfoSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('character_races')->truncate();
         DB::table('character_classes')->truncate();

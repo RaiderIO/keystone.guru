@@ -16,7 +16,7 @@ class FactionsSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
         $this->command->info('Adding known factions');
 
         $factions = [
@@ -60,7 +60,7 @@ class FactionsSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('factions')->truncate();
         DB::table('files')->where('model_class', '=', 'App\Models\Faction')->delete();

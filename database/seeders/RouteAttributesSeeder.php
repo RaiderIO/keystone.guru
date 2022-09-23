@@ -14,7 +14,7 @@ class RouteAttributesSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding route attributes');
 
@@ -52,7 +52,7 @@ class RouteAttributesSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('route_attributes')->truncate();
     }

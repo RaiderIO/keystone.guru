@@ -15,7 +15,7 @@ class RaidMarkersSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         foreach (RaidMarker::ALL as $raidMarkerName => $id) {
             RaidMarker::create([
@@ -25,7 +25,7 @@ class RaidMarkersSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('raid_markers')->truncate();
     }
