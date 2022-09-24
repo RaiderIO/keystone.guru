@@ -1,1 +1,167 @@
-[]
+[
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -69.10922682673,
+        "lng": 206.9978035025,
+        "comment": "1",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -72.737873581356,
+        "lng": 230.74894589641,
+        "comment": "2",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -65.75,
+        "lng": 193.25,
+        "comment": "4",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -164.75,
+        "lng": 233.25,
+        "comment": "3",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -59.37785598478,
+        "lng": 201.06001790402,
+        "comment": "5",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -106.22038681722,
+        "lng": 174.01010573318,
+        "comment": "7",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -149.10861723046,
+        "lng": 242.89357978329,
+        "comment": "8",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -85.637986007837,
+        "lng": 244.03036720817,
+        "comment": "9",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -152.32951493429,
+        "lng": 227.73641411819,
+        "comment": "10",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -110.83677392607,
+        "lng": 209.73727989088,
+        "comment": "11",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -136.69510424465,
+        "lng": 151.05383368211,
+        "comment": "13",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -124.34659692843,
+        "lng": 134.39770753465,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -65.744206072388,
+        "lng": 220.15783128564,
+        "comment": "15",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -102.68979738108,
+        "lng": 195.14850793821,
+        "comment": "16",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 131,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -82.606552874817,
+        "lng": 149.86647551372,
+        "comment": "17",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
