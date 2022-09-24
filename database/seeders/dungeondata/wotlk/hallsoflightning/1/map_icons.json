@@ -2,17 +2,6 @@
     {
         "floor_id": 117,
         "team_id": null,
-        "map_icon_type_id": 8,
-        "lat": -137.3112919648,
-        "lng": 342.90711831211,
-        "comment": "",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "floor_id": 117,
-        "team_id": null,
         "map_icon_type_id": 10,
         "lat": -138.09108310285,
         "lng": 17.30219244551,

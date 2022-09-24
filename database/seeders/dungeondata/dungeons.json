@@ -3361,7 +3361,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.wotlk.azjol_nerub.floors.the_brood_pit",
-                "default": 1,
+                "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "ingame_min_x": 0,
@@ -3384,14 +3384,27 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 402,
+                        "floor1_id": 112,
+                        "floor2_id": 111,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 403,
+                        "floor1_id": 112,
+                        "floor2_id": 113,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 113,
                 "index": 3,
                 "mdt_sub_level": null,
                 "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
-                "default": 0,
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "ingame_min_x": 0,
@@ -3399,7 +3412,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 401,
+                        "floor1_id": 113,
+                        "floor2_id": 112,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
