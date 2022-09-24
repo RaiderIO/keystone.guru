@@ -3513,7 +3513,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 399,
+                        "floor1_id": 117,
+                        "floor2_id": 118,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 118,
@@ -3528,7 +3535,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 400,
+                        "floor1_id": 118,
+                        "floor2_id": 117,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3789,7 +3803,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 393,
+                        "floor1_id": 127,
+                        "floor2_id": 128,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 128,
@@ -3804,7 +3825,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 394,
+                        "floor1_id": 128,
+                        "floor2_id": 127,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 395,
+                        "floor1_id": 128,
+                        "floor2_id": 129,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 129,
@@ -3819,7 +3853,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 396,
+                        "floor1_id": 129,
+                        "floor2_id": 128,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 397,
+                        "floor1_id": 129,
+                        "floor2_id": 130,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 130,
@@ -3834,7 +3881,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 398,
+                        "floor1_id": 130,
+                        "floor2_id": 129,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
