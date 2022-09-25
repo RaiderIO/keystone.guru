@@ -3708,7 +3708,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 412,
+                        "floor1_id": 122,
+                        "floor2_id": 123,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 123,
@@ -3723,7 +3730,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 413,
+                        "floor1_id": 123,
+                        "floor2_id": 122,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3822,7 +3836,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 414,
+                        "floor1_id": 126,
+                        "floor2_id": 127,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 127,
@@ -3839,7 +3860,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 393,
+                        "id": 415,
+                        "floor1_id": 127,
+                        "floor2_id": 126,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 416,
                         "floor1_id": 127,
                         "floor2_id": 128,
                         "direction": "up"

@@ -5,5 +5,12 @@
         "target_floor_id": 130,
         "lat": -121,
         "lng": 158.25
+    },
+    {
+        "id": 224,
+        "floor_id": 129,
+        "target_floor_id": 128,
+        "lat": -122.75,
+        "lng": 214
     }
 ]
