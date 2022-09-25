@@ -17,8 +17,8 @@ class FactionDisplayControls extends MapControl {
                     if (stateFactions.hasOwnProperty(index)) {
                         let faction = stateFactions[index];
                         factionsData.push({
-                            name: faction.name,
-                            name_lc: faction.name.toLowerCase(),
+                            name: lang.get(faction.name),
+                            name_lc: lang.get(faction.name).toLowerCase(),
                             icon_url: faction.iconfile.icon_url,
                             fa_class: parseInt(index) === 0 ? 'fas' : 'far'
                         });

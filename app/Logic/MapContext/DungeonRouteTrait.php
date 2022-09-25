@@ -29,7 +29,7 @@ trait DungeonRouteTrait
             'teamId'                  => $dungeonRoute->team_id,
             'pullGradient'            => $dungeonRoute->pull_gradient,
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
-            'faction'                 => strtolower($dungeonRoute->faction->name),
+            'faction'                 => strtolower($dungeonRoute->faction->key),
             'enemyForces'             => $dungeonRoute->enemy_forces,
             'levelMin'                => $dungeonRoute->level_min,
             'levelMax'                => $dungeonRoute->level_max,

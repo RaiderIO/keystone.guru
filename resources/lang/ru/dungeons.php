@@ -1,8 +1,117 @@
 <?php
 
 return [
+    'wotlk'       => [
+        'ahn_kahet_the_old_kingdom' => [
+            'name'   => '@todo ru: .wotlk.ahn_kahet_the_old_kingdom.name',
+            'floors' => [
+                'ahn_kahet_the_old_kingdom' => '@todo ru: .wotlk.ahn_kahet_the_old_kingdom.floors.ahn_kahet_the_old_kingdom',
+            ],
+        ],
+        'azjol_nerub'               => [
+            'name'   => '@todo ru: .wotlk.azjol_nerub.name',
+            'floors' => [
+                'the_brood_pit'   => '@todo ru: .wotlk.azjol_nerub.floors.the_brood_pit',
+                'hadronoxs_lair'  => '@todo ru: .wotlk.azjol_nerub.floors.hadronoxs_lair',
+                'the_gilded_gate' => '@todo ru: .wotlk.azjol_nerub.floors.the_gilded_gate',
+            ],
+        ],
+        'drak_tharon_keep'          => [
+            'name'   => '@todo ru: .wotlk.drak_tharon_keep.name',
+            'floors' => [
+                'the_vestibules_of_drak_tharon' => '@todo ru: .wotlk.drak_tharon_keep.floors.the_vestibules_of_drak_tharon',
+                'drak_tharon_overlook'          => '@todo ru: .wotlk.drak_tharon_keep.floors.drak_tharon_overlook',
+            ],
+        ],
+        'gundrak'                   => [
+            'name'   => '@todo ru: .wotlk.gundrak.name',
+            'floors' => [
+                'gundrak' => '@todo ru: .wotlk.gundrak.floors.gundrak',
+            ],
+        ],
+
+        'halls_of_lightning'  => [
+            'name'   => '@todo ru: .wotlk.halls_of_lightning.name',
+            'floors' => [
+                'unyielding_garrison' => '@todo ru: .wotlk.halls_of_lightning.floors.unyielding_garrison',
+                'walk_of_the_makers'  => '@todo ru: .wotlk.halls_of_lightning.floors.walk_of_the_makers',
+            ],
+        ],
+        'halls_of_reflection' => [
+            'name'   => '@todo ru: .wotlk.halls_of_reflection.name',
+            'floors' => [
+                'halls_of_reflection' => '@todo ru: .wotlk.halls_of_reflection.floors.halls_of_reflection',
+            ],
+        ],
+        'halls_of_stone'      => [
+            'name'   => '@todo ru: .wotlk.halls_of_stone.name',
+            'floors' => [
+                'halls_of_stone' => '@todo ru: .wotlk.halls_of_stone.floors.halls_of_stone',
+            ],
+        ],
+        'pit_of_saron'        => [
+            'name'   => '@todo ru: .wotlk.pit_of_saron.name',
+            'floors' => [
+                'pit_of_saron' => '@todo ru: .wotlk.pit_of_saron.floors.pit_of_saron',
+            ],
+        ],
+
+        'the_culling_of_stratholme' => [
+            'name'   => '@todo ru: .wotlk.the_culling_of_stratholme.name',
+            'floors' => [
+                'the_culling_of_stratholme' => '@todo ru: .wotlk.the_culling_of_stratholme.floors.the_culling_of_stratholme',
+                'stratholme_city'           => '@todo ru: .wotlk.the_culling_of_stratholme.floors.stratholme_city',
+            ],
+        ],
+        'the_forge_of_souls'        => [
+            'name'   => '@todo ru: .wotlk.the_forge_of_souls.name',
+            'floors' => [],
+        ],
+        'the_nexus'                 => [
+            'name'   => '@todo ru: .wotlk.the_nexus.name',
+            'floors' => [
+                'the_nexus' => '@todo ru: .wotlk.the_nexus.floors.the_nexus',
+            ],
+        ],
+        'the_oculus'                => [
+            'name'   => '@todo ru: .wotlk.the_oculus.name',
+            'floors' => [
+                'the_oculus'            => '@todo ru: .wotlk.the_oculus.floors.the_oculus',
+                'band_of_variance'      => '@todo ru: .wotlk.the_oculus.floors.band_of_variance',
+                'band_of_acceleration'  => '@todo ru: .wotlk.the_oculus.floors.band_of_acceleration',
+                'band_of_transmutation' => '@todo ru: .wotlk.the_oculus.floors.band_of_transmutation',
+                'band_of_alignment'     => '@todo ru: .wotlk.the_oculus.floors.band_of_alignment',
+            ],
+        ],
+
+        'the_violet_hold'       => [
+            'name'   => '@todo ru: .wotlk.the_violet_hold.name',
+            'floors' => [
+                'the_violet_hold' => '@todo ru: .wotlk.the_violet_hold.floors.the_violet_hold',
+            ],
+        ],
+        'trial_of_the_champion' => [
+            'name'   => '@todo ru: .wotlk.trial_of_the_champion.name',
+            'floors' => [],
+        ],
+        'utgarde_keep'          => [
+            'name'   => '@todo ru: .wotlk.utgarde_keep.name',
+            'floors' => [
+                'njorndir_preparation' => '@todo ru: .wotlk.utgarde_keep.floors.njorndir_preparation',
+                'dragonflayer_ascent'  => '@todo ru: .wotlk.utgarde_keep.floors.dragonflayer_ascent',
+                'tyrs_terrace'         => '@todo ru: .wotlk.utgarde_keep.floors.tyrs_terrace',
+            ],
+        ],
+        'utgarde_pinnacle'      => [
+            'name'   => '@todo ru: .wotlk.utgarde_pinnacle.name',
+            'floors' => [
+                'lower_pinnacle' => '@todo ru: .wotlk.utgarde_pinnacle.floors.lower_pinnacle',
+                'upper_pinnacle' => '@todo ru: .wotlk.utgarde_pinnacle.floors.upper_pinnacle',
+            ],
+        ],
+    ],
     'wod'         => [
-        'auchindoun'          => [
+        'auchindoun'           => [
             'name'   => '@todo ru: .wod.auchindoun.name',
             'floors' => [
                 'auchindoun' => '@todo ru: .wod.auchindoun.floors.auchindoun',
@@ -14,13 +123,13 @@ return [
                 'bloodmaul_slag_mines' => '@todo ru: .wod.bloodmaul_slag_mines.floors.bloodmaul_slag_mines',
             ],
         ],
-        'iron_docks'          => [
+        'iron_docks'           => [
             'name'   => '@todo ru: .wod.iron_docks.name',
             'floors' => [
                 'iron_docks' => '@todo ru: .wod.iron_docks.floors.iron_docks',
             ],
         ],
-        'grimrail_depot'      => [
+        'grimrail_depot'       => [
             'name'   => '@todo ru: .wod.grimrail_depot.name',
             'floors' => [
                 'rafters'            => '@todo ru: .wod.grimrail_depot.floors.rafters',

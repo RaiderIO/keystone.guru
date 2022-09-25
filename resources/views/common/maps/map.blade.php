@@ -105,13 +105,13 @@ if ($isAdmin) {
         });
     </script>
 
-    @if($dungeon->isSiegeOfBoralus())
+    @if($dungeon->isFactionSelectionRequired())
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
             <?php
                                                                                                              $i = 0;
-                                                                                                         foreach (\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction) {
+                                                                                                         foreach (\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction) {
                                                                                                              ?>
             <a class="map_faction_display_control map_controls_custom" href="#"
                data-faction="{{ strtolower($faction->key) }}"

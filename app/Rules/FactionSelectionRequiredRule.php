@@ -6,9 +6,10 @@ use App\Models\Dungeon;
 use App\Models\Faction;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class SiegeOfBoralusFactionRule implements Rule
+class FactionSelectionRequiredRule implements Rule
 {
     /**
      * The request control provider instance.
@@ -41,12 +42,11 @@ class SiegeOfBoralusFactionRule implements Rule
         $factionId = $this->request->get('faction_id');
 
         $result = !empty($value);
-        /** @var Dungeon $siegeOfBoralus */
-        $siegeOfBoralus = Dungeon::siegeOfBoralus()->first();
+        /** @var Collection|Dungeon[] $factionSelectionRequired */
+        $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
-        if (intval($dungeonId) === $siegeOfBoralus->id) {
-            $validFactions = Faction::whereIn('name', ['Alliance', 'Horde'])->get()->pluck('id')->toArray();
-            $result        = in_array(intval($factionId), $validFactions);
+        if (in_array(intval($dungeonId), $factionSelectionRequired->pluck('id')->toArray())) {
+            $result        = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
         }
 
         return $result;
@@ -59,6 +59,6 @@ class SiegeOfBoralusFactionRule implements Rule
      */
     public function message()
     {
-        return __('rules.siege_of_boralus_faction_rule.message');
+        return __('rules.faction_selection_required_rule.message');
     }
 }

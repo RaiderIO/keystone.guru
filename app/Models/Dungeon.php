@@ -429,9 +429,9 @@ class Dungeon extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeSiegeOfBoralus($query)
+    public function scopeFactionSelectionRequired($query)
     {
-        return $query->where('key', self::DUNGEON_SIEGE_OF_BORALUS);
+        return $query->whereIn('key', [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
     }
 
     /**
@@ -518,6 +518,14 @@ class Dungeon extends CacheModel
             ->where('aggressiveness', '<>', 'friendly')
             ->where('enemy_forces', '>', 0)
             ->max('base_health') ?? 100000;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFactionSelectionRequired(): bool
+    {
+        return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
     }
 
     /**
