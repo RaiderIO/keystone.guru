@@ -337,7 +337,7 @@ return [
         ],
     ],
     'modal'        => [
-        'userreport'    => [
+        'userreport'      => [
             'dungeonroute' => [
                 'report_route'           => 'Отправить жалобу',
                 'your_name'              => 'Ваше имя',
@@ -355,22 +355,22 @@ return [
                 'submit'                 => 'Отправить',
             ],
         ],
-        'createroute'   => [
+        'createroute'     => [
             'create_route'           => 'Создать маршрут',
             'create_temporary_route' => 'Создать временный маршрут',
             'import_from_mdt'        => 'Импорт из MDT',
         ],
-        'legal'         => [
+        'legal'           => [
             'welcome_back_agree' => 'С возвращением! Чтобы продолжить, вы должны согласиться с нашими %s, %s и %s.',
             'terms_of_service'   => 'Условиями использования',
             'privacy_policy'     => 'Политикой конфиденциальности',
             'cookie_policy'      => 'Политикой в отношении файлов cookie',
             'i_agree'            => 'Согласен',
         ],
-        'routesettings' => [
+        'routesettings'   => [
             'title' => '@todo ru: .modal.routesettings.title',
         ],
-        'share'         => [
+        'share'           => [
             'share'                            => 'Поделиться',
             'publish'                          => 'Опубликовать',
             'review_route_settings'            => 'Предпросмотр %s перед публикацией маршрута',
@@ -384,32 +384,52 @@ return [
             'loading'                          => 'Загрузка...',
             'copy_to_clipboard'                => 'Скопировать в буфер обмена',
         ],
-        'simulate'      => [
-            'title'                      => '@todo ru: .modal.simulate.title',
-            'key_level'                  => '@todo ru: .modal.simulate.key_level',
-            'shrouded_bounty_type'       => '@todo ru: .modal.simulate.shrouded_bounty_type',
-            'shrouded_bounty_types'      => [
+        'simulate'        => [
+            'intro'                                => '@todo ru: .modal.simulate.intro',
+            'title'                                => '@todo ru: .modal.simulate.title',
+            'key_level'                            => '@todo ru: .modal.simulate.key_level',
+            'key_level_title'                      => '@todo ru: .modal.simulate.key_level_title',
+            'shrouded_bounty_type'                 => '@todo ru: .modal.simulate.shrouded_bounty_type',
+            'shrouded_bounty_type_title'           => '@todo ru: .modal.simulate.shrouded_bounty_type_title',
+            'shrouded_bounty_types'                => [
                 'crit'    => '@todo ru: .modal.simulate.shrouded_bounty_types.crit',
                 'haste'   => '@todo ru: .modal.simulate.shrouded_bounty_types.haste',
                 'mastery' => '@todo ru: .modal.simulate.shrouded_bounty_types.mastery',
                 'vers'    => '@todo ru: .modal.simulate.shrouded_bounty_types.vers',
             ],
-            'affix'                      => '@todo ru: .modal.simulate.affix',
-            'affixes'                    => [
+            'affix'                                => '@todo ru: .modal.simulate.affix',
+            'affix_title'                          => '@todo ru: .modal.simulate.affix_title',
+            'affixes'                              => [
                 'fortified'  => '@todo ru: .modal.simulate.affixes.fortified',
                 'tyrannical' => '@todo ru: .modal.simulate.affixes.tyrannical',
             ],
-            'bloodlust'                  => '@todo ru: .modal.simulate.bloodlust',
-            'arcane_intellect'           => '@todo ru: .modal.simulate.arcane_intellect',
-            'power_word_fortitude'       => '@todo ru: .modal.simulate.power_word_fortitude',
-            'battle_shout'               => '@todo ru: .modal.simulate.battle_shout',
-            'mystic_touch'               => '@todo ru: .modal.simulate.mystic_touch',
-            'chaos_brand'                => '@todo ru: .modal.simulate.chaos_brand',
-            'hp_percent'                 => '@todo ru: .modal.simulate.hp_percent',
-            'get_simulationcraft_string' => '@todo ru: .modal.simulate.get_simulationcraft_string',
-            'simulationcraft_string'     => '@todo ru: .modal.simulate.simulationcraft_string',
-            'loading'                    => '@todo ru: .modal.simulate.loading',
-            'copy_to_clipboard'          => '@todo ru: .modal.simulate.copy_to_clipboard',
+            'bloodlust'                            => '@todo ru: .modal.simulate.bloodlust',
+            'bloodlust_title'                      => '@todo ru: .modal.simulate.bloodlust_title',
+            'arcane_intellect'                     => '@todo ru: .modal.simulate.arcane_intellect',
+            'power_word_fortitude'                 => '@todo ru: .modal.simulate.power_word_fortitude',
+            'battle_shout'                         => '@todo ru: .modal.simulate.battle_shout',
+            'mystic_touch'                         => '@todo ru: .modal.simulate.mystic_touch',
+            'chaos_brand'                          => '@todo ru: .modal.simulate.chaos_brand',
+            'hp_percent'                           => '@todo ru: .modal.simulate.hp_percent',
+            'hp_percent_title'                     => '@todo ru: .modal.simulate.hp_percent_title',
+            'bloodlust_per_pull'                   => '@todo ru: .modal.simulate.bloodlust_per_pull',
+            'bloodlust_per_pull_title'             => '@todo ru: .modal.simulate.bloodlust_per_pull_title',
+            'ranged_pull_compensation_yards'       => '@todo ru: .modal.simulate.ranged_pull_compensation_yards',
+            'ranged_pull_compensation_yards_title' => '@todo ru: .modal.simulate.ranged_pull_compensation_yards_title',
+            'use_mounts'                           => '@todo ru: .modal.simulate.use_mounts',
+            'use_mounts_title'                     => '@todo ru: .modal.simulate.use_mounts_title',
+            'get_simulationcraft_string'           => '@todo ru: .modal.simulate.get_simulationcraft_string',
+            'simulationcraft_string'               => '@todo ru: .modal.simulate.simulationcraft_string',
+            'loading'                              => '@todo ru: .modal.simulate.loading',
+            'copy_to_clipboard'                    => '@todo ru: .modal.simulate.copy_to_clipboard',
+        ],
+        'simulateoptions' => [
+            'advanced' => [
+                'patreon_link_text' => '@todo ru: .modal.simulateoptions.advanced.patreon_link_text',
+                'patreon_only'      => '@todo ru: .modal.simulateoptions.advanced.patreon_only',
+                'advanced_options'  => '@todo ru: .modal.simulateoptions.advanced.advanced_options',
+                'description'       => '@todo ru: .modal.simulateoptions.advanced.description',
+            ],
         ],
     ],
     'release'      => [
