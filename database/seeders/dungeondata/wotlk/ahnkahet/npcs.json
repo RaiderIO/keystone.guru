@@ -663,5 +663,43 @@
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": []
+    },
+    {
+        "id": 55566,
+        "dungeon_id": 42,
+        "classification_id": 2,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "name": "Azjol-anak Warrior",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
+        "id": 55573,
+        "dungeon_id": 42,
+        "classification_id": 2,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "name": "Nerubian Flyer",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

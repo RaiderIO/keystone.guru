@@ -3361,7 +3361,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.wotlk.azjol_nerub.floors.the_brood_pit",
-                "default": 1,
+                "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "ingame_min_x": 0,
@@ -3384,14 +3384,27 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 402,
+                        "floor1_id": 112,
+                        "floor2_id": 111,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 403,
+                        "floor1_id": 112,
+                        "floor2_id": 113,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 113,
                 "index": 3,
                 "mdt_sub_level": null,
                 "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
-                "default": 0,
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "ingame_min_x": 0,
@@ -3399,7 +3412,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 401,
+                        "floor1_id": 113,
+                        "floor2_id": 112,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3432,7 +3452,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 404,
+                        "floor1_id": 114,
+                        "floor2_id": 115,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 115,
@@ -3447,7 +3474,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 405,
+                        "floor1_id": 115,
+                        "floor2_id": 114,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3513,7 +3547,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 399,
+                        "floor1_id": 117,
+                        "floor2_id": 118,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 118,
@@ -3528,7 +3569,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 400,
+                        "floor1_id": 118,
+                        "floor2_id": 117,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3789,7 +3837,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 393,
+                        "floor1_id": 127,
+                        "floor2_id": 128,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 128,
@@ -3804,7 +3859,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 394,
+                        "floor1_id": 128,
+                        "floor2_id": 127,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 395,
+                        "floor1_id": 128,
+                        "floor2_id": 129,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 129,
@@ -3819,7 +3887,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 396,
+                        "floor1_id": 129,
+                        "floor2_id": 128,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 397,
+                        "floor1_id": 129,
+                        "floor2_id": 130,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 130,
@@ -3834,7 +3915,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 398,
+                        "floor1_id": 130,
+                        "floor2_id": 129,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3933,7 +4021,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 408,
+                        "floor1_id": 133,
+                        "floor2_id": 134,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 134,
@@ -3948,7 +4043,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 409,
+                        "floor1_id": 134,
+                        "floor2_id": 133,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 410,
+                        "floor1_id": 134,
+                        "floor2_id": 135,
+                        "direction": "up"
+                    }
+                ]
             },
             {
                 "id": 135,
@@ -3963,7 +4071,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 411,
+                        "floor1_id": 135,
+                        "floor2_id": 134,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     },
@@ -3988,21 +4103,6 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "name": "dungeons.wotlk.utgarde_pinnacle.floors.lower_pinnacle",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": []
-            },
-            {
-                "id": 137,
-                "index": 2,
-                "mdt_sub_level": null,
-                "name": "dungeons.wotlk.utgarde_pinnacle.floors.upper_pinnacle",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -4011,7 +4111,36 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [
+                    {
+                        "id": 407,
+                        "floor1_id": 136,
+                        "floor2_id": 137,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 137,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.utgarde_pinnacle.floors.upper_pinnacle",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 406,
+                        "floor1_id": 137,
+                        "floor2_id": 136,
+                        "direction": "down"
+                    }
+                ]
             }
         ]
     }

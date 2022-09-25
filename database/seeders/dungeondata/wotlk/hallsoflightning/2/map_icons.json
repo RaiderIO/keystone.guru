@@ -1,1 +1,35 @@
-[]
+[
+    {
+        "floor_id": 118,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -83.788752334079,
+        "lng": 181.26739924243,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 118,
+        "team_id": null,
+        "map_icon_type_id": 39,
+        "lat": -152.56150027304,
+        "lng": 189.10446669139,
+        "comment": "Need to verify this last part",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 118,
+        "team_id": null,
+        "map_icon_type_id": 4,
+        "lat": -103.91124797337,
+        "lng": 73.232689047896,
+        "comment": "Shortcut to beginning of dungeon after killing Loken",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

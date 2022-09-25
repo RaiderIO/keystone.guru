@@ -1,1 +1,50 @@
-[]
+[
+    {
+        "id": 524,
+        "floor_id": 133,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-119.910281,\"lng\":240.810194},{\"lat\":-111.663357,\"lng\":238.336116},{\"lat\":-101.767048,\"lng\":242.29464},{\"lat\":-96.324077,\"lng\":249.386995},{\"lat\":-87.417399,\"lng\":254.170211}]"
+        }
+    },
+    {
+        "id": 526,
+        "floor_id": 133,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-187.237832,\"lng\":186.376308},{\"lat\":-206.047767,\"lng\":192.263387},{\"lat\":-227.585862,\"lng\":131.238787}]"
+        }
+    },
+    {
+        "id": 530,
+        "floor_id": 133,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#0070de",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-221.875,\"lng\":98},{\"lat\":-229.75,\"lng\":114.25},{\"lat\":-229.5,\"lng\":135.125},{\"lat\":-215.75,\"lng\":172.5},{\"lat\":-210.874067,\"lng\":188.138319},{\"lat\":-219.968367,\"lng\":192.874933},{\"lat\":-228.683737,\"lng\":165.213106}]"
+        }
+    },
+    {
+        "id": 531,
+        "floor_id": 133,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-226.375,\"lng\":165.625},{\"lat\":-216.375,\"lng\":195.25}]"
+        }
+    }
+]
