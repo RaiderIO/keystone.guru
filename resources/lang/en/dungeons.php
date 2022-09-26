@@ -1,8 +1,117 @@
 <?php
 
 return [
+    'wotlk'       => [
+        'ahn_kahet_the_old_kingdom' => [
+            'name'   => 'Ahn\'kahet: The Old Kingdom',
+            'floors' => [
+                'ahn_kahet_the_old_kingdom' => 'Ahn\'kahet: The Old Kingdom',
+            ],
+        ],
+        'azjol_nerub'               => [
+            'name'   => 'Azjol-Nerub',
+            'floors' => [
+                'the_brood_pit'   => 'The Brood Pit',
+                'hadronoxs_lair'  => 'Hadronox\'s Lair',
+                'the_gilded_gate' => 'The Gilded Gate',
+            ],
+        ],
+        'drak_tharon_keep'          => [
+            'name'   => 'Drak\'Tharon Keep',
+            'floors' => [
+                'the_vestibules_of_drak_tharon' => 'The Vestibules of Drak\'Tharon',
+                'drak_tharon_overlook'          => 'Drak\'Tharon Overlook',
+            ],
+        ],
+        'gundrak'                   => [
+            'name'   => 'Gundrak',
+            'floors' => [
+                'gundrak' => 'Gundrak',
+            ],
+        ],
+
+        'halls_of_lightning'  => [
+            'name'   => 'Halls of Lightning',
+            'floors' => [
+                'unyielding_garrison' => 'Unyielding Garrison',
+                'walk_of_the_makers'  => 'Walk of the Makers',
+            ],
+        ],
+        'halls_of_reflection' => [
+            'name'   => 'Halls of Reflection',
+            'floors' => [
+                'halls_of_reflection' => 'Halls of Reflection',
+            ],
+        ],
+        'halls_of_stone'      => [
+            'name'   => 'Halls of Stone',
+            'floors' => [
+                'halls_of_stone' => 'Halls of Stone',
+            ],
+        ],
+        'pit_of_saron'        => [
+            'name'   => 'Pit of Saron',
+            'floors' => [
+                'pit_of_saron' => 'Pit of Saron',
+            ],
+        ],
+
+        'the_culling_of_stratholme' => [
+            'name'   => 'The Culling of Stratholme',
+            'floors' => [
+                'the_culling_of_stratholme' => 'The Culling of Stratholme',
+                'stratholme_city'           => 'Stratholme City',
+            ],
+        ],
+        'the_forge_of_souls'        => [
+            'name'   => 'The Forge of Souls',
+            'floors' => [],
+        ],
+        'the_nexus'                 => [
+            'name'   => 'The Nexus',
+            'floors' => [
+                'the_nexus' => 'The Nexus',
+            ],
+        ],
+        'the_oculus'                => [
+            'name'   => 'The Oculus',
+            'floors' => [
+                'the_oculus'            => 'The Oculus',
+                'band_of_variance'      => 'Band of Variance',
+                'band_of_acceleration'  => 'Band of Acceleration',
+                'band_of_transmutation' => 'Band of Transmutation',
+                'band_of_alignment'     => 'Band of Alignment',
+            ],
+        ],
+
+        'the_violet_hold'       => [
+            'name'   => 'The Violet Hold',
+            'floors' => [
+                'the_violet_hold' => 'The Violet Hold',
+            ],
+        ],
+        'trial_of_the_champion' => [
+            'name'   => 'Trial of the Champion',
+            'floors' => [],
+        ],
+        'utgarde_keep'          => [
+            'name'   => 'Utgarde Keep',
+            'floors' => [
+                'njorndir_preparation' => 'Njorndir Preparation',
+                'dragonflayer_ascent'  => 'Dragonflayer Ascent',
+                'tyrs_terrace'         => 'Tyr\'s Terrace',
+            ],
+        ],
+        'utgarde_pinnacle'      => [
+            'name'   => 'Utgarde Pinnacle',
+            'floors' => [
+                'lower_pinnacle' => 'Lower Pinnacle',
+                'upper_pinnacle' => 'Upper Pinnacle',
+            ],
+        ],
+    ],
     'wod'         => [
-        'auchindoun'          => [
+        'auchindoun'           => [
             'name'   => 'Auchindoun',
             'floors' => [
                 'auchindoun' => 'Auchindoun',
@@ -14,13 +123,13 @@ return [
                 'bloodmaul_slag_mines' => 'Bloodmaul Slag Mines',
             ],
         ],
-        'iron_docks'          => [
+        'iron_docks'           => [
             'name'   => 'Iron Docks',
             'floors' => [
                 'iron_docks' => 'Iron Docks',
             ],
         ],
-        'grimrail_depot'      => [
+        'grimrail_depot'       => [
             'name'   => 'Grimrail Depot',
             'floors' => [
                 'rafters'            => 'Rafters',

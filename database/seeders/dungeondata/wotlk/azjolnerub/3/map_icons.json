@@ -1,0 +1,46 @@
+[
+    {
+        "floor_id": 113,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -224.32605184354,
+        "lng": 47.36614270345,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 113,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -52.125,
+        "lng": 240.125,
+        "comment": "These spawn continuously",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 113,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -63.5,
+        "lng": 230.625,
+        "comment": "These spawn continuously",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 113,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -163.875,
+        "lng": 230.375,
+        "comment": "These spawn continuously",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

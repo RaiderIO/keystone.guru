@@ -18,7 +18,7 @@ class ReleasesSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding releases');
         $rootDir         = database_path('/seeders/releases/');
@@ -58,7 +58,7 @@ class ReleasesSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('releases')->truncate();
         DB::table('release_changelogs')->truncate();

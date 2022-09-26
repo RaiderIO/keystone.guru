@@ -1,0 +1,90 @@
+[
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -179.99134227311,
+        "lng": 335.73121948205,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -153.84523150081,
+        "lng": 326.25799094136,
+        "comment": "Talk to Chromie",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -153.32571796053,
+        "lng": 319.27441908885,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -150.00857394183,
+        "lng": 309.72720713786,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -140.77217611465,
+        "lng": 282.8232380823,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -131.3443162373,
+        "lng": 270.08831226262,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -140.48509715191,
+        "lng": 298.05474910851,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 122,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -106.14752579843,
+        "lng": 183.9227321175,
+        "comment": "Talk to Chromie again",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

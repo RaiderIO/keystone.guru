@@ -155,7 +155,7 @@ class ViewService implements ViewServiceInterface
                 'nextSeason'                       => $nextSeason,
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc'  => $activeDungeonsByExpansionId,
-                'siegeOfBoralus'                   => Dungeon::siegeOfBoralus()->first(),
+                'siegeOfBoralus'                   => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
 
                 // Search
                 'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,

@@ -19,8 +19,11 @@ return [
             ],
             'import_string' => [
                 'category'                                             => [
-                    'pull' => 'Пулл %s',
+                    'pull'   => 'Пулл %s',
+                    'object' => '@todo ru: .mdt.io.import_string.category.object',
                 ],
+                'unable_to_find_floor_for_object'                      => '@todo ru: .mdt.io.import_string.unable_to_find_floor_for_object',
+                'unable_to_find_floor_for_object_details'              => '@todo ru: .mdt.io.import_string.unable_to_find_floor_for_object_details',
                 'unable_to_find_mdt_enemy_for_clone_index'             => 'Невозможно найти врага MDT для клона индекса %s и NPC индекса %s.',
                 'unable_to_find_mdt_enemy_for_clone_index_details'     => 'MDT нанес на карту врага, который еще не известен в Keystone.guru.',
                 'unable_to_find_kg_equivalent_for_mdt_enemy'           => 'Невозможно найти аналог врага %s Keystone.guru для MDT NPC %s (id:%s)',

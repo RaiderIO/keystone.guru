@@ -1,0 +1,79 @@
+[
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -124.5,
+        "lng": 233.75,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 60,
+        "lat": -131.67787671559,
+        "lng": 147.40343609314,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 60,
+        "lat": -172.80428681428,
+        "lng": 174.7630255817,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 24,
+        "lat": -207.08477589948,
+        "lng": 177.52830285253,
+        "comment": "Damage Drake",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 27,
+        "lat": -207.2742404703,
+        "lng": 200.64298049181,
+        "comment": "Heal  Drake",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 25,
+        "lat": -211.06353188657,
+        "lng": 189.08564167217,
+        "comment": "Tank Drake",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 127,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -217.75,
+        "lng": 197.5,
+        "comment": "After the boss fight, 3 friendly NPCs will spawn. Talk to them to get a dragon item. Use the item to call down a dragon. Fly up to next part of the dungeon.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

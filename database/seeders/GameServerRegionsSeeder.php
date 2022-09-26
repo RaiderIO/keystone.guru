@@ -15,7 +15,7 @@ class GameServerRegionsSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
         $this->command->info('Adding known game server regions');
 
         $gameServerRegions = [
@@ -65,7 +65,7 @@ class GameServerRegionsSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('game_server_regions')->truncate();
     }

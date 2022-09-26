@@ -1,0 +1,37 @@
+[
+    {
+        "id": 208,
+        "floor_id": 137,
+        "target_floor_id": 136,
+        "lat": -197.94,
+        "lng": 157.68
+    },
+    {
+        "id": 211,
+        "floor_id": 137,
+        "target_floor_id": 136,
+        "lat": -208.31,
+        "lng": 207.5
+    },
+    {
+        "id": 212,
+        "floor_id": 137,
+        "target_floor_id": 136,
+        "lat": -97.18,
+        "lng": 223.73
+    },
+    {
+        "id": 213,
+        "floor_id": 137,
+        "target_floor_id": 136,
+        "lat": -85.42,
+        "lng": 223.62
+    },
+    {
+        "id": 216,
+        "floor_id": 137,
+        "target_floor_id": 136,
+        "lat": -137.75,
+        "lng": 191.25
+    }
+]

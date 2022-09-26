@@ -1,0 +1,178 @@
+[
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -199.5,
+        "lng": 194,
+        "comment": "Talk to Arthas",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -164.40625,
+        "lng": 205.34375,
+        "comment": "1",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -107.04507926145,
+        "lng": 237.75883167239,
+        "comment": "2",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -163.71875,
+        "lng": 209.96875,
+        "comment": "3",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -98.715685574697,
+        "lng": 239.07833958316,
+        "comment": "4",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -171.0625,
+        "lng": 176.6875,
+        "comment": "6",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -109.23051423867,
+        "lng": 224.39881407582,
+        "comment": "7",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -152.40625,
+        "lng": 207.6875,
+        "comment": "8",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -96.53025059748,
+        "lng": 211.69855043463,
+        "comment": "9",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -146.38724661493,
+        "lng": 173.66883254611,
+        "comment": "5",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -145.59751649587,
+        "lng": 185.58657797921,
+        "comment": "10",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -94.827017692307,
+        "lng": 224.79971327057,
+        "comment": "Talk to Arthas after clearing last wave.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -76.448989580405,
+        "lng": 254.82996526802,
+        "comment": "Talk to Arthas after defeating the boss",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -95.5,
+        "lng": 152.875,
+        "comment": "Talk to Arthas",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -135.18743765371,
+        "lng": 178.98156243798,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 123,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -101.65980441724,
+        "lng": 210.78614814196,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

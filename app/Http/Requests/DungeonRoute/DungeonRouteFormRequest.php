@@ -4,7 +4,7 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
-use App\Rules\SiegeOfBoralusFactionRule;
+use App\Rules\FactionSelectionRequiredRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -56,7 +56,7 @@ class DungeonRouteFormRequest extends FormRequest
             'seasonal_index'   => 'nullable|array',
             'seasonal_index.*' => 'nullable|numeric',
 
-            'faction_id' => [Rule::exists('factions', 'id'), new SiegeOfBoralusFactionRule($this->request)],
+            'faction_id' => [Rule::exists('factions', 'id'), new FactionSelectionRequiredRule($this->request)],
 
             'race'  => 'nullable|array',
             'class' => 'nullable|array',

@@ -59,6 +59,7 @@ return [
     'mapicon_map_object_group_label'                  => 'Иконки',
     'killzone_map_object_group_label'                 => 'Пул',
     'killzonepath_map_object_group_label'             => 'Цепочка пулов',
+    'mountablearea_map_object_group_label'            => '@todo ru: .mountablearea_map_object_group_label',
 
     'publish_state_title_unpublished'   => 'Не опубликовано',
     'publish_state_subtext_unpublished' => 'Только вы можете просматривать этот маршрут',
@@ -123,6 +124,7 @@ return [
     'killzone'                                    => 'Зона поражения',
     'mapicon'                                     => 'Иконки',
     'mapicon_title'                               => 'Создать иконку. Горячая клавиша: <b>2</b>',
+    'map_icon'                                    => '@todo ru: .map_icon',
     'brushline'                                   => 'Рисовать',
     'brushline_title'                             => 'Нарисовать линию. Горячая клавиша: <b>3</b>',
     'pridefulenemy'                               => 'Полный Гордыни',
@@ -135,19 +137,24 @@ return [
     'delete_title'                                => 'Удалить объекты на карте. Горячая клавиша <b>6</b>',
     'finish'                                      => 'Завершить',
     'finish_drawing'                              => 'Завершить рисование',
+    'enemypack'                                   => 'Пак',
+    'enemypack_title'                             => '@todo ru: .enemypack_title',
+    'enemy'                                       => 'Враг',
+    'enemy_title'                                 => '@todo ru: .enemy_title',
+    'enemypatrol'                                 => 'Патруль',
+    'enemypatrol_title'                           => '@todo ru: .enemypatrol_title',
+    'dungeonfloorswitchmarker'                    => 'Уровень',
+    'dungeonfloorswitchmarker_title'              => '@todo ru: .dungeonfloorswitchmarker_title',
+    'mountablearea'                               => '@todo ru: .mountablearea',
+    'mountablearea_title'                         => '@todo ru: .mountablearea_title',
 
     'draw_handler_route_tooltip_start' => 'Нажмите, чтобы начать рисовать маршрут.',
     'draw_handler_route_tooltip_cont'  => 'Нажмите, чтобы продолжить рисовать маршрут.',
     'draw_handler_route_tooltip_end'   => 'Нажмите кнопку \'Готово\' на панели инструментов, чтобы завершить свой рисование.',
 
-    'draw_handler_brushline_tooltip_start' => 'Нажмите, чтобы начать рисовать линию.',
-    'draw_handler_brushline_tooltip_cont'  => 'Нажмите, чтобы закончить рисовать линию.',
-    'draw_handler_brushline_tooltip_end'   => 'Перетаскивайте объекты, нажмите кнопку \'Готово\' на панели инструментов, чтобы завершить рисование.',
-
-    'enemypack'                                   => 'Пак',
-    'enemy'                                       => 'Враг',
-    'enemypatrol'                                 => 'Патруль',
-    'dungeonfloorswitchmarker'                    => 'Уровень',
+    'draw_handler_brushline_tooltip_start'        => 'Нажмите, чтобы начать рисовать линию.',
+    'draw_handler_brushline_tooltip_cont'         => 'Нажмите, чтобы закончить рисовать линию.',
+    'draw_handler_brushline_tooltip_end'          => 'Перетаскивайте объекты, нажмите кнопку \'Готово\' на панели инструментов, чтобы завершить рисование.',
 
     // Raid markers
     'title_raid_marker_no_selection'              => 'Нет рейдовых меток',
@@ -382,6 +389,10 @@ return [
     'dungeonfloorswitchmarker_go_to_label'                          => '@todo ru: .dungeonfloorswitchmarker_go_to_label',
     'dungeonfloorswitchmarker_unknown_label'                        => '@todo ru: .dungeonfloorswitchmarker_unknown_label',
 
+    // Mountable area
+    'mountablearea_faction_label'                                   => '@todo ru: .mountablearea_faction_label',
+    'mountablearea_teeming_label'                                   => '@todo ru: .mountablearea_teeming_label',
+
     // Dungeonroute table
     'actions_label'                                                 => 'Действия',
     'add_to_team_label'                                             => 'Добавить в команду ...',
@@ -485,4 +496,7 @@ return [
     'specialization_select'                 => 'Специализация ...',
     'class_select'                          => 'Класс...',
     'race_select'                           => 'Раса...',
+
+    // Simulate
+    'simulate_pull'                         => '@todo ru: .simulate_pull',
 ];

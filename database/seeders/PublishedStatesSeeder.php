@@ -15,7 +15,7 @@ class PublishedStatesSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding Published States');
 
@@ -27,7 +27,7 @@ class PublishedStatesSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('published_states')->truncate();
     }

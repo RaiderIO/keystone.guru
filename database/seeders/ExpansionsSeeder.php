@@ -17,7 +17,7 @@ class ExpansionsSeeder extends Seeder
      */
     public function run()
     {
-        $this->_rollback();
+        $this->rollback();
 
         $this->command->info('Adding known Expansions');
 
@@ -48,7 +48,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#198033',
                 'released_at' => Carbon::make('2007-01-16 00:00:00'),
             ]), 'expansions.wotlk.name'              => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_WOTLK,
                 'color'       => '#11dff2',
                 'released_at' => Carbon::make('2008-11-13 00:00:00'),
@@ -95,7 +95,7 @@ class ExpansionsSeeder extends Seeder
         }
     }
 
-    private function _rollback()
+    private function rollback()
     {
         DB::table('expansions')->truncate();
         DB::table('files')->where('model_class', 'App\Models\Expansion')->delete();

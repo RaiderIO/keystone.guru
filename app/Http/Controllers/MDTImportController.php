@@ -64,8 +64,8 @@ class MDTImportController extends Controller
             ];
 
             // Siege of Boralus faction but hide it otherwise
-            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
-                $result['faction'] = $dungeonRoute->faction->name;
+            if ($dungeonRoute->dungeon->isFactionSelectionRequired()) {
+                $result['faction'] = __($dungeonRoute->faction->name);
             }
 
             return $result;
