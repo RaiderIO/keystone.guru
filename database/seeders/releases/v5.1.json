@@ -1,0 +1,37 @@
+{
+    "id": 143,
+    "release_changelog_id": 150,
+    "version": "v5.1",
+    "title": "Wrath of the Lich King dungeons added",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-09-26T14:32:00+00:00",
+    "updated_at": "2022-09-26T14:32:00+00:00",
+    "changelog": {
+        "id": 150,
+        "release_id": 143,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 150,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1386,
+                "change": "Wrath of the Lich King dungeons added (massive thanks to G\u00fcnther for doing the mapping effort).",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 150,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1390,
+                "change": "Route previews no longer show mountable areas (which is hidden by default normally).",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
