@@ -1888,7 +1888,7 @@
     {
         "id": 9203,
         "enemy_pack_id": -1,
-        "npc_id": 0,
+        "npc_id": 27972,
         "floor_id": 120,
         "mdt_id": -1,
         "mdt_npc_id": null,
@@ -1904,12 +1904,14 @@
         "lng": 302.46663560016,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": null
+        "npc": {
+            "id": 27972
+        }
     },
     {
         "id": 9204,
         "enemy_pack_id": -1,
-        "npc_id": 0,
+        "npc_id": 27972,
         "floor_id": 120,
         "mdt_id": -1,
         "mdt_npc_id": null,
@@ -1925,12 +1927,14 @@
         "lng": 296.79493747236,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": null
+        "npc": {
+            "id": 27972
+        }
     },
     {
         "id": 9205,
         "enemy_pack_id": -1,
-        "npc_id": 0,
+        "npc_id": 27972,
         "floor_id": 120,
         "mdt_id": -1,
         "mdt_npc_id": null,
@@ -1946,7 +1950,9 @@
         "lng": 308.4255083167,
         "active_auras": [],
         "enemyactiveauras": [],
-        "npc": null
+        "npc": {
+            "id": 27972
+        }
     },
     {
         "id": 9206,
