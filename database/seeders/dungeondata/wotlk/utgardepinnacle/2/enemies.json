@@ -599,7 +599,7 @@
     },
     {
         "id": 9505,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1905,
         "npc_id": 26554,
         "floor_id": 137,
         "mdt_id": -1,
@@ -622,7 +622,7 @@
     },
     {
         "id": 9506,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1905,
         "npc_id": 26553,
         "floor_id": 137,
         "mdt_id": -1,
@@ -645,7 +645,7 @@
     },
     {
         "id": 9507,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1905,
         "npc_id": 26550,
         "floor_id": 137,
         "mdt_id": -1,
