@@ -4219,8 +4219,165 @@
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 6,
+        "floors": [
+            {
+                "id": 138,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_construct_quarter",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 425,
+                        "floor1_id": 138,
+                        "floor2_id": 139,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 426,
+                        "floor1_id": 138,
+                        "floor2_id": 140,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 139,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_arachnid_quarter",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 423,
+                        "floor1_id": 139,
+                        "floor2_id": 138,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 424,
+                        "floor1_id": 139,
+                        "floor2_id": 141,
+                        "direction": "down"
+                    }
+                ]
+            },
+            {
+                "id": 140,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_military_quarter",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 421,
+                        "floor1_id": 140,
+                        "floor2_id": 138,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 422,
+                        "floor1_id": 140,
+                        "floor2_id": 141,
+                        "direction": "right"
+                    }
+                ]
+            },
+            {
+                "id": 141,
+                "index": 4,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_plague_quarter",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 419,
+                        "floor1_id": 141,
+                        "floor2_id": 139,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 420,
+                        "floor1_id": 141,
+                        "floor2_id": 140,
+                        "direction": "left"
+                    }
+                ]
+            },
+            {
+                "id": 142,
+                "index": 5,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_lower_necropolis",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 418,
+                        "floor1_id": 142,
+                        "floor2_id": 143,
+                        "direction": "up"
+                    }
+                ]
+            },
+            {
+                "id": 143,
+                "index": 6,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_upper_necropolis",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 417,
+                        "floor1_id": 143,
+                        "floor2_id": 142,
+                        "direction": "down"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": 61,
