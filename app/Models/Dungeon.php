@@ -118,6 +118,17 @@ class Dungeon extends CacheModel
     const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
     const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
 
+    // Wrath of the Lich King Raid
+    const RAID_ICECROWN_CITADEL                         = 'icecrowncitadel';
+    const RAID_NAXXRAMAS                                = 'naxxramas';
+    const RAID_ONYXIAS_LAIR                             = 'onyxiaslair';
+    const RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER = 'theargentcoliseum';
+    const RAID_THE_EYE_OF_ETERNITY                      = 'theeyeofeternity';
+    const RAID_THE_OBSIDIAN_SANCTUM                     = 'theobsidiansanctum';
+    const RAID_THE_RUBY_SANCTUM                         = 'therubysanctum';
+    const RAID_ULDUAR                                   = 'ulduar';
+    const RAID_VAULT_OF_ARCHAVON                        = 'vaultofarchavon';
+
     // Cataclysm
     const DUNGEON_BLACKROCK_CAVERNS        = 'blackrock_caverns';
     const DUNGEON_DEADMINES_CATACLYSM      = 'deadmines_cataclysm';
@@ -223,6 +234,18 @@ class Dungeon extends CacheModel
         self::DUNGEON_TRIAL_OF_THE_CHAMPION,
         self::DUNGEON_UTGARDE_KEEP,
         self::DUNGEON_UTGARDE_PINNACLE,
+    ];
+
+    const ALL_WOTLK_RAID = [
+        self::RAID_ICECROWN_CITADEL,
+        self::RAID_NAXXRAMAS,
+        self::RAID_ONYXIAS_LAIR,
+        self::RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER,
+        self::RAID_THE_EYE_OF_ETERNITY,
+        self::RAID_THE_OBSIDIAN_SANCTUM,
+        self::RAID_THE_RUBY_SANCTUM,
+        self::RAID_ULDUAR,
+        self::RAID_VAULT_OF_ARCHAVON,
     ];
 
     const ALL_WOD = [
