@@ -1,0 +1,21 @@
+[
+    {
+        "id": 14881,
+        "dungeon_id": 58,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "name": "Spider",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    }
+]
