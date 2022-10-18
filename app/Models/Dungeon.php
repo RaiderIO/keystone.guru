@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,7 @@ use Mockery\Exception;
  * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
  * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
  * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
+ * @property boolean $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property boolean $active True if this dungeon is active, false if it is not.
  *
  * @property Expansion $expansion
@@ -39,6 +41,7 @@ use Mockery\Exception;
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  *
  * @method static Builder active()
  * @method static Builder inactive()
@@ -383,7 +386,7 @@ class Dungeon extends CacheModel
      */
     public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**
@@ -446,13 +449,22 @@ class Dungeon extends CacheModel
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonspeedrunrequirednpcs(): HasMany
+    {
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
+    }
+
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      *
      * @param Builder $query
      * @return Builder
      */
-    public function scopeFactionSelectionRequired($query)
+    public function scopeFactionSelectionRequired(Builder $query): Builder
     {
         return $query->whereIn('key', [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
     }
@@ -463,7 +475,7 @@ class Dungeon extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 1);
     }
@@ -474,7 +486,7 @@ class Dungeon extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeInactive($query)
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
     }
