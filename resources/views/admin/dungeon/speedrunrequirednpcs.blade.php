@@ -3,6 +3,8 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_dungeon_speedrun_required_npcs_table').DataTable({});

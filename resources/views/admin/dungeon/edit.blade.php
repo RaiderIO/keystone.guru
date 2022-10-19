@@ -100,9 +100,13 @@
         @isset($dungeon)
     </div>
 
-    @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
+    <div class="form-group">
+        @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
+    </div>
 
-    @include('admin.dungeon.speedrunrequirednpcs', ['dungeon' => $dungeon])
+    <div class="form-group">
+        @include('admin.dungeon.speedrunrequirednpcs', ['dungeon' => $dungeon])
+    </div>
 
     @endisset
 @endsection

@@ -3,6 +3,8 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_dungeon_floor_table').DataTable({});

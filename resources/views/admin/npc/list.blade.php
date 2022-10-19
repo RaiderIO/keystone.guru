@@ -15,6 +15,8 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_npc_table').DataTable({

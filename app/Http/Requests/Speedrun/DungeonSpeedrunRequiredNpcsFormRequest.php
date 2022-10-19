@@ -28,9 +28,9 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dungeon_id' => [Dungeon::all()->pluck('id')->toArray()],
+            'dungeon_id' => Rule::in(Dungeon::all('id')->pluck('id')->toArray()),
             'npc_id'     => Rule::in(Npc::whereIn('dungeon_id', [-1, $this->get('dungeon_id')])->get('id')->pluck('id')->toArray()),
-            'count'      => 'required|integer',
+            'count'      => 'required|int',
         ];
     }
 }
