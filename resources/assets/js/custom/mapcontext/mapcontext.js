@@ -385,4 +385,12 @@ class MapContext extends Signalable {
     getEnemyForcesShroudedZulGamux() {
         return this._options.dungeon.enemy_forces_shrouded_zul_gamux;
     }
+
+    /**
+     *
+     * @returns [{npc_id: Number, count: Number}]
+     */
+    getDungeonSpeedrunRequiredNpcs() {
+        return this._options.dungeon.dungeonspeedrunrequirednpcs;
+    }
 }

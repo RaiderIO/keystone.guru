@@ -65,6 +65,10 @@ return [
                 'edit_floor' => 'Edit floor',
             ],
 
+            'dungeonspeedrunrequirednpc' => [
+                'new_dungeonspeedrunrequirednpc' => 'New '
+            ],
+
             'npcs' => [
                 'npcs'     => 'NPCs',
                 'new_npc'  => 'New NPC',

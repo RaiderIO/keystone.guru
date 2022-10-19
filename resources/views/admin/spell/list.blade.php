@@ -10,6 +10,8 @@
 @endsection
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_spell_table').DataTable({});

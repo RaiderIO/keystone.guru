@@ -15,6 +15,8 @@
 @endsection
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_release_table').DataTable({
