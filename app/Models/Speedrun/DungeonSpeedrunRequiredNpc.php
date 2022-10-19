@@ -2,10 +2,10 @@
 
 namespace App\Models\Speedrun;
 
+use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Npc;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,14 +19,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class DungeonSpeedrunRequiredNpc extends Model
+class DungeonSpeedrunRequiredNpc extends CacheModel
 {
+    protected $visible = [
+        'npc_id',
+        'count',
+    ];
+
     protected $fillable = [
         'dungeon_id',
         'npc_id',
         'count',
     ];
-    protected $with = ['dungeon', 'npc'];
     public $timestamps = false;
 
     /**

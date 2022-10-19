@@ -58,7 +58,7 @@ class Dungeon extends CacheModel
     protected $appends = ['floor_count'];
     protected $fillable = ['map_id'];
 
-    public $with = ['expansion', 'floors'];
+    public $with = ['expansion', 'floors', 'dungeonspeedrunrequirednpcs'];
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
