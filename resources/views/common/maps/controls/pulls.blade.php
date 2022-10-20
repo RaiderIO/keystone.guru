@@ -63,12 +63,12 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                         </div>
                     </div>
                 </div>
-            @endif
-
-            @if($edit)
-                <div class="">
+                @if( $dungeon->speedrun_enabled )
+                    <div id="edit_route_dungeon_speedrun_required_npcs_container"></div>
+                    <hr class="my-2">
+                @else
                     <div id="edit_route_enemy_forces_container"></div>
-                </div>
+                @endif
             @else
                 <div class="row p-1 pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip"
@@ -78,9 +78,12 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                         </button>
                     </div>
                     <div class="col">
-                        <div id="edit_route_enemy_forces_container" class="pt-1">
-
-                        </div>
+                        @if( $dungeon->speedrun_enabled )
+                            <div id="edit_route_dungeon_speedrun_required_npcs_container" class="pt-1"></div>
+                            <hr class="my-2">
+                        @else
+                            <div id="edit_route_enemy_forces_container" class="pt-1"></div>
+                        @endif
                     </div>
                 </div>
             @endif
