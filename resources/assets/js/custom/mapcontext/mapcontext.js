@@ -393,4 +393,12 @@ class MapContext extends Signalable {
     getDungeonSpeedrunRequiredNpcs() {
         return this._options.dungeon.dungeonspeedrunrequirednpcs;
     }
+
+    /**
+     *
+     * @returns {Boolean}
+     */
+    isDungeonSpeedrunEnabled() {
+        return this._options.dungeon.speedrun_enabled;
+    }
 }

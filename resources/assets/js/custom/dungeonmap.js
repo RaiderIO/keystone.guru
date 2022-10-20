@@ -498,7 +498,11 @@ class DungeonMap extends Signalable {
 
             // Only when enemy forces are relevant in their display (not in a view)
             if (!getState().isMapAdmin()) {
-                mapControls.push(new EnemyForcesControls(this));
+                if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
+                    mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
+                } else {
+                    mapControls.push(new EnemyForcesControls(this));
+                }
             }
             if (!this.options.embed) {
                 // mapControls.push(new EnemyVisualControls(this));
