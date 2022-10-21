@@ -56,7 +56,21 @@ class Dungeon extends CacheModel
      * @var array
      */
     protected $appends = ['floor_count'];
-    protected $fillable = ['map_id'];
+    protected $fillable = [
+        'active',
+        'speedrun_enabled',
+        'zone_id',
+        'map_id',
+        'mdt_id',
+        'name',
+        'key',
+        'slug',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
+    ];
 
     public $with = ['expansion', 'floors', 'dungeonspeedrunrequirednpcs'];
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];

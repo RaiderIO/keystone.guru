@@ -16,7 +16,7 @@
     <script type="text/javascript">
         $(function () {
             var dt = $('#admin_dungeon_table').DataTable({
-                'order': [[1, 'desc']],
+                'aaSorting': [],
                 'lengthMenu': [50],
             });
 
