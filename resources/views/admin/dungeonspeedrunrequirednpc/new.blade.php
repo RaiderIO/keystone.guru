@@ -26,7 +26,7 @@ $npcIds = \App\Models\Npc::whereIn('dungeon_id', [-1, $dungeon->id])->select(['n
     <div class="form-group{{ $errors->has('npc_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_id', __('views/admin.dungeonspeedrunrequirednpc.new.npc_id'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_id', $npcIds, null, ['class' => 'form-control selectpicker']) !!}
+        {!! Form::select('npc_id', $npcIds, null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
         @include('common.forms.form-error', ['key' => 'npc_id'])
     </div>
 
