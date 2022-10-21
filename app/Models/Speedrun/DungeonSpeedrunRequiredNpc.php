@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DungeonSpeedrunRequiredNpc extends CacheModel
 {
     protected $visible = [
+        'id',
         'npc_id',
         'count',
     ];

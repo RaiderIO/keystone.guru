@@ -88,12 +88,14 @@ class Save extends Command
                 'id',
                 'expansion_id',
                 'zone_id',
-                'mdt_id', 'key',
+                'mdt_id',
+                'key',
                 'name',
                 'slug',
                 'enemy_forces_required',
                 'enemy_forces_required_teeming',
                 'timer_max_seconds',
+                'speedrun_enabled',
             ])->toArray(),
             $dungeonDataDir, 'dungeons.json');
     }
