@@ -22,10 +22,18 @@
             {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
         @endisset
 
-        <div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
-            {!! Form::label('active', __('views/admin.dungeon.edit.active')) !!}
-            {!! Form::checkbox('active', 1, isset($dungeon) ? $dungeon->active : 1, ['class' => 'form-control left_checkbox']) !!}
-            @include('common.forms.form-error', ['key' => 'active'])
+        <div class="row form-group">
+            <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
+                {!! Form::label('active', __('views/admin.dungeon.edit.active')) !!}
+                {!! Form::checkbox('active', 1, isset($dungeon) ? $dungeon->active : 1, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'active'])
+            </div>
+
+            <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('speedrun_enabled', __('views/admin.dungeon.edit.speedrun_enabled')) !!}
+                {!! Form::checkbox('speedrun_enabled', 1, isset($dungeon) ? $dungeon->speedrun_enabled : 1, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
+            </div>
         </div>
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">

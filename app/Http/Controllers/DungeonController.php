@@ -23,32 +23,17 @@ class DungeonController extends Controller
      * @return mixed
      * @throws Exception
      */
-    public function store($request, Dungeon $dungeon = null)
+    public function store(DungeonFormRequest $request, Dungeon $dungeon = null)
     {
         if ($dungeon === null) {
-            $dungeon = new Dungeon();
+            $beforeDungeon = new Dungeon();
+            $saveResult    = Dungeon::create($request->validated());
+        } else {
+            $beforeDungeon = clone $dungeon;
+            $saveResult    = $dungeon->update($request->validated());
         }
 
-        $beforeDungeon = clone $dungeon;
-
-        /** @var Dungeon $dungeon */
-        // May not be set when editing
-//        $dungeon->expansion_id = $request->get('expansion_id');
-        $dungeon->zone_id                         = $request->get('zone_id');
-        $dungeon->map_id                          = $request->get('map_id');
-        $dungeon->mdt_id                          = $request->get('mdt_id');
-        $dungeon->name                            = $request->get('name');
-        $dungeon->slug                            = $request->get('slug');
-        $dungeon->key                             = $request->get('key');
-        $dungeon->enemy_forces_required           = $request->get('enemy_forces_required');
-        $dungeon->enemy_forces_required_teeming   = $request->get('enemy_forces_required_teeming');
-        $dungeon->enemy_forces_shrouded           = $request->get('enemy_forces_shrouded');
-        $dungeon->enemy_forces_shrouded_zul_gamux = $request->get('enemy_forces_shrouded_zul_gamux');
-        $dungeon->timer_max_seconds               = $request->get('timer_max_seconds');
-        $dungeon->active                          = $request->get('active', 0);
-
-        // Update or insert it
-        if ($dungeon->save()) {
+        if ($saveResult) {
             $this->mappingChanged($beforeDungeon, $dungeon);
         } else {
             abort(500, 'Unable to save dungeon');
@@ -119,6 +104,12 @@ class DungeonController extends Controller
      */
     public function list()
     {
-        return view('admin.dungeon.list', ['models' => Dungeon::orderByDesc('active')->get()]);
+        return view('admin.dungeon.list', [
+            'models' => Dungeon::select('dungeons.*')
+                ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
+                ->orderByDesc('expansions.released_at')
+                ->orderBy('dungeons.name')
+                ->get()
+        ]);
     }
 }
