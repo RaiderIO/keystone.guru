@@ -4337,7 +4337,7 @@
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
+        "speedrun_enabled": 1,
         "floor_count": 6,
         "floors": [
             {
@@ -4497,7 +4497,38 @@
                 ]
             }
         ],
-        "dungeonspeedrunrequirednpcs": []
+        "dungeonspeedrunrequirednpcs": [
+            {
+                "id": 1,
+                "npc_id": 15977,
+                "count": 110
+            },
+            {
+                "id": 2,
+                "npc_id": 15976,
+                "count": 10
+            },
+            {
+                "id": 3,
+                "npc_id": 15974,
+                "count": 22
+            },
+            {
+                "id": 4,
+                "npc_id": 15975,
+                "count": 21
+            },
+            {
+                "id": 5,
+                "npc_id": 15978,
+                "count": 1
+            },
+            {
+                "id": 6,
+                "npc_id": 15979,
+                "count": 4
+            }
+        ]
     },
     {
         "id": 61,
