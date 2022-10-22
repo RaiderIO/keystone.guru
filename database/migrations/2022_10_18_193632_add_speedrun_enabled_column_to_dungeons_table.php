@@ -14,7 +14,7 @@ class AddSpeedrunEnabledColumnToDungeonsTable extends Migration
     public function up()
     {
         Schema::table('dungeons', function (Blueprint $table) {
-            $table->boolean('speedrun_enabled')->after('timer_max_seconds');
+            $table->boolean('speedrun_enabled')->after('timer_max_seconds')->default(0);
 
             $table->index('speedrun_enabled');
         });
