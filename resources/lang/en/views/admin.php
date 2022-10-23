@@ -58,11 +58,12 @@ return [
     ],
     'dungeonspeedrunrequirednpc' => [
         'new' => [
-            'title'  => 'New Speedrun Required NPC',
-            'header' => 'New Speedrun Required NPC for :dungeon',
-            'npc_id' => 'Npc ID',
-            'count'  => 'Count',
-            'submit' => 'Submit',
+            'title'          => 'New Speedrun Required NPC',
+            'header'         => 'New Speedrun Required NPC for :dungeon',
+            'npc_id'         => 'Npc ID',
+            'linked_npc_ids' => 'Linked NPCs (optional)',
+            'count'          => 'Count',
+            'submit'         => 'Submit',
         ],
     ],
     'expansion'                  => [
