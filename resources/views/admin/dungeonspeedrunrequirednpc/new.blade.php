@@ -29,6 +29,27 @@
         @include('common.forms.form-error', ['key' => 'npc_id'])
     </div>
 
+    <div class="form-group{{ $errors->has('npc2_id') ? ' has-error' : '' }}">
+        {!! Form::label('npc2_id', __('views/admin.dungeonspeedrunrequirednpc.new.linked_npc_ids'), ['class' => 'font-weight-bold']) !!}
+        {!! Form::select('npc2_id', $npcIds, null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+        @include('common.forms.form-error', ['key' => 'npc2_id'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc3_id') ? ' has-error' : '' }}">
+        {!! Form::select('npc3_id', $npcIds, null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+        @include('common.forms.form-error', ['key' => 'npc3_id'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc4_id') ? ' has-error' : '' }}">
+        {!! Form::select('npc4_id', $npcIds, null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+        @include('common.forms.form-error', ['key' => 'npc4_id'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc5_id') ? ' has-error' : '' }}">
+        {!! Form::select('npc5_id', $npcIds, null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+        @include('common.forms.form-error', ['key' => 'npc5_id'])
+    </div>
+
     <div class="form-group{{ $errors->has('count') ? ' has-error' : '' }}">
         {!! Form::label('count', __('views/admin.dungeonspeedrunrequirednpc.new.count'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
