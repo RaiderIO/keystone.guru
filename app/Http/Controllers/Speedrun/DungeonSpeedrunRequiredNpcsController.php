@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Speedrun;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Speedrun\DungeonSpeedrunRequiredNpcsFormRequest;
 use App\Models\Dungeon;
+use App\Models\Npc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -23,7 +24,19 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      */
     public function new(Request $request, Dungeon $dungeon)
     {
-        return view('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon]);
+
+        $npcIds = Npc::whereIn('dungeon_id', [-1, $dungeon->id])
+            ->get(['name', 'id'])
+            ->pluck('name', 'id')
+            ->mapWithKeys(function ($name, $id) {
+                return [$id => sprintf('%s (%d)', $name, $id)];
+            })
+            ->toArray();
+
+        return view('admin.dungeonspeedrunrequirednpc.new', [
+            'dungeon' => $dungeon,
+            'npcIds'  => $npcIds,
+        ]);
     }
 
     /**
@@ -35,7 +48,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
     {
         DungeonSpeedrunRequiredNpc::create($request->validated());
 
-        Session::flash('status', 'Successfully added NPC');
+        Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_added_successfully'));
 
         return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
     }
@@ -54,7 +67,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
             abort(500);
         }
 
-        Session::flash('status', 'Successfully removed NPC');
+        Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully'));
 
         return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
     }

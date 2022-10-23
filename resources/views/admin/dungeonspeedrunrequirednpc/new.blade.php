@@ -1,6 +1,5 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-$npcIds = \App\Models\Npc::whereIn('dungeon_id', [-1, $dungeon->id])->select(['name', 'id'])->get()->pluck('name', 'id')->toArray();
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon],

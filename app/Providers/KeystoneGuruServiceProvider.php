@@ -328,7 +328,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
         });
 
-
         // Custom blade directives
         $expressionToStringContentsParser = function ($expression, $callback) {
             $parameters = collect(explode(', ', $expression));
