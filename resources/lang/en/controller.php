@@ -62,7 +62,8 @@ return [
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
-        'flash' => [
+        'no_linked_npc' => 'No linked NPC',
+        'flash'         => [
             'npc_added_successfully'   => 'Successfully added NPC',
             'npc_deleted_successfully' => 'Successfully removed NPC',
         ],

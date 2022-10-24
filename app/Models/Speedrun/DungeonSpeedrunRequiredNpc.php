@@ -20,6 +20,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property Dungeon $dungeon
  * @property Npc $npc
+ * @property Npc|null $npc2
+ * @property Npc|null $npc3
+ * @property Npc|null $npc4
+ * @property Npc|null $npc5
  *
  * @mixin Eloquent
  */
@@ -60,5 +64,60 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function npc2(): BelongsTo
+    {
+        return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function npc3(): BelongsTo
+    {
+        return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function npc4(): BelongsTo
+    {
+        return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function npc5(): BelongsTo
+    {
+        return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayText(): string
+    {
+        $parts = [];
+        $npcs  = [
+            $this->npc,
+            $this->npc2,
+            $this->npc3,
+            $this->npc4,
+            $this->npc5,
+        ];
+
+        foreach ($npcs as $npc) {
+            if ($npc !== null) {
+                $parts[] = sprintf('%s (%d)', $npc->name, $npc->id);
+            }
+        }
+
+        return implode(', ', $parts);
     }
 }

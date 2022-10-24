@@ -95,16 +95,36 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         let mapContext = getState().getMapContext();
         let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs();
         for (let index in requiredNpcs) {
-            let requiredNpc = requiredNpcs[index];
-
             let template = Handlebars.templates['map_dungeon_speedrun_required_npcs_row_template'];
+
+            let requiredNpc = requiredNpcs[index];
+            let npcs = [
+                requiredNpc.npc_id,
+                requiredNpc.npc2_id,
+                requiredNpc.npc3_id,
+                requiredNpc.npc4_id,
+                requiredNpc.npc5_id,
+            ];
+
+            let killedCount = 0;
+            let npcNames = [];
+            for (let index in npcs) {
+                let npcId = npcs[index];
+                if (npcId !== null) {
+                    npcNames.push({
+                        name: mapContext.findNpcById(npcId).name
+                    });
+
+                    killedCount += this._getKilledEnemiesByNpcId(npcId);
+                }
+            }
 
             $dungeonSpeedrunRequiredNpcs.append(
                 $(template({
                     id: requiredNpc.npc_id,
-                    name: mapContext.findNpcById(requiredNpc.npc_id).name,
+                    npcNames: npcNames,
                     count: requiredNpc.count,
-                    killed_count: this._getKilledEnemiesByNpcId(requiredNpc.npc_id)
+                    killed_count: killedCount
                 }))
             );
         }

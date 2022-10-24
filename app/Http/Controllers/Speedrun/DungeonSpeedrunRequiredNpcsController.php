@@ -34,8 +34,9 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
             ->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [
-            'dungeon' => $dungeon,
-            'npcIds'  => $npcIds,
+            'dungeon'            => $dungeon,
+            'npcIds'             => $npcIds,
+            'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcIds,
         ]);
     }
 
@@ -46,7 +47,12 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      */
     public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon)
     {
-        DungeonSpeedrunRequiredNpc::create($request->validated());
+        $validated            = $request->validated();
+        $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
+        $validated['npc3_id'] = (int)$validated['npc3_id'] === -1 ? null : $validated['npc3_id'];
+        $validated['npc4_id'] = (int)$validated['npc4_id'] === -1 ? null : $validated['npc4_id'];
+        $validated['npc5_id'] = (int)$validated['npc5_id'] === -1 ? null : $validated['npc5_id'];
+        DungeonSpeedrunRequiredNpc::create($validated);
 
         Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_added_successfully'));
 
