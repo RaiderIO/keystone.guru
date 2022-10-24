@@ -12,6 +12,7 @@ use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use App\Models\NpcSpell;
 use App\Models\Spell;
+use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -166,11 +167,12 @@ class NpcController extends Controller
     }
 
     /**
+     * @param NpcServiceInterface $npcService
      * @param Request $request
      * @param Npc $npc
      * @return Factory|View
      */
-    public function edit(Request $request, Npc $npc)
+    public function edit(NpcServiceInterface $npcService, Request $request, Npc $npc)
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
@@ -178,23 +180,7 @@ class NpcController extends Controller
                 return [$id => __($name)];
             }),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  =>
-                Npc::where('dungeon_id', $npc->dungeon_id)
-                    ->orWhere('dungeon_id', -1)
-                    ->orderByRaw('dungeon_id, name')
-                    ->get()
-                    ->groupBy('dungeon_id')
-                    ->mapWithKeys(function ($value, $key) {
-                        // Halls of Valor => [npcs]
-                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
-                        return [$dungeonName => $value->pluck('name', 'id')
-                            ->map(function ($value, $key) {
-                                // Make sure the value is formatted as 'Hymdal (123456)'
-                                return sprintf('%s (%s)', $value, $key);
-                            }),
-                        ];
-                    })
-                    ->toArray(),
+            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeon, true)
         ]);
     }
 

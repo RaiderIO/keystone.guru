@@ -39,9 +39,10 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
             }
         };
 
-        // Update the total count when teeming was changed
-        getState().getMapContext().register('teeming:changed', this, function () {
-            self.refreshUI();
+        $('#edit_route_dungeon_speedrun_required_npcs_collapse').on('show.bs.collapse', function () {
+              getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(true);
+        }).on('hide.bs.collapse', function () {
+              getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(false);
         });
 
         this.loaded = true;
@@ -92,14 +93,19 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         let $dungeonSpeedrunRequiredNpcs = $('#map_dungeon_speedrun_required_npcs');
         $dungeonSpeedrunRequiredNpcs.empty();
 
+        let $dungeonSpeedrunRequiredNpcsOverflow = $('#edit_route_dungeon_speedrun_required_npcs_container_overflow');
+        $dungeonSpeedrunRequiredNpcsOverflow.empty();
+
         let currentFloorId = getState().getCurrentFloor().id;
         let mapContext = getState().getMapContext();
         let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs();
         for (let index in requiredNpcs) {
+            let $targetContainer = $dungeonSpeedrunRequiredNpcs;
             let requiredNpc = requiredNpcs[index];
-            // Skip any npc that isn't on the current floor
+
+            // Insert an npc on a different floor to the overflow container
             if (requiredNpc.floor_id !== currentFloorId) {
-                continue;
+                $targetContainer = $dungeonSpeedrunRequiredNpcsOverflow;
             }
 
             let template = Handlebars.templates['map_dungeon_speedrun_required_npcs_row_template'];
@@ -125,7 +131,7 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
                 }
             }
 
-            $dungeonSpeedrunRequiredNpcs.append(
+            $targetContainer.append(
                 $(template({
                     id: requiredNpc.npc_id,
                     npcNames: npcNames,
@@ -168,9 +174,6 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
     cleanup() {
         console.assert(this instanceof DungeonSpeedrunRequiredNpcsControls, 'this is not DungeonSpeedrunRequiredNpcsControls', this);
         super.cleanup();
-
-        this.map.enemyForcesManager.unregister('enemyforces:changed', this);
-        getState().getMapContext().unregister('teeming:changed', this);
     }
 
 }
