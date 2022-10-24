@@ -3,7 +3,7 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
-use App\Models\Dungeon;
+use App\Models\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 
 class DungeonSpeedrunRequiredNpcsRelationParser implements RelationParser
@@ -14,7 +14,7 @@ class DungeonSpeedrunRequiredNpcsRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === Dungeon::class;
+        return $modelClassName === Floor::class;
     }
 
     /**
@@ -37,7 +37,7 @@ class DungeonSpeedrunRequiredNpcsRelationParser implements RelationParser
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
         foreach ($value as $dungeonSpeedrunRequiredNpc) {
-            $dungeonSpeedrunRequiredNpc['dungeon_id'] = $modelData['id'];
+            $dungeonSpeedrunRequiredNpc['floor_id'] = $modelData['id'];
             DungeonSpeedrunRequiredNpc::create($dungeonSpeedrunRequiredNpc);
         }
 
