@@ -34,7 +34,7 @@
     @foreach ($dungeon->dungeonspeedrunrequirednpcs as $speedrunRequiredNpc)
         <tr>
             <td>{{ $speedrunRequiredNpc->id }}</td>
-            <td>{{ sprintf('%s (%d)', $speedrunRequiredNpc->npc->name, $speedrunRequiredNpc->npc->id) }}</td>
+            <td>{{ $speedrunRequiredNpc->getDisplayText() }}</td>
             <td>{{ $speedrunRequiredNpc->count }}</td>
             <td>
                 <a class="btn btn-danger"

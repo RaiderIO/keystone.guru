@@ -2,18 +2,24 @@
     <div class="col-auto" style="width: 50px;">
         <div class="pl-3">
             <h6 class="pt-1 m-0">
-                {{#ifCond killed_count '==' count  }}
-                    <i class="fas fa-check-circle text-success"></i>
+                {{#ifCond killed_count '>' count  }}
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
                 {{else}}
-                    <i class="fas fa-times-circle text-danger"></i>
+                    {{#ifCond killed_count '==' count  }}
+                        <i class="fas fa-check-circle text-success"></i>
+                    {{else}}
+                        <i class="fas fa-times-circle text-danger"></i>
+                    {{/ifCond}}
                 {{/ifCond}}
             </h6>
         </div>
     </div>
     <div class="col">
-        <h6 class="py-1 pl-2 m-0">
-            {{name}}
-        </h6>
+        {{#each npcNames}}
+            <h6 class="py-1 pl-2 m-0">
+                {{name}}
+            </h6>
+        {{/each}}
     </div>
     <div class="col-auto" style="width: 50px;">
         <h5>
