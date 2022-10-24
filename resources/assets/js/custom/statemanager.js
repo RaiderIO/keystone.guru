@@ -286,6 +286,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets whether to show all required enemies when viewing a speedrun
+     * @param visible {boolean}
+     */
+    setDungeonSpeedrunRequiredNpcsShowAllEnabled(visible) {
+        Cookies.set('dungeon_speedrun_required_npcs_show_all', visible ? 1 : 0, cookieDefaultAttributes);
+
+        this.signal('dungeonspeedrunrequirednpcsshowall:changed');
+    }
+
+    /**
      *
      * @param enabled {boolean}
      */
@@ -552,6 +562,14 @@ class StateManager extends Signalable {
      */
     getEchoCursorsEnabled() {
         return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    getDungeonSpeedrunRequiredNpcsShowAllEnabled() {
+        return parseInt(Cookies.get('dungeon_speedrun_required_npcs_show_all')) === 1;
     }
 
     /**
