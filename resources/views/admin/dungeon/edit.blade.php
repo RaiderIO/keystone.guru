@@ -112,9 +112,5 @@
         @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
     </div>
 
-    <div class="form-group">
-        @include('admin.dungeon.speedrunrequirednpcs', ['dungeon' => $dungeon])
-    </div>
-
     @endisset
 @endsection

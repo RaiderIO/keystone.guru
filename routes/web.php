@@ -232,18 +232,21 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 // Floors
                 Route::group(['prefix' => '{dungeon}/floor'], function () {
                     Route::get('new', [FloorController::class, 'new'])->name('admin.floor.new');
-                    Route::get('{floor}', [FloorController::class, 'edit'])->name('admin.floor.edit');
-                    Route::get('{floor}/mapping', [FloorController::class, 'mapping'])->name('admin.floor.edit.mapping');
 
                     Route::post('new', [FloorController::class, 'savenew'])->name('admin.floor.savenew');
-                    Route::patch('{floor}', [FloorController::class, 'update'])->name('admin.floor.update');
-                });
 
-                // Speedrun required npcs
-                Route::group(['prefix' => '{dungeon}/speedrunrequirednpcs'], function () {
-                    Route::get('new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
-                    Route::post('new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
-                    Route::get('{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
+                    Route::group(['prefix' => '{floor}'], function () {
+                        Route::get('/', [FloorController::class, 'edit'])->name('admin.floor.edit');
+                        Route::patch('/', [FloorController::class, 'update'])->name('admin.floor.update');
+                        Route::get('mapping', [FloorController::class, 'mapping'])->name('admin.floor.edit.mapping');
+
+                        // Speedrun required npcs
+                        Route::group(['prefix' => 'speedrunrequirednpcs'], function () {
+                            Route::get('new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
+                            Route::post('new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
+                            Route::get('{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
+                        });
+                    });
                 });
             });
             Route::get('dungeons', [DungeonController::class, 'list'])->name('admin.dungeons');

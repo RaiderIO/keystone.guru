@@ -92,12 +92,18 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         let $dungeonSpeedrunRequiredNpcs = $('#map_dungeon_speedrun_required_npcs');
         $dungeonSpeedrunRequiredNpcs.empty();
 
+        let currentFloorId = getState().getCurrentFloor().id;
         let mapContext = getState().getMapContext();
         let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs();
         for (let index in requiredNpcs) {
+            let requiredNpc = requiredNpcs[index];
+            // Skip any npc that isn't on the current floor
+            if (requiredNpc.floor_id !== currentFloorId) {
+                continue;
+            }
+
             let template = Handlebars.templates['map_dungeon_speedrun_required_npcs_row_template'];
 
-            let requiredNpc = requiredNpcs[index];
             let npcs = [
                 requiredNpc.npc_id,
                 requiredNpc.npc2_id,

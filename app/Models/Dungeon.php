@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -463,13 +463,12 @@ class Dungeon extends CacheModel
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
-
     /**
      * @return HasMany
      */
-    public function dungeonspeedrunrequirednpcs(): HasMany
+    public function dungeonspeedrunrequirednpcs(): HasManyThrough
     {
-        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
+        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class);
     }
 
     /**

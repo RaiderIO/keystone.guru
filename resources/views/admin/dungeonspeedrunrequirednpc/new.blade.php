@@ -1,10 +1,11 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
+/** @var $floor \App\Models\Floor */
 /** @var $npcIds array */
 /** @var $npcIdsWithNullable array */
 ?>
 @extends('layouts.sitepage', [
-    'breadcrumbsParams' => [$dungeon],
+    'breadcrumbsParams' => [$dungeon, $floor],
     'showAds' => false,
     'title' => sprintf(
         __('views/admin.dungeonspeedrunrequirednpc.new.title'),
@@ -16,9 +17,10 @@
 @endsection
 
 @section('content')
-    {{ Form::open(['route' => ['admin.dungeonspeedrunrequirednpc.savenew', 'dungeon' => $dungeon->slug]]) }}
+    {{ Form::open(['route' => ['admin.dungeonspeedrunrequirednpc.savenew', 'dungeon' => $dungeon, 'floor' => $floor]]) }}
 
     {!! Form::hidden('dungeon_id', $dungeon->id) !!}
+    {!! Form::hidden('floor_id', $floor->id) !!}
 
     <div class="form-group{{ $errors->has('npc_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_id', __('views/admin.dungeonspeedrunrequirednpc.new.npc_id'), ['class' => 'font-weight-bold']) !!}

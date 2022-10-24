@@ -4,13 +4,14 @@ namespace App\Models\Speedrun;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
+use App\Models\Floor;
 use App\Models\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property int $dungeon_id
+ * @property int $floor_id
  * @property int $npc_id
  * @property int $npc2_id
  * @property int $npc3_id
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $count
  *
  * @property Dungeon $dungeon
+ * @property Floor $floor
  * @property Npc $npc
  * @property Npc|null $npc2
  * @property Npc|null $npc3
@@ -31,6 +33,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
 {
     protected $visible = [
         'id',
+        'floor_id',
         'npc_id',
         'npc2_id',
         'npc3_id',
@@ -40,7 +43,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
     ];
 
     protected $fillable = [
-        'dungeon_id',
+        'floor_id',
         'npc_id',
         'npc2_id',
         'npc3_id',
@@ -53,9 +56,17 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
     /**
      * @return BelongsTo
      */
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function dungeon(): BelongsTo
     {
-        return $this->belongsTo(Dungeon::class);
+        return $this->floor->dungeon();
     }
 
     /**

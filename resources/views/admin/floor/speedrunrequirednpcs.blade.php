@@ -14,7 +14,7 @@
 
 <h4>{{ __('views/admin.dungeon.edit.speedrun_required_npcs.title') }}</h4>
 <div class="float-right">
-    <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon->slug]) }}"
+    <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor]) }}"
        class="btn btn-success text-white pull-right" role="button">
         <i class="fas fa-plus"></i> {{ __('views/admin.dungeon.edit.speedrun_required_npcs.add_npc') }}
     </a>
@@ -31,14 +31,20 @@
     </thead>
 
     <tbody>
-    @foreach ($dungeon->dungeonspeedrunrequirednpcs as $speedrunRequiredNpc)
+    @foreach ($floor->dungeonspeedrunrequirednpcs as $speedrunRequiredNpc)
         <tr>
             <td>{{ $speedrunRequiredNpc->id }}</td>
             <td>{{ $speedrunRequiredNpc->getDisplayText() }}</td>
             <td>{{ $speedrunRequiredNpc->count }}</td>
             <td>
                 <a class="btn btn-danger"
-                   href="{{ route('admin.dungeonspeedrunrequirednpc.delete', ['dungeon' => $dungeon->slug, 'dungeonspeedrunrequirednpc' => $speedrunRequiredNpc->id]) }}">
+                   href="{{
+                        route('admin.dungeonspeedrunrequirednpc.delete', [
+                            'dungeon' => $dungeon,
+                            'floor' => $floor,
+                            'dungeonspeedrunrequirednpc' => $speedrunRequiredNpc->id]
+                        )
+                        }}">
                     <i class="fas fa-trash"></i>&nbsp;{{ __('views/admin.dungeon.edit.speedrun_required_npcs.npc_delete') }}
                 </a>
             </td>

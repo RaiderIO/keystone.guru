@@ -247,9 +247,9 @@ Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeo
         $trail->push(__('breadcrumbs.home.admin.floors.edit_floor'), route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]));
     }
 });
-Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('admin.dungeon.edit', $dungeon);
-    $trail->push(__('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc'), route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon]));
+Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon, Floor $floor) {
+    $trail->parent('admin.floor.edit', $dungeon, $floor);
+    $trail->push(__('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc'), route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor]));
 });
 
 

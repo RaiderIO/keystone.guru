@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Speedrun;
 
-use App\Models\Dungeon;
+use App\Models\Floor;
 use App\Models\Npc;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -33,13 +33,13 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
             $npcIds
         );
         return [
-            'dungeon_id' => Rule::in(Dungeon::all('id')->pluck('id')->toArray()),
-            'npc_id'     => Rule::in($npcIds),
-            'npc2_id'    => Rule::in($npcIdsWithNullable),
-            'npc3_id'    => Rule::in($npcIdsWithNullable),
-            'npc4_id'    => Rule::in($npcIdsWithNullable),
-            'npc5_id'    => Rule::in($npcIdsWithNullable),
-            'count'      => 'required|int',
+            'floor_id' => Rule::in(Floor::all('id')->pluck('id')->toArray()),
+            'npc_id'   => Rule::in($npcIds),
+            'npc2_id'  => Rule::in($npcIdsWithNullable),
+            'npc3_id'  => Rule::in($npcIdsWithNullable),
+            'npc4_id'  => Rule::in($npcIdsWithNullable),
+            'npc5_id'  => Rule::in($npcIdsWithNullable),
+            'count'    => 'required|int',
         ];
     }
 }
