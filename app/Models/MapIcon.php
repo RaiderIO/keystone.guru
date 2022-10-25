@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property int|null $mapping_version_id
  * @property int $floor_id
  * @property int $dungeon_route_id
  * @property int $team_id
@@ -29,7 +30,7 @@ class MapIcon extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'floor_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $visible = ['id', 'mapping_version_id', 'floor_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
     protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
 

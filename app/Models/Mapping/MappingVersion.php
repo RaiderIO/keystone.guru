@@ -8,14 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property bool $merged
+ * @property int $dungeon_id
+ * @property int $version
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
  * @mixin Eloquent
  */
-class MappingCommitLog extends Model
+class MappingVersion extends Model
 {
+    protected $fillable = [
+        'dungeon_id',
+        'version',
+    ];
 
+    public $timestamps = true;
 }

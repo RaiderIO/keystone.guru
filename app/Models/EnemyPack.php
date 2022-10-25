@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int $id
+ * @property int $mapping_version_id
  * @property int $floor_id
  * @property string $teeming
  * @property string $faction

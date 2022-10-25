@@ -6,12 +6,13 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $floor_id int
- * @property $target_floor_id int
- * @property $lat float
- * @property $lng float
- * @property $direction string
+ * @property int $id
+ * @property int $mapping_version_id
+ * @property int $floor_id
+ * @property int $target_floor_id
+ * @property float $lat
+ * @property float $lng
+ * @property string $direction
  *
  * @property Floor $floor
  * @property Floor $targetfloor
@@ -25,7 +26,10 @@ class DungeonFloorSwitchMarker extends CacheModel
 
     public $timestamps = false;
 
-    public function getDirectionAttribute()
+    /**
+     * @return string
+     */
+    public function getDirectionAttribute(): string
     {
         /** @var FloorCoupling $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->floor_id)->where('floor2_id', $this->target_floor_id)->first();
@@ -36,16 +40,16 @@ class DungeonFloorSwitchMarker extends CacheModel
     /**
      * @return BelongsTo
      */
-    function floor()
+    function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function targetfloor()
+    function targetfloor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor', 'target_floor_id');
+        return $this->belongsTo(Floor::class, 'target_floor_id');
     }
 }

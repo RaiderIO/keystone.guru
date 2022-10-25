@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
  * @property int $id
+ * @property int $mapping_version_id
  * @property int $floor_id
  * @property int $polyline_id
  * @property string $teeming
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  */
 class EnemyPatrol extends CacheModel
 {
-    public $visible = ['id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
     public $with = ['polyline'];
     public $timestamps = false;
 

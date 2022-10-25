@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
@@ -31,6 +32,7 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
+ * @property Collection|MappingVersion[] $mappingversions
  * @property Collection|Floor[] $floors
  * @property Collection|DungeonRoute[] $dungeonroutes
  * @property Collection|Npc[] $npcs
@@ -39,7 +41,7 @@ use Mockery\Exception;
  * @property Collection|EnemyPack[] $enemypacks
  * @property Collection|EnemyPatrol[] $enemypatrols
  * @property Collection|MapIcon[] $mapicons
- * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  *
@@ -390,6 +392,14 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
+    public function mappingversions(): HasMany
+    {
+        return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -450,7 +460,7 @@ class Dungeon extends CacheModel
     /**
      * @return HasManyThrough
      */
-    public function floorswitchmarkers(): HasManyThrough
+    public function dungeonfloorswitchmarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
     }
@@ -464,7 +474,7 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @return HasMany
+     * @return HasManyThrough
      */
     public function dungeonspeedrunrequirednpcs(): HasManyThrough
     {
