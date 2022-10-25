@@ -6,6 +6,7 @@ namespace Database\Seeders\RelationImport\Parsers;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\FloorCoupling;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 
 class DungeonFloorsRelationParser implements RelationParser
 {
@@ -44,7 +45,12 @@ class DungeonFloorsRelationParser implements RelationParser
                 FloorCoupling::insert($floorcoupling);
             }
 
+            foreach ($floor['dungeonspeedrunrequirednpcs'] as $dungeonSpeedrunRequiredNpc) {
+                DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
+            }
+
             unset($floor['floorcouplings']);
+            unset($floor['dungeonspeedrunrequirednpcs']);
             Floor::insert($floor);
         }
 
