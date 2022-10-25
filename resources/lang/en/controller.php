@@ -2,7 +2,7 @@
 
 
 return [
-    'admintools'           => [
+    'admintools'                  => [
         'error' => [
             'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
             'invalid_mdt_string'                  => 'Invalid MDT string',
@@ -25,23 +25,23 @@ return [
             ],
         ],
     ],
-    'apidungeonroute'      => [
+    'apidungeonroute'             => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
     ],
-    'apiuserreport'        => [
+    'apiuserreport'               => [
         'error' => [
             'unable_to_update_user_report' => 'Unable to update user report',
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
-    'dungeon'              => [
+    'dungeon'                     => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
             'dungeon_updated' => 'Dungeon updated',
         ],
     ],
-    'dungeonroute'         => [
+    'dungeonroute'                => [
         'unable_to_save' => 'Unable to save route',
         'flash'          => [
             'route_cloned_successfully' => 'Route cloned successfully',
@@ -49,7 +49,7 @@ return [
             'route_created'             => 'Route created',
         ],
     ],
-    'dungeonroutediscover' => [
+    'dungeonroutediscover'        => [
         'popular'           => 'Popular routes',
         'this_week_affixes' => 'This week\'s affixes',
         'next_week_affixes' => 'Next week\'s affixes',
@@ -61,28 +61,35 @@ return [
             'new'               => '%s new routes',
         ],
     ],
-    'expansion'            => [
+    'dungeonspeedrunrequirednpcs' => [
+        'no_linked_npc' => 'No linked NPC',
+        'flash'         => [
+            'npc_added_successfully'   => 'Successfully added NPC',
+            'npc_deleted_successfully' => 'Successfully removed NPC',
+        ],
+    ],
+    'expansion'                   => [
         'flash' => [
             'unable_to_save_expansion' => 'Unable to save expansion',
             'expansion_updated'        => 'Expansion updated',
             'expansion_created'        => 'Expansion created',
         ],
     ],
-    'oauthlogin'           => [
+    'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
             'user_exists'             => 'There is already a user with username %s. Did you already register before?',
             'email_exists'            => 'There is already a user with e-mail address %s. Did you already register before?',
         ],
     ],
-    'register'             => [
+    'register'                    => [
         'flash'                 => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
         ],
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
     ],
-    'release'              => [
+    'release'                     => [
         'error' => [
             'unable_to_save_release' => 'Unable to save release',
         ],
@@ -92,7 +99,7 @@ return [
             'github_exception' => 'An error occurred communicating with Github: %s',
         ],
     ],
-    'mdtimport'            => [
+    'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
@@ -102,7 +109,7 @@ return [
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
         ],
     ],
-    'patreon'              => [
+    'patreon'                     => [
         'flash' => [
             'unlink_successful'       => 'Your Patreon account has successfully been unlinked.',
             'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
@@ -110,7 +117,7 @@ return [
             'session_expired'         => 'Your session has expired. Please try again.',
         ],
     ],
-    'profile'              => [
+    'profile'                     => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',
             'username_already_in_use'          => 'That username is already in use.',
@@ -128,7 +135,7 @@ return [
             'error_deleting_account'           => 'An error occurred. Please try again.',
         ],
     ],
-    'spell'                => [
+    'spell'                       => [
         'error' => [
             'unable_to_save_spell' => 'Unable to save spell',
         ],
@@ -137,7 +144,7 @@ return [
             'spell_created' => 'Spell created',
         ],
     ],
-    'team'                 => [
+    'team'                        => [
         'flash' => [
             'team_updated'                        => 'Team updated',
             'team_created'                        => 'Team created',
@@ -147,7 +154,7 @@ return [
             'tag_already_exists'                  => 'This tag already exists',
         ],
     ],
-    'user'                 => [
+    'user'                        => [
         'flash' => [
             'user_is_now_an_admin'         => 'User %s is now an admin',
             'user_is_no_longer_an_admin'   => 'User %s is no longer an admin',

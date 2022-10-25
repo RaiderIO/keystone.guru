@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -25,6 +26,7 @@ use Mockery\Exception;
  * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
  * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
  * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
+ * @property boolean $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property boolean $active True if this dungeon is active, false if it is not.
  *
  * @property Expansion $expansion
@@ -39,6 +41,7 @@ use Mockery\Exception;
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  *
  * @method static Builder active()
  * @method static Builder inactive()
@@ -53,9 +56,23 @@ class Dungeon extends CacheModel
      * @var array
      */
     protected $appends = ['floor_count'];
-    protected $fillable = ['map_id'];
+    protected $fillable = [
+        'active',
+        'speedrun_enabled',
+        'zone_id',
+        'map_id',
+        'mdt_id',
+        'name',
+        'key',
+        'slug',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
+    ];
 
-    public $with = ['expansion', 'floors'];
+    public $with = ['expansion', 'floors', 'dungeonspeedrunrequirednpcs'];
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
@@ -117,6 +134,17 @@ class Dungeon extends CacheModel
     const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
     const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
     const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
+
+    // Wrath of the Lich King Raid
+    const RAID_ICECROWN_CITADEL                         = 'icecrowncitadel';
+    const RAID_NAXXRAMAS                                = 'naxxramas';
+    const RAID_ONYXIAS_LAIR                             = 'onyxiaslair';
+    const RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER = 'theargentcoliseum';
+    const RAID_THE_EYE_OF_ETERNITY                      = 'theeyeofeternity';
+    const RAID_THE_OBSIDIAN_SANCTUM                     = 'theobsidiansanctum';
+    const RAID_THE_RUBY_SANCTUM                         = 'therubysanctum';
+    const RAID_ULDUAR                                   = 'ulduar';
+    const RAID_VAULT_OF_ARCHAVON                        = 'vaultofarchavon';
 
     // Cataclysm
     const DUNGEON_BLACKROCK_CAVERNS        = 'blackrock_caverns';
@@ -223,6 +251,18 @@ class Dungeon extends CacheModel
         self::DUNGEON_TRIAL_OF_THE_CHAMPION,
         self::DUNGEON_UTGARDE_KEEP,
         self::DUNGEON_UTGARDE_PINNACLE,
+    ];
+
+    const ALL_WOTLK_RAID = [
+        self::RAID_ICECROWN_CITADEL,
+        self::RAID_NAXXRAMAS,
+        self::RAID_ONYXIAS_LAIR,
+        self::RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER,
+        self::RAID_THE_EYE_OF_ETERNITY,
+        self::RAID_THE_OBSIDIAN_SANCTUM,
+        self::RAID_THE_RUBY_SANCTUM,
+        self::RAID_ULDUAR,
+        self::RAID_VAULT_OF_ARCHAVON,
     ];
 
     const ALL_WOD = [
@@ -360,7 +400,7 @@ class Dungeon extends CacheModel
      */
     public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**
@@ -424,12 +464,20 @@ class Dungeon extends CacheModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function dungeonspeedrunrequirednpcs(): HasManyThrough
+    {
+        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class);
+    }
+
+    /**
      * Scope a query to only the Siege of Boralus dungeon.
      *
      * @param Builder $query
      * @return Builder
      */
-    public function scopeFactionSelectionRequired($query)
+    public function scopeFactionSelectionRequired(Builder $query): Builder
     {
         return $query->whereIn('key', [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
     }
@@ -440,7 +488,7 @@ class Dungeon extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 1);
     }
@@ -451,7 +499,7 @@ class Dungeon extends CacheModel
      * @param Builder $query
      * @return Builder
      */
-    public function scopeInactive($query)
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
     }

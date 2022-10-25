@@ -6,6 +6,7 @@
 /** @var bool $isMobile */
 /** @var bool $defaultState */
 /** @var bool $hideOnMove */
+/** @var bool $showAllEnabled */
 
 // By default, show it if we're not mobile, but allow overrides
 $defaultState = $defaultState ?? !$isMobile;
@@ -63,12 +64,39 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                         </div>
                     </div>
                 </div>
-            @endif
+                @if( $dungeon->speedrun_enabled )
+                    <div id="edit_route_dungeon_speedrun_required_npcs_container"></div>
+                    <div class="collapse {{ $showAllEnabled ? 'show' : '' }}" id="edit_route_dungeon_speedrun_required_npcs_collapse">
+                        <div id="edit_route_dungeon_speedrun_required_npcs_container_overflow">
 
-            @if($edit)
-                <div class="">
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+                                data-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
+                                aria-expanded="false" aria-controls="collapseExample">
+                            {{ __('views/common.maps.controls.pulls.toggle_all_required_enemies') }}
+
+                        </button>
+                    </div>
+
+                    {{--                    <div class="row pl-2">--}}
+                    {{--                        <div class="col-auto">--}}
+                    {{--                            <input id="edit_route_dungeon_speedrun_required_npcs_show_all" type="checkbox"--}}
+                    {{--                                   class="form-control left_checkbox"/>--}}
+                    {{--                        </div>--}}
+                    {{--                        <div class="col pl-0">--}}
+                    {{--                            <label for="edit_route_dungeon_speedrun_required_npcs_show_all">--}}
+                    {{--                                <h6>--}}
+                    {{--                                    Show all--}}
+                    {{--                                </h6>--}}
+                    {{--                            </label>--}}
+                    {{--                        </div>--}}
+                    {{--                    </div>--}}
+                    <hr class="my-2">
+                @else
                     <div id="edit_route_enemy_forces_container"></div>
-                </div>
+                @endif
             @else
                 <div class="row p-1 pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip"
@@ -78,9 +106,12 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                         </button>
                     </div>
                     <div class="col">
-                        <div id="edit_route_enemy_forces_container" class="pt-1">
-
-                        </div>
+                        @if( $dungeon->speedrun_enabled )
+                            <div id="edit_route_dungeon_speedrun_required_npcs_container" class="pt-1"></div>
+                            <hr class="my-2">
+                        @else
+                            <div id="edit_route_enemy_forces_container" class="pt-1"></div>
+                        @endif
                     </div>
                 </div>
             @endif

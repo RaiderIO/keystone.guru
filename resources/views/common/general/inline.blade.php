@@ -7,6 +7,7 @@ $modal = $modal ?? false;
 if( $section ) { ?>
 @section('scripts')
     @parent
+
     <script>
         document.addEventListener('DOMContentLoaded', function (event) {
             let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});

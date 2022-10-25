@@ -2,35 +2,39 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
+use App\Models\DungeonRoute;
+use App\Models\KillZone;
+use App\Models\KillZoneEnemy;
+
 class DungeonRouteKillZoneRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName string
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === DungeonRoute::class;
     }
 
     /**
-     * @param $name string
-     * @param $value array
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'killzones' && is_array($value);
+        return $name === 'killzones';
     }
 
     /**
-     * @param $modelClassName string
-     * @param $modelData array
-     * @param $name string
-     * @param $value array
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
      * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $killZoneData) {
             // We now know the dungeon route ID, set it back to the Route
@@ -43,7 +47,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParser
 
             if (count($enemies) > 0) {
                 // Gotta save the KillZone in order to get an ID
-                $killZone = new \App\Models\KillZone($killZoneData);
+                $killZone = new KillZone($killZoneData);
                 $killZone->save();
 
                 foreach ($enemies as $key => $enemy) {
@@ -53,7 +57,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParser
                 }
 
                 // Insert vertices
-                \App\Models\KillZoneEnemy::insert($enemies);
+                KillZoneEnemy::insert($enemies);
             }
         }
 

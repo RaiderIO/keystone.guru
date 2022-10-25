@@ -11,6 +11,8 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             let userReportsDatatable = $('#admin_user_reports_table').DataTable({

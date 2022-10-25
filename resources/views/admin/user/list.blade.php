@@ -5,6 +5,8 @@
 @endsection
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         /** @type object */
         let patreonBenefits = {!! $patreonBenefits; !!};
