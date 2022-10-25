@@ -17,9 +17,9 @@ namespace Database\Seeders\RelationImport\Parsers;
  */
 interface RelationParser
 {
-    public function canParseModel($modelClassName);
+    public function canParseModel(string $modelClassName): bool;
 
-    public function canParseRelation($name, $value);
+    public function canParseRelation(string $name, array $value): bool;
 
-    public function parseRelation($modelClassName, $modelData, $name, $value);
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array;
 }

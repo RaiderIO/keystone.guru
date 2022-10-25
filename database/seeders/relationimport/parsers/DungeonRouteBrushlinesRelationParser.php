@@ -2,35 +2,39 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
+use App\Models\Brushline;
+use App\Models\DungeonRoute;
+use App\Models\Polyline;
+
 class DungeonRouteBrushlinesRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName string
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === DungeonRoute::class;
     }
 
     /**
-     * @param $name string
-     * @param $value array
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'brushlines' && is_array($value);
+        return $name === 'brushlines';
     }
 
     /**
-     * @param $modelClassName string
-     * @param $modelData array
-     * @param $name string
-     * @param $value array
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
      * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $brushlineData) {
             // We now know the dungeon route ID, set it back to the Path
@@ -44,14 +48,14 @@ class DungeonRouteBrushlinesRelationParser implements RelationParser
             unset($brushlineData['polyline']);
 
             // Gotta save the Brushline in order to get an ID
-            $brushline = new \App\Models\Brushline($brushlineData);
+            $brushline = new Brushline($brushlineData);
             $brushline->save();
 
             $polyline['model_class'] = get_class($brushline);
             $polyline['model_id']    = $brushline->id;
 
             // Insert polyline, while capturing the result and coupling to the brushline
-            $brushline->polyline_id = \App\Models\Polyline::insertGetId($polyline);
+            $brushline->polyline_id = Polyline::insertGetId($polyline);
             $brushline->save();
         }
 

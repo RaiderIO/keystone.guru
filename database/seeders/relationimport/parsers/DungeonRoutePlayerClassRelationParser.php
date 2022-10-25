@@ -2,41 +2,44 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
+use App\Models\DungeonRoute;
+use App\Models\DungeonRoutePlayerClass;
+
 class DungeonRoutePlayerClassRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName string
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === DungeonRoute::class;
     }
 
     /**
-     * @param $name string
-     * @param $value array
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'playerclasses' && is_array($value);
+        return $name === 'playerclasses';
     }
 
     /**
-     * @param $modelClassName string
-     * @param $modelData array
-     * @param $name string
-     * @param $value array
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
      * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $playerClass) {
             // We now know the dungeon route ID, set it back to the player class
             $playerClass['dungeon_route_id'] = $modelData['id'];
 
-            \App\Models\DungeonRoutePlayerClass::insert($playerClass);
+            DungeonRoutePlayerClass::insert($playerClass);
         }
 
         // Didn't really change anything so just return the value.
