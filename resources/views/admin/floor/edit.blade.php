@@ -79,12 +79,12 @@ $floor = $floor ?? null;
         @include('admin.floor.connectedfloors', ['floor' => $floor])
     </div>
 
+    {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
+
+    {!! Form::close() !!}
+
 
     <div class="form-group">
         @include('admin.floor.speedrunrequirednpcs', ['floor' => $floor])
     </div>
-
-    {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
-
-    {!! Form::close() !!}
 @endsection

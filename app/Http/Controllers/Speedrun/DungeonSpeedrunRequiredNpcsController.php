@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -19,27 +20,21 @@ use Session;
 class DungeonSpeedrunRequiredNpcsController extends Controller
 {
     /**
+     * @param NpcServiceInterface $npcService
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
      * @return Application|Factory|View
      */
-    public function new(Request $request, Dungeon $dungeon, Floor $floor)
+    public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor)
     {
-
-        $npcIds = Npc::whereIn('dungeon_id', [-1, $dungeon->id])
-            ->get(['name', 'id'])
-            ->pluck('name', 'id')
-            ->mapWithKeys(function ($name, $id) {
-                return [$id => sprintf('%s (%d)', $name, $id)];
-            })
-            ->toArray();
+        $npcs = $npcService->getNpcsForDropdown($dungeon, true)->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [
             'dungeon'            => $dungeon,
             'floor'              => $floor,
-            'npcIds'             => $npcIds,
-            'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcIds,
+            'npcIds'             => $npcs,
+            'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcs,
         ]);
     }
 
