@@ -6,7 +6,6 @@ namespace Database\Seeders\RelationImport\Mapping;
 
 use App\Models\Dungeon;
 use Database\Seeders\RelationImport\Parsers\DungeonFloorsRelationParser;
-use Database\Seeders\RelationImport\Parsers\DungeonSpeedrunRequiredNpcsRelationParser;
 use Database\Seeders\RelationImport\Parsers\NestedModelRelationParser;
 
 class DungeonRelationMapping extends RelationMapping
@@ -21,7 +20,6 @@ class DungeonRelationMapping extends RelationMapping
         $this->setPreSaveAttributeParsers(collect([
             new NestedModelRelationParser(),
             new DungeonFloorsRelationParser(),
-            new DungeonSpeedrunRequiredNpcsRelationParser(),
         ]));
     }
 }
