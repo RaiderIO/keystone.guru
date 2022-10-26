@@ -21,16 +21,10 @@ class AddMappingVersionIdColumnToVariousTables extends Migration
      */
     public function up()
     {
-        // Fix typo in the index name by recreating the index (so we can drop it again 2 ms later (: )
-        Schema::table('mountable_areas', function (Blueprint $table) {
-            $table->dropIndex('mountable_area_floor_id_index');
-            $table->index(['floor_id']);
-        });
-
         Schema::table('map_icons', function (Blueprint $table) {
             $table->integer('mapping_version_id')->after('id')->default(null)->nullable(true);
 
-            $table->dropIndex('map_icons_dungeon_route_id_index');
+            $table->dropIndex('map_comments_dungeon_route_id_index');
             $table->index(['dungeon_route_id']);
 
             $table->dropIndex('map_comments_floor_id_dungeon_route_id_index');
