@@ -41,11 +41,11 @@ class DungeonFloorsRelationParser implements RelationParser
         foreach ($value as $floor) {
             $floor['dungeon_id'] = $modelData['id'];
 
-            foreach ($floor['floorcouplings'] as $floorcoupling) {
+            foreach ($floor['floorcouplings'] ?? [] as $floorcoupling) {
                 FloorCoupling::insert($floorcoupling);
             }
 
-            foreach ($floor['dungeonspeedrunrequirednpcs'] as $dungeonSpeedrunRequiredNpc) {
+            foreach ($floor['dungeonspeedrunrequirednpcs'] ?? [] as $dungeonSpeedrunRequiredNpc) {
                 DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
             }
 
