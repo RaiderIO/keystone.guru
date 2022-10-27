@@ -11,6 +11,7 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\MapIcon;
+use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Npc;
 use App\Models\Spell;
@@ -51,6 +52,7 @@ class Save extends Command
 
         $dungeonDataDir = database_path('/seeders/dungeondata/');
 
+        $this->saveMappingVersions($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
@@ -73,7 +75,25 @@ class Save extends Command
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param string $dungeonDataDir
+     */
+    private function saveMappingVersions(string $dungeonDataDir)
+    {
+        // Save NPC data in the root of folder
+        $this->info('Saving mapping versions');
+
+        // Save all mapping versions
+        $mappingVersions = MappingVersion::all();
+
+        $this->saveDataToJsonFile(
+            $mappingVersions->toArray(),
+            $dungeonDataDir,
+            'mapping_versions.json'
+        );
+    }
+
+    /**
+     * @param string $dungeonDataDir
      */
     private function saveDungeons(string $dungeonDataDir)
     {
@@ -97,7 +117,9 @@ class Save extends Command
                 'timer_max_seconds',
                 'speedrun_enabled',
             ])->toArray(),
-            $dungeonDataDir, 'dungeons.json');
+            $dungeonDataDir,
+            'dungeons.json'
+        );
     }
 
     /**
@@ -138,7 +160,6 @@ class Save extends Command
      */
     private function saveDungeonData(string $dungeonDataDir)
     {
-
         foreach (Dungeon::all() as $dungeon) {
             $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
             /** @var $dungeon Dungeon */
@@ -271,7 +292,7 @@ class Save extends Command
                     if ($categoryData->count() > 0) {
                         $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
                     }
-                    $this->saveDataToJsonFile($categoryData, $rootDirPath . '/' . $floor->index, $category . '.json');
+                    $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
                 }
             }
         }

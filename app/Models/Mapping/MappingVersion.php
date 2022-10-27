@@ -21,6 +21,8 @@ class MappingVersion extends Model
     protected $fillable = [
         'dungeon_id',
         'version',
+        'updated_at',
+        'created_at',
     ];
 
     public $timestamps = true;

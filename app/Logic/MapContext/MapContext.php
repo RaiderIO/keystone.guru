@@ -69,7 +69,7 @@ abstract class MapContext
                 'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
-                'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers,
+                'dungeonFloorSwitchMarkers' => $dungeon->dungeonfloorswitchmarkers,
                 'mountableAreas'            => $dungeon->mountableareas,
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));

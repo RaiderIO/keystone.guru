@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
+use Artisan;
 use Illuminate\Database\Seeder;
 
 class MappingVersionSeeder extends Seeder
@@ -15,12 +16,16 @@ class MappingVersionSeeder extends Seeder
      */
     public function run()
     {
+        // Refresh the mapping versions so that we're sure we get the latest info
+        Artisan::call('modelCache:clear', ['--model' => MappingVersion::class]);
+
         if (MappingVersion::count() !== 0) {
             $this->command->comment('NOT adding Mapping Versions - initial seed has already happened');
             return;
         }
 
-        $this->command->comment('Adding new Mapping Versions');
+        $this->command->comment(sprintf('Generating new Mapping Versions: %d', MappingVersion::count()));
+        return;
 
         // This script creates a new mapping version for each dungeon and assigns the mapping version to all existing
         // elements that need a mapping version to continue
