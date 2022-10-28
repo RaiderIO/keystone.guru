@@ -3,6 +3,8 @@
 
 namespace App\Service\Mapping;
 
+use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 interface MappingServiceInterface

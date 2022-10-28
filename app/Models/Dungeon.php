@@ -398,6 +398,16 @@ class Dungeon extends CacheModel
     }
 
     /**
+     * @return MappingVersion
+     */
+    public function currentmappingversion(): MappingVersion
+    {
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->mappingversions()->limit(1)->first();
+        return $mappingVersion;
+    }
+
+    /**
      * @return HasMany
      */
     public function floors(): HasMany

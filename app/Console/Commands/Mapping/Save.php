@@ -168,7 +168,7 @@ class Save extends Command
 //                continue;
 //            }
 
-            $rootDirPath = $dungeonDataDir . $dungeon->expansion->shortname . '/' . $dungeon->key;
+            $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
             $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
@@ -228,7 +228,17 @@ class Save extends Command
                 }
                 foreach ($demoRoute->mapicons as $item) {
                     $item->load(['linkedawakenedobelisks']);
-                    $item->setVisible(['floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index', 'linkedawakenedobelisks']);
+                    $item->setVisible([
+                        'mapping_version_id',
+                        'floor_id',
+                        'map_icon_type_id',
+                        'lat',
+                        'lng',
+                        'comment',
+                        'permanent_tooltip',
+                        'seasonal_index',
+                        'linkedawakenedobelisks',
+                    ]);
                     $toHide->add($item);
                 }
                 foreach ($toHide as $item) {
