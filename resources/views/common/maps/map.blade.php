@@ -1,11 +1,14 @@
 <?php
-/** @var \App\User $user */
-/** @var \App\Logic\MapContext\MapContext $mapContext */
-/** @var App\Models\Dungeon $dungeon */
-/** @var App\Models\DungeonRoute|null $dungeonroute */
-/** @var App\Models\LiveSession|null $livesession */
-/** @var array $show */
-/** @var bool $adFree */
+/**
+ * @var \App\User $user
+ * @var \App\Logic\MapContext\MapContext $mapContext
+ * @var \App\Models\Dungeon $dungeon
+ * @var \App\Models\Mapping\MappingVersion $mappingVersion
+ * @var \App\Models\DungeonRoute|null $dungeonroute
+ * @var \App\Models\LiveSession|null $livesession
+ * @var array $show
+ * @var bool $adFree
+ */
 
 $user             = Auth::user();
 $isAdmin          = isset($admin) && $admin;
@@ -65,6 +68,7 @@ if ($isAdmin) {
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'embed' => $embed,
     'edit' => $edit,
+    'readonly' => false, // May be set to true in the code though - but set a default here
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
@@ -128,6 +132,7 @@ if ($isAdmin) {
             <ul class="leaflet-draw-actions"></ul>
         </div>
 
+
         </script>
     @endif
 @endsection
@@ -135,7 +140,7 @@ if ($isAdmin) {
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
         @include('common.maps.controls.header', [
-            'title' => isset($dungeonroute) ? $dungeonroute->title : __($dungeon->name),
+            'title' => isset($dungeonroute) ? $dungeonroute->title : sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version),
             'echo' => $echo,
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,

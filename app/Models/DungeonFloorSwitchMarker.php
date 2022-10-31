@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class DungeonFloorSwitchMarker extends CacheModel
+class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterface
 {
     protected $appends = ['direction'];
     protected $hidden = ['floor', 'targetfloor', 'laravel_through_key'];
@@ -51,5 +51,13 @@ class DungeonFloorSwitchMarker extends CacheModel
     function targetfloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class, 'target_floor_id');
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

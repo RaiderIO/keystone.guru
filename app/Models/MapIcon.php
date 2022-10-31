@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model
+class MapIcon extends Model implements MappingModelInterface
 {
     use HasLinkedAwakenedObelisk;
 
@@ -39,29 +39,32 @@ class MapIcon extends Model
     /**
      * @return BelongsTo
      */
-    function floor()
+    function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function dungeonroute()
+    function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function mapicontype()
+    public function mapicontype(): BelongsTo
     {
         // Need the foreign key for some reason
-        return $this->belongsTo('App\Models\MapIconType', 'map_icon_type_id');
+        return $this->belongsTo(MapIconType::class, 'map_icon_type_id');
     }
 
-    public function getIsAdminAttribute()
+    /**
+     * @return bool
+     */
+    public function getIsAdminAttribute(): bool
     {
         return $this->dungeon_route_id === -1;
     }
@@ -69,8 +72,16 @@ class MapIcon extends Model
     /**
      * @return bool
      */
-    public function isAwakenedObelisk()
+    public function isAwakenedObelisk(): bool
     {
         return $this->map_icon_type_id >= 17 && $this->map_icon_type_id <= 20;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

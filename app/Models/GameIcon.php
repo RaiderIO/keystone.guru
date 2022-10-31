@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -11,19 +13,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $alias
  *
- * @property \App\Models\File $file
+ * @property File $file
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class GameIcon extends Model
 {
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function file()
+    function file(): BelongsTo
     {
-        return $this->belongsTo('App\Models\File');
+        return $this->belongsTo(File::class);
     }
 }

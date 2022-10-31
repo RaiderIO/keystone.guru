@@ -6,6 +6,7 @@ namespace App\Logic\MapContext;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
@@ -26,10 +27,11 @@ class MapContextDungeon extends MapContext
      * MapContextDungeon constructor.
      * @param Dungeon $dungeon
      * @param Floor $floor
+     * @param MappingVersion $mappingVersion
      */
-    public function __construct(Dungeon $dungeon, Floor $floor)
+    public function __construct(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion)
     {
-        parent::__construct($dungeon, $floor);
+        parent::__construct($dungeon, $floor, $mappingVersion);
     }
 
     public function getType(): string

@@ -8,6 +8,7 @@ use App\Models\CharacterClass;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
@@ -23,14 +24,16 @@ abstract class MapContext
 
     /** @var Model */
     protected Model $context;
-
     /** @var Floor */
     private Floor $floor;
+    /** @var MappingVersion */
+    private MappingVersion $mappingVersion;
 
-    function __construct(Model $context, Floor $floor)
+    function __construct(Model $context, Floor $floor, MappingVersion $mappingVersion)
     {
-        $this->context = $context;
-        $this->floor   = $floor;
+        $this->context        = $context;
+        $this->floor          = $floor;
+        $this->mappingVersion = $mappingVersion;
     }
 
     /** @return string */
@@ -63,6 +66,7 @@ abstract class MapContext
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
+                'latestMappingVersion'      => $dungeon->getCurrentMappingVersion(),
                 'enemies'                   => $dungeon->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
                 'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
                 'auras'                     => Spell::where('aura', true)->get(),
@@ -90,10 +94,13 @@ abstract class MapContext
         $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth();
 
         // Prevent the values being exactly the same, which causes issues in the front end
-        $npcMaxHealth = $npcMaxHealth + ($npcMinHealth === $npcMaxHealth ? 1 : 0);
+        if( $npcMaxHealth <= $npcMinHealth  ) {
+            $npcMaxHealth = $npcMinHealth + 1;
+        }
 
         return [
             'type'                => $this->getType(),
+            'mappingVersion'      => $this->mappingVersion,
             'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),

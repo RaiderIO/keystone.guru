@@ -13,6 +13,7 @@ use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;
 use App\Models\Spell;
+use App\Service\Mapping\MappingService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -29,15 +30,19 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param MappingService $mappingService
      * @return Enemy
      * @throws Exception
      */
-    function store(Request $request)
+    function store(Request $request, MappingService $mappingService)
     {
         /** @var Enemy $enemy */
         $enemy = Enemy::findOrNew($request->get('id'));
 
-        $beforeEnemy = clone $enemy;
+        $beforeEnemy = null;
+        if ($enemy->exists) {
+            $beforeEnemy = clone $enemy;
+        }
 
         $enemy->enemy_pack_id = (int)$request->get('enemy_pack_id');
         $npcId                = $request->get('npc_id', -1);
@@ -62,9 +67,9 @@ class APIEnemyController extends Controller
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat                           = (float)$request->get('lat');
         $enemy->lng                           = (float)$request->get('lng');
+        $enemy->mapping_version_id            = $mappingService->getMappingVersionOrNew($enemy->floor->dungeon)->id;
 
         if ($enemy->save()) {
-
             // Bolstering whitelist, if set
             $activeAuras = $request->get('active_auras', []);
             // Clear current active auras
@@ -118,7 +123,7 @@ class APIEnemyController extends Controller
             DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonroute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
-            if ($raidMarkerName !== null && !empty($raidMarkerName)) {
+            if (!empty($raidMarkerName)) {
                 $raidMarker                   = new DungeonRouteEnemyRaidMarker();
                 $raidMarker->dungeon_route_id = $dungeonroute->id;
                 $raidMarker->raid_marker_id   = RaidMarker::where('name', $raidMarkerName)->first()->id;

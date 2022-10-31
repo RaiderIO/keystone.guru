@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel
+class MountableArea extends CacheModel implements MappingModelInterface
 {
     public $timestamps = false;
     public $fillable = [
@@ -83,5 +83,13 @@ class MountableArea extends CacheModel
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

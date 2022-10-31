@@ -401,4 +401,20 @@ class MapContext extends Signalable {
     isDungeonSpeedrunEnabled() {
         return this._options.dungeon.speedrun_enabled;
     }
+
+    /**
+     *
+     * @returns {id: Number, dungeon_id: Number, version: Number}
+     */
+    getDungeonLatestMappingVersion() {
+        return this._options.dungeon.latestMappingVersion;
+    }
+
+    /**
+     *
+     * @returns {id: Number, dungeon_id: Number, version: Number}
+     */
+    getMappingVersion() {
+        return this._options.mappingVersion;
+    }
 }

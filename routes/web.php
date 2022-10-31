@@ -35,6 +35,7 @@ use App\Http\Controllers\APIUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
@@ -228,6 +229,11 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('new', [DungeonController::class, 'savenew'])->name('admin.dungeon.savenew');
                 Route::patch('{dungeon}', [DungeonController::class, 'update'])->name('admin.dungeon.update');
+
+                // Mapping versions
+                Route::group(['prefix' => '{dungeon}/mappingversion'], function () {
+                    Route::get('new', [MappingVersionController::class, 'savenew'])->name('admin.mappingversion.new');
+                });
 
                 // Floors
                 Route::group(['prefix' => '{dungeon}/floor'], function () {

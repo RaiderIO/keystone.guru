@@ -463,7 +463,8 @@ class MapObject extends Signalable {
                 id: this.id,
                 html: result,
                 map_object_name: mapObjectName,
-                map_object_name_pretty: lang.get(`messages.${mapObjectName}`)
+                map_object_name_pretty: lang.get(`messages.${mapObjectName}`),
+                readonly: this.map.options.readonly
             }));
         } else {
             return result;

@@ -47,43 +47,58 @@ class MappingService implements MappingServiceInterface
     /**
      * @return Collection|Dungeon[]
      */
-    public function getRecentlyChangedDungeons(): Collection
+    public function getDungeonsWithUnmergedMappingChanges(): Collection
     {
-        /** @var Collection|Dungeon[] $result */
-        $result = collect();
+        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
 
-        $mostRecentMappingChanges = $this->getUnmergedMappingChanges();
+        if ($mostRecentlyMergedMappingCommitLog !== null) {
+            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
+                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id')
+                ->where('mapping_change_logs.created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())
+                ->groupBy('dungeon_id');
+        } else {
+            // Get all of them instead
+            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
+                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id');
+        }
 
-        foreach ($mostRecentMappingChanges as $mappingChange) {
-            // Decode the latest known value
-            $decoded = json_decode(!empty($mappingChange->after_model) ? $mappingChange->after_model : $mappingChange->before_model, true);
+        return $dungeonQueryBuilder
+            ->whereNotNull('dungeon_id')
+            ->get()
+            ->keyBy(function (Dungeon $dungeon) {
+                return $dungeon->id;
+            });
+    }
 
-            // Only if we actually decoded something; prevents crashes
-            if ($decoded !== false) {
-                $dungeon = null;
-                if (isset($decoded['dungeon_id']) && (int)$decoded['dungeon_id'] > 0) {
-                    $dungeon = Dungeon::find($decoded['dungeon_id']);
-                } else if (isset($decoded['floor_id']) && (int)$decoded['floor_id'] > 0) {
-                    $dungeon = Floor::find($decoded['floor_id'])->dungeon;
-                }
+    /**
+     * @inheritDoc
+     */
+    public function createNewMappingVersion(Dungeon $dungeon): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
-                // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there
-                if ($dungeon !== null) {
-                    $exists = false;
+        return MappingVersion::create([
+            'dungeon_id' => $dungeon->id,
+            'version'    => ++$currentMappingVersion->version,
+        ]);
+    }
 
-                    foreach ($result as $changedDungeon) {
-                        if ($changedDungeon->id === $dungeon->id) {
-                            $exists = true;
-                            break;
-                        }
-                    }
+    /**
+     * @inheritDoc
+     */
+    public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
+        $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
 
-                    if (!$exists) {
-                        $result->add($dungeon);
-                    }
-                }
-            }
+        // If we were recently changed, it means a new mapping version was already created (by the request that triggered
+        // the creation of the mapping version). If we are the first mapping change for this dungeon since the last merge,
+        // we create a new mapping version and return that.
+        if ($wasRecentlyChanged) {
+            $result = $currentMappingVersion;
+        } else {
+            $result = $this->createNewMappingVersion($dungeon);
         }
 
         return $result;

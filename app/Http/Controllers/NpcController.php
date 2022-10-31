@@ -167,12 +167,12 @@ class NpcController extends Controller
     }
 
     /**
-     * @param NpcServiceInterface $npcService
      * @param Request $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|View
      */
-    public function edit(NpcServiceInterface $npcService, Request $request, Npc $npc)
+    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
@@ -187,11 +187,12 @@ class NpcController extends Controller
     /**
      * Override to give the type hint which is required.
      * @param NpcFormRequest $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
-    public function update(NpcFormRequest $request, Npc $npc)
+    public function update(NpcFormRequest $request, NpcServiceInterface $npcService, Npc $npc)
     {
         if ($this->isSaveAsNew($request)) {
             return $this->savenew($request);
@@ -203,7 +204,7 @@ class NpcController extends Controller
             Session::flash('status', __('views/admin.npc.flash.npc_updated'));
 
             // Display the edit page
-            return $this->edit($request, $npc);
+            return $this->edit($request, $npcService, $npc);
         }
     }
 

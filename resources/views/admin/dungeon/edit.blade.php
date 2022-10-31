@@ -112,5 +112,9 @@
         @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
     </div>
 
+    <div class="form-group">
+        @include('admin.dungeon.mappingversions', ['dungeon' => $dungeon])
+    </div>
+
     @endisset
 @endsection

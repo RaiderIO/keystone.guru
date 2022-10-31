@@ -9,16 +9,35 @@ class DungeonMap extends Signalable {
 
         this.options = options;
 
+        let state = getState();
+        let mapContext = state.getMapContext();
+
+        if (state.isMapAdmin()) {
+            if (mapContext.getMappingVersion().merged) {
+                let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+
+                state.addSnackbar(template(data));
+
+                this.options.readonly = true;
+            }
+        } else if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+            // @TODO show user option to upgrade mapping version of their route
+        }
+
         // Apply the map to our state first thing
-        getState().setDungeonMap(this);
+        state.setDungeonMap(this);
 
         // Listen for floor changes
-        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+        state.register('floorid:changed', this, function (floorIdChangedEvent) {
             self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
 
         // How many map objects have returned a success status
-        this.hotkeys = this._getHotkeys();
+        if (!this.options.readonly) {
+            this.hotkeys = this._getHotkeys();
+        }
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
         this.mapObjectGroupManager.register('loaded', this, function () {
             self.signal('map:mapobjectgroupsloaded');
@@ -492,7 +511,7 @@ class DungeonMap extends Signalable {
         let mapControls = [];
         // No UI = no map controls at all
         if (!this.options.noUI) {
-            if (this.options.edit) {
+            if (this.options.edit && !this.options.readonly) {
                 mapControls.push(new DrawControls(this, editableLayers));
             }
 

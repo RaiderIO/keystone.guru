@@ -398,16 +398,6 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @return MappingVersion
-     */
-    public function currentmappingversion(): MappingVersion
-    {
-        /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $this->mappingversions()->limit(1)->first();
-        return $mappingVersion;
-    }
-
-    /**
      * @return HasMany
      */
     public function floors(): HasMany
@@ -525,6 +515,16 @@ class Dungeon extends CacheModel
     }
 
     /**
+     * @return MappingVersion
+     */
+    public function getCurrentMappingVersion(): MappingVersion
+    {
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->mappingversions()->limit(1)->first();
+        return $mappingVersion;
+    }
+
+    /**
      * @return MapIcon|null
      */
     public function getDungeonStart(): ?MapIcon
@@ -573,7 +573,10 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->where('enemy_forces', '>', 0)
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+                // @TODO This should exclude all raids
+                return $builder->where('enemy_forces', '>', 0);
+            })
             ->min('base_health') ?? 10000;
     }
 
@@ -584,7 +587,10 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->where('enemy_forces', '>', 0)
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+                // @TODO This should exclude all raids
+                return $builder->where('enemy_forces', '>', 0);
+            })
             ->max('base_health') ?? 100000;
     }
 

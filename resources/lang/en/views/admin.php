@@ -33,14 +33,13 @@ return [
                 'floor_edit_mapping'   => 'Mapping',
             ],
 
-            'speedrun_required_npcs' => [
-                'title'                => 'Speedrun Required Npcs',
-                'add_npc'              => 'Add NPC',
-                'table_header_id'      => 'Id',
-                'table_header_npc'     => 'Npc',
-                'table_header_count'   => 'Count',
-                'table_header_actions' => 'Actions',
-                'npc_delete'           => 'Delete',
+            'mapping_versions' => [
+                'title'                   => 'Mapping versions',
+                'add_mapping_version'     => 'Add mapping version',
+                'table_header_merged'     => 'Merged',
+                'table_header_id'         => 'Id',
+                'table_header_version'    => 'Version',
+                'table_header_created_at' => 'Created at',
             ],
         ],
         'list' => [
@@ -96,9 +95,10 @@ return [
     ],
     'floor'                      => [
         'flash'   => [
-            'invalid_floor_id' => 'Floor %s is not a part of dungeon %s',
-            'floor_updated'    => 'Floor updated',
-            'floor_created'    => 'Floor created',
+            'invalid_floor_id'           => 'Floor %s is not a part of dungeon %s',
+            'invalid_mapping_version_id' => 'Mapping version is not for dungeon %s',
+            'floor_updated'              => 'Floor updated',
+            'floor_created'              => 'Floor created',
         ],
         'edit'    => [
             'title_new'               => 'New Floor - %s',
@@ -125,6 +125,16 @@ return [
                 'right' => 'Right',
             ],
             'submit'                  => 'Submit',
+
+            'speedrun_required_npcs' => [
+                'title'                => 'Speedrun Required Npcs',
+                'add_npc'              => 'Add NPC',
+                'table_header_id'      => 'Id',
+                'table_header_npc'     => 'Npc',
+                'table_header_count'   => 'Count',
+                'table_header_actions' => 'Actions',
+                'npc_delete'           => 'Delete',
+            ],
         ],
         'mapping' => [
             'title'  => 'Edit Mapping - %s',

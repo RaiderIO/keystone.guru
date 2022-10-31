@@ -38,6 +38,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string $public_key
  * @property int $author_id
  * @property int $dungeon_id
+ * @property int $mapping_version_id
  * @property int $faction_id
  * @property int|null $team_id
  * @property int $published_state_id

@@ -332,6 +332,8 @@ return [
             'alliance' => 'Alliance',
             'horde'    => 'Horde',
 
+            'admin_header_title' => '%s (mapping version %d)',
+
             'route'         => 'Route',
             'map_settings'  => 'Map settings',
             'pull_settings' => 'Pull settings',

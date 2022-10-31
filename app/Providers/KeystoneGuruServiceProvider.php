@@ -112,9 +112,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @param ViewServiceInterface $viewService
      * @param ExpansionServiceInterface $expansionService
      * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
+     * @param MappingServiceInterface $mappingService
      * @return void
      */
-    public function boot(ViewServiceInterface $viewService, ExpansionServiceInterface $expansionService, AffixGroupEaseTierServiceInterface $affixGroupEaseTierService)
+    public function boot(
+        ViewServiceInterface $viewService,
+        ExpansionServiceInterface $expansionService,
+        AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
+        MappingServiceInterface $mappingService
+    )
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
@@ -321,6 +327,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });
 
+        // Admin
+        view()->composer('admin.dungeon.edit', function (View $view) use ($mappingService) {
+            /** @var Dungeon|null $dungeon */
+            $dungeon = $view->getData()['dungeon'] ?? null;
+            $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
+        });
 
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {

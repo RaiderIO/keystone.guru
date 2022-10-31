@@ -8,7 +8,10 @@ use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Models\DungeonFloorSwitchMarker;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -26,7 +29,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
     /**
      * @param Request $request
      * @return DungeonFloorSwitchMarker
-     * @throws \Exception
+     * @throws Exception
      */
     function store(Request $request)
     {
@@ -53,7 +56,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($dungeonFloorSwitchMarkerBefore, $dungeonFloorSwitchMarker);
         } else {
-            throw new \Exception('Unable to save dungeon floor switch marker!');
+            throw new Exception('Unable to save dungeon floor switch marker!');
         }
 
         return $dungeonFloorSwitchMarker;
@@ -62,7 +65,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
     /**
      * @param Request $request
      * @param DungeonFloorSwitchMarker $dungeonfloorswitchmarker
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     function delete(Request $request, DungeonFloorSwitchMarker $dungeonfloorswitchmarker)
     {
@@ -77,7 +80,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
                 $this->mappingChanged($dungeonfloorswitchmarker, null);
             }
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 

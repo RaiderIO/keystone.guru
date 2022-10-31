@@ -20,7 +20,9 @@ class AdminDungeonMap extends DungeonMap {
             result.push(new FactionDisplayControls(this));
         }
 
-        result.push(new AdminDrawControls(this, editableLayers));
+        if (!this.options.readonly) {
+            result.push(new AdminDrawControls(this, editableLayers));
+        }
         // result.push(new EnemyVisualControls(this));
         result.push(new AdminPanelControls(this));
 

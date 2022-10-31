@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Models\Dungeon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Service\Mapping\MappingService;
 use Carbon\Carbon;
@@ -62,9 +63,16 @@ class Merge extends Command
             }
         }
 
+        if (empty($existingPrId)) {
+            // If we're creating a new merge request, everything before this has been merged - except the most recent commit
+            // (since that's what we're making this MR for in the first place) which we'll filter out
+            MappingCommitLog::whereDate('created_at', '<', Carbon::now()->subMinutes(3))
+                ->update(['merged' => 1]);
+        }
+
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getRecentlyChangedDungeons()->pluck(['name'])->map(function (string $name) {
-            return __($name);
+        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(function (Dungeon $dungeon) {
+            return __($dungeon->name);
         });
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
@@ -86,10 +94,6 @@ class Merge extends Command
                     ],
                 ]);
                 $this->info('Pull request created!');
-
-                // If we're creating a new merge request, everything before this has been merged - except the most recent commit
-                // (since that's what we're making this MR for in the first place) which we'll filter out
-                MappingCommitLog::whereDate('created_at', '<', Carbon::now()->subMinutes(3))->update(['merged' => 1]);
             } catch (ValidationFailedException $ex) {
                 $this->warn('Pull request not created - no changes between branches!');
             }

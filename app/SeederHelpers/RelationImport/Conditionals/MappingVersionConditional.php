@@ -52,7 +52,7 @@ class MappingVersionConditional implements ConditionalInterface
         $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
 
         // Only import this model if it's a version upgrade
-        return $modelMappingVersion->version > $dungeon->currentmappingversion()->version;
+        return $modelMappingVersion->version > $dungeon->getCurrentMappingVersion()->version;
     }
 
     /**

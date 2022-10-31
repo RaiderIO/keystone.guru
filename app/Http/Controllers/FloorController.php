@@ -8,12 +8,14 @@ use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\FloorCoupling;
+use App\Models\Mapping\MappingVersion;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class FloorController extends Controller
@@ -117,17 +119,25 @@ class FloorController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @return Factory|View
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @return Application|Factory|View|RedirectResponse
+     * @throws InvalidArgumentException
      */
     public function mapping(Request $request, Dungeon $dungeon, Floor $floor)
     {
-        $dungeon = $floor->dungeon->load('floors');
+        $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
 
-        return view('admin.floor.mapping', [
-            'floor'      => $floor,
-            'mapContext' => (new MapContextDungeon($dungeon, $floor))->getProperties(),
-        ]);
+        if ($dungeon->id === $mappingVersion->dungeon_id) {
+            $dungeon = $floor->dungeon->load('floors');
+
+            return view('admin.floor.mapping', [
+                'floor'          => $floor,
+                'mapContext'     => (new MapContextDungeon($dungeon, $floor, $mappingVersion))->getProperties(),
+                'mappingVersion' => $mappingVersion,
+            ]);
+        } else {
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));
+            return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
+        }
     }
 
     /**

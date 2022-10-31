@@ -38,7 +38,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel
+class Enemy extends CacheModel implements MappingModelInterface
 {
     use Reportable;
 
@@ -93,7 +93,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function enemypack(): BelongsTo
+    public function enemypack(): BelongsTo
     {
         return $this->belongsTo(EnemyPack::class, 'enemy_pack_id');
     }
@@ -101,7 +101,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function floor(): BelongsTo
+    public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
@@ -109,7 +109,7 @@ class Enemy extends CacheModel
     /**
      * @return BelongsTo
      */
-    function npc(): BelongsTo
+    public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
@@ -117,8 +117,16 @@ class Enemy extends CacheModel
     /**
      * @return HasMany
      */
-    function enemyactiveauras(): HasMany
+    public function enemyactiveauras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

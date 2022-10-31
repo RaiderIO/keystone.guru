@@ -83,8 +83,9 @@ $floor = $floor ?? null;
 
     {!! Form::close() !!}
 
-
-    <div class="form-group">
-        @include('admin.floor.speedrunrequirednpcs', ['floor' => $floor])
-    </div>
+    @isset($floor)
+        <div class="form-group">
+            @include('admin.floor.speedrunrequirednpcs', ['floor' => $floor])
+        </div>
+    @endisset
 @endsection

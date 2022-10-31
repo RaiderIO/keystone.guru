@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel
+class EnemyPatrol extends CacheModel implements MappingModelInterface
 {
     public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
     public $with = ['polyline'];
@@ -28,19 +28,27 @@ class EnemyPatrol extends CacheModel
     /**
      * @return BelongsTo
      */
-    function floor()
+    public function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
      * Get the dungeon route that this brushline is attached to.
      *
-     * @return hasOne
+     * @return HasOne
      */
-    function polyline()
+    public function polyline(): HasOne
     {
-        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 
     public static function boot()

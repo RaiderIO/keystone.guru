@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel
+class EnemyPack extends CacheModel implements MappingModelInterface
 {
     public $timestamps = false;
 
@@ -48,5 +48,13 @@ class EnemyPack extends CacheModel
     public function getEnemiesWithSeasonalType(string $seasonalType): Collection
     {
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }
