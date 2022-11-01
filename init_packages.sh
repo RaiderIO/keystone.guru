@@ -9,7 +9,7 @@ apt-get install -y redis-server \
                 libssl1.0-dev \
                 npm
 
-npm install -g laravel-echo-server handlebars
+npm install -g laravel-echo-server handlebars cross-env dotenv
 
 
 cd /tmp || exit
