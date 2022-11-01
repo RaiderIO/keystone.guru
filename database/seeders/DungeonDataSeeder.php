@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\EnemyPatrol;
 use App\Models\Expansion;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
@@ -25,6 +27,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use SplFileInfo;
 
 class DungeonDataSeeder extends Seeder
 {
@@ -62,43 +65,72 @@ class DungeonDataSeeder extends Seeder
         $rootDir         = database_path('seeders/dungeondata/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
+        // Parse the root files first
+        foreach ($rootDirIterator as $rootDirChild) {
+            /** @var $rootDirChild SplFileInfo */
+            if ($rootDirChild->getType() === 'dir') {
+                continue;
+            }
+
+            $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
+        }
+
+        $rootDirIterator->rewind();
+
         // For each expansion
         foreach ($rootDirIterator as $rootDirChild) {
+            /** @var $rootDirChild SplFileInfo */
+            if ($rootDirChild->getType() !== 'dir') {
+                continue;
+            }
+
             $rootDirChildBaseName = basename($rootDirChild);
-
             // Only folders which have the correct shortname
-            if (Expansion::where('shortname', $rootDirChildBaseName)->first() !== null) {
-                $this->command->info('Expansion ' . $rootDirChildBaseName);
-                $expansionDirIterator = new FilesystemIterator($rootDirChild);
+            if (Expansion::where('shortname', $rootDirChildBaseName)->first() === null) {
+                $this->command->warn(sprintf('- Unable to find expansion %s', $rootDirChildBaseName));
+                continue;
+            }
 
-                // For each dungeon inside an expansion dir
-                foreach ($expansionDirIterator as $dungeonKeyDir) {
-                    $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+            $this->command->info('Expansion ' . $rootDirChildBaseName);
+            $expansionDirIterator = new FilesystemIterator($rootDirChild);
 
-                    $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
-                    // For each floor inside a dungeon dir
-                    foreach ($floorDirIterator as $floorDirFile) {
-                        // Parse loose files
-                        if (!is_dir($floorDirFile)) {
-                            // npcs, dungeon_routes
-                            $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
-                        } // Parse floor dir
-                        else {
-                            $this->command->info('-- Importing floor ' . basename($floorDirFile));
+            // For each dungeon inside an expansion dir
+            foreach ($expansionDirIterator as $dungeonKeyDir) {
+                /** @var $dungeonKeyDir SplFileInfo */
+                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
-                            $importFileIterator = new FilesystemIterator($floorDirFile);
-                            // For each file inside a floor
-                            foreach ($importFileIterator as $importFile) {
-                                $this->parseRawFile($rootDir, $importFile, $mappings, 3);
-                            }
+                $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
+                // For each floor inside a dungeon dir
+                foreach ($floorDirIterator as $floorDirFile) {
+                    // Parse loose files
+                    if (!is_dir($floorDirFile)) {
+                        // npcs, dungeon_routes
+                        $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
+                    } // Parse floor dir
+                    else {
+                        $this->command->info('-- Importing floor ' . basename($floorDirFile));
+
+                        $importFileIterator = new FilesystemIterator($floorDirFile);
+                        // For each file inside a floor
+                        foreach ($importFileIterator as $importFile) {
+                            $this->parseRawFile($rootDir, $importFile, $mappings, 3);
                         }
                     }
                 }
-            } // It's a 'global' file, parse it
-            else if (strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5) { // 5 for length of .json
-                $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
             }
         }
+
+        // Temp - but assign the proper mapping versions to all routes (this is slowish but simplest to get the job done, just once)
+        DungeonRoute::with(['dungeon'])
+            ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+            ->whereNull('mapping_version_id')
+            ->chunk(100, function (Collection $dungeonRoutes) {
+                /** @var Collection|DungeonRoute[] $dungeonRoutes */
+                foreach ($dungeonRoutes as $dungeonRoute) {
+                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->getCurrentMappingVersion()->id;
+                    $dungeonRoute->save();
+                }
+            });
 
         Stopwatch::dumpAll();
     }
@@ -158,6 +190,8 @@ class DungeonDataSeeder extends Seeder
 
         // In case there's no post-save relation parsers we can mass-save instead to save time
         $modelsToSave = collect();
+
+        $updatedModels = 0;
 
         // Do some php fuckery to make this a bit cleaner
         foreach ($modelsData as $modelData) {
@@ -221,6 +255,7 @@ class DungeonDataSeeder extends Seeder
                 // Apply, then save
                 $createdModel->setRawAttributes($modelData);
                 $createdModel->save();
+                $updatedModels++;
 
             } // If we should do some post processing, create & save it now so that we can do just that
             else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
@@ -228,6 +263,7 @@ class DungeonDataSeeder extends Seeder
             } // We don't need to do post processing, add it to the list to be saved
             else {
                 $modelsToSave->push($modelData);
+                $updatedModels++;
                 continue;
             }
 
@@ -261,7 +297,7 @@ class DungeonDataSeeder extends Seeder
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
-        return count($modelsData);
+        return $updatedModels;
     }
 
     protected function rollback()
@@ -288,16 +324,16 @@ class DungeonDataSeeder extends Seeder
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
         DB::table('npc_spells')->truncate();
-//        DB::table('enemies')->truncate();
-//        DB::table('enemy_packs')->truncate();
-//        DB::table('enemy_patrols')->truncate();
-//        DB::table('dungeon_floor_switch_markers')->truncate();
-//        DB::table('mountable_areas')->truncate();
+        DB::table('enemies')->truncate();
+        DB::table('enemy_packs')->truncate();
+        DB::table('enemy_patrols')->truncate();
+        DB::table('dungeon_floor_switch_markers')->truncate();
+        DB::table('mountable_areas')->truncate();
         DB::table('dungeon_speedrun_required_npcs')->truncate();
         // Delete all map icons that are always there
-//        DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
+        DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
         // Delete polylines related to enemy patrols
-//        DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
+        DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
 
         // Truncating these before the above will cause some issues
         // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset

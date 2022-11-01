@@ -7,6 +7,13 @@ use App\Models\Mapping\MappingVersion;
 use Artisan;
 use Illuminate\Database\Seeder;
 
+/**
+ * The Mapping Versions are loaded from mapping_versions.json using the DungeonDataSeeder after this initial seed.
+ *
+ * @package Database\Seeders
+ * @author Wouter
+ * @since 30/10/2022
+ */
 class MappingVersionSeeder extends Seeder
 {
     /**
@@ -25,7 +32,6 @@ class MappingVersionSeeder extends Seeder
         }
 
         $this->command->comment(sprintf('Generating new Mapping Versions: %d', MappingVersion::count()));
-        return;
 
         // This script creates a new mapping version for each dungeon and assigns the mapping version to all existing
         // elements that need a mapping version to continue
