@@ -4497,62 +4497,7 @@
                 ]
             }
         ],
-        "dungeonspeedrunrequirednpcs": [
-            {
-                "id": 1,
-                "npc_id": 15977,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 110
-            },
-            {
-                "id": 2,
-                "npc_id": 15976,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 10
-            },
-            {
-                "id": 3,
-                "npc_id": 15974,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 22
-            },
-            {
-                "id": 4,
-                "npc_id": 15975,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 21
-            },
-            {
-                "id": 5,
-                "npc_id": 15978,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 1
-            },
-            {
-                "id": 6,
-                "npc_id": 15979,
-                "npc2_id": null,
-                "npc3_id": null,
-                "npc4_id": null,
-                "npc5_id": null,
-                "count": 4
-            }
-        ]
+        "dungeonspeedrunrequirednpcs": []
     },
     {
         "id": 61,
