@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "id": 590,
+        "floor_id": 141,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-121.192213,\"lng\":129.262203},{\"lat\":-84.256116,\"lng\":128.788542}]"
+        }
+    },
+    {
+        "id": 591,
+        "floor_id": 141,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-87.192062,\"lng\":121.588888},{\"lat\":-81.936294,\"lng\":136.651322},{\"lat\":-79.37918,\"lng\":138.261771},{\"lat\":-74.122999,\"lng\":139.303826},{\"lat\":-70.808221,\"lng\":137.882841},{\"lat\":-65.693992,\"lng\":134.946141},{\"lat\":-62.947461,\"lng\":132.672566},{\"lat\":-62.947461,\"lng\":132.86203}]"
+        }
+    }
+]
