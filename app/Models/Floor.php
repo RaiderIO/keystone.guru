@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Logic\Utils\MathUtils;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[] $reverseConnectedFloors
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  *
  * @mixin Eloquent
  */
@@ -141,6 +143,15 @@ class Floor extends CacheModel
     function dungeonfloorswitchmarkers(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
+    }
+
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonspeedrunrequirednpcs(): HasMany
+    {
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
     }
 
     /**

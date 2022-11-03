@@ -2,41 +2,44 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
+use App\Models\EnemyPatrol;
+use App\Models\Polyline;
+
 class EnemyPatrolPolylineRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName string
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
-        return $modelClassName === 'App\Models\EnemyPatrol';
+        return $modelClassName === EnemyPatrol::class;
     }
 
     /**
-     * @param $name string
-     * @param $value array
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'polyline';
     }
 
     /**
-     * @param $modelClassName string
-     * @param $modelData array
-     * @param $name string
-     * @param $value array
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
      * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         // Make sure the polyline's relation with the model is restored.
         $value['model_class'] = $modelClassName;
         $value['model_id']    = $modelData['id'];
 
-        $modelData['polyline_id'] = \App\Models\Polyline::insertGetId($value);
+        $modelData['polyline_id'] = Polyline::insertGetId($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

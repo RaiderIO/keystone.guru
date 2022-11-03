@@ -1,13 +1,14 @@
 <?php
 
 return [
-    'dungeon'    => [
+    'dungeon'                    => [
         'edit' => [
             'title_new'                       => 'New dungeon',
             'title_edit'                      => 'Edit dungeon',
             'header_new'                      => 'New dungeon',
             'header_edit'                     => 'Edit dungeon',
             'active'                          => 'Active',
+            'speedrun_enabled'                => 'Speedrun enabled',
             'zone_id'                         => 'Zone ID',
             'map_id'                          => 'Map ID',
             'mdt_id'                          => 'MDT ID',
@@ -21,14 +22,26 @@ return [
             'timer_max_seconds'               => 'Timer (seconds)',
             'submit'                          => 'Submit',
 
-            'floor_management'     => 'Floor management',
-            'add_floor'            => 'Add floor',
-            'table_header_id'      => 'Id',
-            'table_header_index'   => 'Index',
-            'table_header_name'    => 'Name',
-            'table_header_actions' => 'Actions',
-            'floor_edit_edit'      => 'Edit',
-            'floor_edit_mapping'   => 'Mapping',
+            'floor_management' => [
+                'title'                => 'Floor management',
+                'add_floor'            => 'Add floor',
+                'table_header_id'      => 'Id',
+                'table_header_index'   => 'Index',
+                'table_header_name'    => 'Name',
+                'table_header_actions' => 'Actions',
+                'floor_edit_edit'      => 'Edit',
+                'floor_edit_mapping'   => 'Mapping',
+            ],
+
+            'speedrun_required_npcs' => [
+                'title'                => 'Speedrun Required Npcs',
+                'add_npc'              => 'Add NPC',
+                'table_header_id'      => 'Id',
+                'table_header_npc'     => 'Npc',
+                'table_header_count'   => 'Count',
+                'table_header_actions' => 'Actions',
+                'npc_delete'           => 'Delete',
+            ],
         ],
         'list' => [
             'title'                             => 'Dungeon listing',
@@ -43,7 +56,17 @@ return [
             'edit'                              => 'Edit',
         ],
     ],
-    'expansion'  => [
+    'dungeonspeedrunrequirednpc' => [
+        'new' => [
+            'title'          => 'New Speedrun Required NPC',
+            'header'         => 'New Speedrun Required NPC for :dungeon',
+            'npc_id'         => 'Npc ID',
+            'linked_npc_ids' => 'Linked NPCs (optional)',
+            'count'          => 'Count',
+            'submit'         => 'Submit',
+        ],
+    ],
+    'expansion'                  => [
         'edit' => [
             'title_new'     => 'New expansion',
             'header_new'    => 'New expansion',
@@ -71,7 +94,7 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'floor'      => [
+    'floor'                      => [
         'flash'   => [
             'invalid_floor_id' => 'Floor %s is not a part of dungeon %s',
             'floor_updated'    => 'Floor updated',
@@ -108,7 +131,7 @@ return [
             'header' => 'Edit Mapping - %s',
         ],
     ],
-    'npc'        => [
+    'npc'                        => [
         'flash' => [
             'npc_updated' => 'Npc updated',
             'npc_created' => 'Npc %s created',
@@ -159,7 +182,7 @@ return [
             'table_header_actions'        => 'Action',
         ],
     ],
-    'release'    => [
+    'release'                    => [
         'edit' => [
             'title_new'   => 'New release',
             'header_new'  => 'New release',
@@ -188,7 +211,7 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'spell'      => [
+    'spell'                      => [
         'edit' => [
             'title_new'         => 'New spell',
             'header_new'        => 'New spell',
@@ -214,7 +237,7 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'tools'      => [
+    'tools'                      => [
         'datadump'     => [
             'viewexporteddungeondata' => [
                 'title'   => 'Exported!',
@@ -344,7 +367,7 @@ return [
             ],
         ],
     ],
-    'user'       => [
+    'user'                       => [
         'list' => [
             'title'                   => 'User list',
             'header'                  => 'View users',
@@ -358,7 +381,7 @@ return [
             'table_header_patreons'   => 'Patreon',
         ],
     ],
-    'userreport' => [
+    'userreport'                 => [
         'list' => [
             'title'                    => 'User reports',
             'header'                   => 'View user reports',

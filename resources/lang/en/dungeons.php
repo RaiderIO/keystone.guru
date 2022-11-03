@@ -84,17 +84,17 @@ return [
             ],
         ],
 
-        'the_violet_hold'       => [
+        'the_violet_hold'                          => [
             'name'   => 'The Violet Hold',
             'floors' => [
                 'the_violet_hold' => 'The Violet Hold',
             ],
         ],
-        'trial_of_the_champion' => [
+        'trial_of_the_champion'                    => [
             'name'   => 'Trial of the Champion',
             'floors' => [],
         ],
-        'utgarde_keep'          => [
+        'utgarde_keep'                             => [
             'name'   => 'Utgarde Keep',
             'floors' => [
                 'njorndir_preparation' => 'Njorndir Preparation',
@@ -102,11 +102,85 @@ return [
                 'tyrs_terrace'         => 'Tyr\'s Terrace',
             ],
         ],
-        'utgarde_pinnacle'      => [
+        'utgarde_pinnacle'                         => [
             'name'   => 'Utgarde Pinnacle',
             'floors' => [
                 'lower_pinnacle' => 'Lower Pinnacle',
                 'upper_pinnacle' => 'Upper Pinnacle',
+            ],
+        ],
+
+        // Raids
+        'icecrown_citadel'                         => [
+            'name'   => 'Icecrown Citadel',
+            'floors' => [
+                'the_lower_citadel'     => 'The Lower Citadel',
+                'the_rampart_of_skulls' => 'The Rampart of Skulls',
+                'deathbringers_rise'    => 'Deathbringer\'s Rise',
+                'the_frost_queens_lair' => 'The Frost Queen\'s Lair',
+                'the_upper_reach'       => 'The Upper Reach',
+                'royal_quarters'        => 'Royal Quarters',
+                'the_frozen_throne'     => 'The Frozen Throne',
+                'frostmourne'           => 'Frostmourne',
+            ],
+        ],
+        'onyxias_lair'                             => [
+            'name'   => 'Onyxia\'s Lair',
+            'floors' => [
+                'onyxias_lair' => 'Onyxia\'s Lair',
+            ],
+        ],
+        'naxxramas'                                => [
+            'name'   => 'Naxxramas',
+            'floors' => [
+                'the_construct_quarter' => 'The Construct Quarter',
+                'the_arachnid_quarter'  => 'The Arachnid Quarter',
+                'the_military_quarter'  => 'The Military Quarter',
+                'the_plague_quarter'    => 'The Plague Quarter',
+                'the_lower_necropolis'  => 'The Lower Necropolis',
+                'the_upper_necropolis'  => 'The Upper Necropolis',
+            ],
+        ],
+        'crusaders_coliseum_trial_of_the_crusader' => [
+            'name'   => 'Crusaders Coliseum: Trial of the Crusader',
+            'floors' => [
+                'the_argent_coliseum' => 'The Argent Coliseum',
+                'the_icy_depths'      => 'The Icy Depths',
+            ],
+        ],
+        'the_eye_of_eternity'                      => [
+            'name'   => 'The Eye of Eternity',
+            'floors' => [
+                'the_eye_of_eternity' => 'The Eye of Eternity',
+            ],
+        ],
+        'the_obsidian_sanctum'                     => [
+            'name'   => 'The Obsidian Sanctum',
+            'floors' => [
+                'the_obsidian_sanctum' => 'The Obsidian Sanctum',
+            ],
+        ],
+        'the_ruby_sanctum'                         => [
+            'name'   => 'The Ruby Sanctum',
+            'floors' => [
+                'the_ruby_sanctum' => 'The Ruby Sanctum',
+            ],
+        ],
+        'ulduar'                                   => [
+            'name'   => 'Ulduar',
+            'floors' => [
+                'ulduar'                      => 'Ulduar',
+                'the_antechamber_of_ulduar'   => 'The Antechamber of Ulduar',
+                'the_inner_sanctum_of_ulduar' => 'The Inner Sanctum of Ulduar',
+                'the_prison_of_yogg_saron'    => 'The Prison of Yogg-Saron',
+                'the_spark_of_imagination'    => 'The Spark of Imagination',
+                'the_minds_eye'               => 'The Mind\'s Eye',
+            ],
+        ],
+        'vault_of_archavon'                        => [
+            'name'   => 'Vault of Archavon',
+            'floors' => [
+                'vault_of_archavon' => 'Vault of Archavon',
             ],
         ],
     ],

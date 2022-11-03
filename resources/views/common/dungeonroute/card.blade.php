@@ -34,7 +34,7 @@ if (!isset($tierAffixGroup)) {
 
 // Attempt a default value if there's only one affix set
 $tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
-$enemyForcesPercentage = (int)(($dungeonroute->enemy_forces / $dungeonroute->dungeon->enemy_forces_required) * 100);
+$enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
 $enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 
 $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';

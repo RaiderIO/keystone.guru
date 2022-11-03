@@ -5,33 +5,33 @@ namespace Database\Seeders\RelationImport\Parsers;
 class NestedModelRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
         //  Can parse any model
         return true;
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
-        return is_array($value) && isset($value['id']);
+        return isset($value['id']);
     }
 
     /**
-     * @param $modelClassName
-     * @param $modelData
-     * @param $name
-     * @param $value
-     * @return mixed
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
+     * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         // Converts a relation like this: enemy: { id: 1, <otherattributes> } to enemy_id: 1 for saving
         if (!isset($modelData[$name . '_id'])) {

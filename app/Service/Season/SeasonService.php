@@ -96,11 +96,11 @@ class SeasonService implements SeasonServiceInterface
             ->first();
 
         if ($season === null) {
-            logger()->error('Season is null for date', [
-                'date'      => $date,
-                'expansion' => $expansion->shortname,
-                'trace'     => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
-            ]);
+//            logger()->error('Season is null for date', [
+//                'date'      => $date,
+//                'expansion' => $expansion->shortname,
+//                'trace'     => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
+//            ]);
         }
 
         return $season;

@@ -62,7 +62,7 @@ class AffixSeeder extends Seeder
         ]);
 
         foreach ($affixes as $affix) {
-            /** @var $affix Model */
+            /** @var Affix $affix */
             $affix->save();
 
             $iconName          = strtolower(str_replace(' ', '', $affix->key));
@@ -177,18 +177,18 @@ class AffixSeeder extends Seeder
             ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_ENCRYPTED]],
             ['season_id' => 8, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SPITEFUL, Affix::AFFIX_NECROTIC, Affix::AFFIX_ENCRYPTED]],
 
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INSPIRING, Affix::AFFIX_QUAKING, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_GRIEVOUS, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BOLSTERING, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BURSTING, Affix::AFFIX_STORMING, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_RAGING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_INSPIRING, Affix::AFFIX_GRIEVOUS, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SPITEFUL, Affix::AFFIX_NECROTIC, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BOLSTERING, Affix::AFFIX_QUAKING, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SANGUINE, Affix::AFFIX_STORMING, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_RAGING, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SHROUDED], 'confirmed' => false],
-            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SPITEFUL, Affix::AFFIX_NECROTIC, Affix::AFFIX_SHROUDED], 'confirmed' => false],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INSPIRING, Affix::AFFIX_QUAKING, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_GRIEVOUS, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BOLSTERING, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BURSTING, Affix::AFFIX_STORMING, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_RAGING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_INSPIRING, Affix::AFFIX_GRIEVOUS, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SPITEFUL, Affix::AFFIX_NECROTIC, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BOLSTERING, Affix::AFFIX_QUAKING, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SANGUINE, Affix::AFFIX_STORMING, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_RAGING, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SHROUDED]],
+            ['season_id' => 9, 'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SPITEFUL, Affix::AFFIX_NECROTIC, Affix::AFFIX_SHROUDED]],
 
         ];
 

@@ -521,6 +521,18 @@ class DungeonRoute extends Model
     /**
      * @return int
      */
+    public function getEnemyForcesPercentage(): int
+    {
+        if ($this->dungeon->enemy_forces_required > 0) {
+            return (int)(($this->enemy_forces / $this->dungeon->enemy_forces_required) * 100);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @return int
+     */
     public function getEnemyForcesTooMuch(): int
     {
         return max(0, $this->enemy_forces - ($this->teeming ? $this->dungeon->enemy_forces_required_teeming : $this->dungeon->enemy_forces_required));
@@ -1222,10 +1234,10 @@ class DungeonRoute extends Model
             $activeSeason = $this->dungeon->getActiveSeason($seasonService);
 
             if ($activeSeason === null) {
-                logger()->warning('No active season found for dungeon; fallback on current season', [
-                    'dungeonroute' => $this->public_key,
-                    'dungeon'      => $this->dungeon->name,
-                ]);
+//                logger()->warning('No active season found for dungeon; fallback on current season', [
+//                    'dungeonroute' => $this->public_key,
+//                    'dungeon'      => $this->dungeon->name,
+//                ]);
 
                 $activeSeason = $seasonService->getCurrentSeason($expansionService->getCurrentExpansion());
             }

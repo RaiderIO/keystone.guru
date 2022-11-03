@@ -44,7 +44,7 @@ setfacl -d -m g:www-data:rwx storage/logs
 # --no-scripts tag prevents that from happening. After this, artisan will work normally. Otherwise you get this error:
 # Fatal error: Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/vagrant/Git/private/keystone.guru/bootstrap/app.php:14
 tput setaf 2;
-composer update --no-scripts
+composer install --no-scripts
 tput sgr0;
 
 # Prevent not being able to compile because cross-env is missing

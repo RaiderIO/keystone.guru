@@ -32,6 +32,8 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\Npc\NpcService;
+use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonService;
@@ -84,6 +86,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         }
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        $this->app->bind(NpcServiceInterface::class, NpcService::class);
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
@@ -313,6 +316,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('dungeons', $selectedSeason->dungeons);
         });
 
+        // Maps
+        view()->composer('common.maps.controls.pulls', function (View $view) use ($globalViewVariables) {
+            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+        });
+
+
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
             $view->with('teams', Auth::check() ? Auth::user()->teams : collect());
@@ -327,7 +336,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer(['profile.overview', 'common.dungeonroute.coverage.affixgroup'], function (View $view) use ($globalViewVariables) {
             $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
         });
-
 
         // Custom blade directives
         $expressionToStringContentsParser = function ($expression, $callback) {

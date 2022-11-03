@@ -3,47 +3,54 @@
 
 namespace Database\Seeders\RelationImport\Parsers;
 
+use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\FloorCoupling;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 
 class DungeonFloorsRelationParser implements RelationParser
 {
     /**
-     * @param $modelClassName string
-     * @return mixed
+     * @param string $modelClassName
+     * @return bool
      */
-    public function canParseModel($modelClassName)
+    public function canParseModel(string $modelClassName): bool
     {
-        return $modelClassName === 'App\Models\Dungeon';
+        return $modelClassName === Dungeon::class;
     }
 
     /**
-     * @param $name string
-     * @param $value array
-     * @return mixed
+     * @param string $name
+     * @param array $value
+     * @return bool
      */
-    public function canParseRelation($name, $value)
+    public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'floors';
     }
 
     /**
-     * @param $modelClassName string
-     * @param $modelData array
-     * @param $name string
-     * @param $value array
+     * @param string $modelClassName
+     * @param array $modelData
+     * @param string $name
+     * @param array $value
      * @return array
      */
-    public function parseRelation($modelClassName, $modelData, $name, $value)
+    public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $floor) {
             $floor['dungeon_id'] = $modelData['id'];
 
-            foreach ($floor['floorcouplings'] as $floorcoupling) {
+            foreach ($floor['floorcouplings'] ?? [] as $floorcoupling) {
                 FloorCoupling::insert($floorcoupling);
             }
 
+            foreach ($floor['dungeonspeedrunrequirednpcs'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+                DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
+            }
+
             unset($floor['floorcouplings']);
+            unset($floor['dungeonspeedrunrequirednpcs']);
             Floor::insert($floor);
         }
 
