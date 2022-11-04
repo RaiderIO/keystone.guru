@@ -16,14 +16,22 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
 
 class EnemyPack extends MapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'enemypack'});
+        super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
 
         this.label = 'Enemy pack';
 
-        this.color = null;
         this.rawEnemies = [];
 
         getState().register('killzonesnumberstyle:changed', this, this.rebindTooltip.bind(this));
+    }
+
+    /**
+     *
+     * @returns {string}
+     * @protected
+     */
+    _getPolylineColorDefault() {
+        return c.map.enemypack.defaultColor();
     }
 
     /**
@@ -44,6 +52,12 @@ class EnemyPack extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'color',
+                type: 'color',
+                setter: this.setColor.bind(this),
+                default: this._getPolylineColorDefault.bind(this)
             }),
             new Attribute({
                 name: 'label',
@@ -71,6 +85,21 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         this._updateHullLayer();
+    }
+
+    /**
+     * Sets the color for the polyline.
+     * @param color
+     */
+    setColor(color) {
+        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+
+        this.color = color;
+        this.layer.setStyle({
+            fillColor: this.color ?? this._getPolylineColorDefault(),
+            color: this.color ?? this._getPolylineColorDefault()
+        });
+        this.layer.redraw();
     }
 
     /**
