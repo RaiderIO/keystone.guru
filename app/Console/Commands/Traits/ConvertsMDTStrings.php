@@ -15,10 +15,10 @@ trait ConvertsMDTStrings
     private static string $TMP_FILE_BASE_DIR = '/dev/shm/keystone.guru/mdt/';
 
     /** @var string */
-    private static string $CLI_PARSER_ENCODE_CMD = 'cli_weakauras_parser encode %s';
+    private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/sudo /usr/bin/cli_weakauras_parser encode %s';
 
     /** @var string */
-    private static string $CLI_PARSER_DECODE_CMD = 'cli_weakauras_parser decode %s';
+    private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/sudo /usr/bin/cli_weakauras_parser decode %s';
 
     /**
      * Checks if we should log a string to the error logger should it fail parsing
