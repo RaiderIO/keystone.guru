@@ -13,16 +13,12 @@ class QueueSize extends Measurement
      */
     function getPoints(): array
     {
-        $queueNames = array_keys(
-            config(
-                sprintf('horizon.environments.%s', config('app.env'))
-            )
-        );
-
         $tags = array_merge($this->getTags(), ['server' => 'maisie']);
 
         $result = [];
-        foreach ($queueNames as $queueName) {
+        foreach (config(sprintf('horizon.environments.%s', config('app.env'))) as $key => $config) {
+            $queueName = $config['queue'][0];
+
             $result[] = new Point(
                 'queue',
                 null,
