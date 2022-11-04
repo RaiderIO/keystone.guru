@@ -277,15 +277,27 @@ let c = {
             }
         },
         enemypack: {
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function () {
+                return '#5993D2';
+            },
             margin: 2,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },
             polygonOptions: {
-                color: '#5993D2',
                 weight: 1,
                 fillOpacity: 0.3,
                 opacity: 1
+            },
+            polylineOptionsAnimated: {
+                opacity: 1,
+                delay: 400,
+                dashArray: [10, 20],
+                // pulseColorLight: '#FFF',
+                // pulseColorDark: '#000',
+                hardwareAcceleration: true,
+                use: L.polyline
             },
         },
         enemypatrol: {
