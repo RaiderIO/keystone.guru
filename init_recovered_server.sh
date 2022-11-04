@@ -86,11 +86,5 @@ php artisan vendor:publish --tag=language
 php artisan horizon:install
 php artisan horizon:publish
 
-tput setaf 2;
-echo "Seeding Laratrust..."
-tput sgr0;
-# Seed Laratrust (initial users etc)
-php artisan db:seed --class=LaratrustSeeder --database=migrate
-
 # Seeding database
 ./refresh_db_seed.sh

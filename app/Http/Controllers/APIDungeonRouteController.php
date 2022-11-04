@@ -723,7 +723,8 @@ class APIDungeonRouteController extends Controller
 
         try {
             $warnings     = new Collection();
-            $dungeonRoute = $exportString->setDungeonRoute($dungeonroute)
+            $dungeonRoute = $exportString
+                ->setDungeonRoute($dungeonroute)
                 ->getEncodedString($warnings);
 
             $warningResult = [];

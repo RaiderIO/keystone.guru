@@ -9,8 +9,15 @@ apt-get install -y redis-server \
                 libssl1.0-dev \
                 npm
 
-npm install -g laravel-echo-server handlebars
+# Required for puppeteer to work
+apt-get install -y libxdamage-dev \
+                libnss3-dev \
+                libgdk-pixbuf2.0-dev \
+                libgtk-3-dev \
+                libxss-dev \
+                libasound2
 
+npm install -g laravel-echo-server handlebars cross-env dotenv
 
 cd /tmp || exit
 
