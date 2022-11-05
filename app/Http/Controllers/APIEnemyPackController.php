@@ -29,7 +29,7 @@ class APIEnemyPackController extends Controller
         $validated = $request->validated();
 
         /** @var EnemyPack|null $beforeEnemyPack */
-        $beforeEnemyPack = clone $enemyPack;
+        $beforeEnemyPack = $enemyPack === null ? null : clone $enemyPack;
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
