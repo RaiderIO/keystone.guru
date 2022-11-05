@@ -77,6 +77,4 @@ class MapContextDungeon extends MapContext
             'npcs'    => $npcs,
         ]);
     }
-
-
 }

@@ -99,6 +99,10 @@ return [
             'github_exception' => 'An error occurred communicating with Github: %s',
         ],
     ],
+    'mappingversion' => [
+        'created_successfully' => 'Added new mapping version!',
+        'deleted_successfully' => 'Deleted mapping version successfully',
+    ],
     'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [

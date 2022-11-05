@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int $id

@@ -147,11 +147,22 @@ class MappingVersion extends Model
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
+                /** @var $model MappingModelInterface */
                 $model->exists             = false;
                 $model->id                 = null;
                 $model->mapping_version_id = $newMappingVersion->id;
                 $model->save();
             }
+        });
+
+        // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
+        static::deleting(function(MappingVersion $mappingVersion){
+            $mappingVersion->dungeonFloorSwitchMarkers()->delete();
+            $mappingVersion->enemies()->delete();
+            $mappingVersion->enemyPacks()->delete();
+            $mappingVersion->enemyPatrols()->delete();
+            $mappingVersion->mapIcons()->delete();
+            $mappingVersion->mountableAreas()->delete();
         });
     }
 }

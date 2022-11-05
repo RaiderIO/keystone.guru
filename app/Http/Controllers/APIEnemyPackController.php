@@ -24,7 +24,7 @@ class APIEnemyPackController extends Controller
      * @return EnemyPack
      * @throws Exception
      */
-    function store(EnemyPackFormRequest $request, EnemyPack $enemyPack = null): EnemyPack
+    public function store(EnemyPackFormRequest $request, EnemyPack $enemyPack = null): EnemyPack
     {
         $validated = $request->validated();
 
@@ -57,19 +57,19 @@ class APIEnemyPackController extends Controller
 
     /**
      * @param Request $request
-     * @param EnemyPack $enemypack
+     * @param EnemyPack $enemyPack
      * @return Response
      * @throws Exception
      */
-    function delete(Request $request, EnemyPack $enemypack): Response
+    public function delete(Request $request, EnemyPack $enemyPack): Response
     {
-        if ($enemypack->delete()) {
+        if ($enemyPack->delete()) {
             if (Auth::check()) {
-                broadcast(new ModelDeletedEvent($enemypack->floor->dungeon, Auth::getUser(), $enemypack));
+                broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
             }
 
             // Trigger mapping changed event so the mapping gets saved across all environments
-            $this->mappingChanged($enemypack, null);
+            $this->mappingChanged($enemyPack, null);
             $result = response()->noContent();
         } else {
             throw new Exception('Unable to delete pack!');

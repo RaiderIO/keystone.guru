@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

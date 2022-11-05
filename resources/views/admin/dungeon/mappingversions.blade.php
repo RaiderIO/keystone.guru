@@ -31,7 +31,8 @@
         <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_merged') }}</th>
         <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_id') }}</th>
         <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_version') }}</th>
-        <th width="60%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
+        <th width="50%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
+        <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -42,6 +43,12 @@
             <td>{{ $mappingVersion->id }}</td>
             <td>{{ $mappingVersion->version }}</td>
             <td>{{ $mappingVersion->created_at->toDateTimeString() }}</td>
+            <td>
+                <a class="btn btn-danger"
+                   href="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}">
+                    <i class="fas fa-trash"></i>&nbsp;{{ __('views/admin.dungeon.edit.mapping_versions.delete') }}
+                </a>
+            </td>
         </tr>
     @endforeach
     </tbody>

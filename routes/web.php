@@ -233,6 +233,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 // Mapping versions
                 Route::group(['prefix' => '{dungeon}/mappingversion'], function () {
                     Route::get('new', [MappingVersionController::class, 'savenew'])->name('admin.mappingversion.new');
+                    Route::get('{mappingVersion}/delete', [MappingVersionController::class, 'delete'])->name('admin.mappingversion.delete');
                 });
 
                 // Floors
@@ -393,7 +394,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/enemypack', [APIEnemyPackController::class, 'store']);
                 Route::put('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'store']);
-                Route::delete('/enemypack/{enemypack}', [APIEnemyPackController::class, 'delete']);
+                Route::delete('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'delete']);
 
                 Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);
                 Route::delete('/enemypatrol/{enemypatrol}', [APIEnemyPatrolController::class, 'delete']);

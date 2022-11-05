@@ -3,18 +3,10 @@
 namespace App\Http\Controllers\Dungeon;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Speedrun\DungeonSpeedrunRequiredNpcsFormRequest;
 use App\Models\Dungeon;
-use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
-use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\Npc\NpcServiceInterface;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Session;
@@ -27,14 +19,36 @@ class MappingVersionController extends Controller
      * @param MappingServiceInterface $mappingService
      * @return RedirectResponse
      */
-    public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService)
+    public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
     {
         $mappingService->createNewMappingVersion($dungeon);
 
-        Session::flash('status', 'Added new mapping version!');
+        Session::flash('status', __('controller.mappingversion.created_successfully'));
 
         return redirect()->route('admin.dungeon.edit', [
             'dungeon' => $dungeon,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Dungeon $dungeon
+     * @param MappingVersion $mappingVersion
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function delete(Request $request, Dungeon $dungeon, MappingVersion $mappingVersion): RedirectResponse
+    {
+        if ($mappingVersion->delete()) {
+            Session::flash('status', __('controller.mappingversion.deleted_successfully'));
+
+            $result = redirect()->route('admin.dungeon.edit', [
+                'dungeon' => $dungeon,
+            ]);
+        } else {
+            throw new Exception('Unable to delete mapping version!');
+        }
+
+        return $result;
     }
 }
