@@ -127,6 +127,10 @@ const EXPANSION_SHADOWLANDS = 'shadowlands';
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
 
+// Teeming states
+const TEEMING_VISIBLE = 'visible';
+const TEEMING_HIDDEN = 'hidden';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';

@@ -132,7 +132,7 @@ class Enemy extends MapObject {
                 name: 'enemy_pack_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: -1
+                default: null
             }),
             new Attribute({
                 name: 'enemy_forces_override',
@@ -528,7 +528,7 @@ class Enemy extends MapObject {
         let result = [];
 
         // Only if we're part of a pack
-        if (this.enemy_pack_id >= 0) {
+        if (this.enemy_pack_id !== null) {
             // Add all the enemies in said pack to the toggle display
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 

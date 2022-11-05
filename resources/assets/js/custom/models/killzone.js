@@ -374,7 +374,7 @@ class KillZone extends MapObject {
         }
 
         // If the enemy we're adding to the pull is the real one, not the one attached to a pack with the final boss
-        if (enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
+        if (enemy.isAwakenedNpc() && enemy.enemy_pack_id === null) {
             // If we're attaching this awakened enemy to a pull, deselect the other
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
@@ -444,7 +444,7 @@ class KillZone extends MapObject {
         let previousKillZone = enemy.getKillZone();
 
         // If the enemy was part of a pack..
-        if (enemy.enemy_pack_id > 0 && !ignorePackBuddies) {
+        if (enemy.enemy_pack_id !== 0 && !ignorePackBuddies) {
             let packBuddies = enemy.getPackBuddies();
             packBuddies.push(enemy);
             // Add all enemies in the pack to this killzone as well

@@ -121,7 +121,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
                         enemyCandidate.isAwakenedNpc() && enemyCandidate.npc.id === enemy.npc.id &&
                         enemyCandidate.seasonal_index === enemy.seasonal_index &&
-                        enemyCandidate.enemy_pack_id !== -1) {
+                        enemyCandidate.enemy_pack_id !== null) {
 
                         enemy.setLinkedAwakenedEnemy(enemyCandidate);
                         break;

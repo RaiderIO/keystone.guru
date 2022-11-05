@@ -69,6 +69,14 @@ class Enemy extends CacheModel implements MappingModelInterface
         self::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
     ];
 
+    const TEEMING_VISIBLE = 'visible';
+    const TEEMING_HIDDEN = 'hidden';
+
+    const TEEMING_ALL = [
+        self::TEEMING_VISIBLE,
+        self::TEEMING_HIDDEN
+    ];
+
     /**
      * @return array
      */

@@ -5,9 +5,9 @@ class AdminEnemy extends Enemy {
 
         let self = this;
 
-        this.npc_id = 0;
+        this.npc_id = null;
         // Init to an empty value
-        this.enemy_pack_id = -1;
+        this.enemy_pack_id = null;
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 
@@ -391,8 +391,8 @@ class AdminEnemy extends Enemy {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
             enemy_forces: enemy_forces,
             base_health: this.npc === null ? '-' : this.npc.base_health,
-            teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-            is_teeming: this.teeming === 'visible',
+            teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),
+            is_teeming: this.teeming === TEEMING_VISIBLE,
             id: this.id,
             size: c.map.enemy.calculateSize(
                 this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health,
@@ -408,7 +408,7 @@ class AdminEnemy extends Enemy {
             mdt_id: this.mdt_id,
             mdt_npc_id: this.mdt_npc_id,
             enemy_id: this.enemy_id,
-            attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
+            attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
             visual: this.visual !== null ? this.visual.getName() : 'undefined'
         });
 

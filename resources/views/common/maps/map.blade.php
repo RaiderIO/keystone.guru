@@ -53,14 +53,14 @@ if ($isAdmin) {
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
             ['key' => '', 'description' => __('views/common.maps.map.no_teeming')],
-            ['key' => 'visible', 'description' => __('views/common.maps.map.visible_teeming')],
-            ['key' => 'hidden', 'description' => __('views/common.maps.map.hidden_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_VISIBLE, 'description' => __('views/common.maps.map.visible_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_HIDDEN, 'description' => __('views/common.maps.map.hidden_teeming')],
         ],
         // Display options for changing Faction status for map objects
         'factions'       => [
             ['key' => 'any', 'description' => __('views/common.maps.map.any')],
-            ['key' => 'alliance', 'description' => __('views/common.maps.map.alliance')],
-            ['key' => 'horde', 'description' => __('views/common.maps.map.horde')],
+            ['key' => \App\Models\Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
+            ['key' => \App\Models\Faction::FACTION_HORDE, 'description' => __('factions.horde')],
         ],
     ];
 }

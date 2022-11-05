@@ -61,20 +61,20 @@ abstract class MapContext
         $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%s', $this->floor->dungeon->id), function () {
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
             $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons', 'mountableareas']);
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'latestMappingVersion'      => $dungeon->getCurrentMappingVersion(),
-                'enemies'                   => $dungeon->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
+                'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
                 'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
                 'auras'                     => Spell::where('aura', true)->get(),
-                'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
-                'enemyPatrols'              => $dungeon->enemypatrols,
-                'mapIcons'                  => $dungeon->mapicons,
-                'dungeonFloorSwitchMarkers' => $dungeon->dungeonfloorswitchmarkers,
-                'mountableAreas'            => $dungeon->mountableareas,
+                'enemyPacks'                => $this->mappingVersion->enemyPacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
+                'enemyPatrols'              => $this->mappingVersion->enemyPatrols,
+                'mapIcons'                  => $this->mappingVersion->mapIcons,
+                'dungeonFloorSwitchMarkers' => $this->mappingVersion->dungeonFloorSwitchMarkers,
+                'mountableAreas'            => $this->mappingVersion->mountableAreas,
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 

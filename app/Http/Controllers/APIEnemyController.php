@@ -7,6 +7,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Http\Requests\Enemy\EnemyFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
@@ -29,13 +30,15 @@ class APIEnemyController extends Controller
     use ChecksForDuplicates;
 
     /**
-     * @param Request $request
+     * @param EnemyFormRequest $request
      * @param MappingService $mappingService
      * @return Enemy
      * @throws Exception
      */
-    function store(Request $request, MappingService $mappingService)
+    function store(EnemyFormRequest $request, MappingService $mappingService)
     {
+        dd($request->validated());
+
         /** @var Enemy $enemy */
         $enemy = Enemy::findOrNew($request->get('id'));
 
@@ -67,7 +70,7 @@ class APIEnemyController extends Controller
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat                           = (float)$request->get('lat');
         $enemy->lng                           = (float)$request->get('lng');
-        $enemy->mapping_version_id            = $mappingService->getMappingVersionOrNew($enemy->floor->dungeon)->id;
+        $enemy->mapping_version_id            = (int)$request->get('mapping_version_id', -1);
 
         if ($enemy->save()) {
             // Bolstering whitelist, if set

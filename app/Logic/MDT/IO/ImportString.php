@@ -116,7 +116,7 @@ class ImportString extends MDTBase
                     try {
                         // Find out the floor where the NPC is standing on
                         /** @var Enemy $enemy */
-                        $enemy = Enemy::where('npc_id', $npcId)->where('enemy_pack_id', -1)->whereIn('floor_id', $floorIds)->firstOrFail();
+                        $enemy = Enemy::where('npc_id', $npcId)->whereNotNull('enemy_pack_id')->whereIn('floor_id', $floorIds)->firstOrFail();
                         /** @var MapIcon $obeliskMapIcon */
                         $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
@@ -449,7 +449,7 @@ class ImportString extends MDTBase
                                 /** @var Enemy $bossAwakenedEnemy */
                                 $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->enemy->npc_id)
                                     ->where('seasonal_index', $kzEnemy->enemy->seasonal_index)
-                                    ->where('enemy_pack_id', '>', 0)
+                                    ->whereNotNull('enemy_pack_id')
                                     ->first();
 
                                 if ($bossAwakenedEnemy !== null) {
