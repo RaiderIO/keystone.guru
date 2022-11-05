@@ -4,6 +4,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-100.777417\",\"lng\":\"195.452109\"},{\"lat\":\"-120.240158\",\"lng\":\"211.78102\"},{\"lat\":\"-115.292004\",\"lng\":\"217.718805\"},{\"lat\":\"-96.324077\",\"lng\":\"203.534095\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-111.33348\",\"lng\":\"150.58884\"},{\"lat\":\"-131.455976\",\"lng\":\"142.671793\"},{\"lat\":\"-133.270299\",\"lng\":\"152.568102\"},{\"lat\":\"-112.488049\",\"lng\":\"160.155273\"}]"
     },
@@ -20,6 +24,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-137.228823\",\"lng\":\"84.613445\"},{\"lat\":\"-149.929086\",\"lng\":\"87.252461\"},{\"lat\":\"-144.815993\",\"lng\":\"114.962127\"},{\"lat\":\"-133.10536\",\"lng\":\"109.684095\"}]"
     },
@@ -28,6 +34,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-192.483216\",\"lng\":\"140.197716\"},{\"lat\":\"-210.791389\",\"lng\":\"130.796222\"},{\"lat\":\"-216.894113\",\"lng\":\"143.166608\"},{\"lat\":\"-195.946925\",\"lng\":\"151.413533\"}]"
     },
@@ -36,6 +44,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-166.1305\",\"lng\":\"251.277765\"},{\"lat\":\"-175.966229\",\"lng\":\"243.452258\"},{\"lat\":\"-186.232721\",\"lng\":\"262.118606\"},{\"lat\":\"-177.043134\",\"lng\":\"267.503129\"}]"
     },
@@ -44,6 +54,8 @@
         "floor_id": 6,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-186.591689\",\"lng\":\"219.760354\"},{\"lat\":\"-205.042656\",\"lng\":\"231.390925\"},{\"lat\":\"-197.073562\",\"lng\":\"239.934369\"},{\"lat\":\"-184.007118\",\"lng\":\"225.862814\"}]"
     }
