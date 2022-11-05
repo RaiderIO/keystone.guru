@@ -392,6 +392,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::delete('/enemy/{enemy}', [APIEnemyController::class, 'delete']);
 
                 Route::post('/enemypack', [APIEnemyPackController::class, 'store']);
+                Route::put('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'store']);
                 Route::delete('/enemypack/{enemypack}', [APIEnemyPackController::class, 'delete']);
 
                 Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);

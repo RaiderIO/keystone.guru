@@ -907,10 +907,13 @@ class MapObject extends Signalable {
 
         self.signal('save:beforesend');
 
+        let hasRouteModelBinding = this.options.hasOwnProperty('hasRouteModelBinding') ? this.options.hasRouteModelBinding : false;
+
         $.ajax({
-            type: 'POST',
-            url: this.options.hasOwnProperty('save_url') ? this.options.save_url :
-                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
+            type: self.id > 0 && hasRouteModelBinding ? 'PUT' : 'POST',
+            url: (this.options.hasOwnProperty('save_url') ? this.options.save_url :
+                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/`) +
+                (self.id > 0 && hasRouteModelBinding ? self.id : ''),
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {

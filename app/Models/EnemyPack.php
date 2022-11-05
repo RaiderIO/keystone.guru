@@ -13,6 +13,8 @@ use Illuminate\Support\Collection;
  * @property int $floor_id
  * @property string $teeming
  * @property string $faction
+ * @property string|null $color
+ * @property string|null $color_animated
  * @property string $label
  * @property string $vertices_json
  *
@@ -24,6 +26,17 @@ use Illuminate\Support\Collection;
 class EnemyPack extends CacheModel implements MappingModelInterface
 {
     public $timestamps = false;
+
+    protected $fillable = [
+        'id',
+        'floor_id',
+        'teeming',
+        'faction',
+        'color',
+        'color_animated',
+        'label',
+        'vertices_json',
+    ];
 
     /**
      * @return BelongsTo
