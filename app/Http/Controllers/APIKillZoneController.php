@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Requests\KillZone\DeleteAllFormRequest;
 use App\Http\Requests\KillZone\StoreFormRequest;
 use App\Models\DungeonRoute;
@@ -23,8 +22,6 @@ use Teapot\StatusCode\Http;
 
 class APIKillZoneController extends Controller
 {
-    use ChecksForDuplicates;
-
     /**
      * @param DungeonRoute $dungeonroute
      * @param array $data

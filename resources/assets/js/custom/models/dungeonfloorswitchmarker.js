@@ -49,7 +49,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
 class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
-        super(map, layer, {name: 'dungeonfloorswitchmarker'});
+        super(map, layer, {name: 'dungeonfloorswitchmarker', hasRouteModelBinding: true});
 
         let self = this;
 
@@ -116,7 +116,7 @@ class DungeonFloorSwitchMarker extends Icon {
 
                     return selectFloors;
                 },
-                default: -1
+                default: null
             }),
             new Attribute({
                 name: 'direction',
@@ -195,7 +195,7 @@ class DungeonFloorSwitchMarker extends Icon {
 
         this.layer.on('click', function () {
             // Tol'dagor doors don't have a target (locked doors)
-            if (self.target_floor_id > 0) {
+            if (self.target_floor_id !== null) {
                 getState().setFloorId(self.target_floor_id);
             }
         });

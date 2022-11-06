@@ -19,7 +19,6 @@ use Teapot\StatusCode\Http;
 class APIMountableAreaController extends Controller
 {
     use ChangesMapping;
-    use ChecksForDuplicates;
 
     /**
      * @param MountableAreaFormRequest $request

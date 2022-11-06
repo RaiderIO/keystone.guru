@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\MapIcon;
@@ -23,7 +22,6 @@ class APIMapIconController extends Controller
 {
     use ChangesMapping;
     use PublicKeyDungeonRoute;
-    use ChecksForDuplicates;
 
     /**
      * @param Request $request

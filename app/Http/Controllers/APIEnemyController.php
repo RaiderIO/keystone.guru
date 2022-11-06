@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChangesMapping;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\Enemy\EnemyFormRequest;
 use App\Models\DungeonRoute;
@@ -14,7 +11,6 @@ use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;
 use App\Models\Spell;
-use App\Service\Mapping\MappingService;
 use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -29,7 +25,6 @@ use Throwable;
 class APIEnemyController extends APIMappingModelBaseController
 {
     use PublicKeyDungeonRoute;
-    use ChecksForDuplicates;
 
     /**
      * @param EnemyFormRequest $request

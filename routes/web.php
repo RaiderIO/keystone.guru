@@ -401,7 +401,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::put('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'store']);
                 Route::delete('/enemypatrol/{enemypatrol}', [APIEnemyPatrolController::class, 'delete']);
 
-                Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store'])->where(['floor_id' => '[0-9]+']);
+                Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store']);
+                Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'store']);
                 Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);

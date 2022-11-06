@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\EnemyPatrol\EnemyPatrolFormRequest;
 use App\Models\EnemyPatrol;
@@ -19,7 +18,6 @@ use Throwable;
 
 class APIEnemyPatrolController extends APIMappingModelBaseController
 {
-    use ChecksForDuplicates;
     use SavesPolylines;
 
     /**

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChangesMapping;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
 use DB;
@@ -17,8 +15,6 @@ use Throwable;
 
 class APIEnemyPackController extends APIMappingModelBaseController
 {
-    use ChecksForDuplicates;
-
     /**
      * @param EnemyPackFormRequest $request
      * @param EnemyPack|null $enemyPack

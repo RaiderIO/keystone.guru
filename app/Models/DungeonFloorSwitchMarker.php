@@ -24,6 +24,14 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
 {
     protected $appends = ['direction'];
     protected $hidden = ['floor', 'targetfloor', 'laravel_through_key'];
+    protected $fillable = [
+        'id',
+        'mapping_version_id',
+        'floor_id',
+        'target_floor_id',
+        'lat',
+        'lng',
+    ];
 
     public $timestamps = false;
 

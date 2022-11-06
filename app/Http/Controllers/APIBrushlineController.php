@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
@@ -19,7 +18,6 @@ use Teapot\StatusCode\Http;
 
 class APIBrushlineController extends Controller
 {
-    use ChecksForDuplicates;
     use SavesPolylines;
 
     /**

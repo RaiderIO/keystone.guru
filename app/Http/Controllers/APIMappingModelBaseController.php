@@ -59,7 +59,7 @@ abstract class APIMappingModelBaseController extends Controller
 
                 return $model;
             } else {
-                throw new Exception('Unable to save enemy!');
+                throw new Exception('Unable to save model!');
             }
         });
     }
