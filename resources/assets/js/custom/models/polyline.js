@@ -1,4 +1,4 @@
-class Polyline extends MapObject {
+class Polyline extends VersionableMapObject {
     constructor(map, layer, options) {
         super(map, layer, options);
         let self = this;

@@ -19,13 +19,14 @@ use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIEnemyController extends Controller
+class APIEnemyController extends APIMappingModelBaseController
 {
     use ChangesMapping;
     use PublicKeyDungeonRoute;
@@ -34,58 +35,35 @@ class APIEnemyController extends Controller
     /**
      * @param EnemyFormRequest $request
      * @param Enemy|null $enemy
-     * @return Enemy
+     * @return Enemy|Model
      * @throws Exception
      * @throws Throwable
      */
-    function store(EnemyFormRequest $request, Enemy $enemy = null)
+    public function store(EnemyFormRequest $request, Enemy $enemy = null): Enemy
     {
         $validated = $request->validated();
-
-        /** @var Enemy|null $beforeEnemy */
-        $beforeEnemy = $enemy === null ? null : clone $enemy;
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        return DB::transaction(function () use ($request, $validated, $beforeEnemy, $enemy) {
-            if ($enemy === null) {
-                $enemy   = Enemy::create($validated);
-                $success = $enemy instanceof Enemy;
-            } else {
-                $success = $enemy->update($validated);
-            }
-
-            if ($success) {
-                $activeAuras = $request->get('active_auras', []);
-                // Clear current active auras
-                $enemy->enemyactiveauras()->delete();
-                foreach ($activeAuras as $activeAura) {
-                    if (!empty($activeAura)) {
-                        $spell = Spell::findOrFail($activeAura);
-                        // Only when the passed spell is actually an aura
-                        if ($spell->aura) {
-                            EnemyActiveAura::insert([
-                                'enemy_id' => $enemy->id,
-                                'spell_id' => $activeAura,
-                            ]);
-                        }
+        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request) {
+            $activeAuras = $request->get('active_auras', []);
+            // Clear current active auras
+            $enemy->enemyactiveauras()->delete();
+            foreach ($activeAuras as $activeAura) {
+                if (!empty($activeAura)) {
+                    $spell = Spell::findOrFail($activeAura);
+                    // Only when the passed spell is actually an aura
+                    if ($spell->aura) {
+                        EnemyActiveAura::insert([
+                            'enemy_id' => $enemy->id,
+                            'spell_id' => $activeAura,
+                        ]);
                     }
                 }
-
-                $enemy->load(['npc']);
-
-                // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($beforeEnemy, $enemy);
-
-                if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
-                }
-
-                return $enemy;
-            } else {
-                throw new Exception('Unable to save enemy!');
             }
+
+            $enemy->load(['npc']);
         });
     }
 
@@ -96,7 +74,7 @@ class APIEnemyController extends Controller
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
+    public function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -132,7 +110,7 @@ class APIEnemyController extends Controller
      * @return Response|ResponseFactory
      * @throws Throwable
      */
-    function delete(Request $request, Enemy $enemy)
+    public function delete(Request $request, Enemy $enemy)
     {
         return DB::transaction(function () use ($request, $enemy) {
             try {

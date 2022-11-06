@@ -68,7 +68,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
  * @property {Number} permanent_tooltip
  * @property {String} comment
  */
-class Icon extends MapObject {
+class Icon extends VersionableMapObject {
     constructor(map, layer, options) {
         super(map, layer, options);
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,6 +35,7 @@ use Illuminate\Support\Collection;
  * @property EnemyPack|null $enemypack
  * @property Npc|null $npc
  * @property Floor $floor
+ * @property MappingVersion $mappingVersion
  *
  * @property EnemyActiveAura[]|Collection $enemyactiveauras
  *

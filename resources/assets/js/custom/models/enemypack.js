@@ -14,7 +14,7 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
 
 // });
 
-class EnemyPack extends MapObject {
+class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
 

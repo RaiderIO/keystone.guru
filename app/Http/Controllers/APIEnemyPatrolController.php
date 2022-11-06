@@ -16,7 +16,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APIEnemyPatrolController extends Controller
+class APIEnemyPatrolController extends APIMappingModelBaseController
 {
     use ChangesMapping;
     use ChecksForDuplicates;
