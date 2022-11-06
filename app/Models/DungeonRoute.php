@@ -485,7 +485,7 @@ class DungeonRoute extends Model
                            IF(dungeon_routes.teeming = 1,
                               SUM(
                                       IF(
-                                              enemies.enemy_forces_override_teeming >= 0,
+                                              enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
                                               IF(
                                                   npcs.enemy_forces_teeming >= 0,
@@ -496,7 +496,7 @@ class DungeonRoute extends Model
                                   ),
                               SUM(
                                       IF(
-                                              enemies.enemy_forces_override >= 0,
+                                              enemies.enemy_forces_override IS NOT NULL,
                                               enemies.enemy_forces_override,
                                               %s
                                           )

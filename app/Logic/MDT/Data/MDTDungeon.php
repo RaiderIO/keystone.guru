@@ -198,7 +198,8 @@ class MDTDungeon
                         $enemy->enemy_id              = -1;
                         $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
                         $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
-                        $enemy->enemy_forces_override = -1;
+                        $enemy->enemy_forces_override = null;
+                        $enemy->enemy_forces_override_teeming = null;
 
                         $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
                         $enemy->lat = $latLng['lat'];

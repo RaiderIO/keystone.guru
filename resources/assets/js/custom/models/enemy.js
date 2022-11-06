@@ -137,13 +137,13 @@ class Enemy extends VersionableMapObject {
                 name: 'enemy_forces_override',
                 type: 'int',
                 admin: true,
-                default: -1
+                default: null
             }),
             new Attribute({
                 name: 'enemy_forces_override_teeming',
                 type: 'int',
                 admin: true,
-                default: -1
+                default: null
             }),
             // new Attribute({
             //     name: 'npc',
@@ -578,12 +578,12 @@ class Enemy extends VersionableMapObject {
             } else if (this.isShroudedZulGamux()) {
                 result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
             } else if (getState().getMapContext().getTeeming()) {
-                if (this.enemy_forces_override_teeming >= 0) {
+                if (this.enemy_forces_override_teeming !== null) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
                     result = this.npc.enemy_forces_teeming;
                 }
-            } else if (this.enemy_forces_override >= 0) {
+            } else if (this.enemy_forces_override !== null) {
                 result = this.enemy_forces_override;
             }
         }

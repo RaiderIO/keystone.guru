@@ -131,14 +131,14 @@ class KillZone extends Model
                            IF(:teeming = 1,
                               SUM(
                                       IF(
-                                              enemies.enemy_forces_override_teeming >= 0,
+                                              enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
                                               IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
                                           )
                                   ),
                               SUM(
                                       IF(
-                                              enemies.enemy_forces_override >= 0,
+                                              enemies.enemy_forces_override IS NOT NULL,
                                               enemies.enemy_forces_override,
                                               npcs.enemy_forces
                                           )

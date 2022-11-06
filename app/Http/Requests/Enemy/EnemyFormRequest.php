@@ -44,8 +44,8 @@ class EnemyFormRequest extends FormRequest
             'faction'                       => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
             'required'                      => 'boolean',
             'skippable'                     => 'boolean',
-            'enemy_forces_override'         => 'int',
-            'enemy_forces_override_teeming' => 'int',
+            'enemy_forces_override'         => 'nullable|int',
+            'enemy_forces_override_teeming' => 'nullable|int',
             'lat'                           => 'numeric',
             'lng'                           => 'numeric',
         ];
