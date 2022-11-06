@@ -23,7 +23,7 @@ trait SavesPolylines
      *
      * @return Polyline
      */
-    private function _savePolyline(Polyline $polyline, Model $ownerModel, array $data): Polyline
+    private function savePolyline(Polyline $polyline, Model $ownerModel, array $data): Polyline
     {
         $polyline->model_id    = $ownerModel->id;
         $polyline->model_class = get_class($ownerModel);

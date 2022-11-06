@@ -28,7 +28,6 @@ use Throwable;
 
 class APIEnemyController extends APIMappingModelBaseController
 {
-    use ChangesMapping;
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
 

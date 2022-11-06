@@ -23,6 +23,14 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 class EnemyPatrol extends CacheModel implements MappingModelInterface
 {
     public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    protected $fillable = [
+        'id',
+        'mapping_version_id',
+        'floor_id',
+        'polyline_id',
+        'teeming',
+        'faction'
+    ];
     public $with = ['polyline'];
     public $timestamps = false;
 

@@ -49,7 +49,7 @@ class APIBrushlineController extends Controller
             throw new Exception("Unable to save brushline!");
         } else {
             // Create a new polyline and save it
-            $polyline = $this->_savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
+            $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
 
             // Couple the brushline to the polyline
             $brushline->polyline_id = $polyline->id;

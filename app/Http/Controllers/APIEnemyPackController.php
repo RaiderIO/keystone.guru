@@ -17,7 +17,6 @@ use Throwable;
 
 class APIEnemyPackController extends APIMappingModelBaseController
 {
-    use ChangesMapping;
     use ChecksForDuplicates;
 
     /**

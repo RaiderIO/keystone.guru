@@ -48,7 +48,7 @@ class APIPathController extends Controller
 
             if ($path->save()) {
                 // Create a new polyline and save it
-                $polyline = $this->_savePolyline(Polyline::findOrNew($path->polyline_id), $path, $request->get('polyline'));
+                $polyline = $this->savePolyline(Polyline::findOrNew($path->polyline_id), $path, $request->get('polyline'));
 
                 // Couple the path to the polyline
                 $path->polyline_id = $polyline->id;

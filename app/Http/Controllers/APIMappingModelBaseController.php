@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
-use App\Models\Enemy;
 use App\Models\Mapping\MappingModelInterface;
 use Closure;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 /**
  * Base class for all models that are mapping versionable
@@ -29,7 +29,7 @@ abstract class APIMappingModelBaseController extends Controller
      * @param MappingModelInterface|null $model
      * @param Closure|null $onSaveSuccess
      * @return Model
-     * @throws \Exception
+     * @throws Exception|Throwable
      */
     protected function storeModel(array $validated, string $modelClass, MappingModelInterface $model = null, Closure $onSaveSuccess = null): Model
     {
