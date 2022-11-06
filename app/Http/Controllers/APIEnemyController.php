@@ -15,6 +15,7 @@ use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Mapping\MappingService;
+use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
+use Throwable;
 
 class APIEnemyController extends Controller
 {
@@ -31,81 +33,60 @@ class APIEnemyController extends Controller
 
     /**
      * @param EnemyFormRequest $request
-     * @param MappingService $mappingService
+     * @param Enemy|null $enemy
      * @return Enemy
      * @throws Exception
+     * @throws Throwable
      */
-    function store(EnemyFormRequest $request, MappingService $mappingService)
+    function store(EnemyFormRequest $request, Enemy $enemy = null)
     {
-        dd($request->validated());
+        $validated = $request->validated();
 
-        /** @var Enemy $enemy */
-        $enemy = Enemy::findOrNew($request->get('id'));
+        /** @var Enemy|null $beforeEnemy */
+        $beforeEnemy = $enemy === null ? null : clone $enemy;
 
-        $beforeEnemy = null;
-        if ($enemy->exists) {
-            $beforeEnemy = clone $enemy;
-        }
+        $validated['vertices_json'] = json_encode($request->get('vertices'));
+        unset($validated['vertices']);
 
-        $enemy->enemy_pack_id = (int)$request->get('enemy_pack_id');
-        $npcId                = $request->get('npc_id', -1);
-        $enemy->npc_id        = $npcId === null ? -1 : (int)$npcId;
-        // Only when set, otherwise default of -1
-        $mdtId         = $request->get('mdt_id', -1);
-        $enemy->mdt_id = $mdtId === null ? -1 : (int)$mdtId;
-        // May be null if not set
-        $mdtNpcId          = $request->get('mdt_npc_id');
-        $enemy->mdt_npc_id = $mdtNpcId === null ? $mdtNpcId : (int)$request->get('mdt_npc_id');
-        $seasonalIndex     = $request->get('seasonal_index');
-        // don't use is_empty since 0 is valid
-        $enemy->seasonal_index                = $seasonalIndex === null || $seasonalIndex === '' || $seasonalIndex < 0 ? null : (int)$seasonalIndex;
-        $seasonalType                         = $request->get('seasonal_type', null);
-        $enemy->seasonal_type                 = $seasonalType === null || $seasonalType === '' || $seasonalType < 0 ? null : $seasonalType;
-        $enemy->floor_id                      = (int)$request->get('floor_id');
-        $enemy->teeming                       = $request->get('teeming');
-        $enemy->faction                       = $request->get('faction', 'any');
-        $enemy->required                      = (int)$request->get('required', false);
-        $enemy->skippable                     = (int)$request->get('skippable', false);
-        $enemy->enemy_forces_override         = (int)$request->get('enemy_forces_override', -1);
-        $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
-        $enemy->lat                           = (float)$request->get('lat');
-        $enemy->lng                           = (float)$request->get('lng');
-        $enemy->mapping_version_id            = (int)$request->get('mapping_version_id', -1);
-
-        if ($enemy->save()) {
-            // Bolstering whitelist, if set
-            $activeAuras = $request->get('active_auras', []);
-            // Clear current active auras
-            $enemy->enemyactiveauras()->delete();
-            foreach ($activeAuras as $activeAura) {
-                if (!empty($activeAura)) {
-                    $spell = Spell::findOrFail($activeAura);
-                    // Only when the passed spell is actually an aura
-                    if ($spell->aura) {
-                        EnemyActiveAura::insert([
-                            'enemy_id' => $enemy->id,
-                            'spell_id' => $activeAura,
-                        ]);
-                    }
-                }
+        return DB::transaction(function () use ($request, $validated, $beforeEnemy, $enemy) {
+            if ($enemy === null) {
+                $enemy   = Enemy::create($validated);
+                $success = $enemy instanceof Enemy;
+            } else {
+                $success = $enemy->update($validated);
             }
 
+            if ($success) {
+                $activeAuras = $request->get('active_auras', []);
+                // Clear current active auras
+                $enemy->enemyactiveauras()->delete();
+                foreach ($activeAuras as $activeAura) {
+                    if (!empty($activeAura)) {
+                        $spell = Spell::findOrFail($activeAura);
+                        // Only when the passed spell is actually an aura
+                        if ($spell->aura) {
+                            EnemyActiveAura::insert([
+                                'enemy_id' => $enemy->id,
+                                'spell_id' => $activeAura,
+                            ]);
+                        }
+                    }
+                }
 
-            // Trigger mapping changed event so the mapping gets saved across all environments
-            $this->mappingChanged($beforeEnemy, $enemy);
-        } else {
-            throw new Exception('Unable to save enemy!');
-        }
+                $enemy->load(['npc']);
 
-        if ($enemy->npc_id > 0) {
-            $enemy->load(['npc']);
-        }
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($beforeEnemy, $enemy);
 
-        if (Auth::check()) {
-            broadcast(new ModelChangedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
-        }
+                if (Auth::check()) {
+                    broadcast(new ModelChangedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+                }
 
-        return $enemy;
+                return $enemy;
+            } else {
+                throw new Exception('Unable to save enemy!');
+            }
+        });
     }
 
     /**
@@ -148,24 +129,27 @@ class APIEnemyController extends Controller
     /**
      * @param Request $request
      * @param Enemy $enemy
-     * @return array|ResponseFactory|Response
+     * @return Response|ResponseFactory
+     * @throws Throwable
      */
     function delete(Request $request, Enemy $enemy)
     {
-        try {
-            if ($enemy->delete()) {
-                if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+        return DB::transaction(function () use ($request, $enemy) {
+            try {
+                if ($enemy->delete()) {
+                    // Trigger mapping changed event so the mapping gets saved across all environments
+                    $this->mappingChanged($enemy, null);
+
+                    if (Auth::check()) {
+                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+                    }
                 }
-
-                // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($enemy, null);
+                $result = response()->noContent();
+            } catch (Exception $ex) {
+                $result = response('Not found', Http::NOT_FOUND);
             }
-            $result = response()->noContent();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
 
-        return $result;
+            return $result;
+        });
     }
 }

@@ -311,6 +311,7 @@ class ImportString extends MDTBase
                             // Only if we have the npc assigned at all
                             if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
                                 foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
+                                    /** @var $enemyCandidate Enemy */
                                     if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
                                         $enemy = $enemyCandidate;
                                         break;

@@ -8,10 +8,12 @@ use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class APIEnemyPackController extends Controller
 {
@@ -23,6 +25,7 @@ class APIEnemyPackController extends Controller
      * @param EnemyPack|null $enemyPack
      * @return EnemyPack
      * @throws Exception
+     * @throws Throwable
      */
     public function store(EnemyPackFormRequest $request, EnemyPack $enemyPack = null): EnemyPack
     {
@@ -34,25 +37,27 @@ class APIEnemyPackController extends Controller
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        if ($enemyPack === null) {
-            $enemyPack = EnemyPack::create($validated);
-            $success   = $enemyPack instanceof EnemyPack;
-        } else {
-            $success = $enemyPack->update($validated);
-        }
-
-        if ($success) {
-            if (Auth::check()) {
-                broadcast(new ModelChangedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+        return DB::transaction(function () use ($request, $validated, $beforeEnemyPack, $enemyPack) {
+            if ($enemyPack === null) {
+                $enemyPack = EnemyPack::create($validated);
+                $success   = $enemyPack instanceof EnemyPack;
+            } else {
+                $success = $enemyPack->update($validated);
             }
 
-            // Trigger mapping changed event so the mapping gets saved across all environments
-            $this->mappingChanged($beforeEnemyPack, $enemyPack);
-        } else {
-            throw new Exception('Unable to save pack!');
-        }
+            if ($success) {
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($beforeEnemyPack, $enemyPack);
 
-        return $enemyPack;
+                if (Auth::check()) {
+                    broadcast(new ModelChangedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+                }
+            } else {
+                throw new Exception('Unable to save pack!');
+            }
+
+            return $enemyPack;
+        });
     }
 
     /**
@@ -63,18 +68,21 @@ class APIEnemyPackController extends Controller
      */
     public function delete(Request $request, EnemyPack $enemyPack): Response
     {
-        if ($enemyPack->delete()) {
-            if (Auth::check()) {
-                broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+        DB::transaction(function () use ($request, $enemyPack) {
+            if ($enemyPack->delete()) {
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($enemyPack, null);
+
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+                }
+
+                $result = response()->noContent();
+            } else {
+                throw new Exception('Unable to delete pack!');
             }
 
-            // Trigger mapping changed event so the mapping gets saved across all environments
-            $this->mappingChanged($enemyPack, null);
-            $result = response()->noContent();
-        } else {
-            throw new Exception('Unable to delete pack!');
-        }
-
-        return $result;
+            return $result;
+        });
     }
 }

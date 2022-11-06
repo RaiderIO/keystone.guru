@@ -44,7 +44,6 @@ let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
  * @property {Number} enemy_forces_override
  * @property {Number} enemy_forces_override_teeming
  * @property {String} raid_marker_name
- * @property {Boolean} dangerous
  * @property {Boolean} required
  * @property {Boolean} skippable
  * @property {Number} lat
@@ -52,8 +51,8 @@ let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
  *
  * @property L.Layer layer
  */
-class Enemy extends MapObject {
-    constructor(map, layer, options = {name: 'enemy'}) {
+class Enemy extends VersionableMapObject {
+    constructor(map, layer, options = {name: 'enemy', hasRouteModelBinding: true}) {
         super(map, layer, options);
 
         this.label = 'Enemy';
@@ -67,7 +66,7 @@ class Enemy extends MapObject {
         this.active_auras = [];
 
         // MDT
-        this.mdt_id = -1;
+        this.mdt_id = null;
         this.mdt_npc_id = null;
         this.is_mdt = false;
 
@@ -159,7 +158,7 @@ class Enemy extends MapObject {
                 type: 'select',
                 admin: true,
                 values: this._getSelectNpcs.bind(this),
-                default: -1,
+                default: null,
                 live_search: true,
                 setter: function (value) {
 
@@ -202,7 +201,7 @@ class Enemy extends MapObject {
                 type: 'int',
                 admin: true,
                 // edit: false, // Not directly changeable by user
-                default: -1
+                default: null
             }),
             new Attribute({
                 name: 'mdt_npc_id',
@@ -627,7 +626,7 @@ class Enemy extends MapObject {
             this.enemy_forces_teeming = npc.enemy_forces_teeming;
         } else {
             // Not set :(
-            this.npc_id = -1;
+            this.npc_id = null;
         }
 
         this.signal('enemy:set_npc', {npc: npc});

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MakeEnemyPackIdColumnNullableInEnemiesTable extends Migration
+class MakeNpcIdColumnNullableInEnemiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class MakeEnemyPackIdColumnNullableInEnemiesTable extends Migration
     public function up()
     {
         Schema::table('enemies', function (Blueprint $table) {
-            $table->integer('enemy_pack_id')->nullable()->default(null)->change();
+            $table->integer('npc_id')->nullable()->default(null)->change();
         });
 
-        DB::update('UPDATE `enemies` SET `enemy_pack_id` = null WHERE `enemy_pack_id` = -1');
+        DB::update('UPDATE `enemies` SET `npc_id` = null WHERE `npc_id` <= 0');
     }
 
     /**
@@ -28,7 +28,7 @@ class MakeEnemyPackIdColumnNullableInEnemiesTable extends Migration
     public function down()
     {
         Schema::table('enemies', function (Blueprint $table) {
-            $table->integer('enemy_pack_id')->nullable(false)->default(-1)->change();
+            $table->integer('npc_id')->nullable(false)->default(-1)->change();
         });
     }
 }

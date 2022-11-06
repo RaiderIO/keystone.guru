@@ -43,7 +43,25 @@ class Enemy extends CacheModel implements MappingModelInterface
 {
     use Reportable;
 
-    protected $fillable = ['id', 'seasonal_type'];
+    protected $fillable = [
+        'id',
+        'mapping_version_id',
+        'floor_id',
+        'enemy_pack_id',
+        'npc_id',
+        'mdt_id',
+        'mdt_npc_id',
+        'seasonal_index',
+        'seasonal_type',
+        'teeming',
+        'faction',
+        'required',
+        'skippable',
+        'enemy_forces_override',
+        'enemy_forces_override_teeming',
+        'lat',
+        'lng',
+    ];
     public $appends = ['active_auras'];
     public $with = ['npc', 'enemyactiveauras'];
     public $hidden = ['laravel_through_key'];
@@ -70,11 +88,11 @@ class Enemy extends CacheModel implements MappingModelInterface
     ];
 
     const TEEMING_VISIBLE = 'visible';
-    const TEEMING_HIDDEN = 'hidden';
+    const TEEMING_HIDDEN  = 'hidden';
 
     const TEEMING_ALL = [
         self::TEEMING_VISIBLE,
-        self::TEEMING_HIDDEN
+        self::TEEMING_HIDDEN,
     ];
 
     /**

@@ -24,7 +24,7 @@ class AdminEnemy extends Enemy {
 
         // When we're synced, connect to our connected enemy
         this.register(['shown', 'hidden'], this, function (hiddenEvent) {
-            if (self.mdt_id > 0) {
+            if (self.mdt_id !== null) {
                 if (hiddenEvent.data.visible && getState().getMdtMappingModeEnabled()) {
                     self.redrawConnectionToMDTEnemy();
                 } else {
@@ -127,7 +127,7 @@ class AdminEnemy extends Enemy {
 
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             // We're an enemy, we need to find an MDT enemy instead
-            if (!this.is_mdt && this.mdt_id > 0) {
+            if (!this.is_mdt && this.mdt_id !== null) {
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
@@ -167,7 +167,7 @@ class AdminEnemy extends Enemy {
      */
     detachConnectedEnemy() {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
-        this.mdt_id = -1;
+        this.mdt_id = null;
         this._connectedEnemy = null;
     }
 

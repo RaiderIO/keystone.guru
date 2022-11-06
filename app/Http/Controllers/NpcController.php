@@ -43,7 +43,7 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        $oldId = -1;
+        $oldId = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
@@ -95,7 +95,7 @@ class NpcController extends Controller
             }
 
 
-            if ($oldId > 0) {
+            if ($oldId !== null) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
 
@@ -128,7 +128,7 @@ class NpcController extends Controller
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
-        } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
+        } // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else {
             abort(500, 'Unable to save npc!');
         }

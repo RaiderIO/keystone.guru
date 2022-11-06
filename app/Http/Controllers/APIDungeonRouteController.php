@@ -147,7 +147,7 @@ class APIDungeonRouteController extends Controller
                 // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
                 $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
-                if (!$team->members->contains($user->id)) {
+                if (!$team->isUserMember($user)) {
                     abort(403, 'Unauthorized');
                 }
 

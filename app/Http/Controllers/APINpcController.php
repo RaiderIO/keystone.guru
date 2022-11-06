@@ -39,8 +39,8 @@ class APINpcController extends Controller
     }
 
     /**
-     * @param $request
-     * @return array|mixed
+     * @param Request $request
+     * @return array
      * @throws \Exception
      */
     public function list(Request $request)
