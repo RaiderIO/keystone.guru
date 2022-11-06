@@ -243,7 +243,6 @@ class Save extends Command
             foreach ($demoRoute->mapicons as $item) {
                 $item->load(['linkedawakenedobelisks']);
                 $item->setVisible([
-                    'mapping_version_id',
                     'floor_id',
                     'map_icon_type_id',
                     'lat',
