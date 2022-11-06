@@ -86,7 +86,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                 let mapIcon = mapIconMapObjectGroup.objects[key];
 
                 // 10 = dungeon start
-                if (mapIcon.floor_id === currentFloorId && mapIcon.map_icon_type_id === 10) {
+                if (mapIcon.floor_id === currentFloorId && mapIcon.map_icon_type_id === MAP_ICON_TYPE_DUNGEON_START_ID) {
                     dungeonStartOffset++;
                     dungeonStartLatLng = mapIcon.layer.getLatLng();
                     break;

@@ -65,7 +65,7 @@ class ExportString extends MDTBase
                     2 => $mdtCoordinates['y'],
                     3 => $mapIcon->floor->index,
                     4 => true,
-                    5 => $mapIcon->comment,
+                    5 => $mapIcon->comment ?? '',
                 ],
             ];
         }
@@ -255,7 +255,7 @@ class ExportString extends MDTBase
                     $fixedMapIconComment = false;
 
                     foreach ($this->dungeonRoute->mapicons as $mapicon) {
-                        $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment);
+                        $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment ?? '');
                         if ($asciiComment !== $mapicon->comment) {
                             $warnings->push(
                                 new ImportWarning(__('logic.mdt.io.export_string.category.map_icon'),

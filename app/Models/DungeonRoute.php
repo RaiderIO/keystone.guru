@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
@@ -72,6 +73,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Carbon $published_at
  * @property Carbon $expires_at
  *
+ * @property MappingVersion $mappingVersion
  * @property Dungeon $dungeon
  * @property Path $route
  * @property Faction $faction
@@ -149,9 +151,17 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function dungeon(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Dungeon');
+        return $this->belongsTo(Dungeon::class);
     }
 
     /**
@@ -159,7 +169,7 @@ class DungeonRoute extends Model
      */
     public function brushlines(): HasMany
     {
-        return $this->hasMany('App\Models\Brushline');
+        return $this->hasMany(Brushline::class);
     }
 
     /**
@@ -167,7 +177,7 @@ class DungeonRoute extends Model
      */
     public function paths(): HasMany
     {
-        return $this->hasMany('App\Models\Path');
+        return $this->hasMany(Path::class);
     }
 
     /**
@@ -175,7 +185,7 @@ class DungeonRoute extends Model
      */
     public function faction(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Faction');
+        return $this->belongsTo(Faction::class);
     }
 
     /**
@@ -183,7 +193,7 @@ class DungeonRoute extends Model
      */
     public function author(): BelongsTo
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -191,7 +201,7 @@ class DungeonRoute extends Model
      */
     public function specializations(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\CharacterClassSpecialization', 'dungeon_route_player_specializations');
+        return $this->belongsToMany(CharacterClassSpecialization::class, 'dungeon_route_player_specializations');
     }
 
     /**
@@ -199,7 +209,7 @@ class DungeonRoute extends Model
      */
     public function playerspecializations(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerSpecialization');
+        return $this->hasMany(DungeonRoutePlayerSpecialization::class);
     }
 
     /**
@@ -207,7 +217,7 @@ class DungeonRoute extends Model
      */
     public function routeattributesraw(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRouteAttribute');
+        return $this->hasMany(DungeonRouteAttribute::class);
     }
 
     /**
@@ -215,7 +225,7 @@ class DungeonRoute extends Model
      */
     public function classes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\CharacterClass', 'dungeon_route_player_classes');
+        return $this->belongsToMany(CharacterClass::class, 'dungeon_route_player_classes');
     }
 
     /**
@@ -223,7 +233,7 @@ class DungeonRoute extends Model
      */
     public function playerclasses(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerClass');
+        return $this->hasMany(DungeonRoutePlayerClass::class);
     }
 
     /**
@@ -231,7 +241,7 @@ class DungeonRoute extends Model
      */
     public function races(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
+        return $this->belongsToMany(CharacterRace::class, 'dungeon_route_player_races');
     }
 
     /**
@@ -239,7 +249,7 @@ class DungeonRoute extends Model
      */
     public function playerraces(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+        return $this->hasMany(DungeonRoutePlayerRace::class);
     }
 
     /**
@@ -247,7 +257,7 @@ class DungeonRoute extends Model
      */
     public function affixgroups(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRouteAffixGroup');
+        return $this->hasMany(DungeonRouteAffixGroup::class);
     }
 
     /**
@@ -255,7 +265,7 @@ class DungeonRoute extends Model
      */
     public function affixes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'dungeon_route_affix_groups');
+        return $this->belongsToMany(AffixGroup::class, 'dungeon_route_affix_groups');
     }
 
     /**
@@ -263,7 +273,7 @@ class DungeonRoute extends Model
      */
     public function killzones(): HasMany
     {
-        return $this->hasMany('App\Models\KillZone')->orderBy('index');
+        return $this->hasMany(KillZone::class)->orderBy('index');
     }
 
     /**
@@ -271,7 +281,7 @@ class DungeonRoute extends Model
      */
     public function pridefulenemies(): HasMany
     {
-        return $this->hasMany('App\Models\Enemies\PridefulEnemy');
+        return $this->hasMany(PridefulEnemy::class);
     }
 
     /**
@@ -279,7 +289,7 @@ class DungeonRoute extends Model
      */
     public function publishedstate(): BelongsTo
     {
-        return $this->belongsTo('App\Models\PublishedState', 'published_state_id');
+        return $this->belongsTo(PublishedState::class, 'published_state_id');
     }
 
     /**
@@ -287,7 +297,7 @@ class DungeonRoute extends Model
      */
     public function ratings(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRouteRating');
+        return $this->hasMany(DungeonRouteRating::class);
     }
 
     /**
@@ -295,7 +305,7 @@ class DungeonRoute extends Model
      */
     public function favorites(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRouteFavorite');
+        return $this->hasMany(DungeonRouteFavorite::class);
     }
 
     /**
@@ -303,7 +313,7 @@ class DungeonRoute extends Model
      */
     public function livesessions(): HasMany
     {
-        return $this->hasMany('App\Models\LiveSession');
+        return $this->hasMany(LiveSession::class);
     }
 
     /**
@@ -311,7 +321,7 @@ class DungeonRoute extends Model
      */
     public function enemyraidmarkers(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRouteEnemyRaidMarker');
+        return $this->hasMany(DungeonRouteEnemyRaidMarker::class);
     }
 
     /**
@@ -319,7 +329,7 @@ class DungeonRoute extends Model
      */
     public function mapicons(): HasMany
     {
-        return $this->hasMany('App\Models\MapIcon');
+        return $this->hasMany(MapIcon::class);
     }
 
     /**
@@ -327,7 +337,7 @@ class DungeonRoute extends Model
      */
     public function routeattributes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\RouteAttribute', 'dungeon_route_attributes');
+        return $this->belongsToMany(RouteAttribute::class, 'dungeon_route_attributes');
     }
 
     /**
@@ -335,7 +345,7 @@ class DungeonRoute extends Model
      */
     public function pageviews(): HasMany
     {
-        return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
+        return $this->hasMany(PageView::class, 'model_id')->where('model_class', get_class($this));
     }
 
     /**
@@ -344,7 +354,7 @@ class DungeonRoute extends Model
     public function mdtImport(): HasMany
     {
         // Only set if the route was imported through an MDT string
-        return $this->hasMany('App\Models\MDTImport');
+        return $this->hasMany(MDTImport::class);
     }
 
     /**
@@ -352,7 +362,7 @@ class DungeonRoute extends Model
      */
     function team(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Team');
+        return $this->belongsTo(Team::class);
     }
 
     /**

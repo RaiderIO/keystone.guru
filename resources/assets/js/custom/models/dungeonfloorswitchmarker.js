@@ -241,7 +241,7 @@ class DungeonFloorSwitchMarker extends Icon {
     }
 
     toString() {
-        return `Floor switcher (${this.comment.substring(0, 25)})`;
+        return `Floor switcher (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
     }
 
     cleanup() {

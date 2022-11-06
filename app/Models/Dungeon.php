@@ -454,7 +454,7 @@ class Dungeon extends CacheModel
      */
     public function mapicons(): HasManyThrough
     {
-        return $this->hasManyThrough(MapIcon::class, Floor::class)->where('dungeon_route_id', -1);
+        return $this->hasManyThrough(MapIcon::class, Floor::class)->whereNull('dungeon_route_id');
     }
 
     /**

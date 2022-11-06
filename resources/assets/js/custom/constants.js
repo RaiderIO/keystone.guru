@@ -126,6 +126,7 @@ const EXPANSION_SHADOWLANDS = 'shadowlands';
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
 
 // Teeming states
 const TEEMING_VISIBLE = 'visible';

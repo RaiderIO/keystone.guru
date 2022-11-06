@@ -20,7 +20,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
-        parent::__construct($dungeonRoute, $floor);
+        parent::__construct($dungeonRoute, $floor, $dungeonRoute->mappingVersion);
     }
 
     public function getType(): string

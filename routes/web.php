@@ -406,7 +406,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
-                Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'adminDelete']);
+                Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminStore']);
+                Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminDelete']);
 
                 Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
                 Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
@@ -432,7 +433,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::delete('/killzone', [APIKillZoneController::class, 'deleteAll']);
 
             Route::post('/mapicon', [APIMapIconController::class, 'store']);
-            Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'delete']);
+            Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'store']);
+            Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'delete']);
 
             Route::post('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'store']);
             Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);

@@ -49,6 +49,11 @@ class MappingVersionConditional implements ConditionalInterface
             throw new Exception(sprintf('Unable to find dungeon in model data! %s', json_encode($modelData)));
         }
 
+        // Initial import of mapping that does not have mapping versions yet..
+        if (!isset($modelData['mapping_version_id'])) {
+            return true;
+        }
+
         $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
 
         // Only import this model if it's a version upgrade

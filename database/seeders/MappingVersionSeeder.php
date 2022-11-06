@@ -37,6 +37,7 @@ class MappingVersionSeeder extends Seeder
         // elements that need a mapping version to continue
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
+            $this->command->info(sprintf('- Dungeon %s', __($dungeon->name)));
             $mappingVersion = MappingVersion::create([
                 'dungeon_id' => $dungeon->id,
                 'version'    => 1,
