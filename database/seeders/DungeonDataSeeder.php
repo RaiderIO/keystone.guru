@@ -120,19 +120,6 @@ class DungeonDataSeeder extends Seeder
             }
         }
 
-        $this->command->info('Coupling dungeon routes to latest mapping version.. ');
-        // Temp - but assign the proper mapping versions to all routes (this is slowish but simplest to get the job done, just once)
-        DungeonRoute::with(['dungeon'])
-            ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
-            ->whereNull('mapping_version_id')
-            ->chunk(100, function (Collection $dungeonRoutes) {
-                /** @var Collection|DungeonRoute[] $dungeonRoutes */
-                foreach ($dungeonRoutes as $dungeonRoute) {
-                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->getCurrentMappingVersion()->id;
-                    $dungeonRoute->save();
-                }
-            });
-
         Stopwatch::dumpAll();
     }
 

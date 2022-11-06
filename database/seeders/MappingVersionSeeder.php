@@ -3,9 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use Artisan;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 /**
  * The Mapping Versions are loaded from mapping_versions.json using the DungeonDataSeeder after this initial seed.
@@ -38,42 +41,63 @@ class MappingVersionSeeder extends Seeder
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
             $this->command->info(sprintf('- Dungeon %s', __($dungeon->name)));
-            $mappingVersion = MappingVersion::create([
+            // Insert - not create. Skip all the boot static things - those will mess this up
+            $mappingVersionId = MappingVersion::insertGetId([
                 'dungeon_id' => $dungeon->id,
                 'version'    => 1,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
             $this->command->comment(sprintf('- Created new mapping version for %s', __($dungeon->name)));
 
             $updatedDungeonFloorSwitchMarkers = $dungeon->dungeonfloorswitchmarkers()->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d dungeon floor switch markers', $updatedDungeonFloorSwitchMarkers));
 
             $updatedEnemies = $dungeon->enemies()->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemies', $updatedEnemies));
 
             $updatedEnemyPacks = $dungeon->enemypacks()->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy packs', $updatedEnemyPacks));
 
             $updatedEnemyPatrols = $dungeon->enemypatrols()->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy patrols', $updatedEnemyPatrols));
 
             // Only the map icons that are related to a mapping
             $updatedMapIcons = $dungeon->mapicons()->where('dungeon_route_id', -1)->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d map icons', $updatedMapIcons));
 
             $updatedMountableAreas = $dungeon->mountableareas()->update([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d mountable areas', $updatedMountableAreas));
         }
+
+        $this->command->info('Coupling dungeon routes to latest mapping version.. ');
+        $count = 0;
+        // Temp - but assign the proper mapping versions to all routes (this is slowish but simplest to get the job done, just once)
+        DungeonRoute::with(['dungeon'])
+            ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+            ->whereNull('mapping_version_id')
+            ->chunk(100, function (Collection $dungeonRoutes) use ($count) {
+                /** @var Collection|DungeonRoute[] $dungeonRoutes */
+                foreach ($dungeonRoutes as $dungeonRoute) {
+                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->getCurrentMappingVersion()->id;
+                    $dungeonRoute->save();
+                }
+
+                $count += $dungeonRoutes->count();
+
+                $this->command->info(sprintf('- Processed %d dungeon routes...', $count));
+            });
     }
 }
