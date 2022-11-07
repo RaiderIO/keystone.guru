@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Traits;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
@@ -24,17 +25,18 @@ trait ListsEnemies
     /**
      * Lists all enemies for a specific floor.
      *
-     * @param int $dungeonId
+     * @param MappingVersion $mappingVersion
      * @param bool $showMdtEnemies
      * @return array|bool
      * @throws InvalidArgumentException
      */
-    function listEnemies(int $dungeonId, bool $showMdtEnemies = false)
+    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false)
     {
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
             ->join('floors', 'enemies.floor_id', '=', 'floors.id')
-            ->where('floors.dungeon_id', $dungeonId)
+            ->where('floors.dungeon_id', $mappingVersion->dungeon_id)
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->get();
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
@@ -50,10 +52,10 @@ trait ListsEnemies
         $mdtEnemies = collect();
         if ($showMdtEnemies) {
             try {
-                $dungeon    = Dungeon::findOrFail($dungeonId);
+                $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
                 $mdtEnemies = (new MDTDungeon($dungeon->key))->getClonesAsEnemies($dungeon->floors);
 
-                $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy){
+                $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy) {
                     return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);
                 });
 
@@ -81,7 +83,8 @@ trait ListsEnemies
                     $mdtEnemy->mdt_id === $enemy->mdt_id &&
                     $mdtEnemy->npc_id === $enemy->getMdtNpcId()) {
                     // Match found, assign and quit
-                    $mdtEnemy->enemy_id = $enemy->id;
+                    $mdtEnemy->mapping_version_id = $enemy->mapping_version_id;
+                    $mdtEnemy->enemy_id           = $enemy->id;
                     break;
                 }
             }

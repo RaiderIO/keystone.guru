@@ -25,9 +25,9 @@ abstract class MapContext
     /** @var Model */
     protected Model $context;
     /** @var Floor */
-    private Floor $floor;
+    protected Floor $floor;
     /** @var MappingVersion */
-    private MappingVersion $mappingVersion;
+    protected MappingVersion $mappingVersion;
 
     function __construct(Model $context, Floor $floor, MappingVersion $mappingVersion)
     {
@@ -94,7 +94,7 @@ abstract class MapContext
         $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth();
 
         // Prevent the values being exactly the same, which causes issues in the front end
-        if( $npcMaxHealth <= $npcMinHealth  ) {
+        if ($npcMaxHealth <= $npcMinHealth) {
             $npcMaxHealth = $npcMinHealth + 1;
         }
 

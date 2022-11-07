@@ -41,6 +41,9 @@ class MappingVersionConditional implements ConditionalInterface
      */
     public function shouldParseModel(RelationMapping $relationMapping, array $modelData): bool
     {
+        // This class no longer seems necessary - we always truncate and re-populate the seed
+        return true;
+
         if (isset($modelData['dungeon_id'])) {
             $dungeon = $this->getDungeonById($modelData['dungeon_id']);
         } else if (isset($modelData['floor_id'])) {

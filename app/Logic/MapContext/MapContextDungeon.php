@@ -51,7 +51,7 @@ class MapContextDungeon extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->context->id, true);
+        return $this->listEnemies($this->mappingVersion, true);
     }
 
     public function getEchoChannelName(): string

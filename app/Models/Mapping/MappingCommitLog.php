@@ -17,5 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MappingCommitLog extends Model
 {
-
+    protected $fillable = [
+        'id',
+        'merged',
+        'updated_at',
+        'created_at'
+    ];
 }

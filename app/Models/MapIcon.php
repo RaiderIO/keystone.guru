@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -29,8 +31,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model implements MappingModelInterface
+class MapIcon extends Model implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
     use HasLinkedAwakenedObelisk;
 
     protected $visible = ['id', 'mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];

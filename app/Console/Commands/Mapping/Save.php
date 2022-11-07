@@ -4,15 +4,11 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\EnemyPack;
-use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\MapIcon;
+use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
-use App\Models\MountableArea;
 use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
@@ -53,6 +49,7 @@ class Save extends Command
         $dungeonDataDir = database_path('/seeders/dungeondata/');
 
         $this->saveMappingVersions($dungeonDataDir);
+        $this->saveMappingCommitLogs($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
@@ -90,6 +87,25 @@ class Save extends Command
             $mappingVersions->toArray(),
             $dungeonDataDir,
             'mapping_versions.json'
+        );
+    }
+
+    /**
+     * @param string $dungeonDataDir
+     */
+    private function saveMappingCommitLogs(string $dungeonDataDir)
+    {
+        // Save NPC data in the root of folder
+        $this->info('Saving mapping commit logs');
+
+        // Save all mapping versions
+        $mappingVersions = MappingCommitLog::all()
+            ->makeVisible(['created_at', 'updated_at']);
+
+        $this->saveDataToJsonFile(
+            $mappingVersions->toArray(),
+            $dungeonDataDir,
+            'mapping_commit_logs.json'
         );
     }
 

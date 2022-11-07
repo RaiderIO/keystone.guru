@@ -42,7 +42,7 @@ class MapContextLiveSession extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->context->dungeonroute->dungeon->id, false);
+        return $this->listEnemies($this->mappingVersion, false);
     }
 
     public function getEchoChannelName(): string

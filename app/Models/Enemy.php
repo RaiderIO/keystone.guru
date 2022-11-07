@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,8 +43,9 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel implements MappingModelInterface
+class Enemy extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
     use Reportable;
 
     protected $fillable = [

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
@@ -20,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements MappingModelInterface
+class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
     public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
     protected $fillable = [
@@ -29,7 +32,7 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface
         'floor_id',
         'polyline_id',
         'teeming',
-        'faction'
+        'faction',
     ];
     public $with = ['polyline'];
     public $timestamps = false;
@@ -59,6 +62,26 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface
     {
         return $this->floor->dungeon_id;
     }
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    {
+        /** @var Model|MappingModelInterface $clone */
+        $clone                     = clone $this;
+        $clone->exists             = false;
+        $clone->id                 = null;
+        $clone->mapping_version_id = $mappingVersion->id;
+        $clone->save();
+
+        $this->polyline->cloneForNewMappingVersion($mappingVersion, $clone);
+
+        return $clone;
+    }
+
 
     public static function boot()
     {

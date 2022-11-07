@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,8 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel implements MappingModelInterface
+class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
+
     public $timestamps = false;
     public $fillable = [
         'floor_id',

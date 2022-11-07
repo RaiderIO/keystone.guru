@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,8 +22,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterface
+class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
+
     protected $appends = ['direction'];
     protected $hidden = ['floor', 'targetfloor', 'laravel_through_key'];
     protected $fillable = [

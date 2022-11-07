@@ -136,7 +136,7 @@ class MappingVersion extends Model
             // We must get the previous mapping version - that contains the mapping we want to clone
             $previousMappingVersion = $existingMappingVersions[1];
 
-            /** @var Collection|Model[] $previousMapping */
+            /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->enemies)
@@ -145,18 +145,44 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->mapIcons)
                 ->merge($previousMappingVersion->mountableAreas);
 
+            $idMapping = collect([
+                DungeonFloorSwitchMarker::class => collect(),
+                Enemy::class                    => collect(),
+                EnemyPack::class                => collect(),
+                EnemyPatrol::class              => collect(),
+                MapIcon::class                  => collect(),
+                MountableArea::class            => collect(),
+            ]);
+
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
-                /** @var $model MappingModelInterface */
-                $model->exists             = false;
-                $model->id                 = null;
-                $model->mapping_version_id = $newMappingVersion->id;
-                $model->save();
+                $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
+
+                $idMapping->get(get_class($model))->push([
+                    'oldModel' => $model,
+                    'newModel' => $newModel,
+                ]);
+            }
+
+            // Change enemy packs of new enemies
+            foreach ($idMapping->get(Enemy::class) as $enemyRelationCoupling) {
+                /** @var array{oldModel: Enemy, newModel: Enemy} $enemyRelationCoupling */
+                $oldEnemyPackId = $enemyRelationCoupling['oldModel']->enemy_pack_id;
+
+                // Find the new ID of the pack
+                foreach ($idMapping->get(EnemyPack::class) as $enemyPackRelationCoupling) {
+                    /** @var array{oldModel: EnemyPack, newModel: EnemyPack} $enemyPackRelationCoupling */
+                    if ($enemyPackRelationCoupling['oldModel']->id === $oldEnemyPackId) {
+                        $enemyRelationCoupling['newModel']->enemy_pack_id = $enemyPackRelationCoupling['newModel']->id;
+                        $enemyRelationCoupling['newModel']->save();
+                        break;
+                    }
+                }
             }
         });
 
         // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
-        static::deleting(function(MappingVersion $mappingVersion){
+        static::deleting(function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
             $mappingVersion->enemyPacks()->delete();
