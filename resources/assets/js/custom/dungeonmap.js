@@ -23,7 +23,15 @@ class DungeonMap extends Signalable {
                 this.options.readonly = true;
             }
         } else if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
-            // @TODO show user option to upgrade mapping version of their route
+            let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
+
+            let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                'upgrade_url': 'https://google.com'
+            });
+
+            state.addSnackbar(template(data));
+
+            this.options.readonly = true;
         }
 
         // Apply the map to our state first thing

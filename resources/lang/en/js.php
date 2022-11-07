@@ -187,6 +187,8 @@ return [
     'dungeonroute_refresh_thumbnail_success'      => 'Thumbnail refresh queued successfully',
     'updated_patreon_benefits_successfully_label' => 'Patreon benefits updated successfully',
     'mapping_version_readonly_label'              => 'This mapping version is read-only',
+    'mapping_version_upgrade_label'               => 'A new mapping version is available for your route.',
+    'upgrade_label'                               => 'Upgrade',
 
     'classification_label' => 'Classification',
     'edit_label'           => 'Edit',
