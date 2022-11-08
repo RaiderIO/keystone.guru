@@ -29,10 +29,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 2,
@@ -71,7 +71,8 @@
                         "floor2_id": 3,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 3,
@@ -99,7 +100,8 @@
                         "floor2_id": 4,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 4,
@@ -127,7 +129,8 @@
                         "floor2_id": 5,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 5,
@@ -155,7 +158,8 @@
                         "floor2_id": 6,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 6,
@@ -183,7 +187,8 @@
                         "floor2_id": 7,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 7,
@@ -205,10 +210,10 @@
                         "floor2_id": 6,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 3,
@@ -240,7 +245,8 @@
                 "ingame_max_x": -302.5,
                 "ingame_max_y": 2839.06,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 9,
@@ -255,7 +261,8 @@
                 "ingame_max_x": -365,
                 "ingame_max_y": 2778.44,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 10,
@@ -270,7 +277,8 @@
                 "ingame_max_x": -352.5,
                 "ingame_max_y": 2779.56,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 11,
@@ -285,7 +293,8 @@
                 "ingame_max_x": -410,
                 "ingame_max_y": 2751.78,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 12,
@@ -300,10 +309,10 @@
                 "ingame_max_x": -480,
                 "ingame_max_y": 2660.03,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 4,
@@ -335,10 +344,10 @@
                 "ingame_max_x": 1470.83,
                 "ingame_max_y": 3887.5,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 5,
@@ -370,10 +379,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 6,
@@ -405,10 +414,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 7,
@@ -447,7 +456,8 @@
                         "floor2_id": 16,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 16,
@@ -475,7 +485,8 @@
                         "floor2_id": 18,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 18,
@@ -497,10 +508,10 @@
                         "floor2_id": 16,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 8,
@@ -551,7 +562,8 @@
                         "floor2_id": 20,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 20,
@@ -579,7 +591,8 @@
                         "floor2_id": 21,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 21,
@@ -619,7 +632,8 @@
                         "floor2_id": 22,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 22,
@@ -653,7 +667,8 @@
                         "floor2_id": 21,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 23,
@@ -687,7 +702,8 @@
                         "floor2_id": 22,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 24,
@@ -721,10 +737,10 @@
                         "floor2_id": 23,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 9,
@@ -763,7 +779,8 @@
                         "floor2_id": 26,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 26,
@@ -791,7 +808,8 @@
                         "floor2_id": 27,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 27,
@@ -813,10 +831,10 @@
                         "floor2_id": 26,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 10,
@@ -848,10 +866,10 @@
                 "ingame_max_x": 3329.17,
                 "ingame_max_y": 2266.67,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 11,
@@ -890,7 +908,8 @@
                         "floor2_id": 30,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 30,
@@ -918,7 +937,8 @@
                         "floor2_id": 31,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 31,
@@ -946,7 +966,8 @@
                         "floor2_id": 32,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 32,
@@ -974,7 +995,8 @@
                         "floor2_id": 33,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 33,
@@ -1002,7 +1024,8 @@
                         "floor2_id": 34,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 34,
@@ -1030,7 +1053,8 @@
                         "floor2_id": 35,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 35,
@@ -1058,7 +1082,8 @@
                         "floor2_id": 36,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 36,
@@ -1080,10 +1105,10 @@
                         "floor2_id": 35,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 12,
@@ -1115,10 +1140,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 13,
@@ -1157,7 +1182,8 @@
                         "floor2_id": 39,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 39,
@@ -1185,7 +1211,8 @@
                         "floor2_id": 40,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 40,
@@ -1207,10 +1234,10 @@
                         "floor2_id": 39,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 14,
@@ -1249,7 +1276,8 @@
                         "floor2_id": 42,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 42,
@@ -1271,10 +1299,10 @@
                         "floor2_id": 41,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 15,
@@ -1306,10 +1334,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 16,
@@ -1341,10 +1369,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 17,
@@ -1383,7 +1411,8 @@
                         "floor2_id": 46,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 46,
@@ -1405,10 +1434,10 @@
                         "floor2_id": 45,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 18,
@@ -1440,10 +1469,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 19,
@@ -1482,7 +1511,8 @@
                         "floor2_id": 49,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 49,
@@ -1504,10 +1534,10 @@
                         "floor2_id": 48,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 20,
@@ -1539,10 +1569,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 21,
@@ -1581,7 +1611,8 @@
                         "floor2_id": 52,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 52,
@@ -1603,10 +1634,10 @@
                         "floor2_id": 51,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 22,
@@ -1645,7 +1676,8 @@
                         "floor2_id": 54,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 54,
@@ -1673,7 +1705,8 @@
                         "floor2_id": 55,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 55,
@@ -1701,7 +1734,8 @@
                         "floor2_id": 56,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 56,
@@ -1729,7 +1763,8 @@
                         "floor2_id": 57,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 57,
@@ -1757,7 +1792,8 @@
                         "floor2_id": 58,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 58,
@@ -1785,7 +1821,8 @@
                         "floor2_id": 59,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 59,
@@ -1807,10 +1844,10 @@
                         "floor2_id": 58,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 23,
@@ -1855,7 +1892,8 @@
                         "floor2_id": 62,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 61,
@@ -1877,7 +1915,8 @@
                         "floor2_id": 60,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 62,
@@ -1905,7 +1944,8 @@
                         "floor2_id": 63,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 63,
@@ -1933,7 +1973,8 @@
                         "floor2_id": 64,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 64,
@@ -1955,10 +1996,10 @@
                         "floor2_id": 63,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 24,
@@ -1997,7 +2038,8 @@
                         "floor2_id": 66,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 66,
@@ -2019,10 +2061,10 @@
                         "floor2_id": 65,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 25,
@@ -2061,7 +2103,8 @@
                         "floor2_id": 68,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 68,
@@ -2089,7 +2132,8 @@
                         "floor2_id": 69,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 69,
@@ -2111,10 +2155,10 @@
                         "floor2_id": 68,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 26,
@@ -2153,7 +2197,8 @@
                         "floor2_id": 71,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 71,
@@ -2175,10 +2220,10 @@
                         "floor2_id": 70,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 27,
@@ -2210,10 +2255,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 28,
@@ -2264,7 +2309,8 @@
                         "floor2_id": 76,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 74,
@@ -2286,7 +2332,8 @@
                         "floor2_id": 73,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 75,
@@ -2308,7 +2355,8 @@
                         "floor2_id": 73,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 76,
@@ -2330,10 +2378,10 @@
                         "floor2_id": 73,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 29,
@@ -2372,7 +2420,8 @@
                         "floor2_id": 78,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 78,
@@ -2400,7 +2449,8 @@
                         "floor2_id": 79,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 79,
@@ -2422,10 +2472,10 @@
                         "floor2_id": 78,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 30,
@@ -2457,10 +2507,10 @@
                 "ingame_max_x": -6741.67,
                 "ingame_max_y": 3047.92,
                 "percentage_display_zoom": 2,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 31,
@@ -2499,7 +2549,8 @@
                         "floor2_id": 82,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 82,
@@ -2521,10 +2572,10 @@
                         "floor2_id": 81,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 32,
@@ -2563,7 +2614,8 @@
                         "floor2_id": 84,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 84,
@@ -2585,10 +2637,10 @@
                         "floor2_id": 83,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 33,
@@ -2627,7 +2679,8 @@
                         "floor2_id": 86,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 86,
@@ -2655,7 +2708,8 @@
                         "floor2_id": 87,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 87,
@@ -2683,7 +2737,8 @@
                         "floor2_id": 88,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 88,
@@ -2705,10 +2760,10 @@
                         "floor2_id": 87,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 34,
@@ -2747,7 +2802,8 @@
                         "floor2_id": 90,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 90,
@@ -2775,7 +2831,8 @@
                         "floor2_id": 91,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 91,
@@ -2797,10 +2854,10 @@
                         "floor2_id": 90,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 35,
@@ -2839,7 +2896,8 @@
                         "floor2_id": 93,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 93,
@@ -2873,7 +2931,8 @@
                         "floor2_id": 96,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 94,
@@ -2895,7 +2954,8 @@
                         "floor2_id": 93,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 96,
@@ -2923,7 +2983,8 @@
                         "floor2_id": 95,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 95,
@@ -2951,10 +3012,10 @@
                         "floor2_id": 96,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 36,
@@ -3005,7 +3066,8 @@
                         "floor2_id": 104,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 102,
@@ -3027,7 +3089,8 @@
                         "floor2_id": 101,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 103,
@@ -3049,7 +3112,8 @@
                         "floor2_id": 101,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 104,
@@ -3071,10 +3135,10 @@
                         "floor2_id": 101,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 37,
@@ -3113,7 +3177,8 @@
                         "floor2_id": 98,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 98,
@@ -3141,7 +3206,8 @@
                         "floor2_id": 99,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 99,
@@ -3169,7 +3235,8 @@
                         "floor2_id": 100,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 100,
@@ -3191,10 +3258,10 @@
                         "floor2_id": 99,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 38,
@@ -3212,8 +3279,7 @@
         "timer_max_seconds": 1800,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 39,
@@ -3231,8 +3297,7 @@
         "timer_max_seconds": 1800,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 40,
@@ -3264,10 +3329,10 @@
                 "ingame_max_x": 7082.5,
                 "ingame_max_y": -200,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 41,
@@ -3306,7 +3371,8 @@
                         "floor2_id": 107,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 107,
@@ -3334,7 +3400,8 @@
                         "floor2_id": 108,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 108,
@@ -3362,7 +3429,8 @@
                         "floor2_id": 109,
                         "direction": "left"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 109,
@@ -3384,10 +3452,10 @@
                         "floor2_id": 108,
                         "direction": "right"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 42,
@@ -3419,10 +3487,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 43,
@@ -3454,7 +3522,8 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 112,
@@ -3482,7 +3551,8 @@
                         "floor2_id": 113,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 113,
@@ -3504,10 +3574,10 @@
                         "floor2_id": 112,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 44,
@@ -3546,7 +3616,8 @@
                         "floor2_id": 115,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 115,
@@ -3568,10 +3639,10 @@
                         "floor2_id": 114,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 45,
@@ -3603,10 +3674,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 46,
@@ -3645,7 +3716,8 @@
                         "floor2_id": 118,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 118,
@@ -3667,10 +3739,10 @@
                         "floor2_id": 117,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 47,
@@ -3702,10 +3774,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 48,
@@ -3737,10 +3809,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 49,
@@ -3772,10 +3844,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 50,
@@ -3814,7 +3886,8 @@
                         "floor2_id": 123,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 123,
@@ -3836,10 +3909,10 @@
                         "floor2_id": 122,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 51,
@@ -3871,10 +3944,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 52,
@@ -3906,10 +3979,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 53,
@@ -3948,7 +4021,8 @@
                         "floor2_id": 127,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 127,
@@ -3976,7 +4050,8 @@
                         "floor2_id": 128,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 128,
@@ -4004,7 +4079,8 @@
                         "floor2_id": 129,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 129,
@@ -4032,7 +4108,8 @@
                         "floor2_id": 130,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 130,
@@ -4054,10 +4131,10 @@
                         "floor2_id": 129,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 54,
@@ -4089,10 +4166,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 55,
@@ -4124,10 +4201,10 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": []
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 56,
@@ -4166,7 +4243,8 @@
                         "floor2_id": 134,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 134,
@@ -4194,7 +4272,8 @@
                         "floor2_id": 135,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 135,
@@ -4216,10 +4295,10 @@
                         "floor2_id": 134,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 57,
@@ -4258,7 +4337,8 @@
                         "floor2_id": 137,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 137,
@@ -4280,10 +4360,10 @@
                         "floor2_id": 136,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 58,
@@ -4301,8 +4381,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 59,
@@ -4320,8 +4399,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 60,
@@ -4372,6 +4450,98 @@
                         "floor2_id": 142,
                         "direction": "down"
                     }
+                ],
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 1,
+                        "floor_id": 138,
+                        "npc_id": 16017,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 16
+                    },
+                    {
+                        "id": 2,
+                        "floor_id": 138,
+                        "npc_id": 16018,
+                        "npc2_id": 16029,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 11
+                    },
+                    {
+                        "id": 3,
+                        "floor_id": 138,
+                        "npc_id": 16024,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 20
+                    },
+                    {
+                        "id": 4,
+                        "floor_id": 138,
+                        "npc_id": 16021,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    },
+                    {
+                        "id": 5,
+                        "floor_id": 138,
+                        "npc_id": 16020,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 12
+                    },
+                    {
+                        "id": 6,
+                        "floor_id": 138,
+                        "npc_id": 16022,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 15
+                    },
+                    {
+                        "id": 7,
+                        "floor_id": 138,
+                        "npc_id": 16025,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 7
+                    },
+                    {
+                        "id": 8,
+                        "floor_id": 138,
+                        "npc_id": 30071,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    },
+                    {
+                        "id": 9,
+                        "floor_id": 138,
+                        "npc_id": 30083,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 10
+                    }
                 ]
             },
             {
@@ -4405,6 +4575,78 @@
                         "floor1_id": 139,
                         "floor2_id": 142,
                         "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 17,
+                        "floor_id": 139,
+                        "npc_id": 15977,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 110
+                    },
+                    {
+                        "id": 18,
+                        "floor_id": 139,
+                        "npc_id": 15976,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 10
+                    },
+                    {
+                        "id": 20,
+                        "floor_id": 139,
+                        "npc_id": 15974,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 22
+                    },
+                    {
+                        "id": 21,
+                        "floor_id": 139,
+                        "npc_id": 15975,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 21
+                    },
+                    {
+                        "id": 22,
+                        "floor_id": 139,
+                        "npc_id": 15978,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 1
+                    },
+                    {
+                        "id": 23,
+                        "floor_id": 139,
+                        "npc_id": 15980,
+                        "npc2_id": 15981,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 32
+                    },
+                    {
+                        "id": 24,
+                        "floor_id": 139,
+                        "npc_id": 15979,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
                     }
                 ]
             },
@@ -4440,6 +4682,88 @@
                         "floor2_id": 142,
                         "direction": "down"
                     }
+                ],
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 25,
+                        "floor_id": 140,
+                        "npc_id": 16145,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 15
+                    },
+                    {
+                        "id": 26,
+                        "floor_id": 140,
+                        "npc_id": 16146,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 24
+                    },
+                    {
+                        "id": 27,
+                        "floor_id": 140,
+                        "npc_id": 16156,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 22
+                    },
+                    {
+                        "id": 28,
+                        "floor_id": 140,
+                        "npc_id": 16193,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
+                    },
+                    {
+                        "id": 29,
+                        "floor_id": 140,
+                        "npc_id": 16164,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 5
+                    },
+                    {
+                        "id": 30,
+                        "floor_id": 140,
+                        "npc_id": 16165,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 6
+                    },
+                    {
+                        "id": 31,
+                        "floor_id": 140,
+                        "npc_id": 16163,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 13
+                    },
+                    {
+                        "id": 32,
+                        "floor_id": 140,
+                        "npc_id": 16194,
+                        "npc2_id": 16215,
+                        "npc3_id": 16216,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 10
+                    }
                 ]
             },
             {
@@ -4473,6 +4797,78 @@
                         "floor1_id": 141,
                         "floor2_id": 142,
                         "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 10,
+                        "floor_id": 141,
+                        "npc_id": 16168,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 6
+                    },
+                    {
+                        "id": 11,
+                        "floor_id": 141,
+                        "npc_id": 16243,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 6
+                    },
+                    {
+                        "id": 12,
+                        "floor_id": 141,
+                        "npc_id": 16244,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 9
+                    },
+                    {
+                        "id": 13,
+                        "floor_id": 141,
+                        "npc_id": 16034,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 14,
+                        "floor_id": 141,
+                        "npc_id": 16036,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 10
+                    },
+                    {
+                        "id": 15,
+                        "floor_id": 141,
+                        "npc_id": 16037,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 10
+                    },
+                    {
+                        "id": 16,
+                        "floor_id": 141,
+                        "npc_id": 16236,
+                        "npc2_id": 16056,
+                        "npc3_id": 16057,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 20
                     }
                 ]
             },
@@ -4520,7 +4916,8 @@
                         "floor2_id": 143,
                         "direction": "up"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 143,
@@ -4542,10 +4939,10 @@
                         "floor2_id": 142,
                         "direction": "down"
                     }
-                ]
+                ],
+                "dungeonspeedrunrequirednpcs": []
             }
-        ],
-        "dungeonspeedrunrequirednpcs": []
+        ]
     },
     {
         "id": 61,
@@ -4563,8 +4960,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 62,
@@ -4582,8 +4978,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 63,
@@ -4601,8 +4996,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 64,
@@ -4620,8 +5014,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 65,
@@ -4639,8 +5032,7 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     },
     {
         "id": 66,
@@ -4658,7 +5050,6 @@
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
         "floor_count": 0,
-        "floors": [],
-        "dungeonspeedrunrequirednpcs": []
+        "floors": []
     }
 ]
