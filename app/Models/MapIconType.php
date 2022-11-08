@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -57,7 +58,11 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_SPELL_SHADOWMELD            = 'spell_shadowmeld';
     public const MAP_ICON_TYPE_SPELL_SHROUD_OF_CONCEALMENT = 'spell_shroud_of_concealment';
 
-    public const MAP_ICON_TYPE_ITEM_INVISIBILITY = 'item_invisibility';
+    public const MAP_ICON_TYPE_ITEM_INVISIBILITY                 = 'item_invisibility';
+    public const MAP_ICON_TYPE_ITEM_DRUMS_OF_SPEED               = 'item_drums_of_speed';
+    public const MAP_ICON_TYPE_ITEM_FREE_ACTION_POTION           = 'item_free_action_potion';
+    public const MAP_ICON_TYPE_ITEM_GLOBAL_THERMAL_SAPPER_CHARGE = 'item_global_thermal_sapper_charge';
+    public const MAP_ICON_TYPE_ITEM_ROCKET_BOOTS_XTREME          = 'item_rocket_boots_xtreme';
 
     public const MAP_ICON_TYPE_QUESTION_YELLOW = 'question_yellow';
     public const MAP_ICON_TYPE_QUESTION_BLUE   = 'question_blue';
@@ -184,6 +189,11 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_NW_ITEM_SPEAR   => 69,
 
         self::MAP_ICON_TYPE_SPELL_INCARNATION => 70,
+
+        self::MAP_ICON_TYPE_ITEM_DRUMS_OF_SPEED               => 71,
+        self::MAP_ICON_TYPE_ITEM_FREE_ACTION_POTION           => 72,
+        self::MAP_ICON_TYPE_ITEM_GLOBAL_THERMAL_SAPPER_CHARGE => 73,
+        self::MAP_ICON_TYPE_ITEM_ROCKET_BOOTS_XTREME          => 74,
     ];
 
     public $timestamps = false;
@@ -196,9 +206,9 @@ class MapIconType extends CacheModel
         'admin_only',
     ];
 
-    public function mapicons()
+    public function mapicons(): HasMany
     {
-        return $this->hasMany('App\Models\MapIcon');
+        return $this->hasMany(MapIcon::class);
     }
 
     public static function boot()
