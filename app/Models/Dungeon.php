@@ -565,7 +565,6 @@ class Dungeon extends CacheModel
         return $seasonService->getCurrentSeason($this->expansion);
     }
 
-
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      */

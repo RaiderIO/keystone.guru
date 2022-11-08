@@ -1,0 +1,27 @@
+{
+    "id": 145,
+    "release_changelog_id": 152,
+    "version": "v5.3",
+    "title": "Added Naxxramas mapping",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-11-08T20:46:47+00:00",
+    "updated_at": "2022-11-08T20:46:47+00:00",
+    "changelog": {
+        "id": 152,
+        "release_id": 145,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 152,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1405,
+                "change": "Added Naxxramas (many thanks to Cosmophile for adding it!)",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}

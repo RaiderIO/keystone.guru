@@ -58,7 +58,11 @@ class MapIconTypesSeeder extends Seeder
             MapIconType::MAP_ICON_TYPE_SPELL_SHADOWMELD            => ['name' => 'mapicontypes.spell_shadowmeld'],
             MapIconType::MAP_ICON_TYPE_SPELL_SHROUD_OF_CONCEALMENT => ['name' => 'mapicontypes.spell_shroud_of_concealment'],
 
-            MapIconType::MAP_ICON_TYPE_ITEM_INVISIBILITY => ['name' => 'mapicontypes.item_invisibility'],
+            MapIconType::MAP_ICON_TYPE_ITEM_INVISIBILITY                 => ['name' => 'mapicontypes.item_invisibility'],
+            MapIconType::MAP_ICON_TYPE_ITEM_DRUMS_OF_SPEED               => ['name' => 'mapicontypes.item_drums_of_speed'],
+            MapIconType::MAP_ICON_TYPE_ITEM_FREE_ACTION_POTION           => ['name' => 'mapicontypes.item_free_action_potion'],
+            MapIconType::MAP_ICON_TYPE_ITEM_GLOBAL_THERMAL_SAPPER_CHARGE => ['name' => 'mapicontypes.item_global_thermal_sapper_charge'],
+            MapIconType::MAP_ICON_TYPE_ITEM_ROCKET_BOOTS_XTREME          => ['name' => 'mapicontypes.item_rocket_boots_xtreme'],
 
             MapIconType::MAP_ICON_TYPE_QUESTION_YELLOW => ['name' => 'mapicontypes.question_yellow'],
             MapIconType::MAP_ICON_TYPE_QUESTION_BLUE   => ['name' => 'mapicontypes.question_blue'],

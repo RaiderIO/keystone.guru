@@ -4,6 +4,8 @@
         "floor_id": 108,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-123.700454\",\"lng\":\"149.115405\"},{\"lat\":\"-131.310581\",\"lng\":\"150.264104\"},{\"lat\":\"-132.602866\",\"lng\":\"158.66396\"},{\"lat\":\"-125.136327\",\"lng\":\"164.479246\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 108,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-126.356819\",\"lng\":\"67.773203\"},{\"lat\":\"-137.98739\",\"lng\":\"68.850108\"},{\"lat\":\"-136.838692\",\"lng\":\"81.916551\"},{\"lat\":\"-125.567089\",\"lng\":\"81.198615\"}]"
     },
@@ -20,6 +24,8 @@
         "floor_id": 108,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-127.367558\",\"lng\":\"34.150989\"},{\"lat\":\"-138.593334\",\"lng\":\"34.529918\"},{\"lat\":\"-137.788109\",\"lng\":\"48.739761\"},{\"lat\":\"-126.23077\",\"lng\":\"46.371454\"}]"
     },
@@ -28,6 +34,8 @@
         "floor_id": 108,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-127.002962\",\"lng\":\"254.72386\"},{\"lat\":\"-140.141199\",\"lng\":\"257.739193\"},{\"lat\":\"-137.413041\",\"lng\":\"270.590256\"},{\"lat\":\"-125.064533\",\"lng\":\"264.55959\"}]"
     },
@@ -36,6 +44,8 @@
         "floor_id": 108,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-126.278136\",\"lng\":\"107.710609\"},{\"lat\":\"-139.066995\",\"lng\":\"108.847396\"},{\"lat\":\"-135.893463\",\"lng\":\"124.004562\"},{\"lat\":\"-125.188715\",\"lng\":\"118.98375\"}]"
     }

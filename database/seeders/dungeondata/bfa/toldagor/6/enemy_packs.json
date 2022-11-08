@@ -4,6 +4,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-114.88\",\"lng\":\"126.12\"},{\"lat\":\"-110.5\",\"lng\":\"138.25\"},{\"lat\":\"-120.75\",\"lng\":\"137.75\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-178.25\",\"lng\":\"123.62\"},{\"lat\":\"-184.62\",\"lng\":\"132.12\"},{\"lat\":\"-175.5\",\"lng\":\"141.75\"},{\"lat\":\"-168.88\",\"lng\":\"133\"}]"
     },
@@ -20,6 +24,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-184.25\",\"lng\":\"151.38\"},{\"lat\":\"-193.31\",\"lng\":\"144.06\"},{\"lat\":\"-194.19\",\"lng\":\"156.31\"}]"
     },
@@ -28,6 +34,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-49.38\",\"lng\":\"175.5\"},{\"lat\":\"-58.63\",\"lng\":\"184.5\"},{\"lat\":\"-54.13\",\"lng\":\"191\"},{\"lat\":\"-45\",\"lng\":\"182.25\"}]"
     },
@@ -36,6 +44,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-114.375\",\"lng\":\"256.125\"},{\"lat\":\"-120.875\",\"lng\":\"252\"},{\"lat\":\"-125.5\",\"lng\":\"258.625\"},{\"lat\":\"-118.5\",\"lng\":\"263.5\"}]"
     },
@@ -44,6 +54,8 @@
         "floor_id": 58,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-79.125\",\"lng\":\"152.375\"},{\"lat\":\"-86.25\",\"lng\":\"161.75\"},{\"lat\":\"-81.5\",\"lng\":\"165.75\"},{\"lat\":\"-75.375\",\"lng\":\"155\"}]"
     }
