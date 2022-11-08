@@ -14,6 +14,7 @@ use App\SeederHelpers\RelationImport\Mapping\EnemyPackRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPatrolRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MapIconRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\MappingCommitLogRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MappingVersionRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MountableAreaRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\NpcRelationMapping;
@@ -47,6 +48,7 @@ class DungeonDataSeeder extends Seeder
         $mappings = [
             // Loose files
             new MappingVersionRelationMapping(),
+            new MappingCommitLogRelationMapping(),
             new DungeonRelationMapping(),
             new NpcRelationMapping(),
             new DungeonRouteRelationMapping(),
@@ -308,6 +310,7 @@ class DungeonDataSeeder extends Seeder
 
 
         DB::table('mapping_versions')->truncate();
+        DB::table('mapping_commit_logs')->truncate();
         DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
