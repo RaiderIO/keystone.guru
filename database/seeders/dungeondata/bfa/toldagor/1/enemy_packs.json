@@ -4,6 +4,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-147\",\"lng\":\"206.38\"},{\"lat\":\"-156\",\"lng\":\"208.88\"},{\"lat\":\"-153.88\",\"lng\":\"216.5\"},{\"lat\":\"-145.88\",\"lng\":\"213\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-162.63\",\"lng\":\"233.5\"},{\"lat\":\"-169\",\"lng\":\"235.5\"},{\"lat\":\"-169.5\",\"lng\":\"245.88\"},{\"lat\":\"-162\",\"lng\":\"246.12\"}]"
     },
@@ -20,6 +24,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-170.94\",\"lng\":\"215.75\"},{\"lat\":\"-171.12\",\"lng\":\"221.69\"},{\"lat\":\"-178.75\",\"lng\":\"222.38\"},{\"lat\":\"-178.44\",\"lng\":\"216.19\"}]"
     },
@@ -28,6 +34,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-111.5\",\"lng\":\"248.88\"},{\"lat\":\"-118.94\",\"lng\":\"248.38\"},{\"lat\":\"-118.75\",\"lng\":\"255.25\"},{\"lat\":\"-111.5\",\"lng\":\"255.94\"}]"
     },
@@ -36,6 +44,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-125.75\",\"lng\":\"238.5\"},{\"lat\":\"-131.69\",\"lng\":\"234.69\"},{\"lat\":\"-134.38\",\"lng\":\"241.38\"},{\"lat\":\"-128\",\"lng\":\"244.62\"}]"
     },
@@ -44,6 +54,8 @@
         "floor_id": 53,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-131,\"lng\":217.12},{\"lat\":-136.44,\"lng\":220.25},{\"lat\":-134,\"lng\":225.31},{\"lat\":-128.5,\"lng\":222.19}]"
     }
