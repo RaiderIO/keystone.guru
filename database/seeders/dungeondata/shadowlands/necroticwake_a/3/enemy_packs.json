@@ -4,6 +4,8 @@
         "floor_id": 91,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-101.588011\",\"lng\":\"178.479007\"},{\"lat\":\"-124.920946\",\"lng\":\"179.053356\"},{\"lat\":\"-119.751804\",\"lng\":\"212.868164\"},{\"lat\":\"-99.290614\",\"lng\":\"208.05799\"}]"
     }

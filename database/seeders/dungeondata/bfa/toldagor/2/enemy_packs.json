@@ -4,6 +4,8 @@
         "floor_id": 54,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-116.12\",\"lng\":\"251.62\"},{\"lat\":\"-122.38\",\"lng\":\"246.25\"},{\"lat\":\"-127.75\",\"lng\":\"253.88\"},{\"lat\":\"-120.88\",\"lng\":\"258.75\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 54,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-137.25,\"lng\":228.31},{\"lat\":-142.75,\"lng\":237.31},{\"lat\":-134.69,\"lng\":242.75},{\"lat\":-130.12,\"lng\":233}]"
     },
@@ -20,6 +24,8 @@
         "floor_id": 54,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-165.19,\"lng\":207.44},{\"lat\":-171.94,\"lng\":202.75},{\"lat\":-177.88,\"lng\":211.88},{\"lat\":-170.62,\"lng\":217.12}]"
     }

@@ -4,6 +4,8 @@
         "floor_id": 1,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-80.5\",\"lng\":\"187.5\"},{\"lat\":\"-85\",\"lng\":\"191.5\"},{\"lat\":\"-86.5\",\"lng\":\"187\"},{\"lat\":\"-82\",\"lng\":\"182.5\"}]"
     },
@@ -12,6 +14,8 @@
         "floor_id": 1,
         "teeming": null,
         "faction": "any",
+        "color": null,
+        "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-128.5\",\"lng\":\"146.5\"},{\"lat\":\"-124.5\",\"lng\":\"153\"},{\"lat\":\"-119.5\",\"lng\":\"146.5\"},{\"lat\":\"-123\",\"lng\":\"140\"}]"
     }
