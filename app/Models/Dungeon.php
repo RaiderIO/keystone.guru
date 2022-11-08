@@ -545,7 +545,6 @@ class Dungeon extends CacheModel
         return $seasonService->getCurrentSeason($this->expansion);
     }
 
-
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      */
@@ -553,7 +552,10 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->where('enemy_forces', '>', 0)
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+                // @TODO This should exclude all raids
+                return $builder->where('enemy_forces', '>', 0);
+            })
             ->min('base_health') ?? 10000;
     }
 
@@ -564,7 +566,10 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->where('enemy_forces', '>', 0)
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+                // @TODO This should exclude all raids
+                return $builder->where('enemy_forces', '>', 0);
+            })
             ->max('base_health') ?? 100000;
     }
 
