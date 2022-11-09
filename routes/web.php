@@ -326,17 +326,23 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
-                // View string contents
-                Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
-                Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
+                Route::group(['prefix' => 'mdt'], function () {
+                    // View string contents
+                    Route::get('string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
+                    Route::post('string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
 
-                // View string contents as a dungeonroute
-                Route::get('mdt/string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroute'])->name('admin.tools.mdt.string.viewasdungeonroute');
-                Route::post('mdt/string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroutesubmit'])->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+                    // View string contents as a dungeonroute
+                    Route::get('string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroute'])->name('admin.tools.mdt.string.viewasdungeonroute');
+                    Route::post('string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroutesubmit'])->name('admin.tools.mdt.string.viewasdungeonroute.submit');
 
-                // View dungeonroute as string
-                Route::get('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
-                Route::post('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+                    // View dungeonroute as string
+                    Route::get('dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
+                    Route::post('dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+                    // View mapping hash
+                    Route::get('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghash'])->name('admin.tools.mdt.dungeonmappinghash');
+                    Route::post('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghashsubmit'])->name('admin.tools.mdt.dungeonmappinghash.submit');
+                });
 
                 // Wow.tools
                 Route::get('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinates'])->name('admin.tools.wowtools.import_ingame_coordinates');

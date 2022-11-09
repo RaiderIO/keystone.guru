@@ -32,6 +32,8 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTExportStringService;
+use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringService;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingService;
@@ -103,6 +105,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on SeasonService
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
+        $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
 
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);

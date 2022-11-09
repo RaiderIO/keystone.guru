@@ -15,6 +15,7 @@ use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\MDTMappingServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -356,6 +357,27 @@ class AdminToolsController extends Controller
 
             throw $error;
         }
+    }
+
+    /**
+     * @return Factory|
+     */
+    public function mdtdungeonmappinghash()
+    {
+        return view('admin.tools.mdt.dungeonmappinghash');
+    }
+
+    /**
+     * @param Request $request
+     * @param MDTMappingServiceInterface $mdtMappingService
+     * @return void
+     * @throws Throwable
+     */
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingServiceInterface $mdtMappingService)
+    {
+        $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
+
+        dd($mdtMappingService->getMDTMappingHash($dungeon->key));
     }
 
     /**

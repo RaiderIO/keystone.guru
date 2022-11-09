@@ -2,6 +2,8 @@
 
 namespace App\Service\MDT;
 
+use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Mapping\MappingVersion;
 
 class MDTMappingService implements MDTMappingServiceInterface
@@ -28,6 +30,11 @@ class MDTMappingService implements MDTMappingServiceInterface
      */
     public function getMDTMappingHash(string $dungeon): string
     {
-        // TODO: Implement getMDTMappingHash() method.
+        return
+            md5(
+                (new MDTDungeon($dungeon))
+                    ->getMDTNPCs()
+                    ->toJson()
+            );
     }
 }
