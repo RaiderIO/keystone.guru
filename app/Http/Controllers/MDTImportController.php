@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
-use App\Logic\MDT\IO\ImportString;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\MDTImport;
-use App\Service\Season\SeasonService;
+use App\Service\MDT\MDTImportStringServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Collection;
@@ -24,20 +23,18 @@ class MDTImportController extends Controller
     /**
      * Returns some details about the passed string.
      * @param ImportStringFormRequest $request
-     * @param SeasonService $seasonService
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return array|void
-     * @throws Exception
      * @throws Throwable
      */
-    public function details(ImportStringFormRequest $request, SeasonService $seasonService)
+    public function details(ImportStringFormRequest $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
         $string = $request->get('import_string');
 
-        $importString = new ImportString($seasonService);
 
         try {
             $warnings     = new Collection();
-            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false, false);
+            $dungeonRoute = $mdtImportStringService->setEncodedString($string)->getDungeonRoute($warnings, false, false);
 
             $affixes = [];
             foreach ($dungeonRoute->affixes as $affixGroup) {
@@ -98,23 +95,21 @@ class MDTImportController extends Controller
 
     /**
      * @param ImportStringFormRequest $request
-     * @param SeasonService $seasonService
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return Factory|View|void
-     * @throws Exception
      * @throws Throwable
      */
-    public function import(ImportStringFormRequest $request, SeasonService $seasonService)
+    public function import(ImportStringFormRequest $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
         $user = Auth::user();
 
         $sandbox = (bool)$request->get('mdt_import_sandbox', false);
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
-            $string       = $request->get('import_string');
-            $importString = new ImportString($seasonService);
+            $string = $request->get('import_string');
 
             try {
-                $dungeonroute = $importString->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
+                $dungeonroute = $mdtImportStringService->setEncodedString($string)->getDungeonRoute(collect(), $sandbox, true);
 
                 // Ensure team_id is set
                 if (!$sandbox) {
@@ -123,10 +118,10 @@ class MDTImportController extends Controller
                 }
 
                 // Keep track of the import
-                $mdtImport                   = new MDTImport();
-                $mdtImport->dungeon_route_id = $dungeonroute->id;
-                $mdtImport->import_string    = $string;
-                $mdtImport->save();
+                MDTImport::create([
+                    'dungeon_route_id' => $dungeonroute->id,
+                    'import_string'    => $string,
+                ]);
             } catch (InvalidMDTString $ex) {
                 return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {

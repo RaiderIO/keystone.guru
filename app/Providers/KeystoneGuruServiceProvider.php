@@ -23,8 +23,8 @@ use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServerHttpApiService;
-use App\Service\EchoServerHttpApiServiceInterface;
+use App\Service\EchoServer\EchoServerHttpApiService;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -32,6 +32,10 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTImportStringService;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\MDTMappingService;
+use App\Service\MDT\MDTMappingServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -76,6 +80,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
+        $this->app->bind(MDTMappingServiceInterface::class, MDTMappingService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -87,14 +92,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
+
         // Depends on SeasonService
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
+        $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
 
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);
@@ -116,10 +124,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot(
-        ViewServiceInterface $viewService,
-        ExpansionServiceInterface $expansionService,
+        ViewServiceInterface               $viewService,
+        ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
-        MappingServiceInterface $mappingService
+        MappingServiceInterface            $mappingService
     )
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways

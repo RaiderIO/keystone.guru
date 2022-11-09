@@ -1,32 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wouter
- * Date: 05/01/2019
- * Time: 20:49
- */
 
-namespace App\Logic\MDT\IO;
-
+namespace App\Service\MDT;
 
 use Illuminate\Support\Facades\Artisan;
 use Lua;
 
-/**
- * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
- *
- * @package App\Logic\MDT
- * @author Wouter
- * @since 05/01/2019
- */
-class MDTBase
-{
-
-    /**
+class MDTBaseService
+{   /**
      * Gets a Lua instance and load all the required files in it.
      * @return Lua
      */
-    protected function _getLua() : Lua
+    protected function getLua() : Lua
     {
         $lua = new Lua();
 

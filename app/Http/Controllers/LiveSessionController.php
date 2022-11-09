@@ -9,7 +9,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\LiveSession;
 use App\Models\Team;
-use App\Service\EchoServerHttpApiServiceInterface;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\User;
 use Auth;
 use Exception;

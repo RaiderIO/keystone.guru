@@ -1,15 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wouter
- * Date: 05/01/2019
- * Time: 20:49
- */
 
-namespace App\Logic\MDT\IO;
+namespace App\Service\MDT;
 
-
-use App;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
@@ -32,7 +24,6 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonService;
-use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -40,12 +31,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
- * @package App\Logic\MDT
+ * Class MDTImportStringService
+ * @package App\Service\MDT
  * @author Wouter
- * @since 05/01/2019
+ * @since 09/11/2022
  */
-class ImportString extends MDTBase
+class MDTImportStringService extends MDTBaseService implements MDTImportStringServiceInterface
 {
     /** @var string $encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
@@ -64,6 +55,7 @@ class ImportString extends MDTBase
      * @param array $decoded
      * @param DungeonRoute $dungeonRoute
      * @param boolean $save
+     * @throws ImportWarning
      */
     private function parseRiftOffsets(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
@@ -650,7 +642,7 @@ class ImportString extends MDTBase
      * Gets an array that represents the currently set MDT string.
      * @return array|null
      */
-    public function getDecoded()
+    public function getDecoded(): ?array
     {
 //        $lua = $this->_getLua();
         // Import it to a table
@@ -669,7 +661,7 @@ class ImportString extends MDTBase
      */
     public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false): DungeonRoute
     {
-        $lua = $this->_getLua();
+        $lua = $this->getLua();
         // Import it to a table
 //        $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
         $decoded = $this->decode($this->encodedString);
@@ -748,8 +740,8 @@ class ImportString extends MDTBase
             $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
         }
         // else {
-            // Do not do this - the enemy_forces are incremented while creating the route
-            // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
+        // Do not do this - the enemy_forces are incremented while creating the route
+        // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
         // }
 
         return $dungeonRoute;

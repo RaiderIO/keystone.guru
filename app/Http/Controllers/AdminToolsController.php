@@ -7,15 +7,14 @@ use App\Jobs\RefreshEnemyForces;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
-use App\Logic\MDT\IO\ExportString;
-use App\Logic\MDT\IO\ImportString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Npc;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\Season\SeasonService;
+use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -222,7 +221,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return void
      */
     public function enemyforcesrecalculatesubmit(Request $request)
     {
@@ -255,14 +254,16 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return JsonResponse
      */
-    public function mdtviewsubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
-        return response()->json((new ImportString($seasonService))
-            ->setEncodedString($request->get('import_string'))
-            ->getDecoded());
+        return response()->json(
+            $mdtImportStringService
+                ->setEncodedString($request->get('import_string'))
+                ->getDecoded()
+        );
     }
 
     /**
@@ -275,16 +276,14 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
-     *
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return never|void
-     * @throws InvalidMDTString
      * @throws Throwable
      */
-    public function mdtviewasdungeonroutesubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewasdungeonroutesubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
         try {
-            $dungeonRoute = (new ImportString($seasonService))
+            $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(new Collection(), false, false);
             $dungeonRoute->makeVisible(['affixes', 'killzones']);
@@ -320,23 +319,23 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
-     *
+     * @param MDTImportStringServiceInterface $mdtImportStringService
+     * @param MDTExportStringServiceInterface $mdtExportStringService
      * @return never|void
      * @throws Throwable
      */
-    public function mdtviewasstringsubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewasstringsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService, MDTExportStringServiceInterface $mdtExportStringService)
     {
         $dungeonRoute = DungeonRoute::where('public_key', $request->get('public_key'))->firstOrFail();
 
         try {
             $warnings = new Collection();
 
-            $exportString = (new ExportString($seasonService))
+            $exportString = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
                 ->getEncodedString($warnings);
 
-            $stringContents = (new ImportString($seasonService))
+            $stringContents = $mdtImportStringService
                 ->setEncodedString($exportString)
                 ->getDecoded();
 

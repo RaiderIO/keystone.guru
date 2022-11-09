@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wouter
- * Date: 05/01/2019
- * Time: 20:49
- */
 
-namespace App\Logic\MDT\IO;
-
+namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
@@ -24,26 +17,17 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
- * @package App\Logic\MDT
+ * @package App\Service\MDT
  * @author Wouter
- * @since 05/01/2019
+ * @since 09/11/2022
  */
-class ExportString extends MDTBase
+class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
 {
     /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
-
-    /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonService $seasonService;
-
-
-    function __construct(SeasonService $seasonService)
-    {
-        $this->seasonService = $seasonService;
-    }
 
     /**
      * @param Collection $warnings
@@ -288,7 +272,7 @@ class ExportString extends MDTBase
      * @param $dungeonRoute DungeonRoute
      * @return $this Returns self to allow for chaining.
      */
-    public function setDungeonRoute(DungeonRoute $dungeonRoute): ExportString
+    public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
         $this->dungeonRoute = $dungeonRoute->load(['affixgroups', 'dungeon']);
 

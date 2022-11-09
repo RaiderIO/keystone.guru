@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\EchoServer;
 
 use Exception;
 use GuzzleHttp\Client;
