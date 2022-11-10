@@ -279,9 +279,21 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - 158px);
 }
 
-#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container {
+/** Pulls section of the sidebar, when editing, without a speedrun enabled */
+#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (158px + 55px));
+}
+
+/** Pulls section of the sidebar, when editing, WITH a speedrun enabled */
+#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(50vh - (79px + 15px));
+}
+
+/** Speedrun npc section of the sidebar, when editing (WITH a speedrun enabled, doh) */
+#edit_route_dungeon_speedrun_scroll_container.edit {
+    max-height: calc(50vh - (79px + 15px));
 }
 
 /** Mobile heights */
@@ -296,10 +308,29 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-#pulls_sidebar .pulls_container {
+/** Pulls section of the sidebar, when viewing, without a speedrun enabled */
+#pulls_sidebar .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - 109px);
 }
 
+/** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
+#pulls_sidebar:not(.mobile,.embed) .pulls_container {
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(50vh - (79px));
+}
+
+/** Pulls section of the sidebar, when viewing, with a speedrun enabled */
+#pulls_sidebar .pulls_container {
+    max-height: calc(50vh - (79px));
+}
+
+/** Speedrun npc section of the sidebar, when viewing (WITH a speedrun enabled, doh) */
+#edit_route_dungeon_speedrun_scroll_container {
+    max-height: calc(50vh - (79px));
+}
+
+
+/** Pulls section of the sidebar, when viewing on mobile/embed, without a speedrun enabled */
 #pulls_sidebar .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (109px + 55px));

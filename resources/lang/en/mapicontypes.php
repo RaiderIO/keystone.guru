@@ -40,7 +40,11 @@ return [
     'spell_shadowmeld'            => 'Shadowmeld',
     'spell_shroud_of_concealment' => 'Shroud of Concealment',
 
-    'item_invisibility' => 'Invisibility Potion',
+    'item_invisibility'                 => 'Invisibility Potion',
+    'item_drums_of_speed'               => 'Drums of Speed',
+    'item_free_action_potion'           => 'Free Action Potion',
+    'item_global_thermal_sapper_charge' => 'Global Thermal Sapper Charge',
+    'item_rocket_boots_xtreme'          => 'Rocket Boots Xtreme',
 
     'question_yellow' => 'Question',
     'question_blue'   => 'Question',

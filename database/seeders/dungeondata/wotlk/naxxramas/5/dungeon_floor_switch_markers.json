@@ -1,1 +1,37 @@
-[]
+[
+    {
+        "id": 234,
+        "floor_id": 142,
+        "target_floor_id": 139,
+        "lat": -119.47,
+        "lng": 212.09
+    },
+    {
+        "id": 235,
+        "floor_id": 142,
+        "target_floor_id": 138,
+        "lat": -119.79,
+        "lng": 197.94
+    },
+    {
+        "id": 236,
+        "floor_id": 142,
+        "target_floor_id": 140,
+        "lat": -134.04,
+        "lng": 197.51
+    },
+    {
+        "id": 237,
+        "floor_id": 142,
+        "target_floor_id": 141,
+        "lat": -134.04,
+        "lng": 212.2
+    },
+    {
+        "id": 238,
+        "floor_id": 142,
+        "target_floor_id": 143,
+        "lat": -126.85,
+        "lng": 204.54
+    }
+]

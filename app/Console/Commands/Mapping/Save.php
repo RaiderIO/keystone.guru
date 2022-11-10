@@ -81,7 +81,7 @@ class Save extends Command
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion'])->with('floors.floorcouplings')->get();
+        $dungeons = Dungeon::without(['expansion', 'dungeonspeedrunrequirednpcs'])->with(['floors.floorcouplings', 'floors.dungeonspeedrunrequirednpcs'])->get();
 
         $this->saveDataToJsonFile(
             $dungeons->makeVisible([
