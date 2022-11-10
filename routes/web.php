@@ -342,6 +342,11 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                     // View mapping hash
                     Route::get('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghash'])->name('admin.tools.mdt.dungeonmappinghash');
                     Route::post('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghashsubmit'])->name('admin.tools.mdt.dungeonmappinghash.submit');
+
+                    // Convert Mapping Version to MDT Mapping
+                    Route::get('dungeonmappingversiontomdtmapping', [AdminToolsController::class, 'dungeonmappingversiontomdtmapping'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
+                    Route::post('dungeonmappingversiontomdtmapping', [AdminToolsController::class, 'dungeonmappingversiontomdtmappingsubmit'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
+
                 });
 
                 // Wow.tools

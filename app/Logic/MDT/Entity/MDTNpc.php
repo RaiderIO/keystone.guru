@@ -54,15 +54,26 @@ class MDTNpc implements Arrayable
     {
         $this->index     = $index;
         $this->rawMdtNpc = $rawMdtNpc;
-        $this->clones    = $rawMdtNpc['clones'];
+
+        // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
+        $this->recur_ksort($rawMdtNpc['clones']);
+        $this->clones = $rawMdtNpc['clones'];
+
         // Correct clones that don't have a sublevel set
         foreach ($this->clones as $index => $clone) {
             if (!isset($clone['sublevel'])) {
                 $this->clones[$index]['sublevel'] = 1;
             }
         }
-        $this->id           = (int)$rawMdtNpc['id'];
-        $this->spells       = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
+        $this->id = (int)$rawMdtNpc['id'];
+
+        if (isset($rawMdtNpc['spells'])) {
+            $this->recur_ksort($rawMdtNpc['spells']);
+            $this->spells = $rawMdtNpc['spells'];
+        } else {
+            $this->spells = [];
+        }
+
         $this->scale        = (float)$rawMdtNpc['scale'];
         $this->countTeeming = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
         $this->count        = (int)$rawMdtNpc['count'];
@@ -75,9 +86,27 @@ class MDTNpc implements Arrayable
         if (isset($rawMdtNpc['creatureType'])) {
             $this->creatureType = $rawMdtNpc['creatureType'];
         }
-        $this->level           = (int)$rawMdtNpc['level'];
-        $this->health          = (int)$rawMdtNpc['health'];
-        $this->characteristics = isset($rawMdtNpc['characteristics']) ? $rawMdtNpc['characteristics'] : [];
+        $this->level  = (int)$rawMdtNpc['level'];
+        $this->health = (int)$rawMdtNpc['health'];
+
+        if (isset($rawMdtNpc['characteristics'])) {
+            $this->recur_ksort($rawMdtNpc['characteristics']);
+            $this->characteristics = $rawMdtNpc['characteristics'];
+        } else {
+            $this->characteristics = [];
+        }
+    }
+
+    /**
+     * @param $array
+     * @return bool
+     */
+    private function recur_ksort(&$array)
+    {
+        foreach ($array as &$value) {
+            if (is_array($value)) $this->recur_ksort($value);
+        }
+        return ksort($array);
     }
 
     /**
@@ -232,9 +261,9 @@ class MDTNpc implements Arrayable
     {
         return [
             'index'           => $this->getIndex(),
-//            'clones'          => $this->getClones(),
+            'clones'          => $this->getClones(),
             'id'              => $this->getId(),
-//            'spells'          => $this->getSpells(),
+            'spells'          => $this->getSpells(),
             'scale'           => $this->getScale(),
             'countTeeming'    => $this->getCountTeeming(),
             'count'           => $this->getCount(),
@@ -243,7 +272,7 @@ class MDTNpc implements Arrayable
             'creatureType'    => $this->getCreatureType(),
             'level'           => $this->getLevel(),
             'health'          => $this->getHealth(),
-//            'characteristics' => $this->getCharacteristics(),
+            'characteristics' => $this->getCharacteristics(),
         ];
     }
 }

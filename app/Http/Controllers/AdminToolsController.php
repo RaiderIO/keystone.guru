@@ -9,6 +9,7 @@ use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
@@ -379,6 +380,32 @@ class AdminToolsController extends Controller
 
         dd($mdtMappingService->getMDTMappingHash($dungeon->key));
     }
+
+    /**
+     * @return Factory|
+     */
+    public function dungeonmappingversiontomdtmapping()
+    {
+        return view('admin.tools.mdt.dungeonmappingversiontomdtmapping', [
+            'mappingVersionsSelect' => MappingVersion::all()->mapWithKeys(function (MappingVersion $mappingVersion) {
+                return [$mappingVersion->id => sprintf('%s - Version %d (%d)', __($mappingVersion->dungeon->name), $mappingVersion->version, $mappingVersion->id)];
+            }),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param MDTMappingServiceInterface $mdtMappingService
+     * @return void
+     * @throws Throwable
+     */
+    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingServiceInterface $mdtMappingService)
+    {
+        $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
+
+        dd($mdtMappingService->getMDTMapping($mappingVersion));
+    }
+
 
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View

@@ -326,6 +326,16 @@ return [
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
                 'submit'                       => 'Submit',
             ],
+            'dungeonmappinghash' => [
+                'title'                        => 'View MDT Dungeon Mapping Hash',
+                'header'                       => 'View MDT Dungeon Mapping Hash',
+                'submit'                       => 'Submit',
+            ],
+            'dungeonmappingversiontomdtmapping' => [
+                'title'                        => 'Convert Dungeon Mapping to MDT Mapping',
+                'header'                       => 'Convert Dungeon Mapping to MDT Mapping',
+                'submit'                       => 'Submit',
+            ]
         ],
         'npcimport'    => [
             'title'                   => 'Mass import NPCs',
@@ -348,7 +358,7 @@ return [
             'view_mdt_string_as_dungeonroute' => 'View MDT String as Dungeonroute',
             'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
             'view_mdt_diff'                   => 'View MDT Diff',
-            'view_dungeon_mapping_hash'               => 'View dungeon mapping hash',
+            'view_dungeon_mapping_hash'       => 'View dungeon mapping hash',
 
             'subheader_enemy_forces' => 'Enemy Forces',
             'enemy_forces_import'    => 'Import enemy forces',
