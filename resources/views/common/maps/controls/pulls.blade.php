@@ -41,7 +41,11 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
             <i class="fas {{ $defaultState ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
-        @if(!$embed)
+        <?php
+        // We don't want the enemy forces code for $embedding - that's true. BUT if we have a speedrun enabled we do not show
+        // the enemy forces, so then we DO want to have this executed to add the speedrun npcs in that scenario.
+        ?>
+        @if(!$embed || $dungeon->speedrun_enabled)
             @if($edit)
                 <div class="p-1">
                     <div class="row pr-2 mb-2 no-gutters">
@@ -65,34 +69,7 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                     </div>
                 </div>
                 @if( $dungeon->speedrun_enabled )
-                    <div id="edit_route_dungeon_speedrun_required_npcs_container"></div>
-                    <div class="collapse {{ $showAllEnabled ? 'show' : '' }}" id="edit_route_dungeon_speedrun_required_npcs_collapse">
-                        <div id="edit_route_dungeon_speedrun_required_npcs_container_overflow">
-
-                        </div>
-                    </div>
-                    <div class="px-2">
-                        <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
-                                data-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
-                                aria-expanded="false" aria-controls="collapseExample">
-                            {{ __('views/common.maps.controls.pulls.toggle_all_required_enemies') }}
-
-                        </button>
-                    </div>
-
-                    {{--                    <div class="row pl-2">--}}
-                    {{--                        <div class="col-auto">--}}
-                    {{--                            <input id="edit_route_dungeon_speedrun_required_npcs_show_all" type="checkbox"--}}
-                    {{--                                   class="form-control left_checkbox"/>--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col pl-0">--}}
-                    {{--                            <label for="edit_route_dungeon_speedrun_required_npcs_show_all">--}}
-                    {{--                                <h6>--}}
-                    {{--                                    Show all--}}
-                    {{--                                </h6>--}}
-                    {{--                            </label>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
+                    @include('common.maps.controls.dungeonspeedrunrequirednpcs', ['edit' => true, 'showAllEnabled' => $showAllEnabled])
                     <hr class="my-2">
                 @else
                     <div id="edit_route_enemy_forces_container"></div>
@@ -107,8 +84,7 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
                     </div>
                     <div class="col">
                         @if( $dungeon->speedrun_enabled )
-                            <div id="edit_route_dungeon_speedrun_required_npcs_container" class="pt-1"></div>
-                            <hr class="my-2">
+                            @include('common.maps.controls.dungeonspeedrunrequirednpcs', ['edit' => false, 'showAllEnabled' => $showAllEnabled])
                         @else
                             <div id="edit_route_enemy_forces_container" class="pt-1"></div>
                         @endif
@@ -117,7 +93,7 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
             @endif
         @endif
 
-        <div class="pulls_container" data-simplebar>
+        <div class="pulls_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
 
             <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">
