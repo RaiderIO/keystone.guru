@@ -4,7 +4,7 @@ namespace App\Service\MDT;
 
 use App\Models\Mapping\MappingVersion;
 
-interface MDTMappingServiceInterface
+interface MDTMappingExportServiceInterface
 {
     /**
      * @param MappingVersion $mappingVersion

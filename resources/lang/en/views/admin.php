@@ -359,6 +359,7 @@ return [
             'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
             'view_mdt_diff'                   => 'View MDT Diff',
             'view_dungeon_mapping_hash'       => 'View dungeon mapping hash',
+            'view_dungeon_mapping_version_to_mdt_mapping' => 'Convert mapping version to MDT mapping',
 
             'subheader_enemy_forces' => 'Enemy Forces',
             'enemy_forces_import'    => 'Import enemy forces',

@@ -31,7 +31,7 @@
         <a href="{{ route('admin.tools.mdt.dungeonmappinghash') }}">{{ __('views/admin.tools.list.view_dungeon_mapping_hash') }}</a>
     </div>
     <div class="form-group">
-        <a href="{{ route('admin.tools.mdt.dungeonmappingversiontomdtmapping') }}">{{ __('views/admin.tools.list.dungeonmappingversiontomdtmapping') }}</a>
+        <a href="{{ route('admin.tools.mdt.dungeonmappingversiontomdtmapping') }}">{{ __('views/admin.tools.list.view_dungeon_mapping_version_to_mdt_mapping') }}</a>
     </div>
 
     <h4>{{ __('views/admin.tools.list.subheader_enemy_forces') }}</h4>

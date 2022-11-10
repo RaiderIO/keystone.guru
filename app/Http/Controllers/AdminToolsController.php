@@ -16,7 +16,7 @@ use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
-use App\Service\MDT\MDTMappingServiceInterface;
+use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -370,11 +370,11 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param MDTMappingServiceInterface $mdtMappingService
+     * @param MDTMappingExportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
      */
-    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingServiceInterface $mdtMappingService)
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
     {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
@@ -387,7 +387,7 @@ class AdminToolsController extends Controller
     public function dungeonmappingversiontomdtmapping()
     {
         return view('admin.tools.mdt.dungeonmappingversiontomdtmapping', [
-            'mappingVersionsSelect' => MappingVersion::all()->mapWithKeys(function (MappingVersion $mappingVersion) {
+            'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')->get()->mapWithKeys(function (MappingVersion $mappingVersion) {
                 return [$mappingVersion->id => sprintf('%s - Version %d (%d)', __($mappingVersion->dungeon->name), $mappingVersion->version, $mappingVersion->id)];
             }),
         ]);
@@ -395,11 +395,11 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param MDTMappingServiceInterface $mdtMappingService
+     * @param MDTMappingExportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
      */
-    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingServiceInterface $mdtMappingService)
+    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
     {
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
 
