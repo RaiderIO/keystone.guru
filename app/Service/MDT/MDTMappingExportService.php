@@ -14,50 +14,65 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
 {
 
     /**
-     * @param string $tableName
-     * @param array $contents
-     * @return string
-     */
-    private function toLuaTableString(string $tableName, array $contents): string
-    {
-        // TODO: Implement toLuaTableString() method.
-    }
-
-    /**
      * @inheritDoc
      */
     public function getMDTMapping(MappingVersion $mappingVersion): string
     {
+        $header                  = $this->getHeader($mappingVersion);
         $dungeonMaps             = $this->getDungeonMaps($mappingVersion);
         $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion);
         $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
         $mapPOIS                 = $this->getMapPOIs($mappingVersion);
+        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion);
 
-        dd($mapPOIS);
+        echo $dungeonEnemies;
+        dd();
 
-        echo $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString;
+        echo $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIS . $dungeonEnemies;
 
         dd();
 
-//        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion);
 //        dd('test', $dungeonEnemies);
 
 
         return '';
     }
 
+    private function getHeader(MappingVersion $mappingVersion): string
+    {
+        return sprintf('
+local MDT = MDT
+local L = MDT.L
+local dungeonIndex = %d
+MDT.dungeonList[dungeonIndex] = L["%s"]
+MDT.mapInfo[dungeonIndex] = {
+#  viewportPositionOverrides =
+#  {
+#    [1] = {
+#      zoomScale = 1.2999999523163;
+#      horizontalPan = 102.41712541524;
+#      verticalPan = 87.49594729527;
+#    };
+#  }
+};
+        ', $mappingVersion->dungeon->mdt_id, __($mappingVersion->dungeon->name));
+    }
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @return string
+     */
     private function getDungeonMaps(MappingVersion $mappingVersion): string
     {
-        return '';
-//        return sprintf('
-//            MDT.dungeonMaps[dungeonIndex] = {
-//              [0] = "DeOtherSide_Ardenweald",
-//              [1] = "DeOtherSide_Main",
-//              [2] = "DeOtherSide_Gnome",
-//              [3] = "DeOtherSide_Hakkar",
-//              [4] = "DeOtherSide_Ardenweald",
-//            }
-//        ')
+        return sprintf('
+#MDT.dungeonMaps[dungeonIndex] = {
+#  [0] = "DeOtherSide_Ardenweald",
+#  [1] = "DeOtherSide_Main",
+#  [2] = "DeOtherSide_Gnome",
+#  [3] = "DeOtherSide_Hakkar",
+#  [4] = "DeOtherSide_Ardenweald",
+#}
+        ');
     }
 
     /**
@@ -73,9 +88,9 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         }
 
         return sprintf("
-            MDT.dungeonSubLevels[dungeonIndex] = {
-                %s
-            }
+MDT.dungeonSubLevels[dungeonIndex] = {
+    %s
+}
         ", implode(PHP_EOL, $subLevels));
     }
 
@@ -87,7 +102,9 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     {
         $dungeon = $mappingVersion->dungeon;
         return sprintf(
-            'MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnabled = true }',
+            '
+MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnabled = true }
+            ',
             $dungeon->enemy_forces_required,
             $dungeon->enemy_forces_required_teeming
         );
@@ -171,7 +188,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
             $dungeonEnemies[++$dungeonEnemyIndex] = $dungeonEnemy;
         }
 
-        return $this->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
+        return (new PhpArray2LuaTable())->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
     }
 
     /**
