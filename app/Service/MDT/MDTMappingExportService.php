@@ -17,7 +17,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     /**
      * @inheritDoc
      */
-    public function getMDTMapping(MappingVersion $mappingVersion): string
+    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion): string
     {
         $translations = collect();
 
@@ -186,12 +186,19 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
             $cloneIndex = 0;
             foreach ($enemies as $enemy) {
-                if (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
-                    $enemyPackGroups->put($enemy->enemy_pack_id, $enemyPackGroups->count() + 1);
+                $group = $enemyPackGroups->count() + 1;
+                // Individual enemies with no pack
+                if ($enemy->enemy_pack_id === null) {
+                    // The ID doesn't really matter - it's just to offset the group for the next pack, this enemy is now its own group
+                    $enemyPackGroups->put($enemy->id * 1000, $group);
+                } else if (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
+                    $enemyPackGroups->put($enemy->enemy_pack_id, $group);
+                } else {
+                    $group = $enemyPackGroups->get($enemy->enemy_pack_id);
                 }
 
                 $dungeonEnemy['clones'][++$cloneIndex] = array_merge([
-                    'g'        => $enemyPackGroups->get($enemy->enemy_pack_id),
+                    'g'        => $group,
                     'sublevel' => $enemy->floor->mdt_sub_level ?? $enemy->floor->index,
                 ], Conversion::convertLatLngToMDTCoordinate(['lat' => $enemy->lat, 'lng' => $enemy->lng]));
             }
@@ -209,7 +216,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     private function getTranslations(Collection $translations): string
     {
         $lua = [];
-        foreach ($translations as $translation) {
+        foreach ($translations->unique() as $translation) {
             $lua[] = sprintf('L["%s"] = "%s"', $translation, $translation);
         }
 

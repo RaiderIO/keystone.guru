@@ -132,7 +132,7 @@ class Dungeon extends CacheModel
     const DUNGEON_THE_FORGE_OF_SOULS        = 'theforgeofsouls';
     const DUNGEON_THE_NEXUS                 = 'thenexus';
     const DUNGEON_THE_OCULUS                = 'theoculus'; // nexus80
-    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold';
+    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold'; // violethold
     const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
     const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
     const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
