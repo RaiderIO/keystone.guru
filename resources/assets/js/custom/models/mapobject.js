@@ -75,6 +75,7 @@ class MapObject extends Signalable {
     _getAttributes(force = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        let self = this;
         let selectFactions = [];
         let factions = this.map.options.factions;
 
@@ -112,7 +113,10 @@ class MapObject extends Signalable {
                 type: 'select',
                 values: selectFactions,
                 admin: true,
-                show_default: false
+                show_default: false,
+                setter: function (value) {
+                    self.faction = value === '' || value === null ? 'any' : value;
+                }
             }),
             new Attribute({
                 name: 'teeming',
@@ -371,6 +375,10 @@ class MapObject extends Signalable {
                         case 'double':
                             val = parseFloat(val);
                             break;
+                    }
+
+                    if (isNaN(val)) {
+                        val = null;
                     }
 
                     this._setValue(name, val, parentAttribute);
@@ -912,7 +920,7 @@ class MapObject extends Signalable {
         $.ajax({
             type: self.id > 0 && hasRouteModelBinding ? 'PUT' : 'POST',
             url: (this.options.hasOwnProperty('save_url') ? this.options.save_url :
-                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`) +
+                    `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`) +
                 (self.id > 0 && hasRouteModelBinding ? `/${self.id}` : ''),
             dataType: 'json',
             data: this.getSaveData(),

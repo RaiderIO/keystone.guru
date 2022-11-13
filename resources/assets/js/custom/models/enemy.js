@@ -136,14 +136,12 @@ class Enemy extends VersionableMapObject {
             new Attribute({
                 name: 'enemy_forces_override',
                 type: 'int',
-                admin: true,
-                default: null
+                admin: true
             }),
             new Attribute({
                 name: 'enemy_forces_override_teeming',
                 type: 'int',
-                admin: true,
-                default: null
+                admin: true
             }),
             // new Attribute({
             //     name: 'npc',
@@ -201,7 +199,6 @@ class Enemy extends VersionableMapObject {
                 type: 'int',
                 admin: true,
                 // edit: false, // Not directly changeable by user
-                default: null
             }),
             new Attribute({
                 name: 'mdt_npc_id',
@@ -232,7 +229,7 @@ class Enemy extends VersionableMapObject {
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
                 ],
                 setter: function (value) {
-                    self.seasonal_type = value;
+                    self.seasonal_type = value <= 0 ? null : value;
                 }
             }),
             new Attribute({
