@@ -1588,7 +1588,7 @@
     },
     {
         "id": 10350,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 2030,
         "npc_id": 16216,
         "floor_id": 140,
         "mdt_id": -1,
@@ -1611,7 +1611,7 @@
     },
     {
         "id": 10351,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 2030,
         "npc_id": 16194,
         "floor_id": 140,
         "mdt_id": -1,
