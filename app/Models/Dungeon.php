@@ -454,7 +454,13 @@ class Dungeon extends CacheModel
      */
     public function mapicons(): HasManyThrough
     {
-        return $this->hasManyThrough(MapIcon::class, Floor::class)->whereNull('dungeon_route_id');
+        return $this->hasManyThrough(MapIcon::class, Floor::class)
+            ->where(function (Builder $builder) {
+                // TODO this can be replaced with just ->whereNull after mapping version merge is back in development
+                return $builder
+                    ->where('dungeon_route_id', -1)
+                    ->orWhereNull('dungeon_route_id');
+            });
     }
 
     /**
@@ -572,7 +578,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })
@@ -586,7 +592,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })

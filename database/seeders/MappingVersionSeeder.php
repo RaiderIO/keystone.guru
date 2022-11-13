@@ -71,7 +71,7 @@ class MappingVersionSeeder extends Seeder
             $this->command->comment(sprintf('-- Updated %d enemy patrols', $updatedEnemyPatrols));
 
             // Only the map icons that are related to a mapping
-            $updatedMapIcons = $dungeon->mapicons()->where('dungeon_route_id', -1)->update([
+            $updatedMapIcons = $dungeon->mapicons()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d map icons', $updatedMapIcons));
