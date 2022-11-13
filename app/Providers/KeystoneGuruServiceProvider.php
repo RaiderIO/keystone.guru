@@ -58,6 +58,8 @@ use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
+use App\Service\WowTools\WowToolsService;
+use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -115,6 +117,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
         $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
+        $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
     }
 
     /**

@@ -40,7 +40,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
         foreach ($this->dungeonRoute->mapicons as $mapIcon) {
-            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
 
             $result[$currentObjectIndex++] = [
                 'n' => true,
@@ -80,7 +80,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $vertices               = json_decode($line->polyline->vertices_json, true);
             $previousMdtCoordinates = null;
             foreach ($vertices as $latLng) {
-                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinate($latLng);
+                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
 
                 if ($previousMdtCoordinates !== null) {
                     // We must do A -> B, B -> C, C -> D. I don't know why he wants the previous coordinates too, but alas that's how it works

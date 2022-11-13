@@ -679,9 +679,10 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id  = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $teamIdFromRequest = (int)$request->get('team_id', $this->team_id);
-        $this->team_id     = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
+        $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
+        $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
+        $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead

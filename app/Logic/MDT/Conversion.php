@@ -171,9 +171,22 @@ class Conversion
      * @param $latLng array
      * @return array
      */
+    public static function convertLatLngToMDTCoordinateString(array $latLng): array
+    {
+        $mdtCoordinate      = self::convertLatLngToMDTCoordinate($latLng);
+        $mdtCoordinate['x'] = (string)$mdtCoordinate['x'];
+        $mdtCoordinate['y'] = (string)$mdtCoordinate['y'];
+        return $mdtCoordinate;
+    }
+
+    /**
+     * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     * @param $latLng array
+     * @return array
+     */
     public static function convertLatLngToMDTCoordinate(array $latLng): array
     {
-        return ['y' => (string)round($latLng['lat'] * 2.185, 1), 'x' => (string)round($latLng['lng'] * 2.185, 1)];
+        return ['y' => round($latLng['lat'] * 2.185, 1), 'x' => round($latLng['lng'] * 2.185, 1)];
     }
 
     /**

@@ -30,6 +30,7 @@ use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
@@ -96,6 +97,9 @@ class Kernel extends ConsoleKernel
 
         // View
         Cache::class,
+
+        // WowTools
+        RefreshDisplayIds::class,
     ];
 
     /**
@@ -140,6 +144,9 @@ class Kernel extends ConsoleKernel
 
         // Ensure redis remains healthy
         $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->hourly();
+
+        // Ensure display IDs are set
+        $schedule->command('wowtools:refreshdisplayids')->hourly();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }

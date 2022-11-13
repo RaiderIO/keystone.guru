@@ -5,7 +5,7 @@ namespace App\Service\MDT;
 
 class PhpArray2LuaTable
 {
-    private const TOKEN_OBJECT_OPEN  = '{';
+    private const TOKEN_OBJECT_OPEN  = '{' . PHP_EOL;
     private const TOKEN_OBJECT_CLOSE = '}';
 
     private const TOKEN_ARRAY_KEY_OPEN  = '[';
@@ -13,7 +13,7 @@ class PhpArray2LuaTable
 
     private const TOKEN_ASSIGNMENT_OPERATOR = '=';
 
-    private const TOKEN_ITEM_SEPARATOR = ';';
+    private const TOKEN_ITEM_SEPARATOR = ';' . PHP_EOL;
 
     private const TOKEN_STRING_QUOTE = '"';
 
@@ -71,18 +71,17 @@ class PhpArray2LuaTable
 
     /**
      * @param $value
-     * @return array|int[]|string[]
+     * @return array
      */
     private function renderValue($value): array
     {
-        $tokens = [];
-
-        if (is_int($value)) {
-            $tokens = [$value];
-        } else if (is_string($value)) {
+        if (is_string($value)) {
             $tokens = [self::TOKEN_STRING_QUOTE, $value, self::TOKEN_STRING_QUOTE];
         } else if (is_bool($value)) {
-            $tokens = $value ? 'true' : 'false';
+            $tokens = [$value ? 'true' : 'false'];
+        } else {
+            // ints, floats, etc
+            $tokens = [$value];
         }
 
         return $tokens;

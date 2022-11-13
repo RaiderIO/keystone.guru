@@ -131,7 +131,7 @@ class Floor extends CacheModel
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('dungeon_floor_switch_markers.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**

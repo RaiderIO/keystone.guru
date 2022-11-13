@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property int $classification_id
  * @property int $npc_type_id
  * @property int $npc_class_id
+ * @property int $display_id
  * @property string $name
  * @property int $base_health
  * @property int $enemy_forces
@@ -41,7 +42,18 @@ class Npc extends CacheModel
     public $timestamps = false;
 
     protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
-    protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
+    protected $fillable = [
+        'id',
+        'dungeon_id',
+        'npc_type_id',
+        'npc_class_id',
+        'display_id',
+        'name',
+        'base_health',
+        'enemy_forces',
+        'enemy_forces_teeming',
+        'aggressiveness',
+    ];
 
     // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';

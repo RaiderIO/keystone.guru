@@ -27,7 +27,7 @@ if (isset($floor)) {
     </div>
 
     <div class="form-group">
-        <?php
+            <?php
         foreach ($connectedFloorCandidates as $connectedFloorCandidate){
             /** @var \App\Models\FloorCoupling $floorCoupling */
             if ($floorCouplings->isNotEmpty()) {
@@ -44,11 +44,11 @@ if (isset($floor)) {
             </div>
             <div class="col-2">
                 {!! Form::select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [
-                            'none' => __('views/admin.floor.edit.floor_direction.none'),
-                            'up' => __('views/admin.floor.edit.floor_direction.up'),
-                            'down' => __('views/admin.floor.edit.floor_direction.down'),
-                            'left' => __('views/admin.floor.edit.floor_direction.left'),
-                            'right' => __('views/admin.floor.edit.floor_direction.right')
+                            \App\Models\FloorCoupling::DIRECTION_NONE => __('views/admin.floor.edit.floor_direction.none'),
+                            \App\Models\FloorCoupling::DIRECTION_UP => __('views/admin.floor.edit.floor_direction.up'),
+                            \App\Models\FloorCoupling::DIRECTION_DOWN => __('views/admin.floor.edit.floor_direction.down'),
+                            \App\Models\FloorCoupling::DIRECTION_LEFT => __('views/admin.floor.edit.floor_direction.left'),
+                            \App\Models\FloorCoupling::DIRECTION_RIGHT => __('views/admin.floor.edit.floor_direction.right')
                         ], isset($floorCoupling) ? $floorCoupling->direction : '', ['class' => 'form-control selectpicker']) !!}
             </div>
         </div>

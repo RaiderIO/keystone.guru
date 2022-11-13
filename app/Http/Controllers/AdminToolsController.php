@@ -403,7 +403,8 @@ class AdminToolsController extends Controller
     {
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
 
-        dd($mdtMappingService->getMDTMapping($mappingVersion));
+        echo $mdtMappingService->getMDTMapping($mappingVersion);
+        dd();
     }
 
 
