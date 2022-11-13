@@ -11,16 +11,4 @@ interface MDTMappingExportServiceInterface
      * @return string
      */
     public function getMDTMappingAsLuaString(MappingVersion $mappingVersion): string;
-
-    /**
-     * @param string $dungeon
-     * @return MappingVersion
-     */
-    public function getMappingVersion(string $dungeon): MappingVersion;
-
-    /**
-     * @param string $dungeon
-     * @return string
-     */
-    public function getMDTMappingHash(string $dungeon): string;
 }

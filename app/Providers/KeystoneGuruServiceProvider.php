@@ -38,6 +38,8 @@ use App\Service\MDT\MDTImportStringService;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
+use App\Service\MDT\MDTMappingImportService;
+use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -85,6 +87,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
+        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
