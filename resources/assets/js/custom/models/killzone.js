@@ -824,6 +824,13 @@ class KillZone extends MapObject {
      */
     setEnemies(enemies) {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+
+        // .sort() adjusts the array in place, but we don't care for the order
+        if (_.isEqual(this.enemies.sort(), enemies.sort())) {
+            console.log(`Not executing set enemies - the current and received list of enemies is the same`, this.enemies, enemies);
+            return;
+        }
+
         let self = this;
 
         // Remove any enemies that we may have had
