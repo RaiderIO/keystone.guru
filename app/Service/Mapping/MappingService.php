@@ -73,14 +73,23 @@ class MappingService implements MappingServiceInterface
     /**
      * @inheritDoc
      */
-    public function createNewMappingVersion(Dungeon $dungeon): MappingVersion
+    public function createNewMappingVersion(Dungeon $dungeon, bool $quietly = false): MappingVersion
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
-        return MappingVersion::create([
+        $attributes = [
             'dungeon_id' => $dungeon->id,
             'version'    => ++$currentMappingVersion->version,
-        ]);
+        ];
+
+        if ($quietly) {
+            $id     = MappingVersion::insertGetId($attributes);
+            $result = MappingVersion::find($id);
+        } else {
+            $result = MappingVersion::create($attributes);
+        }
+
+        return $result;
     }
 
     /**

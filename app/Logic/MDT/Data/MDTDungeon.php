@@ -12,8 +12,10 @@ namespace App\Logic\MDT\Data;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
+use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
+use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
@@ -34,17 +36,16 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTDungeon
 {
-
-    /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
-    private string $dungeonKey;
+    /** @var Dungeon */
+    private Dungeon $dungeon;
 
     /** @var CacheServiceInterface|mixed */
     private CacheServiceInterface $cacheService;
 
 
-    function __construct($dungeonKey)
+    function __construct(Dungeon $dungeon)
     {
-        $this->dungeonKey = $dungeonKey;
+        $this->dungeon = $dungeon;
 
         $this->cacheService = App::make(CacheServiceInterface::class);
     }
@@ -58,9 +59,9 @@ class MDTDungeon
     {
         $result = new Collection();
 
-        if (Conversion::hasMDTDungeonName($this->dungeonKey)) {
+        if (Conversion::hasMDTDungeonName($this->dungeon->key)) {
             // Fetch the cache or set it if it didn't exist
-            $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeonKey), function () {
+            $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
                 $mdtNpcs = new Collection();
 
                 $lua           = $this->getLua();
@@ -97,13 +98,13 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param $floors Floor|Collection The floors that you want to get the clones for.
+     * @param Floor|Collection $floors The floors that you want to get the clones for.
      * @return Collection|Enemy[]
      * @throws InvalidArgumentException
      */
     public function getClonesAsEnemies(Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeonKey), function () use ($floors) {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($floors) {
             $enemies = new Collection();
 
             try {
@@ -173,8 +174,10 @@ class MDTDungeon
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
                             'enemy_id'                      => -1,
-                            'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null,
-                            'faction'                       => isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any',
+                            'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
+                            'faction'                       => isset($clone['faction']) ?
+                                ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
+                                : 'any',
                             'enemy_forces_override'         => null,
                             'enemy_forces_override_teeming' => null,
                             'lat'                           => $latLng['lat'],
@@ -212,12 +215,12 @@ class MDTDungeon
     {
         $lua = null;
 
-        if (Conversion::hasMDTDungeonName($this->dungeonKey)) {
+        if (Conversion::hasMDTDungeonName($this->dungeon->key)) {
             $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
-            $expansionName    = Conversion::getExpansionName($this->dungeonKey);
-            $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeonKey);
+            $expansionName    = Conversion::getExpansionName($this->dungeon->key);
+            $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
-            $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeonKey);
+            $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
             if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
                 $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 

@@ -2,19 +2,22 @@
 
 namespace App\Service\MDT;
 
+use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
+use App\Service\Mapping\MappingServiceInterface;
 
 interface MDTMappingImportServiceInterface
 {
     /**
-     * @param string $dungeon
+     * @param MappingServiceInterface $mappingService
+     * @param Dungeon $dungeon
      * @return MappingVersion
      */
-    public function getMappingVersion(string $dungeon): MappingVersion;
+    public function importMappingVersionFromMDT(MappingServiceInterface $mappingService, Dungeon $dungeon): MappingVersion;
 
     /**
-     * @param string $dungeon
+     * @param Dungeon $dungeon
      * @return string
      */
-    public function getMDTMappingHash(string $dungeon): string;
+    public function getMDTMappingHash(Dungeon $dungeon): string;
 }
