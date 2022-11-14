@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\MDT;
 
+use App\Logic\MDT\Conversion;
 use App\Models\Expansion;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use Illuminate\Console\Command;
@@ -50,8 +51,10 @@ class ExportMapping extends Command
 
             $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->getCurrentMappingVersion());
 
-            $name     = str_replace(['\'', '-', ':'], '', __($dungeon->name));
-            $name     = implode('', array_map('ucfirst', explode(' ', $name)));
+            $name = Conversion::getMDTDungeonName($dungeon->key);
+            if ($name === null) {
+                throw new \Exception(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
+            }
             $fileName = sprintf('%s/%s.lua', $targetFolder, $name);
 
             $this->info(sprintf('Saving %s', $fileName));

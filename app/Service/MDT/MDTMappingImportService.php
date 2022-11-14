@@ -14,7 +14,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public function getMappingVersion(string $dungeon): MappingVersion
     {
-        // TODO: Implement getMappingVersion() method.
+        $result = null;
+
+        // (new MDTDungeon($dungeon)
+
+        return $result;
     }
 
     /**

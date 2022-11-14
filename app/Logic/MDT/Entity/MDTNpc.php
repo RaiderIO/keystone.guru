@@ -257,7 +257,7 @@ class MDTNpc implements Arrayable
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'index'           => $this->getIndex(),
