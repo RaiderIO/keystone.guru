@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @property int|null $enemy_pack_id
  * @property int|null $npc_id
  * @property int $floor_id
+ * @property int $enemy_patrol_id
  * @property int|null $mdt_id The ID in MDT (clone index) that this enemy is coupled to
  * @property int|null $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
  * @property string $seasonal_type The type of of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
@@ -37,6 +38,7 @@ use Illuminate\Support\Collection;
  * @property EnemyPack|null $enemypack
  * @property Npc|null $npc
  * @property Floor $floor
+ * @property EnemyPatrol|null $enemypatrol
  * @property MappingVersion $mappingVersion
  *
  * @property EnemyActiveAura[]|Collection $enemyactiveauras
@@ -53,6 +55,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'mapping_version_id',
         'floor_id',
         'enemy_pack_id',
+        'enemy_patrol_id',
         'npc_id',
         'mdt_id',
         'mdt_npc_id',
@@ -136,6 +139,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function enemypatrol(): BelongsTo
+    {
+        return $this->belongsTo(EnemyPatrol::class, 'enemy_patrol_id');
     }
 
     /**

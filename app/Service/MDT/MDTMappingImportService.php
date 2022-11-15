@@ -188,9 +188,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         // Get a list of new enemies and save them
         logger()->channel('stderr')->info('Updating Enemy Patrols');
-        $enemies = $mdtDungeon->getClonesAsEnemies($dungeon->floors);
+//        $enemies = $mdtDungeon->getMDTNPCs();
 
-        foreach ($enemies as $enemy) {
+//        foreach ($enemies as $enemy) {
 //            $enemy->exists = false;
 //            $enemy->unsetRelations();
 //
@@ -210,7 +210,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 //            } else {
 //                throw new Exception(sprintf('Unable to save enemy!'));
 //            }
-        }
+//        }
     }
 
     /**
