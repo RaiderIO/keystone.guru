@@ -638,6 +638,7 @@ class DungeonRoute extends Model
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
 
         $this->faction_id     = 1;
         $this->difficulty     = 1;

@@ -54,6 +54,10 @@ class EnemyPack extends VersionableMapObject {
                 default: getState().getCurrentFloor().id
             }),
             new Attribute({
+                name: 'group',
+                type: 'int',
+            }),
+            new Attribute({
                 name: 'color',
                 type: 'color',
                 setter: this.setColor.bind(this),

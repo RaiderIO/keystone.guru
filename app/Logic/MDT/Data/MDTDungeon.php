@@ -166,14 +166,11 @@ class MDTDungeon
                         $enemy = new Enemy([
                             // Dummy so we can ID them later on
                             'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
-                            'is_mdt'                        => true,
                             'floor_id'                      => $floorId,
                             'enemy_pack_id'                 => (int)$clone['g'],
-                            'mdt_npc_index'                 => (int)$clone['mdtNpcIndex'],
                             'npc_id'                        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
-                            'enemy_id'                      => -1,
                             'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
                             'faction'                       => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
@@ -183,6 +180,10 @@ class MDTDungeon
                             'lat'                           => $latLng['lat'],
                             'lng'                           => $latLng['lng'],
                         ]);
+                        // Special MDT fields which are not fillable
+                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                        $enemy->is_mdt        = true;
+                        $enemy->enemy_id      = -1;
 
                         $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 

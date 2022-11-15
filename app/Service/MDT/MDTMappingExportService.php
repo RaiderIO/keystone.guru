@@ -3,12 +3,10 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
-use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
-use Exception;
 use Illuminate\Support\Collection;
 
 class MDTMappingExportService implements MDTMappingExportServiceInterface
@@ -189,8 +187,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 $group = $enemyPackGroups->count() + 1;
                 // Individual enemies with no pack
                 if ($enemy->enemy_pack_id === null) {
-                    // The ID doesn't really matter - it's just to offset the group for the next pack, this enemy is now its own group
-                    $enemyPackGroups->put($enemy->id * 1000, $group);
+                    $group = null;
                 } else if (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
                     $enemyPackGroups->put($enemy->enemy_pack_id, $group);
                 } else {
@@ -198,9 +195,13 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 }
 
                 $dungeonEnemy['clones'][++$cloneIndex] = array_merge([
-                    'g'        => $group,
                     'sublevel' => $enemy->floor->mdt_sub_level ?? $enemy->floor->index,
                 ], Conversion::convertLatLngToMDTCoordinate(['lat' => $enemy->lat, 'lng' => $enemy->lng]));
+
+                // Only add the group if the enemy had a group - group is optional
+                if (!is_null($group)) {
+                    $dungeonEnemy['clones'][$cloneIndex]['g'] = $group;
+                }
             }
 
             $dungeonEnemies[++$dungeonEnemyIndex] = $dungeonEnemy;

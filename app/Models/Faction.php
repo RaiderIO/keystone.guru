@@ -23,6 +23,7 @@ class Faction extends CacheModel
 {
     use HasIconFile;
 
+    const FACTION_ANY         = 'any';
     const FACTION_UNSPECIFIED = 'unspecified';
     const FACTION_HORDE       = 'horde';
     const FACTION_ALLIANCE    = 'alliance';

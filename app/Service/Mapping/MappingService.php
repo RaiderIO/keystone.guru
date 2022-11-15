@@ -8,6 +8,7 @@ use App\Models\Floor;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
@@ -80,6 +81,8 @@ class MappingService implements MappingServiceInterface
         $attributes = [
             'dungeon_id' => $dungeon->id,
             'version'    => ++$currentMappingVersion->version,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
         ];
 
         if ($quietly) {

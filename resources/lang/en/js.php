@@ -388,6 +388,7 @@ return [
     'enemypatrol_weight_label'                                      => 'Weight',
 
     // Enemy pack
+    'enemypack_group_label'                                         => 'Group',
     'enemypack_color_label'                                         => 'Color',
     'enemypack_color_animated_label'                                => 'Color animated',
     'enemypack_faction_label'                                       => 'Faction',

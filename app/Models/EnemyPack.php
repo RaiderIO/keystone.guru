@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $mapping_version_id
  * @property int $floor_id
+ * @property int $group
  * @property string $teeming
  * @property string $faction
  * @property string|null $color
@@ -34,7 +35,9 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
 
     protected $fillable = [
         'id',
+        'mapping_version_id',
         'floor_id',
+        'group',
         'teeming',
         'faction',
         'color',
