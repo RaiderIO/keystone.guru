@@ -4,7 +4,7 @@ namespace App\Logic\MDT\Entity;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class MDTMapPOI  implements Arrayable
+class MDTMapPOI implements Arrayable
 {
     public const TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
     public const TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
@@ -28,7 +28,7 @@ class MDTMapPOI  implements Arrayable
         self::TYPE_IRON_DOCKS_IRON_STAR,
     ];
 
-    private int $floorIndex;
+    private int $subLevel;
 
     private string $template;
 
@@ -47,14 +47,14 @@ class MDTMapPOI  implements Arrayable
     private array $rawMapPOI;
 
     /**
-     * @param int $floorIndex
+     * @param int $subLevel
      * @param array $rawMapPOI
      * @throws \Exception
      */
-    public function __construct(int $floorIndex, array $rawMapPOI)
+    public function __construct(int $subLevel, array $rawMapPOI)
     {
-        $this->floorIndex = $floorIndex;
-        $this->rawMapPOI  = $rawMapPOI;
+        $this->subLevel  = $subLevel;
+        $this->rawMapPOI = $rawMapPOI;
 
         $this->template        = $rawMapPOI['template'];
         $this->type            = $rawMapPOI['type'];
@@ -76,9 +76,9 @@ class MDTMapPOI  implements Arrayable
     /**
      * @return int
      */
-    public function getFloorIndex(): int
+    public function getSubLevel(): int
     {
-        return $this->floorIndex;
+        return $this->subLevel;
     }
 
     /**
@@ -146,4 +146,20 @@ class MDTMapPOI  implements Arrayable
     }
 
 
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'subLevel'        => $this->subLevel,
+            'template'        => $this->template,
+            'type'            => $this->type,
+            'target'          => $this->target,
+            'direction'       => $this->direction,
+            'connectionIndex' => $this->connectionIndex,
+            'x'               => $this->x,
+            'y'               => $this->y,
+        ];
+    }
 }

@@ -11,9 +11,10 @@ interface MDTMappingImportServiceInterface
     /**
      * @param MappingServiceInterface $mappingService
      * @param Dungeon $dungeon
+     * @param bool $forceImport
      * @return MappingVersion
      */
-    public function importMappingVersionFromMDT(MappingServiceInterface $mappingService, Dungeon $dungeon): MappingVersion;
+    public function importMappingVersionFromMDT(MappingServiceInterface $mappingService, Dungeon $dungeon, bool $forceImport = false): MappingVersion;
 
     /**
      * @param Dungeon $dungeon

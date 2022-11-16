@@ -28,10 +28,11 @@ interface MappingServiceInterface
      * Creates a new mapping version for a dungeon.
      *
      * @param Dungeon $dungeon
+     * @param string|null $hash
      * @param bool $quietly
      * @return MappingVersion
      */
-    public function createNewMappingVersion(Dungeon $dungeon, bool $quietly): MappingVersion;
+    public function createNewMappingVersion(Dungeon $dungeon, ?string $hash, bool $quietly): MappingVersion;
 
     /**
      * Gets a mapping version of a dungeon, or creates a new one for this dungeon if the most recent version has been pushed.

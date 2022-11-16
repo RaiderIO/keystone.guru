@@ -17,7 +17,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon}';
+    protected $signature = 'mdt:importmapping {dungeon} {force=false}';
 
     /**
      * The console command description.
@@ -45,7 +45,8 @@ class ImportMapping extends Command
     public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService)
     {
         $dungeonKey = $this->argument('dungeon');
+        $force = $this->argument('force') === 'true';
 
-        $mappingImportService->importMappingVersionFromMDT($mappingService, Dungeon::where('key', $dungeonKey)->firstOrFail());
+        $mappingImportService->importMappingVersionFromMDT($mappingService, Dungeon::where('key', $dungeonKey)->firstOrFail(), $force);
     }
 }

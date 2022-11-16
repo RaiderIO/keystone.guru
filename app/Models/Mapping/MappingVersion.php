@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $version
+ * @property string|null $mdt_mapping_hash
  * @property bool $merged Not saved in the database
  *
  * @property Carbon $updated_at
@@ -41,12 +42,14 @@ class MappingVersion extends Model
         'id',
         'dungeon_id',
         'version',
+        'mdt_mapping_hash',
         'merged',
     ];
 
     protected $fillable = [
         'dungeon_id',
         'version',
+        'mdt_mapping_hash',
         'updated_at',
         'created_at',
     ];

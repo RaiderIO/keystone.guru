@@ -16,6 +16,8 @@ class EnemyPatrol extends Polyline {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypatrol', hasRouteModelBinding: true});
 
+        this.weight = c.map.enemypatrol.defaultWeight;
+
         this.label = 'EnemyPatrol';
     }
 

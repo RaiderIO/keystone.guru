@@ -4,7 +4,6 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
@@ -74,15 +73,16 @@ class MappingService implements MappingServiceInterface
     /**
      * @inheritDoc
      */
-    public function createNewMappingVersion(Dungeon $dungeon, bool $quietly = false): MappingVersion
+    public function createNewMappingVersion(Dungeon $dungeon, ?string $hash, bool $quietly = false): MappingVersion
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $attributes = [
-            'dungeon_id' => $dungeon->id,
-            'version'    => ++$currentMappingVersion->version,
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
+            'dungeon_id'       => $dungeon->id,
+            'mdt_mapping_hash' => $hash,
+            'version'          => ++$currentMappingVersion->version,
+            'created_at'       => Carbon::now()->toDateTimeString(),
+            'updated_at'       => Carbon::now()->toDateTimeString(),
         ];
 
         if ($quietly) {

@@ -48,6 +48,26 @@ class MDTDungeon
         $this->dungeon = $dungeon;
 
         $this->cacheService = App::make(CacheServiceInterface::class);
+
+        if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
+            throw new Exception(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
+        }
+    }
+
+    /**
+     * @return array{normal: int, teeming: int, teemingEnabled: bool}
+     * @throws Exception
+     */
+    public function getDungeonTotalCount(): array
+    {
+        $lua               = $this->getLua();
+        $dungeonTotalCount = $lua->call('GetDungeonTotalCount');
+
+        return [
+            'normal'         => (int)$dungeonTotalCount['normal'],
+            'teeming'        => (int)$dungeonTotalCount['teeming'],
+            'teemingEnabled' => $dungeonTotalCount['teemingEnabled'],
+        ];
     }
 
     /**
@@ -57,24 +77,17 @@ class MDTDungeon
      */
     public function getMDTNPCs(): Collection
     {
-        $result = new Collection();
+        return $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
+            $mdtNpcs = new Collection();
 
-        if (Conversion::hasMDTDungeonName($this->dungeon->key)) {
-            // Fetch the cache or set it if it didn't exist
-            $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
-                $mdtNpcs = new Collection();
+            $lua           = $this->getLua();
+            $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
-                $lua           = $this->getLua();
-                $rawMdtEnemies = $lua->call('GetDungeonEnemies');
-
-                foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
-                    $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
-                }
-                return $mdtNpcs;
-            }, config('keystoneguru.cache.mdt.ttl'));
-        }
-
-        return $result;
+            foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
+                $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+            }
+            return $mdtNpcs;
+        }, config('keystoneguru.cache.mdt.ttl'));
     }
 
     /**
@@ -87,9 +100,9 @@ class MDTDungeon
         $rawMdtMapPOIs = $lua->call('GetMapPOIs');
         $result        = new Collection();
 
-        foreach ($rawMdtMapPOIs as $floorIndex => $pois) {
+        foreach ($rawMdtMapPOIs as $subLevel => $pois) {
             foreach ($pois as $poiIndex => $poi) {
-                $result->push(new MDTMapPOI((int)$floorIndex, $poi));
+                $result->push(new MDTMapPOI((int)$subLevel, $poi));
             }
         }
 
@@ -216,22 +229,21 @@ class MDTDungeon
     {
         $lua = null;
 
-        if (Conversion::hasMDTDungeonName($this->dungeon->key)) {
-            $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
-            $expansionName    = Conversion::getExpansionName($this->dungeon->key);
-            $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
+        $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
+        $expansionName    = Conversion::getExpansionName($this->dungeon->key);
+        $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
-            $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
-            if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
-                $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
+        $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
+        if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+            $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
-                $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
+            $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
 
-                if (!file_exists($mdtDungeonNameFile)) {
-                    throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
-                }
+            if (!file_exists($mdtDungeonNameFile)) {
+                throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
+            }
 
-                $eval = '
+            $eval = '
                         local MDT = {}
                         MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
                         MDT.dungeonTotalCount = {}
@@ -246,12 +258,12 @@ class MDTDungeon
 
                         local L = {}
                         ' .
-                    // Some files require LibStub
-                    file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
-                    // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                    file_get_contents($mdtDungeonNameFile) . PHP_EOL .
-                    // Insert dummy function to get what we need
-                    '
+                // Some files require LibStub
+                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
+                file_get_contents($mdtDungeonNameFile) . PHP_EOL .
+                // Insert dummy function to get what we need
+                '
                         function GetDungeonTotalCount()
                             return MDT.dungeonTotalCount[dungeonIndex]
                         end
@@ -265,12 +277,11 @@ class MDTDungeon
                         end
                     ';
 
-                try {
-                    $lua = new Lua();
-                    $lua->eval($eval);
-                } catch (LuaException $ex) {
-                    dd($ex, $expansionName, $mdtDungeonName, $eval);
-                }
+            try {
+                $lua = new Lua();
+                $lua->eval($eval);
+            } catch (LuaException $ex) {
+                dd($ex, $expansionName, $mdtDungeonName, $eval);
             }
         }
 

@@ -309,7 +309,8 @@ let c = {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
                 return '#E25D5D';
-            }
+            },
+            defaultWeight: 2,
         },
         path: {
             defaultColor: polylineDefaultColor,
