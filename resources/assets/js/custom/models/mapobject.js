@@ -377,7 +377,7 @@ class MapObject extends Signalable {
                             break;
                     }
 
-                    if (isNaN(val)) {
+                    if (typeof val === 'number' && isNaN(val)) {
                         val = null;
                     }
 
