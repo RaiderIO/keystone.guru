@@ -106,7 +106,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     /**
      * @return array
      */
-    function getActiveAurasAttribute(): array
+    public function getActiveAurasAttribute(): array
     {
         $result = [];
 

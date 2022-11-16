@@ -24,7 +24,7 @@ class GameIcon extends Model
     /**
      * @return BelongsTo
      */
-    function file(): BelongsTo
+    public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);
     }

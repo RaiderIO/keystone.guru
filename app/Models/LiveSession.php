@@ -56,7 +56,7 @@ class LiveSession extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -64,9 +64,9 @@ class LiveSession extends Model
      *
      * @return BelongsTo
      */
-    public function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute', 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
     }
 
     /**
@@ -74,7 +74,7 @@ class LiveSession extends Model
      */
     public function overpulledenemies(): HasMany
     {
-        return $this->hasMany('App\Models\Enemies\OverpulledEnemy');
+        return $this->hasMany(OverpulledEnemy::class);
     }
 
     /**

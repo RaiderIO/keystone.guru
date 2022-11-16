@@ -45,7 +45,7 @@ class GameServerRegion extends CacheModel
     /**
      * @return HasMany
      */
-    function users(): HasMany
+    public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }

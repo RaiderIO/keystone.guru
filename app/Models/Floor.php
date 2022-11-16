@@ -177,7 +177,7 @@ class Floor extends CacheModel
     /**
      * @return HasMany
      */
-    function dungeonFloorSwitchMarkersForExport(): HasMany
+    public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
     }

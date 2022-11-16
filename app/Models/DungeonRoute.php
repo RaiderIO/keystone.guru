@@ -360,7 +360,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    function team(): BelongsTo
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

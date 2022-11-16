@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $dungeon_route_id int
- * @property $character_class_id int
- * @property $index int
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $character_class_id
+ * @property int $index
  *
  * @mixin \Eloquent
  */
@@ -24,18 +25,18 @@ class DungeonRoutePlayerClass extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function characterclass()
+    public function characterclass(): BelongsTo
     {
-        return $this->belongsTo('App\Models\CharacterClass');
+        return $this->belongsTo(CharacterClass::class);
     }
 }

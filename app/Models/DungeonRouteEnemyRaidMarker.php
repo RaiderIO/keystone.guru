@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -10,7 +12,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $raid_marker_id
  * @property int $enemy_id
  *
- * @mixin \Eloquent
+ * @property DungeonRoute $dungeonroute
+ * @property RaidMarker $raidmarker
+ * @property Enemy $enemy
+ *
+ * @mixin Eloquent
  */
 class DungeonRouteEnemyRaidMarker extends Model
 {
@@ -18,26 +24,26 @@ class DungeonRouteEnemyRaidMarker extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function raidmarker()
+    public function raidmarker(): BelongsTo
     {
-        return $this->belongsTo('App\Models\RaidMarker');
+        return $this->belongsTo(RaidMarker::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function enemy()
+    public function enemy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Enemy::class);
     }
 }

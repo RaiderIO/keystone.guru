@@ -8,16 +8,17 @@ use App\Models\Expansion;
 use App\Models\Traits\HasStart;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
- * @property $id int The ID of this timewalking event.
- * @property $expansion_id int
- * @property $season_id int
- * @property $key string
- * @property $name string
- * @property $start Carbon
- * @property $start_duration_weeks int
- * @property $week_interval int
+ * @property int $id The ID of this timewalking event.
+ * @property int $expansion_id
+ * @property int $season_id
+ * @property string $key
+ * @property string $name
+ * @property Carbon $start
+ * @property int $start_duration_weeks
+ * @property int $week_interval
  *
  * @property Expansion $expansion
  *
@@ -40,6 +41,6 @@ class TimewalkingEvent extends CacheModel
      */
     public function expansion(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Expansion');
+        return $this->belongsTo(Expansion::class);
     }
 }

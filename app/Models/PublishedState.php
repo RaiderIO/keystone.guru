@@ -9,8 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property $id int
- * @property $name string
+ * @property int $id
+ * @property string $name
+ *
+ * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
  */
@@ -39,9 +41,9 @@ class PublishedState extends CacheModel
     /**
      * @return HasMany
      */
-    public function dungeonroutes()
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**

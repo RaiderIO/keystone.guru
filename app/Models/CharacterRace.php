@@ -28,33 +28,33 @@ class CharacterRace extends CacheModel
     /**
      * @return BelongsToMany
      */
-    function classes()
+    public function classes(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\CharacterClass', 'character_race_class_couplings');
+        return $this->belongsToMany(CharacterClass::class, 'character_race_class_couplings');
     }
 
     /**
      * @return HasMany
      */
-    function specializations()
+    public function specializations(): HasMany
     {
-        return $this->hasMany('App\Models\CharacterClass');
+        return $this->hasMany(CharacterClass::class);
     }
 
     /**
      * @return BelongsTo
      */
-    public function faction()
+    public function faction(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Faction');
+        return $this->belongsTo(Faction::class);
     }
 
     /**
      * @return HasMany
      */
-    function dungeonrouteplayerrace()
+    public function dungeonrouteplayerrace(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+        return $this->hasMany(DungeonRoutePlayerRace::class);
     }
 
     public static function boot()

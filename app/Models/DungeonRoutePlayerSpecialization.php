@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property $id int
- * @property $dungeon_route_id int
- * @property $character_class_specialization_id int
- * @property $index int
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $character_class_specialization_id
+ * @property int $index
  *
  * @mixin Eloquent
  */
@@ -28,24 +28,24 @@ class DungeonRoutePlayerSpecialization extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute', 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
     }
 
     /**
      * @return BelongsTo
      */
-    public function characterclassspecialization()
+    public function characterclassspecialization(): BelongsTo
     {
-        return $this->belongsTo('App\Models\CharacterClassSpecialization');
+        return $this->belongsTo(CharacterClassSpecialization::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    public function specializations()
+    public function specializations(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\DungeonRoutePlayerSpecialization', 'dungeon_route_player_specializations');
+        return $this->belongsToMany(DungeonRoutePlayerSpecialization::class, 'dungeon_route_player_specializations');
     }
 }

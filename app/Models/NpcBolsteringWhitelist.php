@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
+
 /**
  * @property int $id
  * @property int $npc_id
@@ -10,7 +13,7 @@ namespace App\Models;
  * @property Npc $npc
  * @property Npc $whitelistnpc
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class NpcBolsteringWhitelist extends CacheModel
 {
@@ -21,19 +24,19 @@ class NpcBolsteringWhitelist extends CacheModel
     public $with = ['whitelistnpc'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return BelongsTo
      */
-    function npc()
+    public function npc(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Npc');
+        return $this->belongsTo(Npc::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return BelongsTo
      */
-    function whitelistnpc()
+    public function whitelistnpc(): BelongsTo
     {
         // Without to prevent infinite recursion
-        return $this->belongsTo('App\Models\Npc', 'whitelist_npc_id')->without('npcbolsteringwhitelists');
+        return $this->belongsTo(Npc::class, 'whitelist_npc_id')->without('npcbolsteringwhitelists');
     }
 }

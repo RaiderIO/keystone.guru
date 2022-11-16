@@ -14,8 +14,8 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property string $color
  *
- * @property Collection $races
- * @property Collection $dungeonroutes
+ * @property Collection|CharacterRace[] $races
+ * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
  */
@@ -38,21 +38,20 @@ class Faction extends CacheModel
         self::FACTION_ALLIANCE    => 3,
     ];
 
-
     /**
      * @return HasMany
      */
-    function races(): HasMany
+    public function races(): HasMany
     {
-        return $this->hasMany('App\Models\CharacterRace');
+        return $this->hasMany(CharacterRace::class);
     }
 
     /**
      * @return HasMany
      */
-    function dungeonroutes(): HasMany
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     public static function boot()

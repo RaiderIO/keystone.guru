@@ -53,7 +53,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     /**
      * @return BelongsTo
      */
-    function floor(): BelongsTo
+    public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
@@ -61,7 +61,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     /**
      * @return BelongsTo
      */
-    function targetfloor(): BelongsTo
+    public function targetfloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class, 'target_floor_id');
     }

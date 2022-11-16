@@ -75,7 +75,7 @@ class Npc extends CacheModel
      *
      * @return hasMany
      */
-    function enemies(): HasMany
+    public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
@@ -83,7 +83,7 @@ class Npc extends CacheModel
     /**
      * @return hasMany
      */
-    function npcbolsteringwhitelists(): HasMany
+    public function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany(NpcBolsteringWhitelist::class);
     }
@@ -91,7 +91,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function dungeon(): BelongsTo
+    public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
@@ -99,7 +99,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function classification(): BelongsTo
+    public function classification(): BelongsTo
     {
         return $this->belongsTo(NpcClassification::class);
     }
@@ -107,7 +107,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function type(): BelongsTo
+    public function type(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcType::class, 'npc_type_id');
@@ -116,7 +116,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function class(): BelongsTo
+    public function class(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcClass::class, 'npc_class_id');
@@ -133,7 +133,7 @@ class Npc extends CacheModel
     /**
      * @return HasMany
      */
-    function npcspells(): HasMany
+    public function npcspells(): HasMany
     {
         return $this->hasMany(NpcSpell::class);
     }

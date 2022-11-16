@@ -419,7 +419,7 @@ class Dungeon extends CacheModel
      */
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
-        return $this->hasMany('App\Models\Npc')
+        return $this->hasMany(Npc::class)
             ->when($includeGlobalNpcs, function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });

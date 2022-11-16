@@ -3,6 +3,7 @@
 namespace App\Models\Enemies;
 
 use App\Models\Enemy;
+use App\Models\KillZone;
 use App\Models\LiveSession;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $enemy_id
  *
  * @property LiveSession $livesession
+ * @property KillZone $killzone
  * @property Enemy $enemy
  *
  * @mixin Eloquent
@@ -34,24 +36,24 @@ class OverpulledEnemy extends Model
     /**
      * @return BelongsTo
      */
-    function livesession()
+    public function livesession(): BelongsTo
     {
-        return $this->belongsTo('App\Models\LiveSession');
+        return $this->belongsTo(LiveSession::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function killzone()
+    public function killzone(): BelongsTo
     {
-        return $this->belongsTo('App\Models\KillZone');
+        return $this->belongsTo(KillZone::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function enemy()
+    public function enemy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Enemy::class);
     }
 }

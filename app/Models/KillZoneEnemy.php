@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $kill_zone_id int
- * @property $enemy_id int
+ * @property int $id
+ * @property int $kill_zone_id
+ * @property int $npc_id
+ * @property int $mdt_id
  *
  * @property KillZone $killzone
- * @property Enemy $enemy
+ * @property Npc $npc
  *
  * @mixin Eloquent
  */
@@ -24,7 +25,8 @@ class KillZoneEnemy extends Model
 
     protected $fillable = [
         'kill_zone_id',
-        'enemy_id',
+        'npc_id',
+        'mdt_id',
     ];
 
     /**
@@ -32,14 +34,22 @@ class KillZoneEnemy extends Model
      */
     public function killzone(): BelongsTo
     {
-        return $this->belongsTo('App\Models\KillZone');
+        return $this->belongsTo(KillZone::class);
     }
 
     /**
      * @return BelongsTo
      */
-    public function enemy(): BelongsTo
+    public function npc(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return Enemy
+     */
+    public function enemy(): Enemy
+    {
+        return Enemy::where('npc_id', $this->npc_id)->where('mdt_id', $this->mdt_id)->first();
     }
 }

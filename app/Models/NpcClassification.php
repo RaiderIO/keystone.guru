@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $shortname
  * @property string $color
+ *
+ * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
  */
@@ -37,8 +40,8 @@ class NpcClassification extends CacheModel
      *
      * @return HasMany
      */
-    function npcs(): HasMany
+    public function npcs(): HasMany
     {
-        return $this->hasMany('App\Models\Npc');
+        return $this->hasMany(Npc::class);
     }
 }

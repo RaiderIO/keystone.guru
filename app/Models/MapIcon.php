@@ -45,7 +45,7 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     /**
      * @return BelongsTo
      */
-    function floor(): BelongsTo
+    public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
@@ -53,7 +53,7 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     /**
      * @return BelongsTo
      */
-    function dungeonroute(): BelongsTo
+    public function dungeonroute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
