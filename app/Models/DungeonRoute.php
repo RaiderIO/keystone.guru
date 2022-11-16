@@ -516,15 +516,20 @@ class DungeonRoute extends Model
             from `dungeon_routes`
                      left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
                      left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
-                     left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                     left join `enemies` on `enemies`.`npc_id` = `kill_zone_enemies`.`npc_id`
+                         AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
                      left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
                      left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                 where `dungeon_routes`.id = :id
+                    AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
             group by `dungeon_routes`.id
             ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['id' => $this->id]);
 
             $result = $result[0]->enemy_forces;
         }
+        /**
+         *
+         */
 
         return $result;
     }
@@ -1002,7 +1007,7 @@ class DungeonRoute extends Model
         // If we kill a pack that contains enemies with the new seasonal type, we must assign these enemies to the pulls as well
         $checkedEnemyPacks = collect();
         foreach ($this->killzones as $killZone) {
-            foreach ($killZone->enemies as $enemy) {
+            foreach ($killZone->getEnemies() as $enemy) {
                 // Just in case the mapping was changed since then
                 if ($enemy === null) {
                     continue;
@@ -1016,7 +1021,7 @@ class DungeonRoute extends Model
                     // Get any new enemies in this pack that have the seasonal type we're migrating to
                     foreach ($enemy->enemypack->getEnemiesWithSeasonalType($seasonalType) as $seasonalTypeEnemy) {
                         // But only create new enemies if these enemies are new to the pack
-                        if ($killZone->enemies->filter(function (Enemy $enemy) use ($seasonalTypeEnemy) {
+                        if ($killZone->getEnemies()->filter(function (Enemy $enemy) use ($seasonalTypeEnemy) {
                             return $enemy->id === $seasonalTypeEnemy->id;
                         })->isEmpty()) {
                             KillZoneEnemy::create([
@@ -1094,7 +1099,7 @@ class DungeonRoute extends Model
         $result = false;
 
         foreach ($this->killzones as $killZone) {
-            if ($killZone->enemies->filter(function ($enemy) use ($enemyId) {
+            if ($killZone->getEnemies()->filter(function ($enemy) use ($enemyId) {
                 return $enemy->id === $enemyId;
             })->isNotEmpty()) {
                 $result = true;

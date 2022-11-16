@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -48,14 +48,6 @@ class KillZone extends Model
     }
 
     /**
-     * @return BelongsToMany
-     */
-    public function enemies(): BelongsToMany
-    {
-        return $this->belongsToMany(Enemy::class, 'kill_zone_enemies');
-    }
-
-    /**
      * @return HasMany
      */
     public function killzoneenemies(): HasMany
@@ -72,6 +64,26 @@ class KillZone extends Model
     }
 
     /**
+     * @return Collection|Enemy[]
+     */
+    public function getEnemies(): Collection
+    {
+        return Enemy::select('enemies.*')
+            ->join('kill_zone_enemies', function (JoinClause $clause) {
+                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
+                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('kill_zone_enemies.kill_zone_id', $this->id)
+//            ->join('kill_zones', 'kill_zones.id');
+            ->get();
+
+//        return $this->belongsToMany(Enemy::class, 'kill_zone_enemies');
+    }
+
+    /**
      * The floor that we have a killzone on, or the floor that contains the most enemies (and thus most dominant floor)
      * @return Floor
      */
@@ -79,9 +91,9 @@ class KillZone extends Model
     {
         if (isset($this->floor_id) && $this->floor_id > 0) {
             return $this->floor;
-        } else if ($this->enemies->count() > 0) {
+        } else if ($this->killzoneenemies()->count() > 0) {
             $floorTotals = [];
-            foreach ($this->enemies as $enemy) {
+            foreach ($this->getEnemies() as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
                     $floorTotals[$enemy->floor_id] = 0;
                 }
@@ -108,12 +120,13 @@ class KillZone extends Model
             $totalLng = 0;
             $totalLat = 0;
 
-            foreach ($this->enemies as $enemy) {
+            $enemies = $this->getEnemies();
+            foreach ($enemies as $enemy) {
                 $totalLat += $enemy->lat;
                 $totalLng += $enemy->lng;
             }
 
-            return ['lat' => $totalLat / $this->enemies->count(), 'lng' => $totalLng / $this->enemies->count()];
+            return ['lat' => $totalLat / $enemies->count(), 'lng' => $totalLng / $enemies->count()];
         }
     }
 
