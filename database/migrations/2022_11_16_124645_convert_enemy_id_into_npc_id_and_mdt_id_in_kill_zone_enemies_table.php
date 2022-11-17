@@ -24,7 +24,7 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
         DB::update('
             UPDATE `kill_zone_enemies`
                 LEFT JOIN `enemies` ON `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
-            SET `kill_zone_enemies`.`npc_id` = `enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id` = `enemies`.`mdt_id`
+            SET `kill_zone_enemies`.`npc_id` = coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`), `kill_zone_enemies`.`mdt_id` = `enemies`.`mdt_id`
                 WHERE `enemies`.`mdt_id` is not null;
         ');
     }

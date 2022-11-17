@@ -514,12 +514,13 @@ class DungeonRoute extends Model
                                ), 0
                        ) AS SIGNED) as enemy_forces
             from `dungeon_routes`
+                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                      left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
                      left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
-                     left join `enemies` on `enemies`.`npc_id` = `kill_zone_enemies`.`npc_id`
-                         AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
-                     left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
-                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                     left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
+                        AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
+                        AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
+                     left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                 where `dungeon_routes`.id = :id
                     AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
             group by `dungeon_routes`.id
