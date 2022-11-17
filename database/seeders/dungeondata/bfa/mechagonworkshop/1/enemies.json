@@ -205,5 +205,28 @@
         "npc": {
             "id": 144295
         }
+    },
+    {
+        "id": 10530,
+        "enemy_pack_id": 667,
+        "npc_id": 144295,
+        "floor_id": 67,
+        "mdt_id": -1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -170.58170571706,
+        "lng": 112.28526420096,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 144295
+        }
     }
 ]
