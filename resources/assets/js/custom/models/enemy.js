@@ -32,6 +32,7 @@ let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
 let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
 let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
 
 /**
  * @property {Number} floor_id
@@ -230,7 +231,8 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
-                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'},
+                    {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: 'Shrouded not active'}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value;
@@ -535,7 +537,7 @@ class Enemy extends MapObject {
             for (let key in enemyMapObjectGroup.objects) {
                 let enemy = enemyMapObjectGroup.objects[key];
                 // Visible check for possible hidden Awakened Enemies on the last boss
-                if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.isVisible()) {
+                if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.shouldBeVisible()) {
                     result.push(enemy);
                 }
             }
@@ -689,9 +691,13 @@ class Enemy extends MapObject {
         if (mapContext instanceof MapContextDungeonRoute) {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
+                let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
                 if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
+                    // Special case for enemies marked as non-shrouded which replace the enemies that are marked as shrouded
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED && hasShroudedAffix) ||
                     // MDT placeholders are only to suppress warnings when importing - don't show these on the map
                     this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);

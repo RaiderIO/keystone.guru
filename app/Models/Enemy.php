@@ -55,6 +55,7 @@ class Enemy extends CacheModel
     const SEASONAL_TYPE_MDT_PLACEHOLDER    = 'mdt_placeholder';
     const SEASONAL_TYPE_SHROUDED           = 'shrouded';
     const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+    const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
 
     const SEASONAL_TYPE_ALL = [
         self::SEASONAL_TYPE_AWAKENED,
@@ -65,6 +66,7 @@ class Enemy extends CacheModel
         self::SEASONAL_TYPE_MDT_PLACEHOLDER,
         self::SEASONAL_TYPE_SHROUDED,
         self::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
+        self::SEASONAL_TYPE_NO_SHROUDED,
     ];
 
     /**
