@@ -30,6 +30,22 @@ class Conversion
     ];
 
     const DUNGEON_NAME_MAPPING = [
+        Expansion::EXPANSION_WOTLK => [
+            Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
+            Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
+            Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
+            Dungeon::DUNGEON_GUNDRAK                   => 'Gundrak',
+            Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
+            Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
+            Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
+            Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
+            Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
+            Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
+            Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
+            Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
+            Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
+        ],
+
         Expansion::EXPANSION_MOP => [
 //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
         ],
@@ -72,8 +88,8 @@ class Conversion
 
         Expansion::EXPANSION_SHADOWLANDS => [
             // WoD
-            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
-            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+            Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
+            Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
             // SL
             Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
             Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
@@ -91,16 +107,16 @@ class Conversion
             // MoP
             Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
             // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
             // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY     => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW    => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION     => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS             => 'Neltharus',
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS       => 'RubyLifePools',
-            Dungeon::DUNGEON_THE_AZURE_VAULT       => 'TheAzureVault',
-            Dungeon::DUNGEON_NOKHUD_OFFENSIVE      => 'TheNokhudOffensive',
-            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR => 'UldamanLegacyOfTyr',
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
+            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW         => 'BrackenhideHollow',
+            Dungeon::DUNGEON_HALLS_OF_INFUSION          => 'HallsOfInfusion',
+            Dungeon::DUNGEON_NELTHARUS                  => 'Neltharus',
+            Dungeon::DUNGEON_RUBY_LIFE_POOLS            => 'RubyLifePools',
+            Dungeon::DUNGEON_THE_AZURE_VAULT            => 'TheAzureVault',
+            Dungeon::DUNGEON_NOKHUD_OFFENSIVE           => 'TheNokhudOffensive',
+            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR      => 'UldamanLegacyOfTyr',
         ],
     ];
 

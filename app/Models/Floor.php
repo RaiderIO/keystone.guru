@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Logic\Utils\MathUtils;
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
@@ -50,7 +51,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Floor extends CacheModel
+class Floor extends CacheModel implements MappingModelInterface
 {
     use HasFactory;
 
@@ -289,5 +290,13 @@ class Floor extends CacheModel
             'lat' => (self::MAP_MAX_LAT * $factorY),
             'lng' => (self::MAP_MAX_LNG * $factorX),
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->dungeon_id;
     }
 }
