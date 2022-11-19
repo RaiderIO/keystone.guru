@@ -29,7 +29,7 @@ class KillZoneFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'        => 'int',
+            'id'        => 'nullable|int',
             'floor_id'  => ['nullable', Rule::exists(Floor::class, 'id')],
             'color'     => 'nullable|string',
             'lat'       => 'nullable|numeric',

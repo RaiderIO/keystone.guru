@@ -26,7 +26,7 @@ class DungeonMap extends Signalable {
             let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
 
             let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                'upgrade_url': 'https://google.com'
+                'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
             });
 
             state.addSnackbar(template(data));

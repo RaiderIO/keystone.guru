@@ -146,6 +146,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
 
         Route::group(['prefix' => '{title?}'], function () {
+            // Upgrade the mapping of a route
+            Route::get('upgrade', [DungeonRouteController::class, 'upgrade'])->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
             Route::get('edit/{floorindex}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
@@ -438,9 +440,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::post('/brushline', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
 
+            Route::put('/killzone/mass', [APIKillZoneController::class, 'storeall']);
             Route::post('/killzone', [APIKillZoneController::class, 'store']);
-            Route::delete('/killzone/{killzone}', [APIKillZoneController::class, 'delete']);
-            Route::put('/killzone', [APIKillZoneController::class, 'storeall']);
+            Route::put('/killzone/{killZone}', [APIKillZoneController::class, 'store']);
+            Route::delete('/killzone/{killZone}', [APIKillZoneController::class, 'delete']);
             Route::delete('/killzone', [APIKillZoneController::class, 'deleteAll']);
 
             Route::post('/mapicon', [APIMapIconController::class, 'store']);

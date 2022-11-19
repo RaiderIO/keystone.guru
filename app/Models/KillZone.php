@@ -159,7 +159,22 @@ class KillZone extends Model
      */
     public function getSkippableEnemyForces(bool $teeming): Collection
     {
-        $queryResult = DB::select('
+        $isShrouded = $this->dungeonroute->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
+
+        // Ignore the shrouded query if we're not shrouded (make it fail)
+        $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
+            IF(
+                enemies.seasonal_type = "shrouded",
+                dungeons.enemy_forces_shrouded,
+                IF(
+                    enemies.seasonal_type = "shrouded_zul_gamux",
+                    dungeons.enemy_forces_shrouded_zul_gamux,
+                    npcs.enemy_forces
+                )
+            )
+        ' : 'npcs.enemy_forces';
+
+        $queryResult = DB::select(sprintf('
             select `kill_zone_enemies`.*,
                     enemies.id as enemy_id,
                     enemies.enemy_pack_id,
@@ -169,14 +184,14 @@ class KillZone extends Model
                                       IF(
                                               enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
-                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, %s)
                                           )
                                   ),
                               SUM(
                                       IF(
                                               enemies.enemy_forces_override IS NOT NULL,
                                               enemies.enemy_forces_override,
-                                              npcs.enemy_forces
+                                              %s
                                           )
                                   )
                                ), 0
@@ -190,7 +205,7 @@ class KillZone extends Model
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ', ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
+            ', $ifIsShroudedEnemyForcesQuery), ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
         return collect($queryResult);
     }

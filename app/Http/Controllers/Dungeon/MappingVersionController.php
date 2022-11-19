@@ -21,7 +21,7 @@ class MappingVersionController extends Controller
      */
     public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
     {
-        $mappingService->createNewMappingVersion($dungeon);
+        $mappingService->createNewMappingVersionFromPreviousMapping($dungeon);
 
         Session::flash('status', __('controller.mappingversion.created_successfully'));
 

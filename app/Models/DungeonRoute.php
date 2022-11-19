@@ -135,7 +135,7 @@ class DungeonRoute extends Model
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at',
                          'published_at', 'published_state_id', 'published_state'];
 
-    protected $fillable = ['enemy_forces'];
+    protected $fillable = ['mapping_version_id', 'enemy_forces'];
 
     protected $with = ['faction', 'specializations', 'classes', 'races', 'affixes'];
 
@@ -489,7 +489,7 @@ class DungeonRoute extends Model
                 )
             ' : 'npcs.enemy_forces';
 
-            $result = DB::select(sprintf('
+            $queryResult = DB::select(sprintf('
                 select dungeon_routes.id,
                    CAST(IFNULL(
                            IF(dungeon_routes.teeming = 1,
@@ -526,7 +526,10 @@ class DungeonRoute extends Model
             group by `dungeon_routes`.id
             ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['id' => $this->id]);
 
-            $result = $result[0]->enemy_forces;
+            // Could be if no enemies were assigned yet
+            if (!empty($queryResult)) {
+                $result = $queryResult[0]->enemy_forces;
+            }
         }
         /**
          *
@@ -643,7 +646,7 @@ class DungeonRoute extends Model
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
-        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
         $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
 
         $this->faction_id     = 1;

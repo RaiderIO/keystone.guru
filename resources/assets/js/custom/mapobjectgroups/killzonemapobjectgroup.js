@@ -209,12 +209,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
-        // Construct an object equal to that received from the server
-        let killZoneEnemies = [];
-        for (let i = 0; i < enemyIds.length; i++) {
-            killZoneEnemies.push({enemy_id: enemyIds[i]});
-        }
-
         let toSave = [];
         // If we're inserting it last - we don't affect existing killzones
         if (afterIndex !== null) {
@@ -228,10 +222,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let lastKillZone = this._findLastKillZone();
         let killZone = this._loadMapObject({
-            id: -1,
             color: c.map.killzone.polygonOptions.color(lastKillZone !== null ? lastKillZone.color : null),
-            floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
-            killzoneenemies: killZoneEnemies,
+            floor_id: null, // Only for the killzone location which is not set from a 'new pull'
+            enemies: enemyIds,
             lat: null,
             lng: null,
             index: (afterIndex ?? _.size(this.objects)) + 1,
@@ -301,8 +294,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         let killZonesData = [];
-        for (let i = 0; i < killZones.length; i++) {
-            let killZone = killZones[i];
+        for (let key in killZones) {
+            let killZone = killZones[key];
 
             // Only those that can be saved
             if (killZone.id > 0) {
@@ -312,15 +305,15 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'PUT',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/${MAP_OBJECT_GROUP_KILLZONE}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${MAP_OBJECT_GROUP_KILLZONE}/mass`,
             dataType: 'json',
             data: {
                 killzones: killZonesData
             },
             success: function (json) {
-                for (let i = 0; i < killZones.length; i++) {
-                    killZones[i].setSynced(true, true);
-                    killZones[i].onSaveSuccess(json, true);
+                for (let key in killZones) {
+                    killZones[key].setSynced(true, true);
+                    killZones[key].onSaveSuccess(json, true);
                 }
             },
             complete: function () {

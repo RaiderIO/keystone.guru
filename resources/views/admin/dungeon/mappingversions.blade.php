@@ -16,14 +16,14 @@
 @endsection
 
 <h4>{{ __('views/admin.dungeon.edit.mapping_versions.title') }}</h4>
-@if(!$hasUnmergedMappingVersion)
+{{--@if(!$hasUnmergedMappingVersion)--}}
     <div class="float-right">
         <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
            class="btn btn-success text-white pull-right" role="button">
             <i class="fas fa-plus"></i> {{ __('views/admin.dungeon.edit.mapping_versions.add_mapping_version') }}
         </a>
     </div>
-@endif
+{{--@endif--}}
 
 <table id="admin_dungeon_mapping_versions_table" class="tablesorter default_table table-striped">
     <thead>

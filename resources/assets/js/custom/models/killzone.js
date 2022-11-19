@@ -35,7 +35,7 @@ L.Draw.KillZone = L.Draw.Marker.extend({
 
 class KillZone extends MapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'killzone'});
+        super(map, layer, {name: 'killzone', hasRouteModelBinding: true});
 
         let self = this;
         this.id = 0;

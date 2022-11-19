@@ -73,26 +73,36 @@ class MappingService implements MappingServiceInterface
     /**
      * @inheritDoc
      */
-    public function createNewMappingVersion(Dungeon $dungeon, ?string $hash, bool $quietly = false): MappingVersion
+    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
-        $attributes = [
+        return MappingVersion::create([
+            'dungeon_id'       => $dungeon->id,
+            'mdt_mapping_hash' => $currentMappingVersion->mdt_mapping_hash,
+            'version'          => ++$currentMappingVersion->version,
+            'created_at'       => Carbon::now()->toDateTimeString(),
+            'updated_at'       => Carbon::now()->toDateTimeString(),
+        ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+
+        // This needs to happen quietly as to not trigger MappingVersion events defined in its class
+        $id     = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
             'version'          => ++$currentMappingVersion->version,
             'created_at'       => Carbon::now()->toDateTimeString(),
             'updated_at'       => Carbon::now()->toDateTimeString(),
-        ];
+        ]);
 
-        if ($quietly) {
-            $id     = MappingVersion::insertGetId($attributes);
-            $result = MappingVersion::find($id);
-        } else {
-            $result = MappingVersion::create($attributes);
-        }
-
-        return $result;
+        return MappingVersion::find($id);
     }
 
     /**
@@ -110,7 +120,7 @@ class MappingService implements MappingServiceInterface
         if ($wasRecentlyChanged) {
             $result = $currentMappingVersion;
         } else {
-            $result = $this->createNewMappingVersion($dungeon);
+            $result = $this->createNewMappingVersionFromPreviousMapping($dungeon);
         }
 
         return $result;

@@ -25,14 +25,19 @@ interface MappingServiceInterface
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
     /**
+     * @param Dungeon $dungeon
+     * @return MappingVersion
+     */
+    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion;
+
+    /**
      * Creates a new mapping version for a dungeon.
      *
      * @param Dungeon $dungeon
      * @param string|null $hash
-     * @param bool $quietly
      * @return MappingVersion
      */
-    public function createNewMappingVersion(Dungeon $dungeon, ?string $hash, bool $quietly): MappingVersion;
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion;
 
     /**
      * Gets a mapping version of a dungeon, or creates a new one for this dungeon if the most recent version has been pushed.
