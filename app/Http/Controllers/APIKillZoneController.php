@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\KillZone\DeleteAllFormRequest;
-use App\Http\Requests\KillZone\StoreFormRequest;
+use App\Http\Requests\KillZone\KillZoneFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
@@ -31,23 +31,25 @@ class APIKillZoneController extends Controller
      */
     private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true)
     {
+        $enemies = $data['enemies'] ?? null;
+        unset($data['enemies']);
+
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($data['id']);
+        if ($killZone === null) {
+            $killZone = KillZone::create($data);
+            $success  = $killZone instanceof KillZone;
+        } else {
+            $success = $killZone->update($data);
+        }
 
-        $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id         = (int)((isset($data['floor_id'])) ? $data['floor_id'] : $killZone->floor_id);
-        $killZone->color            = $data['color'] ?? $killZone->color;
-        $killZone->lat              = empty($data['lat']) ? null : (float)$data['lat'];
-        $killZone->lng              = empty($data['lng']) ? null : (float)$data['lng'];
-        $killZone->index            = (int)($data['index'] ?? $killZone->index);
-
-        if ($killZone->save()) {
+        if ($success) {
             // Only when the enemies are actually set
-            if (isset($data['enemies'])) {
+            if ($enemies !== null) {
                 $killZone->killzoneenemies()->delete();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
-                $enemyIds = array_unique($data['enemies'] ?? []);
+                $enemyIds = array_unique($enemies);
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $killZoneEnemies = [];
@@ -59,17 +61,17 @@ class APIKillZoneController extends Controller
                         // Assign kill zone to each passed enemy
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZone->id,
-                            'enemy_id'     => $enemyId,
+                            'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
+                            'mdt_id'       => $enemy->mdt_id,
                         ];
                     }
                 }
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
+                // Refresh enemies so that we echo the new stuff back that was just saved to the database
+                $killZone->enemies = $enemyIds;
             }
-
-            // Refresh the enemies that may or may not have been set
-            $killZone->load(['killzoneenemies']);
 
             if ($recalculateEnemyForces) {
                 // Update the enemy forces
@@ -91,12 +93,12 @@ class APIKillZoneController extends Controller
 
 
     /**
-     * @param StoreFormRequest $request
+     * @param KillZoneFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return KillZone
-     * @throws \Exception
+     * @throws AuthorizationException
      */
-    function store(StoreFormRequest $request, DungeonRoute $dungeonroute)
+    function store(KillZoneFormRequest $request, DungeonRoute $dungeonroute)
     {
         if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
@@ -151,7 +153,11 @@ class APIKillZoneController extends Controller
 
         // Save enemy data at once and not one by one - it's slow
         $killZoneEnemies = [];
-        $enemyIds        = Enemy::select('id')->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())->get()->pluck('id')->toArray();
+        $enemyIds        = Enemy::select('id')
+            ->whereIn('floor_id', $dungeonroute->dungeon->floors->pluck('id')->toArray())
+            ->get()
+            ->pluck('id')
+            ->toArray();
 
         // Insert new enemies based on what was sent
         foreach ($request->get('killzones', []) as $killZoneData) {

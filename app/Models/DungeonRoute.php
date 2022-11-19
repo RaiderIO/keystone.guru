@@ -917,11 +917,11 @@ class DungeonRoute extends Model
 
                 // KillZone, save the enemies that were attached to them
                 if ($model instanceof KillZone) {
-                    foreach ($model->killzoneenemies as $enemy) {
-                        $enemy->id           = 0;
-                        $enemy->exists       = false;
-                        $enemy->kill_zone_id = $model->id;
-                        $enemy->save();
+                    foreach ($model->killzoneenemies as $killZoneEnemy) {
+                        $killZoneEnemy->id           = 0;
+                        $killZoneEnemy->exists       = false;
+                        $killZoneEnemy->kill_zone_id = $model->id;
+                        $killZoneEnemy->save();
                     }
                 } // Make sure all polylines are copied over
                 else if (isset($model->polyline_id)) {

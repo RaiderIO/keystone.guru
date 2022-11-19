@@ -80,11 +80,11 @@ class APIEnemyController extends APIMappingModelBaseController
 
             // Create a new one, if the user didn't just want to clear it
             if (!empty($raidMarkerName)) {
-                $raidMarker                   = new DungeonRouteEnemyRaidMarker();
-                $raidMarker->dungeon_route_id = $dungeonroute->id;
-                $raidMarker->raid_marker_id   = RaidMarker::where('name', $raidMarkerName)->first()->id;
-                $raidMarker->enemy_id         = $enemy->id;
-                $raidMarker->save();
+                DungeonRouteEnemyRaidMarker::create([
+                    'dungeon_route_id' => $dungeonroute->id,
+                    'raid_marker_id'   => RaidMarker::where('name', $raidMarkerName)->first()->id,
+                    'enemy_id'         => $enemy->id,
+                ]);
 
                 $result = ['name' => $raidMarkerName];
             } else {

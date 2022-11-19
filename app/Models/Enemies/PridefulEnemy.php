@@ -28,6 +28,7 @@ class PridefulEnemy extends Model
 {
     use Reportable;
 
+    protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
     protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
 
     /**

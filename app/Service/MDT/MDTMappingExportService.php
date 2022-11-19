@@ -19,14 +19,16 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     {
         $translations = collect();
 
-        $dungeonMaps             = $this->getDungeonMaps($mappingVersion);
-        $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
-        $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
-        $mapPOIS                 = $this->getMapPOIs($mappingVersion);
-        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations);
-        $header                  = $this->getHeader($mappingVersion, $translations);
+        return $this->getDungeonEnemies($mappingVersion, $translations);
 
-        return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIS . $dungeonEnemies;
+//        $dungeonMaps             = $this->getDungeonMaps($mappingVersion);
+//        $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
+//        $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
+//        $mapPOIS                 = $this->getMapPOIs($mappingVersion);
+//        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations);
+//        $header                  = $this->getHeader($mappingVersion, $translations);
+//
+//        return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIS . $dungeonEnemies;
     }
 
     /**

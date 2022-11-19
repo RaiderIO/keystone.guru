@@ -39,7 +39,7 @@ class KillZone extends MapObject {
 
         let self = this;
         this.id = 0;
-        this.floor_id = 0;
+        this.floor_id = null;
         this.label = 'KillZone';
         this.color = '#000'; // This is just a default that should never be used anywhere
         this.index = 0;
@@ -71,7 +71,6 @@ class KillZone extends MapObject {
             let teeming = teemingChangedEvent.data.teeming;
 
             // If we're visible for teeming, and we're now no longer teeming, remove ourselves from our current killzone
-
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             let hasRemovedEnemy = false;
             let currentEnemies = [...self.enemies];
@@ -117,7 +116,6 @@ class KillZone extends MapObject {
                 name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
             }),
             new Attribute({
                 name: 'color',
@@ -149,18 +147,11 @@ class KillZone extends MapObject {
                 default: 1
             }),
             new Attribute({
-                name: 'killzoneenemies',
-                type: 'int',
-                edit: false,
-                save: false,
-                setter: this._setEnemiesFromRemote.bind(this),
-                default: []
-            }),
-            new Attribute({
                 name: 'enemies',
                 type: 'array',
                 edit: false,
-                default: []
+                default: [],
+                setter: this._setEnemiesFromRemote.bind(this),
             }),
         ]);
     }
@@ -188,12 +179,12 @@ class KillZone extends MapObject {
             let enemiesEqual = this.enemies.length === remoteEnemies.length;
             let enemies = [];
             for (let i = 0; i < remoteEnemies.length; i++) {
-                let enemy = remoteEnemies[i];
-                enemies.push(enemy.enemy_id);
+                let enemyId = remoteEnemies[i];
+                enemies.push(enemyId);
 
                 // If we haven't already signified the enemies are not equal
                 // If we do not have an enemy at this index or if the enemy's ID at this index is not the same
-                if (enemiesEqual && (!this.enemies.hasOwnProperty(i) || this.enemies[i] !== enemy.enemy_id)) {
+                if (enemiesEqual && (!this.enemies.hasOwnProperty(i) || this.enemies[i] !== enemyId)) {
                     enemiesEqual = false;
                 }
             }
@@ -610,7 +601,7 @@ class KillZone extends MapObject {
         });
 
         // Alpha shapes
-        if (this.layer !== null && this.floor_id > 0) {
+        if (this.layer !== null && this.floor_id !== null) {
             // Killzone not on this floor, draw a line to the floor that it is
             if (currentFloorId !== this.floor_id && this.floor_id !== null) {
                 otherFloorsWithEnemies.push(this.floor_id);

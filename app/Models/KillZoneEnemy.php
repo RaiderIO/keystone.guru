@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $mdt_id
  *
  * @property KillZone $killzone
+ * @property Enemy $enemy
  * @property Npc $npc
  *
  * @mixin Eloquent

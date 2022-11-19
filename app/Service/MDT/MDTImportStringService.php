@@ -194,8 +194,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     {
         $floors = $dungeonRoute->dungeon->floors;
         /** @var Collection|Enemy[] $enemies */
-        $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
-        $enemies = $enemies->each(function (Enemy $enemy) {
+        $enemies = $dungeonRoute->mappingVersion->enemies->each(function (Enemy $enemy) {
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });
 
@@ -274,6 +273,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $mdtEnemy = null;
                             if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
                                 foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
+                                    /** @var $mdtEnemyCandidate Enemy */
                                     if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
                                         // Found it
                                         $mdtEnemy = $mdtEnemyCandidate;
@@ -340,8 +340,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 $kzEnemy = new KillZoneEnemy([
-                                    'enemy_id'     => $enemy->id,
                                     'kill_zone_id' => $killZone->id,
+                                    'npc_id'       => $enemy->npc_id,
+                                    'mdt_id'       => $enemy->mdt_id,
                                 ]);
 
                                 // Couple the KillZoneEnemy to its KillZone
@@ -378,7 +379,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                                 // Save enemies to the killzones regardless
                                 $killZone->killzoneenemies->push($kzEnemy);
-                                $killZone->enemies->push($enemy);
+                                $killZone->enemies->push($enemy->id);
                                 $totalEnemiesMatched++;
                             } else {
                                 $seasonalIndexSkip = true;
@@ -396,30 +397,24 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // No point doing this if we're not saving
                 if ($save) {
                     for ($i = 0; $i < $totalPridefulEnemiesToAdd; $i++) {
-                        $pridefulEnemy = new PridefulEnemy();
-                        // Get the prideful enemy appropriate for this pull
-                        $pridefulEnemy->enemy_id = $pridefulEnemies->slice($dungeonRoute->pridefulenemies->count(), 1)->first()->id;
-                        // We kind of assume the prideful enemy should be on the same floor as the enemies
-                        $pridefulEnemy->floor_id = $killZone->enemies->first()->floor_id;
-
-                        // Location of the enemy
-                        $pridefulEnemy->lat = $killZone->enemies->avg('lat');
-                        $pridefulEnemy->lng = $killZone->enemies->avg('lng');
-
-                        $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
-                        // Save it so we have an ID that we can use later on
-                        $pridefulEnemy->save();
+                        /** @var Enemy $pridefulEnemyEnemy */
+                        $pridefulEnemyEnemy = $pridefulEnemies->slice($dungeonRoute->pridefulenemies->count(), 1)->first();
+                        $pridefulEnemy      = PridefulEnemy::create([
+                            'dungeon_route_id' => $dungeonRoute->id,
+                            'enemy_id'         => $pridefulEnemyEnemy->id,
+                            'floor_id'         => $killZone->enemies->first()->floor_id,
+                            'lat'              => $killZone->enemies->avg('lat'),
+                            'lng'              => $killZone->enemies->avg('lng'),
+                        ]);
 
                         $dungeonRoute->pridefulenemies->push($pridefulEnemy);
 
                         // Couple the prideful enemy to this pull
-                        $kzEnemy = new KillZoneEnemy([
-                            'enemy_id'     => $pridefulEnemy->id,
+                        KillZoneEnemy::create([
                             'kill_zone_id' => $killZone->id,
+                            'npc_id'       => $pridefulEnemyEnemy->npc_id,
+                            'mdt_id'       => $pridefulEnemyEnemy->mdt_id,
                         ]);
-
-                        // Couple the KillZoneEnemy to its KillZone
-                        $kzEnemy->save();
                     }
                 }
 
@@ -429,7 +424,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     // that are around the boss instead
                     $hasFinalBoss = false;
                     foreach ($killZone->killzoneenemies as $kzEnemy) {
-                        if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
+                        if ($kzEnemy->npc !== null && $kzEnemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
                             $hasFinalBoss = true;
                             break;
                         }
@@ -437,10 +432,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                     if ($hasFinalBoss) {
                         foreach ($killZone->killzoneenemies as $kzEnemy) {
-                            if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->isAwakened()) {
+                            if ($kzEnemy->npc !== null && $kzEnemy->npc->isAwakened()) {
                                 // Find the equivalent Awakened Enemy that's next to the boss.
                                 /** @var Enemy $bossAwakenedEnemy */
-                                $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->enemy->npc_id)
+                                $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->npc_id)
+                                    ->where('mdt_id', $kzEnemy->mdt_id)
                                     ->where('seasonal_index', $kzEnemy->enemy->seasonal_index)
                                     ->whereNotNull('enemy_pack_id')
                                     ->first();
@@ -676,6 +672,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $dungeonRoute             = new DungeonRoute();
         $dungeonRoute->author_id  = $sandbox ? -1 : Auth::id();
         $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
+        // Set some relations here so we can reference them later
+        $dungeonRoute->dungeon            = Dungeon::findOrFail($dungeonRoute->dungeon_id);
+        $dungeonRoute->mappingVersion     = $dungeonRoute->dungeon->getCurrentMappingVersion();
+        $dungeonRoute->mapping_version_id = $dungeonRoute->mappingVersion->id;
+
         // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
         $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
         $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED]; // Needs to be explicit otherwise redirect to edit will not have this value

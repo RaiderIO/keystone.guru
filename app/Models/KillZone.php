@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\DB;
  * @property DungeonRoute $dungeonroute
  * @property Floor $floor
  *
- * @property Collection|Enemy[] $enemies
+ * @property Collection|int[] $enemies
  * @property Collection|KillZoneEnemy[] $killzoneenemies
  *
  * @property Carbon $updated_at
@@ -33,9 +33,33 @@ use Illuminate\Support\Facades\DB;
  */
 class KillZone extends Model
 {
-    public $visible = ['id', 'floor_id', 'color', 'lat', 'lng', 'index', 'killzoneenemies'];
-    public $with = ['killzoneenemies'];
+    public $visible = ['id', 'floor_id', 'color', 'lat', 'lng', 'index', 'enemies'];
+    protected $appends = ['enemies'];
     protected $fillable = ['id', 'dungeon_route_id', 'floor_id', 'color', 'index', 'lat', 'lng', 'updated_at', 'created_at'];
+    protected $casts = [
+        'floor_id' => 'integer',
+        'index'    => 'integer',
+    ];
+
+    /**
+     * @return Collection
+     */
+    public function getEnemiesAttribute(): Collection
+    {
+        return Enemy::select('enemies.id')
+            ->join('kill_zone_enemies', function (JoinClause $clause) {
+                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
+                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('kill_zone_enemies.kill_zone_id', $this->id)
+            ->get()
+            ->map(function (Enemy $enemy) {
+                return $enemy->id;
+            });
+    }
 
     /**
      * Get the dungeon route that this killzone is attached to.
@@ -77,10 +101,7 @@ class KillZone extends Model
             ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
             ->where('kill_zone_enemies.kill_zone_id', $this->id)
-//            ->join('kill_zones', 'kill_zones.id');
             ->get();
-
-//        return $this->belongsToMany(Enemy::class, 'kill_zone_enemies');
     }
 
     /**
@@ -131,7 +152,8 @@ class KillZone extends Model
     }
 
     /**
-     * Gets a list of enemy forces per enemy that this kill zone kills.
+     * Gets a list of enemy forces that this kill zone kills that may be skipped.
+     *
      * @param bool $teeming
      * @return Collection
      */
@@ -139,6 +161,7 @@ class KillZone extends Model
     {
         $queryResult = DB::select('
             select `kill_zone_enemies`.*,
+                    enemies.id as enemy_id,
                     enemies.enemy_pack_id,
                    CAST(IFNULL(
                            IF(:teeming = 1,
@@ -160,10 +183,12 @@ class KillZone extends Model
                        ) AS SIGNED) as enemy_forces
             from `kill_zone_enemies`
                  left join `kill_zones` on `kill_zones`.`id` = `kill_zone_enemies`.`kill_zone_id`
+                 left join `dungeon_routes` on `dungeon_routes`.`id` = `kill_zones`.`dungeon_route_id`
+                 left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                  left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
-                 left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
             where kill_zones.id = :kill_zone_id
-            and enemies.skippable = 1
+              and enemies.mapping_version_id = dungeon_routes.mapping_version_id
+              and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
             ', ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
