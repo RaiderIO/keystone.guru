@@ -12,26 +12,26 @@ class DungeonMap extends Signalable {
         let state = getState();
         let mapContext = state.getMapContext();
 
-        if (state.isMapAdmin()) {
-            if (mapContext.getMappingVersion().merged) {
-                let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
+        if (!(mapContext instanceof MapContextLiveSession)) {
+            if (state.isMapAdmin()) {
+                if (mapContext.getMappingVersion().merged) {
+                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
 
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+                    let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+
+                    state.addSnackbar(template(data));
+
+                    this.options.readonly = true;
+                }
+            } else if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+                let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                    'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
+                });
 
                 state.addSnackbar(template(data));
-
-                this.options.readonly = true;
             }
-        } else if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
-            let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
-
-            let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
-            });
-
-            state.addSnackbar(template(data));
-
-            this.options.readonly = true;
         }
 
         // Apply the map to our state first thing

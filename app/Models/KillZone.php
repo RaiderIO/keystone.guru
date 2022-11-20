@@ -48,7 +48,7 @@ class KillZone extends Model
     {
         return Enemy::select('enemies.id')
             ->join('kill_zone_enemies', function (JoinClause $clause) {
-                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
+                $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
             })
             ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
@@ -199,13 +199,14 @@ class KillZone extends Model
             from `kill_zone_enemies`
                  left join `kill_zones` on `kill_zones`.`id` = `kill_zone_enemies`.`kill_zone_id`
                  left join `dungeon_routes` on `dungeon_routes`.`id` = `kill_zones`.`dungeon_route_id`
+                 left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                  left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                  left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
             where kill_zones.id = :kill_zone_id
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ', $ifIsShroudedEnemyForcesQuery), ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
+            ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
         return collect($queryResult);
     }

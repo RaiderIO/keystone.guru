@@ -14,12 +14,12 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
     public function up()
     {
         // Get rid of all enemies assigned to pulls that have since been deleted
-//        DB::delete('
-//            DELETE `kill_zone_enemies`.*
-//            FROM `kill_zone_enemies`
-//                 LEFT JOIN `enemies` ON `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
-//            WHERE `enemies`.`id` is null;
-//        ');
+        DB::delete('
+            DELETE `kill_zone_enemies`.*
+            FROM `kill_zone_enemies`
+                 LEFT JOIN `enemies` ON `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+            WHERE `enemies`.`id` is null;
+        ');
 
         DB::update('
             UPDATE `kill_zone_enemies`

@@ -22,7 +22,7 @@ class MapContextLiveSession extends MapContext
 
     public function __construct(LiveSession $liveSession, Floor $floor)
     {
-        parent::__construct($liveSession, $floor);
+        parent::__construct($liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
 
     public function getType(): string
@@ -60,7 +60,7 @@ class MapContextLiveSession extends MapContext
         return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
             'liveSessionPublicKey' => $this->context->public_key,
             'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->context->overpulledenemies,
+            'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
             'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
             'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
         ]);

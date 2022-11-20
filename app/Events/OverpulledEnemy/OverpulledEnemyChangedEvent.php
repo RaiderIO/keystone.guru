@@ -4,6 +4,7 @@ namespace App\Events\OverpulledEnemy;
 
 use App\Events\ContextEvent;
 use App\Models\Enemies\OverpulledEnemy;
+use App\Models\Enemy;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,14 +19,14 @@ class OverpulledEnemyChangedEvent extends ContextEvent
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
-     * @param $overpulledEnemy OverpulledEnemy
-     * @return void
+     * @param Model $context
+     * @param User $user
+     * @param OverpulledEnemy $overpulledEnemy
+     * @param Enemy $enemy
      */
-    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy)
+    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {
-        $this->enemy_id     = $overpulledEnemy->enemy_id;
+        $this->enemy_id     = $enemy->id;
         $this->kill_zone_id = $overpulledEnemy->kill_zone_id;
         parent::__construct($context, $user);
     }

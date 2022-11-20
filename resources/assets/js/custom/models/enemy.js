@@ -904,7 +904,13 @@ class Enemy extends VersionableMapObject {
      */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isShrouded() || this.isShroudedZulGamux() || this.isTormented() || this.isPridefulNpc() || this.isAwakenedNpc();
+        return this.isBossNpc() ||
+            this.isInspiring() ||
+            this.isShrouded() ||
+            this.isShroudedZulGamux() ||
+            this.isTormented() ||
+            this.isPridefulNpc() ||
+            this.isAwakenedNpc();
     }
 
     /**

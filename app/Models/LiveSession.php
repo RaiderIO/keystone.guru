@@ -10,6 +10,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -29,6 +30,8 @@ use Illuminate\Support\Collection;
  */
 class LiveSession extends Model
 {
+    protected $appends = ['enemies'];
+
     protected $fillable = [
         'dungeon_route_id',
         'user_id',
@@ -75,6 +78,23 @@ class LiveSession extends Model
     public function overpulledenemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);
+    }
+
+    /**
+     * @return Collection|Enemy[]
+     */
+    public function getEnemies(): Collection
+    {
+        return Enemy::select('enemies.*')
+            ->join('overpulled_enemies', function (JoinClause $clause) {
+                $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
+                    ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('live_sessions', 'live_sessions.id', 'overpulled_enemies.live_session_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('overpulled_enemies.live_session_id', $this->id)
+            ->get();
     }
 
     /**

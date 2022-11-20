@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * @property int $id
@@ -49,8 +50,21 @@ class KillZoneEnemy extends Model
     /**
      * @return Enemy
      */
-    public function enemy(): Enemy
+    public function getEnemy(): Enemy
     {
-        return Enemy::where('npc_id', $this->npc_id)->where('mdt_id', $this->mdt_id)->first();
+        /** @var Enemy $result */
+        $result = Enemy::select('enemies.*')
+            ->join('kill_zone_enemies', function (JoinClause $clause) {
+                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
+                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
+            ->whereColumn('mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('kill_zone_enemies.npc_id', $this->npc_id)
+            ->where('kill_zone_enemies.mdt_id', $this->mdt_id)
+            ->first();
+
+        return $result;
     }
 }
