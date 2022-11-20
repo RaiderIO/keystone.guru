@@ -8,6 +8,7 @@ class AdminEnemy extends Enemy {
         this.npc_id = null;
         // Init to an empty value
         this.enemy_pack_id = null;
+        this.enemy_patrol_id = null;
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 
@@ -76,8 +77,11 @@ class AdminEnemy extends Enemy {
             // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
             // Advantage is that this dramatically speeds up the JS.
             // 100 = 10 distance
-            let closeEnough = getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
-            //
+            // If the source layer doesn't have a latLng just assume everything is far away (expensive)
+            let closeEnough = ((selectedMapObject.layer instanceof L.Marker) ?
+                    getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) : 0)
+                < 100;
+
             if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
                 if (closeEnough) {
                     // Attach tooltip again
@@ -409,6 +413,7 @@ class AdminEnemy extends Enemy {
             mdt_npc_id: this.mdt_npc_id,
             enemy_id: this.enemy_id,
             attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
+            attached_to_patrol: this.enemy_patrol_id !== null ? `true (${this.enemy_patrol_id})` : 'false',
             visual: this.visual !== null ? this.visual.getName() : 'undefined'
         });
 

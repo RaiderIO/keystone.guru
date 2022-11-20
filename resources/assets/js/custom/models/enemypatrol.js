@@ -21,6 +21,38 @@ class EnemyPatrol extends Polyline {
         this.label = 'EnemyPatrol';
     }
 
+
+    _getAttributes(force) {
+        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        let self = this;
+
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'couple_enemies',
+                type: 'button',
+                buttonType: 'info',
+                buttonText: lang.get('messages.enemypatrol_couple_enemies_button_text_label'),
+                default: getState().getCurrentFloor().id,
+                clicked: function (e) {
+                    self.map.leafletMap.closePopup();
+
+                    if (self.map.getMapState() instanceof EnemyPatrolEnemySelection) {
+                        self.map.setMapState(null);
+                    } else {
+                        self.map.setMapState(
+                            new EnemyPatrolEnemySelection(self.map, self)
+                        );
+                    }
+                }
+            })
+        ]);
+    }
+
     /**
      *
      * @returns {function}

@@ -302,28 +302,32 @@ class MapObject extends Signalable {
                 if (attribute.type === 'object' && attribute !== parentAttribute) {
                     // Recursively init the popup
                     this._initPopup(attribute);
-                } else if (attribute.isEditable() && attribute.type === 'color') {
-                    // Clean up the previous instance if any
-                    if (typeof attribute._pickr !== 'undefined') {
-                        // Unset it after to be sure to clear it for the next time
-                        attributes[index]._tempPickrColor = null;
-                        attributes[index]._pickr.destroyAndRemove();
-                    }
-                    //
-                    attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                        el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
-                        default: this._getValue(name, parentAttribute)
-                    })).on('save', (color, instance) => {
-                        // Apply the new color
-                        let newColor = '#' + color.toHEXA().join('');
-                        // Only save when the color is valid
-                        if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
-                            $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                } else if (attribute.isEditable()) {
+                    if (attribute.type === 'color') {
+                        // Clean up the previous instance if any
+                        if (typeof attribute._pickr !== 'undefined') {
+                            // Unset it after to be sure to clear it for the next time
+                            attributes[index]._tempPickrColor = null;
+                            attributes[index]._pickr.destroyAndRemove();
                         }
+                        let btnSelector = `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`;
+                        attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+                            el: btnSelector,
+                            default: this._getValue(name, parentAttribute)
+                        })).on('save', (color, instance) => {
+                            // Apply the new color
+                            let newColor = '#' + color.toHEXA().join('');
+                            // Only save when the color is valid
+                            if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
+                                $(btnSelector).val(newColor);
+                            }
 
-                        // Reset ourselves
-                        instance.hide();
-                    });
+                            // Reset ourselves
+                            instance.hide();
+                        });
+                    } else if (attribute.type === 'button') {
+                        $(`#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`).on('click', attribute.clicked);
+                    }
                 }
             }
         }
@@ -434,6 +438,9 @@ class MapObject extends Signalable {
                         case 'color':
                             handlebarsString = 'map_popup_type_color_template';
                             break;
+                        case 'button':
+                            handlebarsString = 'map_popup_type_button_template';
+                            break;
                         case 'string':
                         case 'text':
                         case 'int':
@@ -458,7 +465,9 @@ class MapObject extends Signalable {
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
-                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false
+                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
+                        buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
+                        buttonText: attribute.buttonText ?? 'Do action'
                     }));
                 }
             }

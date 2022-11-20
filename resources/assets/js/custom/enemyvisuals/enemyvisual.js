@@ -378,9 +378,11 @@ class EnemyVisual extends Signalable {
                 selection_classes_base: '',
             };
 
-            let isDeletable = this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable();
-            let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
-                (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
+            let mapState = this.map.getMapState();
+
+            let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
+            let isSelectable = ((mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection) && this.enemy.isSelectable()) ||
+                (mapState instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
             // Set a default color which may be overridden by any visuals
             let borderThickness = getState().getMapZoomLevel();
@@ -534,9 +536,11 @@ class EnemyVisual extends Signalable {
         }
 
 
-        let isDeletable = this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable();
-        let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
-            (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
+        let mapState = this.map.getMapState();
+
+        let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
+        let isSelectable = ((mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection) && this.enemy.isSelectable()) ||
+            (mapState instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
         let size = this.mainVisual.getSize();
 

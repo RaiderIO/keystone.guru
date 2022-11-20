@@ -11,7 +11,7 @@ class MapState extends Signalable {
 
     start() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
-        console.warn('Starting MapState ' + this.getName());
+        console.warn(`Starting MapState ${this.getName()}`);
         let self = this;
 
         this._started = true;
@@ -26,7 +26,7 @@ class MapState extends Signalable {
 
     stop() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
-        console.warn('Stopping MapState ' + this.getName());
+        console.warn(`Stopping MapState ${this.getName()}`);
         this._stopped = true;
     }
 

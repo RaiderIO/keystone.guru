@@ -135,6 +135,12 @@ class Enemy extends VersionableMapObject {
                 default: null
             }),
             new Attribute({
+                name: 'enemy_patrol_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: null
+            }),
+            new Attribute({
                 name: 'enemy_forces_override',
                 type: 'int',
                 admin: true
