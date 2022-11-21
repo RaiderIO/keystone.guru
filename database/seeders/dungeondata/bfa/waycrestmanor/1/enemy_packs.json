@@ -1,7 +1,9 @@
 [
     {
         "id": 91,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -11,7 +13,9 @@
     },
     {
         "id": 92,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -21,7 +25,9 @@
     },
     {
         "id": 93,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -31,7 +37,9 @@
     },
     {
         "id": 94,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -41,7 +49,9 @@
     },
     {
         "id": 98,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -51,7 +61,9 @@
     },
     {
         "id": 99,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -61,7 +73,9 @@
     },
     {
         "id": 101,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -71,7 +85,9 @@
     },
     {
         "id": 103,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -81,7 +97,9 @@
     },
     {
         "id": 104,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -91,7 +109,9 @@
     },
     {
         "id": 105,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -101,7 +121,9 @@
     },
     {
         "id": 106,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -111,7 +133,9 @@
     },
     {
         "id": 107,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -121,7 +145,9 @@
     },
     {
         "id": 108,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -131,7 +157,9 @@
     },
     {
         "id": 109,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -141,7 +169,9 @@
     },
     {
         "id": 111,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -151,7 +181,9 @@
     },
     {
         "id": 112,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -161,7 +193,9 @@
     },
     {
         "id": 113,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -171,7 +205,9 @@
     },
     {
         "id": 114,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -181,7 +217,9 @@
     },
     {
         "id": 115,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -191,7 +229,9 @@
     },
     {
         "id": 116,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -201,7 +241,9 @@
     },
     {
         "id": 117,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -211,7 +253,9 @@
     },
     {
         "id": 442,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -221,7 +265,9 @@
     },
     {
         "id": 443,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -231,7 +277,9 @@
     },
     {
         "id": 444,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -241,7 +289,9 @@
     },
     {
         "id": 447,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -251,7 +301,9 @@
     },
     {
         "id": 448,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -261,7 +313,9 @@
     },
     {
         "id": 449,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -271,7 +325,9 @@
     },
     {
         "id": 518,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -281,7 +337,9 @@
     },
     {
         "id": 519,
+        "mapping_version_id": 23,
         "floor_id": 60,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,

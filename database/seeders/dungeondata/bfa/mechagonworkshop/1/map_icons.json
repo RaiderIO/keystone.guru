@@ -1,13 +1,1 @@
-[
-    {
-        "floor_id": 67,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -51.5,
-        "lng": 296.25,
-        "comment": "",
-        "permanent_tooltip": 0,
-        "seasonal_index": 0,
-        "is_admin": true
-    }
-]
+[]

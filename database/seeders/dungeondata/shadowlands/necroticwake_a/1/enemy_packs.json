@@ -1,7 +1,9 @@
 [
     {
         "id": 690,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -11,7 +13,9 @@
     },
     {
         "id": 691,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -21,7 +25,9 @@
     },
     {
         "id": 692,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -31,7 +37,9 @@
     },
     {
         "id": 693,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -41,7 +49,9 @@
     },
     {
         "id": 694,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -51,7 +61,9 @@
     },
     {
         "id": 695,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -61,7 +73,9 @@
     },
     {
         "id": 699,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -71,7 +85,9 @@
     },
     {
         "id": 700,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -81,7 +97,9 @@
     },
     {
         "id": 701,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -91,7 +109,9 @@
     },
     {
         "id": 702,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -101,7 +121,9 @@
     },
     {
         "id": 703,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -111,7 +133,9 @@
     },
     {
         "id": 704,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -121,7 +145,9 @@
     },
     {
         "id": 705,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -131,7 +157,9 @@
     },
     {
         "id": 706,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -141,7 +169,9 @@
     },
     {
         "id": 707,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -151,7 +181,9 @@
     },
     {
         "id": 708,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -161,7 +193,9 @@
     },
     {
         "id": 709,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -171,7 +205,9 @@
     },
     {
         "id": 710,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -181,7 +217,9 @@
     },
     {
         "id": 711,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -191,7 +229,9 @@
     },
     {
         "id": 712,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -201,7 +241,9 @@
     },
     {
         "id": 1110,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -211,7 +253,9 @@
     },
     {
         "id": 1155,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -221,7 +265,9 @@
     },
     {
         "id": 1156,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -231,7 +277,9 @@
     },
     {
         "id": 1157,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -241,7 +289,9 @@
     },
     {
         "id": 1436,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -251,7 +301,9 @@
     },
     {
         "id": 1437,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -261,7 +313,9 @@
     },
     {
         "id": 1438,
+        "mapping_version_id": 34,
         "floor_id": 89,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,

@@ -1,13 +1,1 @@
-[
-    {
-        "floor_id": 76,
-        "team_id": null,
-        "map_icon_type_id": 58,
-        "lat": -97.875,
-        "lng": 194.9375,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.haunted_urn",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    }
-]
+[]

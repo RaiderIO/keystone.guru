@@ -1,6 +1,7 @@
 [
     {
         "id": 494,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -13,6 +14,7 @@
     },
     {
         "id": 495,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -25,6 +27,7 @@
     },
     {
         "id": 496,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -37,6 +40,7 @@
     },
     {
         "id": 497,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -49,6 +53,7 @@
     },
     {
         "id": 498,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -61,6 +66,7 @@
     },
     {
         "id": 499,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
@@ -73,6 +79,7 @@
     },
     {
         "id": 500,
+        "mapping_version_id": 44,
         "floor_id": 114,
         "teeming": null,
         "faction": "any",
