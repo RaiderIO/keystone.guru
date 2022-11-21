@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-222.488513,\"lng\":211.288704},{\"lat\":-218.180894,\"lng\":205.11445},{\"lat\":-222.488513,\"lng\":203.104228},{\"lat\":-227.1551,\"lng\":211.504085},{\"lat\":-223.206449,\"lng\":213.514307},{\"lat\":-221.483402,\"lng\":209.924624}]"
@@ -17,7 +17,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-207.986196,\"lng\":214.806592},{\"lat\":-204.181133,\"lng\":218.037307}]"
@@ -29,7 +29,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-213.298926,\"lng\":202.386291},{\"lat\":-217.606545,\"lng\":197.935085}]"
@@ -41,7 +41,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-204.037545,\"lng\":140.643755},{\"lat\":-203.319609,\"lng\":142.725771},{\"lat\":-206.263148,\"lng\":158.089611},{\"lat\":-204.109339,\"lng\":176.755959}]"
@@ -53,7 +53,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-191.832625,\"lng\":193.124911},{\"lat\":-200.59145,\"lng\":191.904419},{\"lat\":-202.960641,\"lng\":198.150466},{\"lat\":-198.796609,\"lng\":201.38118},{\"lat\":-193.914641,\"lng\":200.304276},{\"lat\":-190.612133,\"lng\":197.576117},{\"lat\":-191.9375,\"lng\":193.15625}]"

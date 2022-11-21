@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-181.72743,\"lng\":164.969332},{\"lat\":-166.710433,\"lng\":166.383976},{\"lat\":-103.75,\"lng\":182.25}]"

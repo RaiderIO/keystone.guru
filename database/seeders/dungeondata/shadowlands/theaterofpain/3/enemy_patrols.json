@@ -101,7 +101,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-87.375,\"lng\":316.9375},{\"lat\":-109.5,\"lng\":338.21875}]"
@@ -113,7 +113,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-189.5,\"lng\":274.875},{\"lat\":-199.625,\"lng\":279.375}]"

@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":\"-108.375\",\"lng\":\"275.75\"},{\"lat\":\"-137.875\",\"lng\":\"294.375\"},{\"lat\":\"-165.875\",\"lng\":\"276.625\"}]"
@@ -41,7 +41,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":\"-102.75\",\"lng\":\"213.5\"},{\"lat\":\"-102.9375\",\"lng\":\"230.1875\"},{\"lat\":\"-110.4375\",\"lng\":\"251.3125\"}]"
@@ -53,7 +53,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-100.375,\"lng\":265.625},{\"lat\":-86.75,\"lng\":267.8125},{\"lat\":-60.6875,\"lng\":245.5625},{\"lat\":-48.748012,\"lng\":237.5}]"
@@ -77,7 +77,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":\"-177.375\",\"lng\":\"220.875\"},{\"lat\":\"-171.375\",\"lng\":\"231.5\"},{\"lat\":\"-193.5\",\"lng\":\"253.125\"}]"
@@ -101,7 +101,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-134.9375,\"lng\":160.8125},{\"lat\":-123.125,\"lng\":148.1875},{\"lat\":-114.1875,\"lng\":147.625},{\"lat\":-109.5625,\"lng\":140},{\"lat\":-104.1875,\"lng\":135.8125},{\"lat\":-98.375,\"lng\":135.8125}]"
@@ -113,7 +113,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-141.75,\"lng\":160.0625},{\"lat\":-151.375,\"lng\":150.4375},{\"lat\":-158.5625,\"lng\":148.75},{\"lat\":-162.9375,\"lng\":146.4375},{\"lat\":-166.75,\"lng\":138}]"

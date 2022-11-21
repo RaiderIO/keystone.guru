@@ -25,10 +25,10 @@
     {
         "id": 8301,
         "enemy_pack_id": 1587,
-        "npc_id": 114803,
+        "npc_id": 189878,
         "floor_id": 24,
         "mdt_id": 22,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -42,7 +42,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114803
+            "id": 189878
         }
     },
     {
@@ -186,10 +186,10 @@
     {
         "id": 8308,
         "enemy_pack_id": 1586,
-        "npc_id": 114801,
+        "npc_id": 189878,
         "floor_id": 24,
         "mdt_id": 24,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -203,7 +203,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114801
+            "id": 189878
         }
     },
     {
@@ -761,10 +761,10 @@
     {
         "id": 8333,
         "enemy_pack_id": 1594,
-        "npc_id": 115019,
+        "npc_id": 189878,
         "floor_id": 24,
         "mdt_id": 20,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -778,7 +778,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 115019
+            "id": 189878
         }
     },
     {
@@ -1175,10 +1175,10 @@
     {
         "id": 8351,
         "enemy_pack_id": 1599,
-        "npc_id": 115019,
+        "npc_id": 189878,
         "floor_id": 24,
         "mdt_id": 21,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1192,7 +1192,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 115019
+            "id": 189878
         }
     },
     {
