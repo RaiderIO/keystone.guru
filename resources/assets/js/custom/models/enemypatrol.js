@@ -16,12 +16,24 @@ class EnemyPatrol extends Polyline {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypatrol', hasRouteModelBinding: true});
 
+        let self = this;
+
         this.weight = c.map.enemypatrol.defaultWeight;
 
         this.label = 'EnemyPatrol';
+        this.highlighted = false;
 
         // The assigned enemies to this enemy patrol
         this.enemies = [];
+        getState().register('focusedenemy:changed', this, function (focusedEnemyChangedEvent) {
+            let enemy = focusedEnemyChangedEvent.data.focusedenemy;
+            // console.log('focusedenemy:changed', enemy, self.enemies, self.enemies.includes(enemy));
+            if (enemy === null && self.highlighted) {
+                self._onAttachedEnemyMouseOut();
+            } else if (self.enemies.includes(enemy)) {
+                self._onAttachedEnemyMouseOver();
+            }
+        });
     }
 
 
@@ -80,7 +92,7 @@ class EnemyPatrol extends Polyline {
                     repeat: 25,
                     symbol: L.Symbol.dash({
                         pixelSize: 10,
-                        pathOptions: {color: this.polyline.color, weight: 2}
+                        pathOptions: $.extend({}, c.map.enemypatrol.polylineDecoratorOptions, {color: this.polyline.color})
                     })
                 },
                 {
@@ -88,7 +100,10 @@ class EnemyPatrol extends Polyline {
                     repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polyline.color}
+                        pathOptions: $.extend({}, c.map.enemypatrol.polylineDecoratorOptions, {
+                            weight: 0,
+                            color: this.polyline.color
+                        })
                     })
                 }
             ]
@@ -101,6 +116,8 @@ class EnemyPatrol extends Polyline {
      * @private
      */
     _getEnemiesLatLngs() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
         let result = [];
         for (let index in this.enemies) {
             let enemyCandidate = this.enemies[index];
@@ -116,6 +133,8 @@ class EnemyPatrol extends Polyline {
      * @returns {*}
      */
     getLayerLatLng() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
         let vertices = this.getVertices();
 
         // Just get the middle one
@@ -127,6 +146,10 @@ class EnemyPatrol extends Polyline {
      * @param enemy
      */
     addEnemy(enemy) {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
+        console.log('Adding enemy!', this.id, enemy.id);
+
         this.enemies.push(enemy);
     }
 
@@ -135,6 +158,8 @@ class EnemyPatrol extends Polyline {
      * @param enemy
      */
     removeEnemy(enemy) {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
         let newEnemies = [];
         for (let index in this.enemies) {
             let enemyCandidate = this.enemies[index];
@@ -145,6 +170,36 @@ class EnemyPatrol extends Polyline {
         }
 
         this.enemies = newEnemies;
+    }
+
+    /**
+     *
+     */
+    _onAttachedEnemyMouseOver() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
+        this.highlighted = true;
+
+        this.layer.setStyle($.extend({}, c.map.enemypatrol.polylineOptionsHighlighted, {color: this.polyline.color}));
+        this.layer.redraw();
+
+        // Refresh the decorator by firing a changed event
+        this.signal('object:changed');
+    }
+
+    /**
+     *
+     */
+    _onAttachedEnemyMouseOut() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
+        this.highlighted = false;
+
+        this.layer.setStyle($.extend({}, c.map.enemypatrol.polylineOptions, {color: this.polyline.color}));
+        this.layer.redraw();
+
+        // Refresh the decorator by firing a changed event
+        this.signal('object:changed');
     }
 
     /**

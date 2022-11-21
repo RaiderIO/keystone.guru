@@ -282,6 +282,13 @@ let c = {
                 weight: 1
             }
         },
+        adminenemypatrol: {
+            polylineOptions: {
+                color: '#090',
+                weight: 2,
+                opacity: 1,
+            },
+        },
         enemypack: {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
@@ -309,15 +316,31 @@ let c = {
         enemypatrol: {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
-                return '#E25D5D';
-            },
+                return '#003280';
+            }, // #003280
             defaultWeight: 2,
 
             polylineOptions: {
                 color: '#090',
                 weight: 2,
-                fillOpacity: 0.3,
+                opacity: 0,
+            },
+
+            polylineOptionsHighlighted: {
                 opacity: 1,
+                weight: 4,
+            },
+
+            polylineDecoratorOptions: {
+                fillOpacity: 0.5,
+                opacity: 0.5,
+                weight: 2,
+            },
+
+            polylineDecoratorOptionsHighlighted: {
+                fillOpacity: 1,
+                opacity: 1,
+                weight: 4,
             },
         },
         path: {

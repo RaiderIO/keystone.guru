@@ -189,9 +189,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             }
         }
 
-        // After adding all the enemies, redraw the connections to all enemies in the patrols
-        for (let key in enemyPatrolMapObjectGroup.objects) {
-            enemyPatrolMapObjectGroup.objects[key].redrawConnectionsToEnemies();
+        if (getState().isMapAdmin()) {
+            // After adding all the enemies, redraw the connections to all enemies in the patrols
+            for (let key in enemyPatrolMapObjectGroup.objects) {
+                enemyPatrolMapObjectGroup.objects[key].redrawConnectionsToEnemies();
+            }
         }
     }
 

@@ -215,11 +215,13 @@ class Polyline extends VersionableMapObject {
         this.layer.setStyle({
             weight: this.polyline.weight
         });
+        this.layer.redraw();
 
         if (typeof this.layerAnimated !== 'undefined' && this.layerAnimated !== null) {
             this.layerAnimated.setStyle({
                 weight: this.polyline.weight
             });
+            this.layerAnimated.redraw();
         }
     }
 

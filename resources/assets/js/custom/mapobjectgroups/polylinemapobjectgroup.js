@@ -3,6 +3,10 @@ class PolylineMapObjectGroup extends MapObjectGroup {
         super(manager, names, editable);
     }
 
+    _getPolylineOptions() {
+        return {};
+    }
+
     /**
      * Converts polyline.vertices_json to a list of L.LatLngs
      * @param remoteMapObject {Object}
@@ -29,7 +33,7 @@ class PolylineMapObjectGroup extends MapObjectGroup {
      * @inheritDoc
      */
     _createLayer(remoteMapObject) {
-        return L.polyline(this._restorePoints(remoteMapObject));
+        return L.polyline(this._restorePoints(remoteMapObject), this._getPolylineOptions());
     }
 
     /**

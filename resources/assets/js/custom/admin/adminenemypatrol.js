@@ -71,7 +71,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                         L.polyline([
                             [this.centerLatLng.lat, this.centerLatLng.lng],
                             coupledEnemyLatLng
-                        ], c.map.enemypatrol.polylineOptions)
+                        ], c.map.adminenemypatrol.polylineOptions)
                     );
                 }
             }

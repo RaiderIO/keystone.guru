@@ -693,6 +693,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         }
 
         if ($save) {
+            // Can't save these relations to database
+            unset($dungeonRoute->dungeon);
+            unset($dungeonRoute->mappingVersion);
+
             // Pre-emptively save the route
             $dungeonRoute->save();
         } else {
