@@ -55,7 +55,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 1,
-                "enemies": []
+                "enemies": [
+                    4582,
+                    4583,
+                    4584,
+                    4585,
+                    4586,
+                    4587,
+                    4588
+                ]
             },
             {
                 "floor_id": 0,
@@ -63,7 +71,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 2,
-                "enemies": []
+                "enemies": [
+                    4589,
+                    4590,
+                    4591,
+                    4592,
+                    4593,
+                    4594,
+                    4595
+                ]
             },
             {
                 "floor_id": 0,
@@ -71,7 +87,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 3,
-                "enemies": []
+                "enemies": [
+                    4596
+                ]
             },
             {
                 "floor_id": 0,
@@ -79,7 +97,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 4,
-                "enemies": []
+                "enemies": [
+                    4597,
+                    4598,
+                    4601,
+                    4602,
+                    4603,
+                    4604,
+                    4605
+                ]
             },
             {
                 "floor_id": 0,
@@ -87,7 +113,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 5,
-                "enemies": []
+                "enemies": [
+                    5676,
+                    5677,
+                    5681,
+                    5685
+                ]
             },
             {
                 "floor_id": 0,
@@ -95,7 +126,11 @@
                 "lat": null,
                 "lng": null,
                 "index": 6,
-                "enemies": []
+                "enemies": [
+                    5682,
+                    5683,
+                    5684
+                ]
             },
             {
                 "floor_id": 0,
@@ -103,7 +138,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 7,
-                "enemies": []
+                "enemies": [
+                    5689,
+                    5690,
+                    5691,
+                    5692
+                ]
             },
             {
                 "floor_id": 0,
@@ -111,7 +151,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 8,
-                "enemies": []
+                "enemies": [
+                    5696,
+                    5697,
+                    5698,
+                    5699
+                ]
             },
             {
                 "floor_id": 0,
@@ -119,7 +164,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 9,
-                "enemies": []
+                "enemies": [
+                    5743
+                ]
             },
             {
                 "floor_id": 0,
@@ -127,7 +174,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 10,
-                "enemies": []
+                "enemies": [
+                    4606
+                ]
             },
             {
                 "floor_id": 0,
@@ -135,7 +184,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 11,
-                "enemies": []
+                "enemies": [
+                    5715
+                ]
             },
             {
                 "floor_id": 0,
@@ -143,7 +194,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 12,
-                "enemies": []
+                "enemies": [
+                    5725,
+                    5726,
+                    5727,
+                    5728,
+                    5729
+                ]
             },
             {
                 "floor_id": 0,
@@ -151,7 +208,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 13,
-                "enemies": []
+                "enemies": [
+                    5730
+                ]
             },
             {
                 "floor_id": 0,
@@ -159,7 +218,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 14,
-                "enemies": []
+                "enemies": [
+                    5735
+                ]
             },
             {
                 "floor_id": 0,
@@ -167,7 +228,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 15,
-                "enemies": []
+                "enemies": [
+                    5736
+                ]
             },
             {
                 "floor_id": 0,
@@ -175,7 +238,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 16,
-                "enemies": []
+                "enemies": [
+                    5737
+                ]
             },
             {
                 "floor_id": 0,
@@ -183,7 +248,11 @@
                 "lat": null,
                 "lng": null,
                 "index": 17,
-                "enemies": []
+                "enemies": [
+                    5716,
+                    5717,
+                    5718
+                ]
             },
             {
                 "floor_id": 0,
@@ -191,7 +260,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 18,
-                "enemies": []
+                "enemies": [
+                    5723,
+                    5724
+                ]
             },
             {
                 "floor_id": 0,
@@ -199,7 +271,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 19,
-                "enemies": []
+                "enemies": [
+                    4607,
+                    4608,
+                    4609,
+                    4610,
+                    4611,
+                    4612
+                ]
             },
             {
                 "floor_id": 0,
@@ -207,7 +286,18 @@
                 "lat": null,
                 "lng": null,
                 "index": 20,
-                "enemies": []
+                "enemies": [
+                    5629,
+                    5630,
+                    5631,
+                    5632,
+                    5633,
+                    5634,
+                    5635,
+                    5636,
+                    5637,
+                    5638
+                ]
             },
             {
                 "floor_id": 0,
@@ -215,7 +305,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 21,
-                "enemies": []
+                "enemies": [
+                    5639,
+                    5640,
+                    5641,
+                    5642,
+                    5656,
+                    5657,
+                    5658
+                ]
             },
             {
                 "floor_id": 0,
@@ -223,7 +321,16 @@
                 "lat": null,
                 "lng": null,
                 "index": 22,
-                "enemies": []
+                "enemies": [
+                    5643,
+                    5644,
+                    5645,
+                    5646,
+                    5647,
+                    5648,
+                    5649,
+                    5651
+                ]
             },
             {
                 "floor_id": 0,
@@ -231,7 +338,16 @@
                 "lat": null,
                 "lng": null,
                 "index": 23,
-                "enemies": []
+                "enemies": [
+                    5671,
+                    5672,
+                    5673,
+                    5674,
+                    5675,
+                    5712,
+                    5713,
+                    5714
+                ]
             },
             {
                 "floor_id": 0,
@@ -239,7 +355,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 24,
-                "enemies": []
+                "enemies": [
+                    5678,
+                    5679,
+                    5680,
+                    5686,
+                    5687
+                ]
             },
             {
                 "floor_id": 0,
@@ -247,7 +369,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 25,
-                "enemies": []
+                "enemies": [
+                    5693,
+                    5694,
+                    5695,
+                    5709,
+                    5710,
+                    5711
+                ]
             },
             {
                 "floor_id": 0,
@@ -255,7 +384,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 26,
-                "enemies": []
+                "enemies": [
+                    5688
+                ]
             },
             {
                 "floor_id": 0,
@@ -263,7 +394,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 27,
-                "enemies": []
+                "enemies": [
+                    4613
+                ]
             }
         ],
         "enemyraidmarkers": [],
