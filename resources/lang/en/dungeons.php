@@ -65,7 +65,9 @@ return [
         ],
         'the_forge_of_souls'        => [
             'name'   => 'The Forge of Souls',
-            'floors' => [],
+            'floors' => [
+                'the_forge_of_souls' => 'The Forge of Souls',
+            ],
         ],
         'the_nexus'                 => [
             'name'   => 'The Nexus',

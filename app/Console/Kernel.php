@@ -18,6 +18,8 @@ use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
+use App\Console\Commands\MDT\ExportMapping;
+use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\Release\GetCurrentRelease;
@@ -30,6 +32,7 @@ use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
@@ -76,6 +79,8 @@ class Kernel extends ConsoleKernel
         // MDT
         Encode::class,
         Decode::class,
+        ExportMapping::class,
+        ImportMapping::class,
 
         // Patreon
         RefreshMembershipStatus::class,
@@ -96,6 +101,9 @@ class Kernel extends ConsoleKernel
 
         // View
         Cache::class,
+
+        // WowTools
+        RefreshDisplayIds::class,
     ];
 
     /**
@@ -140,6 +148,9 @@ class Kernel extends ConsoleKernel
 
         // Ensure redis remains healthy
         $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->hourly();
+
+        // Ensure display IDs are set
+        $schedule->command('wowtools:refreshdisplayids')->hourly();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }

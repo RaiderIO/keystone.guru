@@ -6,6 +6,7 @@
 /**
  * @var $floor \App\Models\Floor
  * @var $mapContext \App\Logic\MapContext\MapContextDungeon
+ * @var $mappingVersion \App\Models\Mapping\MappingVersion
  */
 ?>
 
@@ -14,6 +15,7 @@
         @include('common.maps.map', [
             'showAds' => false,
             'dungeon' => $floor->dungeon,
+            '$mappingVersion' => $mappingVersion,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,

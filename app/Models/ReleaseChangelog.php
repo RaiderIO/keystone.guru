@@ -27,16 +27,16 @@ class ReleaseChangelog extends CacheModel
     /**
      * @return HasOne
      */
-    function release()
+    public function release(): HasOne
     {
-        return $this->hasOne('App\Models\Release');
+        return $this->hasOne(Release::class);
     }
 
     /**
      * @return HasMany
      */
-    function changes()
+    public function changes(): HasMany
     {
-        return $this->hasMany('App\Models\ReleaseChangelogChange')->orderBy('release_changelog_category_id');
+        return $this->hasMany(ReleaseChangelogChange::class)->orderBy('release_changelog_category_id');
     }
 }

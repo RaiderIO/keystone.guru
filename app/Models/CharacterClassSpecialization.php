@@ -28,9 +28,9 @@ class CharacterClassSpecialization extends CacheModel
     /**
      * @return BelongsTo
      */
-    function class()
+    public function class(): BelongsTo
     {
-        return $this->belongsTo('App\Models\CharacterClass');
+        return $this->belongsTo(CharacterClass::class);
     }
 
     public static function boot()

@@ -703,7 +703,7 @@ class CommonMapsMap extends InlineCode {
 
         for (let index in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[index];
-            if (!enemy.is_mdt && enemy.mdt_id === -1) {
+            if (!enemy.is_mdt && enemy.mdt_id === null) {
                 result.push(enemy);
             }
         }

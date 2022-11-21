@@ -23,8 +23,8 @@ use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServerHttpApiService;
-use App\Service\EchoServerHttpApiServiceInterface;
+use App\Service\EchoServer\EchoServerHttpApiService;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -32,6 +32,14 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTExportStringService;
+use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\MDT\MDTImportStringService;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\MDTMappingExportService;
+use App\Service\MDT\MDTMappingExportServiceInterface;
+use App\Service\MDT\MDTMappingImportService;
+use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -52,6 +60,8 @@ use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
+use App\Service\WowTools\WowToolsService;
+use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -76,6 +86,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
+        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
+        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -87,14 +99,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
+
         // Depends on SeasonService
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
+        $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
+        $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
 
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);
@@ -104,6 +120,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
         $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
+        $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
     }
 
     /**
@@ -112,9 +129,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @param ViewServiceInterface $viewService
      * @param ExpansionServiceInterface $expansionService
      * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
+     * @param MappingServiceInterface $mappingService
      * @return void
      */
-    public function boot(ViewServiceInterface $viewService, ExpansionServiceInterface $expansionService, AffixGroupEaseTierServiceInterface $affixGroupEaseTierService)
+    public function boot(
+        ViewServiceInterface               $viewService,
+        ExpansionServiceInterface          $expansionService,
+        AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
+        MappingServiceInterface            $mappingService
+    )
     {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
@@ -321,6 +344,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });
 
+        // Admin
+        view()->composer('admin.dungeon.edit', function (View $view) use ($mappingService) {
+            /** @var Dungeon|null $dungeon */
+            $dungeon = $view->getData()['dungeon'] ?? null;
+            $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
+        });
 
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {

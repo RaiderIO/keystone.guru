@@ -46,7 +46,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
 
-        foreach ($killZone->enemies->groupBy('npc_id') as $npcId => $enemies) {
+        foreach ($killZone->getEnemies()->groupBy('npc_id') as $npcId => $enemies) {
             /** @var Collection|Enemy[] $enemies */
             $enemyIndex = 1;
             foreach ($enemies as $enemy) {

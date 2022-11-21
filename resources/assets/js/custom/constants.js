@@ -64,8 +64,9 @@ const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
-    MAP_OBJECT_GROUP_ENEMY,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
+    // Depends on MAP_OBJECT_GROUP_ENEMY_PATROL
+    MAP_OBJECT_GROUP_ENEMY,
     // Depends on MAP_OBJECT_GROUP_ENEMY
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
@@ -126,6 +127,11 @@ const EXPANSION_SHADOWLANDS = 'shadowlands';
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
+
+// Teeming states
+const TEEMING_VISIBLE = 'visible';
+const TEEMING_HIDDEN = 'hidden';
 
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
@@ -276,6 +282,13 @@ let c = {
                 weight: 1
             }
         },
+        adminenemypatrol: {
+            polylineOptions: {
+                color: '#090',
+                weight: 2,
+                opacity: 1,
+            },
+        },
         enemypack: {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
@@ -303,8 +316,32 @@ let c = {
         enemypatrol: {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
-                return '#E25D5D';
-            }
+                return '#003280';
+            }, // #003280
+            defaultWeight: 2,
+
+            polylineOptions: {
+                color: '#090',
+                weight: 2,
+                opacity: 0,
+            },
+
+            polylineOptionsHighlighted: {
+                opacity: 1,
+                weight: 4,
+            },
+
+            polylineDecoratorOptions: {
+                fillOpacity: 0.5,
+                opacity: 0.5,
+                weight: 2,
+            },
+
+            polylineDecoratorOptionsHighlighted: {
+                fillOpacity: 1,
+                opacity: 1,
+                weight: 4,
+            },
         },
         path: {
             defaultColor: polylineDefaultColor,

@@ -6,9 +6,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $npc_id int
- * @property $spell_id int
+ * @property int $id
+ * @property int $npc_id
+ * @property int $spell_id
  *
  * @mixin Eloquent
  */
@@ -21,16 +21,16 @@ class NpcSpell extends CacheModel
     /**
      * @return BelongsTo
      */
-    public function npc()
+    public function npc(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Npc');
+        return $this->belongsTo(Npc::class);
     }
 
     /**
      * @return BelongsTo
      */
-    public function spell()
+    public function spell(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Spell');
+        return $this->belongsTo(Spell::class);
     }
 }

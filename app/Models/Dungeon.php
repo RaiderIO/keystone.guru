@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
@@ -31,6 +32,7 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
+ * @property Collection|MappingVersion[] $mappingversions
  * @property Collection|Floor[] $floors
  * @property Collection|DungeonRoute[] $dungeonroutes
  * @property Collection|Npc[] $npcs
@@ -39,7 +41,7 @@ use Mockery\Exception;
  * @property Collection|EnemyPack[] $enemypacks
  * @property Collection|EnemyPatrol[] $enemypatrols
  * @property Collection|MapIcon[] $mapicons
- * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  *
@@ -130,7 +132,7 @@ class Dungeon extends CacheModel
     const DUNGEON_THE_FORGE_OF_SOULS        = 'theforgeofsouls';
     const DUNGEON_THE_NEXUS                 = 'thenexus';
     const DUNGEON_THE_OCULUS                = 'theoculus'; // nexus80
-    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold';
+    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold'; // violethold
     const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
     const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
     const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
@@ -390,6 +392,14 @@ class Dungeon extends CacheModel
     /**
      * @return HasMany
      */
+    public function mappingversions(): HasMany
+    {
+        return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -409,7 +419,7 @@ class Dungeon extends CacheModel
      */
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
-        return $this->hasMany('App\Models\Npc')
+        return $this->hasMany(Npc::class)
             ->when($includeGlobalNpcs, function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });
@@ -444,13 +454,19 @@ class Dungeon extends CacheModel
      */
     public function mapicons(): HasManyThrough
     {
-        return $this->hasManyThrough(MapIcon::class, Floor::class)->where('dungeon_route_id', -1);
+        return $this->hasManyThrough(MapIcon::class, Floor::class)
+            ->where(function (Builder $builder) {
+                // TODO this can be replaced with just ->whereNull after mapping version merge is back in development
+                return $builder
+                    ->where('dungeon_route_id', -1)
+                    ->orWhereNull('dungeon_route_id');
+            });
     }
 
     /**
      * @return HasManyThrough
      */
-    public function floorswitchmarkers(): HasManyThrough
+    public function dungeonfloorswitchmarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
     }
@@ -464,7 +480,7 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @return HasMany
+     * @return HasManyThrough
      */
     public function dungeonspeedrunrequirednpcs(): HasManyThrough
     {
@@ -502,6 +518,16 @@ class Dungeon extends CacheModel
     public function scopeInactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
+    }
+
+    /**
+     * @return MappingVersion
+     */
+    public function getCurrentMappingVersion(): MappingVersion
+    {
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->mappingversions()->limit(1)->first();
+        return $mappingVersion;
     }
 
     /**
@@ -552,7 +578,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })
@@ -566,7 +592,7 @@ class Dungeon extends CacheModel
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function(Builder $builder){
+            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })

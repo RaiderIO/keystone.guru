@@ -18,13 +18,18 @@ class MDTImport extends Model
     /** @var string Prevent MDT being translated to m_d_t */
     protected $table = 'mdt_imports';
 
+    protected $fillable = [
+        'dungeon_route_id',
+        'import_string',
+    ];
+
     /**
      * Get the dungeon route that this import created.
      *
      * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 }

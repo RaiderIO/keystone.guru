@@ -33,7 +33,7 @@ class File extends Model
      * @return bool|null|void
      * @throws Exception
      */
-    function delete()
+    public function delete()
     {
         if (parent::delete()) {
             $this->deleteFromDisk();
@@ -43,7 +43,7 @@ class File extends Model
     /**
      * @return string Extend the file object with the full URL which is relevant for externals
      */
-    public function getUrlAttribute()
+    public function getUrlAttribute(): string
     {
         return $this->getURL();
     }
@@ -51,7 +51,7 @@ class File extends Model
     /**
      * @return string Gets the URL Attribute if this File is an Icon.
      */
-    public function getIconUrlAttribute()
+    public function getIconUrlAttribute(): string
     {
         return $this->getURL();
         // Unavailable since switching to different Image library - but we don't use it anyways
@@ -70,7 +70,7 @@ class File extends Model
      * @note This does NOT remove the file from the database!
      * @return bool True if the file was successfully deleted, false if it was not.
      */
-    public function deleteFromDisk()
+    public function deleteFromDisk(): bool
     {
         return Storage::disk($this->disk)->delete($this->path);
     }
@@ -79,7 +79,7 @@ class File extends Model
      * Get a full path on the file system of this file.
      * @return string The string containing the file path.
      */
-    public function getFullPath()
+    public function getFullPath(): string
     {
         // @TODO May need to do something with $this->disk here?
         return public_path($this->path);
@@ -89,7 +89,7 @@ class File extends Model
      * Get an URL for putting in the url() function in your view.
      * @return string The string containing the URL.
      */
-    public function getURL()
+    public function getURL(): string
     {
         // @TODO May need to do something with $this->disk here?
         if (config('app.env') === 'local') {
@@ -107,7 +107,7 @@ class File extends Model
      * @return File The newly saved file in the database.
      * @throws Exception
      */
-    public static function saveFileToDB($uploadedFile, $model, $dir = 'upload')
+    public static function saveFileToDB($uploadedFile, $model, $dir = 'upload'): File
     {
         $disk = config('app.env') === 'local' ? 'public_uploads' : 'public';
 

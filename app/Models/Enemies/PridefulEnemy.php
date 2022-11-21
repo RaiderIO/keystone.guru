@@ -28,29 +28,30 @@ class PridefulEnemy extends Model
 {
     use Reportable;
 
+    protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
     protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
 
     /**
      * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function enemy()
+    public function enemy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Enemy::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function floor()
+    public function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 }

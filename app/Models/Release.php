@@ -57,9 +57,9 @@ class Release extends CacheModel
     /**
      * @return HasOne
      */
-    function changelog()
+    public function changelog(): HasOne
     {
-        return $this->hasOne('App\Models\ReleaseChangelog');
+        return $this->hasOne(ReleaseChangelog::class);
     }
 
     /**
@@ -109,7 +109,7 @@ class Release extends CacheModel
      * @return string
      * @throws Throwable
      */
-    public function getRedditBodyAttribute()
+    public function getRedditBodyAttribute(): string
     {
         return trim(view('app.release.reddit', ['model' => $this])->render());
     }
@@ -127,7 +127,7 @@ class Release extends CacheModel
     /**
      * @return array
      */
-    public function getDiscordEmbeds()
+    public function getDiscordEmbeds(): array
     {
 //        $result = [];
 //

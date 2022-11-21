@@ -56,7 +56,7 @@ class Season extends CacheModel
      */
     public function expansion(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Expansion');
+        return $this->belongsTo(Expansion::class);
     }
 
     /**
@@ -64,7 +64,7 @@ class Season extends CacheModel
      */
     public function affixgroups(): HasMany
     {
-        return $this->hasMany('App\Models\AffixGroup\AffixGroup');
+        return $this->hasMany(AffixGroup::class);
     }
 
     /**
@@ -72,7 +72,7 @@ class Season extends CacheModel
      */
     public function dungeons(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Dungeon', 'season_dungeons');
+        return $this->belongsToMany(Dungeon::class, 'season_dungeons');
     }
 
     /**

@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property int $classification_id
  * @property int $npc_type_id
  * @property int $npc_class_id
+ * @property int $display_id
  * @property string $name
  * @property int $base_health
  * @property int $enemy_forces
@@ -41,7 +42,18 @@ class Npc extends CacheModel
     public $timestamps = false;
 
     protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
-    protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
+    protected $fillable = [
+        'id',
+        'dungeon_id',
+        'npc_type_id',
+        'npc_class_id',
+        'display_id',
+        'name',
+        'base_health',
+        'enemy_forces',
+        'enemy_forces_teeming',
+        'aggressiveness',
+    ];
 
     // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
@@ -63,7 +75,7 @@ class Npc extends CacheModel
      *
      * @return hasMany
      */
-    function enemies(): HasMany
+    public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
@@ -71,7 +83,7 @@ class Npc extends CacheModel
     /**
      * @return hasMany
      */
-    function npcbolsteringwhitelists(): HasMany
+    public function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany(NpcBolsteringWhitelist::class);
     }
@@ -79,7 +91,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function dungeon(): BelongsTo
+    public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
@@ -87,7 +99,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function classification(): BelongsTo
+    public function classification(): BelongsTo
     {
         return $this->belongsTo(NpcClassification::class);
     }
@@ -95,7 +107,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function type(): BelongsTo
+    public function type(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcType::class, 'npc_type_id');
@@ -104,7 +116,7 @@ class Npc extends CacheModel
     /**
      * @return belongsTo
      */
-    function class(): BelongsTo
+    public function class(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcClass::class, 'npc_class_id');
@@ -121,7 +133,7 @@ class Npc extends CacheModel
     /**
      * @return HasMany
      */
-    function npcspells(): HasMany
+    public function npcspells(): HasMany
     {
         return $this->hasMany(NpcSpell::class);
     }

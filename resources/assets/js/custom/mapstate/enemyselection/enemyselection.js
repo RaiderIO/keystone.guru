@@ -41,6 +41,8 @@ class EnemySelection extends MapObjectMapState {
         // this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        console.log(enemyMapObjectGroup);
+
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
             // Check if we should set this enemy to be selectable or not
@@ -52,6 +54,7 @@ class EnemySelection extends MapObjectMapState {
                 console.assert(self instanceof EnemySelection, 'this is not an EnemySelectionMapState', self);
 
                 self.signal('enemyselection:enemyselected', {
+                    sourceMapObject: self.sourceMapObject,
                     enemy: enemy,
                     ignorePackBuddies: enemySelectedEvent.data.clickEvent.originalEvent.ctrlKey
                 });

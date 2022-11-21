@@ -344,6 +344,10 @@ function getMapIcons() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
 }
 
+function getDungeonFloorSwitchMarkers() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+}
+
 function getUserMousePositions() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
 }
@@ -377,6 +381,10 @@ function getBrushline(id) {
 
 function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
+}
+
+function getDungeonFloorSwitchMarker(id) {
+    return getDungeonFloorSwitchMarkers().findMapObjectById(id);
 }
 
 function getUserMousePosition(id) {

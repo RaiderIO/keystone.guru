@@ -27,6 +27,7 @@ class OverpulledEnemyFormRequest extends FormRequest
             'kill_zone_id' => 'required|int',
             'enemy_ids'    => 'required|array',
             'enemy_ids.*'  => 'numeric',
+            'no_result'    => 'nullable|bool',
         ];
     }
 }

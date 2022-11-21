@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
-use Database\Seeders\Traits\FindsAffixes;
+use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

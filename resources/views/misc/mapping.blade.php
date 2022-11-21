@@ -47,7 +47,7 @@
                     foreach ($dungeon->floors as $floor) {
                         /** @var $floor \App\Models\Floor */
                         $totalEnemies           += $floor->enemies->count();
-                        $totalUnassignedEnemies += $floor->enemies->whereIn('npc_id', [-1, 0])->count();
+                        $totalUnassignedEnemies += $floor->enemies->whereNull('npc_id')->count();
                         $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
                     }
                     ?>

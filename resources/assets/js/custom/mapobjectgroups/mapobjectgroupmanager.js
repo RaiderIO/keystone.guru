@@ -19,10 +19,14 @@ class MapObjectGroupManager extends Signalable {
         }
 
         this.map.register('map:refresh', this, function () {
-            if (!self._loaded) {
-                self._loadMapObjectGroups();
+            try {
+                if (!self._loaded) {
+                    self._loadMapObjectGroups();
+                }
+                self._updateMapObjectGroups();
+            } catch (e){
+                console.error(e);
             }
-            self._updateMapObjectGroups();
         });
     }
 

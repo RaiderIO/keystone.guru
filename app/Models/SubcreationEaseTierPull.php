@@ -32,8 +32,8 @@ class SubcreationEaseTierPull extends CacheModel
     /**
      * @return HasMany
      */
-    public function affixgroupeasetiers()
+    public function affixgroupeasetiers(): HasMany
     {
-        return $this->hasMany('App\Models\AffixGroup\AffixGroupEaseTier');
+        return $this->hasMany(AffixGroupEaseTier::class);
     }
 }

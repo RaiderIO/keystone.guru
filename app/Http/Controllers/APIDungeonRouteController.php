@@ -38,6 +38,7 @@ use App\Models\Team;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -147,7 +148,7 @@ class APIDungeonRouteController extends Controller
                 // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
                 $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
-                if (!$team->members->contains($user->id)) {
+                if (!$team->isUserMember($user)) {
                     abort(403, 'Unauthorized');
                 }
 
@@ -710,20 +711,19 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
+     * @param MDTExportStringServiceInterface $mdtExportStringService
      * @param DungeonRoute $dungeonroute
      * @return array|void
+     * @throws AuthorizationException
      * @throws Throwable
      */
-    function mdtExport(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
+    function mdtExport(Request $request, MDTExportStringServiceInterface $mdtExportStringService, DungeonRoute $dungeonroute)
     {
         $this->authorize('view', $dungeonroute);
 
-        $exportString = new ExportString($seasonService);
-
         try {
             $warnings     = new Collection();
-            $dungeonRoute = $exportString
+            $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonroute)
                 ->getEncodedString($warnings);
 

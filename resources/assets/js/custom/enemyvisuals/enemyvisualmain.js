@@ -91,9 +91,14 @@ class EnemyVisualMain extends EnemyVisualIcon {
             width -= 10;
         }
         // Dangerous = less space
-        if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
+        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant()) {
             width -= 2;
+            // Obsolete enemies require additional subtraction to keep it looking nice
+            if (this.enemyvisual.enemy.isObsolete()) {
+                width -= 3;
+            }
         }
+
 
         // Inverse zoom
         width += (c.map.settings.maxZoom - getState().getMapZoomLevel());

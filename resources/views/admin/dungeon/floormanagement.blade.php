@@ -1,5 +1,14 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
+
+$mappingVersionsSelect = $dungeon->mappingversions
+    ->mapWithKeys(function (\App\Models\Mapping\MappingVersion $mappingVersion) {
+        if ($mappingVersion->merged) {
+            return [$mappingVersion->id => sprintf(__('Version %d (readonly)'), $mappingVersion->version)];
+        } else {
+            return [$mappingVersion->id => sprintf(__('Version %d'), $mappingVersion->version)];
+        }
+    });
 ?>
 
 @section('scripts')
@@ -25,8 +34,8 @@
     <tr>
         <th width="10%">{{ __('views/admin.dungeon.edit.floor_management.table_header_id') }}</th>
         <th width="10%">{{ __('views/admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="60%">{{ __('views/admin.dungeon.edit.floor_management.table_header_name') }}</th>
-        <th width="20%">{{ __('views/admin.dungeon.edit.floor_management.table_header_actions') }}</th>
+        <th width="40%">{{ __('views/admin.dungeon.edit.floor_management.table_header_name') }}</th>
+        <th width="40%">{{ __('views/admin.dungeon.edit.floor_management.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -37,14 +46,23 @@
             <td>{{ $floor->index }}</td>
             <td>{{ __($floor->name) }}</td>
             <td>
-                <a class="btn btn-primary"
-                   href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
-                    <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.edit.floor_management.floor_edit_edit') }}
-                </a>
-                <a class="btn btn-primary"
-                   href="{{ route('admin.floor.edit.mapping', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
-                    <i class="fas fa-route"></i>&nbsp;{{ __('views/admin.dungeon.edit.floor_management.floor_edit_mapping') }}
-                </a>
+                <form method="GET"
+                      action="{{ route('admin.floor.edit.mapping', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a class="btn btn-primary"
+                               href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
+                                <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.edit.floor_management.floor_edit_edit') }}
+                            </a>
+                        </div>
+                        <div class="col">
+                            {!! Form::select('mapping_version', $mappingVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+                        </div>
+                        <div class="col-auto">
+                            {!! Form::submit('Edit mapping', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                </form>
             </td>
         </tr>
     @endforeach
