@@ -876,6 +876,8 @@ class KillZone extends MapObject {
             }
             // And finally remove the layer group from the KZ layer group
             killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
+
+            this.enemyConnectionsLayerGroup = null;
         }
     }
 

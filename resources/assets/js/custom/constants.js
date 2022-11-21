@@ -64,8 +64,9 @@ const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
-    MAP_OBJECT_GROUP_ENEMY,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
+    // Depends on MAP_OBJECT_GROUP_ENEMY_PATROL
+    MAP_OBJECT_GROUP_ENEMY,
     // Depends on MAP_OBJECT_GROUP_ENEMY
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
@@ -311,6 +312,13 @@ let c = {
                 return '#E25D5D';
             },
             defaultWeight: 2,
+
+            polylineOptions: {
+                color: '#090',
+                weight: 2,
+                fillOpacity: 0.3,
+                opacity: 1,
+            },
         },
         path: {
             defaultColor: polylineDefaultColor,

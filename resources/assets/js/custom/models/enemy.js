@@ -60,9 +60,11 @@ class Enemy extends VersionableMapObject {
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
-        /** @type Object May be set when loaded from server */
+        /** @type {Object|null} May be set when loaded from server */
         this.npc = null;
-        /** @type Enemy If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
+        /** @type {EnemyPatrol|null} May be set when loaded from server */
+        this.enemyPatrol = null;
+        /** @type {Enemy} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
         this.active_auras = [];
 
@@ -635,6 +637,26 @@ class Enemy extends VersionableMapObject {
         }
 
         this.signal('enemy:set_npc', {npc: npc});
+    }
+
+    /**
+     *
+     * @param enemyPatrol {EnemyPatrol}
+     */
+    setEnemyPatrol(enemyPatrol) {
+        if (this.enemyPatrol !== null) {
+            console.log(`Removing from enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.removeEnemy(this);
+        }
+
+        this.enemyPatrol = enemyPatrol;
+        this.enemy_patrol_id = null;
+
+        if (this.enemyPatrol !== null) {
+            console.log(`Setting enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.addEnemy(this);
+            this.enemy_patrol_id = enemyPatrol.id;
+        }
     }
 
     /**

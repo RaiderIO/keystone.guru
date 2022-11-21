@@ -4,6 +4,7 @@ namespace App\Http\Requests\Enemy;
 
 use App\Models\Enemy;
 use App\Models\EnemyPack;
+use App\Models\EnemyPatrol;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
@@ -34,6 +35,7 @@ class EnemyFormRequest extends FormRequest
             'mapping_version_id'            => ['required', Rule::exists(MappingVersion::class, 'id')],
             'floor_id'                      => ['required', Rule::exists(Floor::class, 'id')],
             'enemy_pack_id'                 => ['nullable', Rule::exists(EnemyPack::class, 'id')],
+            'enemy_patrol_id'               => ['nullable', Rule::exists(EnemyPatrol::class, 'id')],
             'npc_id'                        => ['nullable', Rule::exists(Npc::class, 'id')],
             'mdt_id'                        => 'nullable|int',
             'mdt_npc_id'                    => 'nullable|int',

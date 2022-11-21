@@ -19,11 +19,14 @@ class EnemyPatrol extends Polyline {
         this.weight = c.map.enemypatrol.defaultWeight;
 
         this.label = 'EnemyPatrol';
+
+        // The assigned enemies to this enemy patrol
+        this.enemies = [];
     }
 
 
     _getAttributes(force) {
-        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
 
         if (this._cachedAttributes !== null && !force) {
             return this._cachedAttributes;
@@ -68,6 +71,8 @@ class EnemyPatrol extends Polyline {
      * @private
      */
     _getDecorator() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
         return L.polylineDecorator(this.layer, {
             patterns: [
                 {
@@ -91,6 +96,58 @@ class EnemyPatrol extends Polyline {
     }
 
     /**
+     *
+     * @returns {*[]}
+     * @private
+     */
+    _getEnemiesLatLngs() {
+        let result = [];
+        for (let index in this.enemies) {
+            let enemyCandidate = this.enemies[index];
+
+            result.push(enemyCandidate.layer.getLatLng());
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getLayerLatLng() {
+        let vertices = this.getVertices();
+
+        // Just get the middle one
+        return vertices[Math.floor(vertices.length / 2)];
+    }
+
+    /**
+     *
+     * @param enemy
+     */
+    addEnemy(enemy) {
+        this.enemies.push(enemy);
+    }
+
+    /**
+     *
+     * @param enemy
+     */
+    removeEnemy(enemy) {
+        let newEnemies = [];
+        for (let index in this.enemies) {
+            let enemyCandidate = this.enemies[index];
+            if (enemyCandidate.id !== enemy.id) {
+                newEnemies.push(enemyCandidate);
+                console.log(`Adding ${enemyCandidate.id} to new list of enemies`);
+            }
+        }
+
+        this.enemies = newEnemies;
+    }
+
+    /**
      * Users cannot delete this. AdminEnemyPatrols may be deleted instead.
      * @returns {boolean}
      */
@@ -107,6 +164,6 @@ class EnemyPatrol extends Polyline {
     }
 
     toString() {
-        return 'Enemy patrol-' + this.id;
+        return `Enemy patrol-${this.id}`;
     }
 }

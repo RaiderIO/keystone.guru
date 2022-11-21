@@ -339,8 +339,8 @@ class AdminEnemy extends Enemy {
         self.layer.on('click', function () {
             // When deleting, we shouldn't have these interactions
             // Only when we're an MDT enemy!
-            if (self.is_mdt && !(self.map.getMapState() instanceof DeleteMapState)) {
-                let currentMapState = self.map.getMapState();
+            let currentMapState = self.map.getMapState();
+            if (self.is_mdt && !(currentMapState instanceof DeleteMapState)) {
                 // Can only interact with select mode if we're the one that is currently being selected
                 if (currentMapState === null) {
                     let mdtEnemySelection = new MDTEnemySelection(self.map, self);
@@ -356,6 +356,29 @@ class AdminEnemy extends Enemy {
                     // Do not unregister enemyselectionmodechanged here; it may be changed externally as well
                     self.map.setMapState(null);
                 }
+            }
+
+            if (currentMapState instanceof EnemyPatrolEnemySelection) {
+                // We just got assigned an enemy patrol!
+                /** @type {AdminEnemyPatrol} */
+                let enemyPatrol = currentMapState.getMapObject();
+                // If we've assigned the patrol, clicking it again will unassign the enemy patrol
+                self.setEnemyPatrol(enemyPatrol.id === self.enemy_patrol_id ? null : enemyPatrol)
+                self.save();
+
+                // We just got assigned an enemy patrol, also assign it to any of our pack buddies
+                let packBuddies = self.getPackBuddies();
+                for (let index in packBuddies) {
+                    let packBuddyEnemy = packBuddies[index];
+                    packBuddyEnemy.setEnemyPatrol(enemyPatrol.id === packBuddyEnemy.enemy_patrol_id ? null : enemyPatrol);
+                    packBuddyEnemy.save();
+                }
+
+                // Regardless if we were setting or unsetting, redraw the connections
+                enemyPatrol.redrawConnectionsToEnemies();
+
+                // Stop the map state
+                self.map.setMapState(null);
             }
         });
 

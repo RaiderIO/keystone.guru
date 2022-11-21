@@ -107,6 +107,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         let isRouteAwakened = mapContext.hasAffix(AFFIX_AWAKENED);
         let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
+        let enemyPatrolMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+
         // Couple awakened enemies to each other
         for (let key in this.objects) {
             /** @type {Enemy} */
@@ -178,6 +180,18 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
                 }
             }
+
+            // Assign patrols to enemies if they have it
+            if (enemy.enemy_patrol_id !== null) {
+                /** @type {EnemyPatrol} */
+                let enemyPatrol = enemyPatrolMapObjectGroup.findMapObjectById(enemy.enemy_patrol_id);
+                enemyPatrol.addEnemy(enemy);
+            }
+        }
+
+        // After adding all the enemies, redraw the connections to all enemies in the patrols
+        for (let key in enemyPatrolMapObjectGroup.objects) {
+            enemyPatrolMapObjectGroup.objects[key].redrawConnectionsToEnemies();
         }
     }
 

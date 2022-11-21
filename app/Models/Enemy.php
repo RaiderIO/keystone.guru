@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Mapping\MappingModelInterface;
-use App\Models\Mapping\MappingModelCloneableInterface;
-use App\Models\Mapping\MappingVersion;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,9 +16,9 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $mapping_version_id
  * @property int|null $enemy_pack_id
+ * @property int|null $enemy_patrol_id
  * @property int|null $npc_id
  * @property int $floor_id
- * @property int $enemy_patrol_id
  * @property int|null $mdt_id The ID in MDT (clone index) that this enemy is coupled to
  * @property int|null $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
  * @property string $seasonal_type The type of of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
@@ -74,6 +74,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     public $with = ['npc', 'enemyactiveauras'];
     public $hidden = ['laravel_through_key'];
     public $timestamps = false;
+    protected $casts = [
+        'mapping_version_id' => 'integer',
+        'floor_id'           => 'integer',
+        'enemy_pack_id'      => 'integer',
+        'enemy_patrol_id'    => 'integer',
+        'lat'                => 'double',
+        'lng'                => 'double',
+    ];
 
     const SEASONAL_TYPE_AWAKENED           = 'awakened';
     const SEASONAL_TYPE_INSPIRING          = 'inspiring';
