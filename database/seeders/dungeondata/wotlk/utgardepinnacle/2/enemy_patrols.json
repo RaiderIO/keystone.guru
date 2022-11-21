@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-101,\"lng\":170},{\"lat\":-91.75,\"lng\":169.375}]"
@@ -17,7 +17,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-127.75,\"lng\":129.125},{\"lat\":-114,\"lng\":128.75}]"
@@ -29,7 +29,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-210.379043,\"lng\":198.833348},{\"lat\":-206.832865,\"lng\":198.750879},{\"lat\":-196.276802,\"lng\":198.915818},{\"lat\":-194.29754,\"lng\":202.379526},{\"lat\":-194.15625,\"lng\":206.28125},{\"lat\":-196.111863,\"lng\":208.812127},{\"lat\":-202.379526,\"lng\":208.812127},{\"lat\":-208.812127,\"lng\":208.812127}]"
@@ -41,7 +41,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-178.854555,\"lng\":234.462406},{\"lat\":-219.778902,\"lng\":234.651871}]"

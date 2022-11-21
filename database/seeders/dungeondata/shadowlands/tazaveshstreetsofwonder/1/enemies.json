@@ -301,10 +301,10 @@
     {
         "id": 7085,
         "enemy_pack_id": 1364,
-        "npc_id": 177817,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 1,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -318,7 +318,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 177817
+            "id": 189878
         }
     },
     {
@@ -761,10 +761,10 @@
     {
         "id": 7108,
         "enemy_pack_id": 1370,
-        "npc_id": 180335,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 10,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -778,7 +778,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180335
+            "id": 189878
         }
     },
     {
@@ -991,10 +991,10 @@
     {
         "id": 7118,
         "enemy_pack_id": 1375,
-        "npc_id": 179841,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": -1,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1008,7 +1008,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 179841
+            "id": 189878
         }
     },
     {
@@ -1083,10 +1083,10 @@
     {
         "id": 7127,
         "enemy_pack_id": 1376,
-        "npc_id": 179840,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 5,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1100,7 +1100,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 179840
+            "id": 189878
         }
     },
     {
@@ -1313,10 +1313,10 @@
     {
         "id": 7137,
         "enemy_pack_id": 1380,
-        "npc_id": 179840,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 4,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1330,7 +1330,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 179840
+            "id": 189878
         }
     },
     {
@@ -1382,10 +1382,10 @@
     {
         "id": 7161,
         "enemy_pack_id": -1,
-        "npc_id": 177808,
+        "npc_id": 190128,
         "floor_id": 101,
         "mdt_id": 1,
-        "mdt_npc_id": 190128,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded_zul_gamux",
         "seasonal_index": null,
         "teeming": null,
@@ -1399,7 +1399,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 177808
+            "id": 190128
         }
     },
     {
@@ -1474,10 +1474,10 @@
     {
         "id": 7192,
         "enemy_pack_id": 1390,
-        "npc_id": 180348,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": -1,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1491,7 +1491,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180348
+            "id": 189878
         }
     },
     {
@@ -2578,10 +2578,10 @@
     {
         "id": 8485,
         "enemy_pack_id": -1,
-        "npc_id": 180315,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": -1,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -2595,16 +2595,16 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180315
+            "id": 189878
         }
     },
     {
         "id": 8486,
         "enemy_pack_id": -1,
-        "npc_id": 180315,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 8,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -2618,16 +2618,16 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180315
+            "id": 189878
         }
     },
     {
         "id": 8490,
         "enemy_pack_id": -1,
-        "npc_id": 180315,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 11,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -2641,16 +2641,16 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180315
+            "id": 189878
         }
     },
     {
         "id": 8491,
         "enemy_pack_id": -1,
-        "npc_id": 180315,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 12,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -2664,16 +2664,16 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180315
+            "id": 189878
         }
     },
     {
         "id": 8503,
         "enemy_pack_id": -1,
-        "npc_id": 180315,
+        "npc_id": 189878,
         "floor_id": 101,
         "mdt_id": 2,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -2687,7 +2687,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 180315
+            "id": 189878
         }
     },
     {

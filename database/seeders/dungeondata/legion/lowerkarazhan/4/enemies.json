@@ -899,10 +899,10 @@
     {
         "id": 8246,
         "enemy_pack_id": -1,
-        "npc_id": 114634,
+        "npc_id": 189878,
         "floor_id": 22,
         "mdt_id": 15,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -916,7 +916,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114634
+            "id": 189878
         }
     },
     {
@@ -1152,10 +1152,10 @@
     {
         "id": 8257,
         "enemy_pack_id": 1576,
-        "npc_id": 114625,
+        "npc_id": 189878,
         "floor_id": 22,
         "mdt_id": 14,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1169,7 +1169,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114625
+            "id": 189878
         }
     },
     {
@@ -1474,10 +1474,10 @@
     {
         "id": 8271,
         "enemy_pack_id": 1578,
-        "npc_id": 114625,
+        "npc_id": 189878,
         "floor_id": 22,
         "mdt_id": 13,
-        "mdt_npc_id": 189878,
+        "mdt_npc_id": null,
         "seasonal_type": "shrouded",
         "seasonal_index": null,
         "teeming": null,
@@ -1491,7 +1491,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114625
+            "id": 189878
         }
     },
     {

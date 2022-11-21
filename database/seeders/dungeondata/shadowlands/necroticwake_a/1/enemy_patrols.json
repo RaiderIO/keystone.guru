@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-81.59375,\"lng\":252.96875},{\"lat\":-123.875,\"lng\":208},{\"lat\":-127.125,\"lng\":244.625},{\"lat\":-81.625,\"lng\":253.03125}]"
@@ -41,7 +41,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-136.75,\"lng\":102.75},{\"lat\":-106,\"lng\":133},{\"lat\":-62.375,\"lng\":96.125}]"
@@ -53,7 +53,7 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-221.125,\"lng\":183.5},{\"lat\":-209.9375,\"lng\":170.3125},{\"lat\":-197.9375,\"lng\":189.625},{\"lat\":-220.78125,\"lng\":183.59375}]"
