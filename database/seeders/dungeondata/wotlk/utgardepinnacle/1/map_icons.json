@@ -1,6 +1,8 @@
 [
     {
+        "mapping_version_id": 57,
         "floor_id": 136,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 2,
         "lat": -210.02032339519,

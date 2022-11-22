@@ -1,7 +1,9 @@
 [
     {
         "id": 396,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -11,7 +13,9 @@
     },
     {
         "id": 398,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -21,7 +25,9 @@
     },
     {
         "id": 399,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -31,7 +37,9 @@
     },
     {
         "id": 400,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -41,7 +49,9 @@
     },
     {
         "id": 401,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -51,7 +61,9 @@
     },
     {
         "id": 402,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -61,7 +73,9 @@
     },
     {
         "id": 403,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -71,7 +85,9 @@
     },
     {
         "id": 404,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -81,7 +97,9 @@
     },
     {
         "id": 405,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -91,7 +109,9 @@
     },
     {
         "id": 407,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -101,7 +121,9 @@
     },
     {
         "id": 408,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -111,7 +133,9 @@
     },
     {
         "id": 409,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -121,7 +145,9 @@
     },
     {
         "id": 410,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -131,7 +157,9 @@
     },
     {
         "id": 411,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -141,7 +169,9 @@
     },
     {
         "id": 413,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -151,7 +181,9 @@
     },
     {
         "id": 414,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -161,7 +193,9 @@
     },
     {
         "id": 415,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -171,7 +205,9 @@
     },
     {
         "id": 416,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -181,7 +217,9 @@
     },
     {
         "id": 417,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -191,7 +229,9 @@
     },
     {
         "id": 418,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -201,7 +241,9 @@
     },
     {
         "id": 419,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -211,7 +253,9 @@
     },
     {
         "id": 420,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -221,7 +265,9 @@
     },
     {
         "id": 421,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -231,7 +277,9 @@
     },
     {
         "id": 422,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -241,7 +289,9 @@
     },
     {
         "id": 423,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -251,7 +301,9 @@
     },
     {
         "id": 424,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -261,7 +313,9 @@
     },
     {
         "id": 425,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -271,7 +325,9 @@
     },
     {
         "id": 426,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -281,7 +337,9 @@
     },
     {
         "id": 427,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -291,7 +349,9 @@
     },
     {
         "id": 428,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -301,7 +361,9 @@
     },
     {
         "id": 429,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -311,7 +373,9 @@
     },
     {
         "id": 431,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -321,7 +385,9 @@
     },
     {
         "id": 432,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -331,7 +397,9 @@
     },
     {
         "id": 433,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -341,7 +409,9 @@
     },
     {
         "id": 434,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -351,7 +421,9 @@
     },
     {
         "id": 435,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -361,7 +433,9 @@
     },
     {
         "id": 436,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -371,7 +445,9 @@
     },
     {
         "id": 438,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -381,7 +457,9 @@
     },
     {
         "id": 439,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -391,7 +469,9 @@
     },
     {
         "id": 505,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -401,7 +481,9 @@
     },
     {
         "id": 506,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -411,7 +493,9 @@
     },
     {
         "id": 507,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -421,7 +505,9 @@
     },
     {
         "id": 508,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -431,7 +517,9 @@
     },
     {
         "id": 510,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -441,7 +529,9 @@
     },
     {
         "id": 512,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -451,7 +541,9 @@
     },
     {
         "id": 513,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "horde",
         "color": null,
@@ -461,7 +553,9 @@
     },
     {
         "id": 514,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -471,7 +565,9 @@
     },
     {
         "id": 515,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -481,7 +577,9 @@
     },
     {
         "id": 517,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "alliance",
         "color": null,
@@ -491,7 +589,9 @@
     },
     {
         "id": 554,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -501,7 +601,9 @@
     },
     {
         "id": 555,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -511,7 +613,9 @@
     },
     {
         "id": 583,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -521,7 +625,9 @@
     },
     {
         "id": 625,
+        "mapping_version_id": 18,
         "floor_id": 47,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,

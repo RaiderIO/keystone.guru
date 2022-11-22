@@ -1,6 +1,7 @@
 [
     {
         "id": 230,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -13,6 +14,7 @@
     },
     {
         "id": 231,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -25,6 +27,7 @@
     },
     {
         "id": 232,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -37,6 +40,7 @@
     },
     {
         "id": 233,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -49,6 +53,7 @@
     },
     {
         "id": 234,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -61,6 +66,7 @@
     },
     {
         "id": 235,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -73,6 +79,7 @@
     },
     {
         "id": 237,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -85,6 +92,7 @@
     },
     {
         "id": 238,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -97,6 +105,7 @@
     },
     {
         "id": 239,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -109,6 +118,7 @@
     },
     {
         "id": 240,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -121,6 +131,7 @@
     },
     {
         "id": 268,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -133,6 +144,7 @@
     },
     {
         "id": 269,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -145,6 +157,7 @@
     },
     {
         "id": 270,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -157,6 +170,7 @@
     },
     {
         "id": 271,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -169,6 +183,7 @@
     },
     {
         "id": 272,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",
@@ -181,6 +196,7 @@
     },
     {
         "id": 273,
+        "mapping_version_id": 33,
         "floor_id": 86,
         "teeming": null,
         "faction": "any",

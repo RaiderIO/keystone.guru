@@ -1,6 +1,7 @@
 [
     {
         "id": 203,
+        "mapping_version_id": 53,
         "floor_id": 128,
         "target_floor_id": 129,
         "lat": -35.5,

@@ -1,6 +1,8 @@
 [
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 6,
         "lat": -142.58218331401,
@@ -11,7 +13,9 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 44,
         "lat": -134.46875,
@@ -22,7 +26,9 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 44,
         "lat": -113.59375,
@@ -33,7 +39,9 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 36,
         "lat": -61.9375,
@@ -44,7 +52,9 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 44,
         "lat": -64.039024935064,
@@ -55,7 +65,9 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 44,
         "lat": -44.571540283946,
@@ -66,18 +78,22 @@
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 10,
         "lat": -197.72379668863,
         "lng": 163.33704943844,
-        "comment": "",
+        "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
     },
     {
+        "mapping_version_id": 4,
         "floor_id": 13,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 44,
         "lat": -76.496320466072,

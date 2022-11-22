@@ -1,7 +1,9 @@
 [
     {
         "id": 9636,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1852,
+        "enemy_patrol_id": null,
         "npc_id": 23960,
         "floor_id": 134,
         "mdt_id": -1,
@@ -24,7 +26,9 @@
     },
     {
         "id": 9637,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1852,
+        "enemy_patrol_id": null,
         "npc_id": 29735,
         "floor_id": 134,
         "mdt_id": -1,
@@ -47,7 +51,9 @@
     },
     {
         "id": 9641,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1854,
+        "enemy_patrol_id": null,
         "npc_id": 23961,
         "floor_id": 134,
         "mdt_id": -1,
@@ -70,7 +76,9 @@
     },
     {
         "id": 9642,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1854,
+        "enemy_patrol_id": null,
         "npc_id": 23960,
         "floor_id": 134,
         "mdt_id": -1,
@@ -93,7 +101,9 @@
     },
     {
         "id": 9643,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1854,
+        "enemy_patrol_id": null,
         "npc_id": 23956,
         "floor_id": 134,
         "mdt_id": -1,
@@ -116,7 +126,9 @@
     },
     {
         "id": 9644,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1854,
+        "enemy_patrol_id": null,
         "npc_id": 23960,
         "floor_id": 134,
         "mdt_id": -1,
@@ -139,7 +151,9 @@
     },
     {
         "id": 9645,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1855,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -162,7 +176,9 @@
     },
     {
         "id": 9646,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1855,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -185,7 +201,9 @@
     },
     {
         "id": 9647,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1855,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -208,7 +226,9 @@
     },
     {
         "id": 9648,
+        "mapping_version_id": 56,
         "enemy_pack_id": -1,
+        "enemy_patrol_id": null,
         "npc_id": 24084,
         "floor_id": 134,
         "mdt_id": -1,
@@ -231,7 +251,9 @@
     },
     {
         "id": 9649,
+        "mapping_version_id": 56,
         "enemy_pack_id": -1,
+        "enemy_patrol_id": null,
         "npc_id": 24084,
         "floor_id": 134,
         "mdt_id": -1,
@@ -254,7 +276,9 @@
     },
     {
         "id": 9650,
+        "mapping_version_id": 56,
         "enemy_pack_id": -1,
+        "enemy_patrol_id": null,
         "npc_id": 24084,
         "floor_id": 134,
         "mdt_id": -1,
@@ -277,7 +301,9 @@
     },
     {
         "id": 9651,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1856,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -300,7 +326,9 @@
     },
     {
         "id": 9652,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1856,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -323,7 +351,9 @@
     },
     {
         "id": 9653,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1856,
+        "enemy_patrol_id": null,
         "npc_id": 28419,
         "floor_id": 134,
         "mdt_id": -1,
@@ -346,7 +376,9 @@
     },
     {
         "id": 9654,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1857,
+        "enemy_patrol_id": null,
         "npc_id": 24200,
         "floor_id": 134,
         "mdt_id": -1,
@@ -369,7 +401,9 @@
     },
     {
         "id": 9655,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1857,
+        "enemy_patrol_id": null,
         "npc_id": 24201,
         "floor_id": 134,
         "mdt_id": -1,
@@ -392,7 +426,9 @@
     },
     {
         "id": 9656,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1858,
+        "enemy_patrol_id": null,
         "npc_id": 24071,
         "floor_id": 134,
         "mdt_id": -1,
@@ -415,7 +451,9 @@
     },
     {
         "id": 9657,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1858,
+        "enemy_patrol_id": null,
         "npc_id": 24069,
         "floor_id": 134,
         "mdt_id": -1,
@@ -438,7 +476,9 @@
     },
     {
         "id": 9658,
+        "mapping_version_id": 56,
         "enemy_pack_id": 1858,
+        "enemy_patrol_id": null,
         "npc_id": 28410,
         "floor_id": 134,
         "mdt_id": -1,
