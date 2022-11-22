@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
+use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
@@ -55,6 +56,9 @@ class Kernel extends ConsoleKernel
 
         // Cache
         RedisClearIdleKeys::class,
+
+        // Database
+        Backup::class,
 
         // Discover
         DiscoverCache::class,
