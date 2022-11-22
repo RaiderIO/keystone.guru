@@ -78,7 +78,7 @@
         "paths": [],
         "killzones": [
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
@@ -94,7 +94,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
@@ -110,7 +110,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e3e",
                 "lat": null,
                 "lng": null,
@@ -124,7 +124,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e9eff",
                 "lat": null,
                 "lng": null,
@@ -139,7 +139,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#fffb3e",
                 "lat": null,
                 "lng": null,
@@ -155,7 +155,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff3e",
                 "lat": null,
                 "lng": null,
@@ -166,7 +166,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e9e",
                 "lat": null,
                 "lng": null,
@@ -181,7 +181,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3effff",
                 "lat": null,
                 "lng": null,
@@ -194,7 +194,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff9b3e",
                 "lat": null,
                 "lng": null,
@@ -205,7 +205,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e3eff",
                 "lat": null,
                 "lng": null,
@@ -224,7 +224,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#a1ff3e",
                 "lat": null,
                 "lng": null,
@@ -236,7 +236,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
@@ -247,7 +247,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
@@ -263,7 +263,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e3e",
                 "lat": null,
                 "lng": null,
@@ -273,7 +273,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e9eff",
                 "lat": null,
                 "lng": null,
@@ -294,7 +294,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#fffb3e",
                 "lat": null,
                 "lng": null,
@@ -308,7 +308,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff3e",
                 "lat": null,
                 "lng": null,
@@ -320,7 +320,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e9e",
                 "lat": null,
                 "lng": null,
@@ -331,7 +331,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3effff",
                 "lat": null,
                 "lng": null,
@@ -344,7 +344,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff9b3e",
                 "lat": null,
                 "lng": null,
@@ -355,7 +355,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e3eff",
                 "lat": null,
                 "lng": null,
@@ -368,7 +368,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#a1ff3e",
                 "lat": null,
                 "lng": null,
@@ -381,7 +381,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
@@ -392,7 +392,7 @@
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
