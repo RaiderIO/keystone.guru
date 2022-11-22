@@ -1,7 +1,9 @@
 [
     {
         "id": 1442,
+        "mapping_version_id": 33,
         "floor_id": 88,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,

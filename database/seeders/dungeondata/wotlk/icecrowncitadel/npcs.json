@@ -5,6 +5,7 @@
         "classification_id": 1,
         "npc_type_id": 3,
         "npc_class_id": 1,
+        "display_id": 44816,
         "name": "Spider",
         "base_health": 12345,
         "enemy_forces": -1,

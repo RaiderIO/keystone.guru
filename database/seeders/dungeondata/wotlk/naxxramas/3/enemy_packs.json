@@ -1,7 +1,9 @@
 [
     {
         "id": 1966,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#00ff96",
@@ -11,7 +13,9 @@
     },
     {
         "id": 1967,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -21,7 +25,9 @@
     },
     {
         "id": 1968,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#ff002b",
@@ -31,7 +37,9 @@
     },
     {
         "id": 1969,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -41,7 +49,9 @@
     },
     {
         "id": 1972,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#ff002b",
@@ -51,7 +61,9 @@
     },
     {
         "id": 1974,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -61,7 +73,9 @@
     },
     {
         "id": 1975,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#c000ff",
@@ -71,7 +85,9 @@
     },
     {
         "id": 1976,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#00ff96",
@@ -81,7 +97,9 @@
     },
     {
         "id": 1977,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#ff002b",
@@ -91,7 +109,9 @@
     },
     {
         "id": 1978,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -101,7 +121,9 @@
     },
     {
         "id": 1979,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#00ff96",
@@ -111,7 +133,9 @@
     },
     {
         "id": 1998,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#ff002b",
@@ -121,7 +145,9 @@
     },
     {
         "id": 1999,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -131,7 +157,9 @@
     },
     {
         "id": 2000,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -141,7 +169,9 @@
     },
     {
         "id": 2001,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -151,7 +181,9 @@
     },
     {
         "id": 2002,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -161,7 +193,9 @@
     },
     {
         "id": 2003,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -171,7 +205,9 @@
     },
     {
         "id": 2004,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -181,7 +217,9 @@
     },
     {
         "id": 2005,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -191,7 +229,9 @@
     },
     {
         "id": 2006,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -201,7 +241,9 @@
     },
     {
         "id": 2007,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -211,7 +253,9 @@
     },
     {
         "id": 2008,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -221,7 +265,9 @@
     },
     {
         "id": 2009,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -231,7 +277,9 @@
     },
     {
         "id": 2010,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#ff002b",
@@ -241,7 +289,9 @@
     },
     {
         "id": 2011,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -251,7 +301,9 @@
     },
     {
         "id": 2012,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -261,7 +313,9 @@
     },
     {
         "id": 2013,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -271,7 +325,9 @@
     },
     {
         "id": 2014,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -281,7 +337,9 @@
     },
     {
         "id": 2015,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#e35c73",
@@ -291,7 +349,9 @@
     },
     {
         "id": 2016,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -301,7 +361,9 @@
     },
     {
         "id": 2017,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -311,7 +373,9 @@
     },
     {
         "id": 2018,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#e35c73",
@@ -321,7 +385,9 @@
     },
     {
         "id": 2019,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -331,7 +397,9 @@
     },
     {
         "id": 2020,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -341,7 +409,9 @@
     },
     {
         "id": 2030,
+        "mapping_version_id": 60,
         "floor_id": 140,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",

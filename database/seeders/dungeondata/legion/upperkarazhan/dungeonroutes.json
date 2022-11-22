@@ -4,6 +4,7 @@
         "clone_of": null,
         "author_id": 1,
         "dungeon_id": 11,
+        "mapping_version_id": 11,
         "faction_id": 1,
         "team_id": null,
         "published_state_id": 3,
@@ -19,7 +20,7 @@
         "pull_gradient": "",
         "pull_gradient_apply_always": 0,
         "created_at": "2022-08-27T10:26:39+00:00",
-        "updated_at": "2022-08-27T10:26:39+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -38,13 +39,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 1,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8405
-                    },
-                    {
-                        "enemy_id": 8406
-                    }
+                "enemies": [
+                    8405,
+                    8406
                 ]
             },
             {
@@ -53,10 +50,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 2,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8407
-                    }
+                "enemies": [
+                    8407
                 ]
             },
             {
@@ -65,13 +60,9 @@
                 "lat": null,
                 "lng": null,
                 "index": 3,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8408
-                    },
-                    {
-                        "enemy_id": 8409
-                    }
+                "enemies": [
+                    8408,
+                    8409
                 ]
             },
             {
@@ -80,10 +71,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 4,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8410
-                    }
+                "enemies": [
+                    8410
                 ]
             },
             {
@@ -92,31 +81,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 5,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8411
-                    },
-                    {
-                        "enemy_id": 8412
-                    },
-                    {
-                        "enemy_id": 8413
-                    },
-                    {
-                        "enemy_id": 8414
-                    },
-                    {
-                        "enemy_id": 8415
-                    },
-                    {
-                        "enemy_id": 8425
-                    },
-                    {
-                        "enemy_id": 8426
-                    },
-                    {
-                        "enemy_id": 8427
-                    }
+                "enemies": [
+                    8411,
+                    8412,
+                    8413,
+                    8414,
+                    8415,
+                    8425,
+                    8426,
+                    8427
                 ]
             },
             {
@@ -125,31 +98,15 @@
                 "lat": null,
                 "lng": null,
                 "index": 6,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8416
-                    },
-                    {
-                        "enemy_id": 8417
-                    },
-                    {
-                        "enemy_id": 8419
-                    },
-                    {
-                        "enemy_id": 8420
-                    },
-                    {
-                        "enemy_id": 8421
-                    },
-                    {
-                        "enemy_id": 8422
-                    },
-                    {
-                        "enemy_id": 8423
-                    },
-                    {
-                        "enemy_id": 8424
-                    }
+                "enemies": [
+                    8416,
+                    8417,
+                    8419,
+                    8420,
+                    8421,
+                    8422,
+                    8423,
+                    8424
                 ]
             },
             {
@@ -158,10 +115,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 7,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8418
-                    }
+                "enemies": [
+                    8418
                 ]
             },
             {
@@ -170,10 +125,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 8,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8436
-                    }
+                "enemies": [
+                    8436
                 ]
             },
             {
@@ -182,10 +135,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 9,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8429
-                    }
+                "enemies": [
+                    8429
                 ]
             },
             {
@@ -194,10 +145,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 10,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8440
-                    }
+                "enemies": [
+                    8440
                 ]
             },
             {
@@ -206,10 +155,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 11,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8444
-                    }
+                "enemies": [
+                    8444
                 ]
             },
             {
@@ -218,10 +165,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 12,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8438
-                    }
+                "enemies": [
+                    8438
                 ]
             },
             {
@@ -230,37 +175,17 @@
                 "lat": null,
                 "lng": null,
                 "index": 13,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8451
-                    },
-                    {
-                        "enemy_id": 8452
-                    },
-                    {
-                        "enemy_id": 8453
-                    },
-                    {
-                        "enemy_id": 8454
-                    },
-                    {
-                        "enemy_id": 8455
-                    },
-                    {
-                        "enemy_id": 8456
-                    },
-                    {
-                        "enemy_id": 8457
-                    },
-                    {
-                        "enemy_id": 8458
-                    },
-                    {
-                        "enemy_id": 8459
-                    },
-                    {
-                        "enemy_id": 8527
-                    }
+                "enemies": [
+                    8451,
+                    8452,
+                    8453,
+                    8454,
+                    8455,
+                    8456,
+                    8457,
+                    8458,
+                    8459,
+                    8527
                 ]
             },
             {
@@ -269,10 +194,8 @@
                 "lat": null,
                 "lng": null,
                 "index": 14,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 8474
-                    }
+                "enemies": [
+                    8474
                 ]
             }
         ],

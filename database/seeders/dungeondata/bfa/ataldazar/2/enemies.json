@@ -1,7 +1,9 @@
 [
     {
         "id": 184,
+        "mapping_version_id": 14,
         "enemy_pack_id": -1,
+        "enemy_patrol_id": null,
         "npc_id": 122963,
         "floor_id": 42,
         "mdt_id": 1,

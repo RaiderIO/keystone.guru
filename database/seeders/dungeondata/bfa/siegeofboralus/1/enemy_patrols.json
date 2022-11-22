@@ -1,6 +1,7 @@
 [
     {
         "id": 92,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -13,6 +14,7 @@
     },
     {
         "id": 93,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -25,6 +27,7 @@
     },
     {
         "id": 94,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
@@ -37,6 +40,7 @@
     },
     {
         "id": 95,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
@@ -49,6 +53,7 @@
     },
     {
         "id": 96,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
@@ -61,6 +66,7 @@
     },
     {
         "id": 97,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
@@ -73,6 +79,7 @@
     },
     {
         "id": 99,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -85,6 +92,7 @@
     },
     {
         "id": 123,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",

@@ -104,20 +104,29 @@ class DungeonDataSeeder extends Seeder
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
                 foreach ($floorDirIterator as $floorDirFile) {
-                    // Parse loose files
-                    if (!is_dir($floorDirFile)) {
-                        // npcs, dungeon_routes
-                        $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
-                    } // Parse floor dir
-                    else {
-                        $this->command->info('-- Importing floor ' . basename($floorDirFile));
-
-                        $importFileIterator = new FilesystemIterator($floorDirFile);
-                        // For each file inside a floor
-                        foreach ($importFileIterator as $importFile) {
-                            $this->parseRawFile($rootDir, $importFile, $mappings, 3);
-                        }
+                    /** @var $floorDirFile SplFileInfo */
+                    if ($floorDirFile->getType() !== 'dir') {
+                        continue;
                     }
+                    $this->command->info('-- Importing floor ' . basename($floorDirFile));
+
+                    $importFileIterator = new FilesystemIterator($floorDirFile);
+                    // For each file inside a floor
+                    foreach ($importFileIterator as $importFile) {
+                        // Floors first - parse dirs and only THEN files
+                        $this->parseRawFile($rootDir, $importFile, $mappings, 3);
+                    }
+                }
+
+                $floorDirIterator->rewind();
+                foreach ($floorDirIterator as $floorDirFile) {
+                    /** @var $floorDirFile SplFileInfo */
+                    if ($floorDirFile->getType() === 'dir') {
+                        continue;
+                    }
+
+                    // npcs, dungeon_routes
+                    $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
                 }
             }
         }

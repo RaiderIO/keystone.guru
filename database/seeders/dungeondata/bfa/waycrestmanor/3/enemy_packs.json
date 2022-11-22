@@ -1,7 +1,9 @@
 [
     {
         "id": 120,
+        "mapping_version_id": 23,
         "floor_id": 62,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -11,7 +13,9 @@
     },
     {
         "id": 121,
+        "mapping_version_id": 23,
         "floor_id": 62,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -21,7 +25,9 @@
     },
     {
         "id": 125,
+        "mapping_version_id": 23,
         "floor_id": 62,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,
@@ -31,7 +37,9 @@
     },
     {
         "id": 126,
+        "mapping_version_id": 23,
         "floor_id": 62,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": null,

@@ -1,6 +1,7 @@
 [
     {
         "id": 151,
+        "mapping_version_id": 28,
         "floor_id": 73,
         "teeming": null,
         "faction": "any",
@@ -13,6 +14,7 @@
     },
     {
         "id": 256,
+        "mapping_version_id": 28,
         "floor_id": 73,
         "teeming": null,
         "faction": "any",
@@ -25,6 +27,7 @@
     },
     {
         "id": 257,
+        "mapping_version_id": 28,
         "floor_id": 73,
         "teeming": null,
         "faction": "any",

@@ -1,0 +1,596 @@
+[
+    {
+        "id": 1,
+        "dungeon_id": 1,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:19.000000Z",
+        "updated_at": "2022-11-21T22:31:19.000000Z",
+        "merged": false
+    },
+    {
+        "id": 2,
+        "dungeon_id": 2,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 3,
+        "dungeon_id": 3,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 4,
+        "dungeon_id": 4,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 5,
+        "dungeon_id": 5,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 6,
+        "dungeon_id": 6,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 7,
+        "dungeon_id": 7,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 8,
+        "dungeon_id": 8,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 9,
+        "dungeon_id": 9,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 10,
+        "dungeon_id": 10,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 11,
+        "dungeon_id": 11,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 12,
+        "dungeon_id": 12,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 13,
+        "dungeon_id": 13,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 14,
+        "dungeon_id": 14,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 15,
+        "dungeon_id": 15,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 16,
+        "dungeon_id": 16,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 17,
+        "dungeon_id": 17,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 18,
+        "dungeon_id": 18,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 19,
+        "dungeon_id": 19,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 20,
+        "dungeon_id": 20,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 21,
+        "dungeon_id": 21,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 22,
+        "dungeon_id": 22,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 23,
+        "dungeon_id": 23,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 24,
+        "dungeon_id": 24,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 25,
+        "dungeon_id": 25,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 26,
+        "dungeon_id": 26,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 27,
+        "dungeon_id": 27,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 28,
+        "dungeon_id": 28,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 29,
+        "dungeon_id": 29,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 30,
+        "dungeon_id": 30,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 31,
+        "dungeon_id": 31,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 32,
+        "dungeon_id": 32,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 33,
+        "dungeon_id": 33,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 34,
+        "dungeon_id": 34,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 35,
+        "dungeon_id": 35,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 36,
+        "dungeon_id": 36,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 37,
+        "dungeon_id": 37,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 38,
+        "dungeon_id": 38,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 39,
+        "dungeon_id": 39,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 40,
+        "dungeon_id": 40,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 41,
+        "dungeon_id": 41,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 42,
+        "dungeon_id": 42,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 43,
+        "dungeon_id": 43,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 44,
+        "dungeon_id": 44,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 45,
+        "dungeon_id": 45,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 46,
+        "dungeon_id": 46,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 47,
+        "dungeon_id": 47,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 48,
+        "dungeon_id": 48,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 49,
+        "dungeon_id": 49,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 50,
+        "dungeon_id": 50,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 51,
+        "dungeon_id": 51,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 52,
+        "dungeon_id": 52,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 53,
+        "dungeon_id": 53,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 54,
+        "dungeon_id": 54,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 55,
+        "dungeon_id": 55,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 56,
+        "dungeon_id": 56,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:20.000000Z",
+        "updated_at": "2022-11-21T22:31:20.000000Z",
+        "merged": false
+    },
+    {
+        "id": 57,
+        "dungeon_id": 57,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 58,
+        "dungeon_id": 58,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 59,
+        "dungeon_id": 59,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 60,
+        "dungeon_id": 60,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 61,
+        "dungeon_id": 61,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 62,
+        "dungeon_id": 62,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 63,
+        "dungeon_id": 63,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 64,
+        "dungeon_id": 64,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 65,
+        "dungeon_id": 65,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    },
+    {
+        "id": 66,
+        "dungeon_id": 66,
+        "version": 1,
+        "mdt_mapping_hash": null,
+        "created_at": "2022-11-21T22:31:21.000000Z",
+        "updated_at": "2022-11-21T22:31:21.000000Z",
+        "merged": false
+    }
+]
