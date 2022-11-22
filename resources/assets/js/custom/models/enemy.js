@@ -541,7 +541,7 @@ class Enemy extends VersionableMapObject {
             for (let key in enemyMapObjectGroup.objects) {
                 let enemy = enemyMapObjectGroup.objects[key];
                 // Visible check for possible hidden Awakened Enemies on the last boss
-                if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.shouldBeVisible()) {
+                if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.isVisible()) {
                     result.push(enemy);
                 }
             }
