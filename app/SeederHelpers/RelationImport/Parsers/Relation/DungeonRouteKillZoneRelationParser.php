@@ -3,6 +3,7 @@
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 
@@ -51,22 +52,28 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 
             // Unset the relation data, otherwise the save function will complain that the column doesn't exist,
             // but keep a reference to it as we still need it later on
-            $enemies = $killZoneData['killzoneenemies'];
-            unset($killZoneData['killzoneenemies']);
+
+            $enemies = $killZoneData['enemies'];
+            unset($killZoneData['enemies']);
 
             if (count($enemies) > 0) {
                 // Gotta save the KillZone in order to get an ID
-                $killZone = new KillZone($killZoneData);
-                $killZone->save();
+                $killZone                = KillZone::create($killZoneData);
+                $killZoneEnemyAttributes = [];
 
-                foreach ($enemies as $key => $enemy) {
+                foreach ($enemies as $key => $enemyId) {
+                    $enemy = Enemy::findOrFail($enemyId);
                     // Make sure the enemy's relation with the kill zone is restored.
                     // Do not use $enemy since that would create a new copy and we'd lose our changes
-                    $enemies[$key]['kill_zone_id'] = $killZone->id;
+                    $killZoneEnemyAttributes[] = [
+                        'kill_zone_id' => $killZone->id,
+                        'npc_id'       => $enemy->npc_id,
+                        'mdt_id'       => $enemy->mdt_id,
+                    ];
                 }
 
                 // Insert vertices
-                KillZoneEnemy::insert($enemies);
+                KillZoneEnemy::insert($killZoneEnemyAttributes);
             }
         }
 

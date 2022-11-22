@@ -164,7 +164,7 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function mapIconsForExport(): HasMany
     {
-        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', -1);
+        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null);
     }
 
     /**

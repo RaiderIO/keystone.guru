@@ -1318,14 +1318,18 @@ class DungeonRoute extends Model
             $item->enemyraidmarkers()->delete();
             $item->brushlines()->delete();
             $item->paths()->delete();
-            $item->killzones()->delete();
+            foreach($item->killzones as $killZone){
+                $killZone->delete();
+            }
             $item->mapicons()->delete();
             $item->pridefulenemies()->delete();
 
             // External
             $item->ratings()->delete();
             $item->favorites()->delete();
-            $item->livesessions()->delete();
+            foreach($item->livesessions as $liveSession){
+                $liveSession->delete();
+            }
 
             $item->mdtImport()->delete();
         });

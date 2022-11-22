@@ -161,10 +161,11 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         $npcs = Npc::whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id])->get()->keyBy('id');
 
         // A variable for storing my enemy packs and assigning them a group numbers
-        $enemyPackGroups = collect();
+        $enemyPackGroups   = collect();
+        $savedEnemyPatrols = collect();
 
         $dungeonEnemyIndex = 0;
-        foreach ($mappingVersion->enemies->groupBy('npc_id') as $npcId => $enemies) {
+        foreach ($mappingVersion->enemies()->with('enemypatrol')->get()->groupBy('npc_id') as $npcId => $enemies) {
             /** @var Collection|Enemy[] $enemies */
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
@@ -203,6 +204,22 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 // Only add the group if the enemy had a group - group is optional
                 if (!is_null($group)) {
                     $dungeonEnemy['clones'][$cloneIndex]['g'] = $group;
+                }
+
+                // Add patrol if any
+                if ($enemy->enemy_patrol_id !== null && !$savedEnemyPatrols->has($enemy->enemy_patrol_id)) {
+                    $patrolVertices   = [];
+                    $polylineVertices = json_decode($enemy->enemypatrol->polyline->vertices_json, true);
+                    $vertexIndex = 0;
+                    foreach ($polylineVertices as $vertex) {
+                        $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertex);
+                    }
+                    $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
+
+                    // Cache it only if the patrol was tied to a group
+                    if ($enemy->enemy_pack_id !== null) {
+                        $savedEnemyPatrols->put($enemy->enemy_patrol_id, $enemy->enemypatrol);
+                    }
                 }
             }
 

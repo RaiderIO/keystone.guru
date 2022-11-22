@@ -456,10 +456,8 @@ class Dungeon extends CacheModel
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
             ->where(function (Builder $builder) {
-                // TODO this can be replaced with just ->whereNull after mapping version merge is back in development
                 return $builder
-                    ->where('dungeon_route_id', -1)
-                    ->orWhereNull('dungeon_route_id');
+                    ->whereNull('dungeon_route_id');
             });
     }
 
