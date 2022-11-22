@@ -112,11 +112,11 @@ class CacheService implements CacheServiceInterface
     /**
      * @param string $key
      * @param $object
-     * @param string|null $ttl
+     * @param string|null|DateInterval $ttl
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function set(string $key, $object, ?string $ttl = null): bool
+    public function set(string $key, $object, $ttl = null): bool
     {
         return Cache::set($key, $object, $ttl);
     }
