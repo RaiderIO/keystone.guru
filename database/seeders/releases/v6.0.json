@@ -1,0 +1,37 @@
+{
+    "id": 147,
+    "release_changelog_id": 154,
+    "version": "v6.0",
+    "title": "Added mapping versions, coupled enemies with their patrols, preparation for merging mapping with MythicDungeonTools",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-11-22T22:17:19+00:00",
+    "updated_at": "2022-11-22T22:17:19+00:00",
+    "changelog": {
+        "id": 154,
+        "release_id": 147,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 154,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1448,
+                "change": "The way pulls are saved and handled changed drastically - you should notice nothing of this but this was a major overhaul required to align mapping with MythicDungeonTools.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 154,
+                "release_changelog_category_id": 4,
+                "ticket_id": 678,
+                "change": "Enemies are now able to be linked with their patrols (will be active when Keystone.guru switches to use MythicDungeonTools mapping).",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
