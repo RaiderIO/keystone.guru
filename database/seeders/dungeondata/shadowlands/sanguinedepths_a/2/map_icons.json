@@ -1,1 +1,67 @@
-[]
+[
+    {
+        "mapping_version_id": 32,
+        "floor_id": 84,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -189.75,
+        "lng": 205.5,
+        "comment": "mapping.map_icons.shadowlands.sanguine_depths.graveyard_grand_proctor_beryllia",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 32,
+        "floor_id": 84,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -36.25,
+        "lng": 220.125,
+        "comment": "mapping.map_icons.shadowlands.sanguine_depths.anima_cage",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 32,
+        "floor_id": 84,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -42.75,
+        "lng": 47.75,
+        "comment": "mapping.map_icons.shadowlands.sanguine_depths.exit",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 32,
+        "floor_id": 84,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 40,
+        "lat": -82.0625,
+        "lng": 289.5625,
+        "comment": "mapping.map_icons.shadowlands.sanguine_depths.gauntlet_explanation",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 32,
+        "floor_id": 84,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -158.97540942259,
+        "lng": 240,
+        "comment": "mapping.map_icons.shadowlands.sanguine_depths.zrali_essence",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

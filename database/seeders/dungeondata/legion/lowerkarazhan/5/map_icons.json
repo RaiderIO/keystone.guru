@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "mapping_version_id": 8,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -84.878679921372,
+        "lng": 195.76505792122,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 8,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -79.220101259947,
+        "lng": 198.15907197028,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

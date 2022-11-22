@@ -1,1 +1,67 @@
-[]
+[
+    {
+        "mapping_version_id": 35,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -84,
+        "lng": 122.5,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 35,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 57,
+        "lat": -178.75,
+        "lng": 189.75,
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.necrolord_banner",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 35,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -127.3125,
+        "lng": 223.1875,
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 35,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -159.5625,
+        "lng": 175.125,
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 35,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -188.0625,
+        "lng": 268.6875,
+        "comment": "mapping.map_icons.shadowlands.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

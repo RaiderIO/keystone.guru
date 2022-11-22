@@ -1,1 +1,80 @@
-[]
+[
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -82.75,
+        "lng": 226.5,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -166.83528146835,
+        "lng": 169.96911275643,
+        "comment": "Mobs go into boss once damaged",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -82.25,
+        "lng": 132.75,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 5,
+        "lat": -126.25,
+        "lng": 119,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 7,
+        "lat": -135,
+        "lng": 102,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 45,
+        "floor_id": 116,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -25.89887925806,
+        "lng": 138.5263583845,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

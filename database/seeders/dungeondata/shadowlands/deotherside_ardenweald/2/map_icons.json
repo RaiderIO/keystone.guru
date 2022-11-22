@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "mapping_version_id": 28,
+        "floor_id": 74,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 4,
+        "lat": -147.5,
+        "lng": 185.5,
+        "comment": "mapping.map_icons.shadowlands.de_other_side.exit",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 28,
+        "floor_id": 74,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -153.1875,
+        "lng": 234.6875,
+        "comment": "mapping.map_icons.shadowlands.de_other_side.engineer_blob_button",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

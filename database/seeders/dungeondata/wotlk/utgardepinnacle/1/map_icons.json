@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "mapping_version_id": 57,
+        "floor_id": 136,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -210.02032339519,
+        "lng": 182.16270536971,
+        "comment": "Pat from upstairs can come down.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
