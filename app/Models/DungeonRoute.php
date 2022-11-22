@@ -1316,8 +1316,12 @@ class DungeonRoute extends Model
 
             // Mapping related items
             $item->enemyraidmarkers()->delete();
-            $item->brushlines()->delete();
-            $item->paths()->delete();
+            foreach($item->brushlines as $brushline){
+                $brushline->delete();
+            }
+            foreach($item->paths as $path){
+                $path->delete();
+            }
             foreach($item->killzones as $killZone){
                 $killZone->delete();
             }
