@@ -9,6 +9,8 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.enemyConnectionsLayerGroup = null;
         // Layer to has all polylines for the connected enemies to this patrol
         this.connectedEnemiesLayer = null;
+
+        getState().register('floorid:changed', this, this.redrawConnectionsToEnemies.bind(this));
     }
 
     /**
@@ -17,6 +19,24 @@ class AdminEnemyPatrol extends EnemyPatrol {
      */
     isEditable() {
         return true;
+    }
+
+    /**
+     * @param {Enemy} enemy
+     */
+    addEnemy(enemy) {
+        super.addEnemy(enemy);
+
+        enemy.register('object:changed', this, this.redrawConnectionsToEnemies.bind(this));
+    }
+
+    /**
+     * @param {Enemy} enemy
+     */
+    removeEnemy(enemy) {
+        super.removeEnemy(enemy);
+
+        enemy.unregister('object:changed', this);
     }
 
     /**
@@ -45,11 +65,13 @@ class AdminEnemyPatrol extends EnemyPatrol {
      */
     redrawConnectionsToEnemies() {
         console.assert(this instanceof EnemyPatrol, 'this is not an EnemyPatrol', this);
-        // for (let index in this.enemies) {
-        //     console.log(`Draw enemy patrol ${this.id} line to enemy ${this.enemies[index]}`);
-        // }
 
         this.removeExistingConnectionsToEnemies();
+
+        // If the patrol is not visible, don't draw any new stuff
+        if(!this.shouldBeVisible()){
+            return;
+        }
 
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
 
@@ -81,5 +103,12 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
             this.enemyConnectionsLayerGroup.addLayer(this.connectedEnemiesLayer);
         }
+    }
+
+
+    cleanup() {
+        super.cleanup();
+
+        getState().unregister('floorid:changed', this);
     }
 }

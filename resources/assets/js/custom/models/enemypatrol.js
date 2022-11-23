@@ -152,8 +152,6 @@ class EnemyPatrol extends Polyline {
     addEnemy(enemy) {
         console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
 
-        console.log('Adding enemy!', this.id, enemy.id);
-
         this.enemies.push(enemy);
     }
 
@@ -169,7 +167,6 @@ class EnemyPatrol extends Polyline {
             let enemyCandidate = this.enemies[index];
             if (enemyCandidate.id !== enemy.id) {
                 newEnemies.push(enemyCandidate);
-                console.log(`Adding ${enemyCandidate.id} to new list of enemies`);
             }
         }
 
