@@ -310,23 +310,22 @@ class MapObject extends Signalable {
                             attributes[index]._tempPickrColor = null;
                             attributes[index]._pickr.destroyAndRemove();
                         }
-                        let btnSelector = `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`;
                         attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                            el: btnSelector,
+                            el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
                             default: this._getValue(name, parentAttribute)
                         })).on('save', (color, instance) => {
                             // Apply the new color
                             let newColor = '#' + color.toHEXA().join('');
                             // Only save when the color is valid
                             if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
-                                $(btnSelector).val(newColor);
+                                $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
                             }
 
                             // Reset ourselves
                             instance.hide();
                         });
                     } else if (attribute.type === 'button') {
-                        $(`#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`).on('click', attribute.clicked);
+                        $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`).on('click', attribute.clicked);
                     }
                 }
             }
