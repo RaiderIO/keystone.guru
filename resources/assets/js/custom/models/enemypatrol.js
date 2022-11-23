@@ -50,6 +50,7 @@ class EnemyPatrol extends Polyline {
             new Attribute({
                 name: 'couple_enemies',
                 type: 'button',
+                edit: false,
                 buttonType: 'info',
                 buttonText: lang.get('messages.enemypatrol_couple_enemies_button_text_label'),
                 default: getState().getCurrentFloor().id,
