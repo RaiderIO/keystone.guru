@@ -137,8 +137,12 @@ class EnemyPatrol extends Polyline {
 
         let vertices = this.getVertices();
 
-        // Just get the middle one
-        return vertices[Math.floor(vertices.length / 2)];
+        if (vertices.length === 2) {
+            return {'lat': (vertices[0].lat + vertices[1].lat) / 2, 'lng': (vertices[0].lng + vertices[1].lng) / 2};
+        } else {
+            // Just get the middle one
+            return vertices[Math.floor(vertices.length / 2)];
+        }
     }
 
     /**
