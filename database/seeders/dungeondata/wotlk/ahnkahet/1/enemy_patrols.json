@@ -26,19 +26,6 @@
         }
     },
     {
-        "id": 430,
-        "mapping_version_id": 42,
-        "floor_id": 110,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#003280",
-            "color_animated": null,
-            "weight": 3,
-            "vertices_json": "[{\"lat\":-90.210802,\"lng\":304.366241},{\"lat\":-76.60845,\"lng\":305.998523},{\"lat\":-75.084986,\"lng\":290.110975}]"
-        }
-    },
-    {
         "id": 431,
         "mapping_version_id": 42,
         "floor_id": 110,
@@ -49,19 +36,6 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-75.376889,\"lng\":271.571222},{\"lat\":-92.942838,\"lng\":282.209754}]"
-        }
-    },
-    {
-        "id": 432,
-        "mapping_version_id": 42,
-        "floor_id": 110,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#003280",
-            "color_animated": null,
-            "weight": 3,
-            "vertices_json": "[{\"lat\":-93.547122,\"lng\":258.098162},{\"lat\":-102.880296,\"lng\":263.123717},{\"lat\":-110.203248,\"lng\":264.990352},{\"lat\":-113.936518,\"lng\":260.82632},{\"lat\":-114.510867,\"lng\":257.954574},{\"lat\":-106.828947,\"lng\":254.293098},{\"lat\":-102.305947,\"lng\":252.282876},{\"lat\":-98.357297,\"lng\":255.800765},{\"lat\":-93.762503,\"lng\":257.595606}]"
         }
     },
     {
@@ -205,6 +179,19 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-131.25,\"lng\":123},{\"lat\":-146,\"lng\":110.75}]"
+        }
+    },
+    {
+        "id": 615,
+        "mapping_version_id": 42,
+        "floor_id": 110,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-84.6875,\"lng\":305},{\"lat\":-75.8125,\"lng\":306.0625},{\"lat\":-73.90625,\"lng\":294.9375}]"
         }
     }
 ]
