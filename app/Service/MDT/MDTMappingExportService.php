@@ -19,7 +19,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     {
         $translations = collect();
 
-        return $this->getDungeonEnemies($mappingVersion, $translations);
+        return trim($this->getDungeonEnemies($mappingVersion, $translations));
 
 //        $dungeonMaps             = $this->getDungeonMaps($mappingVersion);
 //        $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
