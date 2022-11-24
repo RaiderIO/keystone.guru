@@ -439,7 +439,7 @@
             {
                 "id": 17,
                 "index": 1,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 2,
                 "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
                 "default": 0,
                 "min_enemy_size": null,
@@ -451,7 +451,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 187,
+                        "id": 483,
                         "floor1_id": 17,
                         "floor2_id": 16,
                         "direction": "up"
@@ -462,7 +462,7 @@
             {
                 "id": 16,
                 "index": 2,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "name": "dungeons.legion.halls_of_valor.floors.the_high_gate",
                 "default": 1,
                 "min_enemy_size": null,
@@ -474,13 +474,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 185,
+                        "id": 481,
                         "floor1_id": 16,
                         "floor2_id": 17,
                         "direction": "right"
                     },
                     {
-                        "id": 186,
+                        "id": 482,
                         "floor1_id": 16,
                         "floor2_id": 18,
                         "direction": "up"
