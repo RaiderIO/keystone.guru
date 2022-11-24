@@ -14,6 +14,26 @@ class AdminEnemyPatrol extends EnemyPatrol {
     }
 
     /**
+     *
+     * @returns {*[]}
+     * @private
+     */
+    _getVisibleEnemiesLatLngs() {
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+
+        let result = [];
+        for (let index in this.enemies) {
+            let enemyCandidate = this.enemies[index];
+
+            if( enemyCandidate.shouldBeVisible() ) {
+                result.push(enemyCandidate.layer.getLatLng());
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Must be explicitly overriden since EnemyPatrols cannot be deleted; admin ones can.
      * @returns {boolean}
      */
@@ -79,7 +99,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         enemyPatrolMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
-        let enemyLatLngs = this._getEnemiesLatLngs();
+        let enemyLatLngs = this._getVisibleEnemiesLatLngs();
 
         if (enemyLatLngs.length > 0) {
             this.centerLatLng = this.getLayerLatLng();

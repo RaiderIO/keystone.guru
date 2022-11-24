@@ -674,7 +674,6 @@ class CommonMapsMap extends InlineCode {
      */
     _mdtAutoSolve() {
         let enemiesToSolve = this._getMDTUnmappedEnemies();
-        console.log(enemiesToSolve);
 
         for (let index in enemiesToSolve) {
             let enemyToSolve = enemiesToSolve[index];
@@ -722,8 +721,8 @@ class CommonMapsMap extends InlineCode {
         let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         let closestEnemyDistance = 99999999;
-        for (let index in enemyMapObjectGroup.objects) {
-            let enemyCandidate = enemyMapObjectGroup.objects[index];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemyCandidate = enemyMapObjectGroup.objects[key];
             let distance = getDistance([enemyCandidate.lat, enemyCandidate.lng], [targetEnemy.lat, targetEnemy.lng]);
             if (enemyCandidate.is_mdt &&
                 targetEnemy.getMdtNpcId() === enemyCandidate.npc_id &&
