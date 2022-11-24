@@ -82,6 +82,11 @@ class MappingVersionSeeder extends Seeder
             $this->command->comment(sprintf('-- Updated %d mountable areas', $updatedMountableAreas));
         }
 
+        /**
+        // This works initially as well?
+        UPDATE `dungeon_routes`
+        SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
+         */
         $this->command->info('Coupling dungeon routes to latest mapping version.. ');
         $count = 0;
         // Temp - but assign the proper mapping versions to all routes (this is slowish but simplest to get the job done, just once)
