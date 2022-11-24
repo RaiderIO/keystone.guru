@@ -94,7 +94,7 @@ class MappingService implements MappingServiceInterface
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
-        $id     = MappingVersion::insertGetId([
+        $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
             'version'          => ++$currentMappingVersion->version,
@@ -102,7 +102,15 @@ class MappingService implements MappingServiceInterface
             'updated_at'       => Carbon::now()->toDateTimeString(),
         ]);
 
-        return MappingVersion::find($id);
+        $newMappingVersion = MappingVersion::find($id);
+
+        // Copy all map icons over from the previous mapping version - this allows us to keep adding icons regardless of
+        // MDT mapping
+        foreach ($currentMappingVersion->mapIcons as $mapIcon) {
+            $mapIcon->cloneForNewMappingVersion($newMappingVersion);
+        }
+
+        return $newMappingVersion;
     }
 
     /**
