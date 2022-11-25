@@ -229,9 +229,9 @@
         "mapping_version_id": 7,
         "enemy_pack_id": 13,
         "enemy_patrol_id": null,
-        "npc_id": 99891,
+        "npc_id": 97068,
         "floor_id": 16,
-        "mdt_id": null,
+        "mdt_id": 1,
         "mdt_npc_id": null,
         "seasonal_type": null,
         "seasonal_index": null,
@@ -246,7 +246,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 99891
+            "id": 97068
         }
     },
     {

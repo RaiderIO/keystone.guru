@@ -4,7 +4,7 @@
         "mapping_version_id": 11,
         "enemy_pack_id": null,
         "enemy_patrol_id": null,
-        "npc_id": 114627,
+        "npc_id": 190128,
         "floor_id": 30,
         "mdt_id": 1,
         "mdt_npc_id": null,
@@ -21,7 +21,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 114627
+            "id": 190128
         }
     },
     {
@@ -31,9 +31,9 @@
         "enemy_patrol_id": null,
         "npc_id": 114627,
         "floor_id": 30,
-        "mdt_id": null,
+        "mdt_id": 1,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "no_shrouded",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
