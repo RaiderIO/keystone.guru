@@ -61,7 +61,14 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                 $killZone                = KillZone::create($killZoneData);
                 $killZoneEnemyAttributes = [];
 
+                $savedEnemyIds = collect();
+
                 foreach ($enemies as $key => $enemyId) {
+                    // Do not doubly save enemies if the file somehow contained doubles (#1473)
+                    if ($savedEnemyIds->contains($enemyId)) {
+                        continue;
+                    }
+
                     $enemy = Enemy::findOrFail($enemyId);
                     // Make sure the enemy's relation with the kill zone is restored.
                     // Do not use $enemy since that would create a new copy and we'd lose our changes
@@ -70,6 +77,8 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                         'npc_id'       => $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
                     ];
+
+                    $savedEnemyIds->push($enemyId);
                 }
 
                 // Insert vertices
