@@ -951,6 +951,10 @@ html, body, #map, #app, .wrapper {
     border: 3px solid #d000ff;
 }
 
+.no_shrouded {
+    border: 3px solid #00ffff;
+}
+
 .tormented {
     border: 3px solid #ffffff;
 }
