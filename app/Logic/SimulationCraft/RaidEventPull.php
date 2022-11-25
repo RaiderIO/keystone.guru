@@ -54,7 +54,8 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             }
         }
 
-        $this->delay = $this->calculateDelay($killZone, $previousKillLocation, $previousKillFloor);
+        // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
+        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : $this->calculateDelay($killZone, $previousKillLocation, $previousKillFloor);
 
         return $this;
     }

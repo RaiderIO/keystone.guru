@@ -946,6 +946,15 @@ class Enemy extends VersionableMapObject {
      *
      * @returns {boolean}
      */
+    isNotShrouded() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.isBossNpc() ||
