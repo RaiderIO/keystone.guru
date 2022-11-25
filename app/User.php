@@ -73,7 +73,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'patreon_user_link_id', 'public_key', 'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms',
+        'id',
+        'patreon_user_link_id',
+        'public_key',
+        'oauth_id',
+        'game_server_region_id',
+        'name',
+        'email',
+        'echo_color',
+        'password',
+        'legal_agreed',
+        'legal_agreed_ms',
     ];
 
     /**
@@ -110,23 +120,23 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function dungeonroutes() : HasMany
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute', 'author_id');
+        return $this->hasMany(DungeonRoute::class, 'author_id');
     }
 
     /**
      * @return HasMany
      */
-    public function reports() : HasMany
+    public function reports(): HasMany
     {
-        return $this->hasMany('App\Models\UserReport');
+        return $this->hasMany(UserReport::class);
     }
 
     /**
      * @return HasOne
      */
-    public function patreonUserLink() : HasOne
+    public function patreonUserLink(): HasOne
     {
         return $this->hasOne(PatreonUserLink::class);
     }
@@ -134,18 +144,18 @@ class User extends Authenticatable
     /**
      * @return BelongsTo
      */
-    public function gameserverregion() : BelongsTo
+    public function gameserverregion(): BelongsTo
     {
         // Don't know why it won't work without the foreign key specified..
-        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
+        return $this->belongsTo(GameServerRegion::class, 'game_server_region_id');
     }
 
     /**
      * @return BelongsToMany
      */
-    public function teams() : BelongsToMany
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Team', 'team_users');
+        return $this->belongsToMany(Team::class, 'team_users');
     }
 
     /**

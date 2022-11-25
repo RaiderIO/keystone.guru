@@ -19,18 +19,17 @@ trait HasIconFile
     /**
      * @return HasOne
      */
-    function iconfile(): HasOne
+    public function iconfile(): HasOne
     {
-        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(File::class, 'model_id')->where('model_class', get_class($this));
     }
 
     /**
      * @param UploadedFile $file
      * @throws Exception
      */
-    function saveUploadedFile(UploadedFile $file)
+    public function saveUploadedFile(UploadedFile $file)
     {
-
         // Delete the icon should it exist already
         if ($this->iconfile !== null) {
             $this->iconfile->delete();

@@ -1,11 +1,12 @@
 [
     {
         "id": 89,
+        "mapping_version_id": 22,
         "floor_id": 57,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-82.12,\"lng\":186},{\"lat\":-112.25,\"lng\":161}]"

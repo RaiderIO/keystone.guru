@@ -397,7 +397,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 killZoneMapObjectGroup.applyPullGradient();
             }
 
-            killZoneMapObjectGroup.massSave(['index', 'color'], null);
+            killZoneMapObjectGroup.massSave(['index', 'color'], function(){
+
+            });
         }
         this._dragHasSwitchedOrder = false;
     }

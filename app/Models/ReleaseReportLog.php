@@ -6,12 +6,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $release_id int
- * @property $platform string
+ * @property int $id
+ * @property int $release_id
+ * @property string $platform
  *
- * @property $updated_at string
- * @property $created_at string
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @mixin Eloquent
  */
@@ -22,8 +22,8 @@ class ReleaseReportLog extends CacheModel
     /**
      * @return BelongsTo
      */
-    function release()
+    public function release(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Release');
+        return $this->belongsTo(Release::class);
     }
 }

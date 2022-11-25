@@ -22,7 +22,7 @@ L.Draw.MapIcon = L.Draw.Marker.extend({
  */
 class MapIcon extends Icon {
     constructor(map, layer) {
-        super(map, layer, {name: 'map_icon', route_suffix: 'mapicon'});
+        super(map, layer, {name: 'map_icon', route_suffix: 'mapicon', hasRouteModelBinding: true});
 
         this.label = 'MapIcon';
     }
@@ -43,8 +43,8 @@ class MapIcon extends Icon {
             new Attribute({
                 // Reads team_id, stores as show_across_team
                 name: 'team_id',
-                type: 'bool',
-                default: false,
+                type: 'int',
+                default: null,
                 edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
@@ -136,6 +136,6 @@ class MapIcon extends Icon {
     }
 
     toString() {
-        return `Map icon (${this.comment.substring(0, 25)})`;
+        return `Map icon (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
     }
 }

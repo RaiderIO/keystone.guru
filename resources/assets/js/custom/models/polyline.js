@@ -1,4 +1,4 @@
-class Polyline extends MapObject {
+class Polyline extends VersionableMapObject {
     constructor(map, layer, options) {
         super(map, layer, options);
         let self = this;
@@ -215,11 +215,13 @@ class Polyline extends MapObject {
         this.layer.setStyle({
             weight: this.polyline.weight
         });
+        this.layer.redraw();
 
         if (typeof this.layerAnimated !== 'undefined' && this.layerAnimated !== null) {
             this.layerAnimated.setStyle({
                 weight: this.polyline.weight
             });
+            this.layerAnimated.redraw();
         }
     }
 

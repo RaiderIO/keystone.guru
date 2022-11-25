@@ -10,7 +10,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
         this.setSynced(false);
 
-        this.target_floor_id = -1;
+        this.target_floor_id = null;
     }
 
     /**

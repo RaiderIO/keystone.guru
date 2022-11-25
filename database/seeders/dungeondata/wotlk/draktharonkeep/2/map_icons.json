@@ -1,22 +1,26 @@
 [
     {
+        "mapping_version_id": 44,
         "floor_id": 115,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 4,
         "lat": -48.21875,
         "lng": 146.71875,
-        "comment": "",
+        "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
     },
     {
+        "mapping_version_id": 44,
         "floor_id": 115,
+        "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 4,
         "lat": -33.516196686901,
         "lng": 146.90540755622,
-        "comment": "",
+        "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

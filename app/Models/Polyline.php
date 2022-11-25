@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -19,11 +22,28 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Eloquent
  */
-class Polyline extends Model
+class Polyline extends Model implements MappingModelCloneableInterface
 {
     use HasGenericModelRelation;
 
     public $timestamps = false;
     public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
     public $fillable = ['model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    {
+        /** @var Polyline|MappingModelInterface $clone */
+        $clone           = clone $this;
+        $clone->exists   = false;
+        $clone->id       = null;
+        $clone->model_id = $newParent->id;
+        $clone->save();
+
+        return $clone;
+    }
 }

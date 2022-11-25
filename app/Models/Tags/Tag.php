@@ -39,9 +39,9 @@ class Tag extends Model
     /**
      * @return BelongsTo
      */
-    public function tagcategory()
+    public function tagcategory(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Tags\TagCategory', 'tag_category_id');
+        return $this->belongsTo(TagCategory::class, 'tag_category_id');
     }
 
     /**

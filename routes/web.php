@@ -35,6 +35,7 @@ use App\Http\Controllers\APIUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
@@ -145,6 +146,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
 
         Route::group(['prefix' => '{title?}'], function () {
+            // Upgrade the mapping of a route
+            Route::get('upgrade', [DungeonRouteController::class, 'upgrade'])->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
             Route::get('edit/{floorindex}', [DungeonRouteController::class, 'editfloor'])->name('dungeonroute.edit.floor');
@@ -228,6 +231,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('new', [DungeonController::class, 'savenew'])->name('admin.dungeon.savenew');
                 Route::patch('{dungeon}', [DungeonController::class, 'update'])->name('admin.dungeon.update');
+
+                // Mapping versions
+                Route::group(['prefix' => '{dungeon}/mappingversion'], function () {
+                    Route::get('new', [MappingVersionController::class, 'savenew'])->name('admin.mappingversion.new');
+                    Route::get('{mappingVersion}/delete', [MappingVersionController::class, 'delete'])->name('admin.mappingversion.delete');
+                });
 
                 // Floors
                 Route::group(['prefix' => '{dungeon}/floor'], function () {
@@ -319,17 +328,28 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
-                // View string contents
-                Route::get('mdt/string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
-                Route::post('mdt/string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
+                Route::group(['prefix' => 'mdt'], function () {
+                    // View string contents
+                    Route::get('string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
+                    Route::post('string', [AdminToolsController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
 
-                // View string contents as a dungeonroute
-                Route::get('mdt/string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroute'])->name('admin.tools.mdt.string.viewasdungeonroute');
-                Route::post('mdt/string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroutesubmit'])->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+                    // View string contents as a dungeonroute
+                    Route::get('string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroute'])->name('admin.tools.mdt.string.viewasdungeonroute');
+                    Route::post('string/dungeonroute', [AdminToolsController::class, 'mdtviewasdungeonroutesubmit'])->name('admin.tools.mdt.string.viewasdungeonroute.submit');
 
-                // View dungeonroute as string
-                Route::get('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
-                Route::post('mdt/dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+                    // View dungeonroute as string
+                    Route::get('dungeonroute/string', [AdminToolsController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
+                    Route::post('dungeonroute/string', [AdminToolsController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+                    // View mapping hash
+                    Route::get('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghash'])->name('admin.tools.mdt.dungeonmappinghash');
+                    Route::post('dungeonmappinghash', [AdminToolsController::class, 'mdtdungeonmappinghashsubmit'])->name('admin.tools.mdt.dungeonmappinghash.submit');
+
+                    // Convert Mapping Version to MDT Mapping
+                    Route::get('dungeonmappingversiontomdtmapping', [AdminToolsController::class, 'dungeonmappingversiontomdtmapping'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
+                    Route::post('dungeonmappingversiontomdtmapping', [AdminToolsController::class, 'dungeonmappingversiontomdtmappingsubmit'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
+
+                });
 
                 // Wow.tools
                 Route::get('wowtools/importingamecoordinates', [AdminToolsController::class, 'importingamecoordinates'])->name('admin.tools.wowtools.import_ingame_coordinates');
@@ -383,20 +403,24 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('/npc', [APINpcController::class, 'list']);
 
                 Route::post('/enemy', [APIEnemyController::class, 'store']);
+                Route::put('/enemy/{enemy}', [APIEnemyController::class, 'store']);
                 Route::delete('/enemy/{enemy}', [APIEnemyController::class, 'delete']);
 
                 Route::post('/enemypack', [APIEnemyPackController::class, 'store']);
                 Route::put('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'store']);
-                Route::delete('/enemypack/{enemypack}', [APIEnemyPackController::class, 'delete']);
+                Route::delete('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'delete']);
 
                 Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);
+                Route::put('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'store']);
                 Route::delete('/enemypatrol/{enemypatrol}', [APIEnemyPatrolController::class, 'delete']);
 
-                Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store'])->where(['floor_id' => '[0-9]+']);
+                Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store']);
+                Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'store']);
                 Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
-                Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'adminDelete']);
+                Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminStore']);
+                Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminDelete']);
 
                 Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
                 Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
@@ -416,13 +440,15 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::post('/brushline', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
 
+            Route::put('/killzone/mass', [APIKillZoneController::class, 'storeall']);
             Route::post('/killzone', [APIKillZoneController::class, 'store']);
-            Route::delete('/killzone/{killzone}', [APIKillZoneController::class, 'delete']);
-            Route::put('/killzone', [APIKillZoneController::class, 'storeall']);
+            Route::put('/killzone/{killZone}', [APIKillZoneController::class, 'store']);
+            Route::delete('/killzone/{killZone}', [APIKillZoneController::class, 'delete']);
             Route::delete('/killzone', [APIKillZoneController::class, 'deleteAll']);
 
             Route::post('/mapicon', [APIMapIconController::class, 'store']);
-            Route::delete('/mapicon/{mapicon}', [APIMapIconController::class, 'delete']);
+            Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'store']);
+            Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'delete']);
 
             Route::post('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'store']);
             Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);

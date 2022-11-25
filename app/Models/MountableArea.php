@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int $id
+ * @property int $mapping_version_id
  * @property int $floor_id
  * @property string $vertices_json
  *
@@ -16,8 +18,10 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel
+class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
+
     public $timestamps = false;
     public $fillable = [
         'floor_id',
@@ -82,5 +86,13 @@ class MountableArea extends CacheModel
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

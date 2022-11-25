@@ -3,21 +3,24 @@
 namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\EnemyPatrol;
 use App\Models\Expansion;
-use Database\Seeders\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
-use Database\Seeders\RelationImport\Mapping\DungeonRelationMapping;
-use Database\Seeders\RelationImport\Mapping\DungeonRouteRelationMapping;
-use Database\Seeders\RelationImport\Mapping\EnemyPackRelationMapping;
-use Database\Seeders\RelationImport\Mapping\EnemyPatrolRelationMapping;
-use Database\Seeders\RelationImport\Mapping\EnemyRelationMapping;
-use Database\Seeders\RelationImport\Mapping\MapIconRelationMapping;
-use Database\Seeders\RelationImport\Mapping\MountableAreaRelationMapping;
-use Database\Seeders\RelationImport\Mapping\NpcRelationMapping;
-use Database\Seeders\RelationImport\Mapping\RelationMapping;
-use Database\Seeders\RelationImport\Mapping\SpellRelationMapping;
-use Database\Seeders\RelationImport\Parsers\RelationParser;
+use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\EnemyPackRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\EnemyPatrolRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\EnemyRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\MapIconRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\MappingCommitLogRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\MappingVersionRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\MountableAreaRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\NpcRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
+use App\SeederHelpers\RelationImport\Parsers\Relation\RelationParserInterface;
 use Exception;
 use FilesystemIterator;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +28,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use SplFileInfo;
 
 class DungeonDataSeeder extends Seeder
 {
@@ -43,6 +47,8 @@ class DungeonDataSeeder extends Seeder
 
         $mappings = [
             // Loose files
+            new MappingVersionRelationMapping(),
+            new MappingCommitLogRelationMapping(),
             new DungeonRelationMapping(),
             new NpcRelationMapping(),
             new DungeonRouteRelationMapping(),
@@ -58,44 +64,70 @@ class DungeonDataSeeder extends Seeder
             new MountableAreaRelationMapping(),
         ];
 
-        $rootDir         = database_path('/seeders/dungeondata/');
+        $rootDir         = database_path('seeders/dungeondata/');
         $rootDirIterator = new FilesystemIterator($rootDir);
+
+        // Parse the root files first
+        foreach ($rootDirIterator as $rootDirChild) {
+            /** @var $rootDirChild SplFileInfo */
+            if ($rootDirChild->getType() === 'dir') {
+                continue;
+            }
+
+            $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
+        }
+
+        $rootDirIterator->rewind();
 
         // For each expansion
         foreach ($rootDirIterator as $rootDirChild) {
+            /** @var $rootDirChild SplFileInfo */
+            if ($rootDirChild->getType() !== 'dir') {
+                continue;
+            }
+
             $rootDirChildBaseName = basename($rootDirChild);
-
             // Only folders which have the correct shortname
-            if (Expansion::where('shortname', $rootDirChildBaseName)->first() !== null) {
-                $this->command->info('Expansion ' . $rootDirChildBaseName);
-                $expansionDirIterator = new FilesystemIterator($rootDirChild);
+            if (Expansion::where('shortname', $rootDirChildBaseName)->first() === null) {
+                $this->command->warn(sprintf('- Unable to find expansion %s', $rootDirChildBaseName));
+                continue;
+            }
 
-                // For each dungeon inside an expansion dir
-                foreach ($expansionDirIterator as $dungeonKeyDir) {
-                    $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+            $this->command->info('Expansion ' . $rootDirChildBaseName);
+            $expansionDirIterator = new FilesystemIterator($rootDirChild);
 
-                    $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
-                    // For each floor inside a dungeon dir
-                    foreach ($floorDirIterator as $floorDirFile) {
-                        // Parse loose files
-                        if (!is_dir($floorDirFile)) {
-                            // npcs, dungeon_routes
-                            $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
-                        } // Parse floor dir
-                        else {
-                            $this->command->info('-- Importing floor ' . basename($floorDirFile));
+            // For each dungeon inside an expansion dir
+            foreach ($expansionDirIterator as $dungeonKeyDir) {
+                /** @var $dungeonKeyDir SplFileInfo */
+                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
-                            $importFileIterator = new FilesystemIterator($floorDirFile);
-                            // For each file inside a floor
-                            foreach ($importFileIterator as $importFile) {
-                                $this->parseRawFile($rootDir, $importFile, $mappings, 3);
-                            }
-                        }
+                $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
+                // For each floor inside a dungeon dir
+                foreach ($floorDirIterator as $floorDirFile) {
+                    /** @var $floorDirFile SplFileInfo */
+                    if ($floorDirFile->getType() !== 'dir') {
+                        continue;
+                    }
+                    $this->command->info('-- Importing floor ' . basename($floorDirFile));
+
+                    $importFileIterator = new FilesystemIterator($floorDirFile);
+                    // For each file inside a floor
+                    foreach ($importFileIterator as $importFile) {
+                        // Floors first - parse dirs and only THEN files
+                        $this->parseRawFile($rootDir, $importFile, $mappings, 3);
                     }
                 }
-            } // It's a 'global' file, parse it
-            else if (strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5) { // 5 for length of .json
-                $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
+
+                $floorDirIterator->rewind();
+                foreach ($floorDirIterator as $floorDirFile) {
+                    /** @var $floorDirFile SplFileInfo */
+                    if ($floorDirFile->getType() === 'dir') {
+                        continue;
+                    }
+
+                    // npcs, dungeon_routes
+                    $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
+                }
             }
         }
 
@@ -103,10 +135,10 @@ class DungeonDataSeeder extends Seeder
     }
 
     /**
-     * @param $rootDir string
-     * @param $filePath string
-     * @param $mappings RelationMapping[]
-     * @param $depth integer
+     * @param string $rootDir
+     * @param string $filePath
+     * @param RelationMapping[] $mappings
+     * @param integer $depth
      * @throws Exception
      */
     private function parseRawFile(string $rootDir, string $filePath, array $mappings, int $depth = 1): void
@@ -122,7 +154,7 @@ class DungeonDataSeeder extends Seeder
             if ($mapping->getFileName() === $fileName) {
                 $count = $this->loadModelsFromFile($filePath, $mapping);
                 $this->command->info(sprintf(
-                    $prefix . 'Imported %s (%s into %s)',
+                    $prefix . 'Imported %s (%s from %s)',
                     str_replace($rootDir, '', $fileName),
                     $count,
                     $fileName
@@ -140,8 +172,8 @@ class DungeonDataSeeder extends Seeder
     }
 
     /**
-     * @param $filePath string
-     * @param $mapping RelationMapping
+     * @param string $filePath
+     * @param RelationMapping $mapping
      * @return int The amount of models loaded from the file
      * @throws Exception
      */
@@ -158,25 +190,47 @@ class DungeonDataSeeder extends Seeder
         // In case there's no post-save relation parsers we can mass-save instead to save time
         $modelsToSave = collect();
 
+        $updatedModels = 0;
+
         // Do some php fuckery to make this a bit cleaner
         foreach ($modelsData as $modelData) {
+            $shouldParseModel = true;
+
+            // First, check if we may even insert this model (for example if the mapping version is not new enough so we shouldn't re-insert the model)
+            foreach ($mapping->getConditionals() as $conditional) {
+                if (!($shouldParseModel = $conditional->shouldParseModel($mapping, $modelData))) {
+                    break;
+                }
+            }
+
+            // Ok, we found a reason not to parse this model. Continue to the next model
+            if (!$shouldParseModel) {
+                continue;
+            }
 
             $unsetRelations = [];
-
+            // We're editing $modelData inside the loop - don't convert it to foreach nor move the count() outside the loop
             for ($i = 0; $i < count($modelData); $i++) {
                 $keys  = array_keys($modelData);
                 $key   = $keys[$i];
                 $value = $modelData[$key];
 
-                // $this->command->info(json_encode($key) . ' ' . json_encode($value));
+                // Parse individual attributes of the root object
+                foreach ($mapping->getAttributeParsers() as $attributeParser) {
+                    if (!is_array($value) &&
+                        $attributeParser->canParseModel($mapping->getClass())) {
+                        $modelData = $attributeParser->parseAttribute($mapping->getClass(), $modelData, $key, $value);
+                    }
+                }
 
-                foreach ($mapping->getPreSaveAttributeParsers() as $attributeParser) {
+                // Parse the relations of the root object
+                foreach ($mapping->getPreSaveRelationParsers() as $relationParser) {
                     // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
                     if (is_array($value) &&
-                        $attributeParser->canParseModel($mapping->getClass()) &&
-                        $attributeParser->canParseRelation($key, $value)) {
+                        $relationParser->canParseModel($mapping->getClass()) &&
+                        $relationParser->canParseRelation($key, $value)) {
 
-                        $modelData = $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
+                        $modelData = $relationParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
                     }
                 }
 
@@ -200,13 +254,15 @@ class DungeonDataSeeder extends Seeder
                 // Apply, then save
                 $createdModel->setRawAttributes($modelData);
                 $createdModel->save();
+                $updatedModels++;
 
             } // If we should do some post processing, create & save it now so that we can do just that
-            else if ($mapping->getPostSaveAttributeParsers()->isNotEmpty()) {
+            else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 $createdModel = $mapping->getClass()::create($modelData);
             } // We don't need to do post processing, add it to the list to be saved
             else {
                 $modelsToSave->push($modelData);
+                $updatedModels++;
                 continue;
             }
 
@@ -217,9 +273,9 @@ class DungeonDataSeeder extends Seeder
                 // Merge the unset relations with the model again so we can parse the model again
                 $modelData = $modelData + $unsetRelations;
 
-                foreach ($mapping->getPostSaveAttributeParsers() as $attributeParser) {
+                foreach ($mapping->getPostSaveRelationParsers() as $attributeParser) {
                     foreach ($modelData as $key => $value) {
-                        /** @var $attributeParser RelationParser */
+                        /** @var $attributeParser RelationParserInterface */
                         // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
                         if (is_array($value) &&
                             $attributeParser->canParseModel($mapping->getClass()) &&
@@ -240,7 +296,7 @@ class DungeonDataSeeder extends Seeder
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
-        return count($modelsData);
+        return $updatedModels;
     }
 
     protected function rollback()
@@ -262,6 +318,8 @@ class DungeonDataSeeder extends Seeder
         }
 
 
+        DB::table('mapping_versions')->truncate();
+        DB::table('mapping_commit_logs')->truncate();
         DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
@@ -273,7 +331,7 @@ class DungeonDataSeeder extends Seeder
         DB::table('mountable_areas')->truncate();
         DB::table('dungeon_speedrun_required_npcs')->truncate();
         // Delete all map icons that are always there
-        DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
+        DB::table('map_icons')->whereNull('dungeon_route_id')->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
 

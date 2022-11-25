@@ -20,7 +20,7 @@ class PatreonUserBenefit extends Model
     /**
      * @return BelongsTo
      */
-    function patreonuserlink(): BelongsTo
+    public function patreonuserlink(): BelongsTo
     {
         return $this->belongsTo(PatreonUserLink::class);
     }
@@ -28,7 +28,7 @@ class PatreonUserBenefit extends Model
     /**
      * @return BelongsTo
      */
-    function patreonbenefit(): BelongsTo
+    public function patreonbenefit(): BelongsTo
     {
         return $this->belongsTo(PatreonBenefit::class);
     }

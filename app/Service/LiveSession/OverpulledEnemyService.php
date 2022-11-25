@@ -43,6 +43,8 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
                 // Loop over all available kill zones from which we can still potentially subtract enemy forces
                 foreach ($availableKillZones as $availableKillZone) {
+                    $availableKillZone->dungeonroute = $liveSession->dungeonroute;
+
                     $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonroute->teeming);
 
                     // Contains a list of enemies, grouped by pack, with the -1 pack being enemies that are not assigned to a pack being LAST
@@ -104,14 +106,14 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                                IF(dungeon_routes.teeming = 1,
                                   SUM(
                                           IF(
-                                                  enemies.enemy_forces_override_teeming >= 0,
+                                                  enemies.enemy_forces_override_teeming IS NOT NULL,
                                                   enemies.enemy_forces_override_teeming,
                                                   IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
                                               )
                                       ),
                                   SUM(
                                           IF(
-                                                  enemies.enemy_forces_override >= 0,
+                                                  enemies.enemy_forces_override IS NOT NULL,
                                                   enemies.enemy_forces_override,
                                                   npcs.enemy_forces
                                               )

@@ -81,7 +81,7 @@ class EnemyAttaching {
                         }, enemyPackPolygon.toGeoJSON().geometry) &&
                         enemyMapObjectGroup.isMapObjectVisible(enemy)) {
                         // Remove it from the pack
-                        enemy.enemy_pack_id = -1;
+                        enemy.enemy_pack_id = null;
                         // Save enemy so their pack connection is broken
                         enemy.save();
                     }
@@ -97,7 +97,7 @@ class EnemyAttaching {
             // For each enemy we know of, cannot use rawEnemies for reasons I can't be bothered to figure out rn
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 if (enemy.enemy_pack_id === deletedEnemyPack.id) {
-                    enemy.enemy_pack_id = -1;
+                    enemy.enemy_pack_id = null;
                     enemy.save();
                 }
             });

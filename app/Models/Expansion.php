@@ -86,7 +86,7 @@ class Expansion extends CacheModel
      */
     public function dungeons(): HasMany
     {
-        return $this->hasMany('App\Models\Dungeon');
+        return $this->hasMany(Dungeon::class);
     }
 
     /**
@@ -94,7 +94,7 @@ class Expansion extends CacheModel
      */
     public function seasons(): HasMany
     {
-        return $this->hasMany('App\Models\Season');
+        return $this->hasMany(Season::class);
     }
 
     /**
@@ -102,7 +102,7 @@ class Expansion extends CacheModel
      */
     public function timewalkingevent(): HasOne
     {
-        return $this->hasOne('App\Models\Timewalking\TimewalkingEvent');
+        return $this->hasOne(TimewalkingEvent::class);
     }
 
     /**

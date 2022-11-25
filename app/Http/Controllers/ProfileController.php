@@ -8,7 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Service\EchoServerHttpApiServiceInterface;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;

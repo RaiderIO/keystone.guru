@@ -47,7 +47,7 @@ class TeamUser extends Model
      * @param int $userId
      * @return Builder
      */
-    function scopeIsModerator(Builder $query, int $userId): Builder
+    public function scopeIsModerator(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId)->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MODERATOR]);
     }
@@ -55,16 +55,16 @@ class TeamUser extends Model
     /**
      * @return BelongsTo
      */
-    function team(): BelongsTo
+    public function team(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Team');
+        return $this->belongsTo(Team::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function user(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 }

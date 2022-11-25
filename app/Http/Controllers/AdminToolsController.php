@@ -7,15 +7,16 @@ use App\Jobs\RefreshEnemyForces;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
-use App\Logic\MDT\IO\ExportString;
-use App\Logic\MDT\IO\ImportString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\Season\SeasonService;
+use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -222,7 +223,7 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return void
      */
     public function enemyforcesrecalculatesubmit(Request $request)
     {
@@ -255,14 +256,16 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return JsonResponse
      */
-    public function mdtviewsubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
-        return response()->json((new ImportString($seasonService))
-            ->setEncodedString($request->get('import_string'))
-            ->getDecoded());
+        return response()->json(
+            $mdtImportStringService
+                ->setEncodedString($request->get('import_string'))
+                ->getDecoded()
+        );
     }
 
     /**
@@ -275,16 +278,14 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
-     *
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return never|void
-     * @throws InvalidMDTString
      * @throws Throwable
      */
-    public function mdtviewasdungeonroutesubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewasdungeonroutesubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
         try {
-            $dungeonRoute = (new ImportString($seasonService))
+            $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(new Collection(), false, false);
             $dungeonRoute->makeVisible(['affixes', 'killzones']);
@@ -320,23 +321,23 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param SeasonService $seasonService
-     *
+     * @param MDTImportStringServiceInterface $mdtImportStringService
+     * @param MDTExportStringServiceInterface $mdtExportStringService
      * @return never|void
      * @throws Throwable
      */
-    public function mdtviewasstringsubmit(Request $request, SeasonService $seasonService)
+    public function mdtviewasstringsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService, MDTExportStringServiceInterface $mdtExportStringService)
     {
         $dungeonRoute = DungeonRoute::where('public_key', $request->get('public_key'))->firstOrFail();
 
         try {
             $warnings = new Collection();
 
-            $exportString = (new ExportString($seasonService))
+            $exportString = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
                 ->getEncodedString($warnings);
 
-            $stringContents = (new ImportString($seasonService))
+            $stringContents = $mdtImportStringService
                 ->setEncodedString($exportString)
                 ->getDecoded();
 
@@ -358,6 +359,54 @@ class AdminToolsController extends Controller
             throw $error;
         }
     }
+
+    /**
+     * @return Factory|
+     */
+    public function mdtdungeonmappinghash()
+    {
+        return view('admin.tools.mdt.dungeonmappinghash');
+    }
+
+    /**
+     * @param Request $request
+     * @param MDTMappingExportServiceInterface $mdtMappingService
+     * @return void
+     * @throws Throwable
+     */
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
+    {
+        $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
+
+        dd($mdtMappingService->getMDTMappingHash($dungeon->key));
+    }
+
+    /**
+     * @return Factory|
+     */
+    public function dungeonmappingversiontomdtmapping()
+    {
+        return view('admin.tools.mdt.dungeonmappingversiontomdtmapping', [
+            'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')->get()->mapWithKeys(function (MappingVersion $mappingVersion) {
+                return [$mappingVersion->id => sprintf('%s - Version %d (%d)', __($mappingVersion->dungeon->name), $mappingVersion->version, $mappingVersion->id)];
+            }),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param MDTMappingExportServiceInterface $mdtMappingService
+     * @return void
+     * @throws Throwable
+     */
+    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
+    {
+        $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
+
+        echo $mdtMappingService->getMDTMappingAsLuaString($mappingVersion);
+        dd();
+    }
+
 
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
@@ -501,7 +550,7 @@ class AdminToolsController extends Controller
         // For each dungeon
         foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mdtNpcs = (new MDTDungeon($dungeon->key))->getMDTNPCs();
+            $mdtNpcs = (new MDTDungeon($dungeon))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

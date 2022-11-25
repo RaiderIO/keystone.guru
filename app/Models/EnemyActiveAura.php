@@ -23,16 +23,16 @@ class EnemyActiveAura extends CacheModel
     /**
      * @return BelongsTo
      */
-    function enemy()
+    public function enemy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Enemy::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function spell()
+    public function spell(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Spell');
+        return $this->belongsTo(Spell::class);
     }
 }

@@ -169,6 +169,7 @@ let scripts = [
     // Models
     'resources/assets/js/custom/models/attribute.js',
     'resources/assets/js/custom/models/mapobject.js',
+    'resources/assets/js/custom/models/versionablemapobject.js',
     'resources/assets/js/custom/models/polyline.js',
     'resources/assets/js/custom/models/enemy.js',
     'resources/assets/js/custom/models/pridefulenemy.js',
@@ -197,6 +198,7 @@ let scripts = [
     'resources/assets/js/custom/mapstate/raidmarkerselectmapstate.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/enemypatrolenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',

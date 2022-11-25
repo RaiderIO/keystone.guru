@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +12,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int $id
+ * @property int $mapping_version_id
  * @property int $floor_id
+ * @property int $group
  * @property string $teeming
  * @property string $faction
  * @property string|null $color
@@ -22,13 +27,17 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel
+class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
+
     public $timestamps = false;
 
     protected $fillable = [
         'id',
+        'mapping_version_id',
         'floor_id',
+        'group',
         'teeming',
         'faction',
         'color',
@@ -55,10 +64,18 @@ class EnemyPack extends CacheModel
 
     /**
      * @param string $seasonalType
-     * @return Collection
+     * @return Collection|Enemy[]
      */
     public function getEnemiesWithSeasonalType(string $seasonalType): Collection
     {
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->floor->dungeon_id;
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Season;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property Season $season
  * @property Expansion $expansion
+ * @property Collection|AffixGroupEaseTier[] $easetiers
  *
  * @mixin Eloquent
  */
@@ -36,7 +38,7 @@ class AffixGroup extends AffixGroupBase
      */
     public function season(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Season');
+        return $this->belongsTo(Season::class);
     }
 
     /**
@@ -44,7 +46,7 @@ class AffixGroup extends AffixGroupBase
      */
     public function expansion(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Expansion');
+        return $this->belongsTo(Expansion::class);
     }
 
     /**
@@ -52,6 +54,6 @@ class AffixGroup extends AffixGroupBase
      */
     public function easetiers(): HasMany
     {
-        return $this->hasMany('App\Models\AffixGroup\AffixGroupEaseTier');
+        return $this->hasMany(AffixGroupEaseTier::class);
     }
 }

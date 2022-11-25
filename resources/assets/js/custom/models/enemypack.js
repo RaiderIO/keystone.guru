@@ -14,7 +14,7 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
 
 // });
 
-class EnemyPack extends MapObject {
+class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
 
@@ -52,6 +52,10 @@ class EnemyPack extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'group',
+                type: 'int',
             }),
             new Attribute({
                 name: 'color',

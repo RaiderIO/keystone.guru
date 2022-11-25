@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
@@ -19,7 +18,6 @@ use Teapot\StatusCode\Http;
 
 class APIBrushlineController extends Controller
 {
-    use ChecksForDuplicates;
     use SavesPolylines;
 
     /**
@@ -49,7 +47,7 @@ class APIBrushlineController extends Controller
             throw new Exception("Unable to save brushline!");
         } else {
             // Create a new polyline and save it
-            $polyline = $this->_savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
+            $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
 
             // Couple the brushline to the polyline
             $brushline->polyline_id = $polyline->id;

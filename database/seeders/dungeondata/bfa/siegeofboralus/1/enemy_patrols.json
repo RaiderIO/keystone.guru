@@ -1,11 +1,12 @@
 [
     {
         "id": 92,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-37.48,\"lng\":278.19},{\"lat\":-37.66,\"lng\":285.5}]"
@@ -13,11 +14,12 @@
     },
     {
         "id": 93,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-38.98,\"lng\":259.44},{\"lat\":-42.79,\"lng\":269.69}]"
@@ -25,11 +27,12 @@
     },
     {
         "id": 94,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-92.25,\"lng\":224.88},{\"lat\":-85.5,\"lng\":223}]"
@@ -37,11 +40,12 @@
     },
     {
         "id": 95,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-177,\"lng\":207.31},{\"lat\":-180,\"lng\":203.69},{\"lat\":-177.12,\"lng\":198.94}]"
@@ -49,11 +53,12 @@
     },
     {
         "id": 96,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-167.66,\"lng\":213.44},{\"lat\":-172.6,\"lng\":210.81},{\"lat\":-176.6,\"lng\":220.06},{\"lat\":-170.54,\"lng\":221.31},{\"lat\":-167.66,\"lng\":213.44}]"
@@ -61,11 +66,12 @@
     },
     {
         "id": 97,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-188.06,\"lng\":213.25},{\"lat\":-177.54,\"lng\":220.62}]"
@@ -73,11 +79,12 @@
     },
     {
         "id": 99,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-51.35,\"lng\":275},{\"lat\":-50.35,\"lng\":277.5},{\"lat\":-44.66,\"lng\":279.06},{\"lat\":-45.66,\"lng\":285.12}]"
@@ -85,11 +92,12 @@
     },
     {
         "id": 123,
+        "mapping_version_id": 18,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-51.47,\"lng\":272.78},{\"lat\":-51.34,\"lng\":276.62},{\"lat\":-48.06,\"lng\":278.69}]"

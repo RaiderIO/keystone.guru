@@ -314,13 +314,13 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
-#pulls_sidebar:not(.mobile,.embed) .pulls_container {
+#pulls_sidebar:not(.mobile,.embed) .pulls_container.has_speedrun {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(50vh - (79px));
 }
 
 /** Pulls section of the sidebar, when viewing, with a speedrun enabled */
-#pulls_sidebar .pulls_container {
+#pulls_sidebar .pulls_container.has_speedrun {
     max-height: calc(50vh - (79px));
 }
 

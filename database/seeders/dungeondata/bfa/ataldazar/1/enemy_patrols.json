@@ -1,11 +1,12 @@
 [
     {
         "id": 8,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-73.12,\"lng\":251.25},{\"lat\":-83.25,\"lng\":263.62}]"
@@ -13,11 +14,12 @@
     },
     {
         "id": 9,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-124.25,\"lng\":204.81},{\"lat\":-124.25,\"lng\":218.44}]"
@@ -25,11 +27,12 @@
     },
     {
         "id": 10,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-179.63,\"lng\":254.38},{\"lat\":-179.63,\"lng\":265.5}]"
@@ -37,11 +40,12 @@
     },
     {
         "id": 11,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-177.63,\"lng\":235.12},{\"lat\":-177.69,\"lng\":249}]"
@@ -49,11 +53,12 @@
     },
     {
         "id": 108,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#e25d5d",
+            "color": "#003280",
             "color_animated": null,
             "weight": 4,
             "vertices_json": "[{\"lat\":\"-117.5\",\"lng\":\"264.5\"},{\"lat\":\"-101.5\",\"lng\":\"264.62\"}]"
@@ -61,11 +66,12 @@
     },
     {
         "id": 109,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-76.13,\"lng\":211},{\"lat\":-60.88,\"lng\":211.12}]"
@@ -73,11 +79,12 @@
     },
     {
         "id": 110,
+        "mapping_version_id": 14,
         "floor_id": 41,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-66.44,\"lng\":238.75},{\"lat\":-74.13,\"lng\":250.19}]"

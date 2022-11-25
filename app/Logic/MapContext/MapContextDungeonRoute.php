@@ -20,7 +20,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
-        parent::__construct($dungeonRoute, $floor);
+        parent::__construct($dungeonRoute, $floor, $dungeonRoute->mappingVersion);
     }
 
     public function getType(): string
@@ -40,7 +40,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->context->dungeon->id, false);
+        return $this->listEnemies($this->mappingVersion, false);
     }
 
     public function getEchoChannelName(): string

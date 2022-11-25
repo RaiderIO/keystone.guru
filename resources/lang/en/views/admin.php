@@ -33,14 +33,15 @@ return [
                 'floor_edit_mapping'   => 'Mapping',
             ],
 
-            'speedrun_required_npcs' => [
-                'title'                => 'Speedrun Required Npcs',
-                'add_npc'              => 'Add NPC',
-                'table_header_id'      => 'Id',
-                'table_header_npc'     => 'Npc',
-                'table_header_count'   => 'Count',
-                'table_header_actions' => 'Actions',
-                'npc_delete'           => 'Delete',
+            'mapping_versions' => [
+                'title'                   => 'Mapping versions',
+                'add_mapping_version'     => 'Add mapping version',
+                'delete'                  => 'Delete',
+                'table_header_merged'     => 'Merged',
+                'table_header_id'         => 'Id',
+                'table_header_version'    => 'Version',
+                'table_header_created_at' => 'Created at',
+                'table_header_actions'    => 'Actions',
             ],
         ],
         'list' => [
@@ -96,9 +97,10 @@ return [
     ],
     'floor'                      => [
         'flash'   => [
-            'invalid_floor_id' => 'Floor %s is not a part of dungeon %s',
-            'floor_updated'    => 'Floor updated',
-            'floor_created'    => 'Floor created',
+            'invalid_floor_id'           => 'Floor %s is not a part of dungeon %s',
+            'invalid_mapping_version_id' => 'Mapping version is not for dungeon %s',
+            'floor_updated'              => 'Floor updated',
+            'floor_created'              => 'Floor created',
         ],
         'edit'    => [
             'title_new'               => 'New Floor - %s',
@@ -125,6 +127,16 @@ return [
                 'right' => 'Right',
             ],
             'submit'                  => 'Submit',
+
+            'speedrun_required_npcs' => [
+                'title'                => 'Speedrun Required Npcs',
+                'add_npc'              => 'Add NPC',
+                'table_header_id'      => 'Id',
+                'table_header_npc'     => 'Npc',
+                'table_header_count'   => 'Count',
+                'table_header_actions' => 'Actions',
+                'npc_delete'           => 'Delete',
+            ],
         ],
         'mapping' => [
             'title'  => 'Edit Mapping - %s',
@@ -314,6 +326,16 @@ return [
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
                 'submit'                       => 'Submit',
             ],
+            'dungeonmappinghash' => [
+                'title'                        => 'View MDT Dungeon Mapping Hash',
+                'header'                       => 'View MDT Dungeon Mapping Hash',
+                'submit'                       => 'Submit',
+            ],
+            'dungeonmappingversiontomdtmapping' => [
+                'title'                        => 'Convert Dungeon Mapping to MDT Mapping',
+                'header'                       => 'Convert Dungeon Mapping to MDT Mapping',
+                'submit'                       => 'Submit',
+            ]
         ],
         'npcimport'    => [
             'title'                   => 'Mass import NPCs',
@@ -336,6 +358,8 @@ return [
             'view_mdt_string_as_dungeonroute' => 'View MDT String as Dungeonroute',
             'view_dungeonroute_as_mdt_string' => 'View Dungeonroute as MDT String',
             'view_mdt_diff'                   => 'View MDT Diff',
+            'view_dungeon_mapping_hash'       => 'View dungeon mapping hash',
+            'view_dungeon_mapping_version_to_mdt_mapping' => 'Convert mapping version to MDT mapping',
 
             'subheader_enemy_forces' => 'Enemy Forces',
             'enemy_forces_import'    => 'Import enemy forces',

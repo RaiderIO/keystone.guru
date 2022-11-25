@@ -10,9 +10,12 @@ namespace App\Logic\MDT\Data;
 
 
 use App\Logic\MDT\Conversion;
+use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
+use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
+use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
@@ -33,19 +36,38 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTDungeon
 {
-
-    /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
-    private string $dungeonKey;
+    /** @var Dungeon */
+    private Dungeon $dungeon;
 
     /** @var CacheServiceInterface|mixed */
     private CacheServiceInterface $cacheService;
 
 
-    function __construct($dungeonKey)
+    function __construct(Dungeon $dungeon)
     {
-        $this->dungeonKey = $dungeonKey;
+        $this->dungeon = $dungeon;
 
         $this->cacheService = App::make(CacheServiceInterface::class);
+
+        if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
+            throw new Exception(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
+        }
+    }
+
+    /**
+     * @return array{normal: int, teeming: int, teemingEnabled: bool}
+     * @throws Exception
+     */
+    public function getDungeonTotalCount(): array
+    {
+        $lua               = $this->getLua();
+        $dungeonTotalCount = $lua->call('GetDungeonTotalCount');
+
+        return [
+            'normal'         => (int)$dungeonTotalCount['normal'],
+            'teeming'        => (int)$dungeonTotalCount['teeming'],
+            'teemingEnabled' => $dungeonTotalCount['teemingEnabled'],
+        ];
     }
 
     /**
@@ -55,80 +77,47 @@ class MDTDungeon
      */
     public function getMDTNPCs(): Collection
     {
-        $result = new Collection();
-        if (Conversion::hasMDTDungeonName($this->dungeonKey)) {
-            // Fetch the cache or set it if it didn't exist
-            $result = $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeonKey), function () {
-                $result           = new Collection();
-                $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
-                $expansionName    = Conversion::getExpansionName($this->dungeonKey);
-                $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeonKey);
+        return $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
+            $mdtNpcs = new Collection();
 
-                $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeonKey);
-                if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
-                    $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
+            $lua           = $this->getLua();
+            $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
-                    $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
+            foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
+                $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+            }
+            return $mdtNpcs;
+        }, config('keystoneguru.cache.mdt.ttl'));
+    }
 
-                    if (!file_exists($mdtDungeonNameFile)) {
-                        throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
-                    }
+    /**
+     * @return Collection|MDTMapPOI[]
+     * @throws Exception
+     */
+    public function getMDTMapPOIs(): Collection
+    {
+        $lua           = $this->getLua();
+        $rawMdtMapPOIs = $lua->call('GetMapPOIs');
+        $result        = new Collection();
 
-                    $eval = '
-                        local MDT = {}
-                        MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
-                        MDT.dungeonTotalCount = {}
-                        MDT.mapInfo = {}
-                        MDT.mapPOIs = {}
-                        MDT.dungeonEnemies = {}
-                        MDT.scaleMultiplier = {}
-                        MDT.dungeonBosses = {}
-                        MDT.dungeonList = {}
-                        MDT.dungeonMaps = {}
-                        MDT.dungeonSubLevels = {}
-
-                        local L = {}
-                        ' .
-                        // Some files require LibStub
-                        file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
-                        // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                        file_get_contents($mdtDungeonNameFile) . PHP_EOL .
-                        // Insert dummy function to get what we need
-                        '
-                        function GetDungeonEnemies()
-                            return MDT.dungeonEnemies[dungeonIndex]
-                        end
-                    ';
-
-                    try {
-                        $lua = new Lua();
-                        $lua->eval($eval);
-                        $rawMdtEnemies = $lua->call('GetDungeonEnemies');
-
-                        foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
-                            $result->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
-                        }
-                    } catch (LuaException $ex) {
-                        dd($ex, $expansionName, $mdtDungeonName, $eval);
-                    }
-                }
-                return $result;
-            }, config('keystoneguru.cache.mdt.ttl'));
+        foreach ($rawMdtMapPOIs as $subLevel => $pois) {
+            foreach ($pois as $poiIndex => $poi) {
+                $result->push(new MDTMapPOI((int)$subLevel, $poi));
+            }
         }
 
         return $result;
     }
 
-
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param $floors Floor|Collection The floors that you want to get the clones for.
+     * @param Floor|Collection $floors The floors that you want to get the clones for.
      * @return Collection|Enemy[]
      * @throws InvalidArgumentException
      */
     public function getClonesAsEnemies(Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeonKey), function () use ($floors) {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($floors) {
             $enemies = new Collection();
 
             try {
@@ -185,24 +174,29 @@ class MDTDungeon
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
-                        $enemy = new Enemy();
-                        // Dummy so we can ID them later on
-                        $enemy->id            = ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex;
-                        $enemy->is_mdt        = true;
-                        $enemy->floor_id      = $floorId;
-                        $enemy->enemy_pack_id = (int)$clone['g'];
-                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                        $enemy->npc_id        = $npcId;
-                        // All MDT_IDs are 1-indexed, because LUA
-                        $enemy->mdt_id                = $mdtCloneIndex;
-                        $enemy->enemy_id              = -1;
-                        $enemy->teeming               = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                        $enemy->faction               = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
-                        $enemy->enemy_forces_override = -1;
+                        $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
 
-                        $latLng     = Conversion::convertMDTCoordinateToLatLng($clone);
-                        $enemy->lat = $latLng['lat'];
-                        $enemy->lng = $latLng['lng'];
+                        $enemy = new Enemy([
+                            // Dummy so we can ID them later on
+                            'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
+                            'floor_id'                      => $floorId,
+                            'enemy_pack_id'                 => (int)$clone['g'],
+                            'npc_id'                        => $npcId,
+                            // All MDT_IDs are 1-indexed, because LUA
+                            'mdt_id'                        => $mdtCloneIndex,
+                            'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
+                            'faction'                       => isset($clone['faction']) ?
+                                ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
+                                : 'any',
+                            'enemy_forces_override'         => null,
+                            'enemy_forces_override_teeming' => null,
+                            'lat'                           => $latLng['lat'],
+                            'lng'                           => $latLng['lng'],
+                        ]);
+                        // Special MDT fields which are not fillable
+                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                        $enemy->is_mdt        = true;
+                        $enemy->enemy_id      = -1;
 
                         $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
@@ -225,5 +219,72 @@ class MDTDungeon
 
             return $enemies;
         }, config('keystoneguru.cache.mdt.ttl'));
+    }
+
+    /**
+     * @return Lua
+     * @throws Exception
+     */
+    private function getLua(): Lua
+    {
+        $lua = null;
+
+        $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
+        $expansionName    = Conversion::getExpansionName($this->dungeon->key);
+        $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
+
+        $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
+        if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+            $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
+
+            $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
+
+            if (!file_exists($mdtDungeonNameFile)) {
+                throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
+            }
+
+            $eval = '
+                        local MDT = {}
+                        MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
+                        MDT.dungeonTotalCount = {}
+                        MDT.mapInfo = {}
+                        MDT.mapPOIs = {}
+                        MDT.dungeonEnemies = {}
+                        MDT.scaleMultiplier = {}
+                        MDT.dungeonBosses = {}
+                        MDT.dungeonList = {}
+                        MDT.dungeonMaps = {}
+                        MDT.dungeonSubLevels = {}
+
+                        local L = {}
+                        ' .
+                // Some files require LibStub
+                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
+                file_get_contents($mdtDungeonNameFile) . PHP_EOL .
+                // Insert dummy function to get what we need
+                '
+                        function GetDungeonTotalCount()
+                            return MDT.dungeonTotalCount[dungeonIndex]
+                        end
+
+                        function GetMapPOIs()
+                            return MDT.mapPOIs[dungeonIndex]
+                        end
+
+                        function GetDungeonEnemies()
+                            return MDT.dungeonEnemies[dungeonIndex]
+                        end
+                    ';
+
+            try {
+                $lua = new Lua();
+                $lua->eval($eval);
+            } catch (LuaException $ex) {
+                dd($ex, $expansionName, $mdtDungeonName, $eval);
+            }
+        }
+
+        return $lua;
     }
 }

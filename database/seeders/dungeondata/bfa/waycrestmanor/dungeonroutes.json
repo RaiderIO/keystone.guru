@@ -4,6 +4,7 @@
         "clone_of": null,
         "author_id": 1,
         "dungeon_id": 23,
+        "mapping_version_id": 23,
         "faction_id": 1,
         "team_id": -1,
         "published_state_id": 1,
@@ -19,7 +20,7 @@
         "pull_gradient": "",
         "pull_gradient_apply_always": 0,
         "created_at": "2020-07-04T09:55:03+00:00",
-        "updated_at": "2021-04-17T22:25:01+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -49,567 +50,353 @@
         ],
         "killzones": [
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
                 "index": 1,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 426
-                    },
-                    {
-                        "enemy_id": 427
-                    },
-                    {
-                        "enemy_id": 428
-                    },
-                    {
-                        "enemy_id": 432
-                    },
-                    {
-                        "enemy_id": 433
-                    },
-                    {
-                        "enemy_id": 434
-                    },
-                    {
-                        "enemy_id": 435
-                    }
+                "enemies": [
+                    426,
+                    427,
+                    428,
+                    432,
+                    433,
+                    434,
+                    435
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
                 "index": 2,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 4239
-                    }
+                "enemies": [
+                    4239
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e9eff",
                 "lat": null,
                 "lng": null,
                 "index": 4,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 454
-                    },
-                    {
-                        "enemy_id": 455
-                    },
-                    {
-                        "enemy_id": 456
-                    },
-                    {
-                        "enemy_id": 457
-                    },
-                    {
-                        "enemy_id": 458
-                    }
+                "enemies": [
+                    454,
+                    455,
+                    456,
+                    457,
+                    458
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#fffb3e",
                 "lat": null,
                 "lng": null,
                 "index": 5,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 143
-                    },
-                    {
-                        "enemy_id": 3420
-                    },
-                    {
-                        "enemy_id": 3421
-                    }
+                "enemies": [
+                    143,
+                    3420,
+                    3421
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff3e",
                 "lat": null,
                 "lng": null,
                 "index": 6,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 465
-                    },
-                    {
-                        "enemy_id": 466
-                    },
-                    {
-                        "enemy_id": 3419
-                    }
+                "enemies": [
+                    465,
+                    466,
+                    3419
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e9e",
                 "lat": null,
                 "lng": null,
                 "index": 7,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 467
-                    },
-                    {
-                        "enemy_id": 468
-                    },
-                    {
-                        "enemy_id": 471
-                    },
-                    {
-                        "enemy_id": 2076
-                    },
-                    {
-                        "enemy_id": 2077
-                    }
+                "enemies": [
+                    467,
+                    468,
+                    471,
+                    2076,
+                    2077
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3effff",
                 "lat": null,
                 "lng": null,
                 "index": 8,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 485
-                    },
-                    {
-                        "enemy_id": 488
-                    },
-                    {
-                        "enemy_id": 489
-                    },
-                    {
-                        "enemy_id": 490
-                    },
-                    {
-                        "enemy_id": 491
-                    },
-                    {
-                        "enemy_id": 493
-                    },
-                    {
-                        "enemy_id": 494
-                    },
-                    {
-                        "enemy_id": 495
-                    },
-                    {
-                        "enemy_id": 1411
-                    },
-                    {
-                        "enemy_id": 1413
-                    },
-                    {
-                        "enemy_id": 1415
-                    },
-                    {
-                        "enemy_id": 2865
-                    }
+                "enemies": [
+                    485,
+                    488,
+                    489,
+                    490,
+                    491,
+                    493,
+                    494,
+                    495,
+                    1411,
+                    1413,
+                    1415,
+                    2865
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff9b3e",
                 "lat": null,
                 "lng": null,
                 "index": 9,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 477
-                    },
-                    {
-                        "enemy_id": 478
-                    },
-                    {
-                        "enemy_id": 479
-                    },
-                    {
-                        "enemy_id": 480
-                    }
+                "enemies": [
+                    477,
+                    478,
+                    479,
+                    480
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e3eff",
                 "lat": null,
                 "lng": null,
                 "index": 10,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 481
-                    },
-                    {
-                        "enemy_id": 482
-                    },
-                    {
-                        "enemy_id": 483
-                    },
-                    {
-                        "enemy_id": 484
-                    }
+                "enemies": [
+                    481,
+                    482,
+                    483,
+                    484
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#a1ff3e",
                 "lat": null,
                 "lng": null,
                 "index": 11,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 4196
-                    }
+                "enemies": [
+                    4196
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
                 "index": 12,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 147
-                    }
+                "enemies": [
+                    147
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
                 "index": 13,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 2071
-                    },
-                    {
-                        "enemy_id": 2072
-                    },
-                    {
-                        "enemy_id": 2073
-                    },
-                    {
-                        "enemy_id": 2074
-                    },
-                    {
-                        "enemy_id": 2075
-                    },
-                    {
-                        "enemy_id": 3482
-                    },
-                    {
-                        "enemy_id": 3483
-                    },
-                    {
-                        "enemy_id": 3484
-                    },
-                    {
-                        "enemy_id": 4241
-                    },
-                    {
-                        "enemy_id": 4242
-                    }
+                "enemies": [
+                    2071,
+                    2072,
+                    2073,
+                    2074,
+                    2075,
+                    3482,
+                    3483,
+                    3484,
+                    4241,
+                    4242
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e3e",
                 "lat": null,
                 "lng": null,
                 "index": 14,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 505
-                    },
-                    {
-                        "enemy_id": 506
-                    },
-                    {
-                        "enemy_id": 508
-                    },
-                    {
-                        "enemy_id": 509
-                    },
-                    {
-                        "enemy_id": 510
-                    }
+                "enemies": [
+                    505,
+                    506,
+                    508,
+                    509,
+                    510
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e9eff",
                 "lat": null,
                 "lng": null,
                 "index": 15,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 507
-                    },
-                    {
-                        "enemy_id": 511
-                    },
-                    {
-                        "enemy_id": 512
-                    },
-                    {
-                        "enemy_id": 513
-                    },
-                    {
-                        "enemy_id": 514
-                    }
+                "enemies": [
+                    507,
+                    511,
+                    512,
+                    513,
+                    514
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#fffb3e",
                 "lat": null,
                 "lng": null,
                 "index": 16,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 500
-                    },
-                    {
-                        "enemy_id": 501
-                    },
-                    {
-                        "enemy_id": 502
-                    },
-                    {
-                        "enemy_id": 503
-                    },
-                    {
-                        "enemy_id": 504
-                    }
+                "enemies": [
+                    500,
+                    501,
+                    502,
+                    503,
+                    504
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff3e",
                 "lat": null,
                 "lng": null,
                 "index": 17,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 146
-                    }
+                "enemies": [
+                    146
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e9e",
                 "lat": null,
                 "lng": null,
                 "index": 18,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 2078
-                    },
-                    {
-                        "enemy_id": 2079
-                    },
-                    {
-                        "enemy_id": 2080
-                    },
-                    {
-                        "enemy_id": 2081
-                    },
-                    {
-                        "enemy_id": 2082
-                    },
-                    {
-                        "enemy_id": 2083
-                    },
-                    {
-                        "enemy_id": 2084
-                    },
-                    {
-                        "enemy_id": 2085
-                    },
-                    {
-                        "enemy_id": 2086
-                    },
-                    {
-                        "enemy_id": 2920
-                    }
+                "enemies": [
+                    2078,
+                    2079,
+                    2080,
+                    2081,
+                    2082,
+                    2083,
+                    2084,
+                    2085,
+                    2086,
+                    2920
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3effff",
                 "lat": null,
                 "lng": null,
                 "index": 19,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 4240
-                    }
+                "enemies": [
+                    4240
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff9b3e",
                 "lat": null,
                 "lng": null,
                 "index": 20,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 549
-                    },
-                    {
-                        "enemy_id": 551
-                    },
-                    {
-                        "enemy_id": 553
-                    }
+                "enemies": [
+                    549,
+                    551,
+                    553
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e3eff",
                 "lat": null,
                 "lng": null,
                 "index": 21,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 546
-                    },
-                    {
-                        "enemy_id": 547
-                    },
-                    {
-                        "enemy_id": 548
-                    }
+                "enemies": [
+                    546,
+                    547,
+                    548
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#a1ff3e",
                 "lat": null,
                 "lng": null,
                 "index": 22,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 4198
-                    }
+                "enemies": [
+                    4198
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3eff",
                 "lat": null,
                 "lng": null,
                 "index": 23,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 557
-                    },
-                    {
-                        "enemy_id": 558
-                    },
-                    {
-                        "enemy_id": 559
-                    },
-                    {
-                        "enemy_id": 560
-                    }
+                "enemies": [
+                    557,
+                    558,
+                    559,
+                    560
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff9e",
                 "lat": null,
                 "lng": null,
                 "index": 24,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 554
-                    },
-                    {
-                        "enemy_id": 555
-                    },
-                    {
-                        "enemy_id": 556
-                    }
+                "enemies": [
+                    554,
+                    555,
+                    556
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#ff3e3e",
                 "lat": null,
                 "lng": null,
                 "index": 25,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 145
-                    },
-                    {
-                        "enemy_id": 2965
-                    }
+                "enemies": [
+                    145,
+                    2965
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3e9eff",
                 "lat": null,
                 "lng": null,
                 "index": 26,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 562
-                    },
-                    {
-                        "enemy_id": 563
-                    },
-                    {
-                        "enemy_id": 564
-                    }
+                "enemies": [
+                    562,
+                    563,
+                    564
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#fffb3e",
                 "lat": null,
                 "lng": null,
                 "index": 27,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 565
-                    },
-                    {
-                        "enemy_id": 566
-                    },
-                    {
-                        "enemy_id": 568
-                    },
-                    {
-                        "enemy_id": 570
-                    }
+                "enemies": [
+                    565,
+                    566,
+                    568,
+                    570
                 ]
             },
             {
-                "floor_id": 0,
+                "floor_id": null,
                 "color": "#3eff3e",
                 "lat": null,
                 "lng": null,
                 "index": 28,
-                "killzoneenemies": [
-                    {
-                        "enemy_id": 144
-                    }
+                "enemies": [
+                    144
                 ]
             }
         ],

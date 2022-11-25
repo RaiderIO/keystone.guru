@@ -32,6 +32,7 @@ let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
 let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
 let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
 
 /**
  * @property {Number} floor_id
@@ -44,7 +45,6 @@ let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
  * @property {Number} enemy_forces_override
  * @property {Number} enemy_forces_override_teeming
  * @property {String} raid_marker_name
- * @property {Boolean} dangerous
  * @property {Boolean} required
  * @property {Boolean} skippable
  * @property {Number} lat
@@ -52,22 +52,24 @@ let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
  *
  * @property L.Layer layer
  */
-class Enemy extends MapObject {
-    constructor(map, layer, options = {name: 'enemy'}) {
+class Enemy extends VersionableMapObject {
+    constructor(map, layer, options = {name: 'enemy', hasRouteModelBinding: true}) {
         super(map, layer, options);
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
-        /** @type Object May be set when loaded from server */
+        /** @type {Object|null} May be set when loaded from server */
         this.npc = null;
-        /** @type Enemy If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
+        /** @type {EnemyPatrol|null} May be set when loaded from server */
+        this.enemyPatrol = null;
+        /** @type {Enemy} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
         this.active_auras = [];
 
         // MDT
-        this.mdt_id = -1;
+        this.mdt_id = null;
         this.mdt_npc_id = null;
         this.is_mdt = false;
 
@@ -132,19 +134,23 @@ class Enemy extends MapObject {
                 name: 'enemy_pack_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: -1
+                default: null
+            }),
+            new Attribute({
+                name: 'enemy_patrol_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: null
             }),
             new Attribute({
                 name: 'enemy_forces_override',
                 type: 'int',
-                admin: true,
-                default: -1
+                admin: true
             }),
             new Attribute({
                 name: 'enemy_forces_override_teeming',
                 type: 'int',
-                admin: true,
-                default: -1
+                admin: true
             }),
             // new Attribute({
             //     name: 'npc',
@@ -159,7 +165,7 @@ class Enemy extends MapObject {
                 type: 'select',
                 admin: true,
                 values: this._getSelectNpcs.bind(this),
-                default: -1,
+                default: null,
                 live_search: true,
                 setter: function (value) {
 
@@ -202,7 +208,6 @@ class Enemy extends MapObject {
                 type: 'int',
                 admin: true,
                 // edit: false, // Not directly changeable by user
-                default: -1
             }),
             new Attribute({
                 name: 'mdt_npc_id',
@@ -230,10 +235,11 @@ class Enemy extends MapObject {
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
-                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'}
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'},
+                    {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: 'Shrouded not active'}
                 ],
                 setter: function (value) {
-                    self.seasonal_type = value;
+                    self.seasonal_type = value <= 0 ? null : value;
                 }
             }),
             new Attribute({
@@ -528,7 +534,7 @@ class Enemy extends MapObject {
         let result = [];
 
         // Only if we're part of a pack
-        if (this.enemy_pack_id >= 0) {
+        if (this.enemy_pack_id !== null) {
             // Add all the enemies in said pack to the toggle display
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
@@ -579,12 +585,12 @@ class Enemy extends MapObject {
             } else if (this.isShroudedZulGamux()) {
                 result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
             } else if (getState().getMapContext().getTeeming()) {
-                if (this.enemy_forces_override_teeming >= 0) {
+                if (this.enemy_forces_override_teeming !== null) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
                     result = this.npc.enemy_forces_teeming;
                 }
-            } else if (this.enemy_forces_override >= 0) {
+            } else if (this.enemy_forces_override !== null) {
                 result = this.enemy_forces_override;
             }
         }
@@ -627,10 +633,30 @@ class Enemy extends MapObject {
             this.enemy_forces_teeming = npc.enemy_forces_teeming;
         } else {
             // Not set :(
-            this.npc_id = -1;
+            this.npc_id = null;
         }
 
         this.signal('enemy:set_npc', {npc: npc});
+    }
+
+    /**
+     *
+     * @param enemyPatrol {EnemyPatrol}
+     */
+    setEnemyPatrol(enemyPatrol) {
+        if (this.enemyPatrol !== null) {
+            console.log(`Removing from enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.removeEnemy(this);
+        }
+
+        this.enemyPatrol = enemyPatrol;
+        this.enemy_patrol_id = null;
+
+        if (this.enemyPatrol !== null) {
+            console.log(`Setting enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.addEnemy(this);
+            this.enemy_patrol_id = enemyPatrol.id;
+        }
     }
 
     /**
@@ -689,9 +715,13 @@ class Enemy extends MapObject {
         if (mapContext instanceof MapContextDungeonRoute) {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
+                let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
                 if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
+                    // Special case for enemies marked as non-shrouded which replace the enemies that are marked as shrouded
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED && hasShroudedAffix) ||
                     // MDT placeholders are only to suppress warnings when importing - don't show these on the map
                     this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
@@ -902,7 +932,13 @@ class Enemy extends MapObject {
      */
     isImportant() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.isBossNpc() || this.isInspiring() || this.isShrouded() || this.isShroudedZulGamux() || this.isTormented() || this.isPridefulNpc() || this.isAwakenedNpc();
+        return this.isBossNpc() ||
+            this.isInspiring() ||
+            this.isShrouded() ||
+            this.isShroudedZulGamux() ||
+            this.isTormented() ||
+            this.isPridefulNpc() ||
+            this.isAwakenedNpc();
     }
 
     /**

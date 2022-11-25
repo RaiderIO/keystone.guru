@@ -43,7 +43,7 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        $oldId = -1;
+        $oldId = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
@@ -95,7 +95,7 @@ class NpcController extends Controller
             }
 
 
-            if ($oldId > 0) {
+            if ($oldId !== null) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
 
@@ -128,7 +128,7 @@ class NpcController extends Controller
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
-        } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
+        } // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else {
             abort(500, 'Unable to save npc!');
         }
@@ -167,12 +167,12 @@ class NpcController extends Controller
     }
 
     /**
-     * @param NpcServiceInterface $npcService
      * @param Request $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|View
      */
-    public function edit(NpcServiceInterface $npcService, Request $request, Npc $npc)
+    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
@@ -187,11 +187,12 @@ class NpcController extends Controller
     /**
      * Override to give the type hint which is required.
      * @param NpcFormRequest $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
-    public function update(NpcFormRequest $request, Npc $npc)
+    public function update(NpcFormRequest $request, NpcServiceInterface $npcService, Npc $npc)
     {
         if ($this->isSaveAsNew($request)) {
             return $this->savenew($request);
@@ -203,7 +204,7 @@ class NpcController extends Controller
             Session::flash('status', __('views/admin.npc.flash.npc_updated'));
 
             // Display the edit page
-            return $this->edit($request, $npc);
+            return $this->edit($request, $npcService, $npc);
         }
     }
 

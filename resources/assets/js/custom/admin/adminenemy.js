@@ -5,9 +5,10 @@ class AdminEnemy extends Enemy {
 
         let self = this;
 
-        this.npc_id = 0;
+        this.npc_id = null;
         // Init to an empty value
-        this.enemy_pack_id = -1;
+        this.enemy_pack_id = null;
+        this.enemy_patrol_id = null;
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 
@@ -24,7 +25,7 @@ class AdminEnemy extends Enemy {
 
         // When we're synced, connect to our connected enemy
         this.register(['shown', 'hidden'], this, function (hiddenEvent) {
-            if (self.mdt_id > 0) {
+            if (self.mdt_id !== null) {
                 if (hiddenEvent.data.visible && getState().getMdtMappingModeEnabled()) {
                     self.redrawConnectionToMDTEnemy();
                 } else {
@@ -76,8 +77,11 @@ class AdminEnemy extends Enemy {
             // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
             // Advantage is that this dramatically speeds up the JS.
             // 100 = 10 distance
-            let closeEnough = getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
-            //
+            // If the source layer doesn't have a latLng just assume everything is far away (expensive)
+            let closeEnough = ((selectedMapObject.layer instanceof L.Marker) ?
+                    getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) : 0)
+                < 100;
+
             if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
                 if (closeEnough) {
                     // Attach tooltip again
@@ -127,7 +131,7 @@ class AdminEnemy extends Enemy {
 
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             // We're an enemy, we need to find an MDT enemy instead
-            if (!this.is_mdt && this.mdt_id > 0) {
+            if (!this.is_mdt && this.mdt_id !== null) {
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
@@ -167,7 +171,7 @@ class AdminEnemy extends Enemy {
      */
     detachConnectedEnemy() {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
-        this.mdt_id = -1;
+        this.mdt_id = null;
         this._connectedEnemy = null;
     }
 
@@ -335,8 +339,8 @@ class AdminEnemy extends Enemy {
         self.layer.on('click', function () {
             // When deleting, we shouldn't have these interactions
             // Only when we're an MDT enemy!
-            if (self.is_mdt && !(self.map.getMapState() instanceof DeleteMapState)) {
-                let currentMapState = self.map.getMapState();
+            let currentMapState = self.map.getMapState();
+            if (self.is_mdt && !(currentMapState instanceof DeleteMapState)) {
                 // Can only interact with select mode if we're the one that is currently being selected
                 if (currentMapState === null) {
                     let mdtEnemySelection = new MDTEnemySelection(self.map, self);
@@ -352,6 +356,29 @@ class AdminEnemy extends Enemy {
                     // Do not unregister enemyselectionmodechanged here; it may be changed externally as well
                     self.map.setMapState(null);
                 }
+            }
+
+            if (currentMapState instanceof EnemyPatrolEnemySelection) {
+                // We just got assigned an enemy patrol!
+                /** @type {AdminEnemyPatrol} */
+                let enemyPatrol = currentMapState.getMapObject();
+                // If we've assigned the patrol, clicking it again will unassign the enemy patrol
+                self.setEnemyPatrol(enemyPatrol.id === self.enemy_patrol_id ? null : enemyPatrol)
+                self.save();
+
+                // We just got assigned an enemy patrol, also assign it to any of our pack buddies
+                let packBuddies = self.getPackBuddies();
+                for (let index in packBuddies) {
+                    let packBuddyEnemy = packBuddies[index];
+                    packBuddyEnemy.setEnemyPatrol(enemyPatrol.id === packBuddyEnemy.enemy_patrol_id ? null : enemyPatrol);
+                    packBuddyEnemy.save();
+                }
+
+                // Regardless if we were setting or unsetting, redraw the connections
+                enemyPatrol.redrawConnectionsToEnemies();
+
+                // Stop the map state
+                self.map.setMapState(null);
             }
         });
 
@@ -375,9 +402,9 @@ class AdminEnemy extends Enemy {
         let enemy_forces = this.npc === null ? -1 : this.npc.enemy_forces;
 
         // Admin maps have 0 enemy forces
-        if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+        if (this.enemy_forces_override !== null || enemy_forces >= 1) {
             // @TODO This HTML probably needs to go somewhere else
-            if (this.enemy_forces_override >= 0) {
+            if (this.enemy_forces_override !== null) {
                 enemy_forces = '<s>' + enemy_forces + '</s> ' +
                     '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
             } else if (enemy_forces >= 1) {
@@ -391,8 +418,8 @@ class AdminEnemy extends Enemy {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
             enemy_forces: enemy_forces,
             base_health: this.npc === null ? '-' : this.npc.base_health,
-            teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-            is_teeming: this.teeming === 'visible',
+            teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),
+            is_teeming: this.teeming === TEEMING_VISIBLE,
             id: this.id,
             size: c.map.enemy.calculateSize(
                 this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health,
@@ -408,7 +435,8 @@ class AdminEnemy extends Enemy {
             mdt_id: this.mdt_id,
             mdt_npc_id: this.mdt_npc_id,
             enemy_id: this.enemy_id,
-            attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
+            attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
+            attached_to_patrol: this.enemy_patrol_id !== null ? `true (${this.enemy_patrol_id})` : 'false',
             visual: this.visual !== null ? this.visual.getName() : 'undefined'
         });
 

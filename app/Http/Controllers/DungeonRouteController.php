@@ -444,4 +444,30 @@ class DungeonRouteController extends Controller
 
         return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
     }
+
+    /**
+     * @param DungeonRouteFormRequest $request
+     * @param Dungeon $dungeon
+     * @param DungeonRoute $dungeonroute
+     * @param string|null $title
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
+     */
+    public function upgrade(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title)
+    {
+        $this->authorize('edit', $dungeonroute);
+
+        // Store it and show the edit page again
+        $dungeonroute->update([
+            'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
+        ]);
+
+        // Display the edit page
+        return redirect()->route('dungeonroute.edit', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => Str::slug($dungeonroute->title),
+        ]);
+    }
 }

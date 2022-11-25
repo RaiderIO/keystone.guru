@@ -17,18 +17,44 @@ use Exception;
 class Conversion
 {
     const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_VANILLA     => null,
-        Expansion::EXPANSION_TBC         => null,
-        Expansion::EXPANSION_WOTLK       => null,
-        Expansion::EXPANSION_CATACLYSM   => null,
-        Expansion::EXPANSION_MOP         => null,
-        Expansion::EXPANSION_WOD         => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
-        Expansion::EXPANSION_LEGION      => 'Legion',
-        Expansion::EXPANSION_BFA         => 'BattleForAzeroth',
-        Expansion::EXPANSION_SHADOWLANDS => 'Shadowlands',
+        Expansion::EXPANSION_VANILLA      => null,
+        Expansion::EXPANSION_TBC          => null,
+        Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
+        Expansion::EXPANSION_CATACLYSM    => null,
+        Expansion::EXPANSION_MOP          => null,
+        Expansion::EXPANSION_WOD          => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
+        Expansion::EXPANSION_LEGION       => 'Legion',
+        Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
+        Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
+        Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
     ];
 
     const DUNGEON_NAME_MAPPING = [
+        Expansion::EXPANSION_WOTLK => [
+            Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
+            Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
+            Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
+            Dungeon::DUNGEON_GUNDRAK                   => 'Gundrak',
+            Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
+            Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
+            Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
+            Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
+            Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
+            Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
+            Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
+            Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
+            Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
+        ],
+
+        Expansion::EXPANSION_MOP => [
+//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+        ],
+
+        Expansion::EXPANSION_WOD => [
+//            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
+//            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+        ],
+
         Expansion::EXPANSION_LEGION => [
             Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
             Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
@@ -61,10 +87,10 @@ class Conversion
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
-            //WoD dungeons
+            // WoD
             Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
             Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
-            // Real SL dungeons
+            // SL
             Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
             Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
             Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
@@ -75,6 +101,22 @@ class Conversion
             Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
             Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
             Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
+        ],
+
+        Expansion::EXPANSION_DRAGONFLIGHT => [
+            // MoP
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            // WoD
+            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            // DF
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
+            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW         => 'BrackenhideHollow',
+            Dungeon::DUNGEON_HALLS_OF_INFUSION          => 'HallsOfInfusion',
+            Dungeon::DUNGEON_NELTHARUS                  => 'Neltharus',
+            Dungeon::DUNGEON_RUBY_LIFE_POOLS            => 'RubyLifePools',
+            Dungeon::DUNGEON_THE_AZURE_VAULT            => 'TheAzureVault',
+            Dungeon::DUNGEON_NOKHUD_OFFENSIVE           => 'TheNokhudOffensive',
+            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR      => 'UldamanLegacyOfTyr',
         ],
     ];
 
@@ -128,7 +170,7 @@ class Conversion
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
     {
-        $result = false;
+        $result = null;
 
         $expansionName = self::getExpansionName($dungeonKey);
         if (is_string($expansionName)) {
@@ -171,9 +213,22 @@ class Conversion
      * @param $latLng array
      * @return array
      */
+    public static function convertLatLngToMDTCoordinateString(array $latLng): array
+    {
+        $mdtCoordinate      = self::convertLatLngToMDTCoordinate($latLng);
+        $mdtCoordinate['x'] = (string)$mdtCoordinate['x'];
+        $mdtCoordinate['y'] = (string)$mdtCoordinate['y'];
+        return $mdtCoordinate;
+    }
+
+    /**
+     * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     * @param $latLng array
+     * @return array
+     */
     public static function convertLatLngToMDTCoordinate(array $latLng): array
     {
-        return ['y' => (string)round($latLng['lat'] * 2.185, 1), 'x' => (string)round($latLng['lng'] * 2.185, 1)];
+        return ['y' => round($latLng['lat'] * 2.185, 1), 'x' => round($latLng['lng'] * 2.185, 1)];
     }
 
     /**

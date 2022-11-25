@@ -25,16 +25,16 @@ class DungeonRouteRating extends Model
     /**
      * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }

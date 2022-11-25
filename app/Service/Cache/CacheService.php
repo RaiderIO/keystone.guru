@@ -41,8 +41,8 @@ class CacheService implements CacheServiceInterface
      * Remembers a value with a specific key if a condition is met
      * @param bool $condition
      * @param string $key
-     * @param $value
-     * @param null $ttl
+     * @param Closure|mixed $value
+     * @param string|null|DateInterval $ttl
      * @return Closure|mixed|null
      * @throws InvalidArgumentException
      */
@@ -60,7 +60,7 @@ class CacheService implements CacheServiceInterface
     /**
      * @param string $key
      * @param Closure|mixed $value
-     * @param null $ttl
+     * @param string|null|DateInterval $ttl
      * @return mixed
      */
     public function remember(string $key, $value, $ttl = null)
@@ -112,7 +112,7 @@ class CacheService implements CacheServiceInterface
     /**
      * @param string $key
      * @param $object
-     * @param null $ttl
+     * @param string|null|DateInterval $ttl
      * @return bool
      * @throws InvalidArgumentException
      */

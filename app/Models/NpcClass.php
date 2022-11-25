@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property string $name
+ *
+ * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
  */
@@ -16,7 +19,10 @@ class NpcClass extends CacheModel
     protected $fillable = ['id', 'name'];
     public $timestamps = false;
 
-    public function getNameKeyAttribute()
+    /**
+     * @return string
+     */
+    public function getNameKeyAttribute(): string
     {
         return strtolower($this->name);
     }
@@ -26,8 +32,8 @@ class NpcClass extends CacheModel
      *
      * @return HasMany
      */
-    function npcs()
+    public function npcs(): HasMany
     {
-        return $this->hasMany('App\Models\Npc');
+        return $this->hasMany(Npc::class);
     }
 }

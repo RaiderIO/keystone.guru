@@ -1,11 +1,14 @@
 <?php
-/** @var \App\User $user */
-/** @var \App\Logic\MapContext\MapContext $mapContext */
-/** @var App\Models\Dungeon $dungeon */
-/** @var App\Models\DungeonRoute|null $dungeonroute */
-/** @var App\Models\LiveSession|null $livesession */
-/** @var array $show */
-/** @var bool $adFree */
+/**
+ * @var \App\User $user
+ * @var \App\Logic\MapContext\MapContext $mapContext
+ * @var \App\Models\Dungeon $dungeon
+ * @var \App\Models\Mapping\MappingVersion $mappingVersion
+ * @var \App\Models\DungeonRoute|null $dungeonroute
+ * @var \App\Models\LiveSession|null $livesession
+ * @var array $show
+ * @var bool $adFree
+ */
 
 $user             = Auth::user();
 $isAdmin          = isset($admin) && $admin;
@@ -50,14 +53,14 @@ if ($isAdmin) {
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
             ['key' => '', 'description' => __('views/common.maps.map.no_teeming')],
-            ['key' => 'visible', 'description' => __('views/common.maps.map.visible_teeming')],
-            ['key' => 'hidden', 'description' => __('views/common.maps.map.hidden_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_VISIBLE, 'description' => __('views/common.maps.map.visible_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_HIDDEN, 'description' => __('views/common.maps.map.hidden_teeming')],
         ],
         // Display options for changing Faction status for map objects
         'factions'       => [
             ['key' => 'any', 'description' => __('views/common.maps.map.any')],
-            ['key' => 'alliance', 'description' => __('views/common.maps.map.alliance')],
-            ['key' => 'horde', 'description' => __('views/common.maps.map.horde')],
+            ['key' => \App\Models\Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
+            ['key' => \App\Models\Faction::FACTION_HORDE, 'description' => __('factions.horde')],
         ],
     ];
 }
@@ -65,6 +68,7 @@ if ($isAdmin) {
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'embed' => $embed,
     'edit' => $edit,
+    'readonly' => false, // May be set to true in the code though - but set a default here
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
@@ -128,6 +132,7 @@ if ($isAdmin) {
             <ul class="leaflet-draw-actions"></ul>
         </div>
 
+
         </script>
     @endif
 @endsection
@@ -135,7 +140,7 @@ if ($isAdmin) {
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
         @include('common.maps.controls.header', [
-            'title' => isset($dungeonroute) ? $dungeonroute->title : __($dungeon->name),
+            'title' => isset($dungeonroute) ? $dungeonroute->title : sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version),
             'echo' => $echo,
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,

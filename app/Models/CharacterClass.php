@@ -13,7 +13,10 @@ use Illuminate\Support\Collection;
  * @property string $key
  * @property string $name
  * @property string $color
- * @property Collection $specializations
+ *
+ * @property Collection|CharacterClassSpecialization[] $specializations
+ * @property Collection|DungeonRoutePlayerClass[] $dungeonrouteplayerclasses
+ * @property Collection|DungeonRoutePlayerRace[] $dungeonrouteplayerraces
  *
  * @mixin Eloquent
  */
@@ -28,33 +31,33 @@ class CharacterClass extends CacheModel
     /**
      * @return HasMany
      */
-    function specializations()
+    public function specializations(): HasMany
     {
-        return $this->hasMany('App\Models\CharacterClassSpecialization');
+        return $this->hasMany(CharacterClassSpecialization::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    function races()
+    public function races(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\CharacterRace', 'character_race_class_couplings');
+        return $this->belongsToMany(CharacterRace::class, 'character_race_class_couplings');
     }
 
     /**
      * @return BelongsToMany
      */
-    function dungeonrouteplayerclasses()
+    public function dungeonrouteplayerclasses(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
+        return $this->belongsToMany(DungeonRoutePlayerClass::class, 'dungeon_route_player_classes');
     }
 
     /**
      * @return BelongsToMany
      */
-    function dungeonrouteplayerraces()
+    public function dungeonrouteplayerraces(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\DungeonRoutePlayerRace', 'dungeon_route_player_races');
+        return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
     }
 
     public static function boot()

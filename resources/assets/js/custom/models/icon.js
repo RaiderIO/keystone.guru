@@ -68,7 +68,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
  * @property {Number} permanent_tooltip
  * @property {String} comment
  */
-class Icon extends MapObject {
+class Icon extends VersionableMapObject {
     constructor(map, layer, options) {
         super(map, layer, options);
 
@@ -139,7 +139,7 @@ class Icon extends MapObject {
                 name: 'map_icon_type_id',
                 type: 'select',
                 values: editableMapIconTypes,
-                default: -1,
+                default: null,
                 live_search: true,
                 setter: this.setMapIconTypeId.bind(this)
             }),
@@ -239,7 +239,7 @@ class Icon extends MapObject {
     getDisplayText() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
 
-        return this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+        return this.comment !== null && this.comment.length > 0 ? this.comment : this.map_icon_type.name;
     }
 
     /**
@@ -266,7 +266,7 @@ class Icon extends MapObject {
 
         this.unbindTooltip();
 
-        if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
+        if (this.comment !== null && this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
             let text = lang.get(this.getDisplayText());
 
             // Wrap the text
@@ -293,7 +293,7 @@ class Icon extends MapObject {
     }
 
     toString() {
-        return `Icon (${this.comment.substring(0, 25)})`;
+        return `Icon (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
     }
 
     cleanup() {

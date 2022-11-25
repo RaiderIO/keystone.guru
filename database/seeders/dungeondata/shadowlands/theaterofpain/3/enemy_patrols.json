@@ -1,6 +1,7 @@
 [
     {
         "id": 220,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -13,6 +14,7 @@
     },
     {
         "id": 221,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -25,6 +27,7 @@
     },
     {
         "id": 222,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -37,6 +40,7 @@
     },
     {
         "id": 223,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -49,6 +53,7 @@
     },
     {
         "id": 224,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -61,6 +66,7 @@
     },
     {
         "id": 225,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -73,6 +79,7 @@
     },
     {
         "id": 226,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -85,6 +92,7 @@
     },
     {
         "id": 227,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
@@ -97,11 +105,12 @@
     },
     {
         "id": 228,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-87.375,\"lng\":316.9375},{\"lat\":-109.5,\"lng\":338.21875}]"
@@ -109,11 +118,12 @@
     },
     {
         "id": 267,
+        "mapping_version_id": 35,
         "floor_id": 94,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-189.5,\"lng\":274.875},{\"lat\":-199.625,\"lng\":279.375}]"

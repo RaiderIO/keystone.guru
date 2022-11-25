@@ -1,11 +1,12 @@
 [
     {
         "id": 263,
+        "mapping_version_id": 28,
         "floor_id": 74,
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
+            "color": "#003280",
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-99.1875,\"lng\":200.5625},{\"lat\":-97.75,\"lng\":177.1875}]"
@@ -13,6 +14,7 @@
     },
     {
         "id": 264,
+        "mapping_version_id": 28,
         "floor_id": 74,
         "teeming": null,
         "faction": "any",
@@ -25,6 +27,7 @@
     },
     {
         "id": 265,
+        "mapping_version_id": 28,
         "floor_id": 74,
         "teeming": null,
         "faction": "any",
@@ -37,6 +40,7 @@
     },
     {
         "id": 266,
+        "mapping_version_id": 28,
         "floor_id": 74,
         "teeming": null,
         "faction": "any",

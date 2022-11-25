@@ -1,7 +1,9 @@
 [
     {
         "id": 2021,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -11,7 +13,9 @@
     },
     {
         "id": 2022,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -21,7 +25,9 @@
     },
     {
         "id": 2023,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -31,7 +37,9 @@
     },
     {
         "id": 2024,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -41,7 +49,9 @@
     },
     {
         "id": 2025,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -51,17 +61,21 @@
     },
     {
         "id": 2026,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
         "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"-136.950695\",\"lng\":\"171.227849\"},{\"lat\":\"-106.23091\",\"lng\":\"171.730404\"},{\"lat\":\"-111.61405\",\"lng\":\"161.679293\"},{\"lat\":\"-120.011748\",\"lng\":\"157.946024\"},{\"lat\":\"-127.763469\",\"lng\":\"160.961357\"},{\"lat\":\"-134.366787\",\"lng\":\"163.97669\"}]"
+        "vertices_json": "[{\"lat\":\"-136.950695\",\"lng\":\"171.227849\"},{\"lat\":\"-106.23091\",\"lng\":\"171.730404\"},{\"lat\":\"-111.61405\",\"lng\":\"161.679293\"},{\"lat\":\"-120.1875\",\"lng\":\"158.46875\"},{\"lat\":\"-127.763469\",\"lng\":\"160.961357\"},{\"lat\":\"-134.366787\",\"lng\":\"163.97669\"}]"
     },
     {
         "id": 2027,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -71,7 +85,9 @@
     },
     {
         "id": 2028,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -81,7 +97,9 @@
     },
     {
         "id": 2029,
+        "mapping_version_id": 60,
         "floor_id": 141,
+        "group": null,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",

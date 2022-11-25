@@ -47,6 +47,9 @@ class DatabaseSeeder extends Seeder
         // Depends on Expansions
         $this->call(DungeonDataSeeder::class);
 
+        // Depends on DungeonDataSeeder
+        $this->call(MappingVersionSeeder::class);
+
         // Depends on ExpansionsSeeder, DungeonDataSeeder
         $this->call(SeasonsSeeder::class);
     }

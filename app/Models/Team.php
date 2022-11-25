@@ -16,16 +16,16 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property $id int
- * @property $public_key string
- * @property $name string
- * @property $description string
- * @property $invite_code string
- * @property $default_role string
+ * @property int $id
+ * @property string $public_key
+ * @property string $name
+ * @property string $description
+ * @property string $invite_code
+ * @property string $default_role
  *
- * @property Collection $teamusers
- * @property Collection $members
- * @property Collection $dungeonroutes
+ * @property Collection|TeamUser[] $teamusers
+ * @property Collection|User[] $members
+ * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
  */
@@ -50,25 +50,25 @@ class Team extends Model
     /**
      * @return HasMany
      */
-    function teamusers(): HasMany
+    public function teamusers(): HasMany
     {
-        return $this->hasMany('App\Models\TeamUser');
+        return $this->hasMany(TeamUser::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    function members(): BelongsToMany
+    public function members(): BelongsToMany
     {
-        return $this->belongsToMany('App\User', 'team_users');
+        return $this->belongsToMany(User::class, 'team_users');
     }
 
     /**
      * @return HasMany
      */
-    function dungeonroutes(): HasMany
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**

@@ -75,6 +75,7 @@ class MapObject extends Signalable {
     _getAttributes(force = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        let self = this;
         let selectFactions = [];
         let factions = this.map.options.factions;
 
@@ -112,7 +113,10 @@ class MapObject extends Signalable {
                 type: 'select',
                 values: selectFactions,
                 admin: true,
-                show_default: false
+                show_default: false,
+                setter: function (value) {
+                    self.faction = value === '' || value === null ? 'any' : value;
+                }
             }),
             new Attribute({
                 name: 'teeming',
@@ -298,28 +302,31 @@ class MapObject extends Signalable {
                 if (attribute.type === 'object' && attribute !== parentAttribute) {
                     // Recursively init the popup
                     this._initPopup(attribute);
-                } else if (attribute.isEditable() && attribute.type === 'color') {
-                    // Clean up the previous instance if any
-                    if (typeof attribute._pickr !== 'undefined') {
-                        // Unset it after to be sure to clear it for the next time
-                        attributes[index]._tempPickrColor = null;
-                        attributes[index]._pickr.destroyAndRemove();
-                    }
-                    //
-                    attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                        el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
-                        default: this._getValue(name, parentAttribute)
-                    })).on('save', (color, instance) => {
-                        // Apply the new color
-                        let newColor = '#' + color.toHEXA().join('');
-                        // Only save when the color is valid
-                        if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
-                            $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                } else if (attribute.isEditable()) {
+                    if (attribute.type === 'color') {
+                        // Clean up the previous instance if any
+                        if (typeof attribute._pickr !== 'undefined') {
+                            // Unset it after to be sure to clear it for the next time
+                            attributes[index]._tempPickrColor = null;
+                            attributes[index]._pickr.destroyAndRemove();
                         }
+                        attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+                            el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
+                            default: this._getValue(name, parentAttribute)
+                        })).on('save', (color, instance) => {
+                            // Apply the new color
+                            let newColor = '#' + color.toHEXA().join('');
+                            // Only save when the color is valid
+                            if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
+                                $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                            }
 
-                        // Reset ourselves
-                        instance.hide();
-                    });
+                            // Reset ourselves
+                            instance.hide();
+                        });
+                    } else if (attribute.type === 'button') {
+                        $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`).on('click', attribute.clicked);
+                    }
                 }
             }
         }
@@ -371,6 +378,10 @@ class MapObject extends Signalable {
                         case 'double':
                             val = parseFloat(val);
                             break;
+                    }
+
+                    if (typeof val === 'number' && isNaN(val)) {
+                        val = null;
                     }
 
                     this._setValue(name, val, parentAttribute);
@@ -426,6 +437,9 @@ class MapObject extends Signalable {
                         case 'color':
                             handlebarsString = 'map_popup_type_color_template';
                             break;
+                        case 'button':
+                            handlebarsString = 'map_popup_type_button_template';
+                            break;
                         case 'string':
                         case 'text':
                         case 'int':
@@ -450,7 +464,9 @@ class MapObject extends Signalable {
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
-                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false
+                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
+                        buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
+                        buttonText: attribute.buttonText ?? 'Do action'
                     }));
                 }
             }
@@ -463,7 +479,8 @@ class MapObject extends Signalable {
                 id: this.id,
                 html: result,
                 map_object_name: mapObjectName,
-                map_object_name_pretty: lang.get(`messages.${mapObjectName}`)
+                map_object_name_pretty: lang.get(`messages.${mapObjectName}`),
+                readonly: this.map.options.readonly
             }));
         } else {
             return result;
@@ -911,8 +928,8 @@ class MapObject extends Signalable {
         $.ajax({
             type: self.id > 0 && hasRouteModelBinding ? 'PUT' : 'POST',
             url: (this.options.hasOwnProperty('save_url') ? this.options.save_url :
-                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/`) +
-                (self.id > 0 && hasRouteModelBinding ? self.id : ''),
+                    `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`) +
+                (self.id > 0 && hasRouteModelBinding ? `/${self.id}` : ''),
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {

@@ -648,7 +648,7 @@ class CommonMapsMap extends InlineCode {
             // Strip the last two elements (<number>/mapping)
             pathSplit.splice(-2);
             pathname = pathSplit.join('/');
-            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
+            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping?mapping_version=${getState().getMapContext().getMappingVersion().id}`;
         } else {
             // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
             if (isNumeric(pathSplit[pathSplit.length - 1])) {
@@ -674,7 +674,6 @@ class CommonMapsMap extends InlineCode {
      */
     _mdtAutoSolve() {
         let enemiesToSolve = this._getMDTUnmappedEnemies();
-        console.log(enemiesToSolve);
 
         for (let index in enemiesToSolve) {
             let enemyToSolve = enemiesToSolve[index];
@@ -703,7 +702,7 @@ class CommonMapsMap extends InlineCode {
 
         for (let index in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[index];
-            if (!enemy.is_mdt && enemy.mdt_id === -1) {
+            if (!enemy.is_mdt && enemy.mdt_id === null) {
                 result.push(enemy);
             }
         }
@@ -722,8 +721,8 @@ class CommonMapsMap extends InlineCode {
         let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         let closestEnemyDistance = 99999999;
-        for (let index in enemyMapObjectGroup.objects) {
-            let enemyCandidate = enemyMapObjectGroup.objects[index];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemyCandidate = enemyMapObjectGroup.objects[key];
             let distance = getDistance([enemyCandidate.lat, enemyCandidate.lng], [targetEnemy.lat, targetEnemy.lng]);
             if (enemyCandidate.is_mdt &&
                 targetEnemy.getMdtNpcId() === enemyCandidate.npc_id &&

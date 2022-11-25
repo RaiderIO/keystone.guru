@@ -8,9 +8,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property $id int The ID of this Affix.
- * @property $affix_id int
- * @property $affix_group_id int
+ * @property int $id The ID of this Affix.
+ * @property int $affix_id
+ * @property int $affix_group_id
  *
  * @property Affix $affix
  * @property AffixGroup $affixgroup
@@ -27,7 +27,7 @@ class AffixGroupCoupling extends CacheModel
      */
     public function affix(): HasOne
     {
-        return $this->hasOne('App\Models\Affix');
+        return $this->hasOne(Affix::class);
     }
 
     /**
@@ -35,6 +35,6 @@ class AffixGroupCoupling extends CacheModel
      */
     public function affixgroup(): HasOne
     {
-        return $this->hasOne('App\Models\AffixGroup\AffixGroup');
+        return $this->hasOne(AffixGroup::class);
     }
 }

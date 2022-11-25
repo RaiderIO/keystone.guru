@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property $id int
- * @property $dungeon_route_id int
- * @property $floor_id int
- * @property $polyline_id int
- * @property $updated_at string
- * @property $created_at string
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $floor_id
+ * @property int $polyline_id
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @property DungeonRoute $dungeonroute
  * @property Polyline $polyline
@@ -36,17 +36,17 @@ class Path extends Model
      *
      * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
      * @return HasOne
      */
-    function polyline()
+    public function polyline(): HasOne
     {
-        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', get_class($this));
     }
 
     /**
@@ -54,9 +54,9 @@ class Path extends Model
      *
      * @return BelongsTo
      */
-    function floor()
+    public function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     public static function boot()
@@ -66,14 +66,8 @@ class Path extends Model
         // Delete Path properly if it gets deleted
         static::deleting(function ($item) {
             /** @var $item HasLinkedAwakenedObelisk */
-            if ($item->linkedawakenedobelisks !== null) {
-                $item->linkedawakenedobelisks()->delete();
-            }
-
-            /** @var $item Path */
-            if ($item->polyline !== null) {
-                $item->polyline->delete();
-            }
+            $item->linkedawakenedobelisks()->delete();
+            $item->polyline()->delete();
         });
     }
 }

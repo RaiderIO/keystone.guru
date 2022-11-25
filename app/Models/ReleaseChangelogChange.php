@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 /**
  * @property int $id
  * @property int $release_changelog_id
@@ -12,7 +16,7 @@ namespace App\Models;
  * @property ReleaseChangelogCategory $category
  * @property ReleaseChangelog $changelog
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ReleaseChangelogChange extends CacheModel
 {
@@ -22,18 +26,18 @@ class ReleaseChangelogChange extends CacheModel
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function category()
+    public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ReleaseChangelogCategory', 'release_changelog_category_id');
+        return $this->belongsTo(ReleaseChangelogCategory::class, 'release_changelog_category_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    function changelog()
+    public function changelog(): HasOne
     {
-        return $this->hasOne('App\Models\ReleaseChangelog');
+        return $this->hasOne(ReleaseChangelog::class);
     }
 }
