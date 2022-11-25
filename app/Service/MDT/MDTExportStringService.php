@@ -115,7 +115,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
         /** @var Collection|KillZone[] $killZones */
-        $killZones = $this->dungeonRoute->killzones()->with(['enemies'])->get();
+        $killZones = $this->dungeonRoute->killzones()->get();
         foreach ($killZones as $killZone) {
             $pull = [];
 

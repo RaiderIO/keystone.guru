@@ -391,6 +391,10 @@ class Enemy extends VersionableMapObject {
             this.setDefaultVisible(this.shouldBeVisible());
         }
 
+        if (this.shouldBeIgnored()) {
+            this.setVisible(false);
+        }
+
         this.visual = new EnemyVisual(this.map, this, this.layer);
     }
 
@@ -700,14 +704,15 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
-     * @inheritDoc
+     *
+     * @returns {boolean}
      */
-    shouldBeVisible() {
+    shouldBeIgnored() {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
                 // console.warn(`Hiding awakened enemy linked to last boss since it's already killed in the map ${this.id}`);
-                return false;
+                return true;
             }
         }
 
@@ -725,7 +730,7 @@ class Enemy extends VersionableMapObject {
                     // MDT placeholders are only to suppress warnings when importing - don't show these on the map
                     this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
-                    return false;
+                    return true;
                 }
             }
         }
@@ -733,6 +738,17 @@ class Enemy extends VersionableMapObject {
         // Hide MDT enemies
         if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
             // console.warn(`Hiding MDT enemy since MDT mapping mode is disabled ${this.id}`);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    shouldBeVisible() {
+        if (this.shouldBeIgnored()) {
             return false;
         }
 
