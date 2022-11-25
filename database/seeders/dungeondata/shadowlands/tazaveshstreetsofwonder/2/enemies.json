@@ -183,7 +183,7 @@
         "floor_id": 102,
         "mdt_id": null,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "no_shrouded",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

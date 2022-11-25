@@ -1306,7 +1306,7 @@
         "enemy_patrol_id": null,
         "npc_id": 95885,
         "floor_id": 38,
-        "mdt_id": null,
+        "mdt_id": 1,
         "mdt_npc_id": null,
         "seasonal_type": null,
         "seasonal_index": null,
