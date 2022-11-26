@@ -4900,31 +4900,6 @@
         }
     },
     {
-        "id": 5885,
-        "mapping_version_id": 31,
-        "enemy_pack_id": null,
-        "enemy_patrol_id": null,
-        "npc_id": 168022,
-        "floor_id": 81,
-        "mdt_id": 12,
-        "mdt_npc_id": null,
-        "seasonal_type": null,
-        "seasonal_index": null,
-        "teeming": null,
-        "faction": "any",
-        "required": 0,
-        "skippable": 1,
-        "enemy_forces_override": null,
-        "enemy_forces_override_teeming": null,
-        "lat": -64.69,
-        "lng": 257.38,
-        "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 168022
-        }
-    },
-    {
         "id": 5886,
         "mapping_version_id": 31,
         "enemy_pack_id": null,
