@@ -133,15 +133,20 @@ class KillZone extends Model
     /**
      * @return array{lat: float, lng: float}
      */
-    public function getKillLocation(): array
+    public function getKillLocation(): ?array
     {
         if (isset($this->lat) && isset($this->lng)) {
             return ['lat' => $this->lat, 'lng' => $this->lng];
         } else {
+            $enemies = $this->getEnemies();
+
+            if ($enemies->isEmpty()) {
+                return null;
+            }
+
             $totalLng = 0;
             $totalLat = 0;
 
-            $enemies = $this->getEnemies();
             foreach ($enemies as $enemy) {
                 $totalLat += $enemy->lat;
                 $totalLng += $enemy->lng;

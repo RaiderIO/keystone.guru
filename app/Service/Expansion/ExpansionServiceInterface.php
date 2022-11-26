@@ -24,6 +24,11 @@ interface ExpansionServiceInterface
     public function getCurrentExpansion(): Expansion;
 
     /**
+     * @return Expansion|null
+     */
+    public function getNextExpansion(): ?Expansion;
+
+    /**
      * @param Expansion $expansion
      * @return ExpansionData
      */
