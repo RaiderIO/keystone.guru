@@ -109,5 +109,9 @@ return [
         'name'        => 'Shrouded',
         'description' => 'Nathrezim infiltrators have disguised themselves among enemies throughout the dungeon. Cartel Ta will reward you handsomely for assisting in their capture.',
     ],
+    'thundering'              => [
+        'name'        => 'Thundering',
+        'description' => 'Enemies have 5% more health. While in combat, players are periodically overcharged with primal power from Raszageth\'s unending storm. This power comes with great risk, and failure to discharge it quickly can have stunning consequences.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 ];
