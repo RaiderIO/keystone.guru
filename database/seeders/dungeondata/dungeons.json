@@ -5667,8 +5667,84 @@
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 3,
+        "floors": [
+            {
+                "id": 163,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.crypt_of_the_ancients",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 513,
+                        "floor1_id": 163,
+                        "floor2_id": 164,
+                        "direction": "right"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 164,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.altar_of_shadows",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 511,
+                        "floor1_id": 164,
+                        "floor2_id": 163,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 512,
+                        "floor1_id": 164,
+                        "floor2_id": 165,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 165,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.edge_of_reality",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 510,
+                        "floor1_id": 165,
+                        "floor2_id": 164,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
     },
     {
         "id": 76,
@@ -5685,7 +5761,24 @@
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 166,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.mop.temple_of_the_jade_serpent.floors.temple_of_the_jade_serpent",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
     }
 ]
