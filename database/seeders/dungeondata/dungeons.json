@@ -5058,5 +5058,634 @@
         "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
+    },
+    {
+        "id": 67,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "dragonacademy",
+        "name": "dungeons.dragonflight.algeth_ar_academy.name",
+        "slug": "algeth-ar-academy",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 3,
+        "floors": [
+            {
+                "id": 144,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.algeth_ar_academy.floors.algeth_ar_academy",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 488,
+                        "floor1_id": 144,
+                        "floor2_id": 145,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 489,
+                        "floor1_id": 144,
+                        "floor2_id": 146,
+                        "direction": "right"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 145,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.algeth_ar_academy.floors.the_pitch",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 490,
+                        "floor1_id": 145,
+                        "floor2_id": 144,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 146,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.algeth_ar_academy.floors.the_headteachers_enclave",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 491,
+                        "floor1_id": 146,
+                        "floor2_id": 144,
+                        "direction": "left"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 68,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "brackenhide",
+        "name": "dungeons.dragonflight.brackenhide_hollow.name",
+        "slug": "brackenhide-hollow",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 147,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.brackenhide_hollow.floors.brackenhide_hollow",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 492,
+                        "floor1_id": 147,
+                        "floor2_id": 148,
+                        "direction": "right"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 148,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.brackenhide_hollow.floors.den_of_decay",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 493,
+                        "floor1_id": 148,
+                        "floor2_id": 147,
+                        "direction": "left"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 69,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "hallsofinfusion",
+        "name": "dungeons.dragonflight.halls_of_infusion.name",
+        "slug": "halls-of-infusion",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 149,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.halls_of_infusion.floors.infusers_rotunda",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 494,
+                        "floor1_id": 149,
+                        "floor2_id": 150,
+                        "direction": "left"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 150,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.halls_of_infusion.floors.infusion_chamber",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 495,
+                        "floor1_id": 150,
+                        "floor2_id": 149,
+                        "direction": "right"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 70,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "neltharus",
+        "name": "dungeons.dragonflight.neltharus.name",
+        "slug": "neltharus",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 151,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.neltharus.floors.the_burning_cauldron",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 496,
+                        "floor1_id": 151,
+                        "floor2_id": 152,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 152,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.neltharus.floors.chamber_of_flames",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 497,
+                        "floor1_id": 152,
+                        "floor2_id": 151,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 71,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "nokhudoffensive",
+        "name": "dungeons.dragonflight.nokhud_offensive.name",
+        "slug": "nokhud-offensive",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 153,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.nokhud_offensive.floors.nokhud_offensive",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 72,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "rubylifepools",
+        "name": "dungeons.dragonflight.ruby_life_pools.name",
+        "slug": "ruby-life-pools",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 154,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.ruby_life_pools.floors.infusion_chambers",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 498,
+                        "floor1_id": 154,
+                        "floor2_id": 155,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 155,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.ruby_life_pools.floors.ruby_overlook",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 499,
+                        "floor1_id": 155,
+                        "floor2_id": 154,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 73,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "theazurevault",
+        "name": "dungeons.dragonflight.the_azure_vault.name",
+        "slug": "the-azure-vault",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 5,
+        "floors": [
+            {
+                "id": 156,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.the_arcane_conservatory",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 506,
+                        "floor1_id": 156,
+                        "floor2_id": 157,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 157,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.crystal_chambers",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 158,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.mausoleum_of_legends",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 507,
+                        "floor1_id": 158,
+                        "floor2_id": 157,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 508,
+                        "floor1_id": 158,
+                        "floor2_id": 159,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 159,
+                "index": 4,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.the_infinity_seal",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 503,
+                        "floor1_id": 159,
+                        "floor2_id": 158,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 504,
+                        "floor1_id": 159,
+                        "floor2_id": 160,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 160,
+                "index": 5,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.sindragosas_lament",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 505,
+                        "floor1_id": 160,
+                        "floor2_id": 156,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 74,
+        "expansion_id": 10,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "uldamanlegacyoftyr",
+        "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.name",
+        "slug": "uldaman-legacy-of-tyr",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 161,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.floors.hall_of_the_keepers",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 487,
+                        "floor1_id": 161,
+                        "floor2_id": 162,
+                        "direction": "right"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 162,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.floors.the_vault_of_tyr",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 486,
+                        "floor1_id": 162,
+                        "floor2_id": 161,
+                        "direction": "left"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
+    },
+    {
+        "id": 75,
+        "expansion_id": 9,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "shadowmoonburialgrounds",
+        "name": "dungeons.wod.shadowmoon_burial_grounds.name",
+        "slug": "shadowmoon-burial-grounds",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 76,
+        "expansion_id": 8,
+        "zone_id": 0,
+        "map_id": 0,
+        "mdt_id": 0,
+        "key": "templeofthejadeserpent",
+        "name": "dungeons.mop.temple_of_the_jade_serpent.name",
+        "slug": "temple-of-the-jade-serpent",
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": 0,
+        "enemy_forces_shrouded_zul_gamux": 0,
+        "timer_max_seconds": 0,
+        "speedrun_enabled": 0,
+        "floor_count": 0,
+        "floors": []
     }
 ]
