@@ -519,9 +519,9 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @return MappingVersion
+     * @return MappingVersion|null
      */
-    public function getCurrentMappingVersion(): MappingVersion
+    public function getCurrentMappingVersion(): ?MappingVersion
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = $this->mappingversions()->limit(1)->first();
