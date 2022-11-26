@@ -120,9 +120,9 @@ class SeasonsSeeder extends Seeder
                 'presets'           => 0,
                 'affix_group_count' => 10,
                 'dungeons'          => Dungeon::whereIn('key', [
-                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
                     Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-                    Dungeon::DUNGEON_NOKHUD_OFFENSIVE,
+                    Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE,
+                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
                     Dungeon::DUNGEON_THE_AZURE_VAULT,
                     Dungeon::DUNGEON_COURT_OF_STARS,
                     Dungeon::DUNGEON_HALLS_OF_VALOR,

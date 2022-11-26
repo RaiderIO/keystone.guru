@@ -53,6 +53,7 @@ class Conversion
         Expansion::EXPANSION_WOD => [
 //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
 //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+//            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
         ],
 
         Expansion::EXPANSION_LEGION => [
@@ -115,7 +116,7 @@ class Conversion
             Dungeon::DUNGEON_NELTHARUS                  => 'Neltharus',
             Dungeon::DUNGEON_RUBY_LIFE_POOLS            => 'RubyLifePools',
             Dungeon::DUNGEON_THE_AZURE_VAULT            => 'TheAzureVault',
-            Dungeon::DUNGEON_NOKHUD_OFFENSIVE           => 'TheNokhudOffensive',
+            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE       => 'TheNokhudOffensive',
             Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR      => 'UldamanLegacyOfTyr',
         ],
     ];

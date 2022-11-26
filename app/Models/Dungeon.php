@@ -227,13 +227,13 @@ class Dungeon extends CacheModel
     const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
 
     // Dragonflight
+    const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
     const DUNGEON_BRACKENHIDE_HOLLOW    = 'brackenhide';
     const DUNGEON_HALLS_OF_INFUSION     = 'hallsofinfusion';
     const DUNGEON_NELTHARUS             = 'neltharus';
     const DUNGEON_RUBY_LIFE_POOLS       = 'rubylifepools';
-    const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
     const DUNGEON_THE_AZURE_VAULT       = 'theazurevault';
-    const DUNGEON_NOKHUD_OFFENSIVE      = 'nokhudoffensive';
+    const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     const ALL_WOTLK = [
@@ -323,7 +323,7 @@ class Dungeon extends CacheModel
         self::DUNGEON_RUBY_LIFE_POOLS,
         self::DUNGEON_ALGETH_AR_ACADEMY,
         self::DUNGEON_THE_AZURE_VAULT,
-        self::DUNGEON_NOKHUD_OFFENSIVE,
+        self::DUNGEON_THE_NOKHUD_OFFENSIVE,
         self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
     ];
 

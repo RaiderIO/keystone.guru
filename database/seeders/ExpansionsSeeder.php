@@ -68,10 +68,10 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#875f03',
                 'released_at' => Carbon::make('2014-11-13 00:00:00'),
             ]), 'expansions.dragonflight.name'                => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_DRAGONFLIGHT,
                 'color'       => '#b0a497',
-                'released_at' => Carbon::make('2022-12-31 00:00:00'),
+                'released_at' => Carbon::make('2022-11-29 00:00:00'),
             ]),
         ];
 

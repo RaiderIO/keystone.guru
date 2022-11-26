@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'wotlk'       => [
+    'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [
             'name'   => 'Ahn\'kahet: The Old Kingdom',
             'floors' => [
@@ -186,26 +186,26 @@ return [
             ],
         ],
     ],
-    'wod'         => [
-        'auchindoun'           => [
+    'wod'          => [
+        'auchindoun'                => [
             'name'   => 'Auchindoun',
             'floors' => [
                 'auchindoun' => 'Auchindoun',
             ],
         ],
-        'bloodmaul_slag_mines' => [
+        'bloodmaul_slag_mines'      => [
             'name'   => 'Bloodmaul Slag Mines',
             'floors' => [
                 'bloodmaul_slag_mines' => 'Bloodmaul Slag Mines',
             ],
         ],
-        'iron_docks'           => [
+        'iron_docks'                => [
             'name'   => 'Iron Docks',
             'floors' => [
                 'iron_docks' => 'Iron Docks',
             ],
         ],
-        'grimrail_depot'       => [
+        'grimrail_depot'            => [
             'name'   => 'Grimrail Depot',
             'floors' => [
                 'rafters'            => 'Rafters',
@@ -214,8 +214,24 @@ return [
                 'forward_train_cars' => 'Forward Train Cars',
             ],
         ],
+        'shadowmoon_burial_grounds' => [
+            'name'   => 'Shadowmoon Burial Grounds',
+            'floors' => [
+                'crypt_of_the_ancients' => 'Crypt of the Ancients',
+                'altar_of_shadow'       => 'Altar of Shadow',
+                'edge_of_reality'       => 'Edge of Reality',
+            ],
+        ],
     ],
-    'legion'      => [
+    'mop'          => [
+        'temple_of_the_jade_serpent' => [
+            'name'   => 'Temple of the Jade Serpent',
+            'floors' => [
+                'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
+            ],
+        ],
+    ],
+    'legion'       => [
         'arcway'               => [
             'name'   => 'The Arcway',
             'floors' => [
@@ -324,7 +340,7 @@ return [
             ],
         ],
     ],
-    'bfa'         => [
+    'bfa'          => [
         'atal_dazar'                => [
             'name'   => 'Atal\'Dazar',
             'floors' => [
@@ -427,7 +443,7 @@ return [
             ],
         ],
     ],
-    'shadowlands' => [
+    'shadowlands'  => [
         'de_other_side'              => [
             'name'   => 'De Other Side',
             'floors' => [
@@ -508,6 +524,67 @@ return [
                 'aggramars_vault'   => 'Aggramar\'s Vault',
                 'boralus_harbor'    => 'Boralus Harbor',
                 'the_opulent_nexus' => 'The Opulent Nexus',
+            ],
+        ],
+    ],
+    'dragonflight' => [
+        'algeth_ar_academy'     => [
+            'name'   => 'Algeth\'ar Academy',
+            'floors' => [
+                'algeth_ar_academy'        => 'Algeth\'ar Academy',
+                'the_pitch'                => 'The Pitch',
+                'the_headteachers_enclave' => 'The Headteacher\'s Enclave',
+            ],
+        ],
+        'brackenhide_hollow'    => [
+            'name'   => 'Brackenhide Hollow',
+            'floors' => [
+                'brackenhide_hollow' => 'Brackenhide Hollow',
+                'den_of_decay'       => 'Den of Decay',
+            ],
+        ],
+        'halls_of_infusion'     => [
+            'name'   => 'Halls of Infusion',
+            'floors' => [
+                'infusers_rotunda' => 'Infuser\'s Rotunda',
+                'infusion_chamber' => 'Infusion Chamber',
+            ],
+        ],
+        'neltharus'             => [
+            'name'   => 'Nethalrus',
+            'floors' => [
+                'the_burning_cauldron' => 'The Burning Cauldron',
+                'chamber_of_flames'    => 'Chamber of Flames',
+            ],
+        ],
+        'ruby_life_pools'       => [
+            'name'   => 'Ruby Life Pools',
+            'floors' => [
+                'infusion_chambers' => 'Infusion Chambers',
+                'ruby_overlook'     => 'Ruby Overlook',
+            ],
+        ],
+        'the_azure_vault'       => [
+            'name'   => 'The Azure Vault',
+            'floors' => [
+                'the_arcane_conservatory' => 'The Arcane Conservatory',
+                'upper_chamber'           => 'Crystal Chambers',
+                'mausoleum_of_legends'    => 'Mausoleum of Legends',
+                'the_infinity_seal'       => 'The Infinity Seal',
+                'sindragosas_lament'      => 'Sindragosa\'s Lament',
+            ],
+        ],
+        'nokhud_offensive'      => [
+            'name'   => 'The Nokhud Offensive',
+            'floors' => [
+                'the_nokhud_offensive' => 'The Nokhud Offensive',
+            ],
+        ],
+        'uldaman_legacy_of_tyr' => [
+            'name'   => 'Uldaman: Legacy of Tyr',
+            'floors' => [
+                'hall_of_the_keepers' => 'Hall of the Keepers',
+                'the_vault_of_tyr'    => 'The Vault of Tyr',
             ],
         ],
     ],
