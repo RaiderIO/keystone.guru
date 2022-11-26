@@ -1,0 +1,16 @@
+{
+    "id": 149,
+    "release_changelog_id": 156,
+    "version": "v6.0.2",
+    "title": "Hotfixes for release v6.0.1",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2022-11-25T23:47:23+00:00",
+    "updated_at": "2022-11-26T00:03:53+00:00",
+    "changelog": {
+        "id": 156,
+        "release_id": 149,
+        "description": "The MDT auto-solver did not properly run and coupled enemies to MDT enemies that it shouldn't have done.",
+        "changes": []
+    }
+}
