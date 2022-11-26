@@ -5732,7 +5732,7 @@
         "npc_id": 129547,
         "floor_id": 43,
         "mdt_id": 1,
-        "mdt_npc_id": null,
+        "mdt_npc_id": 129547000,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,

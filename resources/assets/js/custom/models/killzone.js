@@ -846,7 +846,11 @@ class KillZone extends MapObject {
             /** @type Enemy */
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
-                self._addEnemy(enemy);
+                if (!enemy.shouldBeIgnored()) {
+                    self._addEnemy(enemy);
+                } else {
+                    console.log(`Not adding enemy ${enemy.id} to killzone ${this.id}, enemy should be ignored!`);
+                }
             } else {
                 console.warn('Add: unable to find enemy with id ' + enemyId + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');

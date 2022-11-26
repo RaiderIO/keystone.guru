@@ -489,8 +489,11 @@ class DungeonRoute extends Model
                 )
             ' : 'npcs.enemy_forces';
 
+            // This produces a list of enemies with their enemy forces. This also does not count duplicate enemies across
+            // the same or multiple pulls twice. This may have been introduced with migration to mapping versions but idk
             $queryResult = DB::select(sprintf('
                 select dungeon_routes.id,
+               CAST(
                    CAST(IFNULL(
                            IF(dungeon_routes.teeming = 1,
                               SUM(
@@ -512,7 +515,7 @@ class DungeonRoute extends Model
                                           )
                                   )
                                ), 0
-                       ) AS SIGNED) as enemy_forces
+                       ) AS SIGNED)  / COUNT(concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)) AS SIGNED) as enemy_forces
             from `dungeon_routes`
                      left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                      left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
@@ -523,17 +526,16 @@ class DungeonRoute extends Model
                      left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                 where `dungeon_routes`.id = :id
                     AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
-            group by `dungeon_routes`.id
+            group by `dungeon_routes`.id, concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)
             ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['id' => $this->id]);
 
             // Could be if no enemies were assigned yet
             if (!empty($queryResult)) {
-                $result = $queryResult[0]->enemy_forces;
+                foreach($queryResult as $row){
+                    $result += $row->enemy_forces;
+                }
             }
         }
-        /**
-         *
-         */
 
         return $result;
     }
@@ -864,6 +866,7 @@ class DungeonRoute extends Model
         $dungeonroute->clone_of           = $this->public_key;
         $dungeonroute->author_id          = Auth::id();
         $dungeonroute->dungeon_id         = $this->dungeon_id;
+        $dungeonroute->mapping_version_id = $this->mapping_version_id;
         $dungeonroute->faction_id         = $this->faction_id;
         $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
         // Do not clone team_id; user assigns the team himself
@@ -904,8 +907,8 @@ class DungeonRoute extends Model
 
     /**
      * Clone relations of this dungeonroute into another dungeon route.
-     * @param $dungeonroute DungeonRoute The RECEIVER of the target $relations
-     * @param $relations array The relations that you want to clone.
+     * @param DungeonRoute $dungeonroute The RECEIVER of the target $relations
+     * @param array $relations The relations that you want to clone.
      */
     public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations)
     {
@@ -1316,13 +1319,13 @@ class DungeonRoute extends Model
 
             // Mapping related items
             $item->enemyraidmarkers()->delete();
-            foreach($item->brushlines as $brushline){
+            foreach ($item->brushlines as $brushline) {
                 $brushline->delete();
             }
-            foreach($item->paths as $path){
+            foreach ($item->paths as $path) {
                 $path->delete();
             }
-            foreach($item->killzones as $killZone){
+            foreach ($item->killzones as $killZone) {
                 $killZone->delete();
             }
             $item->mapicons()->delete();
@@ -1331,7 +1334,7 @@ class DungeonRoute extends Model
             // External
             $item->ratings()->delete();
             $item->favorites()->delete();
-            foreach($item->livesessions as $liveSession){
+            foreach ($item->livesessions as $liveSession) {
                 $liveSession->delete();
             }
 

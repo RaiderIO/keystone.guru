@@ -85,6 +85,7 @@ trait ListsEnemies
                     // Match found, assign and quit
                     $mdtEnemy->mapping_version_id = $enemy->mapping_version_id;
                     $mdtEnemy->enemy_id           = $enemy->id;
+
                     break;
                 }
             }
@@ -93,6 +94,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $mdtEnemies->toArray()];
+        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $mdtEnemies->values()->toArray()];
     }
 }
