@@ -85,6 +85,13 @@ trait ListsEnemies
                     // Match found, assign and quit
                     $mdtEnemy->mapping_version_id = $enemy->mapping_version_id;
                     $mdtEnemy->enemy_id           = $enemy->id;
+
+                    // Offset shrouded enemies since they're stacked EXACTLY on top of the enemy that they replaced
+                    if (in_array($mdtEnemy->npc_id, [189878, 190128])) {
+                        $mdtEnemy->lat += 3;
+                        $mdtEnemy->lng += 3;
+                    }
+
                     break;
                 }
             }

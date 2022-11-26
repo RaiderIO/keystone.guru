@@ -32,10 +32,13 @@ class EnemyVisualMain extends EnemyVisualIcon {
             }
 
             let mapContext = state.getMapContext();
-            if (this.enemyvisual.enemy.isShrouded() && mapContext.hasAffix(AFFIX_SHROUDED)) {
+            let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
+            if (this.enemyvisual.enemy.isShrouded() && hasShroudedAffix) {
                 mainVisualInnerClasses.push('shrouded');
-            } else if (this.enemyvisual.enemy.isShroudedZulGamux()) {
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux() && hasShroudedAffix) {
                 mainVisualInnerClasses.push('shrouded_zul_gamux');
+            } else if (this.enemyvisual.enemy.isNotShrouded() && state.isMapAdmin()) {
+                mainVisualInnerClasses.push('no_shrouded');
             } else if (this.enemyvisual.enemy.isInspiring()) {
                 mainVisualInnerClasses.push('inspiring');
             } else if (this.enemyvisual.enemy.isEncrypted()) {
