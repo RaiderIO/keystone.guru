@@ -35,7 +35,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
 
         foreach ($this->options->dungeonroute->killzones as $killZone) {
             // Skip empty pulls
-            if ($killZone->killzoneenemies()->count() === 0) {
+            if ($killZone->getEnemies()->count() === 0) {
                 continue;
             }
 

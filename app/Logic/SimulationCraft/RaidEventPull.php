@@ -67,7 +67,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     {
         // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
         $killLocation = $killZone->getKillLocation();
-        $floor        = $killZone->getDominantFloor();
+        // No enemies killed, no location, no pull, no delay
+        if ($killLocation === null) {
+            return 0;
+        }
+
+        $floor = $killZone->getDominantFloor();
 
         // On the same floor it's easy - just calculate the distance between and then subtract any mounted speed
         if ($previousKillFloor->id === $floor->id) {

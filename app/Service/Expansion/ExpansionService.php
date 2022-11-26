@@ -32,6 +32,14 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
+     * @return Expansion|null
+     */
+    public function getNextExpansion(): ?Expansion
+    {
+        return $this->getExpansionAt(Carbon::now()->addWeeks(4));
+    }
+
+    /**
      * @inheritDoc
      */
     public function getData(Expansion $expansion): ExpansionData
