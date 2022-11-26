@@ -1,0 +1,27 @@
+{
+    "id": 150,
+    "release_changelog_id": 157,
+    "version": "v6.0.3",
+    "title": "Corrected mapping in various dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-11-26T14:31:07+00:00",
+    "updated_at": "2022-11-26T14:31:07+00:00",
+    "changelog": {
+        "id": 157,
+        "release_id": 150,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 157,
+                "release_changelog_category_id": 5,
+                "ticket_id": 864,
+                "change": "Fixed an issue where killing the same enemy twice would calculate that enemy twice for enemy forces.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
