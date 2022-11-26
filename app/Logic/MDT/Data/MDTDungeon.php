@@ -210,6 +210,8 @@ class MDTDungeon
 
                         if (isset($clone['disguised']) && $clone['disguised']) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
+                            $enemy->lat += 2;
+                            $enemy->lng += 2;
                         }
 
                         $enemies->push($enemy);

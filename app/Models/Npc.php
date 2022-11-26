@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -36,7 +37,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Npc extends CacheModel
+class Npc extends CacheModel implements MappingModelInterface
 {
     public $incrementing = false;
     public $timestamps = false;
@@ -220,5 +221,13 @@ class Npc extends CacheModel
             $item->npcbolsteringwhitelists()->delete();
             $item->npcspells()->delete();
         });
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->dungeon_id;
     }
 }
