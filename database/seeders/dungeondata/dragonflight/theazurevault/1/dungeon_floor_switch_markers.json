@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "id": 255,
+        "mapping_version_id": 71,
+        "floor_id": 156,
+        "target_floor_id": 157,
+        "lat": -113,
+        "lng": 172
+    }
+]
