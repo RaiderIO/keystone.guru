@@ -600,7 +600,7 @@
         "mdt_mapping_hash": "67dcc3f13f897c6875bbcdf63c644877",
         "created_at": "2022-11-28T21:11:33.000000Z",
         "updated_at": "2022-11-28T21:11:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 68,
@@ -609,7 +609,7 @@
         "mdt_mapping_hash": "16d1076b0c4fa181e4daa9567360febb",
         "created_at": "2022-11-28T21:11:41.000000Z",
         "updated_at": "2022-11-28T21:11:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 69,
@@ -618,7 +618,7 @@
         "mdt_mapping_hash": "3a37157a49388b1d3fc488ded4f88ed7",
         "created_at": "2022-11-28T21:11:48.000000Z",
         "updated_at": "2022-11-28T21:11:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 70,
@@ -627,7 +627,7 @@
         "mdt_mapping_hash": "e22e315f506c3dcc38cfc8cc56806193",
         "created_at": "2022-11-28T21:11:55.000000Z",
         "updated_at": "2022-11-28T21:11:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 71,
@@ -636,7 +636,7 @@
         "mdt_mapping_hash": "8b6c583d55471f0daa0a000a94a01133",
         "created_at": "2022-11-28T21:12:24.000000Z",
         "updated_at": "2022-11-28T21:12:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 72,
@@ -645,7 +645,7 @@
         "mdt_mapping_hash": "f522f02c5d24c337ab6912a23241d887",
         "created_at": "2022-11-28T21:12:35.000000Z",
         "updated_at": "2022-11-28T21:12:35.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 73,
@@ -654,7 +654,7 @@
         "mdt_mapping_hash": "2193760eb964ec799ab8d05ceb642224",
         "created_at": "2022-11-28T21:12:43.000000Z",
         "updated_at": "2022-11-28T21:12:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 74,
@@ -663,7 +663,7 @@
         "mdt_mapping_hash": "f02b4494049b731443ff1b45f43126d4",
         "created_at": "2022-11-28T21:12:49.000000Z",
         "updated_at": "2022-11-28T21:12:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 75,
@@ -672,6 +672,6 @@
         "mdt_mapping_hash": "945d72d5ec997c56e915f67679873c84",
         "created_at": "2022-11-28T21:12:55.000000Z",
         "updated_at": "2022-11-28T21:12:55.000000Z",
-        "merged": false
+        "merged": true
     }
 ]
