@@ -213,6 +213,7 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
+            'expansion_routes'        => 'Expansion routes',
             'routes'                  => ':expansion',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',

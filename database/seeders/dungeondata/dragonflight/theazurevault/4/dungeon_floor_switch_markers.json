@@ -1,0 +1,18 @@
+[
+    {
+        "id": 260,
+        "mapping_version_id": 71,
+        "floor_id": 159,
+        "target_floor_id": 160,
+        "lat": -112,
+        "lng": 177
+    },
+    {
+        "id": 261,
+        "mapping_version_id": 71,
+        "floor_id": 159,
+        "target_floor_id": 158,
+        "lat": -67,
+        "lng": 340
+    }
+]

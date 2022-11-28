@@ -71,7 +71,9 @@ class ViewService implements ViewServiceInterface
 
             $currentExpansion = $this->expansionService->getCurrentExpansion();
             $currentSeason = $currentExpansion->currentseason;
-            $nextSeason = $currentExpansion->nextseason;
+
+            $nextExpansion = $this->expansionService->getNextExpansion() ?? $currentExpansion;
+            $nextSeason = $nextExpansion->nextseason;
 
             /** @var Release $latestRelease */
             $latestRelease          = Release::latest()->first();

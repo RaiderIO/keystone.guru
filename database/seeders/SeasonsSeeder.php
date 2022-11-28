@@ -37,6 +37,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 1,
                 'start'             => '2018-09-04 00:00:00',
                 'presets'           => 3,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
@@ -44,6 +45,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 2,
                 'start'             => '2019-01-23 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
@@ -51,6 +53,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 3,
                 'start'             => '2019-07-10 00:00:00',
                 'presets'           => 3,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_BFA),
@@ -58,6 +61,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 4,
                 'start'             => '2020-01-21 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -65,6 +69,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 1,
                 'start'             => '2020-12-08 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -72,6 +77,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 2,
                 'start'             => '2021-07-06 00:00:00',
                 'presets'           => 2,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_LEGION),
@@ -79,6 +85,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 1,
                 'start'             => '2021-12-28 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -86,6 +93,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 3,
                 'start'             => '2022-03-01 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -93,6 +101,7 @@ class SeasonsSeeder extends Seeder
                 'index'             => 4,
                 'start'             => '2022-08-02 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 12,
                 'dungeons'          => Dungeon::whereIn('key', [
                     Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
                     Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
@@ -109,10 +118,11 @@ class SeasonsSeeder extends Seeder
                 'index'             => 1,
                 'start'             => '2022-12-13 00:00:00',
                 'presets'           => 0,
+                'affix_group_count' => 10,
                 'dungeons'          => Dungeon::whereIn('key', [
-                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
                     Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-                    Dungeon::DUNGEON_NOKHUD_OFFENSIVE,
+                    Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE,
+                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
                     Dungeon::DUNGEON_THE_AZURE_VAULT,
                     Dungeon::DUNGEON_COURT_OF_STARS,
                     Dungeon::DUNGEON_HALLS_OF_VALOR,

@@ -1,6 +1,7 @@
 <?php
 /** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
 /** @var \App\Models\Season $currentSeason */
+/** @var \App\Models\Season $nextSeason */
 
 $navs = [
     route('dungeonroutes.search') => [
@@ -18,14 +19,20 @@ foreach ($activeExpansions as $expansion) {
             __($expansion->name),
 //            $expansion->hasTimewalkingEvent() ?
 //                __('views/common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
-                __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+            __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
+}
+
+if ($nextSeason !== null) {
+    $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
+        'text' => $nextSeason->name
+    ];
 }
 $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
     'text' => $currentSeason->name
 ];
 
-$navs[__('Expansion routes')] = $expansionRoutes;
+$navs[__('views/common.layout.header.expansion_routes')] = $expansionRoutes;
 
 $navs[route('misc.affixes')] = [
     'text' => __('views/common.layout.header.affixes')
@@ -73,11 +80,11 @@ $navs[route('misc.affixes')] = [
                             </a>
                         </li>
                     @else
-                        <?php
-                        /** @noinspection PhpUndefinedVariableInspection */
-                        $headerText = $route;
-                        $dropdownId = \Illuminate\Support\Str::slug($headerText)
-                        ?>
+                            <?php
+                            /** @noinspection PhpUndefinedVariableInspection */
+                            $headerText = $route;
+                            $dropdownId = \Illuminate\Support\Str::slug($headerText)
+                            ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="{{ $dropdownId }}" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

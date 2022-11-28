@@ -16,13 +16,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property $id int
- * @property $expansion_id int
- * @property $seasonal_affix_id int
- * @property $index int
- * @property $start datetime
- * @property $presets int
- * @property $name string Dynamic attribute
+ * @property int $id
+ * @property int $expansion_id
+ * @property int $seasonal_affix_id
+ * @property int $index
+ * @property Carbon $start
+ * @property int $presets
+ * @property int $affix_group_count
+ * @property string $name Dynamic attribute
  *
  * @property Expansion $expansion
  * @property Collection|AffixGroup[] $affixgroups
@@ -34,7 +35,7 @@ class Season extends CacheModel
 {
     use HasStart;
 
-    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets'];
+    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count'];
     public $with = ['expansion', 'affixgroups', 'dungeons'];
     public $timestamps = false;
 

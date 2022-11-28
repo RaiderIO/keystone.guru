@@ -32,8 +32,9 @@ if (!isset($dungeons)) {
     $dungeonsSelect = [];
     // Show a selector to only show all dungeons in a specific season
     if ($showSeasons) {
+        $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [];
         foreach ($seasons as $season) {
-            $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [sprintf('season-%d', $season->id) => $season->name];
+            $dungeonsSelect[__('views/common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
@@ -50,7 +51,7 @@ use Mockery\Exception;
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel
+class Dungeon extends CacheModel implements MappingModelInterface
 {
     /**
      * The accessors to append to the model's array form.
@@ -227,13 +228,13 @@ class Dungeon extends CacheModel
     const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
 
     // Dragonflight
+    const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
     const DUNGEON_BRACKENHIDE_HOLLOW    = 'brackenhide';
     const DUNGEON_HALLS_OF_INFUSION     = 'hallsofinfusion';
     const DUNGEON_NELTHARUS             = 'neltharus';
     const DUNGEON_RUBY_LIFE_POOLS       = 'rubylifepools';
-    const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
     const DUNGEON_THE_AZURE_VAULT       = 'theazurevault';
-    const DUNGEON_NOKHUD_OFFENSIVE      = 'nokhudoffensive';
+    const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     const ALL_WOTLK = [
@@ -323,7 +324,7 @@ class Dungeon extends CacheModel
         self::DUNGEON_RUBY_LIFE_POOLS,
         self::DUNGEON_ALGETH_AR_ACADEMY,
         self::DUNGEON_THE_AZURE_VAULT,
-        self::DUNGEON_NOKHUD_OFFENSIVE,
+        self::DUNGEON_THE_NOKHUD_OFFENSIVE,
         self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
     ];
 
@@ -519,9 +520,9 @@ class Dungeon extends CacheModel
     }
 
     /**
-     * @return MappingVersion
+     * @return MappingVersion|null
      */
-    public function getCurrentMappingVersion(): MappingVersion
+    public function getCurrentMappingVersion(): ?MappingVersion
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = $this->mappingversions()->limit(1)->first();
@@ -691,5 +692,13 @@ class Dungeon extends CacheModel
         static::deleting(function ($someModel) {
             return false;
         });
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->id;
     }
 }

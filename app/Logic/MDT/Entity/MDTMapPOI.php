@@ -34,11 +34,11 @@ class MDTMapPOI implements Arrayable
 
     private string $type;
 
-    private int $target;
+    private ?int $target;
 
-    private int $direction;
+    private ?int $direction;
 
-    private int $connectionIndex;
+    private ?int $connectionIndex;
 
     private float $x;
 
@@ -58,9 +58,9 @@ class MDTMapPOI implements Arrayable
 
         $this->template        = $rawMapPOI['template'];
         $this->type            = $rawMapPOI['type'];
-        $this->target          = $rawMapPOI['target'];
-        $this->direction       = $rawMapPOI['direction'];
-        $this->connectionIndex = $rawMapPOI['connectionIndex'];
+        $this->target          = $rawMapPOI['target'] ?? 0;
+        $this->direction       = $rawMapPOI['direction'] ?? 0;
+        $this->connectionIndex = $rawMapPOI['connectionIndex'] ?? 0;
         $this->x               = $rawMapPOI['x'];
         $this->y               = $rawMapPOI['y'];
 
@@ -98,25 +98,25 @@ class MDTMapPOI implements Arrayable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getTarget(): int
+    public function getTarget(): ?int
     {
         return $this->target;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDirection(): int
+    public function getDirection(): ?int
     {
         return $this->direction;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getConnectionIndex(): int
+    public function getConnectionIndex(): ?int
     {
         return $this->connectionIndex;
     }

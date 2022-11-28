@@ -50,7 +50,13 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->getCurrentMappingVersion());
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            if ($currentMappingVersion === null) {
+                $this->comment(sprintf('Skipping %s, no current mapping version found', __($dungeon->name)));
+                continue;
+            }
+
+            $luaString = $mappingExportService->getMDTMappingAsLuaString($currentMappingVersion);
 
             $name = Conversion::getMDTDungeonName($dungeon->key);
             if ($name === null) {

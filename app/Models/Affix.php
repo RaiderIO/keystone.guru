@@ -44,6 +44,7 @@ class Affix extends CacheModel
     const AFFIX_INFERNAL   = 'Infernal';
     const AFFIX_ENCRYPTED  = 'Encrypted';
     const AFFIX_SHROUDED   = 'Shrouded';
+    const AFFIX_THUNDERING = 'Thundering';
 
     const ALL_AFFIXES = [
         self::AFFIX_BOLSTERING,
@@ -73,6 +74,7 @@ class Affix extends CacheModel
         self::AFFIX_INFERNAL,
         self::AFFIX_ENCRYPTED,
         self::AFFIX_SHROUDED,
+        self::AFFIX_THUNDERING,
     ];
 
     const SEASONAL_AFFIXES = [
@@ -84,6 +86,7 @@ class Affix extends CacheModel
         self::AFFIX_INFERNAL,
         self::AFFIX_ENCRYPTED,
         self::AFFIX_SHROUDED,
+        self::AFFIX_THUNDERING,
     ];
 
     private const SEASONAL_TYPE_AFFIX_MAPPING = [

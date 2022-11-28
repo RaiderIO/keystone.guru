@@ -80,7 +80,13 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                     <div class="row no-gutters justify-content-center align-self-center">
                         <div id="route_title" class="col">
                             <h5 class="mb-0 mr-2">
-                                {{ $title }}
+                                @isset($dungeonroute)
+                                    {{ $title }}
+                                @else
+                                    <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
+                                        {{ sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
+                                    </a>
+                                @endisset
                             </h5>
                         </div>
                         @auth
