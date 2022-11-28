@@ -68,6 +68,12 @@ class APIMapIconController extends APIMappingModelBaseController
                 }
             }
 
+            // Set the mapping version if it was placed in the context of a dungeon
+            if($dungeonroute === null){
+                $mapIcon->mapping_version_id = $validated['mapping_version_id'];
+                $mapIcon->save();
+            }
+
             // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
             if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonroute !== null && $mapIcon->team_id === null) {
                 throw new Exception('Unable to save map icon!');

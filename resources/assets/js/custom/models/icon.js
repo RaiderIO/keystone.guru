@@ -219,7 +219,7 @@ class Icon extends VersionableMapObject {
         this.map_icon_type_id = mapIconTypeId;
 
         // Set the icon and refresh the visual
-        this.map_icon_type = getState().getMapContext().getMapIconType(this.map_icon_type_id);
+        this.map_icon_type = getState().getMapContext().getMapIconType(parseInt(this.map_icon_type_id));
         this._refreshVisual();
     }
 
