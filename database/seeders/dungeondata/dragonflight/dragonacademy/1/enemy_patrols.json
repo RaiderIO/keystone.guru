@@ -3,7 +3,7 @@
         "id": 616,
         "mapping_version_id": 67,
         "floor_id": 144,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",

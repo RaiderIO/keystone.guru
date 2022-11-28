@@ -3,7 +3,7 @@
         "id": 655,
         "mapping_version_id": 75,
         "floor_id": 166,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",
@@ -16,7 +16,7 @@
         "id": 656,
         "mapping_version_id": 75,
         "floor_id": 166,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",
@@ -29,7 +29,7 @@
         "id": 657,
         "mapping_version_id": 75,
         "floor_id": 166,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",
@@ -42,7 +42,7 @@
         "id": 658,
         "mapping_version_id": 75,
         "floor_id": 166,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",
@@ -55,7 +55,7 @@
         "id": 659,
         "mapping_version_id": 75,
         "floor_id": 166,
-        "teeming": "visible",
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#003280",
