@@ -474,16 +474,16 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 481,
+                        "id": 520,
                         "floor1_id": 16,
                         "floor2_id": 17,
-                        "direction": "right"
+                        "direction": "left"
                     },
                     {
-                        "id": 482,
+                        "id": 521,
                         "floor1_id": 16,
                         "floor2_id": 18,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeonspeedrunrequirednpcs": []
