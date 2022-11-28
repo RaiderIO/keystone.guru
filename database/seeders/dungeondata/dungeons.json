@@ -5501,7 +5501,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 514,
+                        "floor1_id": 157,
+                        "floor2_id": 156,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 515,
+                        "floor1_id": 157,
+                        "floor2_id": 158,
+                        "direction": "down"
+                    }
+                ],
                 "dungeonspeedrunrequirednpcs": []
             },
             {
@@ -5696,7 +5709,7 @@
                 "id": 164,
                 "index": 2,
                 "mdt_sub_level": null,
-                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.altar_of_shadows",
+                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.altar_of_shadow",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -5707,13 +5720,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 511,
+                        "id": 516,
                         "floor1_id": 164,
                         "floor2_id": 163,
                         "direction": "left"
                     },
                     {
-                        "id": 512,
+                        "id": 517,
                         "floor1_id": 164,
                         "floor2_id": 165,
                         "direction": "down"
