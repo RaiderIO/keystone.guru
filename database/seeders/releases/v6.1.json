@@ -1,0 +1,27 @@
+{
+    "id": 151,
+    "release_changelog_id": 158,
+    "version": "v6.1",
+    "title": "Dragonflight Season 1 added",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-11-28T21:45:50+00:00",
+    "updated_at": "2022-11-28T21:45:50+00:00",
+    "changelog": {
+        "id": 158,
+        "release_id": 151,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 158,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1367,
+                "change": "They say better late than never, but it's finally here! Added Dragonflight Season 1 and the mapping for all dungeons, which is now a carbon copy of MDT's mapping and will remain so in the future.  Thanks to Nnoggie for proposing the idea and setting us on this path!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            }
+        ]
+    }
+}
