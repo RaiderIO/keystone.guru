@@ -76,7 +76,7 @@ class MDTDungeon
      */
     public function getMDTDungeonID(): int
     {
-        $lua          = $this->getLua();
+        $lua = $this->getLua();
         return $lua->call('GetDungeonIndex');
     }
 
@@ -110,7 +110,8 @@ class MDTDungeon
         $rawMdtMapPOIs = $lua->call('GetMapPOIs');
         $result        = new Collection();
 
-        foreach ($rawMdtMapPOIs as $subLevel => $pois) {
+        // May be null
+        foreach ($rawMdtMapPOIs ?? [] as $subLevel => $pois) {
             foreach ($pois as $poiIndex => $poi) {
                 $result->push(new MDTMapPOI((int)$subLevel, $poi));
             }

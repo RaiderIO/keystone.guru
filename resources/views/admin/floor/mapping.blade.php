@@ -1,7 +1,3 @@
-@extends('layouts.map', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => sprintf(__('views/admin.floor.mapping.title'), __($floor->dungeon->name))])
-@section('header-title')
-    {{ sprintf(__('views/admin.floor.mapping.header'), __($floor->dungeon->name)) }}
-@endsection
 <?php
 /**
  * @var $floor \App\Models\Floor
@@ -10,12 +6,23 @@
  */
 ?>
 
+@extends('layouts.map', [
+    'showAds' => false,
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => sprintf(__('views/admin.floor.mapping.title'), __($floor->dungeon->name))
+])
+@section('header-title')
+    {{ sprintf(__('views/admin.floor.mapping.header'), __($floor->dungeon->name)) }}
+@endsection
+
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
             'showAds' => false,
             'dungeon' => $floor->dungeon,
-            '$mappingVersion' => $mappingVersion,
+            'mappingVersion' => $mappingVersion,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,

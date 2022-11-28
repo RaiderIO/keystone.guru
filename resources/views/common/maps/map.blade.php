@@ -133,6 +133,7 @@ if ($isAdmin) {
         </div>
 
 
+
         </script>
     @endif
 @endsection
@@ -140,7 +141,7 @@ if ($isAdmin) {
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
         @include('common.maps.controls.header', [
-            'title' => isset($dungeonroute) ? $dungeonroute->title : sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version),
+            'title' => optional($dungeonroute)->title,
             'echo' => $echo,
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,

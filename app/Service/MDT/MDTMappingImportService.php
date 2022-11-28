@@ -244,6 +244,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 if (isset($mdtNpcClone['patrol'])) {
                     logger()->channel('stderr')->info('- Found Enemy Patrol');
+
+                    if (empty($mdtNpcClone['patrol'])) {
+                        logger()->channel('stderr')->warning('- Enemy Patrol has no vertices - skipping!');
+                        continue;
+                    }
+
                     $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $mdtNPC->getId(), $mdtCloneIndex);
 
                     $vertices = [];
@@ -251,11 +257,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $vertices[] = Conversion::convertMDTCoordinateToLatLng($xy);
                     }
 
+                    // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
+                    $vertices[] = $vertices[0];
+
                     // Polyline
                     $polyLine = Polyline::create([
                         'model_id'       => -1,
                         'model_class'    => EnemyPatrol::class,
-                        'color'          => '#E25D5D',
+                        'color'          => '#003280',
                         'color_animated' => null,
                         'weight'         => 2,
                         'vertices_json'  => json_encode($vertices),
