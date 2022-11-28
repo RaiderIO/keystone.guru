@@ -71,6 +71,16 @@ class MDTDungeon
     }
 
     /**
+     * @return int
+     * @throws Exception
+     */
+    public function getMDTDungeonID(): int
+    {
+        $lua          = $this->getLua();
+        return $lua->call('GetDungeonIndex');
+    }
+
+    /**
      * Get a list of NPCs
      * @return Collection|MDTNpc[]
      * @throws Exception
@@ -210,8 +220,8 @@ class MDTDungeon
 
                         if (isset($clone['disguised']) && $clone['disguised']) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
-                            $enemy->lat += 2;
-                            $enemy->lng += 2;
+                            $enemy->lat           += 2;
+                            $enemy->lng           += 2;
                         }
 
                         $enemies->push($enemy);
@@ -276,6 +286,10 @@ class MDTDungeon
 
                         function GetDungeonEnemies()
                             return MDT.dungeonEnemies[dungeonIndex]
+                        end
+
+                        function GetDungeonIndex()
+                            return dungeonIndex
                         end
                     ';
 

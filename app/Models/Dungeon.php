@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
@@ -50,7 +51,7 @@ use Mockery\Exception;
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel
+class Dungeon extends CacheModel implements MappingModelInterface
 {
     /**
      * The accessors to append to the model's array form.
@@ -691,5 +692,13 @@ class Dungeon extends CacheModel
         static::deleting(function ($someModel) {
             return false;
         });
+    }
+
+    /**
+     * @return int
+     */
+    public function getDungeonId(): int
+    {
+        return $this->id;
     }
 }

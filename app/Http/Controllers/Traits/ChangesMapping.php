@@ -24,7 +24,7 @@ trait ChangesMapping
 
         (new MappingChangeLog([
             'dungeon_id'   => optional($beforeModel)->getDungeonId() ?? $afterModel->getDungeonId(),
-            'model_id'     => ($beforeModel ?? $afterModel)->id,
+            'model_id'     => optional($beforeModel)->id ?? $afterModel->id,
             'model_class'  => get_class($beforeModel ?? $afterModel),
             'before_model' => $beforeModel !== null ? json_encode($beforeModel->toArray()) : null,
             'after_model'  => $afterModel !== null ? json_encode($afterModel->toArray()) : null,
