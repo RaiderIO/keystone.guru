@@ -5355,8 +5355,8 @@
         "map_id": 0,
         "mdt_id": 0,
         "key": "nokhudoffensive",
-        "name": "dungeons.dragonflight.nokhud_offensive.name",
-        "slug": "nokhud-offensive",
+        "name": "dungeons.dragonflight.the_nokhud_offensive.name",
+        "slug": "the-nokhud-offensive",
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
@@ -5369,7 +5369,7 @@
                 "id": 153,
                 "index": 1,
                 "mdt_sub_level": null,
-                "name": "dungeons.dragonflight.nokhud_offensive.floors.nokhud_offensive",
+                "name": "dungeons.dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -5451,13 +5451,13 @@
     {
         "id": 73,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 13954,
         "map_id": 0,
-        "mdt_id": 0,
+        "mdt_id": 44,
         "key": "theazurevault",
         "name": "dungeons.dragonflight.the_azure_vault.name",
         "slug": "the-azure-vault",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 410,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
@@ -5501,7 +5501,20 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 514,
+                        "floor1_id": 157,
+                        "floor2_id": 156,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 515,
+                        "floor1_id": 157,
+                        "floor2_id": 158,
+                        "direction": "down"
+                    }
+                ],
                 "dungeonspeedrunrequirednpcs": []
             },
             {
@@ -5577,9 +5590,9 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 505,
+                        "id": 519,
                         "floor1_id": 160,
-                        "floor2_id": 156,
+                        "floor2_id": 159,
                         "direction": "up"
                     }
                 ],
@@ -5696,7 +5709,7 @@
                 "id": 164,
                 "index": 2,
                 "mdt_sub_level": null,
-                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.altar_of_shadows",
+                "name": "dungeons.wod.shadowmoon_burial_grounds.floors.altar_of_shadow",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -5707,13 +5720,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 511,
+                        "id": 516,
                         "floor1_id": 164,
                         "floor2_id": 163,
                         "direction": "left"
                     },
                     {
-                        "id": 512,
+                        "id": 517,
                         "floor1_id": 164,
                         "floor2_id": 165,
                         "direction": "down"
