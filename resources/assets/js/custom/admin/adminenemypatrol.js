@@ -25,7 +25,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         for (let index in this.enemies) {
             let enemyCandidate = this.enemies[index];
 
-            if( enemyCandidate.shouldBeVisible() ) {
+            if (enemyCandidate.shouldBeVisible()) {
                 result.push(enemyCandidate.layer.getLatLng());
             }
         }
@@ -89,7 +89,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.removeExistingConnectionsToEnemies();
 
         // If the patrol is not visible, don't draw any new stuff
-        if(!this.shouldBeVisible()){
+        if (!this.shouldBeVisible()) {
             return;
         }
 
