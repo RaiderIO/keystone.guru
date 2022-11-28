@@ -41,7 +41,6 @@ class EnemySelection extends MapObjectMapState {
         // this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        console.log(enemyMapObjectGroup);
 
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];

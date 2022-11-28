@@ -55,6 +55,8 @@ class KillZone extends Model
             ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
             ->where('kill_zone_enemies.kill_zone_id', $this->id)
+            // Disabling model caching makes this query work - not sure why the cache would break it, but it does
+            ->disableCache()
             ->get()
             ->map(function (Enemy $enemy) {
                 return $enemy->id;

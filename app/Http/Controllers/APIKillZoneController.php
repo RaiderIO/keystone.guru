@@ -72,8 +72,7 @@ class APIKillZoneController extends Controller
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
-                // Refresh enemies so that we echo the new stuff back that was just saved to the database
-                $killZone->enemies = $validEnemyIds;
+                $killZone->enemies = collect($validEnemyIds);
             }
 
             if ($recalculateEnemyForces) {
