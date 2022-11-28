@@ -5369,7 +5369,7 @@
                 "id": 153,
                 "index": 1,
                 "mdt_sub_level": null,
-                "name": "dungeons.dragonflight.nokhud_offensive.floors.nokhud_offensive",
+                "name": "dungeons.dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
