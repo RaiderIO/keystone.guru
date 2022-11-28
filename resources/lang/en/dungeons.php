@@ -568,13 +568,13 @@ return [
             'name'   => 'The Azure Vault',
             'floors' => [
                 'the_arcane_conservatory' => 'The Arcane Conservatory',
-                'upper_chamber'           => 'Crystal Chambers',
+                'crystal_chambers'        => 'Crystal Chambers',
                 'mausoleum_of_legends'    => 'Mausoleum of Legends',
                 'the_infinity_seal'       => 'The Infinity Seal',
                 'sindragosas_lament'      => 'Sindragosa\'s Lament',
             ],
         ],
-        'nokhud_offensive'      => [
+        'the_nokhud_offensive'      => [
             'name'   => 'The Nokhud Offensive',
             'floors' => [
                 'the_nokhud_offensive' => 'The Nokhud Offensive',
