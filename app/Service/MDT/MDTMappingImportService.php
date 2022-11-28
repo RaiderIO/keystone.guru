@@ -201,7 +201,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 'mapping_version_id' => $newMappingVersion->id,
                 'floor_id'           => $enemiesWithGroupsByEnemyPack->first()->floor_id,
                 'group'              => $groupIndex,
-                'teeming'            => Enemy::TEEMING_VISIBLE,
+                'teeming'            => null,
                 'faction'            => Faction::FACTION_ANY,
                 'label'              => sprintf('Imported from MDT - group %d', $groupIndex),
                 'vertices_json'      => json_encode($this->getVerticesBoundingBoxFromEnemies($enemiesWithGroupsByEnemyPack)),
@@ -280,7 +280,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'mapping_version_id' => $newMappingVersion->id,
                         'floor_id'           => $savedEnemy->floor_id,
                         'polyline_id'        => $polyLine->id,
-                        'teeming'            => Enemy::TEEMING_VISIBLE,
+                        'teeming'            => null,
                         'faction'            => Faction::FACTION_ANY,
                     ]);
                     if ($enemyPatrol !== null) {
