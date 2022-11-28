@@ -5590,9 +5590,9 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 505,
+                        "id": 519,
                         "floor1_id": 160,
-                        "floor2_id": 156,
+                        "floor2_id": 159,
                         "direction": "up"
                     }
                 ],
