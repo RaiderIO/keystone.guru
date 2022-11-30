@@ -1,0 +1,27 @@
+{
+    "id": 152,
+    "release_changelog_id": 159,
+    "version": "v6.1.1",
+    "title": "Fixed various crashes after release of v6.1",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-11-30T09:00:56+00:00",
+    "updated_at": "2022-11-30T09:00:56+00:00",
+    "changelog": {
+        "id": 159,
+        "release_id": 152,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 159,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1496,
+                "change": "Fixed various crashes after release of v6.1",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
