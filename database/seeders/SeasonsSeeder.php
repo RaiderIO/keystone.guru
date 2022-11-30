@@ -116,7 +116,7 @@ class SeasonsSeeder extends Seeder
                 'expansion_id'      => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id' => 26,
                 'index'             => 1,
-                'start'             => '2022-12-13 00:00:00',
+                'start'             => '2022-11-28 00:00:00',
                 'presets'           => 0,
                 'affix_group_count' => 10,
                 'dungeons'          => Dungeon::whereIn('key', [

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\DebugBarMessageLogger;
+use App\Http\Middleware\DungeonRouteContextLogger;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
@@ -71,15 +72,16 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'                  => Authenticate::class,
-        'auth.basic'            => AuthenticateWithBasicAuth::class,
-        'bindings'              => SubstituteBindings::class,
-        'can'                   => Authorize::class,
-        'guest'                 => RedirectIfAuthenticated::class,
-        'throttle'              => ThrottleRequests::class,
-        'ajax'                  => OnlyAjax::class,
-        'viewcachebuster'       => ViewCacheBuster::class,
-        'legal_agreed'          => LegalAgreed::class,
-        'debugbarmessagelogger' => DebugBarMessageLogger::class,
+        'auth'                         => Authenticate::class,
+        'auth.basic'                   => AuthenticateWithBasicAuth::class,
+        'bindings'                     => SubstituteBindings::class,
+        'can'                          => Authorize::class,
+        'guest'                        => RedirectIfAuthenticated::class,
+        'throttle'                     => ThrottleRequests::class,
+        'ajax'                         => OnlyAjax::class,
+        'viewcachebuster'              => ViewCacheBuster::class,
+        'legal_agreed'                 => LegalAgreed::class,
+        'debugbarmessagelogger'        => DebugBarMessageLogger::class,
+        'dungeon_route_context_logger' => DungeonRouteContextLogger::class,
     ];
 }
