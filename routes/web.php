@@ -142,7 +142,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
 
     // May not be logged in - we have anonymous routes
-    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
+    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}', 'middleware' => 'dungeon_route_context_logger'], function () {
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
 
         Route::group(['prefix' => '{title?}'], function () {

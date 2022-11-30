@@ -141,7 +141,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array($enemy->npc->classification->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
+                    if (!in_array(optional($enemy->npc->classification)->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
                         $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                             ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]

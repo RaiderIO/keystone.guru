@@ -33,6 +33,7 @@ class APIMapIconController extends APIMappingModelBaseController
     public function store(MapIconFormRequest $request, ?DungeonRoute $dungeonroute, MapIcon $mapIcon = null): MapIcon
     {
         $validated = $request->validated();
+        $validated['dungeon_route_id'] = optional($dungeonroute)->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
