@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\WithDungeonRouteContext;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 
