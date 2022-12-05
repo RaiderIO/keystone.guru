@@ -6,6 +6,7 @@ use App\Models\GameServerRegion;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Mapping\MappingService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -39,9 +40,9 @@ class Random extends Command
      *
      * @return int
      */
-    public function handle(MappingService $mappingService, ExpansionService $expansionService, TimewalkingEventServiceInterface $timewalkingEventService)
+    public function handle(WowToolsServiceInterface $wowToolsService)
     {
-        dd($mappingService->getDungeonsWithUnmergedMappingChanges());
+        dd($wowToolsService->getDisplayId(12345));
 
 //        $this->info(
 //            $expansionService->getCurrentAffixGroup(

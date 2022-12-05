@@ -100,6 +100,19 @@ class Stopwatch
     }
 
     /**
+     * @param string $timerName
+     * @return float
+     */
+    public static function stop(string $timerName = 'default'): float
+    {
+        $elapsed = self::elapsed($timerName);
+
+        unset(self::$timers[$timerName]);
+
+        return $elapsed;
+    }
+
+    /**
      *
      */
     public static function dumpAll(): void

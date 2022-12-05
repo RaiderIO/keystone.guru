@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env'  => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -209,6 +209,7 @@ return [
          * Keystone.guru Service Providers...
          */
         App\Providers\KeystoneGuruServiceProvider::class,
+        App\Providers\LoggingServiceProvider::class,
     ],
 
     /*
