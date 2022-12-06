@@ -7,14 +7,14 @@ use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 class WowToolsService implements WowToolsServiceInterface
 {
     /** @var WowToolsServiceLoggingInterface */
-    private WowToolsServiceLoggingInterface $logging;
+    private WowToolsServiceLoggingInterface $log;
 
     /**
-     * @param WowToolsServiceLoggingInterface $logging
+     * @param WowToolsServiceLoggingInterface $log
      */
-    public function __construct(WowToolsServiceLoggingInterface $logging)
+    public function __construct(WowToolsServiceLoggingInterface $log)
     {
-        $this->logging = $logging;
+        $this->log = $log;
     }
 
 
@@ -24,7 +24,7 @@ class WowToolsService implements WowToolsServiceInterface
      */
     public function getDisplayId(int $npcId): ?int
     {
-        $this->logging->getDisplayIdRequestStart();
+        $this->log->getDisplayIdRequestStart($npcId);
         try {
             $result = null;
 
@@ -38,17 +38,17 @@ class WowToolsService implements WowToolsServiceInterface
             $requestResult = (array)json_decode(curl_exec($ch), true);
 
             if (isset($requestResult['error'])) {
-                $this->logging->getDisplayIdRequestError($requestResult['error']);
+                $this->log->getDisplayIdRequestError($requestResult['error']);
             } else {
                 if (!isset($requestResult['CreatureDisplayInfoID[0]'])) {
-                    $this->logging->getDisplayIdRequestResultUnableFindCreateDisplayInfoID();
+                    $this->log->getDisplayIdRequestResultUnableFindCreateDisplayInfoID();
                 } else {
                     $result = (int)$requestResult['CreatureDisplayInfoID[0]'];
-                    $this->logging->getDisplayIdRequestResult($result);
+                    $this->log->getDisplayIdRequestResult($result);
                 }
             }
         } finally {
-            $this->logging->getDisplayIdRequestEnd();
+            $this->log->getDisplayIdRequestEnd();
         }
 
         return $result;
