@@ -7,9 +7,10 @@ use App\Logging\StructuredLogging;
 class WowToolsServiceLogging extends StructuredLogging implements WowToolsServiceLoggingInterface
 {
     /**
+     * @param int $npcId
      * @return void
      */
-    public function getDisplayIdRequestStart(): void
+    public function getDisplayIdRequestStart(int $npcId): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }

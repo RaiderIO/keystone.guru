@@ -13,9 +13,6 @@ class StructuredLogging
     /** @var array Upon calling begin() or end(), this array is a flattened versino of $groupedContext to make it quicker to write logs to disk */
     private array $cachedContext = [];
 
-    /** @var array */
-    private array $timers = [];
-
     /**
      * @param string $functionName
      * @param array $context
@@ -23,7 +20,14 @@ class StructuredLogging
      */
     protected function start(string $functionName, array $context): void
     {
-        $targetKey                         = str_replace('start', '', strtolower($functionName));
+        $targetKey = str_replace('start', '', strtolower($functionName));
+        if (isset($this->groupedContexts[$targetKey])) {
+            $this->log(
+                Logger::ERROR,
+                sprintf('%s: Unable to start a structured log that was already started!', __METHOD__),
+                array_merge(['targetKey' => $targetKey], $context)
+            );
+        }
         $this->groupedContexts[$targetKey] = $context;
         $this->cachedContext               = call_user_func_array('array_merge', $this->groupedContexts);
         Stopwatch::start($targetKey);
@@ -49,6 +53,7 @@ class StructuredLogging
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }
+
         unset($this->groupedContexts[$targetKey]);
         $this->cachedContext = call_user_func_array('array_merge', $this->groupedContexts);
     }
@@ -125,12 +130,13 @@ class StructuredLogging
 
     /**
      * @param int $level
-     * @param string $message
+     * @param string $functionName
      * @param array $context
      * @return void
      */
-    private function log(int $level, string $message, array $context = []): void
+    private function log(int $level, string $functionName, array $context = []): void
     {
-        logger()->log(Logger::getLevelName($level), $message, array_merge($this->cachedContext, $context));
+        // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
+        logger()->log(Logger::getLevelName($level), array_reverse(explode('\\', $functionName))[0], array_merge($this->cachedContext, $context));
     }
 }

@@ -4,7 +4,7 @@ namespace App\Service\WowTools\Logging;
 
 interface WowToolsServiceLoggingInterface
 {
-    public function getDisplayIdRequestStart(): void;
+    public function getDisplayIdRequestStart(int $npcId): void;
 
     public function getDisplayIdRequestError(string $error): void;
 
