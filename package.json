@@ -71,7 +71,7 @@
         "password-strength-meter": "^2.1.0",
         "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
-        "puppeteer": "^1.20.0",
+        "puppeteer": "^19.4.0",
         "simplebar": "^5.3.8",
         "socket.io-client": "^2.4.0",
         "zikes-circlemenu": "^0.1.1"
