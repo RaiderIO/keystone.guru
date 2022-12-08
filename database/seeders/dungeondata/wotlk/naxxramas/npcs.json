@@ -1865,7 +1865,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 16539,
         "name": "Death Knight Understudy",
         "base_health": 12345,
         "enemy_forces": 0,
