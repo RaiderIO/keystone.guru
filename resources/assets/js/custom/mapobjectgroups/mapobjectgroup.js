@@ -445,12 +445,11 @@ class MapObjectGroup extends Signalable {
         }
 
         // Remove it from our records
-        // @TODO Improve this
         let newObjects = [];
         for (let key in this.objects) {
             let objectCandidate = this.objects[key];
             if (objectCandidate.id !== mapObject.id) {
-                newObjects.push(objectCandidate);
+                newObjects[key] = objectCandidate;
             }
         }
         this.objects = newObjects;
