@@ -1,0 +1,37 @@
+{
+    "id": 153,
+    "release_changelog_id": 160,
+    "version": "v6.1.2",
+    "title": "Map bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-12-12T09:21:05+00:00",
+    "updated_at": "2022-12-12T09:21:05+00:00",
+    "changelog": {
+        "id": 160,
+        "release_id": 153,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 160,
+                "release_changelog_category_id": 3,
+                "ticket_id": 1508,
+                "change": "Attempting to navigate away from the page with unsaved changes will now prompt you to make sure you're okay with this.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 160,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1507,
+                "change": "Deleting a pull or map icon no longer crashes the map, rendering it useless.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
