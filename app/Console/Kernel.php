@@ -151,7 +151,7 @@ class Kernel extends ConsoleKernel
         }
 
         // Ensure redis remains healthy
-        $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->hourly();
+        $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->everyFiveMinutes();
 
         // Ensure display IDs are set
         $schedule->command('wowtools:refreshdisplayids')->hourly();
