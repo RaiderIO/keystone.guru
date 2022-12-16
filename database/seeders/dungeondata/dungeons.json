@@ -5768,7 +5768,7 @@
         "key": "templeofthejadeserpent",
         "name": "dungeons.mop.temple_of_the_jade_serpent.name",
         "slug": "temple-of-the-jade-serpent",
-        "enemy_forces_required": 289,
+        "enemy_forces_required": 410,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
