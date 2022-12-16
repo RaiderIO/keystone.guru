@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\AdminToolsController;
 use App\Http\Controllers\Api\APIMountableAreaController;
+use App\Http\Controllers\Api\APISiteController;
 use App\Http\Controllers\APIBrushlineController;
 use App\Http\Controllers\APIDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\APIDungeonRouteController;
@@ -370,7 +371,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['prefix' => 'ajax'], function () {
+    Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
+        Route::get('refresh-csrf', [APISiteController::class, 'refreshCsrf'])->name('api.refresh_csrf');
+
         Route::group(['prefix' => 'tag'], function () {
             Route::get('/', [APITagController::class, 'all'])->name('api.tag.all');
             Route::get('/{category}', [APITagController::class, 'list'])->name('api.tag.list');
@@ -380,9 +383,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::put('/{tag}/all', [APITagController::class, 'updateAll'])->name('api.tag.updateall');
             Route::delete('/{tag}/all', [APITagController::class, 'deleteAll'])->name('api.tag.deleteall');
         });
-    });
 
-    Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
         Route::get('/{publickey}/data', [APIDungeonRouteController::class, 'data']);
 
         Route::post('userreport/dungeonroute/{dungeonroute}', [APIUserReportController::class, 'dungeonrouteStore'])->name('userreport.dungeonroute');
