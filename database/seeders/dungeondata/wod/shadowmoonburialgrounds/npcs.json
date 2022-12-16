@@ -188,7 +188,7 @@
         "display_id": 59296,
         "name": "Carrion Worm",
         "base_health": 1720817,
-        "enemy_forces": 0,
+        "enemy_forces": 15,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
