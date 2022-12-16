@@ -234,7 +234,7 @@ return [
             'my_favorites'      => 'My favorites',
             'my_tags'           => 'My tags',
             'my_teams'          => 'My teams',
-            'my_profile'        => 'My profile',
+            'my_profile'        => 'My public profile',
             'account_settings'  => 'Account settings',
             'logout'            => 'Logout',
         ],

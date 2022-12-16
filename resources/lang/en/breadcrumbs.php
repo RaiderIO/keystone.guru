@@ -24,7 +24,7 @@ return [
             ],
         ],
 
-        'my_profile' => 'My profile',
+        'my_profile' => 'My public profile',
         'my_routes'  => 'My routes',
         'my_tags'    => 'My tags',
         'my_teams'   => 'My teams',
