@@ -199,7 +199,7 @@ return [
     'delete_user_label'                                              => 'Delete user',
 
     // Home page
-    'export_notes_label'                                             => 'Export notes',
+    'import_notes_label'                                             => 'Import notes',
     'warnings_label'                                                 => 'Warnings',
     'category_label'                                                 => 'Category',
     'message_label'                                                  => 'Message',

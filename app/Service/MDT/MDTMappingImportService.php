@@ -33,6 +33,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
         if ($forceImport || $dungeon->getCurrentMappingVersion()->mdt_mapping_hash !== $latestMdtMappingHash) {
+            logger()->channel('stderr')->info(
+                sprintf('Mapping has changed! %s vs %s', $dungeon->getCurrentMappingVersion()->mdt_mapping_hash, $latestMdtMappingHash)
+            );
+
             $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $this->getMDTMappingHash($dungeon));
             logger()->channel('stderr')->info(sprintf('Creating version %d (%d) OK', $newMappingVersion->version, $newMappingVersion->id));
 

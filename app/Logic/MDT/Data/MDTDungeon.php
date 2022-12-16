@@ -134,6 +134,7 @@ class MDTDungeon
             try {
                 $mdtNpcs = $this->getMDTNPCs();
             } catch (Exception $exception) {
+                logger()->error($exception->getMessage());
                 return $enemies;
             }
 
@@ -268,6 +269,7 @@ class MDTDungeon
                         MDT.dungeonList = {}
                         MDT.dungeonMaps = {}
                         MDT.dungeonSubLevels = {}
+                        MDT.zoneIdToDungeonIdx = {}
 
                         local L = {}
                         ' .

@@ -18,7 +18,7 @@ class StructuredLogging
      * @param array $context
      * @return void
      */
-    protected function start(string $functionName, array $context): void
+    protected function start(string $functionName, array $context = []): void
     {
         $targetKey = str_replace('start', '', strtolower($functionName));
         if (isset($this->groupedContexts[$targetKey])) {

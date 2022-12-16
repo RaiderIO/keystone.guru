@@ -99,7 +99,7 @@ return [
             'github_exception' => 'An error occurred communicating with Github: %s',
         ],
     ],
-    'mappingversion' => [
+    'mappingversion'              => [
         'created_successfully' => 'Added new mapping version!',
         'deleted_successfully' => 'Deleted mapping version successfully',
     ],
@@ -119,6 +119,8 @@ return [
             'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
             'patreon_session_expired' => 'Your Patreon session has expired. Please try again.',
             'session_expired'         => 'Your session has expired. Please try again.',
+            'patreon_error_occurred'  => 'An error occurred on Patreon\'s side. Please try again later.',
+            'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
         ],
     ],
     'profile'                     => [

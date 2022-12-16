@@ -74,19 +74,25 @@ class PatreonController extends Controller
                     $campaignTiers    = $patreonService->loadCampaignTiers($patreonApiService);
 
                     $identityResponse = $patreonApiService->getIdentity($tokens['access_token']);
-                    $member           = collect($identityResponse['included'])->filter(function (array $included) {
-                        return $included['type'] === 'member';
-                    })->first();
+                    if (isset($identityResponse['errors'])) {
+                        Session::flash('warning', __('controller.patreon.flash.patreon_error_occurred'));
+                    } else if (!isset($identityResponse['included'])) {
+                        Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
+                    } else {
+                        $member = collect($identityResponse['included'])->filter(function (array $included) {
+                            return $included['type'] === 'member';
+                        })->first();
 
-                    $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
-                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
+                        $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
+                        $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
-                    // Now that the PatreonData object was created, apply the correct paid benefits to the account
-                    $patreonService->applyPaidBenefitsForMember(
-                        $campaignBenefits,
-                        $campaignTiers,
-                        $member
-                    );
+                        // Now that the PatreonData object was created, apply the correct paid benefits to the account
+                        $patreonService->applyPaidBenefitsForMember(
+                            $campaignBenefits,
+                            $campaignTiers,
+                            $member
+                        );
+                    }
                 }
 
                 // Message to the user

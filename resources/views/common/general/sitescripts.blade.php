@@ -13,7 +13,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
     // Legal nag so that everyone agrees to the terms, that has registered.
     @if($showLegalModal && !Auth::user()->legal_agreed)
 
-    document.addEventListener("DOMContentLoaded", function (event) {
+    document.addEventListener('DOMContentLoaded', function (event) {
         $('#legal_modal').modal('show');
         $('#legal_confirm_btn').unbind('click').bind('click', _agreeLegalBtnClicked);
     });
@@ -40,6 +40,37 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             }
         });
     }
+
     @endif
     @endauth
+
+    document.addEventListener('DOMContentLoaded', function (event) {
+        setInterval(function () {
+            var csrfToken = $('[name="csrf-token"]').val();
+            $.ajax({
+                url: '{{ route('api.refresh_csrf') }}',
+                type: 'get'
+            }).done(function (data) {
+                _setCsrfToken(data.token);
+            }).fail(function () {
+                console.error('Unable to refresh session! Site will probably not work anymore now..');
+            });
+        }, {{ config('session.lifetime') * 60000 }});
+    });
+
+    /**
+     *
+     * @param newCsrfToken
+     * @private
+     */
+    function _setCsrfToken(newCsrfToken) {
+        $('[name="csrf-token"]').attr('content', newCsrfToken);
+        csrfToken = newCsrfToken;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': newCsrfToken
+            }
+        });
+    }
 </script>
