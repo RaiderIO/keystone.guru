@@ -195,7 +195,7 @@ return [
     'delete_user_label'                                              => 'Удалить пользователя',
 
     // Home page
-    'export_notes_label'                                             => 'Экспорт заметок',
+    'import_notes_label'                                             => 'Импорт заметки',
     'warnings_label'                                                 => 'Предупреждения',
     'category_label'                                                 => 'Категории',
     'message_label'                                                  => 'Сообщение',
