@@ -535,7 +535,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                     // Get the proper index of the floor, validated for length
                     $mdtSubLevel = ((int)$details[2]);
-                    $mdtSubLevel = ($mdtSubLevel < $floors->count() ? $mdtSubLevel : 0);
 
                     /** @var Floor $floor */
                     $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
