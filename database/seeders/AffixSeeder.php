@@ -58,7 +58,7 @@ class AffixSeeder extends Seeder
             new Affix(['key' => Affix::AFFIX_INFERNAL, 'name' => 'affixes.infernal.name', 'icon_file_id' => -1, 'description' => 'affixes.infernal.description']),
             new Affix(['key' => Affix::AFFIX_ENCRYPTED, 'name' => 'affixes.encrypted.name', 'icon_file_id' => -1, 'description' => 'affixes.encrypted.description']),
             new Affix(['key' => Affix::AFFIX_SHROUDED, 'name' => 'affixes.shrouded.name', 'icon_file_id' => -1, 'description' => 'affixes.shrouded.description']),
-            new Affix(['key' => Affix::AFFIX_THUNDERING, 'name' => 'affixes.thundering.name', 'icon_file_id' => -1, 'description' => 'affixes.shrouded.description']),
+            new Affix(['key' => Affix::AFFIX_THUNDERING, 'name' => 'affixes.thundering.name', 'icon_file_id' => -1, 'description' => 'affixes.thundering.description']),
         ]);
 
         foreach ($affixes as $affix) {
