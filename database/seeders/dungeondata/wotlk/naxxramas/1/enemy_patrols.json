@@ -52,22 +52,6 @@
         }
     },
     {
-        "id": 544,
-        "mapping_version_id": 60,
-        "floor_id": 138,
-        "teeming": null,
-        "faction": "any",
-        "polyline": null
-    },
-    {
-        "id": 545,
-        "mapping_version_id": 60,
-        "floor_id": 138,
-        "teeming": null,
-        "faction": "any",
-        "polyline": null
-    },
-    {
         "id": 546,
         "mapping_version_id": 60,
         "floor_id": 138,
@@ -92,14 +76,6 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-171.906362,\"lng\":162.625},{\"lat\":-175.187596,\"lng\":162.8125},{\"lat\":-178.312596,\"lng\":163.65625},{\"lat\":-181.625128,\"lng\":164.90625},{\"lat\":-185.781282,\"lng\":167.15625},{\"lat\":-189.000048,\"lng\":169.46875},{\"lat\":-192.259052,\"lng\":171.891732},{\"lat\":-195.422197,\"lng\":175.39188},{\"lat\":-198.3657,\"lng\":179.484118},{\"lat\":-201.093493,\"lng\":183.75},{\"lat\":-204.172266,\"lng\":184.112197},{\"lat\":-212.317149,\"lng\":184.68059},{\"lat\":-216.200175,\"lng\":184.870055},{\"lat\":-217.052547,\"lng\":191.596047}]"
         }
-    },
-    {
-        "id": 550,
-        "mapping_version_id": 60,
-        "floor_id": 138,
-        "teeming": null,
-        "faction": "any",
-        "polyline": null
     },
     {
         "id": 551,
