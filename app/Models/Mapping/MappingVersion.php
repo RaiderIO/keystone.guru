@@ -127,6 +127,14 @@ class MappingVersion extends Model
         return $this->hasMany(MountableArea::class);
     }
 
+    /**
+     * @return bool
+     */
+    public function isLatestForDungeon(): bool
+    {
+        return $this->dungeon->getCurrentMappingVersion()->version === $this->version;
+    }
+
 
     public static function boot()
     {
