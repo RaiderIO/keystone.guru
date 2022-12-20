@@ -333,7 +333,12 @@ return [
             'alliance' => 'Alliance',
             'horde'    => 'Horde',
 
-            'admin_header_title' => '%s (mapping version %d)',
+            'new_mapping_version_header_title'       => 'There is a new mapping version for this dungeon',
+            'new_mapping_version_header_description' => 'Keystone.guru works with mapping versions for each dungeon.
+                Every time Blizzard makes a change to the mapping or an error is corrected, a new mapping version is created.
+                Routes that are created with previous mapping versions are not automatically updated to the latest version.
+                This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
+            'admin_header_title'                     => '%s (mapping version %d)',
 
             'route'         => 'Route',
             'map_settings'  => 'Map settings',

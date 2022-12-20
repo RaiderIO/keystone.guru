@@ -310,7 +310,7 @@ html, body, #map, #app, .wrapper {
 
 /** Pulls section of the sidebar, when viewing, without a speedrun enabled */
 #pulls_sidebar .pulls_container:not(.has_speedrun) {
-    max-height: calc(100vh - 109px);
+    max-height: calc(100vh - 163px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
