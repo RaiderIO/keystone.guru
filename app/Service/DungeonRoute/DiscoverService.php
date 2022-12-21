@@ -6,8 +6,10 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteAffixGroup;
 use App\Models\PublishedState;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class DiscoverService extends BaseDiscoverService
@@ -41,7 +43,9 @@ class DiscoverService extends BaseDiscoverService
             optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ??
             collect();
 
-        return DungeonRoute::query()->limit($this->limit)
+        return DungeonRoute::query()
+            ->selectRaw('DISTINCT `dungeon_routes`.*')
+            ->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
@@ -65,11 +69,19 @@ class DiscoverService extends BaseDiscoverService
                     ->orderBy('weightedPopularity', 'desc');
             })
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', 'dungeon_routes.id')
-            ->when($this->season === null, function(Builder $builder) {
+            // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
+            // We want the most recent season's routes showing up for this if possible
+            ->joinSub(
+                DungeonRouteAffixGroup::query()
+                    ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
+                    ->groupBy('dungeon_route_id'),
+                'ag', function (JoinClause $joinClause) {
+                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
+            })
+            ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
             })
-            ->when($this->season !== null, function(Builder $builder) {
+            ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
                     ->where('season_dungeons.season_id', $this->season->id);
             })
@@ -79,10 +91,7 @@ class DiscoverService extends BaseDiscoverService
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
-            // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
-            // We want the most recent season's routes showing up for this if possible
-            ->orderBy('dungeon_route_affix_groups.affix_group_id', 'desc')
-            ->groupBy('dungeon_routes.id', 'dungeon_route_affix_groups.affix_group_id');
+            ->groupBy('dungeon_routes.id');
     }
 
     /**
