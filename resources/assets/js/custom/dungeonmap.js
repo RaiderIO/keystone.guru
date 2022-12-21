@@ -23,7 +23,7 @@ class DungeonMap extends Signalable {
 
                     this.options.readonly = true;
                 }
-            } else if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+            } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
                 let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {

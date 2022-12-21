@@ -228,6 +228,7 @@ return [
             'name'   => 'Temple of the Jade Serpent',
             'floors' => [
                 'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
+                'scrollkeepers_sanctum'      => 'Scrollkeeper\'s Sanctum',
             ],
         ],
     ],
@@ -574,7 +575,7 @@ return [
                 'sindragosas_lament'      => 'Sindragosa\'s Lament',
             ],
         ],
-        'the_nokhud_offensive'      => [
+        'the_nokhud_offensive'  => [
             'name'   => 'The Nokhud Offensive',
             'floors' => [
                 'the_nokhud_offensive' => 'The Nokhud Offensive',
