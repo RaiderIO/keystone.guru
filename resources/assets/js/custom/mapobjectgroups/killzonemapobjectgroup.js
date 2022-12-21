@@ -218,6 +218,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             for (let index in toSave) {
                 toSave[index].index++;
             }
+        } else {
+            let objectValues = _.values(this.objects);
+            afterIndex = objectValues.length === 0 ? 0 : _.maxBy(objectValues, 'index').index;
         }
 
         let lastKillZone = this._findLastKillZone();
@@ -227,7 +230,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             enemies: enemyIds,
             lat: null,
             lng: null,
-            index: (afterIndex ?? _.size(this.objects)) + 1,
+            index: afterIndex + 1,
             // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
             // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
             local: true

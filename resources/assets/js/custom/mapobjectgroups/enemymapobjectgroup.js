@@ -181,8 +181,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 }
             }
 
+            // enemyPatrolMapObjectGroup may be false if we're generating thumbnails
             // Assign patrols to enemies if they have it
-            if (enemy.enemy_patrol_id !== null) {
+            if (enemyPatrolMapObjectGroup instanceof EnemyPatrolMapObjectGroup && enemy.enemy_patrol_id !== null) {
                 /** @type {EnemyPatrol} */
                 let enemyPatrol = enemyPatrolMapObjectGroup.findMapObjectById(enemy.enemy_patrol_id);
                 enemyPatrol.addEnemy(enemy);

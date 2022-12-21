@@ -915,6 +915,11 @@ class DungeonRoute extends Model
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {
             foreach ($relation as $model) {
+                // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
+                if ($model instanceof KillZone) {
+                    $model->load(['killzoneenemies']);
+                }
+
                 /** @var $model Model */
                 $model->id               = 0;
                 $model->exists           = false;
@@ -956,6 +961,9 @@ class DungeonRoute extends Model
     {
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killzones as $killZone) {
+            // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
+            $killZone->load(['killzoneenemies']);
+
             foreach ($killZone->killzoneenemies as $kzEnemy) {
                 if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [
                         Enemy::SEASONAL_TYPE_PRIDEFUL,
