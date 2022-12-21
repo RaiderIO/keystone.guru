@@ -179,6 +179,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($affixGroup) {
                 return $this->applyAffixGroupCountPenalty(
                     $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                         ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                 )->get();
             }, config('keystoneguru.discover.service.popular.ttl')
@@ -231,6 +232,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($dungeon, $affixGroup) {
                 return $this->applyAffixGroupCountPenalty(
                     $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                         ->where('dungeon_routes.dungeon_id', $dungeon->id)
                         ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                 )->get();

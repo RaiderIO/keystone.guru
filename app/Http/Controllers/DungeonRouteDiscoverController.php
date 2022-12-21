@@ -9,6 +9,7 @@ use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -39,7 +40,6 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @param Expansion $expansion
      * @param string $seasonIndex
-     * @param ExpansionServiceInterface $expansionService
      * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
@@ -48,7 +48,6 @@ class DungeonRouteDiscoverController extends Controller
     public function discoverSeason(
         Expansion                 $expansion,
         string                    $seasonIndex,
-        ExpansionServiceInterface $expansionService,
         DiscoverServiceInterface  $discoverService
     )
     {
@@ -100,8 +99,7 @@ class DungeonRouteDiscoverController extends Controller
     public function discoverExpansion(
         Expansion                 $expansion,
         ExpansionServiceInterface $expansionService,
-        DiscoverServiceInterface  $discoverService
-    )
+        DiscoverServiceInterface  $discoverService)
     {
         $this->authorize('view', $expansion);
 
@@ -136,11 +134,19 @@ class DungeonRouteDiscoverController extends Controller
      * @param Dungeon $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface $seasonService
      * @return Factory
      * @throws AuthorizationException
      */
-    public function discoverdungeon(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
+    public function discoverdungeon(
+        Expansion                 $expansion,
+        Dungeon                   $dungeon,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService,
+        SeasonServiceInterface    $seasonService)
     {
+        $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
+
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
@@ -288,11 +294,19 @@ class DungeonRouteDiscoverController extends Controller
      * @param Dungeon $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface $seasonService
      * @return Factory
      * @throws AuthorizationException
      */
-    public function discoverdungeonthisweek(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
+    public function discoverdungeonthisweek(
+        Expansion                 $expansion,
+        Dungeon                   $dungeon,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService,
+        SeasonServiceInterface    $seasonService)
     {
+        $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
+
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
@@ -317,11 +331,19 @@ class DungeonRouteDiscoverController extends Controller
      * @param Dungeon $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface $seasonService
      * @return Factory
      * @throws AuthorizationException
      */
-    public function discoverdungeonnextweek(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
+    public function discoverdungeonnextweek(
+        Expansion                 $expansion,
+        Dungeon                   $dungeon,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService,
+        SeasonServiceInterface    $seasonService)
     {
+        $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
+
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
@@ -364,5 +386,38 @@ class DungeonRouteDiscoverController extends Controller
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->newByDungeon($dungeon),
         ]);
+    }
+
+    /**
+     * It can happen that your current dungeon (say Halls of Valor) is part of the current expansion's current season (DF S1)
+     * If so - we need to change the expansion for said dungeon from Legion to (in this case) Dragonflight. Otherwise,
+     * it will find affixes for the timewalking season and not for the current season, leading to incorrect affixes.
+     *
+     * This function will correct this mistake and apply the correct expansion + season.
+     *
+     * @param Expansion $originalExpansion
+     * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
+     * @param SeasonServiceInterface $seasonService
+     * @return Expansion
+     */
+    private function applyCorrectedExpansion(
+        Expansion                $originalExpansion,
+        Dungeon                  $dungeon,
+        DiscoverServiceInterface $discoverService,
+        SeasonServiceInterface   $seasonService): Expansion
+    {
+
+        $result = $originalExpansion;
+
+        // First - check if this dungeon is part of the current expansion's season, regardless of the season it originated from
+        $currentSeason = $seasonService->getCurrentSeason();
+        if ($currentSeason->hasDungeon($dungeon)) {
+            // If it does, change the expansion to the current expansion so that the correct affixes are found
+            $result = $currentSeason->expansion;
+            $discoverService->withSeason($currentSeason);
+        }
+
+        return $result;
     }
 }
