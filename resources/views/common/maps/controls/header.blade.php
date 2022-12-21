@@ -109,7 +109,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </div>
                     </div>
-                    @if(isset($dungeonroute) && $dungeonroute->mappingVersion->isLatestForDungeon())
+                    @if(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
                         <div class="row">
                             <div class="col" data-toggle="tooltip"
                                  title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
