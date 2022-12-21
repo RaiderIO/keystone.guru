@@ -1,0 +1,97 @@
+{
+    "id": 155,
+    "release_changelog_id": 162,
+    "version": "v6.1.4",
+    "title": "Bugfixes to discovery pages, cloning routes. Updated Temple of the Jade Serpent mapping",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2022-12-21T22:27:27+00:00",
+    "updated_at": "2022-12-21T22:27:27+00:00",
+    "changelog": {
+        "id": 162,
+        "release_id": 155,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1516,
+                "change": "Improved the graphics for most of the Dragonflight Season 1 dungeons, and added new backgrounds.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1517,
+                "change": "Updated MDT version - Temple of the Jade Serpent now has the missing enemies at the last boss.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1521,
+                "change": "\"A new mapping version is available for your route\" is no longer shown when you're not actively editing the route. A new warning in the header is shown instead to alert you you may be viewing an outdated route.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1522,
+                "change": "Routes that have multiple affixes assigned to them no longer show up more than once in the route discovery pages.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1523,
+                "change": "Halls of Valor and Court of Stars no longer think they are part of Legion Timewalking in the route discovery pages.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1524,
+                "change": "Route thumbnails are now no longer rendered blank.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1525,
+                "change": "Cloning a route no longer clones the route with empty pulls.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 162,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1526,
+                "change": "Creating a new pull using shift + click will now always add the pull in the correct position in the route.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}
