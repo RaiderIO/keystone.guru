@@ -219,7 +219,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 toSave[index].index++;
             }
         } else {
-            afterIndex = this.objects.length === 0 ? 0 : _.maxBy(_.values(this.objects), 'index').index;
+            let objectValues = _.values(this.objects);
+            afterIndex = objectValues.length === 0 ? 0 : _.maxBy(objectValues, 'index').index;
         }
 
         let lastKillZone = this._findLastKillZone();
