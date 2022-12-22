@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Environment;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Jobs\RefreshDiscoverCache;
 use Illuminate\Console\Command;
 
 class Update extends Command
@@ -99,7 +100,8 @@ class Update extends Command
 
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
-        $this->call('discover:cache');
+        // Dispatch the refreshing of the discovery cache - this can take up to 5 minutes and can be done in the background
+        RefreshDiscoverCache::dispatch();
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         // Bit of a nasty hack to fix permission issues
