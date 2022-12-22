@@ -165,7 +165,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         $savedEnemyPatrols = collect();
 
         $dungeonEnemyIndex = 0;
-        foreach ($mappingVersion->enemies()->with('enemypatrol')->get()->groupBy('npc_id') as $npcId => $enemies) {
+        foreach ($mappingVersion->enemies()->with('enemypatrol')->orderBy('mdt_id')->get()->groupBy('npc_id') as $npcId => $enemies) {
             /** @var Collection|Enemy[] $enemies */
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);

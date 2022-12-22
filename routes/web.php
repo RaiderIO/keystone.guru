@@ -329,6 +329,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', [AdminToolsController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
+                // Thumbnails
+                Route::get('thumbnails/regenerate', [AdminToolsController::class, 'thumbnailsregenerate'])->name('admin.tools.thumbnails.regenerate.view');
+                Route::post('thumbnails/regenerate', [AdminToolsController::class, 'thumbnailsregeneratesubmit'])->name('admin.tools.thumbnails.regenerate.submit');
+
                 Route::group(['prefix' => 'mdt'], function () {
                     // View string contents
                     Route::get('string', [AdminToolsController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
