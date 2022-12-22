@@ -243,6 +243,10 @@ class Conversion
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
         $season = $dungeon->getActiveSeason($seasonService);
+        if ($season === null) {
+            logger()->error(sprintf('Unable to find season for dungeon %s', __($dungeon->name)));
+            return null;
+        }
 
         $affixGroup = $season->affixgroups->get($mdtWeek - 1);
         if ($affixGroup === null) {
