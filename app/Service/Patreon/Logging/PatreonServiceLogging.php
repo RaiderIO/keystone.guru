@@ -2,7 +2,9 @@
 
 namespace App\Service\Patreon\Logging;
 
-class PatreonServiceLogging extends \App\Logging\StructuredLogging implements PatreonServiceLoggingInterface
+use App\Logging\StructuredLogging;
+
+class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
 {
     /**
      * @return mixed
@@ -125,7 +127,7 @@ class PatreonServiceLogging extends \App\Logging\StructuredLogging implements Pa
      */
     public function applyPaidBenefitsForMemberCannotFindPatreonData(): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     /**
