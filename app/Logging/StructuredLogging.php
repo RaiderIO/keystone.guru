@@ -18,7 +18,7 @@ class StructuredLogging
     /**
      * @return string|null
      */
-    public function getChannel(): ?string
+    protected function getChannel(): ?string
     {
         return $this->channel;
     }
@@ -27,7 +27,7 @@ class StructuredLogging
      * @param string|null $channel
      * @return StructuredLogging
      */
-    public function setChannel(?string $channel): StructuredLogging
+    protected function setChannel(?string $channel): StructuredLogging
     {
         $this->channel = $channel;
         return $this;
