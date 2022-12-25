@@ -13,6 +13,26 @@ class StructuredLogging
     /** @var array Upon calling begin() or end(), this array is a flattened versino of $groupedContext to make it quicker to write logs to disk */
     private array $cachedContext = [];
 
+    private ?string $channel = null;
+
+    /**
+     * @return string|null
+     */
+    public function getChannel(): ?string
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param string|null $channel
+     * @return StructuredLogging
+     */
+    public function setChannel(?string $channel): StructuredLogging
+    {
+        $this->channel = $channel;
+        return $this;
+    }
+
     /**
      * @param string $functionName
      * @param array $context
@@ -137,6 +157,6 @@ class StructuredLogging
     private function log(int $level, string $functionName, array $context = []): void
     {
         // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-        logger()->log(Logger::getLevelName($level), array_reverse(explode('\\', $functionName))[0], array_merge($this->cachedContext, $context));
+        logger()->channel($this->channel)->log(Logger::getLevelName($level), array_reverse(explode('\\', $functionName))[0], array_merge($this->cachedContext, $context));
     }
 }
