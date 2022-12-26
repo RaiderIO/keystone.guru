@@ -163,6 +163,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemy->enemy_pack_id      = null;
             $enemy->mapping_version_id = $newMappingVersion->id;
 
+            // @TODO recover enemy from previous mapping version and restore keystone.guru only properties
+
             if ($enemy->save()) {
                 logger()->channel('stderr')->info(sprintf('- Enemy %d OK', $enemy->id));
             } else {
