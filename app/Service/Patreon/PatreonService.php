@@ -145,7 +145,6 @@ class PatreonService implements PatreonServiceInterface
             $user = $patreonUserLink->user;
             if ($user === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
-                logger()->debug(sprintf('Unable to find user %s - user account may have deleted or e-mail changed', $memberEmail));
                 return false;
             }
 
