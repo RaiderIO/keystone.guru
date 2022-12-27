@@ -754,5 +754,23 @@
         "created_at": "2022-12-21T22:22:49.000000Z",
         "updated_at": "2022-12-21T22:22:49.000000Z",
         "merged": false
+    },
+    {
+        "id": 85,
+        "dungeon_id": 71,
+        "version": 3,
+        "mdt_mapping_hash": "c86d6660294395695c38d5d586fe568b",
+        "created_at": "2022-12-27T20:56:25.000000Z",
+        "updated_at": "2022-12-27T20:56:25.000000Z",
+        "merged": false
+    },
+    {
+        "id": 86,
+        "dungeon_id": 73,
+        "version": 3,
+        "mdt_mapping_hash": "ffb2fe0f50facb4a731e3f3ca5b70cf3",
+        "created_at": "2022-12-27T20:57:32.000000Z",
+        "updated_at": "2022-12-27T20:57:32.000000Z",
+        "merged": false
     }
 ]
