@@ -37,5 +37,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 85,
+        "floor_id": 153,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -125.78125,
+        "lng": 288.5,
+        "comment": "Dragonkiller Lance",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 85,
+        "floor_id": 153,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -132.625,
+        "lng": 280.875,
+        "comment": "Dragonkiller Lance",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 85,
+        "floor_id": 153,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -136.5,
+        "lng": 287.0625,
+        "comment": "Dragonkiller Lance",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
