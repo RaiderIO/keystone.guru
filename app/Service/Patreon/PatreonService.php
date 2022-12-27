@@ -95,7 +95,6 @@ class PatreonService implements PatreonServiceInterface
             return null;
         }
 
-
         try {
             $this->log->loadCampaignMembersStart();
 
@@ -123,25 +122,27 @@ class PatreonService implements PatreonServiceInterface
      */
     public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
     {
-        /** @var array{id: string, type: string, relationships: array, attributes: array{email: string}} $member */
+        /** @var array{id: string, type: string, relationships: array} $member */
 
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
             $memberEmail = $member['attributes']['email'];
 
-            if (empty($memberEmail)) {
-                $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
-                return false;
-            }
-
             /** @var PatreonUserLink $patreonUserLink */
-            $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
+            $patreonUserLink = PatreonUserLink::with(['user'])
+                ->where('patreon_id', $member['id'])
+                ->orWhere('email', $memberEmail)->first();
 
             if ($patreonUserLink === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
                 return false;
             }
+
+            // Temp - ensure the patreon ID is set
+            $patreonUserLink->update([
+                'patreon_id' => $member['id'],
+            ]);
 
             $user = $patreonUserLink->user;
             if ($user === null) {

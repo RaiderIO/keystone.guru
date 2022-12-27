@@ -14,8 +14,9 @@ use Illuminate\Support\Collection;
 /**
  * @property int $id
  * @property int $user_id
+ * @property string $patreon_id
  * @property string $email
- * @property string scope
+ * @property string $scope
  * @property string $access_token
  * @property string $refresh_token
  * @property string $version
@@ -30,6 +31,7 @@ class PatreonUserLink extends Model
 {
     protected $fillable = [
         'user_id',
+        'patreon_id',
         'email',
         'scope',
         'access_token',

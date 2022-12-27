@@ -48,6 +48,9 @@ class RefreshMembershipStatus extends Command
         if ($campaignBenefits === null ||
             $campaignTiers === null ||
             $members === null) {
+            $this->info(
+                sprintf('Benefits, tiers or members are empty: %d, %d, %d', is_null($campaignBenefits), is_null($campaignTiers), is_null($members))
+            );
             return -1;
         }
 

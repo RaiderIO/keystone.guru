@@ -28,9 +28,7 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignMembersEnd(): void;
 
-    public function applyPaidBenefitsForMemberEmptyMemberEmail(): void;
-
-    public function applyPaidBenefitsForMemberStart(string $memberEmail): void;
+    public function applyPaidBenefitsForMemberStart(string $memberId): void;
 
     public function applyPaidBenefitsForMemberCannotFindPatreonData(): void;
 

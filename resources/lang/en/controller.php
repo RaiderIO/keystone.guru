@@ -115,12 +115,13 @@ return [
     ],
     'patreon'                     => [
         'flash' => [
-            'unlink_successful'       => 'Your Patreon account has successfully been unlinked.',
-            'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
-            'patreon_session_expired' => 'Your Patreon session has expired. Please try again.',
-            'session_expired'         => 'Your session has expired. Please try again.',
-            'patreon_error_occurred'  => 'An error occurred on Patreon\'s side. Please try again later.',
-            'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
+            'unlink_successful'                 => 'Your Patreon account has successfully been unlinked.',
+            'link_successful'                   => 'Your Patreon has been linked successfully. Thank you!',
+            'patreon_session_expired'           => 'Your Patreon session has expired. Please try again.',
+            'session_expired'                   => 'Your session has expired. Please try again.',
+            'patreon_error_occurred'            => 'An error occurred on Patreon\'s side. Please try again later.',
+            'internal_error_occurred'           => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
+            'patreon_email_not_set_cannot_link' => 'Your e-mail address appears not to be set in Patreon',
         ],
     ],
     'profile'                     => [

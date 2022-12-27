@@ -106,18 +106,10 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
+     * @param string $memberId
      * @return mixed
      */
-    public function applyPaidBenefitsForMemberEmptyMemberEmail(): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @param string $memberEmail
-     * @return mixed
-     */
-    public function applyPaidBenefitsForMemberStart(string $memberEmail): void
+    public function applyPaidBenefitsForMemberStart(string $memberId): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }

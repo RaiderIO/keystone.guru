@@ -37,22 +37,6 @@ class PatreonApiService implements PatreonApiServiceInterface
                     urlencode('fields[member]')
                 )
             );
-
-            if (!isset($identityResponse['errors'])) {
-
-                if (!isset($identityResponse['included'])) {
-                    $this->log->getIdentityIncludedNotFound();
-                } else {
-                    // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
-                    foreach ($identityResponse['included'] as &$included) {
-                        if ($included['type'] === 'member') {
-                            $included['attributes']['email'] = $identityResponse['data']['attributes']['email'];
-                            $this->log->getIdentityUpdatedEmailAddress($included['attributes']['email']);
-                            break;
-                        }
-                    }
-                }
-            }
         } finally {
             $this->log->getIdentityEnd($identityResponse);
         }

@@ -66,7 +66,10 @@ class PatreonController extends Controller
                 // Special case for the admin user - since the service needs this account to exist we need to just create
                 // the PatreonData for this user and ignore the paid benefits (admins get everything, anyways)
                 if ($user->id === 1) {
-                    $patreonUserLinkAttributes['email'] = 'admin@app.com';
+                    $identityResponse                        = $patreonApiService->getIdentity($tokens['access_token']);
+
+                    $patreonUserLinkAttributes['patreon_id'] = $identityResponse['data']['id'];
+                    $patreonUserLinkAttributes['email']      = 'admin@app.com';
                     $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
                 } else {
                     // Fetch info we need to construct the PatreonData object/be able to link paid benefits
@@ -78,12 +81,15 @@ class PatreonController extends Controller
                         Session::flash('warning', __('controller.patreon.flash.patreon_error_occurred'));
                     } else if (!isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
+                    } else if (!isset($identityResponse['data']['attributes']['email']) || is_null($identityResponse['data']['attributes']['email'])) {
+                        Session::flash('warning', __('controller.patreon.flash.patreon_email_not_set_cannot_link'));
                     } else {
                         $member = collect($identityResponse['included'])->filter(function (array $included) {
                             return $included['type'] === 'member';
                         })->first();
 
-                        $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
+                        $patreonUserLinkAttributes['patreon_id'] = $identityResponse['data']['id'];
+                        $patreonUserLinkAttributes['email']      = '';
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
                         // Now that the PatreonData object was created, apply the correct paid benefits to the account
