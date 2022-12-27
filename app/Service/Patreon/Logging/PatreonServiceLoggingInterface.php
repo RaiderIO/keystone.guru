@@ -42,7 +42,7 @@ interface PatreonServiceLoggingInterface
 
     public function applyPaidBenefitsRevokedPatreonBenefit(string $removedBenefit, string $email): void;
 
-    public function applyPaidBenefitsForMemberEnd(string $memberEmail): void;
+    public function applyPaidBenefitsForMemberEnd(): void;
 
     public function loadAdminUserIsCached(int $id): void;
 

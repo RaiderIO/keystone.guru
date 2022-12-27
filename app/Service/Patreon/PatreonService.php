@@ -3,8 +3,8 @@
 namespace App\Service\Patreon;
 
 use App\Models\Patreon\PatreonBenefit;
-use App\Models\Patreon\PatreonUserLink;
 use App\Models\Patreon\PatreonUserBenefit;
+use App\Models\Patreon\PatreonUserLink;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use App\User;
 
@@ -124,18 +124,19 @@ class PatreonService implements PatreonServiceInterface
     public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
     {
         /** @var array{id: string, type: string, relationships: array, attributes: array{email: string}} $member */
-        $memberEmail = $member['attributes']['email'];
 
-        if (empty($memberEmail)) {
-            $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
-            return false;
-        }
-
-        /** @var PatreonUserLink $patreonUserLink */
-        $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
         try {
-            $this->log->applyPaidBenefitsForMemberStart($memberEmail);
+            $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
+            $memberEmail = $member['attributes']['email'];
+
+            if (empty($memberEmail)) {
+                $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
+                return false;
+            }
+
+            /** @var PatreonUserLink $patreonUserLink */
+            $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
 
             if ($patreonUserLink === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
@@ -186,7 +187,7 @@ class PatreonService implements PatreonServiceInterface
                 }
             }
         } finally {
-            $this->log->applyPaidBenefitsForMemberEnd($memberEmail);
+            $this->log->applyPaidBenefitsForMemberEnd();
         }
 
         return true;

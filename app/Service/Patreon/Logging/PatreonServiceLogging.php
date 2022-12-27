@@ -167,10 +167,9 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @param string $memberEmail
      * @return mixed
      */
-    public function applyPaidBenefitsForMemberEnd(string $memberEmail): void
+    public function applyPaidBenefitsForMemberEnd(): void
     {
         $this->end(__METHOD__);
     }
