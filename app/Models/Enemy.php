@@ -182,4 +182,12 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     {
         return $this->floor->dungeon_id;
     }
+
+    /**
+     * @return string
+     */
+    public function getUniqueKey(): string
+    {
+        return sprintf('%d-%d', $this->getMdtNpcId(), $this->mdt_id);
+    }
 }
