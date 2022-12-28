@@ -109,5 +109,9 @@ return [
         'name'        => '@todo ru: .shrouded.name',
         'description' => '@todo ru: .shrouded.description',
     ],
+    'thundering'              => [
+        'name'        => '@todo ru: .thundering.name',
+        'description' => '@todo ru: .thundering.description',
+    ],
     'seasonal_index_preset' => '%s расстановка %d',
 ];

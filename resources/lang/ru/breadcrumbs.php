@@ -65,6 +65,10 @@ return [
                 'edit_floor' => 'редактировать этаж',
             ],
 
+            'dungeonspeedrunrequirednpc' => [
+                'new_dungeonspeedrunrequirednpc' => '@todo ru: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc'
+            ],
+
             'npcs' => [
                 'npcs'     => 'НПЦ',
                 'new_npc'  => 'Новый НПЦ',

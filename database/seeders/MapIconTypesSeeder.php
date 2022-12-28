@@ -104,7 +104,9 @@ class MapIconTypesSeeder extends Seeder
             MapIconType::MAP_ICON_TYPE_NW_ITEM_SHIELD  => ['name' => 'mapicontypes.nw_item_shield', 'width' => 32, 'height' => 32, 'admin_only' => true],
             MapIconType::MAP_ICON_TYPE_NW_ITEM_SPEAR   => ['name' => 'mapicontypes.nw_item_spear', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
-            MapIconType::MAP_ICON_TYPE_SPELL_INCARNATION => ['name' => 'mapicontypes.spell_incarnation', 'width' => 32, 'height' => 32,],
+            MapIconType::MAP_ICON_TYPE_SPELL_INCARNATION         => ['name' => 'mapicontypes.spell_incarnation', 'width' => 32, 'height' => 32,],
+            MapIconType::MAP_ICON_TYPE_SPELL_MISDIRECTION        => ['name' => 'mapicontypes.spell_misdirection', 'width' => 32, 'height' => 32,],
+            MapIconType::MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE => ['name' => 'mapicontypes.spell_tricks_of_the_trade', 'width' => 32, 'height' => 32,],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {

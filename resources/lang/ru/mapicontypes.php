@@ -40,7 +40,11 @@ return [
     'spell_shadowmeld'            => '@todo ru: .spell_shadowmeld',
     'spell_shroud_of_concealment' => '@todo ru: .spell_shroud_of_concealment',
 
-    'item_invisibility' => '@todo ru: .item_invisibility',
+    'item_invisibility'                 => '@todo ru: .item_invisibility',
+    'item_drums_of_speed'               => '@todo ru: .item_drums_of_speed',
+    'item_free_action_potion'           => '@todo ru: .item_free_action_potion',
+    'item_global_thermal_sapper_charge' => '@todo ru: .item_global_thermal_sapper_charge',
+    'item_rocket_boots_xtreme'          => '@todo ru: .item_rocket_boots_xtreme',
 
     'question_yellow' => '@todo ru: .question_yellow',
     'question_blue'   => '@todo ru: .question_blue',
@@ -82,5 +86,7 @@ return [
     'nw_item_shield'  => '@todo ru: .nw_item_shield',
     'nw_item_spear'   => '@todo ru: .nw_item_spear',
 
-    'spell_incarnation' => '@todo ru: .spell_incarnation',
+    'spell_incarnation'         => '@todo ru: .spell_incarnation',
+    'spell_misdirection'        => '@todo ru: .spell_misdirection',
+    'spell_tricks_of_the_trade' => '@todo ru: .spell_tricks_of_the_trade',
 ];

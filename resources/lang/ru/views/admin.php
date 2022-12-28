@@ -1,13 +1,14 @@
 <?php
 
 return [
-    'dungeon'    => [
+    'dungeon'                    => [
         'edit' => [
             'title_new'                       => 'Новое подземелье',
             'title_edit'                      => 'Редактировать подземелье',
             'header_new'                      => 'Новое подземелье',
             'header_edit'                     => 'Редактировать подземелье',
             'active'                          => 'Действующий',
+            'speedrun_enabled'                => '@todo ru: .dungeon.edit.speedrun_enabled',
             'zone_id'                         => 'ID зоны',
             'map_id'                          => '@todo ru: .dungeon.edit.map_id',
             'mdt_id'                          => 'MDT ID',
@@ -21,14 +22,27 @@ return [
             'timer_max_seconds'               => 'Таймер (секунды)',
             'submit'                          => 'Подтвердить',
 
-            'floor_management'     => 'Управление уровнями',
-            'add_floor'            => 'Добавить уровень',
-            'table_header_id'      => 'ID',
-            'table_header_index'   => 'Индекс',
-            'table_header_name'    => 'Имя',
-            'table_header_actions' => 'Действия',
-            'floor_edit_edit'      => 'Редактировать',
-            'floor_edit_mapping'   => 'Разместить',
+            'floor_management' => [
+                'title'                => '@todo ru: .dungeon.edit.floor_management.title',
+                'add_floor'            => '@todo ru: .dungeon.edit.floor_management.add_floor',
+                'table_header_id'      => '@todo ru: .dungeon.edit.floor_management.table_header_id',
+                'table_header_index'   => '@todo ru: .dungeon.edit.floor_management.table_header_index',
+                'table_header_name'    => '@todo ru: .dungeon.edit.floor_management.table_header_name',
+                'table_header_actions' => '@todo ru: .dungeon.edit.floor_management.table_header_actions',
+                'floor_edit_edit'      => '@todo ru: .dungeon.edit.floor_management.floor_edit_edit',
+                'floor_edit_mapping'   => '@todo ru: .dungeon.edit.floor_management.floor_edit_mapping',
+            ],
+
+            'mapping_versions' => [
+                'title'                   => '@todo ru: .dungeon.edit.mapping_versions.title',
+                'add_mapping_version'     => '@todo ru: .dungeon.edit.mapping_versions.add_mapping_version',
+                'delete'                  => '@todo ru: .dungeon.edit.mapping_versions.delete',
+                'table_header_merged'     => '@todo ru: .dungeon.edit.mapping_versions.table_header_merged',
+                'table_header_id'         => '@todo ru: .dungeon.edit.mapping_versions.table_header_id',
+                'table_header_version'    => '@todo ru: .dungeon.edit.mapping_versions.table_header_version',
+                'table_header_created_at' => '@todo ru: .dungeon.edit.mapping_versions.table_header_created_at',
+                'table_header_actions'    => '@todo ru: .dungeon.edit.mapping_versions.table_header_actions',
+            ],
         ],
         'list' => [
             'title'                             => 'Список подземелий',
@@ -43,7 +57,17 @@ return [
             'edit'                              => 'Редактировать',
         ],
     ],
-    'expansion'  => [
+    'dungeonspeedrunrequirednpc' => [
+        'new' => [
+            'title'          => '@todo ru: .dungeonspeedrunrequirednpc.new.title',
+            'header'         => '@todo ru: .dungeonspeedrunrequirednpc.new.header',
+            'npc_id'         => '@todo ru: .dungeonspeedrunrequirednpc.new.npc_id',
+            'linked_npc_ids' => '@todo ru: .dungeonspeedrunrequirednpc.new.linked_npc_ids',
+            'count'          => '@todo ru: .dungeonspeedrunrequirednpc.new.count',
+            'submit'         => '@todo ru: .dungeonspeedrunrequirednpc.new.submit',
+        ],
+    ],
+    'expansion'                  => [
         'edit' => [
             'title_new'     => 'Новое дополнение',
             'header_new'    => 'Новое дополнение',
@@ -71,11 +95,12 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'floor'      => [
+    'floor'                      => [
         'flash'   => [
-            'invalid_floor_id' => 'Этаж %s не является частью подземелья %s',
-            'floor_updated'    => 'Этаж обновлен',
-            'floor_created'    => 'Этаж создан',
+            'invalid_floor_id'           => 'Этаж %s не является частью подземелья %s',
+            'invalid_mapping_version_id' => '@todo ru: .floor.flash.invalid_mapping_version_id',
+            'floor_updated'              => 'Этаж обновлен',
+            'floor_created'              => 'Этаж создан',
         ],
         'edit'    => [
             'title_new'               => 'Новый этаж - %s',
@@ -102,13 +127,23 @@ return [
                 'right' => 'Правый',
             ],
             'submit'                  => 'Подтвердить',
+
+            'speedrun_required_npcs' => [
+                'title'                => '@todo ru: .floor.edit.speedrun_required_npcs.title',
+                'add_npc'              => '@todo ru: .floor.edit.speedrun_required_npcs.add_npc',
+                'table_header_id'      => '@todo ru: .floor.edit.speedrun_required_npcs.table_header_id',
+                'table_header_npc'     => '@todo ru: .floor.edit.speedrun_required_npcs.table_header_npc',
+                'table_header_count'   => '@todo ru: .floor.edit.speedrun_required_npcs.table_header_count',
+                'table_header_actions' => '@todo ru: .floor.edit.speedrun_required_npcs.table_header_actions',
+                'npc_delete'           => '@todo ru: .floor.edit.speedrun_required_npcs.npc_delete',
+            ],
         ],
         'mapping' => [
             'title'  => 'Редактировать отображение - %s',
             'header' => 'Редактировать отображение - %s',
         ],
     ],
-    'npc'        => [
+    'npc'                        => [
         'flash' => [
             'npc_updated' => 'NPC обновлены',
             'npc_created' => 'NPC %s создан',
@@ -159,7 +194,7 @@ return [
             'table_header_actions'        => 'Действия',
         ],
     ],
-    'release'    => [
+    'release'                    => [
         'edit' => [
             'title_new'   => 'Новый релиз',
             'header_new'  => 'Новый релиз',
@@ -188,7 +223,7 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'spell'      => [
+    'spell'                      => [
         'edit' => [
             'title_new'         => 'Новая способность',
             'header_new'        => 'Новая способность',
@@ -214,7 +249,7 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'tools'      => [
+    'tools'                      => [
         'datadump'     => [
             'viewexporteddungeondata' => [
                 'title'   => 'Экспортировано!',
@@ -259,7 +294,7 @@ return [
             ],
         ],
         'mdt'          => [
-            'diff'         => [
+            'diff'                              => [
                 'title'                 => 'MDT Различия',
                 'header'                => 'MDT Различия',
                 'headers'               => [
@@ -279,17 +314,27 @@ return [
                 'npc_message'           => ':npcName (:npcId, :count использованы)',
                 'apply_mdt_kg'          => 'Применить (MDT -> KG)',
             ],
-            'dungeonroute' => [
+            'dungeonroute'                      => [
                 'title'      => 'Просмотреть маршрут подземелья как строку для MDT',
                 'header'     => 'Просмотреть маршрут подземелья как строку для MDT',
                 'public_key' => 'Публичный ключ',
                 'submit'     => 'Подтвердить',
             ],
-            'string'       => [
+            'string'                            => [
                 'title'                        => 'Просмотр содержимое строки MDT',
                 'header'                       => 'Просмотр содержимое строки MDT',
                 'paste_your_mdt_export_string' => 'Вставьте строку экспорта Mythic Dungeon Tools',
                 'submit'                       => 'Подтвердить',
+            ],
+            'dungeonmappinghash'                => [
+                'title'  => '@todo ru: .tools.mdt.dungeonmappinghash.title',
+                'header' => '@todo ru: .tools.mdt.dungeonmappinghash.header',
+                'submit' => '@todo ru: .tools.mdt.dungeonmappinghash.submit',
+            ],
+            'dungeonmappingversiontomdtmapping' => [
+                'title'  => '@todo ru: .tools.mdt.dungeonmappingversiontomdtmapping.title',
+                'header' => '@todo ru: .tools.mdt.dungeonmappingversiontomdtmapping.header',
+                'submit' => '@todo ru: .tools.mdt.dungeonmappingversiontomdtmapping.submit',
             ],
         ],
         'npcimport'    => [
@@ -308,11 +353,13 @@ return [
             'subheader_dungeonroute'    => 'Маршрут подземелья',
             'view_dungeonroute_details' => 'Показать детали маршрута подземелья',
 
-            'subheader_mdt'                   => 'MDT',
-            'view_mdt_string'                 => 'Просмотреть содержимое строки MDT',
-            'view_mdt_string_as_dungeonroute' => 'Просмотреть строку MDT как маршрут подземелья',
-            'view_dungeonroute_as_mdt_string' => 'Просмотреть маршрут подземелья как строку MDT',
-            'view_mdt_diff'                   => 'Просмотр различия с MDT',
+            'subheader_mdt'                               => 'MDT',
+            'view_mdt_string'                             => 'Просмотреть содержимое строки MDT',
+            'view_mdt_string_as_dungeonroute'             => 'Просмотреть строку MDT как маршрут подземелья',
+            'view_dungeonroute_as_mdt_string'             => 'Просмотреть маршрут подземелья как строку MDT',
+            'view_mdt_diff'                               => 'Просмотр различия с MDT',
+            'view_dungeon_mapping_hash'                   => '@todo ru: .tools.list.view_dungeon_mapping_hash',
+            'view_dungeon_mapping_version_to_mdt_mapping' => '@todo ru: .tools.list.view_dungeon_mapping_version_to_mdt_mapping',
 
             'subheader_enemy_forces' => 'Силы врага',
             'enemy_forces_import'    => 'Импорт силы врага',
@@ -332,6 +379,16 @@ return [
             'export_releases'     => 'Экспорт релизов',
 
             'enemy_forces_recalculate' => '@todo ru: .tools.list.enemy_forces_recalculate',
+
+            'subheader_thumbnails'  => '@todo ru: .tools.list.subheader_thumbnails',
+            'thumbnails_regenerate' => '@todo ru: .tools.list.thumbnails_regenerate',
+        ],
+        'thumbnails'   => [
+            'regenerate' => [
+                'title'  => '@todo ru: .tools.thumbnails.regenerate.title',
+                'header' => '@todo ru: .tools.thumbnails.regenerate.header',
+                'submit' => '@todo ru: .tools.thumbnails.regenerate.submit',
+            ],
         ],
         'wowtools'     => [
             'importingamecoordinates' => [
@@ -344,7 +401,7 @@ return [
             ],
         ],
     ],
-    'user'       => [
+    'user'                       => [
         'list' => [
             'title'                   => 'Список пользователей',
             'header'                  => 'Показать пользователя',
@@ -358,7 +415,7 @@ return [
             'table_header_patreons'   => 'Patreon',
         ],
     ],
-    'userreport' => [
+    'userreport'                 => [
         'list' => [
             'title'                    => 'Отчеты пользователей',
             'header'                   => 'Просмотр отчетов пользователей',
