@@ -110,7 +110,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
      */
     public function applyPaidBenefitsForMemberEmptyMemberEmail(): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     /**

@@ -186,6 +186,13 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
             // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
             if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
+                // If the first pull is not on the first floor
+                if( !killZoneOnCurrentFloor ) {
+                    let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0]);
+                    killZoneCenteroid.lat = closestMarkerToKillZoneFloor.lat;
+                    killZoneCenteroid.lng = closestMarkerToKillZoneFloor.lng;
+                }
+
                 this.createNewPath([{
                     lat: dungeonStartLatLng.lat,
                     lng: dungeonStartLatLng.lng
