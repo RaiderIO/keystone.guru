@@ -2,7 +2,7 @@
 
 
 return [
-    'admintools'           => [
+    'admintools'                  => [
         'error' => [
             'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
             'invalid_mdt_string'                  => 'Неверная строка MDT',
@@ -25,23 +25,23 @@ return [
             ],
         ],
     ],
-    'apidungeonroute'      => [
+    'apidungeonroute'             => [
         'mdt_generate_error'  => 'Произошла ошибка при создании строки MDT: %s',
         'mdt_generate_no_lua' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы',
     ],
-    'apiuserreport'        => [
+    'apiuserreport'               => [
         'error' => [
             'unable_to_update_user_report' => 'Невозможно обновить отчет пользователя',
             'unable_to_save_report'        => 'Невозможно сохранить отчет',
         ],
     ],
-    'dungeon'              => [
+    'dungeon'                     => [
         'flash' => [
             'dungeon_created' => 'Подземелье создано',
             'dungeon_updated' => 'Подземелье обновлено',
         ],
     ],
-    'dungeonroute'         => [
+    'dungeonroute'                => [
         'unable_to_save' => 'Невозможно сохранить маршрут',
         'flash'          => [
             'route_cloned_successfully' => 'Маршрут успешно клонирован',
@@ -49,7 +49,7 @@ return [
             'route_created'             => 'Маршрут создан',
         ],
     ],
-    'dungeonroutediscover' => [
+    'dungeonroutediscover'        => [
         'popular'           => 'Популярные маршруты',
         'this_week_affixes' => 'Текущие аффиксы',
         'next_week_affixes' => 'Аффиксы следующей неделе',
@@ -61,28 +61,35 @@ return [
             'new'               => '%s Новые',
         ],
     ],
-    'expansion'            => [
+    'dungeonspeedrunrequirednpcs' => [
+        'no_linked_npc' => '@todo ru: .dungeonspeedrunrequirednpcs.no_linked_npc',
+        'flash'         => [
+            'npc_added_successfully'   => '@todo ru: .dungeonspeedrunrequirednpcs.flash.npc_added_successfully',
+            'npc_deleted_successfully' => '@todo ru: .dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully',
+        ],
+    ],
+    'expansion'                   => [
         'flash' => [
             'unable_to_save_expansion' => 'Не удалось сохранить дополнение',
             'expansion_updated'        => 'Дополнение обновлено',
             'expansion_created'        => 'Дополнение создано',
         ],
     ],
-    'oauthlogin'           => [
+    'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => 'Регистрация прошла успешно.',
             'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
             'email_exists'            => 'Пользователь с таким электронным адресом уже существует %s. Может быть вы уже зарегистрированы?',
         ],
     ],
-    'register'             => [
+    'register'                    => [
         'flash'                 => [
             'registered_successfully' => 'Регистрация прошла успешно.',
         ],
         'legal_agreed_required' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
         'legal_agreed_accepted' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
     ],
-    'release'              => [
+    'release'                     => [
         'error' => [
             'unable_to_save_release' => 'Невозможно сохранить релиз',
         ],
@@ -92,7 +99,11 @@ return [
             'github_exception' => 'Произошла ошибка связи с Github: %s',
         ],
     ],
-    'mdtimport'            => [
+    'mappingversion'              => [
+        'created_successfully' => '@todo ru: .mappingversion.created_successfully',
+        'deleted_successfully' => '@todo ru: .mappingversion.deleted_successfully',
+    ],
+    'mdtimport'                   => [
         'unknown_dungeon' => 'Неизвестное подземелье',
         'error'           => [
             'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
@@ -102,15 +113,17 @@ return [
             'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
         ],
     ],
-    'patreon'              => [
+    'patreon'                     => [
         'flash' => [
             'unlink_successful'       => '@todo ru: .patreon.flash.unlink_successful',
             'link_successful'         => '@todo ru: .patreon.flash.link_successful',
             'patreon_session_expired' => '@todo ru: .patreon.flash.patreon_session_expired',
             'session_expired'         => '@todo ru: .patreon.flash.session_expired',
+            'patreon_error_occurred'  => '@todo ru: .patreon.flash.patreon_error_occurred',
+            'internal_error_occurred' => '@todo ru: .patreon.flash.internal_error_occurred',
         ],
     ],
-    'profile'              => [
+    'profile'                     => [
         'flash' => [
             'email_already_in_use'             => 'Пользователь с таким электронным адресом уже существует',
             'username_already_in_use'          => 'Пользователь с таким именем уже существует',
@@ -128,7 +141,7 @@ return [
             'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
         ],
     ],
-    'spell'                => [
+    'spell'                       => [
         'error' => [
             'unable_to_save_spell' => 'Невозможно сохранить способность',
         ],
@@ -137,7 +150,7 @@ return [
             'spell_created' => 'Способность создана',
         ],
     ],
-    'team'                 => [
+    'team'                        => [
         'flash' => [
             'team_updated'                        => 'Команда обновлена',
             'team_created'                        => 'Команда создана',
@@ -147,7 +160,7 @@ return [
             'tag_already_exists'                  => 'Этот тег уже существует',
         ],
     ],
-    'user'                 => [
+    'user'                        => [
         'flash' => [
             'user_is_now_an_admin'         => 'Пользователь %s теперь администратор',
             'user_is_no_longer_an_admin'   => 'Пользователь %s больше не администратор',

@@ -86,5 +86,7 @@ return [
     'nw_item_shield'  => 'Shield',
     'nw_item_spear'   => 'Spear',
 
-    'spell_incarnation' => 'Incarnation',
+    'spell_incarnation'         => 'Incarnation',
+    'spell_misdirection'        => 'Misdirection',
+    'spell_tricks_of_the_trade' => 'Tricks of the Trade',
 ];

@@ -186,7 +186,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             if (enemyPatrolMapObjectGroup instanceof EnemyPatrolMapObjectGroup && enemy.enemy_patrol_id !== null) {
                 /** @type {EnemyPatrol} */
                 let enemyPatrol = enemyPatrolMapObjectGroup.findMapObjectById(enemy.enemy_patrol_id);
-                enemyPatrol.addEnemy(enemy);
+                if (enemyPatrol !== null) {
+                    enemyPatrol.addEnemy(enemy);
+                } else {
+                    console.error(`Unable to find enemy patrol ${enemy.enemy_patrol_id} that is coupled to enemy ${enemy.id}`);
+                }
             }
         }
 

@@ -213,6 +213,7 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
+            'expansion_routes'        => '@todo ru: .layout.header.expansion_routes',
             'routes'                  => ':expansion',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
@@ -308,12 +309,13 @@ return [
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
             'pulls'     => [
-                'settings_title'         => 'Настройки карты/пула',
-                'new_pull'               => 'Новый пул',
-                'delete_all_pulls_title' => 'Удалить все пулы',
-                'loading'                => 'Загрузка...',
-                'no_pulls_created_edit'  => 'Никаких пулов еще не создано. Нажмите кнопку выше или на врага, чтобы создать ваш первый пул.',
-                'no_pulls_created_view'  => 'Никаких пулов еще не создано.',
+                'settings_title'              => 'Настройки карты/пула',
+                'new_pull'                    => 'Новый пул',
+                'delete_all_pulls_title'      => 'Удалить все пулы',
+                'toggle_all_required_enemies' => '@todo ru: .maps.controls.pulls.toggle_all_required_enemies',
+                'loading'                     => 'Загрузка...',
+                'no_pulls_created_edit'       => 'Никаких пулов еще не создано. Нажмите кнопку выше или на врага, чтобы создать ваш первый пул.',
+                'no_pulls_created_view'       => 'Никаких пулов еще не создано.',
             ],
             'view'      => [
                 'edit_this_route_title'          => 'Редактировать это маршрут',
@@ -330,6 +332,10 @@ return [
             'any'      => 'Любая',
             'alliance' => 'Альянс',
             'horde'    => 'Орда',
+
+            'new_mapping_version_header_title'       => '@todo ru: .maps.map.new_mapping_version_header_title',
+            'new_mapping_version_header_description' => '@todo ru: .maps.map.new_mapping_version_header_description',
+            'admin_header_title'                     => '@todo ru: .maps.map.admin_header_title',
 
             'route'         => 'Маршрут',
             'map_settings'  => 'Настройки карты',

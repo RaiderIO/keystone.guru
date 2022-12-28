@@ -2,7 +2,7 @@
     {
         "id": 56439,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 3,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 45980,
@@ -11,7 +11,7 @@
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -22,7 +22,7 @@
     {
         "id": 56448,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 41125,
@@ -31,7 +31,7 @@
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -42,7 +42,7 @@
     {
         "id": 56732,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 39487,
@@ -51,7 +51,7 @@
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -62,7 +62,7 @@
     {
         "id": 57080,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 42914,
@@ -82,7 +82,7 @@
     {
         "id": 57109,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 41677,
@@ -102,7 +102,7 @@
     {
         "id": 58319,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 40884,
@@ -122,7 +122,7 @@
     {
         "id": 59051,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 40594,
@@ -142,7 +142,7 @@
     {
         "id": 59544,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 40723,
@@ -162,7 +162,7 @@
     {
         "id": 59545,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 31460,
@@ -182,7 +182,7 @@
     {
         "id": 59546,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 40855,
@@ -202,7 +202,7 @@
     {
         "id": 59547,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 42431,
@@ -222,7 +222,7 @@
     {
         "id": 59552,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 39483,
@@ -242,7 +242,7 @@
     {
         "id": 59553,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 40856,
@@ -262,7 +262,7 @@
     {
         "id": 59555,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 40907,
@@ -282,7 +282,7 @@
     {
         "id": 59598,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 40884,
@@ -302,7 +302,7 @@
     {
         "id": 59726,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 3,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 40594,
@@ -311,7 +311,7 @@
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -322,7 +322,7 @@
     {
         "id": 59873,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 43999,
@@ -342,7 +342,7 @@
     {
         "id": 62358,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 39442,
@@ -362,7 +362,7 @@
     {
         "id": 65317,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 42431,
@@ -382,7 +382,7 @@
     {
         "id": 200126,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 40330,
@@ -402,7 +402,7 @@
     {
         "id": 200131,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73618,
@@ -422,7 +422,7 @@
     {
         "id": 200137,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 69004,
@@ -442,7 +442,7 @@
     {
         "id": 200387,
         "dungeon_id": 76,
-        "classification_id": 0,
+        "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 46020,

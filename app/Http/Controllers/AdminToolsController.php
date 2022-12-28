@@ -14,6 +14,7 @@ use App\Models\Npc;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
@@ -236,7 +237,6 @@ class AdminToolsController extends Controller
                 return $builder->where('dungeon_id', $dungeonId);
             });
 
-        // All dungeons
         $count = 0;
         foreach ($builder->get() as $dungeonRoute) {
             RefreshEnemyForces::dispatch($dungeonRoute->id);
@@ -245,6 +245,40 @@ class AdminToolsController extends Controller
 
         dd(sprintf('Dispatched %d jobs', $count));
     }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function thumbnailsregenerate()
+    {
+        return view('admin.tools.thumbnails.regenerate');
+    }
+
+    /**
+     * @param Request $request
+     * @param ThumbnailService $thumbnailService
+     * @return void
+     */
+    public function thumbnailsregeneratesubmit(Request $request, ThumbnailService $thumbnailService)
+    {
+        $dungeonId = (int)$request->get('dungeon_id');
+
+        $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+            ->with('dungeon')
+            ->when($dungeonId !== -1, function (Builder $builder) use ($dungeonId) {
+                return $builder->where('dungeon_id', $dungeonId);
+            });
+
+        $count         = 0;
+        $dungeonRoutes = $builder->get();
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $thumbnailService->queueThumbnailRefresh($dungeonRoute);
+            $count++;
+        }
+
+        dd(sprintf('Dispatched %d jobs for %d routes', $count, $dungeonRoutes->count()));
+    }
+
 
     /**
      * @return Factory|

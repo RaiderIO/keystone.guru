@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'wotlk'       => [
+    'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [
             'name'   => '@todo ru: .wotlk.ahn_kahet_the_old_kingdom.name',
             'floors' => [
@@ -65,7 +65,9 @@ return [
         ],
         'the_forge_of_souls'        => [
             'name'   => '@todo ru: .wotlk.the_forge_of_souls.name',
-            'floors' => [],
+            'floors' => [
+                'the_forge_of_souls' => '@todo ru: .wotlk.the_forge_of_souls.floors.the_forge_of_souls',
+            ],
         ],
         'the_nexus'                 => [
             'name'   => '@todo ru: .wotlk.the_nexus.name',
@@ -84,17 +86,17 @@ return [
             ],
         ],
 
-        'the_violet_hold'       => [
+        'the_violet_hold'                          => [
             'name'   => '@todo ru: .wotlk.the_violet_hold.name',
             'floors' => [
                 'the_violet_hold' => '@todo ru: .wotlk.the_violet_hold.floors.the_violet_hold',
             ],
         ],
-        'trial_of_the_champion' => [
+        'trial_of_the_champion'                    => [
             'name'   => '@todo ru: .wotlk.trial_of_the_champion.name',
             'floors' => [],
         ],
-        'utgarde_keep'          => [
+        'utgarde_keep'                             => [
             'name'   => '@todo ru: .wotlk.utgarde_keep.name',
             'floors' => [
                 'njorndir_preparation' => '@todo ru: .wotlk.utgarde_keep.floors.njorndir_preparation',
@@ -102,34 +104,108 @@ return [
                 'tyrs_terrace'         => '@todo ru: .wotlk.utgarde_keep.floors.tyrs_terrace',
             ],
         ],
-        'utgarde_pinnacle'      => [
+        'utgarde_pinnacle'                         => [
             'name'   => '@todo ru: .wotlk.utgarde_pinnacle.name',
             'floors' => [
                 'lower_pinnacle' => '@todo ru: .wotlk.utgarde_pinnacle.floors.lower_pinnacle',
                 'upper_pinnacle' => '@todo ru: .wotlk.utgarde_pinnacle.floors.upper_pinnacle',
             ],
         ],
+
+        // Raids
+        'icecrown_citadel'                         => [
+            'name'   => '@todo ru: .wotlk.icecrown_citadel.name',
+            'floors' => [
+                'the_lower_citadel'     => '@todo ru: .wotlk.icecrown_citadel.floors.the_lower_citadel',
+                'the_rampart_of_skulls' => '@todo ru: .wotlk.icecrown_citadel.floors.the_rampart_of_skulls',
+                'deathbringers_rise'    => '@todo ru: .wotlk.icecrown_citadel.floors.deathbringers_rise',
+                'the_frost_queens_lair' => '@todo ru: .wotlk.icecrown_citadel.floors.the_frost_queens_lair',
+                'the_upper_reach'       => '@todo ru: .wotlk.icecrown_citadel.floors.the_upper_reach',
+                'royal_quarters'        => '@todo ru: .wotlk.icecrown_citadel.floors.royal_quarters',
+                'the_frozen_throne'     => '@todo ru: .wotlk.icecrown_citadel.floors.the_frozen_throne',
+                'frostmourne'           => '@todo ru: .wotlk.icecrown_citadel.floors.frostmourne',
+            ],
+        ],
+        'onyxias_lair'                             => [
+            'name'   => '@todo ru: .wotlk.onyxias_lair.name',
+            'floors' => [
+                'onyxias_lair' => '@todo ru: .wotlk.onyxias_lair.floors.onyxias_lair',
+            ],
+        ],
+        'naxxramas'                                => [
+            'name'   => '@todo ru: .wotlk.naxxramas.name',
+            'floors' => [
+                'the_construct_quarter' => '@todo ru: .wotlk.naxxramas.floors.the_construct_quarter',
+                'the_arachnid_quarter'  => '@todo ru: .wotlk.naxxramas.floors.the_arachnid_quarter',
+                'the_military_quarter'  => '@todo ru: .wotlk.naxxramas.floors.the_military_quarter',
+                'the_plague_quarter'    => '@todo ru: .wotlk.naxxramas.floors.the_plague_quarter',
+                'the_lower_necropolis'  => '@todo ru: .wotlk.naxxramas.floors.the_lower_necropolis',
+                'the_upper_necropolis'  => '@todo ru: .wotlk.naxxramas.floors.the_upper_necropolis',
+            ],
+        ],
+        'crusaders_coliseum_trial_of_the_crusader' => [
+            'name'   => '@todo ru: .wotlk.crusaders_coliseum_trial_of_the_crusader.name',
+            'floors' => [
+                'the_argent_coliseum' => '@todo ru: .wotlk.crusaders_coliseum_trial_of_the_crusader.floors.the_argent_coliseum',
+                'the_icy_depths'      => '@todo ru: .wotlk.crusaders_coliseum_trial_of_the_crusader.floors.the_icy_depths',
+            ],
+        ],
+        'the_eye_of_eternity'                      => [
+            'name'   => '@todo ru: .wotlk.the_eye_of_eternity.name',
+            'floors' => [
+                'the_eye_of_eternity' => '@todo ru: .wotlk.the_eye_of_eternity.floors.the_eye_of_eternity',
+            ],
+        ],
+        'the_obsidian_sanctum'                     => [
+            'name'   => '@todo ru: .wotlk.the_obsidian_sanctum.name',
+            'floors' => [
+                'the_obsidian_sanctum' => '@todo ru: .wotlk.the_obsidian_sanctum.floors.the_obsidian_sanctum',
+            ],
+        ],
+        'the_ruby_sanctum'                         => [
+            'name'   => '@todo ru: .wotlk.the_ruby_sanctum.name',
+            'floors' => [
+                'the_ruby_sanctum' => '@todo ru: .wotlk.the_ruby_sanctum.floors.the_ruby_sanctum',
+            ],
+        ],
+        'ulduar'                                   => [
+            'name'   => '@todo ru: .wotlk.ulduar.name',
+            'floors' => [
+                'ulduar'                      => '@todo ru: .wotlk.ulduar.floors.ulduar',
+                'the_antechamber_of_ulduar'   => '@todo ru: .wotlk.ulduar.floors.the_antechamber_of_ulduar',
+                'the_inner_sanctum_of_ulduar' => '@todo ru: .wotlk.ulduar.floors.the_inner_sanctum_of_ulduar',
+                'the_prison_of_yogg_saron'    => '@todo ru: .wotlk.ulduar.floors.the_prison_of_yogg_saron',
+                'the_spark_of_imagination'    => '@todo ru: .wotlk.ulduar.floors.the_spark_of_imagination',
+                'the_minds_eye'               => '@todo ru: .wotlk.ulduar.floors.the_minds_eye',
+            ],
+        ],
+        'vault_of_archavon'                        => [
+            'name'   => '@todo ru: .wotlk.vault_of_archavon.name',
+            'floors' => [
+                'vault_of_archavon' => '@todo ru: .wotlk.vault_of_archavon.floors.vault_of_archavon',
+            ],
+        ],
     ],
-    'wod'         => [
-        'auchindoun'           => [
+    'wod'          => [
+        'auchindoun'                => [
             'name'   => '@todo ru: .wod.auchindoun.name',
             'floors' => [
                 'auchindoun' => '@todo ru: .wod.auchindoun.floors.auchindoun',
             ],
         ],
-        'bloodmaul_slag_mines' => [
+        'bloodmaul_slag_mines'      => [
             'name'   => '@todo ru: .wod.bloodmaul_slag_mines.name',
             'floors' => [
                 'bloodmaul_slag_mines' => '@todo ru: .wod.bloodmaul_slag_mines.floors.bloodmaul_slag_mines',
             ],
         ],
-        'iron_docks'           => [
+        'iron_docks'                => [
             'name'   => '@todo ru: .wod.iron_docks.name',
             'floors' => [
                 'iron_docks' => '@todo ru: .wod.iron_docks.floors.iron_docks',
             ],
         ],
-        'grimrail_depot'       => [
+        'grimrail_depot'            => [
             'name'   => '@todo ru: .wod.grimrail_depot.name',
             'floors' => [
                 'rafters'            => '@todo ru: .wod.grimrail_depot.floors.rafters',
@@ -138,8 +214,25 @@ return [
                 'forward_train_cars' => '@todo ru: .wod.grimrail_depot.floors.forward_train_cars',
             ],
         ],
+        'shadowmoon_burial_grounds' => [
+            'name'   => '@todo ru: .wod.shadowmoon_burial_grounds.name',
+            'floors' => [
+                'crypt_of_the_ancients' => '@todo ru: .wod.shadowmoon_burial_grounds.floors.crypt_of_the_ancients',
+                'altar_of_shadow'       => '@todo ru: .wod.shadowmoon_burial_grounds.floors.altar_of_shadow',
+                'edge_of_reality'       => '@todo ru: .wod.shadowmoon_burial_grounds.floors.edge_of_reality',
+            ],
+        ],
     ],
-    'legion'      => [
+    'mop'          => [
+        'temple_of_the_jade_serpent' => [
+            'name'   => '@todo ru: .mop.temple_of_the_jade_serpent.name',
+            'floors' => [
+                'temple_of_the_jade_serpent' => '@todo ru: .mop.temple_of_the_jade_serpent.floors.temple_of_the_jade_serpent',
+                'scrollkeepers_sanctum'      => '@todo ru: .mop.temple_of_the_jade_serpent.floors.scrollkeepers_sanctum',
+            ],
+        ],
+    ],
+    'legion'       => [
         'arcway'               => [
             'name'   => 'Катакомбы Сурамара',
             'floors' => [
@@ -248,7 +341,7 @@ return [
             ],
         ],
     ],
-    'bfa'         => [
+    'bfa'          => [
         'atal_dazar'                => [
             'name'   => 'Атал\'Дазар',
             'floors' => [
@@ -351,7 +444,7 @@ return [
             ],
         ],
     ],
-    'shadowlands' => [
+    'shadowlands'  => [
         'de_other_side'              => [
             'name'   => 'Та Сторона',
             'floors' => [
@@ -432,6 +525,67 @@ return [
                 'aggramars_vault'   => 'Хранилище Агграммара',
                 'boralus_harbor'    => 'Гавань Боралуса',
                 'the_opulent_nexus' => 'Блистательный Нексус',
+            ],
+        ],
+    ],
+    'dragonflight' => [
+        'algeth_ar_academy'     => [
+            'name'   => '@todo ru: .dragonflight.algeth_ar_academy.name',
+            'floors' => [
+                'algeth_ar_academy'        => '@todo ru: .dragonflight.algeth_ar_academy.floors.algeth_ar_academy',
+                'the_pitch'                => '@todo ru: .dragonflight.algeth_ar_academy.floors.the_pitch',
+                'the_headteachers_enclave' => '@todo ru: .dragonflight.algeth_ar_academy.floors.the_headteachers_enclave',
+            ],
+        ],
+        'brackenhide_hollow'    => [
+            'name'   => '@todo ru: .dragonflight.brackenhide_hollow.name',
+            'floors' => [
+                'brackenhide_hollow' => '@todo ru: .dragonflight.brackenhide_hollow.floors.brackenhide_hollow',
+                'den_of_decay'       => '@todo ru: .dragonflight.brackenhide_hollow.floors.den_of_decay',
+            ],
+        ],
+        'halls_of_infusion'     => [
+            'name'   => '@todo ru: .dragonflight.halls_of_infusion.name',
+            'floors' => [
+                'infusers_rotunda' => '@todo ru: .dragonflight.halls_of_infusion.floors.infusers_rotunda',
+                'infusion_chamber' => '@todo ru: .dragonflight.halls_of_infusion.floors.infusion_chamber',
+            ],
+        ],
+        'neltharus'             => [
+            'name'   => '@todo ru: .dragonflight.neltharus.name',
+            'floors' => [
+                'the_burning_cauldron' => '@todo ru: .dragonflight.neltharus.floors.the_burning_cauldron',
+                'chamber_of_flames'    => '@todo ru: .dragonflight.neltharus.floors.chamber_of_flames',
+            ],
+        ],
+        'ruby_life_pools'       => [
+            'name'   => '@todo ru: .dragonflight.ruby_life_pools.name',
+            'floors' => [
+                'infusion_chambers' => '@todo ru: .dragonflight.ruby_life_pools.floors.infusion_chambers',
+                'ruby_overlook'     => '@todo ru: .dragonflight.ruby_life_pools.floors.ruby_overlook',
+            ],
+        ],
+        'the_azure_vault'       => [
+            'name'   => '@todo ru: .dragonflight.the_azure_vault.name',
+            'floors' => [
+                'the_arcane_conservatory' => '@todo ru: .dragonflight.the_azure_vault.floors.the_arcane_conservatory',
+                'crystal_chambers'        => '@todo ru: .dragonflight.the_azure_vault.floors.crystal_chambers',
+                'mausoleum_of_legends'    => '@todo ru: .dragonflight.the_azure_vault.floors.mausoleum_of_legends',
+                'the_infinity_seal'       => '@todo ru: .dragonflight.the_azure_vault.floors.the_infinity_seal',
+                'sindragosas_lament'      => '@todo ru: .dragonflight.the_azure_vault.floors.sindragosas_lament',
+            ],
+        ],
+        'the_nokhud_offensive'  => [
+            'name'   => '@todo ru: .dragonflight.the_nokhud_offensive.name',
+            'floors' => [
+                'the_nokhud_offensive' => '@todo ru: .dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive',
+            ],
+        ],
+        'uldaman_legacy_of_tyr' => [
+            'name'   => '@todo ru: .dragonflight.uldaman_legacy_of_tyr.name',
+            'floors' => [
+                'hall_of_the_keepers' => '@todo ru: .dragonflight.uldaman_legacy_of_tyr.floors.hall_of_the_keepers',
+                'the_vault_of_tyr'    => '@todo ru: .dragonflight.uldaman_legacy_of_tyr.floors.the_vault_of_tyr',
             ],
         ],
     ],

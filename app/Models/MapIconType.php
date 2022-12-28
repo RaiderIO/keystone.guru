@@ -104,7 +104,9 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_NW_ITEM_SHIELD  = 'nw_item_shield';
     public const MAP_ICON_TYPE_NW_ITEM_SPEAR   = 'nw_item_spear';
 
-    public const MAP_ICON_TYPE_SPELL_INCARNATION = 'spell_incarnation';
+    public const MAP_ICON_TYPE_SPELL_INCARNATION         = 'spell_incarnation';
+    public const MAP_ICON_TYPE_SPELL_MISDIRECTION        = 'spell_misdirection';
+    public const MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE = 'spell_tricks_of_the_trade';
 
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
@@ -194,6 +196,9 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_ITEM_FREE_ACTION_POTION           => 72,
         self::MAP_ICON_TYPE_ITEM_GLOBAL_THERMAL_SAPPER_CHARGE => 73,
         self::MAP_ICON_TYPE_ITEM_ROCKET_BOOTS_XTREME          => 74,
+
+        self::MAP_ICON_TYPE_SPELL_MISDIRECTION        => 75,
+        self::MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE => 76,
     ];
 
     public $timestamps = false;

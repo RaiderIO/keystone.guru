@@ -10,8 +10,28 @@ class StructuredLogging
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
-    /** @var array Upon calling begin() or end(), this array is a flattened versino of $groupedContext to make it quicker to write logs to disk */
+    /** @var array Upon calling begin() or end(), this array is a flattened version of $groupedContext to make it quicker to write logs to disk */
     private array $cachedContext = [];
+
+    private ?string $channel = null;
+
+    /**
+     * @return string|null
+     */
+    protected function getChannel(): ?string
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param string|null $channel
+     * @return StructuredLogging
+     */
+    protected function setChannel(?string $channel): StructuredLogging
+    {
+        $this->channel = $channel;
+        return $this;
+    }
 
     /**
      * @param string $functionName
@@ -136,7 +156,17 @@ class StructuredLogging
      */
     private function log(int $level, string $functionName, array $context = []): void
     {
+        $levelName = Logger::getLevelName($level);
+        // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
+        $fixedLength  = 7;
+        $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));
+
+        $messageWithContextCounts = trim(sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0]));
         // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-        logger()->log(Logger::getLevelName($level), array_reverse(explode('\\', $functionName))[0], array_merge($this->cachedContext, $context));
+        logger()->channel($this->channel)->log(
+            $levelName,
+            sprintf('%s%s', $startPadding, $messageWithContextCounts),
+            array_merge($this->cachedContext, $context)
+        );
     }
 }
