@@ -9,9 +9,10 @@
         let items = [];
 
         if (row.has_thumbnail) {
-            for (let i = 1; i <= row.dungeon.floor_count; i++) {
+            for (let index in row.dungeon.floors) {
+                let floor = row.dungeon.floors[index];
                 items.push({
-                    src: `/images/route_thumbnails/${row.public_key}_${i}.png`
+                    src: `/images/route_thumbnails/${row.public_key}_${floor.index}.png`
                 });
             }
         } else {
