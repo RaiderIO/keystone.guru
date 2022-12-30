@@ -85,8 +85,9 @@ class APIDungeonRouteController extends Controller
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'ratings', 'pageviews', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required')
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
+            ->join('mapping_versions', 'mapping_versions.dungeon_id',  'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -95,7 +96,7 @@ class APIDungeonRouteController extends Controller
                 $query->orWhereNull('expires_at');
             })
             // required for the enemy forces calculation
-            ->groupBy('dungeon_routes.id');
+            ->groupBy(['dungeon_routes.id', 'mapping_versions.dungeon_id']);
 
         $user = Auth::user();
         $mine = false;
