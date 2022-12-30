@@ -34,11 +34,12 @@ return [
             'attributes_selected'     => '{0} attributes',
         ],
         'card'       => [
-            'no_description'    => 'No description',
-            'by_author'         => 'By',
-            'updated_at'        => 'Updated %s',
-            'report'            => 'Report',
-            'refresh_thumbnail' => 'Refresh thumbnail',
+            'no_description'           => 'No description',
+            'outdated_mapping_version' => 'This route uses an old mapping version for this dungeon. The route may not accurately reflect in-game enemies.',
+            'by_author'                => 'By',
+            'updated_at'               => 'Updated %s',
+            'report'                   => 'Report',
+            'refresh_thumbnail'        => 'Refresh thumbnail',
         ],
         'cardlist'   => [
             'no_dungeonroutes' => 'No routes found',

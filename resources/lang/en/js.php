@@ -92,9 +92,10 @@ return [
 
     'selected_label' => 'selected',
 
-    'affixes_label'    => 'Affixes',
-    'attributes_label' => 'Attributes',
-    'setup_label'      => 'Setup',
+    'affixes_label'             => 'Affixes',
+    'attributes_label'          => 'Attributes',
+    'setup_label'               => 'Setup',
+    'new_mapping_version_label' => 'A new mapping version for your route\'s dungeon is available. Upgrade your route now by editing it.',
 
     'submit_label' => 'Submit',
 

@@ -34,11 +34,12 @@ return [
             'attributes_selected'     => '{0} Атрибутов',
         ],
         'card'       => [
-            'no_description'    => 'Нет описания',
-            'by_author'         => 'Автор',
-            'updated_at'        => 'Обновлено %s',
-            'report'            => 'Жалоба',
-            'refresh_thumbnail' => 'Обновить миниатюры',
+            'no_description'           => 'Нет описания',
+            'outdated_mapping_version' => '@todo ru: .dungeonroute.card.outdated_mapping_version',
+            'by_author'                => 'Автор',
+            'updated_at'               => 'Обновлено %s',
+            'report'                   => 'Жалоба',
+            'refresh_thumbnail'        => 'Обновить миниатюры',
         ],
         'cardlist'   => [
             'no_dungeonroutes' => 'Маршруты не найдены',

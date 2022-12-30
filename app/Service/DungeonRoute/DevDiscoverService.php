@@ -26,7 +26,13 @@ class DevDiscoverService extends BaseDiscoverService
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansion->id)
+            ->when($this->season === null, function (Builder $builder) {
+                $builder->where('dungeons.expansion_id', $this->expansion->id);
+            })
+            ->when($this->season !== null, function (Builder $builder) {
+                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
+                    ->where('season_dungeons.season_id', $this->season->id);
+            })
 //            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false);
@@ -47,7 +53,13 @@ class DevDiscoverService extends BaseDiscoverService
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansion->id)
+            ->when($this->season === null, function (Builder $builder) {
+                $builder->where('dungeons.expansion_id', $this->expansion->id);
+            })
+            ->when($this->season !== null, function (Builder $builder) {
+                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
+                    ->where('season_dungeons.season_id', $this->season->id);
+            })
 //            ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
             ->where('demo', false)

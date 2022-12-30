@@ -430,6 +430,11 @@ class DungeonrouteTable extends InlineCode {
                         return false;
                     }
 
+                    // 9 = Shadowlands, 10 = Dragonflight
+                    let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
+                    let isShadowlandsRoute = seasonId === 9;
+                    let isDragonflightRoute = seasonId === 10;
+
                     let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
                     let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
 
@@ -437,8 +442,9 @@ class DungeonrouteTable extends InlineCode {
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
                         published: row.published,
-                        show_migrate_to_encrypted: !rowHasEncryptedAffix && !rowHasShroudedAffix,
-                        show_migrate_to_shrouded: !rowHasShroudedAffix
+                        show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
+                        show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
+                        has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
                     }));
                 }
             },

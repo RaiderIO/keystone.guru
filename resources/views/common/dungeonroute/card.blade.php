@@ -8,38 +8,42 @@
 /** @var $__env array */
 /** @var $cache boolean */
 
-$showAffixes = $showAffixes ?? true;
+$showAffixes      = $showAffixes ?? true;
 $showDungeonImage = $showDungeonImage ?? false;
 
-$cacheFn = function() use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
-$dominantAffix = 'keystone';
-if( $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED) ) {
-    $dominantAffix = strtolower(\App\Models\Affix::AFFIX_FORTIFIED);
-} else if( $dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL) ) {
-    $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
-}
-$seasonalAffix = $dungeonroute->getSeasonalAffix();
+$cacheFn = function()
 
-if (!isset($tierAffixGroup)) {
-    // Try to come up with a sensible default
-    if ($dungeonroute->affixes->count() === 1) {
-        $tierAffixGroup = $dungeonroute->affixes->first();
-    } else {
-        // If the affix list contains the current affix, we can use that to display the tier instead
-        $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
-            return $affixGroup->id === $currentAffixGroup->id;
-        })->isNotEmpty() ? $currentAffixGroup : null);
+use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env)
+
+{
+    $dominantAffix = 'keystone';
+    if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED)) {
+        $dominantAffix = strtolower(\App\Models\Affix::AFFIX_FORTIFIED);
+    } else if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL)) {
+        $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
     }
-}
+    $seasonalAffix = $dungeonroute->getSeasonalAffix();
+
+    if (!isset($tierAffixGroup)) {
+        // Try to come up with a sensible default
+        if ($dungeonroute->affixes->count() === 1) {
+            $tierAffixGroup = $dungeonroute->affixes->first();
+        } else {
+            // If the affix list contains the current affix, we can use that to display the tier instead
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
+                return $affixGroup->id === $currentAffixGroup->id;
+            })->isNotEmpty() ? $currentAffixGroup : null);
+        }
+    }
 
 // Attempt a default value if there's only one affix set
-$tierAffixGroup = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
-$enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
-$enemyForcesWarning = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
+    $tierAffixGroup        = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
+    $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
+    $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-$owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
+    $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
 
-ob_start(); ?>
+    ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }}">
@@ -58,7 +62,7 @@ ob_start(); ?>
     <div class="col">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
-             style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
+                 style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
             @endif
         >
             <div class="row no-gutters p-2 header">
@@ -69,13 +73,20 @@ ob_start(); ?>
                         </a>
                     </h4>
                 </div>
-                @if( $showAffixes )
+                @if( !$dungeonroute->mappingVersion->isLatestForDungeon() )
                     <div class="col-auto">
-                        <?php
-                        ob_start();
-                        ?>
+                        <i class="fas fa-exclamation-triangle text-warning" title="{{ __('views/common.dungeonroute.card.outdated_mapping_version') }}"
+                           data-toggle="tooltip"></i>
+                    </div>
+                @endif
+                @if( $showAffixes )
+                    <div class="col-auto ml-1">
+                            <?php
+                            ob_start();
+                            ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
-                            <div class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
+                            <div
+                                class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
                                 @include('common.affixgroup.affixgroup', [
                                     'affixgroup' => $affixgroup,
                                     'showText' => false,
@@ -83,19 +94,21 @@ ob_start(); ?>
                                 ])
                             </div>
                         @endforeach
-                        <?php $affixes = ob_get_clean(); ?>
-                            <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
-                                 data-html="true"
-                                 data-content="{{ $affixes }}" style="cursor: pointer;">
-                                <div class="col">
-                                    <img class="select_icon" src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"/>
-                                </div>
-                                @if($seasonalAffix !== null)
-                                    <div class="col ml-1">
-                                        <img class="select_icon" src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"/>
-                                    </div>
-                                @endif
+                            <?php $affixes = ob_get_clean(); ?>
+                        <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
+                             data-html="true"
+                             data-content="{{ $affixes }}" style="cursor: pointer;">
+                            <div class="col">
+                                <img class="select_icon"
+                                     src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"/>
                             </div>
+                            @if($seasonalAffix !== null)
+                                <div class="col ml-1">
+                                    <img class="select_icon"
+                                         src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"/>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     <div class="col-auto px-1">
                         @if($tierAffixGroup !== null)
@@ -176,8 +189,8 @@ ob_start(); ?>
     </div>
 </div>
 
-<?php
-return ob_get_clean();
+    <?php
+    return ob_get_clean();
 };
 
 // Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
