@@ -23,7 +23,10 @@ class MapState extends Signalable {
 
         this._started = true;
 
-        window.addEventListener('beforeunload', this._onBeforeUnload);
+
+        if (this.map.options.edit) {
+            window.addEventListener('beforeunload', this._onBeforeUnload);
+        }
 
         // $(document).bind('keydown', function (event) {
         //     // Escape
@@ -38,7 +41,9 @@ class MapState extends Signalable {
         console.warn(`Stopping MapState ${this.getName()}`);
         this._stopped = true;
 
-        window.removeEventListener('beforeunload', this._onBeforeUnload);
+        if (this.map.options.edit) {
+            window.removeEventListener('beforeunload', this._onBeforeUnload);
+        }
     }
 
     getName() {
