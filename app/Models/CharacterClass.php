@@ -30,7 +30,7 @@ class CharacterClass extends CacheModel
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';
-    public const CHARACTER_CLASS_DEATH_KNIGHT = 'deathknight';
+    public const CHARACTER_CLASS_DEATH_KNIGHT = 'death_knight';
     public const CHARACTER_CLASS_MAGE         = 'mage';
     public const CHARACTER_CLASS_PRIEST       = 'priest';
     public const CHARACTER_CLASS_MONK         = 'monk';
@@ -39,7 +39,7 @@ class CharacterClass extends CacheModel
     public const CHARACTER_CLASS_SHAMAN       = 'shaman';
     public const CHARACTER_CLASS_PALADIN      = 'paladin';
     public const CHARACTER_CLASS_DRUID        = 'druid';
-    public const CHARACTER_CLASS_DEMON_HUNTER = 'demonhunter';
+    public const CHARACTER_CLASS_DEMON_HUNTER = 'demon_hunter';
     public const CHARACTER_CLASS_EVOKER       = 'evoker';
 
     // Do NOT change the order of this array!
