@@ -28,6 +28,37 @@ class CharacterClass extends CacheModel
     public $hidden = ['icon_file_id', 'pivot'];
     public $fillable = ['key', 'name', 'color'];
 
+    public const CHARACTER_CLASS_WARRIOR      = 'warrior';
+    public const CHARACTER_CLASS_HUNTER       = 'hunter';
+    public const CHARACTER_CLASS_DEATH_KNIGHT = 'deathknight';
+    public const CHARACTER_CLASS_MAGE         = 'mage';
+    public const CHARACTER_CLASS_PRIEST       = 'priest';
+    public const CHARACTER_CLASS_MONK         = 'monk';
+    public const CHARACTER_CLASS_ROGUE        = 'rogue';
+    public const CHARACTER_CLASS_WARLOCK      = 'warlock';
+    public const CHARACTER_CLASS_SHAMAN       = 'shaman';
+    public const CHARACTER_CLASS_PALADIN      = 'paladin';
+    public const CHARACTER_CLASS_DRUID        = 'druid';
+    public const CHARACTER_CLASS_DEMON_HUNTER = 'demonhunter';
+    public const CHARACTER_CLASS_EVOKER       = 'evoker';
+
+    // Do NOT change the order of this array!
+    public const ALL = [
+        self::CHARACTER_CLASS_WARRIOR,
+        self::CHARACTER_CLASS_HUNTER,
+        self::CHARACTER_CLASS_DEATH_KNIGHT,
+        self::CHARACTER_CLASS_MAGE,
+        self::CHARACTER_CLASS_PRIEST,
+        self::CHARACTER_CLASS_MONK,
+        self::CHARACTER_CLASS_ROGUE,
+        self::CHARACTER_CLASS_WARLOCK,
+        self::CHARACTER_CLASS_SHAMAN,
+        self::CHARACTER_CLASS_PALADIN,
+        self::CHARACTER_CLASS_DRUID,
+        self::CHARACTER_CLASS_DEMON_HUNTER,
+        self::CHARACTER_CLASS_EVOKER,
+    ];
+
     /**
      * @return HasMany
      */

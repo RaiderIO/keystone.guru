@@ -108,6 +108,25 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_SPELL_MISDIRECTION        = 'spell_misdirection';
     public const MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE = 'spell_tricks_of_the_trade';
 
+
+    public const MAP_ICON_TYPE_ROLE_TANK   = 'role_tank';
+    public const MAP_ICON_TYPE_ROLE_HEALER = 'role_healer';
+    public const MAP_ICON_TYPE_ROLE_DPS    = 'role_dps';
+
+    public const MAP_ICON_TYPE_CLASS_WARRIOR      = 'class_warrior';
+    public const MAP_ICON_TYPE_CLASS_HUNTER       = 'class_hunter';
+    public const MAP_ICON_TYPE_CLASS_DEATH_KNIGHT = 'class_deathknight';
+    public const MAP_ICON_TYPE_CLASS_MAGE         = 'class_mage';
+    public const MAP_ICON_TYPE_CLASS_PRIEST       = 'class_priest';
+    public const MAP_ICON_TYPE_CLASS_MONK         = 'class_monk';
+    public const MAP_ICON_TYPE_CLASS_ROGUE        = 'class_rogue';
+    public const MAP_ICON_TYPE_CLASS_WARLOCK      = 'class_warlock';
+    public const MAP_ICON_TYPE_CLASS_SHAMAN       = 'class_shaman';
+    public const MAP_ICON_TYPE_CLASS_PALADIN      = 'class_paladin';
+    public const MAP_ICON_TYPE_CLASS_DRUID        = 'class_druid';
+    public const MAP_ICON_TYPE_CLASS_DEMON_HUNTER = 'class_demonhunter';
+    public const MAP_ICON_TYPE_CLASS_EVOKER       = 'class_evoker';
+
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
         self::MAP_ICON_TYPE_COMMENT                   => 2,

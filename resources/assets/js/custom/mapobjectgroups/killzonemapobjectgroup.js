@@ -44,16 +44,23 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
+        console.log('_onObjectDeleted', data);
         let mapObject = data.context;
 
         let toSave = [];
 
+        console.log(this.objects);
+
         $.each(this.objects, function (i, obj) {
+            console.log(i, obj, obj.getIndex(), mapObject.getIndex());
+
             if (obj.getIndex() >= mapObject.getIndex()) {
                 toSave.push(obj);
                 obj.setIndex(obj.getIndex() - 1);
             }
         });
+
+        console.log('toSave', toSave);
 
         // If last pull is deleted, we don't need to change anything to pulls ahead of us (indices)
         if (toSave.length > 1) {
