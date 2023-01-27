@@ -90,10 +90,10 @@ class CharacterInfoSeeder extends Seeder
         $classes = [];
         foreach (CharacterClass::ALL as $characterClassKey) {
             $class = new CharacterClass([
-                    'name'  => sprintf('classes.%s', $characterClassKey),
-                    'key'   => $characterClassKey,
-                    'color' => $classColors[$characterClassKey]]
-            );
+                'name'  => sprintf('classes.%s', $characterClassKey),
+                'key'   => $characterClassKey,
+                'color' => $classColors[$characterClassKey],
+            ]);
 
             // Temp file
             $class->icon_file_id = -1;
@@ -110,6 +110,8 @@ class CharacterInfoSeeder extends Seeder
 
             $class->icon_file_id = $icon->id;
             $class->save();
+
+            $classes[$class->name] = $class;
         }
 
         $this->command->info('Adding known race/class combinations');
