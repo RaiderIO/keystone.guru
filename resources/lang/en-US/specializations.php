@@ -16,6 +16,10 @@ return [
         'guardian'    => 'Guardian',
         'restoration' => 'Restoration',
     ],
+    'evoker'       => [
+        'devastation'  => 'Devastation',
+        'preservation' => 'Preservation',
+    ],
     'hunter'       => [
         'beast_mastery' => 'Beast Mastery',
         'marksman'      => 'Marksman',

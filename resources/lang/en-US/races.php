@@ -10,7 +10,8 @@ return [
     'pandarenalliance'    => 'Pandaren',
     'void_elf'            => 'Void Elf',
     'lightforged_draenei' => 'Lightforged Draenei',
-    'dark_iron_dwarf'      => 'Dark Iron Dwarf',
+    'dark_iron_dwarf'     => 'Dark Iron Dwarf',
+    'dracthyralliance'    => 'Dracthyr',
 
 
     'orc'                 => 'Orc',
@@ -23,6 +24,7 @@ return [
     'nightborne'          => 'Nightborne',
     'highmountain_tauren' => 'Highmountain Tauren',
     'maghar_orc'          => 'Mag\'har Orc',
+    'dracthyrhorde'       => 'Dracthyr',
 
 
     'kul_tiran_human' => 'Kul Tiran Human',

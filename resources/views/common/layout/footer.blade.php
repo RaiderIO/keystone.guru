@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li class="mbr-text item-wrap">
-                            <a href="https://discord.gg/Rx92vbFR" target="_blank" rel="noopener noreferrer">
+                            <a href="https://discord.gg/2KtWrqw" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-discord"></i> {{ __('views/common.layout.footer.discord') }}
                             </a>
                         </li>
