@@ -89,4 +89,22 @@ return [
     'spell_incarnation'         => '@todo de: .spell_incarnation',
     'spell_misdirection'        => '@todo de: .spell_misdirection',
     'spell_tricks_of_the_trade' => '@todo de: .spell_tricks_of_the_trade',
+
+    'role_tank'   => '@todo de-DE: .role_tank',
+    'role_healer' => '@todo de-DE: .role_healer',
+    'role_dps'    => '@todo de-DE: .role_dps',
+
+    'class_warrior'      => '@todo de-DE: .class_warrior',
+    'class_hunter'       => '@todo de-DE: .class_hunter',
+    'class_death_knight' => '@todo de-DE: .class_death_knight',
+    'class_mage'         => '@todo de-DE: .class_mage',
+    'class_priest'       => '@todo de-DE: .class_priest',
+    'class_monk'         => '@todo de-DE: .class_monk',
+    'class_rogue'        => '@todo de-DE: .class_rogue',
+    'class_warlock'      => '@todo de-DE: .class_warlock',
+    'class_shaman'       => '@todo de-DE: .class_shaman',
+    'class_paladin'      => '@todo de-DE: .class_paladin',
+    'class_druid'        => '@todo de-DE: .class_druid',
+    'class_demon_hunter' => '@todo de-DE: .class_demon_hunter',
+    'class_evoker'       => '@todo de-DE: .class_evoker',
 ];

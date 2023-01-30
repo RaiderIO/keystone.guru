@@ -89,4 +89,22 @@ return [
     'spell_incarnation'         => 'Incarnation',
     'spell_misdirection'        => 'Misdirection',
     'spell_tricks_of_the_trade' => 'Tricks of the Trade',
+
+    'role_tank'   => 'Tank',
+    'role_healer' => 'Healer',
+    'role_dps'    => 'DPS',
+
+    'class_warrior'      => 'Warrior',
+    'class_hunter'       => 'Hunter',
+    'class_death_knight' => 'Death Knight',
+    'class_mage'         => 'Mage',
+    'class_priest'       => 'Priest',
+    'class_monk'         => 'Monk',
+    'class_rogue'        => 'Rogue',
+    'class_warlock'      => 'Warlock',
+    'class_shaman'       => 'Shaman',
+    'class_paladin'      => 'Paladin',
+    'class_druid'        => 'Druid',
+    'class_demon_hunter' => 'Demon Hunter',
+    'class_evoker'       => 'Evoker',
 ];

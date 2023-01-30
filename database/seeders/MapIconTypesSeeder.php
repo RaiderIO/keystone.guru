@@ -104,9 +104,27 @@ class MapIconTypesSeeder extends Seeder
             MapIconType::MAP_ICON_TYPE_NW_ITEM_SHIELD  => ['name' => 'mapicontypes.nw_item_shield', 'width' => 32, 'height' => 32, 'admin_only' => true],
             MapIconType::MAP_ICON_TYPE_NW_ITEM_SPEAR   => ['name' => 'mapicontypes.nw_item_spear', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
-            MapIconType::MAP_ICON_TYPE_SPELL_INCARNATION         => ['name' => 'mapicontypes.spell_incarnation', 'width' => 32, 'height' => 32,],
-            MapIconType::MAP_ICON_TYPE_SPELL_MISDIRECTION        => ['name' => 'mapicontypes.spell_misdirection', 'width' => 32, 'height' => 32,],
-            MapIconType::MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE => ['name' => 'mapicontypes.spell_tricks_of_the_trade', 'width' => 32, 'height' => 32,],
+            MapIconType::MAP_ICON_TYPE_SPELL_INCARNATION         => ['name' => 'mapicontypes.spell_incarnation', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_SPELL_MISDIRECTION        => ['name' => 'mapicontypes.spell_misdirection', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE => ['name' => 'mapicontypes.spell_tricks_of_the_trade', 'width' => 32, 'height' => 32],
+
+            MapIconType::MAP_ICON_TYPE_ROLE_TANK   => ['name' => 'mapicontypes.role_tank', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_ROLE_HEALER => ['name' => 'mapicontypes.role_healer', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_ROLE_DPS    => ['name' => 'mapicontypes.role_dps', 'width' => 32, 'height' => 32],
+
+            MapIconType::MAP_ICON_TYPE_CLASS_WARRIOR      => ['name' => 'mapicontypes.class_warrior', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_HUNTER       => ['name' => 'mapicontypes.class_hunter', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_DEATH_KNIGHT => ['name' => 'mapicontypes.class_death_knight', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_MAGE         => ['name' => 'mapicontypes.class_mage', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_PRIEST       => ['name' => 'mapicontypes.class_priest', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_MONK         => ['name' => 'mapicontypes.class_monk', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_ROGUE        => ['name' => 'mapicontypes.class_rogue', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_WARLOCK      => ['name' => 'mapicontypes.class_warlock', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_SHAMAN       => ['name' => 'mapicontypes.class_shaman', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_PALADIN      => ['name' => 'mapicontypes.class_paladin', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_DRUID        => ['name' => 'mapicontypes.class_druid', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_DEMON_HUNTER => ['name' => 'mapicontypes.class_demon_hunter', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CLASS_EVOKER       => ['name' => 'mapicontypes.class_evoker', 'width' => 32, 'height' => 32],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {
