@@ -437,29 +437,6 @@
         "floor_count": 3,
         "floors": [
             {
-                "id": 17,
-                "index": 1,
-                "mdt_sub_level": 2,
-                "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 483,
-                        "floor1_id": 17,
-                        "floor2_id": 16,
-                        "direction": "up"
-                    }
-                ],
-                "dungeonspeedrunrequirednpcs": []
-            },
-            {
                 "id": 16,
                 "index": 2,
                 "mdt_sub_level": 1,
@@ -484,6 +461,29 @@
                         "floor1_id": 16,
                         "floor2_id": 18,
                         "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 17,
+                "index": 1,
+                "mdt_sub_level": 2,
+                "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 483,
+                        "floor1_id": 17,
+                        "floor2_id": 16,
+                        "direction": "up"
                     }
                 ],
                 "dungeonspeedrunrequirednpcs": []
@@ -3510,6 +3510,29 @@
         "floor_count": 3,
         "floors": [
             {
+                "id": 113,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 485,
+                        "floor1_id": 113,
+                        "floor2_id": 112,
+                        "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
                 "id": 111,
                 "index": 1,
                 "mdt_sub_level": 3,
@@ -3557,29 +3580,6 @@
                         "floor1_id": 112,
                         "floor2_id": 113,
                         "direction": "up"
-                    }
-                ],
-                "dungeonspeedrunrequirednpcs": []
-            },
-            {
-                "id": 113,
-                "index": 3,
-                "mdt_sub_level": 1,
-                "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 485,
-                        "floor1_id": 113,
-                        "floor2_id": 112,
-                        "direction": "down"
                     }
                 ],
                 "dungeonspeedrunrequirednpcs": []
@@ -4009,29 +4009,6 @@
         "floor_count": 5,
         "floors": [
             {
-                "id": 126,
-                "index": 1,
-                "mdt_sub_level": null,
-                "name": "dungeons.wotlk.the_oculus.floors.the_oculus",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 414,
-                        "floor1_id": 126,
-                        "floor2_id": 127,
-                        "direction": "up"
-                    }
-                ],
-                "dungeonspeedrunrequirednpcs": []
-            },
-            {
                 "id": 127,
                 "index": 2,
                 "mdt_sub_level": null,
@@ -4055,6 +4032,29 @@
                         "id": 416,
                         "floor1_id": 127,
                         "floor2_id": 128,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 126,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.the_oculus.floors.the_oculus",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 414,
+                        "floor1_id": 126,
+                        "floor2_id": 127,
                         "direction": "up"
                     }
                 ],
@@ -4325,29 +4325,6 @@
         "floor_count": 2,
         "floors": [
             {
-                "id": 136,
-                "index": 1,
-                "mdt_sub_level": null,
-                "name": "dungeons.wotlk.utgarde_pinnacle.floors.lower_pinnacle",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 407,
-                        "floor1_id": 136,
-                        "floor2_id": 137,
-                        "direction": "up"
-                    }
-                ],
-                "dungeonspeedrunrequirednpcs": []
-            },
-            {
                 "id": 137,
                 "index": 2,
                 "mdt_sub_level": null,
@@ -4366,6 +4343,29 @@
                         "floor1_id": 137,
                         "floor2_id": 136,
                         "direction": "down"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 136,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.utgarde_pinnacle.floors.lower_pinnacle",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 407,
+                        "floor1_id": 136,
+                        "floor2_id": 137,
+                        "direction": "up"
                     }
                 ],
                 "dungeonspeedrunrequirednpcs": []
@@ -4550,6 +4550,53 @@
                         "count": 10
                     }
                 ]
+            },
+            {
+                "id": 142,
+                "index": 5,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_lower_necropolis",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 475,
+                        "floor1_id": 142,
+                        "floor2_id": 138,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 476,
+                        "floor1_id": 142,
+                        "floor2_id": 139,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 477,
+                        "floor1_id": 142,
+                        "floor2_id": 140,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 478,
+                        "floor1_id": 142,
+                        "floor2_id": 141,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 479,
+                        "floor1_id": 142,
+                        "floor2_id": 143,
+                        "direction": "up"
+                    }
+                ],
+                "dungeonspeedrunrequirednpcs": []
             },
             {
                 "id": 139,
@@ -4880,53 +4927,6 @@
                 ]
             },
             {
-                "id": 142,
-                "index": 5,
-                "mdt_sub_level": null,
-                "name": "dungeons.wotlk.naxxramas.floors.the_lower_necropolis",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 475,
-                        "floor1_id": 142,
-                        "floor2_id": 138,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 476,
-                        "floor1_id": 142,
-                        "floor2_id": 139,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 477,
-                        "floor1_id": 142,
-                        "floor2_id": 140,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 478,
-                        "floor1_id": 142,
-                        "floor2_id": 141,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 479,
-                        "floor1_id": 142,
-                        "floor2_id": 143,
-                        "direction": "up"
-                    }
-                ],
-                "dungeonspeedrunrequirednpcs": []
-            },
-            {
                 "id": 143,
                 "index": 6,
                 "mdt_sub_level": null,
@@ -5038,8 +5038,105 @@
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 6,
+        "floors": [
+            {
+                "id": 167,
+                "index": 1,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.ulduar",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 168,
+                "index": 2,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.the_antechamber_of_ulduar",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 169,
+                "index": 3,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.the_inner_sanctum_of_ulduar",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 170,
+                "index": 4,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.the_prison_of_yogg_saron",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 171,
+                "index": 5,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.the_spark_of_imagination",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            },
+            {
+                "id": 172,
+                "index": 6,
+                "mdt_sub_level": null,
+                "name": "dungeons.wotlk.ulduar.floors.the_minds_eye",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeonspeedrunrequirednpcs": []
+            }
+        ]
     },
     {
         "id": 66,
@@ -5068,7 +5165,7 @@
         "key": "dragonacademy",
         "name": "dungeons.dragonflight.algeth_ar_academy.name",
         "slug": "algeth-ar-academy",
-        "enemy_forces_required": 405,
+        "enemy_forces_required": 450,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
@@ -5357,7 +5454,7 @@
         "key": "nokhudoffensive",
         "name": "dungeons.dragonflight.the_nokhud_offensive.name",
         "slug": "the-nokhud-offensive",
-        "enemy_forces_required": 580,
+        "enemy_forces_required": 520,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
