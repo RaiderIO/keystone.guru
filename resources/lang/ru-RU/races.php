@@ -10,7 +10,8 @@ return [
     'pandarenalliance'    => 'Пандарены Альянс',
     'void_elf'            => 'Эльфы Бездны',
     'lightforged_draenei' => 'Озарённые дренеи',
-    'dark_iron_dwarf'      => 'Дворфы из клана Чёрного Железа',
+    'dark_iron_dwarf'     => 'Дворфы из клана Чёрного Железа',
+    'dracthyralliance'    => '@todo ru-RU: .dracthyralliance',
 
 
     'orc'                 => 'Орки',
@@ -23,6 +24,7 @@ return [
     'nightborne'          => 'Ночнорождённые',
     'highmountain_tauren' => 'Таурены Крутогорья',
     'maghar_orc'          => 'Маг’хары',
+    'dracthyrhorde'       => '@todo ru-RU: .dracthyrhorde',
 
 
     'kul_tiran_human' => 'Култирасцы',

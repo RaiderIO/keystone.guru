@@ -44,19 +44,19 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
     @endif
     @endauth
 
-    document.addEventListener('DOMContentLoaded', function (event) {
-        setInterval(function () {
-            var csrfToken = $('[name="csrf-token"]').val();
-            $.ajax({
-                url: '{{ route('api.refresh_csrf') }}',
-                type: 'get'
-            }).done(function (data) {
-                _setCsrfToken(data.token);
-            }).fail(function () {
-                console.error('Unable to refresh session! Site will probably not work anymore now..');
-            });
-        }, {{ config('session.lifetime') * 60000 }});
-    });
+    {{--document.addEventListener('DOMContentLoaded', function (event) {--}}
+    {{--    setInterval(function () {--}}
+    {{--        var csrfToken = $('[name="csrf-token"]').val();--}}
+    {{--        $.ajax({--}}
+    {{--            url: '{{ route('api.refresh_csrf') }}',--}}
+    {{--            type: 'get'--}}
+    {{--        }).done(function (data) {--}}
+    {{--            _setCsrfToken(data.token);--}}
+    {{--        }).fail(function () {--}}
+    {{--            console.error('Unable to refresh session! Site will probably not work anymore now..');--}}
+    {{--        });--}}
+    {{--    }, {{ config('session.lifetime') * 60000 }});--}}
+    {{--});--}}
 
     /**
      *

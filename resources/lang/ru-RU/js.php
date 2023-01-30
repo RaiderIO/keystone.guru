@@ -92,9 +92,9 @@ return [
 
     'selected_label' => 'Выбрать',
 
-    'affixes_label'    => 'Аффиксы',
-    'attributes_label' => 'Атрибуты',
-    'setup_label'      => 'Установить',
+    'affixes_label'             => 'Аффиксы',
+    'attributes_label'          => 'Атрибуты',
+    'setup_label'               => 'Установить',
     'new_mapping_version_label' => '@todo ru: .new_mapping_version_label',
 
     'submit_label' => 'Подтвердить',

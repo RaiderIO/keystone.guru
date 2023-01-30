@@ -182,4 +182,13 @@
         </li>
     </ul>
 
+    <h4>
+        Class icons
+    </h4>
+    <ul>
+        <li>
+            <a href="https://twitter.com/keyboardturn/status/1561631145447473153">@keyboardturn on Twitter</a>
+        </li>
+    </ul>
+
 @endsection

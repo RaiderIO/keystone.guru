@@ -47,7 +47,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 'd' => [
                     1 => $mdtCoordinates['x'],
                     2 => $mdtCoordinates['y'],
-                    3 => $mapIcon->floor->index,
+                    3 => $mapIcon->floor->mdt_sub_level ?? $mapIcon->floor->index,
                     4 => true,
                     5 => $mapIcon->comment ?? '',
                 ],
@@ -63,7 +63,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 'd' => [
                     1 => $line->polyline->weight,
                     2 => 1,
-                    3 => $line->floor->index,
+                    3 => $line->floor->mdt_sub_level ?? $line->floor->index,
                     4 => true,
                     5 => strpos($line->polyline->color, '#') === 0 ? substr($line->polyline->color, 1) : $line->polyline->color,
                     6 => -8,
