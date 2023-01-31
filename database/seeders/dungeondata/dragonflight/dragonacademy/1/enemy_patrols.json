@@ -24,5 +24,18 @@
             "weight": 2,
             "vertices_json": "[{\"lat\":-170,\"lng\":202},{\"lat\":-176,\"lng\":200},{\"lat\":-184,\"lng\":200},{\"lat\":-187,\"lng\":206},{\"lat\":-185,\"lng\":212},{\"lat\":-178,\"lng\":215},{\"lat\":-171,\"lng\":214},{\"lat\":-169,\"lng\":207},{\"lat\":-170,\"lng\":202}]"
         }
+    },
+    {
+        "id": 722,
+        "mapping_version_id": 87,
+        "floor_id": 144,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-170,\"lng\":202},{\"lat\":-176,\"lng\":200},{\"lat\":-184,\"lng\":200},{\"lat\":-187,\"lng\":206},{\"lat\":-185,\"lng\":212},{\"lat\":-178,\"lng\":215},{\"lat\":-171,\"lng\":214},{\"lat\":-169,\"lng\":207},{\"lat\":-170,\"lng\":202}]"
+        }
     }
 ]
