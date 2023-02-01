@@ -79,7 +79,7 @@ class RefreshAffixGroupEaseTiers extends Command
                             // If found
                             $dungeon = $dungeonList->first(function (Dungeon $dungeon) use ($dungeonName) {
                                 // Translate the name of the dungeon to English (from a key), and then match it
-                                return __($dungeon->name, [], 'en') === $dungeonName;
+                                return __($dungeon->name, [], 'en-US') === $dungeonName;
                             });
 
                             if ($dungeon instanceof Dungeon) {
@@ -134,7 +134,7 @@ class RefreshAffixGroupEaseTiers extends Command
             $invalidAffixes = $affixes->filter(function (string $affixName) use ($affixList) {
                 // Find the affix in the list and match by translated name - must be found to continue
                 return $affixList->filter(function (Affix $affix) use ($affixName) {
-                    return __($affix->name, [], 'en') === $affixName;
+                    return __($affix->name, [], 'en-US') === $affixName;
                 })->isEmpty();
             });
 

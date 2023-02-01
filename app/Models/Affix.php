@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasIconFile;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -108,7 +109,7 @@ class Affix extends CacheModel
      */
     public function affixGroups(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\AffixGroup\AffixGroup', 'affix_group_couplings');
+        return $this->belongsToMany(AffixGroup::class, 'affix_group_couplings');
     }
 
     /**

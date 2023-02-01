@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands\MDT;
 
-use App\Logic\MDT\Conversion;
 use App\Models\Dungeon;
-use App\Models\Expansion;
+use App\Models\Season;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use Illuminate\Console\Command;
 
@@ -45,8 +43,21 @@ class ImportMapping extends Command
     public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService)
     {
         $dungeonKey = $this->argument('dungeon');
-        $force = $this->argument('force') === 'true';
+        $force      = $this->argument('force') === 'true';
 
-        $mappingImportService->importMappingVersionFromMDT($mappingService, Dungeon::where('key', $dungeonKey)->firstOrFail(), $force);
+        if (is_numeric($dungeonKey)) {
+            // If it's an ID we should treat it as a season instead
+            $season = Season::findOrFail($dungeonKey);
+
+            foreach ($season->dungeons as $dungeon) {
+                try {
+                    $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
+                } catch (\Exception $exception) {
+                    $this->error($exception->getMessage());
+                }
+            }
+        } else {
+            $mappingImportService->importMappingVersionFromMDT($mappingService, Dungeon::where('key', $dungeonKey)->firstOrFail(), $force);
+        }
     }
 }

@@ -403,7 +403,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function floors(): HasMany
     {
-        return $this->hasMany(Floor::class)->orderBy('index');
+        return $this->hasMany(Floor::class)->orderByDesc('default')->orderBy('index');
     }
 
     /**
