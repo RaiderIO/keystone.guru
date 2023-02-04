@@ -3,6 +3,7 @@
 
 namespace App\Logic\MapContext;
 
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor;
@@ -11,6 +12,7 @@ use App\Models\Npc;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Facades\App;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class MapContextDungeon
@@ -51,7 +53,11 @@ class MapContextDungeon extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->mappingVersion, true);
+        try {
+            return $this->listEnemies($this->mappingVersion, true);
+        } catch (InvalidMDTDungeonException $e) {
+            return $this->listEnemies($this->mappingVersion);
+        }
     }
 
     public function getEchoChannelName(): string
