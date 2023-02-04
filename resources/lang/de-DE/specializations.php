@@ -16,6 +16,10 @@ return [
         'guardian'    => '@todo de: .druid.guardian',
         'restoration' => '@todo de: .druid.restoration',
     ],
+    'evoker'       => [
+        'devastation'  => '@todo de-DE: .evoker.devastation',
+        'preservation' => '@todo de-DE: .evoker.preservation',
+    ],
     'hunter'       => [
         'beast_mastery' => '@todo de: .hunter.beast_mastery',
         'marksman'      => '@todo de: .hunter.marksman',

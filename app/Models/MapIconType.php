@@ -218,6 +218,24 @@ class MapIconType extends CacheModel
 
         self::MAP_ICON_TYPE_SPELL_MISDIRECTION        => 75,
         self::MAP_ICON_TYPE_SPELL_TRICKS_OF_THE_TRADE => 76,
+
+        self::MAP_ICON_TYPE_ROLE_TANK   => 77,
+        self::MAP_ICON_TYPE_ROLE_HEALER => 78,
+        self::MAP_ICON_TYPE_ROLE_DPS    => 79,
+
+        self::MAP_ICON_TYPE_CLASS_WARRIOR      => 80,
+        self::MAP_ICON_TYPE_CLASS_HUNTER       => 81,
+        self::MAP_ICON_TYPE_CLASS_DEATH_KNIGHT => 82,
+        self::MAP_ICON_TYPE_CLASS_MAGE         => 83,
+        self::MAP_ICON_TYPE_CLASS_PRIEST       => 84,
+        self::MAP_ICON_TYPE_CLASS_MONK         => 85,
+        self::MAP_ICON_TYPE_CLASS_ROGUE        => 86,
+        self::MAP_ICON_TYPE_CLASS_WARLOCK      => 87,
+        self::MAP_ICON_TYPE_CLASS_SHAMAN       => 88,
+        self::MAP_ICON_TYPE_CLASS_PALADIN      => 89,
+        self::MAP_ICON_TYPE_CLASS_DRUID        => 90,
+        self::MAP_ICON_TYPE_CLASS_DEMON_HUNTER => 91,
+        self::MAP_ICON_TYPE_CLASS_EVOKER       => 92,
     ];
 
     public $timestamps = false;

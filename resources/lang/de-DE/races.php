@@ -10,7 +10,8 @@ return [
     'pandarenalliance'    => '@todo de: .pandarenalliance',
     'void_elf'            => '@todo de: .void_elf',
     'lightforged_draenei' => '@todo de: .lightforged_draenei',
-    'dark_iron_dwarf'      => '@todo de: .dark_iron_dwarf',
+    'dark_iron_dwarf'     => '@todo de: .dark_iron_dwarf',
+    'dracthyralliance'    => '@todo de-DE: .dracthyralliance',
 
 
     'orc'                 => '@todo de: .orc',
@@ -23,6 +24,7 @@ return [
     'nightborne'          => '@todo de: .nightborne',
     'highmountain_tauren' => '@todo de: .highmountain_tauren',
     'maghar_orc'          => '@todo de: .maghar_orc',
+    'dracthyrhorde'       => '@todo de-DE: .dracthyrhorde',
 
 
     'kul_tiran_human' => '@todo de: .kul_tiran_human',

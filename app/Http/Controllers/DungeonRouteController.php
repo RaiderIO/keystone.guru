@@ -463,6 +463,8 @@ class DungeonRouteController extends Controller
             'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
         ]);
 
+        DungeonRoute::dropCaches($dungeonroute->id);
+
         // Display the edit page
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
