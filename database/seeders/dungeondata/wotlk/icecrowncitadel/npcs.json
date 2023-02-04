@@ -25,7 +25,7 @@
         "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 38804,
         "name": "Warpweaver Torell",
         "base_health": 12345,
         "enemy_forces": -1,
