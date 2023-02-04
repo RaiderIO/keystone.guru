@@ -12,6 +12,7 @@ namespace App\Logic\MDT\Data;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
@@ -50,7 +51,7 @@ class MDTDungeon
         $this->cacheService = App::make(CacheServiceInterface::class);
 
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
-            throw new Exception(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
+            throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
         }
     }
 

@@ -9,6 +9,7 @@ return [
             'header_edit'                     => 'Edit dungeon',
             'active'                          => 'Active',
             'speedrun_enabled'                => 'Speedrun enabled',
+            'id'                              => 'ID',
             'zone_id'                         => 'Zone ID',
             'map_id'                          => 'Map ID',
             'mdt_id'                          => 'MDT ID',
