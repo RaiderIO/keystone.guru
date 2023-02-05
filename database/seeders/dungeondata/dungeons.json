@@ -5037,7 +5037,7 @@
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
+        "speedrun_enabled": 1,
         "floor_count": 6,
         "floors": [
             {
