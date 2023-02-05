@@ -5142,10 +5142,16 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 533,
+                        "id": 535,
                         "floor1_id": 170,
                         "floor2_id": 169,
                         "direction": "right"
+                    },
+                    {
+                        "id": 536,
+                        "floor1_id": 170,
+                        "floor2_id": 172,
+                        "direction": "down"
                     }
                 ],
                 "dungeonspeedrunrequirednpcs": []
@@ -5186,7 +5192,14 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 537,
+                        "floor1_id": 172,
+                        "floor2_id": 170,
+                        "direction": "up"
+                    }
+                ],
                 "dungeonspeedrunrequirednpcs": []
             }
         ]

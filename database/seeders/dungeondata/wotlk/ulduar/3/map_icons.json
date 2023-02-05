@@ -1,1 +1,80 @@
-[]
+[
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -191.21711809382737,
+        "lng": 116.99437247752132,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -84.83276158187881,
+        "lng": 108.04217150656928,
+        "comment": "Teleporter",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -204.68368813103413,
+        "lng": 196.7145932932422,
+        "comment": "Teleporter: The Inner Sanctum of Ulduar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -137.65625,
+        "lng": 196.4375,
+        "comment": "Teleporter: Convervatory of Life",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -112.58932120610048,
+        "lng": 265.48722985283683,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -164.048483823014,
+        "lng": 229.0217345275338,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
