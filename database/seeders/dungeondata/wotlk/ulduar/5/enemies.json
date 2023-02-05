@@ -1,1 +1,27 @@
-[]
+[
+    {
+        "id": 14031,
+        "mapping_version_id": 92,
+        "enemy_pack_id": null,
+        "enemy_patrol_id": null,
+        "npc_id": 33350,
+        "floor_id": 171,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "lat": -106.31598754253915,
+        "lng": 167.0368893324438,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 33350
+        }
+    }
+]
