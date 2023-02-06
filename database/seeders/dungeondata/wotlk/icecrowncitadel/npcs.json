@@ -18,5 +18,25 @@
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": []
+    },
+    {
+        "id": 121139,
+        "dungeon_id": 58,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 38804,
+        "name": "Warpweaver Torell",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

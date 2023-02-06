@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "id": 757,
+        "mapping_version_id": 92,
+        "floor_id": 167,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-65.03125,\"lng\":160.5625},{\"lat\":-64.9375,\"lng\":146.28125},{\"lat\":-65.03125,\"lng\":160.90625}]"
+        }
+    },
+    {
+        "id": 758,
+        "mapping_version_id": 92,
+        "floor_id": 167,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-70.65625,\"lng\":148.21875},{\"lat\":-70.6875,\"lng\":160.8125},{\"lat\":-70.65625,\"lng\":147.8125}]"
+        }
+    },
+    {
+        "id": 759,
+        "mapping_version_id": 92,
+        "floor_id": 167,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-63.8125,\"lng\":149.53125},{\"lat\":-65.34375,\"lng\":152.5625},{\"lat\":-63.5625,\"lng\":155.71875},{\"lat\":-63.65625,\"lng\":162.40625},{\"lat\":-62.1875,\"lng\":164.15625},{\"lat\":-60.40625,\"lng\":162.53125},{\"lat\":-61.625,\"lng\":161.28125},{\"lat\":-62.34375,\"lng\":161.625},{\"lat\":-62.53125,\"lng\":155.75},{\"lat\":-64.3125,\"lng\":152.5},{\"lat\":-63,\"lng\":150.09375},{\"lat\":-63.78125,\"lng\":149.53125}]"
+        }
+    },
+    {
+        "id": 760,
+        "mapping_version_id": 92,
+        "floor_id": 167,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-71.59375,\"lng\":146.78125},{\"lat\":-69.875,\"lng\":152.21875},{\"lat\":-71.71875,\"lng\":156.65625},{\"lat\":-71.875,\"lng\":160.4375},{\"lat\":-74.875,\"lng\":161.875},{\"lat\":-74.75,\"lng\":163.46875},{\"lat\":-71.15625,\"lng\":161.875},{\"lat\":-70.96875,\"lng\":156.90625},{\"lat\":-68.9375,\"lng\":152.21875},{\"lat\":-70.71875,\"lng\":146.28125},{\"lat\":-71.59375,\"lng\":146.8125}]"
+        }
+    }
+]
