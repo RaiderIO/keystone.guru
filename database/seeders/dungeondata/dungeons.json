@@ -5061,7 +5061,38 @@
                         "direction": "up"
                     }
                 ],
-                "dungeonspeedrunrequirednpcs": []
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 33,
+                        "floor_id": 167,
+                        "npc_id": 34069,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 34,
+                        "floor_id": 167,
+                        "npc_id": 34085,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 35,
+                        "floor_id": 167,
+                        "npc_id": 34086,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    }
+                ]
             },
             {
                 "id": 168,
@@ -5090,7 +5121,58 @@
                         "direction": "up"
                     }
                 ],
-                "dungeonspeedrunrequirednpcs": []
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 36,
+                        "floor_id": 168,
+                        "npc_id": 34197,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    },
+                    {
+                        "id": 37,
+                        "floor_id": 168,
+                        "npc_id": 34190,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
+                    },
+                    {
+                        "id": 38,
+                        "floor_id": 168,
+                        "npc_id": 34198,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
+                    },
+                    {
+                        "id": 42,
+                        "floor_id": 168,
+                        "npc_id": 34199,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
+                    },
+                    {
+                        "id": 43,
+                        "floor_id": 168,
+                        "npc_id": 34196,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 4
+                    }
+                ]
             },
             {
                 "id": 169,
@@ -5125,7 +5207,138 @@
                         "direction": "left"
                     }
                 ],
-                "dungeonspeedrunrequirednpcs": []
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 39,
+                        "floor_id": 169,
+                        "npc_id": 34133,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 40,
+                        "floor_id": 169,
+                        "npc_id": 34134,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    },
+                    {
+                        "id": 41,
+                        "floor_id": 169,
+                        "npc_id": 34135,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 9
+                    },
+                    {
+                        "id": 44,
+                        "floor_id": 169,
+                        "npc_id": 33699,
+                        "npc2_id": 33722,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 8
+                    },
+                    {
+                        "id": 45,
+                        "floor_id": 169,
+                        "npc_id": 33755,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 46,
+                        "floor_id": 169,
+                        "npc_id": 33754,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 47,
+                        "floor_id": 169,
+                        "npc_id": 33431,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 20
+                    },
+                    {
+                        "id": 48,
+                        "floor_id": 169,
+                        "npc_id": 33430,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 49,
+                        "floor_id": 169,
+                        "npc_id": 33528,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 1
+                    },
+                    {
+                        "id": 50,
+                        "floor_id": 169,
+                        "npc_id": 33526,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 51,
+                        "floor_id": 169,
+                        "npc_id": 33525,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 52,
+                        "floor_id": 169,
+                        "npc_id": 33527,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 53,
+                        "floor_id": 169,
+                        "npc_id": 33772,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    }
+                ]
             },
             {
                 "id": 170,
@@ -5154,7 +5367,68 @@
                         "direction": "down"
                     }
                 ],
-                "dungeonspeedrunrequirednpcs": []
+                "dungeonspeedrunrequirednpcs": [
+                    {
+                        "id": 54,
+                        "floor_id": 170,
+                        "npc_id": 33818,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 7
+                    },
+                    {
+                        "id": 55,
+                        "floor_id": 170,
+                        "npc_id": 33819,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 6
+                    },
+                    {
+                        "id": 56,
+                        "floor_id": 170,
+                        "npc_id": 33822,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 8
+                    },
+                    {
+                        "id": 57,
+                        "floor_id": 170,
+                        "npc_id": 33820,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 5
+                    },
+                    {
+                        "id": 58,
+                        "floor_id": 170,
+                        "npc_id": 33824,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 2
+                    },
+                    {
+                        "id": 59,
+                        "floor_id": 170,
+                        "npc_id": 33823,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "count": 3
+                    }
+                ]
             },
             {
                 "id": 171,
