@@ -59,7 +59,7 @@
     "patreon/patreon": "^1.0.0",
     "phlak/semver": "^4.0",
     "php-http/guzzle6-adapter": "^2.0",
-    "predis/predis": "^1.1",
+    "predis/predis": "^2.1",
     "santigarcor/laratrust": "^7.1",
     "shrikeh/teapot": "^2.3",
     "socialiteproviders/battlenet": "^4.1.0",
