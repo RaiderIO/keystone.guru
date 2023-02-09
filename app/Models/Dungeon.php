@@ -577,7 +577,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })
@@ -591,7 +591,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when($this->key !== Dungeon::RAID_NAXXRAMAS, function (Builder $builder) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
             })

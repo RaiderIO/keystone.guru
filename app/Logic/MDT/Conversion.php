@@ -38,6 +38,7 @@ class Conversion
             Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
             Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
             Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
+            Dungeon::RAID_ULDUAR                       => 'Ulduar',
             Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
             Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
             Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
