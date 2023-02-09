@@ -1,0 +1,37 @@
+{
+    "id": 158,
+    "release_changelog_id": 165,
+    "version": "v6.2",
+    "title": "Ulduar mapping",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-02-09T22:50:49+00:00",
+    "updated_at": "2023-02-09T22:50:49+00:00",
+    "changelog": {
+        "id": 165,
+        "release_id": 158,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 165,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1581,
+                "change": "Linking a Patreon account to a second Keystone.guru account will now unlink it from the first account, removing benefits from the first account and placing them on the second account.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 165,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1553,
+                "change": "Added Ulduar mapping and required enemies for 25-man speedrun. Note: 10-man speedrun currently is not supported but will be added later.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
+            }
+        ]
+    }
+}
