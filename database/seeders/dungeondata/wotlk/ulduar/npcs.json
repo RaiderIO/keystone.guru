@@ -1927,7 +1927,7 @@
         "npc_class_id": 1,
         "display_id": 28578,
         "name": "Mimiron",
-        "base_health": 12345,
+        "base_health": 750000,
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
