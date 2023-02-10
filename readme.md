@@ -8,9 +8,9 @@ It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer f
 The website is free to use, now and forever. You may support the development of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
 
 # Features
-* Full interactive Leaflet map of all Shadowlands™ dungeons
+* Full interactive Leaflet map of all Wrath of the Lich King Classic™, Battle for Azeroth™, Shadowlands™ and Dragonflight™ dungeons
 * Enhanced dungeon map images to allow for 5 zoom levels
-* Custom dungeon mapping with all known enemies and patrols inside dungeons (updated to 9.0)
+* Dungeon mapping shared with Mythic Dungeon Tools for a seamless integration (thanks to Nnoggie for collaborating)
 * Full import/export support for Mythic Dungeon Tools strings
 * Route planning functions such as
   * Plotting a path through the dungeon, allowing a route to split up should the need arise
@@ -31,6 +31,7 @@ The website is free to use, now and forever. You may support the development of 
 * Search function for looking up routes others have made
   * Search by dungeon, affixes, target key level, ratings, author or whether enemy forces have been reached or not
 * An up-to-date overview of upcoming affixes and their time based on your region
+* Generate a SimulationCraft string to simulate your route and optimize your pulls
 * When not registered, you are free to view any routes found in the search function, or when directly linked by others
   * Temporary routes available in which you can try out your route/the website with no strings attached
 * Log in through Google, Discord or Battle.net if you don't want to register
@@ -40,7 +41,8 @@ The website is free to use, now and forever. You may support the development of 
 * No ads
 * Create animated lines on the map
 * Create unlisted private routes that can be shared with others by link
-  
+* Enhanced SimulationCraft support
+
 # Not included in this repository
 * Map tiles of all dungeons
 * Software used for creating said map tiles (self-made)
@@ -54,7 +56,7 @@ Any security vulnerabilities should be reported directly to myself on Discord (W
 If you found a security vulnerability, do not abuse the vulnerability for more than is reasonably necessary to confirm the issue exists.
 
 # License
-At this time this project has [no license](https://choosealicense.com/no-permission/) attached to it while I explore the options of licensing. 
+At this time this project has [no license](https://choosealicense.com/no-permission/) attached to it while I explore the options of licensing.
 If you have any suggestions for a fitting license don't hesitate to raise an issue.
 
 # Contact
