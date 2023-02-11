@@ -7,11 +7,11 @@ use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 /**
  * This service provides functionality for reading the current laravel echo service and parsing its contents.
@@ -32,16 +32,18 @@ class SeasonService implements SeasonServiceInterface
     /** @var Season */
     private $firstSeasonCache = null;
 
-    public function __construct()
+    public function __construct(
+        ExpansionServiceInterface $expansionService
+    )
     {
-        $this->expansionService = App::make(ExpansionService::class);
+        $this->expansionService = $expansionService;
         $this->seasonCache      = collect();
         $this->firstSeasonCache = null;
     }
 
     /**
      * @param Expansion|null $expansion
-     * @return Collection
+     * @return Collection|Season[]
      */
     public function getSeasons(?Expansion $expansion = null): Collection
     {
@@ -139,12 +141,39 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getIterationsAt(Carbon $date): int
     {
-        $seasonsStart = $this->getFirstSeason();
+        $iterations    = 0;
+        $seasons       = $this->getSeasons();
+        $currentSeason = null;
+        $i             = 0;
 
-        $weeksSinceStart = $seasonsStart->getWeeksSinceStartAt($date);
+        foreach ($seasons as $upcomingSeason) {
+            // Calculate the length of the previous season according to the next season's start - OR the current date
+            // if there is no next season
+            if ($currentSeason !== null) {
+                // If we reached the target date before the start of the next season..
+                // OR target date not reached - and we don't have a next season to consider, so just assume this season
+                // will last until the target date
+                $hasReachedTargetDate = $date->isBefore($upcomingSeason->start) || !$seasons->has($i + 1);
+                if ($hasReachedTargetDate) {
+                    $dateTillNextSeason = $date;
+                } else {
+                    $dateTillNextSeason = $upcomingSeason->start;
+                }
+
+                $seasonDuration = $currentSeason->start->diffInWeeks($dateTillNextSeason);
+                $iterations += $seasonDuration / $currentSeason->affix_group_count;
+
+                if ($hasReachedTargetDate) {
+                    break;
+                }
+            }
+
+            $currentSeason = $upcomingSeason;
+            $i++;
+        }
 
         // Round down
-        return (int)($weeksSinceStart / config('keystoneguru.season_iteration_affix_group_count'));
+        return (int)$iterations;
     }
 
     /**
