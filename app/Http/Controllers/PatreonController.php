@@ -114,6 +114,15 @@ class PatreonController extends Controller
      */
     private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
     {
+        $existingPatreonUserLink = PatreonUserLink::where('email', $attributes['email'])->first();
+
+        // If the link already exists, remove it entirely. Can't couple the same Patreon account to 2 Keystone.guru accounts
+        if ($existingPatreonUserLink !== null) {
+            $existingPatreonUserLink->user()->update(['patreon_user_link_id' => null]);
+
+            $existingPatreonUserLink->delete();
+        }
+
         // Create a new PatreonData object and assign it to the user
         $patreonUserLink = PatreonUserLink::create($attributes);
         $user->update([

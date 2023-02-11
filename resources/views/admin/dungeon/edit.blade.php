@@ -37,6 +37,12 @@
         </div>
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
+            {!! Form::label('id', __('views/admin.dungeon.edit.id')) !!}
+            {!! Form::number('id', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+            @include('common.forms.form-error', ['key' => 'id'])
+        </div>
+
+        <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
             {!! Form::label('zone_id', __('views/admin.dungeon.edit.zone_id')) !!}
             {!! Form::number('zone_id', null, ['class' => 'form-control']) !!}
             @include('common.forms.form-error', ['key' => 'zone_id'])

@@ -1,1 +1,80 @@
-[]
+[
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -191.21711809383,
+        "lng": 116.99437247752,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -84.832761581879,
+        "lng": 108.04217150657,
+        "comment": "Teleporter",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -204.68368813103,
+        "lng": 196.71459329324,
+        "comment": "Teleporter: The Inner Sanctum of Ulduar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -137.65625,
+        "lng": 196.4375,
+        "comment": "Teleporter: Convervatory of Life",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -112.5893212061,
+        "lng": 265.48722985284,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 92,
+        "floor_id": 169,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -164.04848382301,
+        "lng": 229.02173452753,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

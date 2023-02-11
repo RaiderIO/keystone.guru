@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
@@ -29,6 +30,7 @@ trait ListsEnemies
      * @param bool $showMdtEnemies
      * @return array|bool
      * @throws InvalidArgumentException
+     * @throws InvalidMDTDungeonException
      */
     function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false)
     {
