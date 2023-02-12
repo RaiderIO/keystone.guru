@@ -18,11 +18,9 @@ interface SeasonServiceInterface
 
     function getCurrentSeason(?Expansion $expansion = null): ?Season;
 
-    function getNextSeason(?Expansion $expansion = null): ?Season;
+    function getNextSeasonOfExpansion(?Expansion $expansion = null): ?Season;
 
-    function getIterationsAt(Carbon $date): int;
-
-    function getAffixGroupIndexAt(Carbon $date): int;
+    function getAffixGroupIndexAt(Carbon $date, ?Expansion $expansion = null): int;
 
     function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

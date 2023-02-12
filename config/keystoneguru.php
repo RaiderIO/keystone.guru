@@ -144,12 +144,6 @@ return [
      */
     'registered_user_dungeonroute_limit' => 999,
 
-
-    /**
-     * How many affix groups are in an iteration of a season.
-     */
-    'season_iteration_affix_group_count' => 12,
-
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
