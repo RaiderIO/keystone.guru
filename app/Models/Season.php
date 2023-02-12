@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
  * @property Carbon $start
  * @property int $presets
  * @property int $affix_group_count
+ * @property int $start_affix_group_index The index of the affix that was the first affix to be available upon season start
  * @property string $name Dynamic attribute
  *
  * @property Expansion $expansion
@@ -35,7 +36,7 @@ class Season extends CacheModel
 {
     use HasStart;
 
-    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count'];
+    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
     public $with = ['expansion', 'affixgroups', 'dungeons'];
     public $timestamps = false;
 
