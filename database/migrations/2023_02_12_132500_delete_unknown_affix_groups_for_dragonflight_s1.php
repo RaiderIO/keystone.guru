@@ -12,12 +12,12 @@ class DeleteUnknownAffixGroupsForDragonflightS1 extends Migration
     public function up()
     {
         DB::delete('
-            DELETE FROM `dungeon_route_affix_groups` WHERE affix_group_id IN (102, 103)
+            DELETE FROM `dungeon_route_affix_groups` WHERE affix_group_id IN (104, 105)
             ');
 
 
         DB::delete('
-            DELETE FROM `affix_group_ease_tiers` WHERE affix_group_id IN (102, 103)
+            DELETE FROM `affix_group_ease_tiers` WHERE affix_group_id IN (104, 105)
             ');
     }
 
