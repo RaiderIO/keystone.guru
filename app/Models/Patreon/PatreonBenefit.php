@@ -6,9 +6,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property $id int
- * @property $key string
- * @property $name string
+ * @property int $id
+ * @property string $key
+ * @property string $name
  *
  * @mixin Eloquent
  * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?

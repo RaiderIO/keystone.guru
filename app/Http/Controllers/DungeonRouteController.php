@@ -10,7 +10,6 @@ use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
-use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -100,14 +99,7 @@ class DungeonRouteController extends Controller
                 ->first();
         }
 
-        // Handle route views counting
-        if (PageView::trackPageView($dungeonroute->id, get_class($dungeonroute))) {
-            // Do not update the updated_at time - triggering a refresh of the thumbnails
-            $dungeonroute->timestamps = false;
-            $dungeonroute->views++;
-            $dungeonroute->popularity++;
-            $dungeonroute->update(['views', 'popularity']);
-        }
+        $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE);
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
@@ -356,6 +348,8 @@ class DungeonRouteController extends Controller
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
+
+        $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_EMBED);
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();

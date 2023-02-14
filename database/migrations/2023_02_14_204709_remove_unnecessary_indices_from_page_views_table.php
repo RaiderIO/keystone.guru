@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailColumnToPatreonDataTable extends Migration
+class RemoveUnnecessaryIndicesFromPageViewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddEmailColumnToPatreonDataTable extends Migration
      */
     public function up()
     {
-        Schema::table('patreon_data', function (Blueprint $table) {
-            $table->string('email')->after('user_id');
-            $table->index('email');
+        Schema::table('page_views', function (Blueprint $table) {
+            $table->dropIndex(['model_id']);
+            $table->dropIndex(['user_id']);
         });
     }
 
@@ -26,9 +26,9 @@ class AddEmailColumnToPatreonDataTable extends Migration
      */
     public function down()
     {
-        Schema::table('patreon_data', function (Blueprint $table) {
-            $table->dropIndex(['email']);
-            $table->dropColumn('email');
+        Schema::table('page_views', function (Blueprint $table) {
+            $table->index(['user_id']);
+            $table->index(['model_id']);
         });
     }
 }

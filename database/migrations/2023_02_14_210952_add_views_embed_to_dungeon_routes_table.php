@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailColumnToPatreonDataTable extends Migration
+class AddViewsEmbedToDungeonRoutesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddEmailColumnToPatreonDataTable extends Migration
      */
     public function up()
     {
-        Schema::table('patreon_data', function (Blueprint $table) {
-            $table->string('email')->after('user_id');
-            $table->index('email');
+        Schema::table('dungeon_routes', function (Blueprint $table) {
+            // No need for an index - not searching on this column
+            $table->integer('views_embed')->default(0)->after('views');
         });
     }
 
@@ -26,9 +26,8 @@ class AddEmailColumnToPatreonDataTable extends Migration
      */
     public function down()
     {
-        Schema::table('patreon_data', function (Blueprint $table) {
-            $table->dropIndex(['email']);
-            $table->dropColumn('email');
+        Schema::table('dungeon_routes', function (Blueprint $table) {
+            $table->dropColumn('views_embed');
         });
     }
 }

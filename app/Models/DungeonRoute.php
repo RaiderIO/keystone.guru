@@ -64,6 +64,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property boolean $pull_gradient_apply_always
  *
  * @property int $views
+ * @property int $views_embed
  * @property int $popularity
  *
  * @property Carbon $thumbnail_refresh_queued_at
@@ -122,6 +123,9 @@ class DungeonRoute extends Model
     use Reportable;
     use HasTags;
     use GeneratesPublicKey;
+
+    public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_EMBED = 2;
 
     /**
      * The accessors to append to the model's array form.
@@ -531,7 +535,7 @@ class DungeonRoute extends Model
 
             // Could be if no enemies were assigned yet
             if (!empty($queryResult)) {
-                foreach($queryResult as $row){
+                foreach ($queryResult as $row) {
                     $result += $row->enemy_forces;
                 }
             }
@@ -1241,6 +1245,30 @@ class DungeonRoute extends Model
         }
 
         return $subTitle;
+    }
+
+    /**
+     * @param int $source
+     * @return bool
+     */
+    public function trackPageView(int $source): bool
+    {
+        // Handle route views counting
+
+        if ($result = PageView::trackPageView($this->id, DungeonRoute::class, $source)) {
+            // Do not update the updated_at time - triggering a refresh of the thumbnails
+            $this->timestamps = false;
+            if ($source === self::PAGE_VIEW_SOURCE_VIEW_ROUTE) {
+                $this->views++;
+            }
+            if ($source === self::PAGE_VIEW_SOURCE_VIEW_EMBED) {
+                $this->views_embed++;
+            }
+            $this->popularity++;
+            $this->update(['views', 'views_embed', 'popularity']);
+        }
+
+        return $result;
     }
 
     /**

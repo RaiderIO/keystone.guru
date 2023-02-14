@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
  * @property int $model_id
  * @property string $model_class
  * @property string $session_id
+ * @property int|null $source
  * @property string $created_at
  * @property string $updated_at
  *
@@ -21,6 +22,13 @@ use Illuminate\Support\Facades\Session;
  */
 class PageView extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'model_id',
+        'model_class',
+        'session_id',
+        'source',
+    ];
 
     /**
      * @return bool True if this PageView is recent enough to be considered 'current', false if it is not and a new view
@@ -35,12 +43,13 @@ class PageView extends Model
     }
 
     /**
-     * Tracks a view for this model. The view may not track if there's a recent view and we're still in the same 'session'.
-     * @param $modelId int
-     * @param $modelClass string
+     * Tracks a view for this model. The view may not track if there's a recent view, and we're still in the same 'session'.
+     * @param int $modelId
+     * @param string $modelClass
+     * @param int|null $source
      * @return bool True if the page view was tracked, false if it was not.
      */
-    public static function trackPageView(int $modelId, string $modelClass): bool
+    public static function trackPageView(int $modelId, string $modelClass, int $source = null): bool
     {
         $result = false;
 
@@ -49,15 +58,17 @@ class PageView extends Model
         $sessionId = Session::getId();
 
         $mostRecentPageView = PageView::getMostRecentPageView($modelId, $modelClass);
+
         // Only if the view may be counted
         if ($mostRecentPageView === null || !$mostRecentPageView->isRecent()) {
             // Create a new view and save it
-            $pageView              = new PageView();
-            $pageView->user_id     = $userId;
-            $pageView->model_id    = $modelId;
-            $pageView->model_class = $modelClass;
-            $pageView->session_id  = $sessionId;
-            $pageView->save();
+            PageView::create([
+                'user_id'     => $userId,
+                'model_id'    => $modelId,
+                'model_class' => $modelClass,
+                'session_id'  => $sessionId,
+                'source'      => $source,
+            ]);
 
             $result = true;
         } else {

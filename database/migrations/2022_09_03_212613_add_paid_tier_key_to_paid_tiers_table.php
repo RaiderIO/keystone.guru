@@ -28,7 +28,7 @@ class AddPaidTierKeyToPaidTiersTable extends Migration
     public function down()
     {
         Schema::table('paid_tiers', function (Blueprint $table) {
-            $table->dropIndex('key');
+            $table->dropIndex(['key']);
             $table->dropColumn('key');
         });
     }
