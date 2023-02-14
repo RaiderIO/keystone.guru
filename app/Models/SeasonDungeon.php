@@ -6,9 +6,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $season_id int
- * @property $dungeon_id int
+ * @property int $id
+ * @property int $season_id
+ * @property int $dungeon_id
  * @property Season $season
  * @property Dungeon $dungeon
  *

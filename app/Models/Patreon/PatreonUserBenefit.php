@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $patreon_user_link_id int
- * @property $patreon_benefit_id int
+ * @property int $id
+ * @property int $patreon_user_link_id
+ * @property int $patreon_benefit_id
  *
  * @mixin Eloquent
  */
