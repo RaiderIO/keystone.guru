@@ -24,6 +24,7 @@ use App\Http\Controllers\APIEnemyPatrolController;
 use App\Http\Controllers\APIKillZoneController;
 use App\Http\Controllers\APILiveSessionController;
 use App\Http\Controllers\APIMapIconController;
+use App\Http\Controllers\APIMetricController;
 use App\Http\Controllers\APINpcController;
 use App\Http\Controllers\APIOverpulledEnemyController;
 use App\Http\Controllers\APIPathController;
@@ -400,6 +401,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::post('/mdt/details', [MDTImportController::class, 'details'])->name('mdt.details');
 
         Route::post('/profile/legal', [APIProfileController::class, 'legalAgree']);
+
+        // Metrics
+        Route::group(['prefix' => 'metric'], function () {
+            Route::post('/', [APIMetricController::class, 'store'])->name('api.metric.store');
+            Route::post('/route/{dungeonRoute}', [APIMetricController::class, 'storeDungeonRoute'])->name('api.metric.store.dungeonroute');
+        });
 
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {

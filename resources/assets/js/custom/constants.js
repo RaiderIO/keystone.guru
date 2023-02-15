@@ -129,6 +129,12 @@ const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
 const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
 
+// Metrics
+const METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
+
+const METRIC_TAG_MDT_COPY_VIEW = 'view';
+const METRIC_TAG_MDT_COPY_EMBED = 'embed';
+
 // Teeming states
 const TEEMING_VISIBLE = 'visible';
 const TEEMING_HIDDEN = 'hidden';

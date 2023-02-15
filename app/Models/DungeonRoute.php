@@ -10,6 +10,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
+use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -122,6 +123,7 @@ class DungeonRoute extends Model
     use SerializesDates;
     use Reportable;
     use HasTags;
+    use HasMetrics;
     use GeneratesPublicKey;
 
     public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;

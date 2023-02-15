@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Metric;
 
+use App\Models\Metrics\Metric;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class APIMetricFormRequest extends FormRequest
 {
@@ -24,7 +26,12 @@ class APIMetricFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'int',
+            'id'          => 'int',
+            'model_id'    => 'int|null',
+            'model_class' => 'string|null',
+            'category'    => Rule::in(Metric::ALL_CATEGORIES),
+            'tag'         => Rule::in(Metric::ALL_TAGS),
+            'value'       => 'int',
         ];
     }
 }

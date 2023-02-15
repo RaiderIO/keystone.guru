@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteMDTExportFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
@@ -30,6 +31,7 @@ use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Metrics\Metric;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -39,6 +41,7 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\Metric\MetricServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -87,7 +90,7 @@ class APIDungeonRouteController extends Controller
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
-            ->join('mapping_versions', 'mapping_versions.dungeon_id',  'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -718,7 +721,9 @@ class APIDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws Throwable
      */
-    function mdtExport(Request $request, MDTExportStringServiceInterface $mdtExportStringService, DungeonRoute $dungeonroute)
+    function mdtExport(Request $request,
+                       MDTExportStringServiceInterface     $mdtExportStringService,
+                       DungeonRoute                        $dungeonroute)
     {
         $this->authorize('view', $dungeonroute);
 

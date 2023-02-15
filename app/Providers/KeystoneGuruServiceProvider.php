@@ -40,6 +40,8 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\Metric\MetricService;
+use App\Service\Metric\MetricServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -88,6 +90,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
+        $this->app->bind(MetricServiceInterface::class, MetricService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
