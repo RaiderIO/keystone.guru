@@ -1377,6 +1377,8 @@ class DungeonRoute extends Model
             }
 
             $item->mdtImport()->delete();
+            $item->metrics()->delete();
+            $item->metricAggregations()->delete();
         });
     }
 }

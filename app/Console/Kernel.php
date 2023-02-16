@@ -21,6 +21,7 @@ use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
+use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\Release\GetCurrentRelease;
@@ -80,6 +81,9 @@ class Kernel extends ConsoleKernel
         MappingRestore::class,
         MappingSync::class,
 
+        // Metric
+        Aggregate::class,
+
         // MDT
         Encode::class,
         Decode::class,
@@ -126,8 +130,12 @@ class Kernel extends ConsoleKernel
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
+
         if ($appType === 'mapping') {
             $schedule->command('mapping:sync')->everyFiveMinutes();
+
+            // Ensure display IDs are set
+            $schedule->command('wowtools:refreshdisplayids')->hourly();
         }
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
@@ -152,9 +160,6 @@ class Kernel extends ConsoleKernel
 
         // Ensure redis remains healthy
         $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->everyFiveMinutes();
-
-        // Ensure display IDs are set
-        $schedule->command('wowtools:refreshdisplayids')->hourly();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }
