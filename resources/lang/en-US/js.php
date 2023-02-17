@@ -443,7 +443,7 @@ return [
     // 'attributes_label' => 'Attributes',
     // 'setup_label' => 'Setup',
     'author_label'       => 'Author',
-    'views_label'        => 'Views',
+    'metrics_label'      => 'Metrics',
     'rating_label'       => 'Rating',
     'published_label'    => 'Published',
     // 'actions_label' => 'Actions',
