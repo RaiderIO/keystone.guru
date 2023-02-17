@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Metric;
 
+use App\Service\Metric\MetricService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class Aggregate
@@ -42,26 +42,16 @@ class Aggregate extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(MetricService $metricService)
     {
-        // @TODO move to service
-        DB::insert("
-            INSERT INTO metric_aggregations (model_id, model_class, category, tag, value, created_at, updated_at)
-            SELECT model_id, model_class, category, tag, value, created_at, updated_at
-            FROM (
-                SELECT IF(model_id is null, -1, model_id) as model_id,
-                       IF(model_class is null, '', model_class) as model_class,
-                       category,
-                       tag,
-                       count(0) as value,
-                       NOW() as created_at,
-                       NOW() as updated_at
-                FROM metrics
-                GROUP BY model_id, model_class, category, tag
-            ) as metrics
-        ON DUPLICATE KEY UPDATE metric_aggregations.value = metrics.value, metric_aggregations.updated_at = metrics.updated_at;
-        ");
+        if ($metricService->aggregateMetrics()) {
+            $this->info('Successfully aggregated metrics');
 
-        return 0;
+            return 0;
+        } else {
+            $this->error('Failed to aggregate metrics');
+
+            return 1;
+        }
     }
 }

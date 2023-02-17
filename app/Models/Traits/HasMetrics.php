@@ -4,10 +4,17 @@ namespace App\Models\Traits;
 
 use App\Models\Metrics\Metric;
 use App\Models\Metrics\MetricAggregation;
+use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
- * @mixin \Eloquent
+ *
+ *
+ * @property Collection|Metric[] $metrics
+ * @property Collection|MetricAggregation[] $metricAggregations
+ *
+ * @mixin Eloquent
  */
 trait HasMetrics
 {
@@ -32,11 +39,15 @@ trait HasMetrics
      */
     public function metricAggregated(int $category, string $tag): int
     {
-        return (int)$this->hasOne(MetricAggregation::class, 'model_id')
+        /** @var MetricAggregation $metricAggregation */
+        $metricAggregation = $this->hasOne(MetricAggregation::class, 'model_id')
             ->where('model_class', get_class($this))
             ->where('category', $category)
             ->where('tag', $tag)
-            ->get('value');
+            ->get()
+            ->first();
+
+        return $metricAggregation->value;
     }
 
     /**
