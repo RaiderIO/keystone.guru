@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $team_id int
- * @property $user_id int
- * @property $role string
+ * @property int $id
+ * @property int $team_id
+ * @property int $user_id
+ * @property string $role
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at

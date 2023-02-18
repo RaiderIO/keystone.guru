@@ -41,6 +41,8 @@ class CommonMapsEmbedtopbar extends InlineCode {
             },
             success: function (json) {
                 copyToClipboard(json.mdt_string, null, 2000);
+
+                getState().sendMetricForDungeonRoute(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED);
             },
             complete: function () {
                 $('#embed_copy_mdt_string_loader').hide();

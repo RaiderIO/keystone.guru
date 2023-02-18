@@ -8,11 +8,11 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property $id int The ID of this Affix.
- * @property $icon_file_id int The file ID of the icon associated with this Affix.
- * @property $key string The identifying key of the Affix.
- * @property $name string The name of the Affix.
- * @property $description string The description of this Affix.
+ * @property int $id The ID of this Affix.
+ * @property int $icon_file_id The file ID of the icon associated with this Affix.
+ * @property string $key The identifying key of the Affix.
+ * @property string $name The name of the Affix.
+ * @property string $description The description of this Affix.
  *
  * @mixin Eloquent
  */

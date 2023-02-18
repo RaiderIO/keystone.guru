@@ -267,6 +267,6 @@ class Conversion
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
         // We need to figure out which week it is in the rotation
-        return ($affixGroup->id - 1) % config('keystoneguru.season_iteration_affix_group_count');
+        return ($affixGroup->id - 1) % $affixGroup->season->affix_group_count;
     }
 }

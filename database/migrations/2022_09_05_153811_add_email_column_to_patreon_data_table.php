@@ -27,7 +27,7 @@ class AddEmailColumnToPatreonDataTable extends Migration
     public function down()
     {
         Schema::table('patreon_data', function (Blueprint $table) {
-            $table->dropIndex('email');
+            $table->dropIndex(['email']);
             $table->dropColumn('email');
         });
     }

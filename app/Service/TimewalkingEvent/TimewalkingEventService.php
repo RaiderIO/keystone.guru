@@ -7,18 +7,18 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
     /** @var SeasonService */
     private $seasonService;
 
-    public function __construct()
+    public function __construct(SeasonServiceInterface $seasonService)
     {
-        $this->seasonService = App::make(SeasonService::class);
+        $this->seasonService = $seasonService;
     }
 
     /**
@@ -79,7 +79,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
                 if ($diffInWeeks < $timewalkingEvent->start_duration_weeks ||
                     $diffInWeeks % $timewalkingEvent->week_interval === 0) {
                     $affixGroups = $this->seasonService->getCurrentSeason($expansion)->affixgroups;
-                    $result = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
+                    $result      = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
                 }
             }
         } else {

@@ -555,7 +555,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
     {
-        $nextSeason = $seasonService->getNextSeason();
+        $nextSeason = $seasonService->getNextSeasonOfExpansion();
         if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
             return $nextSeason;
         }

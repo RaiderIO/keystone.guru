@@ -10,6 +10,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
+use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
@@ -64,6 +65,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property boolean $pull_gradient_apply_always
  *
  * @property int $views
+ * @property int $views_embed
  * @property int $popularity
  *
  * @property Carbon $thumbnail_refresh_queued_at
@@ -121,7 +123,11 @@ class DungeonRoute extends Model
     use SerializesDates;
     use Reportable;
     use HasTags;
+    use HasMetrics;
     use GeneratesPublicKey;
+
+    public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_EMBED = 2;
 
     /**
      * The accessors to append to the model's array form.
@@ -531,7 +537,7 @@ class DungeonRoute extends Model
 
             // Could be if no enemies were assigned yet
             if (!empty($queryResult)) {
-                foreach($queryResult as $row){
+                foreach ($queryResult as $row) {
                     $result += $row->enemy_forces;
                 }
             }
@@ -691,8 +697,10 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        // Cannot assign $this->dungeon lest ->save() method crashes
+        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
+        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
         $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
         $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
@@ -791,7 +799,18 @@ class DungeonRoute extends Model
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
 
+                $dungeonActiveSeason = $this->dungeon->getActiveSeason($seasonService);
+
                 foreach ($newAffixes as $value) {
+                    $value = (int)$value;
+
+                    if ($dungeonActiveSeason->affixgroups->filter(function (AffixGroup $affixGroup) use ($value) {
+                        return $affixGroup->id === $value;
+                    })->isEmpty()) {
+                        // Attempted to assign an affix that the dungeon cannot have - abort it
+                        continue;
+                    }
+
                     // Check disabled to support dungeons not being tied to expansions but to seasons instead.
                     // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
                     // Skip any affixes that don't exist, and don't match our current expansion
@@ -1244,6 +1263,30 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param int $source
+     * @return bool
+     */
+    public function trackPageView(int $source): bool
+    {
+        // Handle route views counting
+
+        if ($result = PageView::trackPageView($this->id, DungeonRoute::class, $source)) {
+            // Do not update the updated_at time - triggering a refresh of the thumbnails
+            $this->timestamps = false;
+            if ($source === self::PAGE_VIEW_SOURCE_VIEW_ROUTE) {
+                $this->views++;
+            }
+            if ($source === self::PAGE_VIEW_SOURCE_VIEW_EMBED) {
+                $this->views_embed++;
+            }
+            $this->popularity++;
+            $this->update(['views', 'views_embed', 'popularity']);
+        }
+
+        return $result;
+    }
+
+    /**
      * @inheritDoc
      */
     public function touch()
@@ -1254,7 +1297,8 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Creates a missing
+     * Ensure we have an affix group at all times
+     *
      * @param SeasonServiceInterface $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @return void
@@ -1347,6 +1391,8 @@ class DungeonRoute extends Model
             }
 
             $item->mdtImport()->delete();
+            $item->metrics()->delete();
+            $item->metricAggregations()->delete();
         });
     }
 }
