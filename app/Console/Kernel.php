@@ -24,6 +24,8 @@ use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
+use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
+use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -92,6 +94,10 @@ class Kernel extends ConsoleKernel
 
         // Patreon
         RefreshMembershipStatus::class,
+
+        // ReadOnlyMode
+        EnableReadOnlyMode::class,
+        DisableReadOnlyMode::class,
 
         // Release
         GetCurrentRelease::class,

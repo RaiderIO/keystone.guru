@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands\Metric;
+namespace App\Console\Commands\ReadOnlyMode;
 
-use App\Service\Metric\MetricServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Illuminate\Console\Command;
 
 /**
@@ -11,21 +11,21 @@ use Illuminate\Console\Command;
  * @author Wouter
  * @since 16/02/2023
  */
-class Aggregate extends Command
+class Disable extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'metric:aggregate';
+    protected $signature = 'readonly:disable';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Aggregates all metrics and writes them to the metric aggregations table';
+    protected $description = 'Disables read-only mode - the site will once again accept all request types';
 
     /**
      * Create a new command instance.
@@ -42,14 +42,14 @@ class Aggregate extends Command
      *
      * @return mixed
      */
-    public function handle(MetricServiceInterface $metricService)
+    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService)
     {
-        if ($metricService->aggregateMetrics()) {
-            $this->info('Successfully aggregated metrics');
+        if ($readOnlyModeService->setReadOnly(false)) {
+            $this->info('Site is no longer read-only');
 
             return 0;
         } else {
-            $this->error('Failed to aggregate metrics');
+            $this->error('Unable to disable read-only mode');
 
             return 1;
         }

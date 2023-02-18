@@ -48,6 +48,8 @@ use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeService;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Season\SeasonService;
@@ -102,6 +104,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+
+        // Depends on CacheService
+        $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
 
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
