@@ -239,7 +239,7 @@ class Icon extends VersionableMapObject {
     getDisplayText() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
 
-        return this.comment !== null && this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+        return this.comment !== null && this.comment.length > 0 ? this.comment.replaceAll('\n', '<br>') : this.map_icon_type.name;
     }
 
     /**
