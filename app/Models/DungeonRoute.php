@@ -697,8 +697,10 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        // Cannot assign $this->dungeon lest ->save() method crashes
+        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
+        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
         $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
         $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
@@ -797,7 +799,18 @@ class DungeonRoute extends Model
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
 
+                $dungeonActiveSeason = $this->dungeon->getActiveSeason($seasonService);
+
                 foreach ($newAffixes as $value) {
+                    $value = (int)$value;
+
+                    if ($dungeonActiveSeason->affixgroups->filter(function (AffixGroup $affixGroup) use ($value) {
+                        return $affixGroup->id === $value;
+                    })->isEmpty()) {
+                        // Attempted to assign an affix that the dungeon cannot have - abort it
+                        continue;
+                    }
+
                     // Check disabled to support dungeons not being tied to expansions but to seasons instead.
                     // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
                     // Skip any affixes that don't exist, and don't match our current expansion
@@ -1284,7 +1297,8 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Creates a missing
+     * Ensure we have an affix group at all times
+     *
      * @param SeasonServiceInterface $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @return void
