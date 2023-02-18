@@ -12,8 +12,9 @@ class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
     public function up()
     {
         $mapping = [
-            101 => 99,
-            102 => 100,
+            // Temp to prevent it from being overridden when 99 and 100 get migrated
+            101 => 990,
+            102 => 1000,
             103 => 101,
             // These were deleted in previous migration
 //            104 => false,
@@ -25,6 +26,9 @@ class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
             110 => 106,
             99  => 107,
             100 => 108,
+            // Correct wrong ones to the correct ones
+            990 => 99,
+            1000 => 100,
         ];
 
         foreach ($mapping as $old => $new) {
