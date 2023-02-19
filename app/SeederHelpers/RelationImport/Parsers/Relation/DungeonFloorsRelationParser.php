@@ -54,17 +54,24 @@ class DungeonFloorsRelationParser implements RelationParserInterface
                 FloorCoupling::insert($floorcoupling);
             }
 
-            foreach ($floor['dungeonSpeedrunRequiredNpcs10Man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+            foreach ($floor['dungeon_speedrun_required_npcs10_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+                if (!isset($dungeonSpeedrunRequiredNpc['mode'])) {
+                    $dungeonSpeedrunRequiredNpc['mode'] = DungeonSpeedrunRequiredNpc::MODE_25_MAN;
+                }
                 DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
             }
 
-            foreach ($floor['dungeonSpeedrunRequiredNpcs25Man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+            foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+                if (!isset($dungeonSpeedrunRequiredNpc['mode'])) {
+                    $dungeonSpeedrunRequiredNpc['mode'] = DungeonSpeedrunRequiredNpc::MODE_25_MAN;
+                }
                 DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
             }
 
             unset($floor['floorcouplings']);
-            unset($floor['dungeonSpeedrunRequiredNpcs10Man']);
-            unset($floor['dungeonSpeedrunRequiredNpcs25Man']);
+            unset($floor['dungeon_speedrun_required_npcs10_man']);
+            unset($floor['dungeon_speedrun_required_npcs25_man']);
+
             Floor::insert($floor);
         }
 
