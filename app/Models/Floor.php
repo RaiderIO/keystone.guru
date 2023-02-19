@@ -215,13 +215,22 @@ class Floor extends CacheModel implements MappingModelInterface
         return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
+    {
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
+            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_10_MAN);
+    }
 
     /**
      * @return HasMany
      */
-    public function dungeonspeedrunrequirednpcs(): HasMany
+    public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
-        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
+            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_25_MAN);
     }
 
     /**

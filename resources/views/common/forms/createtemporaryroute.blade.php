@@ -1,7 +1,10 @@
+<?php
+$dungeonSelectId = 'dungeon_id_select_temporary';
+?>
 {{ Form::open(['route' => 'dungeonroute.temporary.savenew']) }}
 <div class="container">
     @if( !isset($model) )
-        @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false])
     @endif
 
     <div class="form-group">
@@ -22,6 +25,8 @@
             @endguest
         </div>
     </div>
+
+    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsmode', ['id' => 'dungeon_speedrun_required_npc_mode_temporary', 'dungeonSelectId' => $dungeonSelectId])
 
     <div class="col-lg-12">
         <div class="form-group">

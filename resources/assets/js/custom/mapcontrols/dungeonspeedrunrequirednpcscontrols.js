@@ -98,7 +98,7 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
 
         let currentFloorId = getState().getCurrentFloor().id;
         let mapContext = getState().getMapContext();
-        let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs();
+        let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs25Man();
         for (let index in requiredNpcs) {
             let $targetContainer = $dungeonSpeedrunRequiredNpcs;
             let requiredNpc = requiredNpcs[index];

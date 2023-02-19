@@ -44,7 +44,8 @@ use Mockery\Exception;
  * @property Collection|MapIcon[] $mapicons
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[] $mountableareas
- * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
+ * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs10Man
+ * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs25Man
  *
  * @method static Builder active()
  * @method static Builder inactive()
@@ -75,7 +76,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'timer_max_seconds',
     ];
 
-    public $with = ['expansion', 'floors', 'dungeonspeedrunrequirednpcs'];
+    public $with = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
     public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
@@ -481,9 +482,19 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return HasManyThrough
      */
-    public function dungeonspeedrunrequirednpcs(): HasManyThrough
+    public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
     {
-        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class);
+        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
+            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_10_MAN);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
+    {
+        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
+            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_25_MAN);
     }
 
     /**

@@ -66,7 +66,8 @@ return [
             ],
 
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc' => 'New '
+                'new_dungeonspeedrunrequirednpc10man' => 'New 10-man Dungeon Speedrun Required NPC',
+                'new_dungeonspeedrunrequirednpc25man' => 'New 25-man Dungeon Speedrun Required NPC',
             ],
 
             'npcs' => [

@@ -54,12 +54,17 @@ class DungeonFloorsRelationParser implements RelationParserInterface
                 FloorCoupling::insert($floorcoupling);
             }
 
-            foreach ($floor['dungeonspeedrunrequirednpcs'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+            foreach ($floor['dungeonSpeedrunRequiredNpcs10Man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+                DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
+            }
+
+            foreach ($floor['dungeonSpeedrunRequiredNpcs25Man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
                 DungeonSpeedrunRequiredNpc::insert($dungeonSpeedrunRequiredNpc);
             }
 
             unset($floor['floorcouplings']);
-            unset($floor['dungeonspeedrunrequirednpcs']);
+            unset($floor['dungeonSpeedrunRequiredNpcs10Man']);
+            unset($floor['dungeonSpeedrunRequiredNpcs25Man']);
             Floor::insert($floor);
         }
 

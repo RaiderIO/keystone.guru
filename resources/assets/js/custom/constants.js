@@ -113,6 +113,10 @@ const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
 
+// Dungeon Speedrun Required Npcs
+const DUNGEON_SPEEDRUN_REQUIRED_NPC_MODE_10_MAN = 1;
+const DUNGEON_SPEEDRUN_REQUIRED_NPC_MODE_25_MAN = 1;
+
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;
 const NPC_CLASSIFICATION_ID_ELITE = 2;

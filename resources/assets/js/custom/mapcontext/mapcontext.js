@@ -390,8 +390,16 @@ class MapContext extends Signalable {
      *
      * @returns [{npc_id: Number, count: Number}]
      */
-    getDungeonSpeedrunRequiredNpcs() {
-        return this._options.dungeon.dungeonspeedrunrequirednpcs;
+    getDungeonSpeedrunRequiredNpcs10Man() {
+        return this._options.dungeon.dungeon_speedrun_required_npcs10_man;
+    }
+
+    /**
+     *
+     * @returns [{npc_id: Number, count: Number}]
+     */
+    getDungeonSpeedrunRequiredNpcs25Man() {
+        return this._options.dungeon.dungeon_speedrun_required_npcs25_man;
     }
 
     /**

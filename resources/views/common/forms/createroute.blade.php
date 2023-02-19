@@ -1,10 +1,10 @@
 <?php
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
-$teeming = old('teeming') ?? false;
+$teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
 
 // Make sure $model exists
-$dungeonroute = $dungeonroute ?? null;
+$dungeonroute    = $dungeonroute ?? null;
 $dungeonSelectId = 'dungeon_id_select';
 ?>
 
@@ -20,6 +20,9 @@ $dungeonSelectId = 'dungeon_id_select';
     @endif
 
     @include('common.team.select', ['required' => false, 'selectedId' => optional($dungeonroute)->team_id])
+
+    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsmode', ['dungeon_select_id' => $dungeonSelectId, 'dungeonroute' => $dungeonroute])
+
 
     <div class="form-group">
         <label for="dungeon_route_title">
@@ -59,17 +62,17 @@ $dungeonSelectId = 'dungeon_id_select';
         'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
         'teemingSelector'  => '#teeming',
         'collapseSelector' => '#createRouteAdvancedCollapse',
-        'defaultSelected'  => $defaultSelectedAffixes
+        'defaultSelected'  => $defaultSelectedAffixes,
         ])
 
     @if(isset($dungeonroute))
-        <?php
-        $canMigrateToEncrypted = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_TORMENTED;
-        $canMigrateToShrouded = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_ENCRYPTED;
+            <?php
+            $canMigrateToEncrypted = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_TORMENTED;
+            $canMigrateToShrouded  = $dungeonroute->getSeasonalAffix() === \App\Models\Affix::AFFIX_ENCRYPTED;
 
-        ?>
+            ?>
         @if($canMigrateToEncrypted || $canMigrateToShrouded)
-            <?php $targetAffix = strtolower($canMigrateToEncrypted ? \App\Models\Affix::AFFIX_ENCRYPTED : \App\Models\Affix::AFFIX_SHROUDED); ?>
+                <?php $targetAffix = strtolower($canMigrateToEncrypted ? \App\Models\Affix::AFFIX_ENCRYPTED : \App\Models\Affix::AFFIX_SHROUDED); ?>
             <div class="form-group">
                 <div class="row">
                     <div class="col">
@@ -78,7 +81,7 @@ $dungeonSelectId = 'dungeon_id_select';
                                         'dungeon' => $dungeonroute->dungeon,
                                         'dungeonroute' => $dungeonroute,
                                         'title' => \Illuminate\Support\Str::slug($dungeonroute->title),
-                                        'seasonalType' => $targetAffix
+                                        'seasonalType' => $targetAffix,
                                     ]) }}">
                             {{ __('views/common.forms.createroute.migrate_to_seasonal_type', ['seasonalType' => __(sprintf('affixes.%s.name', $targetAffix))]) }}
                         </a>
@@ -101,7 +104,8 @@ $dungeonSelectId = 'dungeon_id_select';
                     </h5>
                 </div>
 
-                <div id="create_route_advanced_collapse" class="collapse" aria-labelledby="create_route_advanced_heading"
+                <div id="create_route_advanced_collapse" class="collapse"
+                     aria-labelledby="create_route_advanced_heading"
                      data-parent="#create_route">
                     <div class="card-body">
 

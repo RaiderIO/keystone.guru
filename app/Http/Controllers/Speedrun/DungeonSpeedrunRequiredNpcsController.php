@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Speedrun\DungeonSpeedrunRequiredNpcsFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor;
-use App\Models\Npc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
@@ -24,9 +23,10 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
+     * @param int $mode
      * @return Application|Factory|View
      */
-    public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor)
+    public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $mode)
     {
         $npcs = $npcService->getNpcsForDropdown($dungeon, true)->toArray();
 
@@ -35,6 +35,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
             'floor'              => $floor,
             'npcIds'             => $npcs,
             'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcs,
+            'mode'               => $mode,
         ]);
     }
 
@@ -42,9 +43,10 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param DungeonSpeedrunRequiredNpcsFormRequest $request
      * @param Dungeon $dungeon
      * @param Floor $floor
+     * @param int $mode
      * @return RedirectResponse
      */
-    public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor)
+    public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $mode)
     {
         $validated            = $request->validated();
         $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
@@ -62,10 +64,11 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
+     * @param int $mode
      * @param DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc
      * @return RedirectResponse
      */
-    public function delete(Request $request, Dungeon $dungeon, Floor $floor, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc)
+    public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $mode, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc)
     {
         try {
             $dungeonspeedrunrequirednpc->delete();
