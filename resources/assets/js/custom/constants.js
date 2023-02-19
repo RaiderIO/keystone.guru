@@ -113,6 +113,10 @@ const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
 
+// Dungeon Speedrun Required Npcs
+const DUNGEON_SPEEDRUN_REQUIRED_NPC_MODE_10_MAN = 1;
+const DUNGEON_SPEEDRUN_REQUIRED_NPC_MODE_25_MAN = 1;
+
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;
 const NPC_CLASSIFICATION_ID_ELITE = 2;
@@ -128,6 +132,12 @@ const EXPANSION_SHADOWLANDS = 'shadowlands';
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
 const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
+
+// Metrics
+const METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
+
+const METRIC_TAG_MDT_COPY_VIEW = 'view';
+const METRIC_TAG_MDT_COPY_EMBED = 'embed';
 
 // Teeming states
 const TEEMING_VISIBLE = 'visible';

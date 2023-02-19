@@ -387,9 +387,29 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             views: {
-                'title': lang.get('messages.views_label'),
+                'title': lang.get('messages.metrics_label'),
                 'data': 'views',
                 'name': 'views',
+                'render': function (data, type, row, meta) {
+                    let findMetric = function (category, tag) {
+                        for (let i in row.metric_aggregations) {
+                            let metric = row.metric_aggregations[i];
+                            if (metric.category === category && metric.tag === tag) {
+                                return metric.value;
+                            }
+                        }
+
+                        return 0;
+                    }
+
+                    let template = Handlebars.templates['dungeonroute_table_views_metrics'];
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
+                        views: row.views,
+                        views_embed: row.views_embed,
+                        copy_view: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_VIEW),
+                        copy_embed: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED),
+                    }));
+                }
                 // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
             },
             rating: {

@@ -437,7 +437,7 @@ return [
     // 'attributes_label' => 'Attributes',
     // 'setup_label' => 'Setup',
     'author_label'       => 'Автор',
-    'views_label'        => 'Просмотры',
+    'metrics_label'      => 'Метрики',
     'rating_label'       => 'Рейтинг',
     'published_label'    => 'Опубликовано',
     // 'actions_label' => 'Actions',

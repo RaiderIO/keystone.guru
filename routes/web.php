@@ -24,6 +24,7 @@ use App\Http\Controllers\APIEnemyPatrolController;
 use App\Http\Controllers\APIKillZoneController;
 use App\Http\Controllers\APILiveSessionController;
 use App\Http\Controllers\APIMapIconController;
+use App\Http\Controllers\APIMetricController;
 use App\Http\Controllers\APINpcController;
 use App\Http\Controllers\APIOverpulledEnemyController;
 use App\Http\Controllers\APIPathController;
@@ -63,7 +64,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger']], function () {
+Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode']], function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
 
@@ -252,9 +253,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                         // Speedrun required npcs
                         Route::group(['prefix' => 'speedrunrequirednpcs'], function () {
-                            Route::get('new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
-                            Route::post('new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::get('{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::get('{mode}/new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
+                            Route::post('{mode}/new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
+                            Route::get('{mode}/{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });
@@ -400,6 +401,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::post('/mdt/details', [MDTImportController::class, 'details'])->name('mdt.details');
 
         Route::post('/profile/legal', [APIProfileController::class, 'legalAgree']);
+
+        // Metrics
+        Route::group(['prefix' => 'metric'], function () {
+            Route::post('/', [APIMetricController::class, 'store'])->name('api.metric.store');
+            Route::post('/route/{dungeonRoute}', [APIMetricController::class, 'storeDungeonRoute'])->name('api.metric.store.dungeonroute');
+        });
 
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {

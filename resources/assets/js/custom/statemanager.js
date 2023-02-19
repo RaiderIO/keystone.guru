@@ -611,4 +611,46 @@ class StateManager extends Signalable {
             this.snackbarIds = _.without(this.snackbarIds, snackbarId);
         }
     }
+
+    /**
+     *
+     * @param category {Number}
+     * @param tag {String}
+     * @param value {Number}
+     */
+    sendMetric(category, tag, value = 1) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/metric`,
+            dataType: 'json',
+            data: {
+                category: category,
+                tag: tag,
+                value: value
+            }
+        });
+    }
+
+    /**
+     *
+     * @param category {Number}
+     * @param tag {String}
+     * @param value {Number}
+     */
+    sendMetricForDungeonRoute(category, tag, value = 1) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/metric/route/${getState().getMapContext().getPublicKey()}`,
+            dataType: 'json',
+            data: {
+                category: category,
+                tag: tag,
+                value: value
+            }
+        });
+    }
 }

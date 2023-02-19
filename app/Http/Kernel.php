@@ -7,6 +7,7 @@ use App\Http\Middleware\DungeonRouteContextLogger;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
+use App\Http\Middleware\ReadOnlyMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -83,5 +84,6 @@ class Kernel extends HttpKernel
         'legal_agreed'                 => LegalAgreed::class,
         'debugbarmessagelogger'        => DebugBarMessageLogger::class,
         'dungeon_route_context_logger' => DungeonRouteContextLogger::class,
+        'read_only_mode'               => ReadOnlyMode::class,
     ];
 }

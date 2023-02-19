@@ -21,8 +21,11 @@ use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
+use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
+use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
+use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
 use App\Console\Commands\Release\GetCurrentRelease;
 use App\Console\Commands\Release\GetReleaseBody;
 use App\Console\Commands\Release\ReportRelease;
@@ -80,6 +83,9 @@ class Kernel extends ConsoleKernel
         MappingRestore::class,
         MappingSync::class,
 
+        // Metric
+        Aggregate::class,
+
         // MDT
         Encode::class,
         Decode::class,
@@ -88,6 +94,10 @@ class Kernel extends ConsoleKernel
 
         // Patreon
         RefreshMembershipStatus::class,
+
+        // ReadOnlyMode
+        EnableReadOnlyMode::class,
+        DisableReadOnlyMode::class,
 
         // Release
         GetCurrentRelease::class,
@@ -126,8 +136,12 @@ class Kernel extends ConsoleKernel
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
         $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
+
         if ($appType === 'mapping') {
             $schedule->command('mapping:sync')->everyFiveMinutes();
+
+            // Ensure display IDs are set
+            $schedule->command('wowtools:refreshdisplayids')->hourly();
         }
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
@@ -153,8 +167,8 @@ class Kernel extends ConsoleKernel
         // Ensure redis remains healthy
         $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->everyFiveMinutes();
 
-        // Ensure display IDs are set
-        $schedule->command('wowtools:refreshdisplayids')->hourly();
+        // Aggregate all metrics so they're nice and snappy to load
+        $schedule->command('metric:aggregate')->everyFiveMinutes();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }

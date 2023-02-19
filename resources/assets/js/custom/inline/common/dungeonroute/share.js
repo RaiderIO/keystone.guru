@@ -21,6 +21,8 @@ class CommonDungeonrouteShare extends InlineCode {
         $('.copy_mdt_string_to_clipboard').unbind('click').bind('click', function () {
             let $exportResult = $('#mdt_export_result');
             copyToClipboard($exportResult.val(), $exportResult);
+
+            getState().sendMetricForDungeonRoute(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_VIEW);
         });
     }
 }

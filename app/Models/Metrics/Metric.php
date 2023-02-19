@@ -3,6 +3,7 @@
 namespace App\Models\Metrics;
 
 use App\Models\Traits\HasGenericModelRelation;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models\Metrics
  * @author Wouter
  * @since 14/02/2023
+ *
+ * @mixin Eloquent
  */
 class Metric extends Model
 {
@@ -26,10 +29,21 @@ class Metric extends Model
 
     public const CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
 
+    public const ALL_CATEGORIES = [
+        self::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+    ];
+
     public const TAG_MDT_COPY_VIEW  = 'view';
     public const TAG_MDT_COPY_EMBED = 'embed';
 
+    public const ALL_TAGS = [
+        self::TAG_MDT_COPY_VIEW,
+        self::TAG_MDT_COPY_EMBED,
+    ];
+
     protected $fillable = [
+        'model_id',
+        'model_class',
         'category',
         'tag',
         'value',

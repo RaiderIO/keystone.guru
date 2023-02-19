@@ -4,6 +4,7 @@ namespace App\Http\Requests\Speedrun;
 
 use App\Models\Floor;
 use App\Models\Npc;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -41,6 +42,7 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
             'npc3_id'  => Rule::in($npcIdsWithNullable),
             'npc4_id'  => Rule::in($npcIdsWithNullable),
             'npc5_id'  => Rule::in($npcIdsWithNullable),
+            'mode'     => Rule::in(DungeonSpeedrunRequiredNpc::MODE_ALL),
             'count'    => 'required|int',
         ];
     }

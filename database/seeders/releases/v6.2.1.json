@@ -1,0 +1,57 @@
+{
+    "id": 159,
+    "release_changelog_id": 166,
+    "version": "v6.2.1",
+    "title": "Added support for seasons with arbitrary amount of affixes - metrics system",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-02-18T13:46:16+00:00",
+    "updated_at": "2023-02-18T13:46:16+00:00",
+    "changelog": {
+        "id": 166,
+        "release_id": 159,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 166,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1590,
+                "change": "Added a new metrics system which allows tracking of all kinds of stats for your routes. For now it just tracks the amount of MDT string copies people have done for your route. Will be expanded in a future patch.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 166,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1485,
+                "change": "A season can now have an arbitrary amount of affixes instead of a fixed amount of 12. This pattern was first broken in Dragonflight S1 when going from 12 to 10 affix sets per 'iteration'.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 166,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1589,
+                "change": "Route views when your route was embedded were not tracked - this has been corrected.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 166,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1595,
+                "change": "Creating a route for a dungeon that was featured in previous seasons will no longer assign the latest affix for the current and all previously featured season's last affixes.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
+            }
+        ]
+    }
+}

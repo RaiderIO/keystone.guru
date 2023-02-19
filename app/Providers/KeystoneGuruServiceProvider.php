@@ -40,12 +40,16 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\Metric\MetricService;
+use App\Service\Metric\MetricServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeService;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Season\SeasonService;
@@ -88,6 +92,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
+        $this->app->bind(MetricServiceInterface::class, MetricService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -99,6 +104,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+
+        // Depends on CacheService
+        $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
 
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
@@ -237,6 +245,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $globalViewVariables['currentSeason']);
             $view->with('nextSeason', $globalViewVariables['nextSeason']);
+        });
+
+        view()->composer('common.dungeonroute.create.dungeonspeedrunrequirednpcsmode', function (View $view) use ($globalViewVariables) {
+            $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
         });
 
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
