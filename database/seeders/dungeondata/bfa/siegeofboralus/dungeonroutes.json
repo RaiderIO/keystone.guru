@@ -19,6 +19,7 @@
         "demo": 1,
         "pull_gradient": "",
         "pull_gradient_apply_always": 0,
+        "dungeon_speedrun_required_npcs_mode": null,
         "created_at": "2020-07-04T09:53:10+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
         "playerspecializations": [],

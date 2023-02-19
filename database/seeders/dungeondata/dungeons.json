@@ -30,6 +30,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -72,6 +73,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -101,6 +103,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -130,6 +133,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -159,6 +163,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -188,6 +193,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -211,6 +217,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -246,6 +253,7 @@
                 "ingame_max_y": 2839.06,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -262,6 +270,7 @@
                 "ingame_max_y": 2778.44,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -278,6 +287,7 @@
                 "ingame_max_y": 2779.56,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -294,6 +304,7 @@
                 "ingame_max_y": 2751.78,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -310,6 +321,7 @@
                 "ingame_max_y": 2660.03,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -345,6 +357,7 @@
                 "ingame_max_y": 3887.5,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -380,6 +393,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -415,6 +429,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -463,6 +478,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -486,6 +502,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -509,6 +526,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -563,6 +581,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -592,6 +611,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -633,6 +653,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -668,6 +689,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -703,6 +725,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -738,6 +761,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -780,6 +804,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -809,6 +834,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -832,6 +858,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -867,6 +894,7 @@
                 "ingame_max_y": 2266.67,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -909,6 +937,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -938,6 +967,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -967,6 +997,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -996,6 +1027,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1025,6 +1057,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1054,6 +1087,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1083,6 +1117,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1106,6 +1141,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1141,6 +1177,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1183,6 +1220,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1212,6 +1250,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1235,6 +1274,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1277,6 +1317,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1300,6 +1341,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1335,6 +1377,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1370,6 +1413,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1412,6 +1456,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1435,6 +1480,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1470,6 +1516,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1512,6 +1559,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1535,6 +1583,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1570,6 +1619,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1612,6 +1662,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1635,6 +1686,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1677,6 +1729,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1706,6 +1759,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1735,6 +1789,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1764,6 +1819,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1793,6 +1849,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1822,6 +1879,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1845,6 +1903,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -1893,6 +1952,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1916,6 +1976,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1945,6 +2006,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1974,6 +2036,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -1997,6 +2060,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2039,6 +2103,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2062,6 +2127,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2104,6 +2170,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2133,6 +2200,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2156,6 +2224,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2198,6 +2267,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2221,6 +2291,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2256,6 +2327,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2310,6 +2382,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2333,6 +2406,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2356,6 +2430,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2379,6 +2454,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2421,6 +2497,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2450,6 +2527,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2473,6 +2551,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2508,6 +2587,7 @@
                 "ingame_max_y": 3047.92,
                 "percentage_display_zoom": 2,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2550,6 +2630,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2573,6 +2654,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2615,6 +2697,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2638,6 +2721,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2680,6 +2764,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2709,6 +2794,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2738,6 +2824,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2761,6 +2848,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2803,6 +2891,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2832,6 +2921,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2855,6 +2945,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -2897,6 +2988,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2932,6 +3024,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2955,6 +3048,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -2984,6 +3078,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3013,6 +3108,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3067,6 +3163,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3090,6 +3187,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3113,6 +3211,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3136,6 +3235,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3178,6 +3278,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3207,6 +3308,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3236,6 +3338,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3259,6 +3362,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3330,6 +3434,7 @@
                 "ingame_max_y": -200,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3372,6 +3477,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3401,6 +3507,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3430,6 +3537,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3453,6 +3561,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3488,6 +3597,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3530,6 +3640,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3553,6 +3664,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3582,6 +3694,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3624,6 +3737,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3647,6 +3761,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3682,6 +3797,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3724,6 +3840,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3747,6 +3864,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3782,6 +3900,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3817,6 +3936,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3852,6 +3972,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3894,6 +4015,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -3917,6 +4039,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3952,6 +4075,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -3987,6 +4111,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4035,6 +4160,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4058,6 +4184,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4087,6 +4214,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4116,6 +4244,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4139,6 +4268,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4174,6 +4304,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4209,6 +4340,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4251,6 +4383,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4280,6 +4413,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4303,6 +4437,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4345,6 +4480,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4368,6 +4504,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -4458,6 +4595,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 1,
@@ -4467,6 +4605,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 16
                     },
                     {
@@ -4477,6 +4616,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 11
                     },
                     {
@@ -4487,6 +4627,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 20
                     },
                     {
@@ -4497,6 +4638,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     },
                     {
@@ -4507,6 +4649,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 12
                     },
                     {
@@ -4517,6 +4660,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 15
                     },
                     {
@@ -4527,6 +4671,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 7
                     },
                     {
@@ -4537,6 +4682,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     },
                     {
@@ -4547,6 +4693,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 10
                     }
                 ]
@@ -4596,6 +4743,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -4631,6 +4779,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 17,
@@ -4640,6 +4789,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 110
                     },
                     {
@@ -4650,6 +4800,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 10
                     },
                     {
@@ -4660,6 +4811,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 22
                     },
                     {
@@ -4670,6 +4822,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 21
                     },
                     {
@@ -4680,6 +4833,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 1
                     },
                     {
@@ -4690,6 +4844,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 32
                     },
                     {
@@ -4700,6 +4855,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     }
                 ]
@@ -4737,6 +4893,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 25,
@@ -4746,6 +4903,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 15
                     },
                     {
@@ -4756,6 +4914,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 24
                     },
                     {
@@ -4766,6 +4925,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 22
                     },
                     {
@@ -4776,6 +4936,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     },
                     {
@@ -4786,6 +4947,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 5
                     },
                     {
@@ -4796,6 +4958,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 6
                     },
                     {
@@ -4806,6 +4969,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 13
                     },
                     {
@@ -4816,6 +4980,7 @@
                         "npc3_id": 16216,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 10
                     }
                 ]
@@ -4853,6 +5018,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 10,
@@ -4862,6 +5028,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 6
                     },
                     {
@@ -4872,6 +5039,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 6
                     },
                     {
@@ -4882,6 +5050,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 9
                     },
                     {
@@ -4892,6 +5061,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -4902,6 +5072,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 10
                     },
                     {
@@ -4912,6 +5083,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 10
                     },
                     {
@@ -4922,6 +5094,7 @@
                         "npc3_id": 16057,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 20
                     }
                 ]
@@ -4947,6 +5120,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5061,6 +5235,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 33,
@@ -5070,6 +5245,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5080,6 +5256,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5090,6 +5267,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     }
                 ]
@@ -5121,6 +5299,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 36,
@@ -5130,6 +5309,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     },
                     {
@@ -5140,6 +5320,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     },
                     {
@@ -5150,6 +5331,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     },
                     {
@@ -5160,6 +5342,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     },
                     {
@@ -5170,6 +5353,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 4
                     }
                 ]
@@ -5207,6 +5391,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 39,
@@ -5216,6 +5401,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5226,6 +5412,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     },
                     {
@@ -5236,6 +5423,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 9
                     },
                     {
@@ -5246,6 +5434,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 8
                     },
                     {
@@ -5256,6 +5445,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5266,6 +5456,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5276,6 +5467,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 20
                     },
                     {
@@ -5286,6 +5478,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5296,6 +5489,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 1
                     },
                     {
@@ -5306,6 +5500,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5316,6 +5511,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5326,6 +5522,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5336,6 +5533,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     }
                 ]
@@ -5367,6 +5565,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 54,
@@ -5376,6 +5575,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 7
                     },
                     {
@@ -5386,6 +5586,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 6
                     },
                     {
@@ -5396,6 +5597,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 8
                     },
                     {
@@ -5406,6 +5608,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 5
                     },
                     {
@@ -5416,6 +5619,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 2
                     },
                     {
@@ -5426,6 +5630,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
+                        "mode": 2,
                         "count": 3
                     }
                 ]
@@ -5451,6 +5656,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5474,6 +5680,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5540,6 +5747,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5563,6 +5771,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5586,6 +5795,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5628,6 +5838,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5651,6 +5862,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5693,6 +5905,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5716,6 +5929,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5758,6 +5972,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5781,6 +5996,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5816,6 +6032,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5858,6 +6075,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5881,6 +6099,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -5923,6 +6142,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5952,6 +6172,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -5981,6 +6202,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -6010,6 +6232,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -6033,6 +6256,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -6075,6 +6299,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -6098,6 +6323,7 @@
                         "direction": "left"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -6140,6 +6366,7 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -6169,6 +6396,7 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -6192,6 +6420,7 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
@@ -6227,6 +6456,7 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
