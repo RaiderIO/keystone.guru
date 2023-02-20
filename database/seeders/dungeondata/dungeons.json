@@ -4605,7 +4605,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 16
                     },
                     {
@@ -4616,7 +4616,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 11
                     },
                     {
@@ -4627,7 +4627,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 20
                     },
                     {
@@ -4638,7 +4638,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     },
                     {
@@ -4649,7 +4649,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 12
                     },
                     {
@@ -4660,7 +4660,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 15
                     },
                     {
@@ -4671,7 +4671,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 7
                     },
                     {
@@ -4682,7 +4682,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     },
                     {
@@ -4693,7 +4693,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 10
                     }
                 ]
@@ -4789,7 +4789,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 110
                     },
                     {
@@ -4800,7 +4800,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 10
                     },
                     {
@@ -4811,7 +4811,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 22
                     },
                     {
@@ -4822,7 +4822,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 21
                     },
                     {
@@ -4833,7 +4833,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 1
                     },
                     {
@@ -4844,7 +4844,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 32
                     },
                     {
@@ -4855,7 +4855,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     }
                 ]
@@ -4903,7 +4903,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 15
                     },
                     {
@@ -4914,7 +4914,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 24
                     },
                     {
@@ -4925,7 +4925,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 22
                     },
                     {
@@ -4936,7 +4936,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     },
                     {
@@ -4947,7 +4947,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 5
                     },
                     {
@@ -4958,7 +4958,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 6
                     },
                     {
@@ -4969,7 +4969,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 13
                     },
                     {
@@ -4980,7 +4980,7 @@
                         "npc3_id": 16216,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 10
                     }
                 ]
@@ -5028,7 +5028,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 6
                     },
                     {
@@ -5039,7 +5039,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 6
                     },
                     {
@@ -5050,7 +5050,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 9
                     },
                     {
@@ -5061,7 +5061,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5072,7 +5072,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 10
                     },
                     {
@@ -5083,7 +5083,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 10
                     },
                     {
@@ -5094,7 +5094,7 @@
                         "npc3_id": 16057,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 20
                     }
                 ]
@@ -5235,7 +5235,19 @@
                         "direction": "up"
                     }
                 ],
-                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 61,
+                        "floor_id": 167,
+                        "npc_id": 32845,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    }
+                ],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 33,
@@ -5245,7 +5257,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5256,7 +5268,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5267,8 +5279,19 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
+                    },
+                    {
+                        "id": 60,
+                        "floor_id": 167,
+                        "npc_id": 32845,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 5
                     }
                 ]
             },
@@ -5309,7 +5332,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     },
                     {
@@ -5320,7 +5343,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     },
                     {
@@ -5331,7 +5354,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     },
                     {
@@ -5342,7 +5365,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     },
                     {
@@ -5353,7 +5376,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 4
                     }
                 ]
@@ -5401,7 +5424,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5412,7 +5435,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     },
                     {
@@ -5423,7 +5446,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 9
                     },
                     {
@@ -5434,7 +5457,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 8
                     },
                     {
@@ -5445,7 +5468,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5456,7 +5479,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5467,7 +5490,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 20
                     },
                     {
@@ -5478,7 +5501,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5489,7 +5512,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 1
                     },
                     {
@@ -5500,7 +5523,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5511,7 +5534,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5522,7 +5545,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5533,7 +5556,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     }
                 ]
@@ -5575,7 +5598,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 7
                     },
                     {
@@ -5586,7 +5609,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 6
                     },
                     {
@@ -5597,7 +5620,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 8
                     },
                     {
@@ -5608,7 +5631,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 5
                     },
                     {
@@ -5619,7 +5642,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 2
                     },
                     {
@@ -5630,7 +5653,7 @@
                         "npc3_id": null,
                         "npc4_id": null,
                         "npc5_id": null,
-                        "mode": 2,
+                        "difficulty": 2,
                         "count": 3
                     }
                 ]
