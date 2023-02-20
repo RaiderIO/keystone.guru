@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -30,7 +30,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
 
-            'dungeon_speedrun_required_npcs_mode' => Rule::in(DungeonSpeedrunRequiredNpc::MODE_ALL),
+            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
         ];
 
         // Validate demo state, optional or numeric

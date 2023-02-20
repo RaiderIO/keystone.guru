@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Dungeon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddModeColumnToDungeonSpeedrunRequiredNpcsTable extends Migration
+class RenameModeColumnToDifficultyColumnInDungeonSpeedrunRequiredNpcsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,16 +14,8 @@ class AddModeColumnToDungeonSpeedrunRequiredNpcsTable extends Migration
     public function up()
     {
         Schema::table('dungeon_speedrun_required_npcs', function (Blueprint $table) {
-            $table->integer('mode')->after('npc5_id');
-
-            $table->dropIndex(['floor_id']);
-            $table->index(['floor_id', 'mode']);
+            $table->renameColumn('mode', 'difficulty');
         });
-
-        DB::update('
-            UPDATE `dungeon_speedrun_required_npcs` SET mode = :mode
-            ', ['mode' => Dungeon::DIFFICULTY_25_MAN]
-        );
     }
 
     /**
@@ -35,10 +26,7 @@ class AddModeColumnToDungeonSpeedrunRequiredNpcsTable extends Migration
     public function down()
     {
         Schema::table('dungeon_speedrun_required_npcs', function (Blueprint $table) {
-            $table->dropColumn('mode');
-
-            $table->dropIndex(['floor_id', 'mode']);
-            $table->index(['floor_id']);
+            $table->renameColumn('difficulty', 'mode');
         });
     }
 }

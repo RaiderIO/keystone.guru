@@ -247,7 +247,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
 
-        view()->composer('common.dungeonroute.create.dungeonspeedrunrequirednpcsmode', function (View $view) use ($globalViewVariables) {
+        view()->composer('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', function (View $view) use ($globalViewVariables) {
             $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
         });
 

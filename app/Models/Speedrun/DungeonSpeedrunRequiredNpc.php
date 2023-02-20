@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $npc3_id
  * @property int $npc4_id
  * @property int $npc5_id
- * @property int $mode
+ * @property int $difficulty
  * @property int $count
  *
  * @property Dungeon $dungeon
@@ -33,14 +33,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DungeonSpeedrunRequiredNpc extends CacheModel
 {
 
-    const MODE_10_MAN = 1;
-    const MODE_25_MAN = 2;
-
-    const MODE_ALL = [
-        self::MODE_10_MAN,
-        self::MODE_25_MAN,
-    ];
-
     protected $visible = [
         'id',
         'floor_id',
@@ -49,7 +41,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'npc3_id',
         'npc4_id',
         'npc5_id',
-        'mode',
+        'difficulty',
         'count',
     ];
 
@@ -60,7 +52,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'npc3_id',
         'npc4_id',
         'npc5_id',
-        'mode',
+        'difficulty',
         'count',
     ];
     public $timestamps = false;

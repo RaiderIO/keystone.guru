@@ -70,7 +70,7 @@ class DungeonRouteFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
 
-            'dungeon_speedrun_required_npcs_mode' => Rule::in(DungeonSpeedrunRequiredNpc::MODE_ALL),
+            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
         ];
 
         // Validate demo state, optional or numeric

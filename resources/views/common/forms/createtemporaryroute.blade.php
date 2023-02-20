@@ -26,7 +26,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         </div>
     </div>
 
-    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsmode', ['id' => 'dungeon_speedrun_required_npc_mode_temporary', 'dungeonSelectId' => $dungeonSelectId])
+    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', ['id' => 'dungeon_speedrun_required_npc_mode_temporary', 'dungeonSelectId' => $dungeonSelectId])
 
     <div class="col-lg-12">
         <div class="form-group">

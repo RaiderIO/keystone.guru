@@ -54,6 +54,14 @@ use Mockery\Exception;
  */
 class Dungeon extends CacheModel implements MappingModelInterface
 {
+    const DIFFICULTY_10_MAN = 1;
+    const DIFFICULTY_25_MAN = 2;
+
+    const DIFFICULTY_ALL = [
+        self::DIFFICULTY_10_MAN,
+        self::DIFFICULTY_25_MAN,
+    ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -485,7 +493,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_10_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -494,7 +502,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_25_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**

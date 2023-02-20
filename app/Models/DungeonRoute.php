@@ -64,7 +64,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string $pull_gradient
  * @property boolean $pull_gradient_apply_always
  *
- * @property int $dungeon_speedrun_required_npcs_mode
+ * @property int $dungeon_difficulty
  *
  * @property int $views
  * @property int $views_embed
@@ -667,7 +667,7 @@ class DungeonRoute extends Model
         $this->pull_gradient              = '';
         $this->pull_gradient_apply_always = 0;
 
-        $this->dungeon_speedrun_required_npcs_mode = $request->get('dungeon_speedrun_required_npcs_mode');
+        $this->dungeon_difficulty = $request->get('dungeon_difficulty');
 
         $this->title      = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
@@ -734,7 +734,7 @@ class DungeonRoute extends Model
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
 
-        $this->dungeon_speedrun_required_npcs_mode = $request->get('dungeon_speedrun_required_npcs_mode', null);
+        $this->dungeon_difficulty = $request->get('dungeon_difficulty', null);
 
         // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
         $this->unsetRelations();

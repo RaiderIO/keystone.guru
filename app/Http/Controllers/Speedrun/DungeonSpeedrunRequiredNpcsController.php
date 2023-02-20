@@ -23,10 +23,10 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @param int $mode
+     * @param int $difficulty
      * @return Application|Factory|View
      */
-    public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $mode)
+    public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $difficulty)
     {
         $npcs = $npcService->getNpcsForDropdown($dungeon, true)->toArray();
 
@@ -35,7 +35,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
             'floor'              => $floor,
             'npcIds'             => $npcs,
             'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcs,
-            'mode'               => $mode,
+            'difficulty'         => $difficulty,
         ]);
     }
 
@@ -43,10 +43,10 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param DungeonSpeedrunRequiredNpcsFormRequest $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @param int $mode
+     * @param int $difficulty
      * @return RedirectResponse
      */
-    public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $mode)
+    public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $difficulty)
     {
         $validated            = $request->validated();
         $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
@@ -64,11 +64,11 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @param int $mode
+     * @param int $difficulty
      * @param DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc
      * @return RedirectResponse
      */
-    public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $mode, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc)
+    public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $difficulty, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc)
     {
         try {
             $dungeonspeedrunrequirednpc->delete();

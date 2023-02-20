@@ -15,14 +15,14 @@
 @endsection
 
 <h4>
-    @if($mode === \App\Models\Speedrun\DungeonSpeedrunRequiredNpc::MODE_10_MAN )
+    @if($mode === \App\Models\Dungeon::DIFFICULTY_10_MAN )
         {{ __('views/admin.floor.edit.speedrun_required_npcs.title_10_man') }}
         @else
         {{ __('views/admin.floor.edit.speedrun_required_npcs.title_25_man') }}
     @endif
 </h4>
 <div class="float-right">
-    <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'mode' => $mode]) }}"
+    <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}"
        class="btn btn-success text-white pull-right" role="button">
         <i class="fas fa-plus"></i> {{ __('views/admin.floor.edit.speedrun_required_npcs.add_npc') }}
     </a>
@@ -40,7 +40,7 @@
 
     <tbody>
     <?php
-    $speedrunRequiredNpcs = $mode === \App\Models\Speedrun\DungeonSpeedrunRequiredNpc::MODE_10_MAN ?
+    $speedrunRequiredNpcs = $mode === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
         $floor->dungeonSpeedrunRequiredNpcs10Man : $floor->dungeonSpeedrunRequiredNpcs25Man;
     ?>
     @foreach ($speedrunRequiredNpcs as $speedrunRequiredNpc)
@@ -55,7 +55,7 @@
                             'dungeon' => $dungeon,
                             'floor' => $floor,
                             'dungeonspeedrunrequirednpc' => $speedrunRequiredNpc->id,
-                            'mode' => $mode,
+                            'difficulty' => $difficulty,
                         ])
                         }}">
                     <i class="fas fa-trash"></i>&nbsp;{{ __('views/admin.floor.edit.speedrun_required_npcs.npc_delete') }}

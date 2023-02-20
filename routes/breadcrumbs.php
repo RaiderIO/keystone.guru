@@ -247,13 +247,13 @@ Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeo
         $trail->push(__('breadcrumbs.home.admin.floors.edit_floor'), route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]));
     }
 });
-Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon, Floor $floor, int $mode) {
+Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon, Floor $floor, int $difficulty) {
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
-        $mode === \App\Models\Speedrun\DungeonSpeedrunRequiredNpc::MODE_10_MAN ?
+        $difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
-        route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'mode' => $mode]));
+        route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]));
 });
 
 

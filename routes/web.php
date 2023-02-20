@@ -253,9 +253,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                         // Speedrun required npcs
                         Route::group(['prefix' => 'speedrunrequirednpcs'], function () {
-                            Route::get('{mode}/new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
-                            Route::post('{mode}/new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::get('{mode}/{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::get('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
+                            Route::post('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
+                            Route::get('{difficulty}/{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });

@@ -221,7 +221,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_10_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -230,7 +230,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('mode', DungeonSpeedrunRequiredNpc::MODE_25_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
