@@ -115,7 +115,7 @@ const AFFIX_SHROUDED = 'Shrouded';
 
 // Dungeon Speedrun Required Npcs
 const DUNGEON_DIFFICULTY_10_MAN = 1;
-const DUNGEON_DIFFICULTY_25_MAN = 1;
+const DUNGEON_DIFFICULTY_25_MAN = 2;
 
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;

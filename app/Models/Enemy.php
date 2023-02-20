@@ -32,6 +32,7 @@ use Illuminate\Support\Collection;
  * @property boolean $skippable
  * @property int|null $enemy_forces_override
  * @property int|null $enemy_forces_override_teeming
+ * @property int|null $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
  * @property double $lat
  * @property double $lng
  *
@@ -67,6 +68,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'skippable',
         'enemy_forces_override',
         'enemy_forces_override_teeming',
+        'dungeon_difficulty',
         'lat',
         'lng',
     ];
