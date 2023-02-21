@@ -223,9 +223,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer([
             'dungeonroute.discover.category',
             'dungeonroute.discover.dungeon.category',
+            'dungeonroute.discover.season.category',
             'misc.affixes',
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
+            'dungeonroute.discover.season.overview',
         ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
             /** @var Expansion $expansion */
             $expansion = $view->getData()['expansion'];

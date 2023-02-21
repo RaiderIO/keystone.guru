@@ -56,7 +56,26 @@ Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail) {
  */
 Breadcrumbs::for('dungeonroutes.season', function (Generator $trail, Expansion $expansion, Season $season) {
     $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.routes_season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season->index]));
+});
+Breadcrumbs::for('dungeonroutes.season.popular', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.popular'), route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.nextweek', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.next_week_affixes'), route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.thisweek', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.this_week_affixes'), route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.new', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.new'), route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]));
 });
 
 /**

@@ -122,7 +122,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::get('/', [DungeonRouteDiscoverController::class, 'discover'])->name('dungeonroutes');
         Route::group(['prefix' => '{expansion}'], function () {
             Route::get('/', [DungeonRouteDiscoverController::class, 'discoverExpansion'])->name('dungeonroutes.expansion');
-
             Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverpopular'])->name('dungeonroutes.popular');
             Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverthisweek'])->name('dungeonroutes.thisweek');
             Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discovernextweek'])->name('dungeonroutes.nextweek');
@@ -130,13 +129,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::group(['prefix' => 'season/{season}'], function () {
                 Route::get('/', [DungeonRouteDiscoverController::class, 'discoverSeason'])->name('dungeonroutes.season');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverSeasonPopular'])->name('dungeonroutes.season.popular');
+                Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverSeasonThisWeek'])->name('dungeonroutes.season.thisweek');
+                Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverSeasonNextWeek'])->name('dungeonroutes.season.nextweek');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverSeasonNew'])->name('dungeonroutes.season.new');
             });
 
-            Route::get('{dungeon}', [DungeonRouteDiscoverController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
-            Route::get('{dungeon}/popular', [DungeonRouteDiscoverController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
-            Route::get('{dungeon}/affixes/current', [DungeonRouteDiscoverController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
-            Route::get('{dungeon}/affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
-            Route::get('{dungeon}/new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
+            Route::group(['prefix' => '{dungeon}'], function () {
+                Route::get('/', [DungeonRouteDiscoverController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
+                Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
+                Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
+            });
         });
     });
 

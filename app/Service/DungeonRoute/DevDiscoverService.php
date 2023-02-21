@@ -6,6 +6,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -115,6 +116,25 @@ class DevDiscoverService extends BaseDiscoverService
     }
 
     /**
+     * @param Season $season
+     * @return Collection
+     */
+    function popularBySeason(Season $season): Collection
+    {
+        return $this->popularBuilder()->get();
+    }
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
+    {
+        return $this->popularBuilder()->get();
+    }
+
+    /**
      * @inheritDoc
      */
     function new(): Collection
@@ -142,6 +162,25 @@ class DevDiscoverService extends BaseDiscoverService
      * @inheritDoc
      */
     function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @param Season $season
+     * @return Collection
+     */
+    function newBySeason(Season $season): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
