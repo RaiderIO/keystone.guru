@@ -39,9 +39,9 @@
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular'),
-        'link' => $season === null ?
-            route('dungeonroutes.popular', ['expansion' => $expansion]) :
-            route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]),
+        'link' => isset($season) ?
+            route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]) :
+            route('dungeonroutes.popular', ['expansion' => $expansion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
@@ -50,9 +50,9 @@
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
-        'link' => $season === null ?
-            route('dungeonroutes.thisweek', ['expansion' => $expansion]) :
-            route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]),
+        'link' => isset($season) ?
+            route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]) :
+            route('dungeonroutes.thisweek', ['expansion' => $expansion]) ,
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
@@ -69,9 +69,9 @@
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
-        'link' => $season === null ?
-            route('dungeonroutes.nextweek', ['expansion' => $expansion]) :
-            route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]),
+        'link' => isset($season) ?
+            route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
+            route('dungeonroutes.nextweek', ['expansion' => $expansion]),
         // The next week's affix group is current for that week
         'currentAffixGroup' => $nextAffixGroup,
         'affixgroup' => $nextAffixGroup,
@@ -82,9 +82,9 @@
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.newly_published_routes'),
-        'link' => $season === null ?
-            route('dungeonroutes.new', ['expansion' => $expansion]) :
-            route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]),
+        'link' => isset($season) ?
+            route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]) :
+            route('dungeonroutes.new', ['expansion' => $expansion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),

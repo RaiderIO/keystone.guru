@@ -251,7 +251,7 @@ class Floor extends CacheModel implements MappingModelInterface
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints($lng, $dungeonFloorSwitchMarker->lng, $lat, $dungeonFloorSwitchMarker->lat);
-                if ($distanceToClosestFloorSwitchMarker < $distanceToFloorSwitchMarker) {
+                if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
                     $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
                     $result                             = $dungeonFloorSwitchMarker;
                 }
