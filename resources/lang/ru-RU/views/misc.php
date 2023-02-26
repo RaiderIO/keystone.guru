@@ -43,6 +43,10 @@ return [
         'title'  => 'Встроить маршрут',
         'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
     ],
+    'health'     => [
+        'title'  => '@todo ru-RU: .health.title',
+        'header' => '@todo ru-RU: .health.header',
+    ],
     'mapping'   => [
         'title'                         => 'Карты',
         'header'                        => 'Отображение прогресса',

@@ -43,6 +43,10 @@ return [
         'title'  => '@todo de: .embed.title',
         'header' => '@todo de: .embed.header',
     ],
+    'health'     => [
+        'title'  => '@todo de-DE: .health.title',
+        'header' => '@todo de-DE: .health.header',
+    ],
     'mapping'   => [
         'title'                         => '@todo de: .mapping.title',
         'header'                        => '@todo de: .mapping.header',
