@@ -71,7 +71,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
             max_time=%s
             enemy="%s"
             enemy_health=999999
-            keystone_bounty=%s
+            %s
             keystone_level=%d
             raid_events=/invulnerable,cooldown=5160,duration=5160,retarget=1
         ', $this->options->bloodlust,
@@ -82,7 +82,8 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
             $this->options->chaos_brand,
             $this->options->dungeonroute->dungeon->timer_max_seconds,
             $this->options->dungeonroute->title,
-            $this->options->shrouded_bounty_type,
+            $this->options->shrouded_bounty_type === SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE ?
+                '' : sprintf('keystone_bounty=%s', $this->options->shrouded_bounty_type),
             $this->options->key_level
         );
 

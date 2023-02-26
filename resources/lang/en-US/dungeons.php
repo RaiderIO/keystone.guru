@@ -2,8 +2,8 @@
 
 return [
     'difficulty'   => [
-        1 => '10-man',
-        2 => '25-man',
+        '1' => '10-man',
+        '2' => '25-man',
     ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [

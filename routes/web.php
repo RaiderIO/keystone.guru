@@ -83,6 +83,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('changelog', [SiteController::class, 'changelog'])->name('misc.changelog');
     Route::get('release/{release}', [ReleaseController::class, 'view'])->name('release.view');
 
+    Route::get('health', [SiteController::class, 'health'])->name('misc.health');
     Route::get('mapping', [SiteController::class, 'mapping'])->name('misc.mapping');
 
     Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');

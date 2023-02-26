@@ -1,14 +1,8 @@
 <?php
-
-$shroudedBountyTypes = [];
-foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
-    $shroudedBountyTypes[$bountyType] = __(sprintf('views/common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
-}
-
-$affixes = [];
-foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
-    $affixes[$affix] = __(sprintf('views/common.modal.simulate.affixes.%s', $affix));
-}
+/** @var String[] $shroudedBountyTypes */
+/** @var String[] $affixes */
+/** @var bool $isShrouded */
+/** @var bool $isThundering */
 ?>
 
     <!-- General settings -->
@@ -25,6 +19,7 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
     </div>
 </div>
 
+@if($isShrouded)
 <div class="form-group">
     <label for="simulate_shrouded_bounty_type">
         {{ __('views/common.modal.simulate.shrouded_bounty_type') }}
@@ -37,16 +32,33 @@ foreach (\App\Models\SimulationCraft\SimulationCraftRaidEventsOptions::ALL_AFFIX
         </div>
     </div>
 </div>
+@else
+    {!! Form::hidden('simulate_shrouded_bounty_type', 'none', ['id' => 'simulate_shrouded_bounty_type']) !!}
+@endif
 
-<div class="form-group">
-    <label for="simulate_affix">
-        {{ __('views/common.modal.simulate.affix') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.affix_title') }}"></i>
-    </label>
-    <div class="row">
-        <div class="col">
-            {!! Form::select('simulate_affix', $affixes, null, ['id' => 'simulate_affix', 'class' => 'form-control selectpicker']) !!}
+<div class="form-group row">
+    <div class="col">
+        <label for="simulate_affix">
+            {{ __('views/common.modal.simulate.affix') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip"
+               title="{{ __('views/common.modal.simulate.affix_title') }}"></i>
+        </label>
+        <div class="row">
+            <div class="col">
+                {!! Form::select('simulate_affix', $affixes, null, ['id' => 'simulate_affix', 'class' => 'form-control selectpicker']) !!}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <label for="simulate_thundering">
+            {{ __('views/common.modal.simulate.thundering') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip"
+               title="{{ __('views/common.modal.simulate.thundering_title') }}"></i>
+        </label>
+        <div class="row">
+            <div class="col">
+                {!! Form::checkbox('simulate_thundering', 1, $isThundering, ['id' => 'simulate_thundering', 'class' => 'form-control left_checkbox']) !!}
+            </div>
         </div>
     </div>
 </div>

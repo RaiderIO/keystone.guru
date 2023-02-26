@@ -35,6 +35,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             key_level: $('#simulate_key_level').val(),
             shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
             affix: $('#simulate_affix').val(),
+            thundering: $('#simulate_thundering').val(),
             bloodlust: $('#simulate_bloodlust').is(':checked') ? 1 : 0,
             arcane_intellect: $('#simulate_arcane_intellect').is(':checked') ? 1 : 0,
             power_word_fortitude: $('#simulate_power_word_fortitude').is(':checked') ? 1 : 0,
@@ -58,14 +59,18 @@ class CommonDungeonrouteSimulate extends InlineCode {
             for (let key in settings) {
                 // Restore everything to how it was
                 let $input = $(`#simulate_${key}`);
-                if ($input.is(':checkbox')) {
-                    if (parseInt(settings[key]) === 1) {
-                        $input.attr('checked', 'checked');
+                // Hidden inputs should not be modified
+
+                if (!$input.is(':hidden')) {
+                    if ($input.is(':checkbox')) {
+                        if (parseInt(settings[key]) === 1) {
+                            $input.attr('checked', 'checked');
+                        } else {
+                            $input.removeAttr('checked');
+                        }
                     } else {
-                        $input.removeAttr('checked');
+                        $input.val(settings[key]);
                     }
-                } else {
-                    $input.val(settings[key]);
                 }
             }
         }
