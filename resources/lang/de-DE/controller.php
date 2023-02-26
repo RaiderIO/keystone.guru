@@ -54,6 +54,12 @@ return [
         'this_week_affixes' => '@todo de: .dungeonroutediscover.this_week_affixes',
         'next_week_affixes' => '@todo de: .dungeonroutediscover.next_week_affixes',
         'new'               => '@todo de: .dungeonroutediscover.new',
+        'season'            => [
+            'popular'           => '@todo de-DE: .dungeonroutediscover.season.popular',
+            'this_week_affixes' => '@todo de-DE: .dungeonroutediscover.season.this_week_affixes',
+            'next_week_affixes' => '@todo de-DE: .dungeonroutediscover.season.next_week_affixes',
+            'new'               => '@todo de-DE: .dungeonroutediscover.season.new',
+        ],
         'dungeon'           => [
             'popular'           => '@todo de: .dungeonroutediscover.dungeon.popular',
             'this_week_affixes' => '@todo de: .dungeonroutediscover.dungeon.this_week_affixes',

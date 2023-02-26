@@ -22,6 +22,7 @@ class APISimulateFormRequest extends DungeonRouteFormRequest
             'affix'                          => ['required', Rule::in(
                 SimulationCraftRaidEventsOptions::ALL_AFFIXES
             )],
+            'thundering'                     => 'required|in:0,1',
             'bloodlust'                      => 'required|in:0,1',
             'arcane_intellect'               => 'required|in:0,1',
             'power_word_fortitude'           => 'required|in:0,1',

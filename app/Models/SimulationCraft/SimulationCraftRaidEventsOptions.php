@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $key_level
  * @property string $shrouded_bounty_type
  * @property string $affix
+ * @property bool $thundering
  * @property bool $bloodlust Override to say yes/no to Bloodlust/Heroism being available.
  * @property bool $arcane_intellect
  * @property bool $power_word_fortitude
@@ -51,6 +52,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'key_level',
         'shrouded_bounty_type',
         'affix',
+        'thundering',
         'bloodlust',
         'arcane_intellect',
         'power_word_fortitude',
@@ -64,12 +66,14 @@ class SimulationCraftRaidEventsOptions extends Model
     ];
     protected $with = ['dungeonroute'];
 
+    public const SHROUDED_BOUNTY_TYPE_NONE    = 'none';
     public const SHROUDED_BOUNTY_TYPE_CRIT    = 'crit';
     public const SHROUDED_BOUNTY_TYPE_HASTE   = 'haste';
     public const SHROUDED_BOUNTY_TYPE_MASTERY = 'mastery';
     public const SHROUDED_BOUNTY_TYPE_VERS    = 'vers';
 
     public const ALL_SHROUDED_BOUNTY_TYPES = [
+        self::SHROUDED_BOUNTY_TYPE_NONE,
         self::SHROUDED_BOUNTY_TYPE_CRIT,
         self::SHROUDED_BOUNTY_TYPE_HASTE,
         self::SHROUDED_BOUNTY_TYPE_MASTERY,

@@ -9,12 +9,19 @@ return [
         'routes_expansion' => '@todo de: .home.routes_expansion',
 
         'dungeonroutes' => [
-            'season'            => '@todo de: .home.dungeonroutes.season',
             'search'            => '@todo de: .home.dungeonroutes.search',
             'popular'           => '@todo de: .home.dungeonroutes.popular',
             'next_week_affixes' => '@todo de: .home.dungeonroutes.next_week_affixes',
             'this_week_affixes' => '@todo de: .home.dungeonroutes.this_week_affixes',
             'new'               => '@todo de: .home.dungeonroutes.new',
+
+            'routes_season'            => '@todo de-DE: .home.dungeonroutes.routes_season',
+            'season' => [
+                'popular'           => '@todo de-DE: .home.dungeonroutes.season.popular',
+                'next_week_affixes' => '@todo de-DE: .home.dungeonroutes.season.next_week_affixes',
+                'this_week_affixes' => '@todo de-DE: .home.dungeonroutes.season.this_week_affixes',
+                'new'               => '@todo de-DE: .home.dungeonroutes.season.new',
+            ],
 
             'discoverdungeon' => [
                 'popular'           => '@todo de: .home.dungeonroutes.discoverdungeon.popular',
@@ -66,7 +73,8 @@ return [
             ],
 
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc' => '@todo de: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc'
+                'new_dungeonspeedrunrequirednpc10man' => '@todo de-DE: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man',
+                'new_dungeonspeedrunrequirednpc25man' => '@todo de-DE: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man',
             ],
 
             'npcs' => [
