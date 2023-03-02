@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $key_level
  * @property string $shrouded_bounty_type
  * @property string $affix
- * @property bool $thundering
+ * @property int|null $thundering_clear_seconds
  * @property bool $bloodlust Override to say yes/no to Bloodlust/Heroism being available.
  * @property bool $arcane_intellect
  * @property bool $power_word_fortitude
@@ -52,7 +52,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'key_level',
         'shrouded_bounty_type',
         'affix',
-        'thundering',
+        'thundering_clear_seconds',
         'bloodlust',
         'arcane_intellect',
         'power_word_fortitude',
@@ -105,6 +105,14 @@ class SimulationCraftRaidEventsOptions extends Model
     }
 
     /**
+     * @return bool
+     */
+    public function isThunderingAffixActive(): bool
+    {
+        return $this->thundering_clear_seconds !== null;
+    }
+
+    /**
      * @param APISimulateFormRequest $request
      * @param DungeonRoute $dungeonRoute
      * @return SimulationCraftRaidEventsOptions
@@ -122,6 +130,7 @@ class SimulationCraftRaidEventsOptions extends Model
             'public_key'                     => self::generateRandomPublicKey(),
             'user_id'                        => Auth::id(),
             'dungeon_route_id'               => $dungeonRoute->id,
+            'thundering_clear_seconds'       => empty($validated['thundering_clear_seconds']) ? null : $validated['thundering_clear_seconds'],
             'simulate_bloodlust_per_pull'    => $bloodLustPerPull,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
             'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,

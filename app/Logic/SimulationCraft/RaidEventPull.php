@@ -324,10 +324,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     public function toString(): string
     {
         $result = sprintf(
-            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,enemies=',
+            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,%senemies=',
             $this->pullIndex,
             (int)$this->bloodLust,
-            $this->delay
+            $this->delay,
+            $this->options->thundering_clear_seconds !== null ?
+                sprintf('mark_duration=%d,', $this->options->thundering_clear_seconds) : ''
         );
 
         $enemyStrings = [];

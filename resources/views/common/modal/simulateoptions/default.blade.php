@@ -36,6 +36,7 @@
     {!! Form::hidden('simulate_shrouded_bounty_type', 'none', ['id' => 'simulate_shrouded_bounty_type']) !!}
 @endif
 
+@if($isThundering)
 <div class="form-group row">
     <div class="col">
         <label for="simulate_affix">
@@ -51,17 +52,20 @@
     </div>
     <div class="col">
         <label for="simulate_thundering">
-            {{ __('views/common.modal.simulate.thundering') }}
+            {{ __('views/common.modal.simulate.simulate_thundering_clear_seconds') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('views/common.modal.simulate.thundering_title') }}"></i>
+               title="{{ __('views/common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::checkbox('simulate_thundering', 1, $isThundering, ['id' => 'simulate_thundering', 'class' => 'form-control left_checkbox']) !!}
+                {!! Form::text('simulate_thundering_clear_seconds', '10', ['id' => 'simulate_thundering_clear_seconds', 'class' => 'form-control']) !!}
             </div>
         </div>
     </div>
 </div>
+@else
+    {!! Form::hidden('simulate_thundering_clear_seconds', '0', ['id' => 'simulate_thundering_clear_seconds']) !!}
+@endif
 
 <div class="form-group row no-gutters">
     <div class="col">
