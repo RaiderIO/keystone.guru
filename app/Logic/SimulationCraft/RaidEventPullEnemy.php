@@ -37,7 +37,7 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
                 $options->key_level,
                 $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
                 $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
-                $options->thundering
+                $options->isThunderingAffixActive()
             ) * ($this->options->hp_percent / 100);
     }
 

@@ -35,7 +35,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             key_level: $('#simulate_key_level').val(),
             shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
             affix: $('#simulate_affix').val(),
-            thundering: $('#simulate_thundering').val(),
+            thundering_clear_seconds: $('#simulate_thundering_clear_seconds').val(),
             bloodlust: $('#simulate_bloodlust').is(':checked') ? 1 : 0,
             arcane_intellect: $('#simulate_arcane_intellect').is(':checked') ? 1 : 0,
             power_word_fortitude: $('#simulate_power_word_fortitude').is(':checked') ? 1 : 0,
@@ -156,6 +156,15 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 type: 'single',
                 min: 2,
                 max: 40
+            });
+
+        let $thunderingClearSecondsSlider = $('#simulate_thundering_clear_seconds')
+            .ionRangeSlider({
+                grid: true,
+                grid_snap: true,
+                type: 'single',
+                min: 0,
+                max: 15
             });
 
         let $hpPercentage = $('#simulate_hp_percent')
