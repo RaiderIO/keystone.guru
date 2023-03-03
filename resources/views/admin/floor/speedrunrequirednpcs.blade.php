@@ -1,5 +1,5 @@
 <?php
-/** @var $mode int */
+/** @var $difficulty int */
 /** @var $dungeon \App\Models\Dungeon */
 /** @var $floor \App\Models\Floor */
 ?>
@@ -9,13 +9,13 @@
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_dungeon_speedrun_required_npcs_{{ $mode }}_table').DataTable({});
+            $('#admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table').DataTable({});
         });
     </script>
 @endsection
 
 <h4>
-    @if($mode === \App\Models\Dungeon::DIFFICULTY_10_MAN )
+    @if($difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN )
         {{ __('views/admin.floor.edit.speedrun_required_npcs.title_10_man') }}
         @else
         {{ __('views/admin.floor.edit.speedrun_required_npcs.title_25_man') }}
@@ -28,7 +28,7 @@
     </a>
 </div>
 
-<table id="admin_dungeon_speedrun_required_npcs_{{ $mode }}_table" class="tablesorter default_table table-striped">
+<table id="admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
         <th width="10%">{{ __('views/admin.floor.edit.speedrun_required_npcs.table_header_id') }}</th>
@@ -40,7 +40,7 @@
 
     <tbody>
     <?php
-    $speedrunRequiredNpcs = $mode === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
+    $speedrunRequiredNpcs = $difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
         $floor->dungeonSpeedrunRequiredNpcs10Man : $floor->dungeonSpeedrunRequiredNpcs25Man;
     ?>
     @foreach ($speedrunRequiredNpcs as $speedrunRequiredNpc)
