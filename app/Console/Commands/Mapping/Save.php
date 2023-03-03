@@ -46,7 +46,7 @@ class Save extends Command
         // Drop all caches for all models - otherwise it may produce some strange results
         $this->call('modelCache:clear');
 
-        $dungeonDataDir = database_path('/seeders/dungeondata/');
+        $dungeonDataDir = database_path('seeders/dungeondata/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
@@ -61,10 +61,17 @@ class Save extends Command
         if (!empty($mappingBackupDir)) {
             $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d H:i:s'));
 
-            $this->info(sprintf('Saving backup of mapping to %s', $targetDir));
+
+            $tmpZippedFilePath = '/tmp';
+            $zippedFileName = 'mapping.gz';
+            $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
+            $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
+
+            $this->info(sprintf('Saving backup of mapping to %s/%s', $targetDir, $zippedFileName));
             $this->shell([
                 sprintf('mkdir -p "%s"', $targetDir),
-                sprintf('cp -R "%s" "%s"', $dungeonDataDir, $targetDir),
+                sprintf('cp -R "%s/%s" "%s"', $tmpZippedFilePath, $zippedFileName, $targetDir),
+                sprintf('rm %s/%s', $tmpZippedFilePath, $zippedFileName),
             ]);
         }
 
