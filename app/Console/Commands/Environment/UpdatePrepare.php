@@ -10,14 +10,6 @@ class UpdatePrepare extends Command
 {
     use ExecutesShellCommands;
 
-    const NO_DEV = [
-        'live'    => true,
-        'local'   => false,
-        'mapping' => true,
-        'staging' => true,
-        'testing' => false,
-    ];
-
     /**
      * The console command description.
      *
@@ -55,11 +47,9 @@ class UpdatePrepare extends Command
         // Any code after this will use the old definitions and get class not found errors
         $this->shell([
             // Prevent root warning from blocking the entire thing; only install dev dependencies in local
-            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', (self::NO_DEV[$environment] ? '--no-dev' : '')),
+            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', config('app.debug') ? '--no-dev' : ''),
             'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload',
         ]);
-
-        Artisan::call('db:backup');
 
         return 0;
     }
