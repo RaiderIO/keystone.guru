@@ -17,10 +17,13 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.live/;
+            php artisan readonly:enable &&
+            php artisan db:backup &&
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
             php artisan environment:updateprepare live &&
             php artisan environment:update live &&
             php artisan report:release discord &&
             php artisan report:release reddit;
+            php artisan readonly:disable &&
             php artisan up

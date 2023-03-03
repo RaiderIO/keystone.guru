@@ -20,9 +20,12 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.staging/;
+            php artisan readonly:enable &&
+            php artisan db:backup;
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
             php artisan environment:updateprepare staging &&
             php artisan environment:update staging &&
             php artisan report:release discord;
+            php artisan readonly:disable &&
             php artisan up
