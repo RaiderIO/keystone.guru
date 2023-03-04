@@ -92,7 +92,7 @@ class EnemyPack extends VersionableMapObject {
     }
 
     /**
-     * Sets the color for the polyline.
+     * Sets the color of the pack.
      * @param color
      */
     setColor(color) {

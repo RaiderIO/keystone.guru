@@ -389,6 +389,10 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function () {
+                return '#5993D2';
+            },
             percentage_display_zoom_default: 3,
             getCurrentFloorPercentageDisplayZoom: function () {
                 return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;
