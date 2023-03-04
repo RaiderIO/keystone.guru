@@ -119,7 +119,9 @@ class KillZone extends MapObject {
             }),
             new Attribute({
                 name: 'color',
-                type: 'color'
+                type: 'color',
+                setter: this._setColor.bind(this),
+                default: this._getPolylineColorDefault.bind(this)
             }),
             new Attribute({
                 name: 'lat',
@@ -164,6 +166,25 @@ class KillZone extends MapObject {
 
         // Hide the layer of the killzone
         this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+    }
+
+    /**
+     * Sets the color for the polyline.
+     * @param color
+     */
+    _setColor(color) {
+        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+
+        this.color = color ?? this._getColorDefault();
+    }
+
+    /**
+     *
+     * @returns {string}
+     * @protected
+     */
+    _getColorDefault() {
+        return c.map.killzone.defaultColor();
     }
 
     /**

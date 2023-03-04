@@ -9,7 +9,7 @@ use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class KillZoneFormRequest extends FormRequest
+class APIKillZoneMassFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,14 +29,13 @@ class KillZoneFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'        => 'nullable|int',
-            'floor_id'  => ['nullable', Rule::exists(Floor::class, 'id')],
-            'color'     => 'nullable|string',
-            'lat'       => 'nullable|numeric',
-            'lng'       => 'nullable|numeric',
-            'index'     => 'int',
-            'enemies'   => 'array',
-            'enemies.*' => 'int',
+            'killzones' => 'array',
+            'killzones.id' => 'int',
+            'killzones.color'     => [
+                'required',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
+            'killzones.index' => 'int',
         ];
     }
 }

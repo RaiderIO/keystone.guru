@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Requests\KillZone\DeleteAllFormRequest;
-use App\Http\Requests\KillZone\KillZoneFormRequest;
+use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
+use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
@@ -95,13 +95,13 @@ class APIKillZoneController extends Controller
 
 
     /**
-     * @param KillZoneFormRequest $request
+     * @param APIKillZoneFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param KillZone|null $killZone
      * @return KillZone
      * @throws AuthorizationException
      */
-    function store(KillZoneFormRequest $request, DungeonRoute $dungeonroute, KillZone $killZone = null): KillZone
+    function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonroute, KillZone $killZone = null): KillZone
     {
         if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
@@ -241,12 +241,12 @@ class APIKillZoneController extends Controller
     }
 
     /**
-     * @param DeleteAllFormRequest $request
+     * @param APIDeleteAllFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return array|Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function deleteAll(DeleteAllFormRequest $request, DungeonRoute $dungeonroute)
+    function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
