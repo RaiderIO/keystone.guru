@@ -6,7 +6,7 @@ use App\Models\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
 
-class DungeonRouteContextLogger
+class DebugInfoContextLogger
 {
     public function handle(Request $request, Closure $next)
     {
