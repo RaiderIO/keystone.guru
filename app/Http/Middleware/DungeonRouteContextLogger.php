@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\DungeonRoute;
 use Closure;
-use Request;
+use Illuminate\Http\Request;
 
 class DungeonRouteContextLogger
 {
