@@ -40,9 +40,9 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         };
 
         $('#edit_route_dungeon_speedrun_required_npcs_collapse').on('show.bs.collapse', function () {
-              getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(true);
+            getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(true);
         }).on('hide.bs.collapse', function () {
-              getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(false);
+            getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(false);
         });
 
         this.loaded = true;
@@ -98,7 +98,9 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
 
         let currentFloorId = getState().getCurrentFloor().id;
         let mapContext = getState().getMapContext();
-        let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs25Man();
+        let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
+            mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
+            mapContext.getDungeonSpeedrunRequiredNpcs25Man();
         for (let index in requiredNpcs) {
             let $targetContainer = $dungeonSpeedrunRequiredNpcs;
             let requiredNpc = requiredNpcs[index];
