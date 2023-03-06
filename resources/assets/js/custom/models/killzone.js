@@ -173,7 +173,7 @@ class KillZone extends MapObject {
      * @param color
      */
     _setColor(color) {
-        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
         this.color = color ?? this._getColorDefault();
     }
@@ -192,7 +192,7 @@ class KillZone extends MapObject {
      * @param remoteEnemies
      */
     _setEnemiesFromRemote(remoteEnemies) {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // Reconstruct the enemies we're coupled with in a format we expect
         if (typeof remoteEnemies !== 'undefined') {
@@ -436,7 +436,7 @@ class KillZone extends MapObject {
         let enemy = enemySelectedEvent.data.enemy;
         let ignorePackBuddies = enemySelectedEvent.data.ignorePackBuddies;
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // Only when we're saved
         if (this.id === 0) {
@@ -835,7 +835,7 @@ class KillZone extends MapObject {
      * @param enemies
      */
     setEnemies(enemies) {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // .sort() adjusts the array in place, but we don't care for the order
         if (_.isEqual(this.enemies.sort(), enemies.sort())) {
@@ -885,7 +885,7 @@ class KillZone extends MapObject {
      * Removes any existing UI connections to enemies.
      */
     removeExistingConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
@@ -910,7 +910,7 @@ class KillZone extends MapObject {
      * Throws away all current visible connections to enemies, and rebuilds the visuals.
      */
     redrawConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         let self = this;
 
