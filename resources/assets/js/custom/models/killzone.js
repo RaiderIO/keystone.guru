@@ -121,7 +121,7 @@ class KillZone extends MapObject {
                 name: 'color',
                 type: 'color',
                 setter: this._setColor.bind(this),
-                default: this._getPolylineColorDefault.bind(this)
+                default: this._getColorDefault.bind(this)
             }),
             new Attribute({
                 name: 'lat',
