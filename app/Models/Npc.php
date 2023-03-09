@@ -230,10 +230,10 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
-        return $this->dungeon_id ?? -1;
+        return $this->dungeon_id ?? null;
     }
 }

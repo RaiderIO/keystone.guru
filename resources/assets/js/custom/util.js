@@ -352,6 +352,10 @@ function getUserMousePositions() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
 }
 
+function getMountableAreas() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+}
+
 /**
  * Helper functions to help debug the site.
  */
@@ -389,6 +393,10 @@ function getDungeonFloorSwitchMarker(id) {
 
 function getUserMousePosition(id) {
     return getUserMousePositions().findMapObjectById(id);
+}
+
+function getMountableArea(id) {
+    return getMountableAreas().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {

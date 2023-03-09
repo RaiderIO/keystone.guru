@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\MountableArea;
 
-use App\Models\Faction;
+use App\Models\Floor;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,9 +27,10 @@ class MountableAreaFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'       => 'required:int',
-            'floor_id' => 'required:int',
-            'vertices' => 'required:array',
+            'id'                 => 'required:int',
+            'mapping_version_id' => ['required', Rule::exists(MappingVersion::class, 'id')],
+            'floor_id'           => ['required', Rule::exists(Floor::class, 'id')],
+            'vertices'           => 'required:array',
         ];
     }
 }

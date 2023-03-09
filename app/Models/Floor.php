@@ -302,9 +302,9 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
         return $this->dungeon_id;
     }

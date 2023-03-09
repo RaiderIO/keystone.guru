@@ -56,11 +56,11 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
-        return $this->floor->dungeon_id;
+        return optional($this->floor)->dungeon_id ?? null;
     }
 
     /**

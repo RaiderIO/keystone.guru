@@ -48,19 +48,19 @@ class APIEnemyPatrolController extends APIMappingModelBaseController
 
     /**
      * @param Request $request
-     * @param EnemyPatrol $enemypatrol
+     * @param EnemyPatrol $enemyPatrol
      * @return array|ResponseFactory|Response
      */
-    function delete(Request $request, EnemyPatrol $enemypatrol)
+    function delete(Request $request, EnemyPatrol $enemyPatrol)
     {
         try {
-            if ($enemypatrol->delete()) {
+            if ($enemyPatrol->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemypatrol->floor->dungeon, Auth::getUser(), $enemypatrol));
+                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($enemypatrol, null);
+                $this->mappingChanged($enemyPatrol, null);
             }
             $result = response()->noContent();
         } catch (Exception $ex) {

@@ -430,18 +430,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);
                 Route::put('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'store']);
-                Route::delete('/enemypatrol/{enemypatrol}', [APIEnemyPatrolController::class, 'delete']);
+                Route::delete('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'delete']);
 
                 Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store']);
                 Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
+                Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
                 Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminStore']);
                 Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminDelete']);
 
                 Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
-                Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
+                Route::put('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'store']);
+                Route::delete('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
             });
