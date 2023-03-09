@@ -64,7 +64,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode']], function () {
+Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger']], function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
 
@@ -150,7 +150,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
 
     // May not be logged in - we have anonymous routes
-    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}', 'middleware' => 'dungeon_route_context_logger'], function () {
+    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
 
         Route::group(['prefix' => '{title?}'], function () {
