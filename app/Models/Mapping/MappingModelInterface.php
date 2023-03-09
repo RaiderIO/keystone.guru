@@ -17,5 +17,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 interface MappingModelInterface
 {
-    public function getDungeonId(): int;
+    public function getDungeonId(): ?int;
 }

@@ -24,8 +24,13 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
 
     public $timestamps = false;
     public $fillable = [
+        'mapping_version_id',
         'floor_id',
         'vertices_json',
+    ];
+
+    public $hidden = [
+        'floor',
     ];
 
     /**
@@ -89,10 +94,10 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
-        return $this->floor->dungeon_id;
+        return optional($this->floor)->dungeon_id ?? null;
     }
 }
