@@ -116,11 +116,17 @@ function intersection(array $p1, array $p2, array $p3, array $p4): ?array
         $lat = ($a1 * $c2 - $a2 * $c1) / $determinant;
 
         $l1Length = MathUtils::distanceBetweenPoints($p1['lng'], $p2['lng'], $p1['lat'], $p2['lat']);
-
-        // If the distance to the found point is greater than the length of the line, it's not a correct intersection!
-        // This means that the intersection occurred in the elngtended line past the points of $p1 and $p2. We don't want them.
+        // If the distance to the found point is greater than the length of EITHER of the lines, it's not a correct intersection!
+        // This means that the intersection occurred in the extended line past the points of $p1 and $p2. We don't want them.
         if ($l1Length < MathUtils::distanceBetweenPoints($p1['lng'], $lng, $p1['lat'], $lat) ||
             $l1Length < MathUtils::distanceBetweenPoints($p2['lng'], $lng, $p2['lat'], $lat)
+        ) {
+            return null;
+        }
+
+        $l2Length = MathUtils::distanceBetweenPoints($p3['lng'], $p4['lng'], $p3['lat'], $p4['lat']);
+        if ($l2Length < MathUtils::distanceBetweenPoints($p3['lng'], $lng, $p3['lat'], $lat) ||
+            $l2Length < MathUtils::distanceBetweenPoints($p4['lng'], $lng, $p4['lat'], $lat)
         ) {
             return null;
         }

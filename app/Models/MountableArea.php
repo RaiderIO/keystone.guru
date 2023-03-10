@@ -96,6 +96,14 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
+     * @return int
+     */
+    public function getSpeedOrDefault(): int
+    {
+        return $this->speed ?? config('keystoneguru.character.mounted_movement_speed_yards_second');
+    }
+
+    /**
      * @return int|null
      */
     public function getDungeonId(): ?int
