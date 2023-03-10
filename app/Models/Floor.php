@@ -215,13 +215,22 @@ class Floor extends CacheModel implements MappingModelInterface
         return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
+    {
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+    }
 
     /**
      * @return HasMany
      */
-    public function dungeonspeedrunrequirednpcs(): HasMany
+    public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
-        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -242,7 +251,7 @@ class Floor extends CacheModel implements MappingModelInterface
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints($lng, $dungeonFloorSwitchMarker->lng, $lat, $dungeonFloorSwitchMarker->lat);
-                if ($distanceToClosestFloorSwitchMarker < $distanceToFloorSwitchMarker) {
+                if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
                     $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
                     $result                             = $dungeonFloorSwitchMarker;
                 }
@@ -293,9 +302,9 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
         return $this->dungeon_id;
     }

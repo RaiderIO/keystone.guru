@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\MountableArea;
 
-use App\Models\Faction;
+use App\Models\Floor;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

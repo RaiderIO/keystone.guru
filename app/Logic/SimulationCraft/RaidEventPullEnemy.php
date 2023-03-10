@@ -36,7 +36,8 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
         return $npc->calculateHealthForKey(
                 $options->key_level,
                 $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
-                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL
+                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
+                $options->isThunderingAffixActive()
             ) * ($this->options->hp_percent / 100);
     }
 

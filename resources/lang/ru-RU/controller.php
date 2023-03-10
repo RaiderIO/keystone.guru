@@ -54,6 +54,12 @@ return [
         'this_week_affixes' => 'Текущие аффиксы',
         'next_week_affixes' => 'Аффиксы следующей неделе',
         'new'               => 'Новые',
+        'season'            => [
+            'popular'           => '@todo ru-RU: .dungeonroutediscover.season.popular',
+            'this_week_affixes' => '@todo ru-RU: .dungeonroutediscover.season.this_week_affixes',
+            'next_week_affixes' => '@todo ru-RU: .dungeonroutediscover.season.next_week_affixes',
+            'new'               => '@todo ru-RU: .dungeonroutediscover.season.new',
+        ],
         'dungeon'           => [
             'popular'           => '%s популярные маршруты',
             'this_week_affixes' => '%s текущие аффиксы',

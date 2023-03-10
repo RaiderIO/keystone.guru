@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'difficulty'   => [
+        '1' => '@todo de-DE: .difficulty.1',
+        '2' => '@todo de-DE: .difficulty.2',
+    ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [
             'name'   => '@todo de: .wotlk.ahn_kahet_the_old_kingdom.name',

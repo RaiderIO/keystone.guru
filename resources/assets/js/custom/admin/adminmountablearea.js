@@ -14,9 +14,9 @@ L.Draw.MountableArea = L.Draw.Polygon.extend({
 
 // });
 
-class AdminMountableArea extends MapObject {
+class AdminMountableArea extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'mountablearea'});
+        super(map, layer, {name: 'mountablearea', hasRouteModelBinding: true});
 
         this.color = null;
     }

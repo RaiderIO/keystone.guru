@@ -85,7 +85,10 @@ $floor = $floor ?? null;
 
     @isset($floor)
         <div class="form-group">
-            @include('admin.floor.speedrunrequirednpcs', ['floor' => $floor])
+            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => \App\Models\Dungeon::DIFFICULTY_10_MAN, 'floor' => $floor])
+        </div>
+        <div class="form-group">
+            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => \App\Models\Dungeon::DIFFICULTY_25_MAN, 'floor' => $floor])
         </div>
     @endisset
 @endsection

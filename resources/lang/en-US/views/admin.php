@@ -60,8 +60,10 @@ return [
     ],
     'dungeonspeedrunrequirednpc' => [
         'new' => [
-            'title'          => 'New Speedrun Required NPC',
-            'header'         => 'New Speedrun Required NPC for :dungeon',
+            'title_10_man'   => 'New 10-man Speedrun Required NPC',
+            'title_25_man'   => 'New 25-man Speedrun Required NPC',
+            'header_10_man'  => 'New 10-man Speedrun Required NPC for :dungeon',
+            'header_25_man'  => 'New 25-man Speedrun Required NPC for :dungeon',
             'npc_id'         => 'Npc ID',
             'linked_npc_ids' => 'Linked NPCs (optional)',
             'count'          => 'Count',
@@ -130,7 +132,8 @@ return [
             'submit'                  => 'Submit',
 
             'speedrun_required_npcs' => [
-                'title'                => 'Speedrun Required Npcs',
+                'title_10_man'         => '10-man Speedrun Required Npcs',
+                'title_25_man'         => '25-man Speedrun Required Npcs',
                 'add_npc'              => 'Add NPC',
                 'table_header_id'      => 'Id',
                 'table_header_npc'     => 'Npc',
@@ -393,12 +396,12 @@ return [
         ],
         'wowtools'     => [
             'importingamecoordinates' => [
-                'title'                   => 'Import in-game coordinates',
-                'header'                  => 'Import in-game coordinates',
-                'map_csv'                 => 'Map csv (dungeon data, see https://wow.tools/dbc/?dbc=map&build=10.0.0.45232)',
-                'ui_map_group_member_csv' => 'UI map group member csv (floor data, see https://wow.tools/dbc/?dbc=uimapgroupmember&build=10.0.0.45232)',
-                'ui_map_assignment_csv'   => 'UI map assignment csv (in-game coordinates to map coordinates per floor, see https://wow.tools/dbc/?dbc=uimapassignment&build=10.0.0.45232)',
-                'submit'                  => 'Submit',
+                'title'                                  => 'Import in-game coordinates',
+                'header'                                 => 'Import in-game coordinates',
+                'map_table_xhr_response'                 => 'Map table XHR response (dungeon data, see https://wow.tools/dbc/?dbc=map&build=10.0.0.45232, set to 1000 results and view source)',
+                'ui_map_group_member_table_xhr_response' => 'UI map group member table XHR response (floor data, see https://wow.tools/dbc/?dbc=uimapgroupmember&build=10.0.0.45232, set to 1000 results and view source)',
+                'ui_map_assignment_table_xhr_response'   => 'UI map assignment table XHR response (in-game coordinates to map coordinates per floor, see https://wow.tools/dbc/?dbc=uimapassignment&build=10.0.0.45232, set to 1000 results and view network. Copy as fetch, edit length to 25000)',
+                'submit'                                 => 'Submit',
             ],
         ],
     ],

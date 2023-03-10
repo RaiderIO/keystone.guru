@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
+use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Season;
+use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
@@ -223,9 +225,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer([
             'dungeonroute.discover.category',
             'dungeonroute.discover.dungeon.category',
+            'dungeonroute.discover.season.category',
             'misc.affixes',
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
+            'dungeonroute.discover.season.overview',
         ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
             /** @var Expansion $expansion */
             $expansion = $view->getData()['expansion'];
@@ -245,6 +249,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $globalViewVariables['currentSeason']);
             $view->with('nextSeason', $globalViewVariables['nextSeason']);
+        });
+
+        view()->composer('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', function (View $view) use ($globalViewVariables) {
+            $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
         });
 
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
@@ -362,6 +370,28 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Team selector
         view()->composer('common.team.select', function (View $view) use ($globalViewVariables) {
             $view->with('teams', Auth::check() ? Auth::user()->teams : collect());
+        });
+
+        // Simulation
+        view()->composer('common.modal.simulateoptions.default', function (View $view) use ($globalViewVariables) {
+            $shroudedBountyTypes = [];
+            foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
+                $shroudedBountyTypes[$bountyType] = __(sprintf('views/common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
+            }
+
+            $affixes = [];
+            foreach (SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
+                $affixes[$affix] = __(sprintf('views/common.modal.simulate.affixes.%s', $affix));
+            }
+
+            /** @var Season $currentSeason */
+            $currentSeason = $globalViewVariables['currentSeason'];
+            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+
+            $view->with('shroudedBountyTypes', $shroudedBountyTypes);
+            $view->with('affixes', $affixes);
+            $view->with('isShrouded', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+            $view->with('isThundering', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
         // Profile pages

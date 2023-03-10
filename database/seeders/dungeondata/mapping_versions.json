@@ -681,7 +681,7 @@
         "mdt_mapping_hash": "34f9eb84010f82b51a1b75bfe2a38302",
         "created_at": "2022-12-16T10:18:10.000000Z",
         "updated_at": "2022-12-16T10:18:10.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 77,
@@ -690,7 +690,7 @@
         "mdt_mapping_hash": "5c2a61a92fa0cfd42594e3f884cce68a",
         "created_at": "2022-12-16T10:19:47.000000Z",
         "updated_at": "2022-12-16T10:19:47.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 78,
@@ -699,7 +699,7 @@
         "mdt_mapping_hash": "636761c73282e1b9261aecdb2c9e171b",
         "created_at": "2022-12-16T10:19:54.000000Z",
         "updated_at": "2022-12-16T10:19:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 79,
@@ -708,7 +708,7 @@
         "mdt_mapping_hash": "e595a1e840358dd453cd8b9248bbc6ee",
         "created_at": "2022-12-16T10:20:12.000000Z",
         "updated_at": "2022-12-16T10:20:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 80,
@@ -717,7 +717,7 @@
         "mdt_mapping_hash": "a121d252e3ee1a45ff72f3b361affd49",
         "created_at": "2022-12-16T10:20:42.000000Z",
         "updated_at": "2022-12-16T10:20:42.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 81,
@@ -726,7 +726,7 @@
         "mdt_mapping_hash": "0572a2eb1e4565ac8166ab9a2f778a2f",
         "created_at": "2022-12-16T10:20:48.000000Z",
         "updated_at": "2022-12-16T10:20:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 82,
@@ -735,7 +735,7 @@
         "mdt_mapping_hash": "a0cff103a99b2667592a21fe34880a66",
         "created_at": "2022-12-16T10:21:03.000000Z",
         "updated_at": "2022-12-16T10:21:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 83,
@@ -744,7 +744,7 @@
         "mdt_mapping_hash": "40f4df40fe35d2d8879573bbaf6ce202",
         "created_at": "2022-12-16T10:21:08.000000Z",
         "updated_at": "2022-12-16T10:21:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 84,
@@ -753,7 +753,7 @@
         "mdt_mapping_hash": "5d989e747078ad7b926117cee2dfed83",
         "created_at": "2022-12-21T22:22:49.000000Z",
         "updated_at": "2022-12-21T22:22:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 85,
@@ -762,7 +762,7 @@
         "mdt_mapping_hash": "c86d6660294395695c38d5d586fe568b",
         "created_at": "2022-12-27T20:56:25.000000Z",
         "updated_at": "2022-12-27T20:56:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 86,
@@ -771,7 +771,7 @@
         "mdt_mapping_hash": "ffb2fe0f50facb4a731e3f3ca5b70cf3",
         "created_at": "2022-12-27T20:57:32.000000Z",
         "updated_at": "2022-12-27T20:57:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 87,
@@ -780,7 +780,7 @@
         "mdt_mapping_hash": "e298bb6ab96481891c77f6e98cbb6a01",
         "created_at": "2023-01-30T21:23:59.000000Z",
         "updated_at": "2023-01-30T21:23:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 88,
@@ -789,7 +789,7 @@
         "mdt_mapping_hash": "ee99abeba131e535d1b65ee38d3e3270",
         "created_at": "2023-01-30T21:24:18.000000Z",
         "updated_at": "2023-01-30T21:24:18.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 89,
@@ -798,7 +798,7 @@
         "mdt_mapping_hash": "80f5f1be6955627785958010eabcc3da",
         "created_at": "2023-01-31T21:43:01.000000Z",
         "updated_at": "2023-01-31T21:43:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 90,
@@ -807,7 +807,7 @@
         "mdt_mapping_hash": "349e54e93936318270d1797ddc8c25c0",
         "created_at": "2023-01-31T21:43:02.000000Z",
         "updated_at": "2023-01-31T21:43:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 91,
@@ -816,7 +816,7 @@
         "mdt_mapping_hash": "3952e786a3597bc479e2035c40f99c54",
         "created_at": "2023-01-31T21:43:03.000000Z",
         "updated_at": "2023-01-31T21:43:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 92,
@@ -825,6 +825,69 @@
         "mdt_mapping_hash": null,
         "created_at": "2023-02-04T21:39:38.000000Z",
         "updated_at": "2023-02-04T21:39:38.000000Z",
+        "merged": true
+    },
+    {
+        "id": 93,
+        "dungeon_id": 65,
+        "version": 3,
+        "mdt_mapping_hash": null,
+        "created_at": "2023-03-01T22:15:17.000000Z",
+        "updated_at": "2023-03-01T22:15:17.000000Z",
+        "merged": false
+    },
+    {
+        "id": 94,
+        "dungeon_id": 67,
+        "version": 4,
+        "mdt_mapping_hash": "e298bb6ab96481891c77f6e98cbb6a01",
+        "created_at": "2023-03-09T10:32:16.000000Z",
+        "updated_at": "2023-03-09T10:32:16.000000Z",
+        "merged": false
+    },
+    {
+        "id": 95,
+        "dungeon_id": 72,
+        "version": 4,
+        "mdt_mapping_hash": "349e54e93936318270d1797ddc8c25c0",
+        "created_at": "2023-03-09T20:30:18.000000Z",
+        "updated_at": "2023-03-09T20:30:18.000000Z",
+        "merged": false
+    },
+    {
+        "id": 96,
+        "dungeon_id": 71,
+        "version": 5,
+        "mdt_mapping_hash": "ee99abeba131e535d1b65ee38d3e3270",
+        "created_at": "2023-03-09T20:31:27.000000Z",
+        "updated_at": "2023-03-09T20:31:27.000000Z",
+        "merged": false
+    },
+    {
+        "id": 97,
+        "dungeon_id": 4,
+        "version": 5,
+        "mdt_mapping_hash": "80f5f1be6955627785958010eabcc3da",
+        "created_at": "2023-03-09T20:32:46.000000Z",
+        "updated_at": "2023-03-09T20:32:46.000000Z",
+        "merged": false
+    },
+    {
+        "id": 98,
+        "dungeon_id": 7,
+        "version": 4,
+        "mdt_mapping_hash": "a0cff103a99b2667592a21fe34880a66",
+        "created_at": "2023-03-09T20:36:05.000000Z",
+        "updated_at": "2023-03-09T20:36:05.000000Z",
+        "merged": false
+    },
+    {
+        "id": 99,
+        "dungeon_id": 76,
+        "version": 4,
+        "mdt_mapping_hash": "5d989e747078ad7b926117cee2dfed83",
+        "created_at": "2023-03-09T20:37:44.000000Z",
+        "updated_at": "2023-03-09T20:37:44.000000Z",
         "merged": false
     }
 ]

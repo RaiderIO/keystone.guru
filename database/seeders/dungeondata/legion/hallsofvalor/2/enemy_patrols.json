@@ -141,5 +141,57 @@
             "weight": 2,
             "vertices_json": "[{\"lat\":-169,\"lng\":201},{\"lat\":-168,\"lng\":194},{\"lat\":-169,\"lng\":201},{\"lat\":-172,\"lng\":204},{\"lat\":-175,\"lng\":208},{\"lat\":-172,\"lng\":204},{\"lat\":-169,\"lng\":201}]"
         }
+    },
+    {
+        "id": 834,
+        "mapping_version_id": 98,
+        "floor_id": 16,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-130,\"lng\":175},{\"lat\":-127,\"lng\":183},{\"lat\":-131,\"lng\":191},{\"lat\":-127,\"lng\":183},{\"lat\":-130,\"lng\":175}]"
+        }
+    },
+    {
+        "id": 835,
+        "mapping_version_id": 98,
+        "floor_id": 16,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-168,\"lng\":178},{\"lat\":-167,\"lng\":183},{\"lat\":-168,\"lng\":187},{\"lat\":-173,\"lng\":190},{\"lat\":-173,\"lng\":199},{\"lat\":-180,\"lng\":207},{\"lat\":-173,\"lng\":199},{\"lat\":-173,\"lng\":190},{\"lat\":-168,\"lng\":187},{\"lat\":-167,\"lng\":183},{\"lat\":-168,\"lng\":178},{\"lat\":-172,\"lng\":175},{\"lat\":-173,\"lng\":166},{\"lat\":-179,\"lng\":159},{\"lat\":-173,\"lng\":166},{\"lat\":-172,\"lng\":175},{\"lat\":-168,\"lng\":178}]"
+        }
+    },
+    {
+        "id": 836,
+        "mapping_version_id": 98,
+        "floor_id": 16,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-183,\"lng\":164},{\"lat\":-187,\"lng\":160},{\"lat\":-183,\"lng\":164},{\"lat\":-180,\"lng\":166},{\"lat\":-179,\"lng\":171},{\"lat\":-180,\"lng\":166},{\"lat\":-183,\"lng\":164}]"
+        }
+    },
+    {
+        "id": 837,
+        "mapping_version_id": 98,
+        "floor_id": 16,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-169,\"lng\":201},{\"lat\":-168,\"lng\":194},{\"lat\":-169,\"lng\":201},{\"lat\":-172,\"lng\":204},{\"lat\":-175,\"lng\":208},{\"lat\":-172,\"lng\":204},{\"lat\":-169,\"lng\":201}]"
+        }
     }
 ]

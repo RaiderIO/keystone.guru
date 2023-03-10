@@ -64,7 +64,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', [WebhookController::class, 'github'])->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode']], function () {
+Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger']], function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', [SiteController::class, 'home']);
 
@@ -83,6 +83,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('changelog', [SiteController::class, 'changelog'])->name('misc.changelog');
     Route::get('release/{release}', [ReleaseController::class, 'view'])->name('release.view');
 
+    Route::get('health', [SiteController::class, 'health'])->name('misc.health');
     Route::get('mapping', [SiteController::class, 'mapping'])->name('misc.mapping');
 
     Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');
@@ -122,7 +123,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::get('/', [DungeonRouteDiscoverController::class, 'discover'])->name('dungeonroutes');
         Route::group(['prefix' => '{expansion}'], function () {
             Route::get('/', [DungeonRouteDiscoverController::class, 'discoverExpansion'])->name('dungeonroutes.expansion');
-
             Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverpopular'])->name('dungeonroutes.popular');
             Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverthisweek'])->name('dungeonroutes.thisweek');
             Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discovernextweek'])->name('dungeonroutes.nextweek');
@@ -130,13 +130,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::group(['prefix' => 'season/{season}'], function () {
                 Route::get('/', [DungeonRouteDiscoverController::class, 'discoverSeason'])->name('dungeonroutes.season');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverSeasonPopular'])->name('dungeonroutes.season.popular');
+                Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverSeasonThisWeek'])->name('dungeonroutes.season.thisweek');
+                Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverSeasonNextWeek'])->name('dungeonroutes.season.nextweek');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverSeasonNew'])->name('dungeonroutes.season.new');
             });
 
-            Route::get('{dungeon}', [DungeonRouteDiscoverController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
-            Route::get('{dungeon}/popular', [DungeonRouteDiscoverController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
-            Route::get('{dungeon}/affixes/current', [DungeonRouteDiscoverController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
-            Route::get('{dungeon}/affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
-            Route::get('{dungeon}/new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
+            Route::group(['prefix' => '{dungeon}'], function () {
+                Route::get('/', [DungeonRouteDiscoverController::class, 'discoverdungeon'])->name('dungeonroutes.discoverdungeon');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverdungeonpopular'])->name('dungeonroutes.discoverdungeon.popular');
+                Route::get('affixes/current', [DungeonRouteDiscoverController::class, 'discoverdungeonthisweek'])->name('dungeonroutes.discoverdungeon.thisweek');
+                Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
+            });
         });
     });
 
@@ -144,7 +150,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
 
     // May not be logged in - we have anonymous routes
-    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}', 'middleware' => 'dungeon_route_context_logger'], function () {
+    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
 
         Route::group(['prefix' => '{title?}'], function () {
@@ -253,9 +259,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                         // Speedrun required npcs
                         Route::group(['prefix' => 'speedrunrequirednpcs'], function () {
-                            Route::get('new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
-                            Route::post('new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::get('{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::get('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'new'])->name('admin.dungeonspeedrunrequirednpc.new');
+                            Route::post('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'savenew'])->name('admin.dungeonspeedrunrequirednpc.savenew');
+                            Route::get('{difficulty}/{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });
@@ -424,18 +430,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);
                 Route::put('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'store']);
-                Route::delete('/enemypatrol/{enemypatrol}', [APIEnemyPatrolController::class, 'delete']);
+                Route::delete('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'delete']);
 
                 Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store']);
                 Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
+                Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
 
                 Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
                 Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminStore']);
                 Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminDelete']);
 
                 Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
-                Route::delete('/mountablearea/{mountablearea}', [APIMountableAreaController::class, 'delete']);
+                Route::put('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'store']);
+                Route::delete('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
             });

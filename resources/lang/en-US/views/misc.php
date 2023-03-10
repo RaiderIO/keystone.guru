@@ -43,6 +43,10 @@ return [
         'title'  => 'Embed a route',
         'header' => 'Keystone.guru embed test on webpage',
     ],
+    'health'     => [
+        'title'  => 'Health calculation',
+        'header' => 'Health',
+    ],
     'mapping'   => [
         'title'                         => 'Mapping',
         'header'                        => 'Mapping progress',

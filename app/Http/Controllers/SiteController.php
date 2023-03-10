@@ -125,6 +125,15 @@ class SiteController extends Controller
      * @param Request $request
      * @return Factory|View
      */
+    public function health(Request $request)
+    {
+        return view('misc.health');
+    }
+
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
     public function mapping(Request $request)
     {
         return view('misc.mapping');

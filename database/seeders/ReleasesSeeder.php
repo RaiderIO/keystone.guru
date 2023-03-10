@@ -21,7 +21,7 @@ class ReleasesSeeder extends Seeder
         $this->rollback();
 
         $this->command->info('Adding releases');
-        $rootDir         = database_path('/seeders/releases/');
+        $rootDir         = database_path('seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // Iterate over all saved releases

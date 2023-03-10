@@ -44,6 +44,7 @@ let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
  * @property {Number} seasonal_index
  * @property {Number} enemy_forces_override
  * @property {Number} enemy_forces_override_teeming
+ * @property {Number} dungeon_difficulty
  * @property {String} raid_marker_name
  * @property {Boolean} required
  * @property {Boolean} skippable
@@ -151,6 +152,19 @@ class Enemy extends VersionableMapObject {
                 name: 'enemy_forces_override_teeming',
                 type: 'int',
                 admin: true
+            }),
+            new Attribute({
+                name: 'dungeon_difficulty',
+                type: 'select',
+                admin: true,
+                values: [{
+                    id: DUNGEON_DIFFICULTY_10_MAN,
+                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_10_MAN}`)
+                }, {
+                    id: DUNGEON_DIFFICULTY_25_MAN,
+                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
+                }],
+                default: null,
             }),
             // new Attribute({
             //     name: 'npc',
@@ -732,6 +746,11 @@ class Enemy extends VersionableMapObject {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
                     return true;
                 }
+            }
+
+            if (this.hasOwnProperty('dungeon_difficulty')) {
+                // If our dungeon difficulty is null, always show it. Otherwise, only show it when our difficulty matches
+                return this.dungeon_difficulty !== null && mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
             }
         }
 

@@ -34,6 +34,7 @@ return [
         ],
 
         'scaling_factor' => 1.08,
+        'scaling_factor_past_10' => 1.10,
     ],
 
     'cache' => [

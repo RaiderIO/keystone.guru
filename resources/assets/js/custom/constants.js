@@ -113,6 +113,10 @@ const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
 
+// Dungeon Speedrun Required Npcs
+const DUNGEON_DIFFICULTY_10_MAN = 1;
+const DUNGEON_DIFFICULTY_25_MAN = 2;
+
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;
 const NPC_CLASSIFICATION_ID_ELITE = 2;
@@ -385,6 +389,10 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function () {
+                return '#5993D2';
+            },
             percentage_display_zoom_default: 3,
             getCurrentFloorPercentageDisplayZoom: function () {
                 return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;

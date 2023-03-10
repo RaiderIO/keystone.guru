@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -28,6 +29,8 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
         $rules = [
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
+
+            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
         ];
 
         // Validate demo state, optional or numeric

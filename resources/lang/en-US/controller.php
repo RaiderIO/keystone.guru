@@ -54,6 +54,12 @@ return [
         'this_week_affixes' => 'This week\'s affixes',
         'next_week_affixes' => 'Next week\'s affixes',
         'new'               => 'New',
+        'season'            => [
+            'popular'           => '%s popular routes',
+            'this_week_affixes' => '%s this week',
+            'next_week_affixes' => '%s next week',
+            'new'               => '%s new routes',
+        ],
         'dungeon'           => [
             'popular'           => '%s popular routes',
             'this_week_affixes' => '%s this week',
