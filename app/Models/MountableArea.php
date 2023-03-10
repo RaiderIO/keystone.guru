@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $mapping_version_id
  * @property int $floor_id
+ * @property int|null $speed
  * @property string $vertices_json
  *
  * @property Floor $floor
@@ -26,6 +27,7 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     public $fillable = [
         'mapping_version_id',
         'floor_id',
+        'speed',
         'vertices_json',
     ];
 
@@ -91,6 +93,14 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpeedOrDefault(): int
+    {
+        return $this->speed ?? config('keystoneguru.character.mounted_movement_speed_yards_second');
     }
 
     /**

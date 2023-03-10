@@ -428,16 +428,16 @@ return [
             'chaos_brand'                             => 'Chaos Brand',
             'hp_percent'                              => 'HP percentage',
             'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-            'bloodlust_per_pull'                      => 'Bloodlust/Heroism per pull',
+            'bloodlust_per_pull'                      => 'Bloodlust/Heroism per pull.',
             'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust/Heroism to the pull closest to the icon.',
-            'ranged_pull_compensation_yards'          => 'Ranged pull compensation in yards',
+            'ranged_pull_compensation_yards'          => 'Ranged pull compensation in yards.',
             'ranged_pull_compensation_yards_title'    => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
                 and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
                 max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
                 unless you\'re literally chain pulling with no down time in between.',
             'use_mounts'                              => 'Use mounts',
-            'use_mounts_title'                        => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull',
+            'use_mounts_title'                        => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
             'get_simulationcraft_string'              => 'Get SimulationCraft string',
             'simulationcraft_string'                  => 'Simulationcraft string',
             'loading'                                 => 'Loading...',

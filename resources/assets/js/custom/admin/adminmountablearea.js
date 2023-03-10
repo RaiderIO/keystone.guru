@@ -41,6 +41,12 @@ class AdminMountableArea extends VersionableMapObject {
                 default: getState().getCurrentFloor().id
             }),
             new Attribute({
+                name: 'speed',
+                type: 'int',
+                edit: true,
+                default: null
+            }),
+            new Attribute({
                 name: 'vertices',
                 type: 'array',
                 edit: false,

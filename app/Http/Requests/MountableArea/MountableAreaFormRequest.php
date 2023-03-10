@@ -30,6 +30,7 @@ class MountableAreaFormRequest extends FormRequest
             'id'                 => 'required:int',
             'mapping_version_id' => ['required', Rule::exists(MappingVersion::class, 'id')],
             'floor_id'           => ['required', Rule::exists(Floor::class, 'id')],
+            'speed'              => 'nullable|int',
             'vertices'           => 'required:array',
         ];
     }
