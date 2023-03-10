@@ -55,9 +55,11 @@ interface RaidEventPullInterface
 
     /**
      * @param float $ingameDistance
+     * @param float $factor
+     * @param int $speed
      * @return float
      */
-    public function calculateDelayForDistanceMounted(float $ingameDistance): float;
+    public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float;
 
     /**
      * @param float $ingameDistance

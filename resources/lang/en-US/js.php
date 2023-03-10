@@ -412,6 +412,7 @@ return [
     // Mountable area
     'mountablearea_faction_label'                                   => 'Faction',
     'mountablearea_teeming_label'                                   => 'Teeming',
+    'mountablearea_speed_label'                                     => 'Speed (yards p/s)',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Actions',
