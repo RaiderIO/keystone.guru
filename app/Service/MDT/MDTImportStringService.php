@@ -122,10 +122,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         }
 
                         $mapIconEnd = new MapIcon(array_merge([
-                            'floor_id'         => $enemy->floor_id,
-                            'dungeon_route_id' => $dungeonRoute->id,
-                            'map_icon_type_id' => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
-                            'comment'          => $obeliskMapIcon->mapicontype->name
+                            'mapping_version_id' => null,
+                            'floor_id'           => $enemy->floor_id,
+                            'dungeon_route_id'   => $dungeonRoute->id,
+                            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
+                            'comment'            => $obeliskMapIcon->mapicontype->name,
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
@@ -601,15 +602,24 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         // Map comment (n = note)
                         // MethodDungeonTools.lua:2523
                         else if (isset($object['n']) && $object['n']) {
-                            $mapComment           = new MapIcon();
-                            $mapComment->floor_id = $floor->id;
-                            // Bit hacky? But should work
-                            $mapComment->map_icon_type_id = MapIconType::where('key', MapIconType::MAP_ICON_TYPE_COMMENT)->firstOrFail()->id;
-                            $mapComment->comment          = $details[4];
+                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
 
-                            $latLng          = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
-                            $mapComment->lat = $latLng['lat'];
-                            $mapComment->lng = $latLng['lng'];
+                            $mapIconTypeId = MapIconType::MAP_ICON_TYPE_COMMENT;
+                            $commentLower  = strtolower($details[4]);
+                            if ($commentLower === 'heroism') {
+                                $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
+                            } else if ($commentLower === 'bloodlust') {
+                                $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
+                            }
+
+                            $mapComment = new MapIcon([
+                                'mapping_version_id' => null,
+                                'floor_id'           => $floor->id,
+                                'map_icon_type_id'   => MapIconType::where('key', $mapIconTypeId)->firstOrFail()->id,
+                                'comment'            => $details[4],
+                                'lat'                => $latLng['lat'],
+                                'lng'                => $latLng['lng'],
+                            ]);
 
                             if ($save) {
                                 // Save
