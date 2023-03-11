@@ -19,7 +19,8 @@
                 "change": "Internal: dungeons and their floors are now stored in the mapping instead of in seeders and can now be managed using the admin interface.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Internal: floors now have a configurable minimum and maximum enemy size. This will help scale down enemies in very busy dungeons, or make it feel less empty in dungeons with less enemies.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

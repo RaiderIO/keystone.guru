@@ -19,7 +19,8 @@
                 "change": "Affix selection for a route is no longer an advanced option. Route settings are now placed under a separate model which you can access from the header in the map view.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Your current action when editing a route can now be cancelled by pressing the Escape button.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Various minor mapping updates to Plaguefall, Sanguine Depths, The Necrotic Wake and Theater of Pain. Uncoupled some enemies from their packs, corrected Encrypted Relics, skippable enemies etc.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Shift-clicking enemies to create a new pull no longer causes the sidebar to bug out, demanding a full refresh of the page to fix.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Using the back button after navigating to a different floor no longer sometimes causes the map to bug out and cause 'undefined' to appear in the URL. This also happened when using the Draw tool - no longer!",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Switching floors and attempting to edit your route no longer cause many empty snackbars to appear in the bottom of the screen.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Editing a route's team through the route settings does not work in the map.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

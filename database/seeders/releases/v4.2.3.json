@@ -19,7 +19,8 @@
                 "change": "Fixed OAuth registered users not having a public key - this caused them some issues across the site.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

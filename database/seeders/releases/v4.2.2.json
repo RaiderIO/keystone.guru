@@ -19,7 +19,8 @@
                 "change": "You can now select a default color for your paths and free-drawn lines in the map settings menu.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Creating an anonymous route no longer requires you to be logged in. The intention of this feature is to allow you to try the site without being logged in, this was accidentally broken in a previous patch.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Editing a map icon awith a permanent tooltip will no longer reset that state when you edit said map icon. The tooltip will remain permanently on if you set it to be so.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

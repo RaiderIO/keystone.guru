@@ -19,7 +19,8 @@
                 "change": "Changelog page no longer crashes if you manually supply an invalid page number in the url.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Whatever the site thinks the current and next affixes are is now determined by your region (you can set this in your Profile if you're registered - otherwise US is assumed).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Embedded routes are no longer sometimes unresponsive upon page load.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

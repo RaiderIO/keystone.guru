@@ -16,19 +16,6 @@ $showHeader = $showHeader ?? true;
                     @endif
                 </h4>
             </div>
-            @if(Auth::check() && Auth::getUser()->hasRole('admin'))
-                <div class="col-auto cursor-pointer text-primary copy_release_format_reddit" data-id="{{$release->id}}">
-                    <i class="fab fa-reddit"></i>
-                </div>
-                <div class="col-auto cursor-pointer text-primary copy_release_format_discord ml-1"
-                     data-id="{{$release->id}}">
-                    <i class="fab fa-discord"></i>
-                </div>
-                <div class="col-auto cursor-pointer text-primary copy_release_format_github ml-1"
-                     data-id="{{$release->id}}">
-                    <i class="fab fa-github"></i>
-                </div>
-            @endif
         </div>
     @endif
     @if($release->changelog->description !== null)
@@ -46,7 +33,7 @@ $showHeader = $showHeader ?? true;
     @foreach ($release->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
         <p>
             <?php /** @var $change \App\Models\ReleaseChangelogChange */?>
-            {{ $categories->where('id', $categoryId)->first()->category }}:
+            {{ __($categories->where('id', $categoryId)->first()->name) }}:
         </p>
         <ul>
             @foreach ($groupedChange as $category => $change)

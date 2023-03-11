@@ -19,7 +19,8 @@
                 "change": "When you navigate floors on your route, the URL will change to show the floor you're currently on. Refreshing the page will bring you back to the floor you were on before (you can also link to floors for others as well, as a result).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Various performance enhancements (ongoing).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "If you put a kill area on a different floor than the enemies that are in the pull (no enemies on the same floor as the kill area) the kill area would not render correctly. This has been fixed.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Pull index on pulls with only one enemy are now shown.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Synchronized route editing now properly shows the map object's name when someone else made an adjustment ('T was changed by xyz').",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "When part of multiple teams, the team navigator dropdown no longer redirects you to a non-existing page.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Synchronized route editing no longer shows a disconnected state when you switch floors.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

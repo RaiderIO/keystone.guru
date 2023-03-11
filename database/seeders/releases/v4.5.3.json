@@ -19,7 +19,8 @@
                 "change": "You can now migrate Shadowlands non-Encrypted routes to Encrypted routes from the route overview's Actions dropdown.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Updated Russian localization (thanks raikuxq!)",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Enemies are no longer marked as Inspiring on the map if your route does not have the Inspiring affix assigned to it.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Pull percentages (or raw values) zoom level is now configurable per floor - this is useful when a floor is very small and you want to have the percentages show on all zoom levels, or the other way around instead.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Added various missing Relics in Mists and Sanguine Depths.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Both Tazavesh dungeons now have support for the Overpulled Enemies feature when using Live Sessions.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Removed various Relics around the 3rd boss in Plaguefall (Blizzard removed them).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "Subcreation tier list for Tazavesh: So'leah's Gambit now shows up properly in the Shadowlands routes overview and other locations.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Pull connections are now updated properly when you delete pulls, and add new pulls using shift + clicking an enemy.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Editing a route's details now properly shows that this route is assigned to a team (or not).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -119,7 +129,8 @@
                 "change": "Empty pulls no longer always generate a floor separator in the pulls sidebar.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -129,7 +140,8 @@
                 "change": "Fixed a crash when attempting to view routes while your username contains two (or more) spaces after one another.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -139,7 +151,8 @@
                 "change": "Various enemies that purposefully aren't included in the Keystone.guru mapping but exist in the MDT mapping no longer generate import warnings.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

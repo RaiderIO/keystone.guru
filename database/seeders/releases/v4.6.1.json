@@ -19,7 +19,8 @@
                 "change": "Updated Tazavesh mapping further and corrected enemy forces.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

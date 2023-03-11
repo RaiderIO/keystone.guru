@@ -19,7 +19,8 @@
                 "change": "Fixed backdrop z-index being too high, preventing people from being able to log in.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

@@ -19,7 +19,8 @@
                 "change": "Added a season selector for dungeons to the route table. You can now filter your routes on Shadowlands Season 4 so only those dungeons show up (is now also the default).",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Improved the performance of the map.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Route card for Operation Mechagon: Workshop, now properly shows the last floor in the overview (floor 2 is skipped).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Adding a new pull between existing pulls, and then deleting another pull no longer causes those new pulls to be assigned an incorrect pull index.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Non-season 4 dungeons are much less likely to show up when viewing routes for Shadowlands dungeons (like De Other Side etc).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Empty pulls no longer confuse the pulls connections feature.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

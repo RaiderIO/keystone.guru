@@ -19,7 +19,8 @@
                 "change": "Added a dark and white theme.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "You can now upload an avatar for your profile.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Added a new route discovery page, allowing you to easily find the routes you're looking for.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "If you still can't find what you're looking for, a dedicated search page allows you to to set custom filters to find exactly what you're looking for.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "https:\/\/mplus.subcreation.net\/ has been integrated in the above pages, allowing you to easily see the success rate of a dungeon for a specific affix.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Map settings have been completely reworked and many new options have been added.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

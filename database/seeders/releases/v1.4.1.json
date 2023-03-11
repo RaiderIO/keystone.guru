@@ -19,7 +19,8 @@
                 "change": "Added a dedicated page for Infested Voting and a way to summon a dungeon of your choice to do the voting on. You can find the page in the top navigation bar (or at https:\/\/keystone.guru\/infested), it contains instructions on how to get started.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Selected enemy visualisation will no longer reset to 'aggressiveness' when changing floors. Removed 'infested voting' option, this is now done through a special page and not through view\/editing of routes which was confusing and generally not very well done (see above).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Fixed Enemy Forces display in Microsoft Edge.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Atal'Dazar<ul>                 <li>                     Re-added Reanimation Totems to specific packs on the north side of the dungeon.                 <\/li>             <\/ul>",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Freehold<ul>                 <li>                     Added two missing Freehold Mules right after the second boss.                 <\/li>                 <li>                     Corrected some enemy NPCs around the Ring of Booty.                 <\/li>             <\/ul>",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Kings' Rest<ul>                 <li>                     Added three missing Embalming Fluids in the chamber at the second boss.                 <\/li>             <\/ul>",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Temple of Sethraliss<ul>                 <li>                     Removed Teeming status from two packs in the beginning; they show up on non-Teeming weeks as well.                 <\/li>                 <li>                     Added a missing Shrouded Fang that patrols around the first boss.                 <\/li>                 <li>                     Removed a duplicate Scale Krolusk Rider right after the cavern with Mature Krolusks.                 <\/li>             <\/ul>",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

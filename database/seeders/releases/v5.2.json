@@ -19,7 +19,8 @@
                 "change": "Added support for WotLK Classic speedrun raids.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

@@ -19,7 +19,8 @@
                 "change": "Map comment fixed width is removed; the comment now always scales to the width of the text.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

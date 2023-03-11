@@ -19,7 +19,8 @@
                 "change": "Attempting to navigate away from the page with unsaved changes will now prompt you to make sure you're okay with this.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Deleting a pull or map icon no longer crashes the map, rendering it useless.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

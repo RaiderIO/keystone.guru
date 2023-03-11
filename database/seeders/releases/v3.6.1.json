@@ -19,7 +19,8 @@
                 "change": "Fixed crash when no npc was assigned to an enemy.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

@@ -19,7 +19,8 @@
                 "change": "You can now start live sessions! A live session will allow you and your group to join a common room designed to help you while doing your key in-game.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Once you have started a live session from either the route overview or route edit page, you can select a pull and then enemies that you have overpulled. Keystone.guru will then suggest enemies to skip further on in your route (if any), while still landing you as close to 100% enemy forces as possible.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "While in a live session, you can also follow another person's map movements around - you can let the dps you like the least handle the map scrolling while the tank can focus on doing what they do best.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Added Tormented affix support across the site.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

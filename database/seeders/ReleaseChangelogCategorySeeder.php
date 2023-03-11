@@ -18,20 +18,12 @@ class ReleaseChangelogCategorySeeder extends Seeder
         $this->rollback();
         $this->command->info('Adding known release changelog categories');
 
-        $categories = [
-            new ReleaseChangelogCategory(['category' => 'General changes']),
-            new ReleaseChangelogCategory(['category' => 'Route changes']),
-            new ReleaseChangelogCategory(['category' => 'Map changes']),
-            new ReleaseChangelogCategory(['category' => 'Mapping changes']),
-            new ReleaseChangelogCategory(['category' => 'Bugfixes']),
-            new ReleaseChangelogCategory(['category' => 'MDT importer changes']),
-            new ReleaseChangelogCategory(['category' => 'Team changes']),
-            new ReleaseChangelogCategory(['category' => 'MDT exporter changes']),
-            new ReleaseChangelogCategory(['category' => 'Live session changes']),
-        ];
-
-        foreach ($categories as $category) {
-            $category->save();
+        foreach (ReleaseChangelogCategory::ALL as $key => $id) {
+            ReleaseChangelogCategory::create([
+                'id'   => $id,
+                'key'  => $key,
+                'name' => sprintf('releasechangelogcategories.%s', $key),
+            ]);
         }
     }
 

@@ -19,7 +19,8 @@
                 "change": "Fixed various reported mapping issues and MDT importer\/exporter issues, mainly for Legion dungeons.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

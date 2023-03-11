@@ -19,7 +19,8 @@
                 "change": "Reduced the time it takes to update the website. Should be around 3 mins now instead of 8 mins.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Added map icons for Misdirection and Tricks of the Trade.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Keystone.guru is now using a custom version of MDT which has all WotLK dungeons added. This fixes empty strings for dungeons when exported\/imported. Note: if MDT drastically changes the implementation when merging (don't think they will) the strings may break.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Relevant enemies are now marked as skippable, re-enabling live session functionality of overpulled enemies for Dragonflight Season 1 dungeons.",
                 "category": {
                     "id": 9,
-                    "category": "Live session changes"
+                    "key": "live_session_changes",
+                    "name": "releasechangelogcategories.live_session_changes"
                 }
             }
         ]

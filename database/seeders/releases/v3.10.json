@@ -19,7 +19,8 @@
                 "change": "A \"New pull\" button in the pull sidebar allows you to do just that! Alternatively, you can simply press enemies to create pulls (the way it already has been).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "De Other Side: various mapping improvements (enemy forces to mob counts).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Theater of Pain: added missing final boss and various other mini-bosses that were missing. Added a missing Shackled Soul. Various floor switch markers have been added or corrected. Many enemies are no longer incorrectly marked as Humanoid.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Halls of Atonement: added missing health values, corrected a lot of enemies and enemy force values.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Necrotic Wake: added missing Bloody Javelin, corrected a lot of enemy forces values.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Sanguine Depths: added missing enemies (beginning and second floor), corrected a lot of enemy forces values. Corrected floor switch markers.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Plaguefall: corrected Rigged Plagueborer health value.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "Spires of Ascension: corrected health value for Forsworn Usurper and Forsworn Inquisitor.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Viewing a route now once again shows proper percentages for each pull.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Theater of Pain is now supported when importing MDT strings, this was missing before. My bad!",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

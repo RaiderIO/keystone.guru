@@ -19,7 +19,8 @@
                 "change": "Added Naxxramas (many thanks to Cosmophile for adding it!)",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

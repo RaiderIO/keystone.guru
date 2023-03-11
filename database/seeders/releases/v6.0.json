@@ -19,7 +19,8 @@
                 "change": "The way pulls are saved and handled changed drastically - you should notice nothing of this but this was a major overhaul required to align mapping with MythicDungeonTools.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Enemies are now able to be linked with their patrols (will be active when Keystone.guru switches to use MythicDungeonTools mapping).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

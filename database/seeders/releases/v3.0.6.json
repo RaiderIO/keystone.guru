@@ -19,7 +19,8 @@
                 "change": "Pull indices are now visible on all pulls to help identification.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Pulls are now loaded once instead of every time you switch a floor. Fixed various issues when switching floors. Increased general performance.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]
