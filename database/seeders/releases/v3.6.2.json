@@ -19,7 +19,8 @@
                 "change": "Admin: coupling enemies to a pack now works properly again.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

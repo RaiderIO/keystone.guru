@@ -19,7 +19,8 @@
                 "change": "Added new neon colored button Map Icons.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Fixed floor selection being empty when in map view.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

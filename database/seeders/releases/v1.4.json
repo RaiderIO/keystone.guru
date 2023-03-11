@@ -19,7 +19,8 @@
                 "change": "Added titles for all pages on the website. This will aid multi browser-tab usage.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "The view and edit pages for routes are completely reworked. The map is now full screen, a toggleable sidebar holds all interaction\/information. Because of the increased screen real-estate for the map, a new zoom level has been added.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Fixed an issue where Infested Voting information was not available on the tryout version. Voting is still not possible if you're not logged in.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Fixed an issue where you could attempt to assign raid markers to enemies in view mode (didn't work, but still). I also think I re-introduced this bug so hopefully it stays gone for a while now.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Many small changes and improvements to the mapping experience.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

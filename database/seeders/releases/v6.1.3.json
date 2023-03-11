@@ -19,7 +19,8 @@
                 "change": "Import of MDT strings is now functional again.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

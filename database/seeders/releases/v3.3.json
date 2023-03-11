@@ -19,7 +19,8 @@
                 "change": "When editing your Team\/Profile you can now instantly navigate to a specific section using URL anchors. Refreshing the page will now put you back where you were.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Various admin page improvements.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "A list of information about an enemy is displayed in the edit sidebar as you mouse over enemies.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "From this information panel, you can now see if the enemy Bolsters others or not. This also shows what specific enemies the current enemy may also bolster. Think Soggy Shiprats, or the adds of Sam'rekh (fear Awakened enemy) (they don't bolster anything else but their own kind).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "From this information panel, you can now see if the enemy Bursts or not.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "From this information panel, you can now see if the enemy spawns a Sanguine pool or not.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "To make space for the above, the draw settings have been moved to a modal, activated by a new \"Draw Settings\" button.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "From this modal, you can now select the draw gradient to be applied continuously as you make adjustments. The gradient is now also per-route and not per-browser.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "From the enemy information panel you can now report issues with enemies. I will review any reports manually and make adjustments as necessary.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Added various exclamation and question marks.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

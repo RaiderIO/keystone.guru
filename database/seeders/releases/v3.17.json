@@ -19,7 +19,8 @@
                 "change": "Route thumbnails now generate a cropped image which fully views your route instead of the entire dungeon.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "BFA's demo routes have been retired and new Shadowlands routes have been added, courtesy Petko <Echo>.",
                 "category": {
                     "id": 2,
-                    "category": "Route changes"
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "The \"Create new pull\" button will now stick to the top as you scroll through pulls.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "In the pulls sidebar, a new settings button was added. Under these settings, you can now opt to delete all the current pulls in your route.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "You can now toggle route number style between percentage or raw enemy forces.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Added new map icons for Covenants and new portal icons for Theater of Pain. Thank you Jastola!",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "The Necrotic Wake: Added a missing Discarded Shield before the second boss - just as you crossed the bridge on the right.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "Saving a route's settings no longer causes all enemies from other floors to appear on the map.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Interacting with an empty pull (moving, deleting) will no longer clear your entire route of enemies. Hotfixed this morning. Thanks to T. Simmons and Primar for helping me debug this issue.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Right clicking an enemy once again allows you to assign raid markers.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -119,7 +129,8 @@
                 "change": "Creating new pulls in very rapid succession (using shift + click) no longer creates pulls with duplicate index numbers.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -129,7 +140,8 @@
                 "change": "The MDT importer no longer shows the Faction field if it was not relevant for the route.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             },
             {
@@ -139,7 +151,8 @@
                 "change": "Affixes now import correctly.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             },
             {
@@ -149,7 +162,8 @@
                 "change": "When an unknown enemy was encountered, parsing of the pull will now continue instead of discarding the entire pull.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

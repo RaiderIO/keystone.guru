@@ -19,7 +19,8 @@
                 "change": "Fixed affixes page and calculations on what the current affixes should be",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

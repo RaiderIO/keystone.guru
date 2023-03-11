@@ -406,6 +406,7 @@ return [
     // Mountable area
     'mountablearea_faction_label'                                   => '@todo ru: .mountablearea_faction_label',
     'mountablearea_teeming_label'                                   => '@todo ru: .mountablearea_teeming_label',
+    'mountablearea_speed_label'                                     => '@todo ru-RU: .mountablearea_speed_label',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Действия',

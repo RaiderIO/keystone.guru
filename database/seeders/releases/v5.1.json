@@ -19,7 +19,8 @@
                 "change": "Wrath of the Lich King dungeons added (massive thanks to G\u00fcnther for doing the mapping effort).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Route previews no longer show mountable areas (which is hidden by default normally).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

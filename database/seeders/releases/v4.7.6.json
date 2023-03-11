@@ -19,7 +19,8 @@
                 "change": "MDT importer\/exporter available for all season 4 dungeons",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

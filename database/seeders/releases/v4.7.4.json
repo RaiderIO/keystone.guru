@@ -19,7 +19,8 @@
                 "change": "Awakened mini bosses should no longer show up in Mechagon if your route does not have Awakened affix set. Obelisks are a WIP still.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Shrouded Infiltrators and Zul'gamox now award the correct enemy forces per dungeon.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Iron Docks: added missing enemy forces & Shrouded\/Inspiring enemies.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Tazavesh: Streets of Wonder: Added all new Shrouded enemies.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

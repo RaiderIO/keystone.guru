@@ -19,7 +19,8 @@
                 "change": "Added Dratnos' routes as Demo routes (with permission).",
                 "category": {
                     "id": 2,
-                    "category": "Route changes"
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "<ul>     <li>         Freehold         <ul>             <li>An Awakened Obelisk was not properly linked to A\/B week, causing it to sometimes show up twice. This has been corrected.<\/li>         <\/ul>     <\/li>     <li>         Shrine of the Storm         <ul>             <li>The Awakened Obelisk at the 3rd boss has been placed downstairs where it actually is.<\/li>         <\/ul>     <\/li>     <li>         Temple of Sethraliss         <ul>             <li>Brutal Awakened Obelisk was accidentally placed twice - one has been replaced with the correct one.<\/li>         <\/ul>     <\/li>     <li>         Tol Dagor         <ul>             <li>An Awakened Obelisk was not properly linked to A\/B week, causing it to sometimes show up twice. This has been corrected.<\/li>         <\/ul>     <\/li> <\/ul>",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Imported Awakened Obelisk path + icons were not linked to the obelisk - this caused trying to re-set the link to not remove the previously set path + icon.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Tol Dagor: Cutwater Strikers are now imported properly (a bug in MDT causes this).",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Siege of Boralus: Kul Tiran Footman are now imported properly (a bug in MDT causes this).",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

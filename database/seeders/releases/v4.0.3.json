@@ -19,7 +19,8 @@
                 "change": "Temporary routes will no longer all be wiped at midnight GMT +2 but only be removed when they actually expire.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Fixed new release popup from showing up in generated thumbnails.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Map icons can now once again be assigned a permanent tooltip. Thanks \/u\/Twine52!",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

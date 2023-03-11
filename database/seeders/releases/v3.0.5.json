@@ -19,7 +19,8 @@
                 "change": "Various improvements in mapping (fixed enemy forces, MDT linking etc.) Also fixed a few issues with the MDT importer sometimes not fully recognizing all enemies you pulled.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "On Teeming weeks, all Awakened bosses now give 6 points instead of 4. Also fixed some potential errors in the way enemy forces are calculated. The routes page should also load a bit quicker now (though still working on making it faster).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

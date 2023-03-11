@@ -19,7 +19,8 @@
                 "change": "Prideful routes no longer show up ahead of Tormented routes in route browsing.",
                 "category": {
                     "id": 2,
-                    "category": "Route changes"
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Improved performance of re-ordering pulls. Not 100% done, but it won't freeze your browser anymore.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Added preset 2 of Tormented enemies.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

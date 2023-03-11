@@ -19,7 +19,8 @@
                 "change": "Enemy forces are no longer calculated on the fly but whenever changes are made to your route. This speeds up various pages and processes, such as the \/routes page.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "You can now create custom personal tags and team tags for your routes. You can organize your routes the way you want by attaching tags and then search on the tags that are attached to your routes. Separately, teams can tag the routes that are part of them while personal tags will not be visible and vice versa!",
                 "category": {
                     "id": 2,
-                    "category": "Route changes"
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Ctrl + clicking an enemy inside a pack while editing a pull will add just that enemy to your pull.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Spires of Ascension: removed a Forsworn Annihilator from the second island when going right - this enemy is no longer there.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Sharing a link to the view page of a sandbox route will no longer cause a 500 error. Though this behaviour is not advertised, I do believe it should work so you can quickly mock a route and share it with others.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Hotfixed a few days ago - exporting MDT strings would sometimes cause a 400 Bad Request error.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Prideful enemies are now imported from MDT strings.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

@@ -12,6 +12,7 @@ export default {
     'en-US.npcclassifications': require('../../lang/en-US/npcclassifications.php'),
     'en-US.patreonbenefits': require('../../lang/en-US/patreonbenefits.php'),
     'en-US.races': require('../../lang/en-US/races.php'),
+    'en-US.releasechangelogcategories': require('../../lang/en-US/releasechangelogcategories.php'),
     'en-US.specializations': require('../../lang/en-US/specializations.php'),
     'en-US.teamroles': require('../../lang/en-US/teamroles.php'),
 
@@ -27,6 +28,7 @@ export default {
     'de-DE.npcclassifications': require('../../lang/de-DE/npcclassifications.php'),
     'de-DE.patreonbenefits': require('../../lang/de-DE/patreonbenefits.php'),
     'de-DE.races': require('../../lang/de-DE/races.php'),
+    'de-DE.releasechangelogcategories': require('../../lang/de-DE/releasechangelogcategories.php'),
     'de-DE.specializations': require('../../lang/de-DE/specializations.php'),
     'de-DE.teamroles': require('../../lang/de-DE/teamroles.php'),
 
@@ -42,6 +44,7 @@ export default {
     'ru-RU.npcclassifications': require('../../lang/ru-RU/npcclassifications.php'),
     'ru-RU.patreonbenefits': require('../../lang/ru-RU/patreonbenefits.php'),
     'ru-RU.races': require('../../lang/ru-RU/races.php'),
+    'ru-RU.releasechangelogcategories': require('../../lang/ru-RU/releasechangelogcategories.php'),
     'ru-RU.specializations': require('../../lang/ru-RU/specializations.php'),
     'ru-RU.teamroles': require('../../lang/ru-RU/teamroles.php'),
 }

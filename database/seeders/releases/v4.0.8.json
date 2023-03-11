@@ -19,7 +19,8 @@
                 "change": "The routes page now increasingly penalizes routes for each affix that they have assigned to the route. More specific routes tailored for that affix will now rise to the top instead of generic 'catch all' routes. This will also make the routes page less static.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Subcreation tier lists are now showing up again properly on the routes page. Was hotfixed prior to this release.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "A rare bug with certain MDT strings preventing their import was resolved.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

@@ -19,7 +19,8 @@
                 "change": "Searching for a route outside of the current season's dungeons no longer returns an empty page (hotfixed a few days ago).",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Route cards in the Discover Routes section now also show the seasonal affix assigned to that route (aside from Fortified\/Tyrannical routes).",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Your pulls will now show Shrouded enemies and the amount of buffs that you have accumulated.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "By accessing the Route Settings of your route, you can now migrate your route to Shrouded routes (you could already do this from the Actions menu in the route overview, through Shrouded migration is new).",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Creating a route that's not in Shadowlands officially, but is part of Season 4 no longer assigns the wrong affixes to the route. For example, Mechagon would be assigned Awakened affixes.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Routes that aren't in the current season now show their affixes selection again from the Route Settings menu.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

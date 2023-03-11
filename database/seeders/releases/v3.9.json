@@ -19,7 +19,8 @@
                 "change": "All non-Shadowlands dungeons have been unpublished; you may still opt to re-publish them if you so desire (more on legacy dungeons later).",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Pulls in the pulls sidebar will no longer display enemy forces but a percentage instead. This is aimed to help people plan their routes around the Prideful affix. In the future a toggle\/setting will be introduced.",
                 "category": {
                     "id": 2,
-                    "category": "Route changes"
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Touched up the Virtual Tour.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Many minor mapping updates to a lot of dungeons. If you find any issues, please use the 'Report an issue' button when hovering your mouse over an enemy to report an issue directly. Thanks in advance!",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Fixed an issue with Necrotic Wake route importing from MDT.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Visibility toggles from the navigation sidebar now work properly even when switching floors.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Enemy forces in the pulls sidebar at the top would not update properly when creating new pulls - it was always lagging behind. This has been resolved.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "When using live route synchronization (when using a Team) pulls will now get synchronized properly if a pull did not have a killzone assigned to it.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Removed the option to create Teeming routes since Teeming is no longer an affix in Shadowlands. All Shadowlands routes that were marked as Teeming have been reset to their non-Teeming versions.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Switching floors now properly removes the polygon that surrounds the enemies that make up your pull in all cases.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -119,7 +129,8 @@
                 "change": "Using an ad-blocker no longer causes issues when viewing routes. There are currently no ads on this page anyways.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

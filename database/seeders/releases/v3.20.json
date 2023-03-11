@@ -19,7 +19,8 @@
                 "change": "Completely rebuilt ads on the website. I kept the ad placement the same, except for new sticky ads on mobile which may be hidden from view. The map view will now also display an ad. I realise nobody likes ads, but they're necessary to pay the bills. You're free to use an adblocker however, I've made sure it should be easy to block them if you so desire. Alternatively, becoming a patron on https:\/\/www.patreon.com\/keystoneguru will also remove all ads for $1 a month. Feedback always welcome, and thanks for your understanding!",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Zooming can now be done more granularly, the zoom ticks will not be as big as before.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Hovering over an enemy pack now displays the total amount of percentage\/enemy forces in that pack.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Switching between percentage and enemy forces style will now also switch enemies 'enemy forces' visualization to percentages if you have that selected.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "On mobile, the sidebars would start opened by default, this has been changed to start hidden by default as was intended.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Hotfixed earlier: imported MDT routes did not have enemy forces assigned, this has been rectified.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Hovering over enemies on the map would be a bit clunky and not always properly highlight an enemy even though your mouse was hovering over it. This works silky smooth now.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "Teams no longer have their name in the URL - they have all been assigned a public key instead. Using names will still work for some time but will be removed at a later stage.",
                 "category": {
                     "id": 7,
-                    "category": "Team changes"
+                    "key": "team_changes",
+                    "name": "releasechangelogcategories.team_changes"
                 }
             }
         ]
