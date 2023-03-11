@@ -46,9 +46,9 @@ class DungeonRouteDiscoverController extends Controller
      * @throws \Exception
      */
     public function discoverSeason(
-        Expansion                 $expansion,
-        string                    $seasonIndex,
-        DiscoverServiceInterface  $discoverService
+        Expansion                $expansion,
+        string                   $seasonIndex,
+        DiscoverServiceInterface $discoverService
     )
     {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
@@ -80,12 +80,172 @@ class DungeonRouteDiscoverController extends Controller
             'breadcrumbsParams' => [$expansion, $season],
             'gridDungeons'      => $season->dungeons()->active()->get(),
             'expansion'         => $expansion,
+            'season'            => $season,
             'dungeonroutes'     => [
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
                 'new'      => $discoverService->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],
+        ]);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param string $seasonIndex
+     * @param DiscoverServiceInterface $discoverService
+     * @return Factory|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeasonPopular(
+        Expansion                $expansion,
+        string                   $seasonIndex,
+        DiscoverServiceInterface $discoverService
+    )
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        return view('dungeonroute.discover.season.category', [
+            'breadcrumbs'       => 'dungeonroutes.season.popular',
+            'breadcrumbsParams' => [$expansion, $season],
+            'expansion'         => $expansion,
+            'category'          => 'popular',
+            'title'             => sprintf(__('controller.dungeonroutediscover.season.popular'), __($season->name)),
+            'season'            => $season,
+            'dungeonroutes'     => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popularBySeason($season),
+        ]);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param string $seasonIndex
+     * @param DiscoverServiceInterface $discoverService
+     * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface $seasonService
+     * @return Factory|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeasonThisWeek(
+        Expansion                 $expansion,
+        string                    $seasonIndex,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService,
+        SeasonServiceInterface    $seasonService)
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
+
+        return view('dungeonroute.discover.season.category', [
+            'breadcrumbs'       => 'dungeonroutes.season.thisweek',
+            'breadcrumbsParams' => [$expansion, $season],
+            'expansion'         => $expansion,
+            'category'          => 'thisweek',
+            'title'             => sprintf(__('controller.dungeonroutediscover.season.this_week_affixes'), __($season->name)),
+            'season'            => $season,
+            'dungeonroutes'     => $affixGroup === null ? collect() : $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popularBySeasonAndAffixGroup($season, $affixGroup),
+            'affixgroup'        => $affixGroup,
+        ]);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param Dungeon $dungeon
+     * @param DiscoverServiceInterface $discoverService
+     * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface $seasonService
+     * @return Factory|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeasonNextWeek(
+        Expansion                 $expansion,
+        string                    $seasonIndex,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService,
+        SeasonServiceInterface    $seasonService)
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
+
+        return view('dungeonroute.discover.season.category', [
+            'breadcrumbs'       => 'dungeonroutes.season.nextweek',
+            'breadcrumbsParams' => [$expansion, $season],
+            'expansion'         => $expansion,
+            'category'          => 'nextweek',
+            'title'             => sprintf(__('controller.dungeonroutediscover.season.next_week_affixes'), __($season->name)),
+            'season'            => $season,
+            'dungeonroutes'     => $affixGroup === null ? collect() : $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popularBySeasonAndAffixGroup($season, $affixGroup),
+            'affixgroup'        => $affixGroup,
+        ]);
+    }
+
+    /**
+     * @param Expansion $expansion
+     * @param string $seasonIndex
+     * @param DiscoverServiceInterface $discoverService
+     * @return Factory|RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function discoverSeasonNew(
+        Expansion                $expansion,
+        string                   $seasonIndex,
+        DiscoverServiceInterface $discoverService)
+    {
+        $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
+
+        // Redirect to the current expansion
+        if ($season === null) {
+            return redirect()->route('dungeonroutes');
+        }
+
+        $this->authorize('view', $expansion);
+        $this->authorize('view', $season);
+
+        return view('dungeonroute.discover.season.category', [
+            'breadcrumbs'       => 'dungeonroutes.season.new',
+            'breadcrumbsParams' => [$expansion, $season],
+            'expansion'         => $expansion,
+            'category'          => 'new',
+            'title'             => sprintf(__('controller.dungeonroutediscover.season.new'), __($season->name)),
+            'season'            => $season,
+            'dungeonroutes'     => $discoverService
+                ->withExpansion($expansion)
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->newBySeason($season),
         ]);
     }
 

@@ -34,6 +34,7 @@ trait DungeonRouteTrait
             'enemyForces'             => $dungeonRoute->enemy_forces,
             'levelMin'                => $dungeonRoute->level_min,
             'levelMax'                => $dungeonRoute->level_max,
+            'dungeonDifficulty'       => $dungeonRoute->dungeon_difficulty,
 
             'mappingVersionUpgradeUrl' => route('dungeonroute.upgrade', [
                 'dungeon'      => $dungeonRoute->dungeon,

@@ -19,7 +19,8 @@
                 "change": "Awakened, Prideful and Inspiring enemies are now more visible on the map and\/or the pull sidebar on the right.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "You can now hold the shift-button while clicking on an enemy to force create a new pull when you have another pull selected. This should speed up the creation of routes significantly.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "All bosses are now marked as Dangerous.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "De Other Side: Added an Inspiring enemy in the first pack of the dungeon.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Spires of Ascension: Three enemies were inside the contours of a pack, but were not actually assigned to the pack. This has been corrected.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Switching floors when your route key starts with a number (such as '3DfzdfTd'), switching floors will no longer change your URL to an invalid one which will return a 404 when you hit refresh.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Accessing a Spires of Ascension route now opens the map on the first floor, instead of the second.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "Registering through an OAuth provider (Battle.net, Google, Discord) no longer leaves your Synchronized Route Color blank - causing some minor script errors along the way.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Moving a Prideful enemy outside of the contours of the pull it's in will now update the contours to include it once again.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

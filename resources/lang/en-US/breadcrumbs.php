@@ -9,12 +9,19 @@ return [
         'routes_expansion' => ':expansion routes',
 
         'dungeonroutes' => [
-            'season'            => 'Season :season',
             'search'            => 'Search',
             'popular'           => 'Popular',
             'next_week_affixes' => 'Next week\'s affixes',
             'this_week_affixes' => 'This week\'s affixes',
             'new'               => 'New',
+
+            'routes_season'            => 'Season :season',
+            'season' => [
+                'popular'           => 'Popular',
+                'next_week_affixes' => 'Next week\'s affixes',
+                'this_week_affixes' => 'This week\'s affixes',
+                'new'               => 'New',
+            ],
 
             'discoverdungeon' => [
                 'popular'           => 'Popular',
@@ -66,7 +73,8 @@ return [
             ],
 
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc' => 'New '
+                'new_dungeonspeedrunrequirednpc10man' => 'New 10-man Dungeon Speedrun Required NPC',
+                'new_dungeonspeedrunrequirednpc25man' => 'New 25-man Dungeon Speedrun Required NPC',
             ],
 
             'npcs' => [

@@ -37,7 +37,7 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     use HasLinkedAwakenedObelisk;
 
     protected $visible = ['id', 'mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
-    protected $fillable = ['floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $fillable = ['mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
     protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
 
     protected $with = ['mapicontype', 'linkedawakenedobelisks'];
@@ -89,10 +89,10 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
-        return $this->floor->dungeon_id;
+        return optional($this->floor)->dungeon_id ?? null;
     }
 }

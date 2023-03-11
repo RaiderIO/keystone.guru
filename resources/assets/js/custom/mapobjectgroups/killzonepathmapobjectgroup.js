@@ -38,7 +38,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      * @inheritDoc
      */
     _createMapObject(layer, options = {}) {
-        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
+        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not a KillZonePathMapObjectGroup', this);
 
         return new KillZonePath(this.manager.map, layer);
     }
@@ -232,7 +232,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     }
 
     load() {
-        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
+        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not a KillZonePathMapObjectGroup', this);
 
         let killzoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.register('killzone:changed', this, this._refresh.bind(this));
@@ -254,7 +254,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      * @returns {Path}
      */
     createNewPath(vertices, options) {
-        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not an KillZonePathMapObjectGroup', this);
+        console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not a KillZonePathMapObjectGroup', this);
 
         let path = this._loadMapObject($.extend(true, {}, {
             id: this.currentId++,

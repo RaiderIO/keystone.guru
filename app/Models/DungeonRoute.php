@@ -64,6 +64,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string $pull_gradient
  * @property boolean $pull_gradient_apply_always
  *
+ * @property int $dungeon_difficulty
+ *
  * @property int $views
  * @property int $views_embed
  * @property int $popularity
@@ -665,6 +667,8 @@ class DungeonRoute extends Model
         $this->pull_gradient              = '';
         $this->pull_gradient_apply_always = 0;
 
+        $this->dungeon_difficulty = $request->get('dungeon_difficulty');
+
         $this->title      = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
@@ -729,6 +733,8 @@ class DungeonRoute extends Model
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
+
+        $this->dungeon_difficulty = $request->get('dungeon_difficulty', null);
 
         // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
         $this->unsetRelations();
@@ -801,35 +807,39 @@ class DungeonRoute extends Model
 
                 $dungeonActiveSeason = $this->dungeon->getActiveSeason($seasonService);
 
-                foreach ($newAffixes as $value) {
-                    $value = (int)$value;
+                if ($dungeonActiveSeason === null) {
+                    $this->ensureAffixGroup($seasonService, $expansionService);
+                } else {
+                    foreach ($newAffixes as $value) {
+                        $value = (int)$value;
 
-                    if ($dungeonActiveSeason->affixgroups->filter(function (AffixGroup $affixGroup) use ($value) {
-                        return $affixGroup->id === $value;
-                    })->isEmpty()) {
-                        // Attempted to assign an affix that the dungeon cannot have - abort it
-                        continue;
+                        if ($dungeonActiveSeason->affixgroups->filter(function (AffixGroup $affixGroup) use ($value) {
+                            return $affixGroup->id === $value;
+                        })->isEmpty()) {
+                            // Attempted to assign an affix that the dungeon cannot have - abort it
+                            continue;
+                        }
+
+                        // Check disabled to support dungeons not being tied to expansions but to seasons instead.
+                        // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
+                        // Skip any affixes that don't exist, and don't match our current expansion
+                        // if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
+                        //     continue;
+                        // }
+
+                        /** @var AffixGroup $affixGroup */
+                        $affixGroup = AffixGroup::find($value);
+
+                        // Do not add affixes that do not belong to our Teeming selection
+                        if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
+                            continue;
+                        }
+
+                        DungeonRouteAffixGroup::create([
+                            'dungeon_route_id' => $this->id,
+                            'affix_group_id'   => $affixGroup->id,
+                        ]);
                     }
-
-                    // Check disabled to support dungeons not being tied to expansions but to seasons instead.
-                    // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
-                    // Skip any affixes that don't exist, and don't match our current expansion
-                    // if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
-                    //     continue;
-                    // }
-
-                    /** @var AffixGroup $affixGroup */
-                    $affixGroup = AffixGroup::find($value);
-
-                    // Do not add affixes that do not belong to our Teeming selection
-                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
-                        continue;
-                    }
-
-                    DungeonRouteAffixGroup::create([
-                        'dungeon_route_id' => $this->id,
-                        'affix_group_id'   => $affixGroup->id,
-                    ]);
                 }
 
                 // Reload the affixes relation

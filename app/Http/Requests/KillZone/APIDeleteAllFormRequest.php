@@ -4,7 +4,7 @@ namespace App\Http\Requests\KillZone;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteAllFormRequest extends FormRequest
+class APIDeleteAllFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

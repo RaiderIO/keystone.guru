@@ -457,44 +457,57 @@ class AdminToolsController extends Controller
      */
     public function importingamecoordinatessubmit(Request $request)
     {
-        // Parse all Map CSV data and convert them to a workable format
-        $mapCsv                   = $request->get('map_csv');
-        $mapCsvParsed             = str_getcsv_assoc($mapCsv);
-        $mapCsvHeaders            = array_shift($mapCsvParsed);
-        $mapCsvHeaderIndexMapName = array_search('MapName_lang', $mapCsvHeaders);
-        $mapCsvHeaderIndexMapId   = array_search('ID', $mapCsvHeaders);
+        // Parse all Map TABLE data and convert them to a workable format
+        $mapTable                   = $request->get('map_table_xhr_response');
+        $mapTableParsed             = json_decode($mapTable, true)['data'];
+        $mapTableHeaders            = [
+            'ID', 'Directory', 'MapName_lang', 'MapDescription0_lang', 'MapDescription1_lang', 'PvpShortDescription_lang',
+            'Corpse[0]', 'Corpse[1]', 'MapType', 'InstanceType', 'ExpansionID', 'AreaTableID', 'LoadingScreenID',
+            'TimeOfDayOverride', 'ParentMapId', 'CosmeticParentMapID', 'TimeOffset', 'MinimapIconScale', 'CorpseMapID',
+            'MaxPlayers', 'WindSettingsID', 'ZmpFileDataID', 'WdtFileDataID', 'NavigationMaxDistance', 'Flags[0]',
+            'Flags[1]', 'Flags[2]',
+        ];
+        $mapTableHeaderIndexMapName = array_search('MapName_lang', $mapTableHeaders);
+        $mapTableHeaderIndexMapId   = array_search('ID', $mapTableHeaders);
 
-        // Parse all Map Group Member CSV data and convert them to a workable format
-        $mapGroupMemberCsv                    = $request->get('ui_map_group_member_csv');
-        $mapGroupMemberCsvParsed              = str_getcsv_assoc($mapGroupMemberCsv);
-        $mapGroupMemberCsvHeaders             = array_shift($mapGroupMemberCsvParsed);
-        $mapGroupMemberCsvHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberCsvHeaders);
-        $mapGroupMemberCsvHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberCsvHeaders);
+        // Parse all Map Group Member TABLE data and convert them to a workable format
+        $mapGroupMemberTable                    = $request->get('ui_map_group_member_table_xhr_response');
+        $mapGroupMemberTableParsed              = json_decode($mapGroupMemberTable, true)['data'];
+        $mapGroupMemberTableHeaders             = [
+            'ID', 'Name_lang', 'UiMapGroupID', 'UiMapID', 'FloorIndex', 'RelativeHeightIndex',
+        ];
+        $mapGroupMemberTableHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberTableHeaders);
+        $mapGroupMemberTableHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberTableHeaders);
 
-        // Parse all UI Map Assignment CSV data and convert them to a workable format
-        $uiMapAssignmentCsv                      = $request->get('ui_map_assignment_csv');
-        $uiMapAssignmentCsvParsed                = str_getcsv_assoc($uiMapAssignmentCsv);
-        $uiMapAssignmentCsvHeaders               = array_shift($uiMapAssignmentCsvParsed);
-        $uiMapAssignmentCsvHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentCsvHeaders);
-        $uiMapAssignmentCsvHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentCsvHeaders);
+        // Parse all UI Map Assignment TABLE data and convert them to a workable format
+        $uiMapAssignmentTable       = $request->get('ui_map_assignment_table_xhr_response');
+        $uiMapAssignmentTableParsed = json_decode($uiMapAssignmentTable, true)['data'];
+
+        $uiMapAssignmentTableHeaders               = [
+            'UiMin[0]', 'UiMin[1]', 'UiMax[0]', 'UiMax[1]', 'Region[0]', 'Region[1]', 'Region[2]',
+            'Region[3]', 'Region[4]', 'Region[5]', 'ID', 'UiMapID', 'OrderIndex', 'MapID', 'AreaID',
+            'WMODoodadPlacementID', 'WMOGroupID',
+        ];
+        $uiMapAssignmentTableHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders);
 
         /** @var Collection|Dungeon[] $allDungeons */
-//        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_IRON_DOCKS)->get()->keyBy('id');
-        $allDungeons = Dungeon::all()->keyBy('id');
+//        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
+        $allDungeons = Dungeon::where('map_id', '>', 0)->get()->keyBy('id');
 
         $changedDungeons = collect();
 
-        // Go over the Map CSV and parse the map_id - it's the only thing we're interested in
-        foreach ($mapCsvParsed as $row) {
+        // Go over the Map TABLE and parse the map_id - it's the only thing we're interested in
+        foreach ($mapTableParsed as $mapTableRow) {
             foreach ($allDungeons as $dungeon) {
                 // The map names don't always match up (the combined dungeons such as Karazhan seem problematic, have to do this by hand)
-                $mapId = (int)$row[$mapCsvHeaderIndexMapId];
-                if (trim($row[$mapCsvHeaderIndexMapName]) === __($dungeon->name)) {
+                $mapId = (int)$mapTableRow[$mapTableHeaderIndexMapId];
+                if (trim($mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
                     if ($dungeon->map_id !== $mapId) {
                         $beforeModel = clone $dungeon;
 
@@ -515,30 +528,41 @@ class AdminToolsController extends Controller
         $unchangedDungeons = $allDungeons->diffKeys($changedDungeons);
 
         // Go over the UI Map Assignments and find the ones we're interested in
-        foreach ($uiMapAssignmentCsvParsed as $row) {
-            foreach ($allDungeons as $dungeon) {
-                if ((int)$row[$uiMapAssignmentCsvHeaderIndexMapId] === $dungeon->map_id &&
-                    (int)$row[$uiMapAssignmentCsvHeaderIndexOrderIndex] === 0) {
+        foreach ($allDungeons as $dungeon) {
+            if ($dungeon->floors->count() === 0) {
+                dump(sprintf('Skipping dungeon %s - no floors defined so no point', __($dungeon->name)));
+                continue;
+            }
+            foreach ($uiMapAssignmentTableParsed as $uiMapAssignmentRow) {
+                if ((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMapId] === $dungeon->map_id &&
+                    (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexOrderIndex] === 0) {
                     // Now that we know the UI map ID - cross-reference it with the map group to get the correct floor
-                    $uiMapId = (int)$row[$uiMapAssignmentCsvHeaderIndexUiMapId];
+                    $uiMapId = (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId];
 
                     // Try to find the map group member (floor definition) - NOTE: sometimes this doesn't exist,
                     // and you'll have to manually verify it without!
                     $foundMapGroupMember = false;
-                    foreach ($mapGroupMemberCsvParsed as $mapGroupMemberRow) {
-                        if ((int)$mapGroupMemberRow[$mapGroupMemberCsvHeaderIndexUiMapId] === $uiMapId) {
+                    foreach ($mapGroupMemberTableParsed as $mapGroupMemberRow) {
+                        if ((int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId] === $uiMapId) {
                             // We found the group member - now find which floor it was for
-                            $foundFloor = false;
+                            $mapGroupMemberFloorName = html_entity_decode(
+                                trim($mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
+                                ENT_QUOTES,
+                                'UTF-8'
+                            );
+                            $foundFloor              = false;
                             foreach ($dungeon->floors as $floor) {
-                                if (trim($mapGroupMemberRow[$mapGroupMemberCsvHeaderIndexNameLang]) === __($floor->name)) {
+                                if ($mapGroupMemberFloorName === __($floor->name)) {
                                     $beforeModel = clone $floor;
 
                                     $floor->update([
-                                        'ingame_min_x' => $row[$uiMapAssignmentCsvHeaderIndexMinX],
-                                        'ingame_min_y' => $row[$uiMapAssignmentCsvHeaderIndexMinY],
-                                        'ingame_max_x' => $row[$uiMapAssignmentCsvHeaderIndexMaxX],
-                                        'ingame_max_y' => $row[$uiMapAssignmentCsvHeaderIndexMaxY],
+                                        'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
+                                        'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
+                                        'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
+                                        'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
                                     ]);
+
+                                    dump('Updated floor ' . __($floor->name));
 
                                     $this->mappingChanged($beforeModel, $floor);
                                     $foundFloor = true;
@@ -547,10 +571,13 @@ class AdminToolsController extends Controller
                             }
 
                             if (!$foundFloor) {
-                                dump(sprintf('Unable to find floor with id %d and name %s (typo in name?)',
-                                    (int)$mapGroupMemberRow[$mapGroupMemberCsvHeaderIndexUiMapId],
-                                    $mapGroupMemberRow[$mapGroupMemberCsvHeaderIndexNameLang]
-                                ));
+                                dump(
+                                    sprintf('Unable to find floor with id %d and name %s in dungeon %s (typo in name or floor does not exist?)',
+                                        (int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId],
+                                        __($dungeon->name),
+                                        $mapGroupMemberFloorName
+                                    )
+                                );
                             }
 
                             $foundMapGroupMember = true;
@@ -559,9 +586,31 @@ class AdminToolsController extends Controller
                     }
 
                     if (!$foundMapGroupMember) {
-                        dump(sprintf('Unable to find map group member with ui map id %d',
-                            (int)$row[$uiMapAssignmentCsvHeaderIndexUiMapId]
-                        ), $row);
+                        if ($dungeon->floors->count() === 1) {
+                            $floor       = $dungeon->floors->first();
+                            $beforeModel = clone $floor;
+
+                            $floor->update([
+                                'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
+                                'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
+                                'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
+                                'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
+                            ]);
+
+                            dump('Updated floor from backup: ' . __($floor->name));
+
+                            $this->mappingChanged($beforeModel, $floor);
+                        } else {
+                            dump(sprintf('Unable to find map group member with ui map id %d (%s)',
+                                (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId],
+                                __($dungeon->name)
+                            ), [
+                                'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
+                                'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
+                                'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
+                                'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
+                            ]);
+                        }
                     }
                 }
             }

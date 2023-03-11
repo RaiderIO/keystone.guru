@@ -106,5 +106,41 @@
         "color_animated": null,
         "label": "Imported from MDT - group 18",
         "vertices_json": "[{\"lat\":-114,\"lng\":197},{\"lat\":-103,\"lng\":197},{\"lat\":-103,\"lng\":206},{\"lat\":-114,\"lng\":206}]"
+    },
+    {
+        "id": 2877,
+        "mapping_version_id": 94,
+        "floor_id": 145,
+        "group": 16,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 16",
+        "vertices_json": "[{\"lat\":-109,\"lng\":159},{\"lat\":-100,\"lng\":159},{\"lat\":-100,\"lng\":169},{\"lat\":-109,\"lng\":169}]"
+    },
+    {
+        "id": 2878,
+        "mapping_version_id": 94,
+        "floor_id": 145,
+        "group": 17,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 17",
+        "vertices_json": "[{\"lat\":-113,\"lng\":177},{\"lat\":-104,\"lng\":177},{\"lat\":-104,\"lng\":187},{\"lat\":-113,\"lng\":187}]"
+    },
+    {
+        "id": 2879,
+        "mapping_version_id": 94,
+        "floor_id": 145,
+        "group": 18,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 18",
+        "vertices_json": "[{\"lat\":-114,\"lng\":197},{\"lat\":-103,\"lng\":197},{\"lat\":-103,\"lng\":206},{\"lat\":-114,\"lng\":206}]"
     }
 ]

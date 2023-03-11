@@ -37,5 +37,83 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -194.20181564169,
+        "lng": 161.53570617146,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -175.24829278424,
+        "lng": 163.18696005677,
+        "comment": "5% Haste",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -155.93736965042,
+        "lng": 162.03122359349,
+        "comment": "+584 Mastery Rating",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -143.42320530304,
+        "lng": 179.22459721859,
+        "comment": "+10% Healing Taken",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -151.58461683394,
+        "lng": 189.34474751691,
+        "comment": "+5% Versatility",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 94,
+        "floor_id": 144,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 53,
+        "lat": -183.07380032765,
+        "lng": 178.62259420204,
+        "comment": "5% Critical Strike",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

@@ -16,6 +16,7 @@
         "skippable": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": null,
         "lat": -125,
         "lng": 147,
         "active_auras": [],

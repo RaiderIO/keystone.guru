@@ -19,7 +19,8 @@
                 "change": "Fixed an issue where killing the same enemy twice would calculate that enemy twice for enemy forces.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

@@ -19,7 +19,8 @@
                 "change": "Fixed killzones being created multiple times locally (v2: Electric Boogaloo)",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

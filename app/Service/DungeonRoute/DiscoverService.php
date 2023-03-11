@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\PublishedState;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -109,7 +110,13 @@ class DiscoverService extends BaseDiscoverService
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
-            ->where('dungeons.expansion_id', $this->expansion->id)
+            ->when($this->season === null, function (Builder $builder) {
+                $builder->where('dungeons.expansion_id', $this->expansion->id);
+            })
+            ->when($this->season !== null, function (Builder $builder) {
+                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
+                    ->where('season_dungeons.season_id', $this->season->id);
+            })
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
@@ -241,6 +248,43 @@ class DiscoverService extends BaseDiscoverService
     }
 
     /**
+     * @param Season $season
+     * @return Collection
+     */
+    function popularBySeason(Season $season): Collection
+    {
+        $this->withSeason($season);
+
+        return $this->cacheService->rememberWhen($this->closure === null,
+            $this->getCacheKey('popular'), function () use ($season) {
+                return $this->popularBuilder()
+                    ->get();
+            }, config('keystoneguru.discover.service.popular.ttl')
+        );
+    }
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
+    {
+        $this->withSeason($season);
+
+        return $this->cacheService->rememberWhen($this->closure === null,
+            $this->getCacheKey(sprintf('affix_group_%s:popular', $affixGroup->id)),
+            function () use ($affixGroup) {
+                return $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get();
+            }, config('keystoneguru.discover.service.popular.ttl')
+        );
+    }
+
+    /**
      * @inheritDoc
      */
     function new(): Collection
@@ -291,6 +335,42 @@ class DiscoverService extends BaseDiscoverService
             function () use ($dungeon, $affixGroup) {
                 return $this->newBuilder()
                     ->where('dungeon_routes.dungeon_id', $dungeon->id)
+                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                    ->get();
+            }, config('keystoneguru.discover.service.popular.ttl')
+        );
+    }
+
+    /**
+     * @param Season $season
+     * @return Collection
+     */
+    function newBySeason(Season $season): Collection
+    {
+        $this->withSeason($season);
+
+        return $this->cacheService->rememberWhen($this->closure === null,
+            $this->getCacheKey('new'), function () {
+                return $this->newBuilder()
+                    ->get();
+            }, config('keystoneguru.discover.service.popular.ttl')
+        );
+    }
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
+    {
+        $this->withSeason($season);
+
+        return $this->cacheService->rememberWhen($this->closure === null,
+            $this->getCacheKey(sprintf('affix_group_%s:new', $affixGroup->id)),
+            function () use ($affixGroup) {
+                return $this->newBuilder()
                     ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
                     ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
                     ->get();

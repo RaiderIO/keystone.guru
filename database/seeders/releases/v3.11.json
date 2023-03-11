@@ -19,7 +19,8 @@
                 "change": "Mind Soothe and Combustion are now available as Map Icons, thanks Chantelle! If you have any more suggestions let me know and I will add them.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Cumulative enemy forces percentages are now displayed on the map per-pull if you're zoomed in enough. Thanks Owah for the suggestion.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Enemy portraits are now available in the map view. A HUGE thanks to Ogando | Steffen for supplying the portrait images and automating the gathering process, absolute legend!",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "De Other Side: Atal'ai Devoted before Hakkar no longer give enemy forces (he kills them instantly on pull). Thanks Primar!",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Sanguine Depths: corrected Famished Tick placement before the first boss. Corrected a whole host of enemies in the final gauntlet area at General Kaal. Thanks to Takatsuki for reporting, thanks to Daenarian, Sonskyn, Kalafrak and Xiuxiu for running the dungeon to verify the mapping.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Theater of Pain: corrected various minor things such as icons and floor switch markers.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -79,7 +85,8 @@
                 "change": "Creating a route without refreshing the browser in between no longer generates wrong enemy orces percentages from the 10th pull and up. Thank you Akiranai (and others) for reporting!",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -89,7 +96,8 @@
                 "change": "\"Awakened Enemy Set\" is no longer an option when creating a new route - this was a legacy option. Thank you again Akiranai for reporting.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -99,7 +107,8 @@
                 "change": "Enemy forces override to 0 now works correctly.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -109,7 +118,8 @@
                 "change": "Corrected miniboss import issue on Theater of Pain.",
                 "category": {
                     "id": 6,
-                    "category": "MDT importer changes"
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

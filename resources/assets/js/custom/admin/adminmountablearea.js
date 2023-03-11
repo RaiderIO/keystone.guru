@@ -14,9 +14,9 @@ L.Draw.MountableArea = L.Draw.Polygon.extend({
 
 // });
 
-class AdminMountableArea extends MapObject {
+class AdminMountableArea extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'mountablearea'});
+        super(map, layer, {name: 'mountablearea', hasRouteModelBinding: true});
 
         this.color = null;
     }
@@ -39,6 +39,12 @@ class AdminMountableArea extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'speed',
+                type: 'int',
+                edit: true,
+                default: null
             }),
             new Attribute({
                 name: 'vertices',

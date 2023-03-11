@@ -19,7 +19,8 @@
                 "change": "Grimrail Depot now has enemy forces and Inspiring enemies mapped (Shrouded was already done).",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Iron Docks now has all Shrouded and Inspiring enemies mapped. Some enemy forces are still missing after first boss.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Tazavesh: So'leah's Gambit now has all Shrouded enemies mapped.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Nathrezim Infiltrators now give 6 enemy forces - Zul'gamux 18",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

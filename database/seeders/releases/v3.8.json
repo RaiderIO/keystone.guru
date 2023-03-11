@@ -19,7 +19,8 @@
                 "change": "MDT import is once again supported. Note: MDT is not 100% accurate (neither is Keystone.guru) so always double check your imported routes while we both try to make our mappings as accurate as can be. As part of this, various corrections to mapping have been done. In Mists of Tirna Scithe various missing enemies were added, various enemies have changed in Spires of Ascension, And much more small changes to all dungeons.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             }
         ]

@@ -41,20 +41,20 @@ class APIDungeonFloorSwitchMarkerController extends APIMappingModelBaseControlle
 
     /**
      * @param Request $request
-     * @param DungeonFloorSwitchMarker $dungeonfloorswitchmarker
+     * @param DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
      * @return ResponseFactory|Response
      */
-    public function delete(Request $request, DungeonFloorSwitchMarker $dungeonfloorswitchmarker)
+    public function delete(Request $request, DungeonFloorSwitchMarker $dungeonFloorSwitchMarker)
     {
         try {
-            $dungeon = $dungeonfloorswitchmarker->floor->dungeon;
-            if ($dungeonfloorswitchmarker->delete()) {
+            $dungeon = $dungeonFloorSwitchMarker->floor->dungeon;
+            if ($dungeonFloorSwitchMarker->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeon, Auth::getUser(), $dungeonfloorswitchmarker));
+                    broadcast(new ModelDeletedEvent($dungeon, Auth::getUser(), $dungeonFloorSwitchMarker));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($dungeonfloorswitchmarker, null);
+                $this->mappingChanged($dungeonFloorSwitchMarker, null);
             }
             $result = response()->noContent();
         } catch (Exception $ex) {

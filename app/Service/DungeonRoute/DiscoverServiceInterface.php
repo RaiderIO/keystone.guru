@@ -86,6 +86,19 @@ interface DiscoverServiceInterface
     function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
     /**
+     * @param Season $season
+     * @return Collection
+     */
+    function popularBySeason(Season $season): Collection;
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
+
+    /**
      * @return Collection
      */
     function new(): Collection;
@@ -108,6 +121,19 @@ interface DiscoverServiceInterface
      * @return Collection
      */
     function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
+
+    /**
+     * @param Season $season
+     * @return Collection
+     */
+    function newBySeason(Season $season): Collection;
+
+    /**
+     * @param Season $season
+     * @param AffixGroupBase $affixGroup
+     * @return Collection
+     */
+    function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
 
     /*
     |--------------------------------------------------------------------------

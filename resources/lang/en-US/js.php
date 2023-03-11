@@ -361,6 +361,8 @@ return [
     'enemy_active_auras_select_default_label'                       => 'Not set',
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
+    'enemy_dungeon_difficulty_select_default_label'                 => 'Always',
+    'enemy_dungeon_difficulty_label'                                => 'Dungeon difficulty',
     'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
@@ -410,6 +412,7 @@ return [
     // Mountable area
     'mountablearea_faction_label'                                   => 'Faction',
     'mountablearea_teeming_label'                                   => 'Teeming',
+    'mountablearea_speed_label'                                     => 'Speed (yards p/s)',
 
     // Dungeonroute table
     'actions_label'                                                 => 'Actions',

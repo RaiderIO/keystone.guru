@@ -26,11 +26,22 @@ class AdminReleaseEdit extends InlineCode {
     _addChangeRow(ticket = '', category = '', change = '') {
         let template = Handlebars.templates['release_change_row_template'];
 
+        let categories = [];
+        for (let index in this.options.categories) {
+            let category = this.options.categories[index];
+
+            categories.push({
+                id: category.id,
+                key: category.key,
+                name: lang.get(category.name)
+            });
+        }
+
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
             ticket: ticket,
             change: change,
             category: category,
-            categories: this.options.categories
+            categories: categories
         });
 
         let html = template(data);

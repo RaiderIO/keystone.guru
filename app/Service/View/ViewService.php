@@ -16,7 +16,6 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
-use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -70,10 +69,10 @@ class ViewService implements ViewServiceInterface
                 ->where('active', true);
 
             $currentExpansion = $this->expansionService->getCurrentExpansion();
-            $currentSeason = $currentExpansion->currentseason;
+            $currentSeason    = $currentExpansion->currentseason;
 
             $nextExpansion = $this->expansionService->getNextExpansion() ?? $currentExpansion;
-            $nextSeason = $nextExpansion->nextseason;
+            $nextSeason    = $nextExpansion->nextseason;
 
             /** @var Release $latestRelease */
             $latestRelease          = Release::latest()->first();
@@ -174,6 +173,7 @@ class ViewService implements ViewServiceInterface
                     ->pluck('expansion_id', 'id')->mapWithKeys(function (int $expansionId, int $dungeonId) use ($allExpansions) {
                         return [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname];
                     }),
+                'allSpeedrunDungeons'              => Dungeon::where('speedrun_enabled', true)->get(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
     }

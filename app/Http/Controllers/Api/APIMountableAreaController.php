@@ -2,75 +2,66 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\APIMappingModelBaseController;
 use App\Http\Controllers\Traits\ChangesMapping;
-use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Requests\MountableArea\MountableAreaFormRequest;
 use App\Models\MountableArea;
+use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
+use Throwable;
 
-class APIMountableAreaController extends Controller
+class APIMountableAreaController extends APIMappingModelBaseController
 {
     use ChangesMapping;
 
     /**
      * @param MountableAreaFormRequest $request
-     * @return MountableArea
+     * @param MountableArea|null $mountableArea
+     * @return MountableArea|Model
      * @throws Exception
+     * @throws Throwable
      */
-    function store(MountableAreaFormRequest $request)
+    public function store(MountableAreaFormRequest $request, MountableArea $mountableArea = null): MountableArea
     {
-        /** @var MountableArea $mountableArea */
-        $mountableArea = MountableArea::findOrNew($request->get('id'));
+        $validated = $request->validated();
 
-        $beforeMountableArea = clone $mountableArea;
+        $validated['vertices_json'] = json_encode($request->get('vertices'));
+        unset($validated['vertices']);
 
-        $mountableArea->floor_id      = (int)$request->get('floor_id');
-        $mountableArea->vertices_json = json_encode($request->get('vertices'));
-
-        // Upon successful save!
-        if ($mountableArea->save()) {
-            if (Auth::check()) {
-                broadcast(new ModelChangedEvent($mountableArea->floor->dungeon, Auth::getUser(), $mountableArea));
-            }
-
-            // Trigger mapping changed event so the mapping gets saved across all environments
-            $this->mappingChanged($beforeMountableArea, $mountableArea);
-        } else {
-            throw new Exception('Unable to save pack!');
-        }
-
-        return $mountableArea;
+        return $this->storeModel($validated, MountableArea::class, $mountableArea);
     }
 
     /**
      * @param Request $request
-     * @param MountableArea $mountablearea
-     * @return array|ResponseFactory|Response
+     * @param MountableArea $mountableArea
+     * @return Response|ResponseFactory
+     * @throws Throwable
      */
-    function delete(Request $request, MountableArea $mountablearea)
+    public function delete(Request $request, MountableArea $mountableArea)
     {
-        try {
-            if ($mountablearea->delete()) {
-                if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($mountablearea->floor->dungeon, Auth::getUser(), $mountablearea));
+        return DB::transaction(function () use ($request, $mountableArea) {
+            try {
+                if ($mountableArea->delete()) {
+                    // Trigger mapping changed event so the mapping gets saved across all environments
+                    $this->mappingChanged($mountableArea, null);
+
+                    if (Auth::check()) {
+                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, Auth::getUser(), $mountableArea));
+                    }
                 }
-
-                // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($mountablearea, null);
+                $result = response()->noContent();
+            } catch (Exception $ex) {
+                $result = response('Not found', Http::NOT_FOUND);
             }
-            $result = response()->noContent();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
 
-        return $result;
+            return $result;
+        });
     }
 }

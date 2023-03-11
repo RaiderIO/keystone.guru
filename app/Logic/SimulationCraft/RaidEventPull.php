@@ -2,6 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
+use App\Logic\SimulationCraft\Models\MountableAreaIntersection;
 use App\Logic\Utils\MathUtils;
 use App\Models\Enemy;
 use App\Models\Floor;
@@ -94,7 +95,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      */
     public function calculateDelayBetweenPoints(Floor $floor, array $pointA, array $pointB): float
     {
-        [$mountFactor, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
+        [$mountFactorsAndSpeeds, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
             $floor,
             $pointA,
             $pointB
@@ -108,16 +109,29 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 $pointAIngameCoordinates['y'], $pointBIngameCoordinates['y']
             ) - $this->options->ranged_pull_compensation_yards;
 
-        $delayMounted    = $this->calculateDelayForDistanceMounted(
-            $ingameDistanceToPointB * $mountFactor
-        );
+        $delayMounted       = 0;
+        $totalMountedFactor = 0;
+
+        foreach ($mountFactorsAndSpeeds as $mountFactorAndSpeed) {
+            if (!is_array($mountFactorAndSpeed)) {
+                dd($mountFactorsAndSpeeds);
+            }
+            /** @var $mountFactorAndSpeed array{factor: float, speed: int} */
+            $totalMountedFactor += $mountFactorAndSpeed['factor'];
+            $delayMounted       += $this->calculateDelayForDistanceMounted(
+                $ingameDistanceToPointB,
+                $mountFactorAndSpeed['factor'],
+                $mountFactorAndSpeed['speed']
+            );
+        }
+
         $delayMountCasts = $this->calculateDelayForMountCasts($mountCasts);
         $delayOnFoot     = $this->calculateDelayForDistanceOnFoot(
-            $ingameDistanceToPointB * (1 - $mountFactor)
+            $ingameDistanceToPointB * (1 - $totalMountedFactor)
         );
 
         // If we utilized the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
-        if ($mountFactor > 0) {
+        if ($totalMountedFactor > 0) {
             $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
                 $ingameDistanceToPointB
             );
@@ -154,8 +168,6 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      */
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(Floor $floor, Floor $targetFloor, array $point): float
     {
-        $result = 0;
-
         $previousKillFloorClosestDungeonFloorSwitchMarker = $floor->findClosestFloorSwitchMarker(
             $point['lat'],
             $point['lng'],
@@ -169,7 +181,9 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
                 'lng' => $previousKillFloorClosestDungeonFloorSwitchMarker->lng,
             ]);
         } else {
-            dd(sprintf('There is no floor switch marker from %d to %d!', $floor->id, $targetFloor->id));
+            // @TODO #1621
+            logger()->warning(sprintf('There is no floor switch marker from %d to %d!', $floor->id, $targetFloor->id));
+            $result = 20;
         }
 
         return $result;
@@ -195,7 +209,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
      * @param Floor $floor
      * @param array{lat: float, lng: float} $pointA
      * @param array{lat: float, lng: float} $pointB
-     * @return array{mountedFactor: float, mountCasts: int}
+     * @return array{array{factor: float, speed: int}, mountCasts: int}
      */
     public function calculateMountedFactorAndMountCastsBetweenPoints(
         Floor $floor,
@@ -204,90 +218,121 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     {
         // 0% of the time on mounts, 0 mount casts
         if (!$this->options->use_mounts) {
-            return [0, 0];
+            return [[], 0];
         }
 
         /** @var MountableArea|null $startMountableArea The mountable area that we started in - can be null if not started inside a mountable area */
         $startMountableArea = null;
 
         // Construct a list of intersections from mountable areas.
-        $foundIntersections = collect();
+        /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
+        $allMountableAreaIntersections = collect();
         foreach ($floor->mountableareas as $mountableArea) {
             // Determine from which mountable area the location started
             if ($startMountableArea === null && $mountableArea->contains($pointA)) {
                 $startMountableArea = $mountableArea;
             }
 
-            $mountableAreaIntersections = $mountableArea->getIntersections(
+            $intersections = $mountableArea->getIntersections(
                 $pointA,
                 $pointB
             );
 
-            // If we found some intersections, add them to the general list
-            if (!empty($mountableAreaIntersections)) {
-                $foundIntersections = $foundIntersections->merge($mountableAreaIntersections);
+            if (empty($intersections)) {
+                continue;
             }
+
+            /** @var MountableAreaIntersection[]|Collection $mountableAreaIntersections */
+            $mountableAreaIntersections = collect();
+            foreach ($intersections as $intersection) {
+                $mountableAreaIntersections->push(new MountableAreaIntersection($mountableArea, $intersection['lat'], $intersection['lng']));
+            }
+
+            // Add them to the general list
+            $allMountableAreaIntersections = $allMountableAreaIntersections->merge($mountableAreaIntersections);
         }
 
         // If we did NOT find any intersections, it means that we either stayed mounted (inside zone) or can't mount (no zone)
-        if ($foundIntersections->isEmpty()) {
+        if ($allMountableAreaIntersections->isEmpty()) {
             if ($startMountableArea !== null) {
                 // We are mounted 100% of the way, with 1 cast to mount up
-                return [1, 1];
+                return [[['factor' => 1, 'speed' => $startMountableArea->getSpeedOrDefault()]], 1];
             } else {
                 // We are mounted 0% of the way and will keep walking
-                return [0, 0];
+                return [[], 0];
             }
         }
 
         // Now that we have a (randomly sorted) list of mountable areas and intersections, we need to sort the list and
         // then determine if an intersection causes a mount up, or a dismount
-        $foundIntersections = $foundIntersections->sortBy(function (array $foundIntersection) use ($pointA) {
+        /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
+        $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(function (MountableAreaIntersection $foundIntersection) use ($pointA) {
             return MathUtils::distanceBetweenPoints(
-                $pointA['lng'], $foundIntersection['lng'],
-                $pointA['lat'], $foundIntersection['lat'],
+                $pointA['lng'], $foundIntersection->getLng(),
+                $pointA['lat'], $foundIntersection->getLat(),
             );
         })->values();
 
-        // Compile a list of all locations we know of, and then determine how much %-age is mounted, and how much %-age is on-foot
-        $allLatLngs    = collect($foundIntersections)->merge([$pointB]);
         $totalDistance = MathUtils::distanceBetweenPoints(
             $pointA['lng'], $pointB['lng'],
             $pointA['lat'], $pointB['lat'],
         );
 
-        $totalDistanceOnFoot = $totalDistanceMounted = 0;
         // If we are currently mounted (as in, we finished killing the previous pack, now going to the current pack)
         // Then we also initialize mountCasts to 1, since when we're done killing, we need to cast mount which is 1.5s
         $isMounted  = $startMountableArea !== null;
         $mountCasts = (int)$isMounted;
 
         // We start at where we're at now
-        $previousLatLng  = $pointA;
-        $allLatLngsCount = $allLatLngs->count();
+        $previousLatLng                     = $pointA;
+        $allMountableAreaIntersectionsCount = $allMountableAreaIntersections->count();
 
-        foreach ($allLatLngs as $index => $latLng) {
+        $factorsAndSpeeds = [];
+        foreach ($allMountableAreaIntersections as $index => $mountableAreaIntersection) {
             $distanceBetweenLatLngs = MathUtils::distanceBetweenPoints(
-                $previousLatLng['lng'], $latLng['lng'],
-                $previousLatLng['lat'], $latLng['lat'],
+                $previousLatLng['lng'], $mountableAreaIntersection->getLng(),
+                $previousLatLng['lat'], $mountableAreaIntersection->getLat(),
             );
 
             // Add the distance to the appropriate totalDistance variable
             if ($isMounted) {
-                $totalDistanceMounted += $distanceBetweenLatLngs;
-            } else {
-                $totalDistanceOnFoot += $distanceBetweenLatLngs;
+                $factorsAndSpeeds[] = [
+                    'factor' => $distanceBetweenLatLngs / $totalDistance,
+                    'speed'  => $mountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+                ];
+            }
+            // We were not mounted this intersection - mount up for the next one!
+            // But only if we have another intersection after this
+            else if ($index !== $allMountableAreaIntersectionsCount - 1) {
+                $mountCasts++;
             }
 
             // Since we encountered a new edge of the zone, we're now either mounting or dismounting
             // But not the last point - that's when we reach the enemy and start attacking.
             $isMounted = !$isMounted;
-            if ($isMounted && $index !== $allLatLngsCount - 1) {
-                $mountCasts++;
-            }
+
+            // We are now at the last known intersection point since we just travelled there
+            $previousLatLng = ['lat' => $mountableAreaIntersection->getLat(), 'lng' => $mountableAreaIntersection->getLng()];
         }
 
-        return [$totalDistanceMounted / $totalDistance, $mountCasts];
+        // One last thing - if we are mounted at this point, we need to add another entry since we reached our destination
+        // while mounted. We shouldn't forget to add this last travel distance as well
+        if ($isMounted) {
+            /** @var MountableAreaIntersection $lastMountableAreaIntersection */
+            $lastMountableAreaIntersection = $allMountableAreaIntersections->last();
+
+            $distanceToPack = MathUtils::distanceBetweenPoints(
+                $pointB['lng'], $lastMountableAreaIntersection->getLng(),
+                $pointB['lat'], $lastMountableAreaIntersection->getLat(),
+            );
+
+            $factorsAndSpeeds[] = [
+                'factor' => $distanceToPack / $totalDistance,
+                'speed'  => $lastMountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+            ];
+        }
+
+        return [$factorsAndSpeeds, $mountCasts];
     }
 
     /**
@@ -300,21 +345,23 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @param float $ingameDistance
-     * @return float
-     */
-    public function calculateDelayForDistanceMounted(float $ingameDistance): float
-    {
-        return max(0, $ingameDistance) / config('keystoneguru.character.mounted_movement_speed_yards_second');
-    }
-
-    /**
      * @param int $mountCasts
      * @return float
      */
     public function calculateDelayForMountCasts(int $mountCasts): float
     {
         return (max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds'));
+    }
+
+    /**
+     * @param float $ingameDistance
+     * @param float $factor
+     * @param int $speed
+     * @return float
+     */
+    public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float
+    {
+        return max(0, $ingameDistance * $factor) / $speed;
     }
 
 
@@ -324,10 +371,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     public function toString(): string
     {
         $result = sprintf(
-            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,enemies=',
+            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,%senemies=',
             $this->pullIndex,
             (int)$this->bloodLust,
-            $this->delay
+            $this->delay,
+            $this->options->thundering_clear_seconds !== null ?
+                sprintf('mark_duration=%d,', $this->options->thundering_clear_seconds) : ''
         );
 
         $enemyStrings = [];

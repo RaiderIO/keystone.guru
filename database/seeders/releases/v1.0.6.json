@@ -19,7 +19,8 @@
                 "change": "Corrected Teeming enemy forces needed for The Underrot, King's Rest.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

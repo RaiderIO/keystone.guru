@@ -19,7 +19,8 @@
                 "change": "Fixed various crashes after release of v6.1",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

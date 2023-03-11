@@ -19,7 +19,8 @@
                 "change": "Sanguine Depths: Added a missing Venthyr Anima Cage in the beginning of the instance.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Various enemies are no longer marked as bolstering\/sanguine\/bursting.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Route thumbnails are once again being generated.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

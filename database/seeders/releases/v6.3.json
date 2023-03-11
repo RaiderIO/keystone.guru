@@ -1,0 +1,138 @@
+{
+    "id": 160,
+    "release_changelog_id": 167,
+    "version": "v6.3",
+    "title": "Updated SimulationCraft string generation for Dragonflight, 10-man speedrun support for Ulduar",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-03-06T11:26:10+00:00",
+    "updated_at": "2023-03-06T11:26:10+00:00",
+    "changelog": {
+        "id": 167,
+        "release_id": 160,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1580,
+                "change": "10-man Ulduar speedrun routes are now possible. Both the mapping and required enemies have been updated. Creating a new Ulduar route allows you select between 10-man and 25-man versions. All current Ulduar routes are considered 25-man.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1600,
+                "change": "Viewing routes for a specific season now has dedicated pages for showing popular routes for just that season - it is no longer based on the expansion of said season.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1530,
+                "change": "Reduced the downtime of the site while performing an update.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1603,
+                "change": "HP calculation of enemies is now correct past keystone level +10.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1611,
+                "change": "Fixed a crash that could sometimes occur when attempting to save a pull.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 6,
+                "ticket_id": 1620,
+                "change": "Map Icons imported from MDT can now always be edited properly.",
+                "category": {
+                    "id": 6,
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 8,
+                "ticket_id": 1620,
+                "change": "Map Icons exported to an MDT string now copy over the name of the icon (for example: Bloodlust, Heroism) if no comment was provided.",
+                "category": {
+                    "id": 8,
+                    "key": "mdt_exporter_changes",
+                    "name": "releasechangelogcategories.mdt_exporter_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 10,
+                "ticket_id": 1585,
+                "change": "Added floor coordinates for all currently available dungeons - this means that travel times will now be accurately calculated for SimulationCraft strings.",
+                "category": {
+                    "id": 10,
+                    "key": "simulation_craft_changes",
+                    "name": "releasechangelogcategories.simulation_craft_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 10,
+                "ticket_id": 1604,
+                "change": "SimulationCraft string generation is now updated for Dragonflight (Season 1). Also adds support for Thundering affix.",
+                "category": {
+                    "id": 10,
+                    "key": "simulation_craft_changes",
+                    "name": "releasechangelogcategories.simulation_craft_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 10,
+                "ticket_id": 1616,
+                "change": "Added support for Dragonflying for Nokhud Offensive to calculate (more) accurate delays between pulls.",
+                "category": {
+                    "id": 10,
+                    "key": "simulation_craft_changes",
+                    "name": "releasechangelogcategories.simulation_craft_changes"
+                }
+            },
+            {
+                "release_changelog_id": 167,
+                "release_changelog_category_id": 10,
+                "ticket_id": 1617,
+                "change": "Added mountable areas for all Dragonflight S1 dungeons.",
+                "category": {
+                    "id": 10,
+                    "key": "simulation_craft_changes",
+                    "name": "releasechangelogcategories.simulation_craft_changes"
+                }
+            }
+        ]
+    }
+}

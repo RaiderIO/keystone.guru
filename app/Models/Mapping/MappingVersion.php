@@ -167,6 +167,7 @@ class MappingVersion extends Model
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
+                /** @var CloneForNewMappingVersionNoRelations $model */
                 $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
 
                 $idMapping->get(get_class($model))->push([
@@ -187,6 +188,19 @@ class MappingVersion extends Model
                         $enemyRelationCoupling['newModel']->enemy_pack_id = $enemyPackRelationCoupling['newModel']->id;
                         $enemyRelationCoupling['newModel']->save();
                         break;
+                    }
+                }
+
+                $oldEnemyPatrolId = $enemyRelationCoupling['oldModel']->enemy_patrol_id;
+                if ($oldEnemyPatrolId !== null) {
+                    // Find the new ID of the enemy patrol
+                    foreach ($idMapping->get(EnemyPatrol::class) as $enemyPatrolRelationCoupling) {
+                        /** @var array{oldModel: EnemyPatrol, newModel: EnemyPatrol} $enemyPatrolRelationCoupling */
+                        if ($enemyPatrolRelationCoupling['oldModel']->id === $oldEnemyPatrolId) {
+                            $enemyRelationCoupling['newModel']->enemy_patrol_id = $enemyPatrolRelationCoupling['newModel']->id;
+                            $enemyRelationCoupling['newModel']->save();
+                            break;
+                        }
                     }
                 }
             }

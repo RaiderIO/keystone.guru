@@ -56,7 +56,26 @@ Breadcrumbs::for('dungeonroute.discover.search', function (Generator $trail) {
  */
 Breadcrumbs::for('dungeonroutes.season', function (Generator $trail, Expansion $expansion, Season $season) {
     $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season]));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.routes_season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season->index]));
+});
+Breadcrumbs::for('dungeonroutes.season.popular', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.popular'), route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.nextweek', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.next_week_affixes'), route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.thisweek', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.this_week_affixes'), route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.new', function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.new'), route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]));
 });
 
 /**
@@ -247,9 +266,13 @@ Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeo
         $trail->push(__('breadcrumbs.home.admin.floors.edit_floor'), route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]));
     }
 });
-Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon, Floor $floor) {
+Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $trail, Dungeon $dungeon, Floor $floor, int $difficulty) {
     $trail->parent('admin.floor.edit', $dungeon, $floor);
-    $trail->push(__('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc'), route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor]));
+    $trail->push(
+        $difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
+            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
+            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
+        route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]));
 });
 
 

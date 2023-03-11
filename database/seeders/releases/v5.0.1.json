@@ -19,7 +19,8 @@
                 "change": "Fixed various issues with the SimulationCraft implementation which brings it much closer to actual log results (thanks Finalslave for reporting).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

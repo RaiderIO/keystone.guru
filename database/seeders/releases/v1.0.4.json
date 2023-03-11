@@ -19,7 +19,8 @@
                 "change": "Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

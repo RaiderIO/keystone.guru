@@ -19,7 +19,8 @@
                 "change": "Various error messages when using the Routes page have been resolved.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "You can now define a gradient for how you wish to color your pulls. For example, if you define a gradient from red to green and apply that color to your Pulls, the first pull will be red, while the last pull will be green and everything else in between will be on the gradient between red and green. This will more easily allow you to identify which pulls are done at what time in a non-linear dungeon.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Selecting a pull is now done from the map (or the new sidebar), and having a pull selected highlights it with an animated dashed border.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Pulls are now independent of floors. You can have a pull that starts on one floor and ends on another. Don't forget to add an optional killzone to indicate where you're killing them!",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Hiding\/showing layers have been moved from the top right to the sidebar on the left. It will now also remember your choice between sessions.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -69,7 +74,8 @@
                 "change": "Killzones have been made optional. Killzones are now called 'Pulls', while the killzone is now an optional indicator for where to kill the Pull.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]

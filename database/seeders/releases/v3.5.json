@@ -19,7 +19,8 @@
                 "change": "Shadowlands preparation of adding Inspiring enemies.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Prideful affix is now supported in Shadowlands dungeons.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "The Necrotic Wake (Shadowlands Dungeon) has been mapped and is now available as a preview!",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Added tooling for adding NPCs for new expansions in an easier way.",
                 "category": {
                     "id": 4,
-                    "category": "Mapping changes"
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
                 }
             },
             {
@@ -59,7 +63,8 @@
                 "change": "Creating a new pull will no longer create a second ghost pull in the sidebar.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

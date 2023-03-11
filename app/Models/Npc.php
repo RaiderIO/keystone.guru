@@ -185,9 +185,13 @@ class Npc extends CacheModel implements MappingModelInterface
      * @param bool $tyrannical
      * @return float
      */
-    private function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical): float
+    public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical): float
     {
-        $keyLevelFactor = pow(config('keystoneguru.keystone.scaling_factor'), ($keyLevel - 2));
+        $keyLevelFactor = 1;
+        // 2 because we start counting up at key level 3 (+2 = 0)
+        for ($i = 2; $i < $keyLevel; $i++) {
+            $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
+        }
 
         if ($fortified && $this->isAffectedByFortified()) {
             $keyLevelFactor *= 1.2;
@@ -202,11 +206,13 @@ class Npc extends CacheModel implements MappingModelInterface
      * @param int $keyLevel
      * @param bool $fortified
      * @param bool $tyrannical
+     * @param bool $thundering
      * @return void
      */
-    public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical): float
+    public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
-        return round($this->base_health * $this->getScalingFactor($keyLevel, $fortified, $tyrannical));
+        $thunderingFactor = $thundering && $keyLevel >= 10 ? 1.05 : 1;
+        return round($this->base_health * $this->getScalingFactor($keyLevel, $fortified, $tyrannical, $thundering) * $thunderingFactor);
     }
 
 
@@ -224,10 +230,10 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDungeonId(): int
+    public function getDungeonId(): ?int
     {
-        return $this->dungeon_id ?? -1;
+        return $this->dungeon_id ?? null;
     }
 }

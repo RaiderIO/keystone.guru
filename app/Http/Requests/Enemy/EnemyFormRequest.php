@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Enemy;
 
+use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -47,6 +48,7 @@ class EnemyFormRequest extends FormRequest
             'skippable'                     => 'boolean',
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
+            'dungeon_difficulty'            => [Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, ['', null]))],
             'lat'                           => 'numeric',
             'lng'                           => 'numeric',
         ];

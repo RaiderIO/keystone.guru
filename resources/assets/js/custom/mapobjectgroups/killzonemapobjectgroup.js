@@ -72,7 +72,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     _createMapObject(layer, options = {}) {
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
         return new KillZone(this.manager.map, layer);
     }

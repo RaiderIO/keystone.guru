@@ -3,7 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
-use App\Models\Expansion;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Rules\FactionSelectionRequiredRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -53,8 +53,8 @@ class DungeonRouteFormRequest extends FormRequest
             'template'                  => 'nullable|int',
 
             // Array since there's potentially a seasonal index per expansion
-            'seasonal_index'   => 'nullable|array',
-            'seasonal_index.*' => 'nullable|numeric',
+            'seasonal_index'            => 'nullable|array',
+            'seasonal_index.*'          => 'nullable|numeric',
 
             'faction_id' => [Rule::exists('factions', 'id'), new FactionSelectionRequiredRule($this->request)],
 
@@ -69,6 +69,8 @@ class DungeonRouteFormRequest extends FormRequest
             'attributes.*'           => 'nullable|numeric',
 
             'unlisted' => 'nullable|int',
+
+            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
         ];
 
         // Validate demo state, optional or numeric

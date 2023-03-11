@@ -19,7 +19,8 @@
                 "change": "Fixed various dungeons not loading properly (Motherlode, Waycrest Manor and Junkyard).",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "Killing all enemies that cannot be skipped would sometimes prevent you from publishing your route. This has been remedied.",
                 "category": {
                     "id": 5,
-                    "category": "Bugfixes"
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
                 }
             }
         ]

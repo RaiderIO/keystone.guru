@@ -3,24 +3,33 @@
 /** @var $floor \App\Models\Floor */
 /** @var $npcIds array */
 /** @var $npcIdsWithNullable array */
+/** @var $difficulty int */
 ?>
 @extends('layouts.sitepage', [
-    'breadcrumbsParams' => [$dungeon, $floor],
+    'breadcrumbsParams' => [$dungeon, $floor, $difficulty],
     'showAds' => false,
     'title' => sprintf(
-        __('views/admin.dungeonspeedrunrequirednpc.new.title'),
+        \App\Models\Dungeon::DIFFICULTY_10_MAN ?
+        __('views/admin.dungeonspeedrunrequirednpc.new.title_10_man') :
+        __('views/admin.dungeonspeedrunrequirednpc.new.title_25_man')
+        ,
         __($dungeon->name)
     )]
 )
 @section('header-title')
-    {{ __('views/admin.dungeonspeedrunrequirednpc.new.header', ['dungeon' => __($dungeon->name)]) }}
+    @if($difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN )
+            {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_10_man', ['dungeon' => __($dungeon->name)]) }}
+        @else
+            {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_25_man', ['dungeon' => __($dungeon->name)]) }}
+    @endif
 @endsection
 
 @section('content')
-    {{ Form::open(['route' => ['admin.dungeonspeedrunrequirednpc.savenew', 'dungeon' => $dungeon, 'floor' => $floor]]) }}
+    {{ Form::open(['route' => ['admin.dungeonspeedrunrequirednpc.savenew', 'dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]]) }}
 
     {!! Form::hidden('dungeon_id', $dungeon->id) !!}
     {!! Form::hidden('floor_id', $floor->id) !!}
+    {!! Form::hidden('difficulty', $difficulty) !!}
 
     <div class="form-group{{ $errors->has('npc_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_id', __('views/admin.dungeonspeedrunrequirednpc.new.npc_id'), ['class' => 'font-weight-bold']) !!}

@@ -1,5 +1,6 @@
 <?php
 /** @var \App\Models\Release $release */
+/** @var \App\Models\ReleaseChangelogCategory[]|\Illuminate\Support\Collection $categories */
 $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChangelog();
 ?>
 

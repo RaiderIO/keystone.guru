@@ -9,6 +9,7 @@ return [
             'header_edit'                     => '@todo de: .dungeon.edit.header_edit',
             'active'                          => '@todo de: .dungeon.edit.active',
             'speedrun_enabled'                => '@todo de: .dungeon.edit.speedrun_enabled',
+            'id'                              => '@todo de-DE: .dungeon.edit.id',
             'zone_id'                         => '@todo de: .dungeon.edit.zone_id',
             'map_id'                          => '@todo de: .dungeon.edit.map_id',
             'mdt_id'                          => '@todo de: .dungeon.edit.mdt_id',
@@ -59,8 +60,10 @@ return [
     ],
     'dungeonspeedrunrequirednpc' => [
         'new' => [
-            'title'          => '@todo de: .dungeonspeedrunrequirednpc.new.title',
-            'header'         => '@todo de: .dungeonspeedrunrequirednpc.new.header',
+            'title_10_man'   => '@todo de-DE: .dungeonspeedrunrequirednpc.new.title_10_man',
+            'title_25_man'   => '@todo de-DE: .dungeonspeedrunrequirednpc.new.title_25_man',
+            'header_10_man'  => '@todo de-DE: .dungeonspeedrunrequirednpc.new.header_10_man',
+            'header_25_man'  => '@todo de-DE: .dungeonspeedrunrequirednpc.new.header_25_man',
             'npc_id'         => '@todo de: .dungeonspeedrunrequirednpc.new.npc_id',
             'linked_npc_ids' => '@todo de: .dungeonspeedrunrequirednpc.new.linked_npc_ids',
             'count'          => '@todo de: .dungeonspeedrunrequirednpc.new.count',
@@ -129,7 +132,8 @@ return [
             'submit'                  => '@todo de: .floor.edit.submit',
 
             'speedrun_required_npcs' => [
-                'title'                => '@todo de: .floor.edit.speedrun_required_npcs.title',
+                'title_10_man'         => '@todo de-DE: .floor.edit.speedrun_required_npcs.title_10_man',
+                'title_25_man'         => '@todo de-DE: .floor.edit.speedrun_required_npcs.title_25_man',
                 'add_npc'              => '@todo de: .floor.edit.speedrun_required_npcs.add_npc',
                 'table_header_id'      => '@todo de: .floor.edit.speedrun_required_npcs.table_header_id',
                 'table_header_npc'     => '@todo de: .floor.edit.speedrun_required_npcs.table_header_npc',
@@ -392,12 +396,12 @@ return [
         ],
         'wowtools'     => [
             'importingamecoordinates' => [
-                'title'                   => '@todo de: .tools.wowtools.importingamecoordinates.title',
-                'header'                  => '@todo de: .tools.wowtools.importingamecoordinates.header',
-                'map_csv'                 => '@todo de: .tools.wowtools.importingamecoordinates.map_csv',
-                'ui_map_group_member_csv' => '@todo de: .tools.wowtools.importingamecoordinates.ui_map_group_member_csv',
-                'ui_map_assignment_csv'   => '@todo de: .tools.wowtools.importingamecoordinates.ui_map_assignment_csv',
-                'submit'                  => '@todo de: .tools.wowtools.importingamecoordinates.submit',
+                'title'                                  => '@todo de: .tools.wowtools.importingamecoordinates.title',
+                'header'                                 => '@todo de: .tools.wowtools.importingamecoordinates.header',
+                'map_table_xhr_response'                 => '@todo de-DE: .tools.wowtools.importingamecoordinates.map_table_xhr_response',
+                'ui_map_group_member_table_xhr_response' => '@todo de-DE: .tools.wowtools.importingamecoordinates.ui_map_group_member_table_xhr_response',
+                'ui_map_assignment_table_xhr_response'   => '@todo de-DE: .tools.wowtools.importingamecoordinates.ui_map_assignment_table_xhr_response',
+                'submit'                                 => '@todo de: .tools.wowtools.importingamecoordinates.submit',
             ],
         ],
     ],

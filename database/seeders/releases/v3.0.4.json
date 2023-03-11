@@ -19,7 +19,8 @@
                 "change": "Accessing your profile would sometimes give a 500 error code, depending on your various Team memberships. This has been resolved.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -29,7 +30,8 @@
                 "change": "You can now import MDT strings while not logged in (from the Try menu) as was intended.",
                 "category": {
                     "id": 1,
-                    "category": "General changes"
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
                 }
             },
             {
@@ -39,7 +41,8 @@
                 "change": "Cooperative route editing should now be bug-free across multiple floors.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             },
             {
@@ -49,7 +52,8 @@
                 "change": "Internal lat\/lng data was sometimes saved in the wrong order. This has been corrected.",
                 "category": {
                     "id": 3,
-                    "category": "Map changes"
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
                 }
             }
         ]
