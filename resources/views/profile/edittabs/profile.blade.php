@@ -1,5 +1,6 @@
 <?php
-/** @var $user \App\User */
+/** @var \App\User $user */
+/** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
 ?>
 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
     {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch', 'files' => true]) }}
@@ -66,25 +67,16 @@
         {!! Form::color('echo_color', null, ['id' => 'echo_color', 'class' => 'form-control']) !!}
 
         <?php
-        $half = ($allClasses->count() / 2);
-        for ($i = 0;
-             $i < $allClasses->count();
-             $i++){
-            $class = $allClasses->get($i)
-            ?>
-        @if($i % $half === 0)
-            <div class="row no-gutters pt-1">
-                @endif
-                <div class="col profile_class_color border-dark"
-                     data-color="{{ $class->color }}"
-                     style="background-color: {{ $class->color }};">
-                </div>
-                @if($i % $half === $half - 1)
+        foreach ($allClasses->chunk(13) as $chunk) { ?>
+        <div class="row no-gutters pt-1">
+            <?php foreach ($chunk as $class) { ?>
+            <div class="col-md profile_class_color border-dark"
+                 data-color="{{ $class->color }}"
+                 style="background-color: {{ $class->color }};">
             </div>
-        @endif
-            <?php
-        }
-        ?>
+            <?php } ?>
+        </div>
+        <?php } ?>
     </div>
 
     {!! Form::submit(__('views/profile.edit.save'), ['class' => 'btn btn-info']) !!}
