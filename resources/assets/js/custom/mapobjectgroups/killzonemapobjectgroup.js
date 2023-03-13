@@ -49,21 +49,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let toSave = [];
 
-        console.log(this.objects);
-
-        $.each(this.objects, function (i, obj) {
-            console.log(i, obj, obj.getIndex(), mapObject.getIndex());
+        let sortedObjects = _.sortBy(_.values(this.objects), 'index');
+        for (let i = 0; i < sortedObjects.length; i++) {
+            /** @type KillZone */
+            let obj = sortedObjects[i];
 
             if (obj.getIndex() >= mapObject.getIndex()) {
                 toSave.push(obj);
-                obj.setIndex(obj.getIndex() - 1);
+                obj.setIndex(i + 1);
             }
-        });
-
-        console.log('toSave', toSave);
+        }
 
         // If last pull is deleted, we don't need to change anything to pulls ahead of us (indices)
-        if (toSave.length > 1) {
+        if (toSave.length > 0) {
             this.massSave('*', null, toSave);
         }
 
