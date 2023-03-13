@@ -86,6 +86,16 @@ class PatreonApiServiceLogging extends StructuredLogging implements PatreonApiSe
     }
 
     /**
+     * @param $response
+     * @return void
+     */
+    public function getAllPagesUnknownResponse($response): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+
+    /**
      * @param array $errors
      * @return void
      */

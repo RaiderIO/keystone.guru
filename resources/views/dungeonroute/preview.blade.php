@@ -33,6 +33,7 @@ $dungeon->load('floors');
         'dungeonroute' => $dungeonroute,
         'showAds' => false,
         'edit' => false,
+        'echo' => false,
         'noUI' => true,
         'defaultZoom' => 1,
         'floorId' => $floorId,
