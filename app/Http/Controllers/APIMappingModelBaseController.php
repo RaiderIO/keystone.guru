@@ -23,6 +23,11 @@ abstract class APIMappingModelBaseController extends Controller
 {
     use ChangesMapping;
 
+    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
+    {
+        return true;
+    }
+
     /**
      * @param array $validated
      * @param string $modelClass
@@ -51,7 +56,9 @@ abstract class APIMappingModelBaseController extends Controller
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
-                $this->mappingChanged($beforeModel, $model);
+                if ($this->shouldCallMappingChanged($beforeModel, $model)) {
+                    $this->mappingChanged($beforeModel, $model);
+                }
 
                 if (Auth::check()) {
                     broadcast(new ModelChangedEvent($model->floor->dungeon, Auth::getUser(), $model));

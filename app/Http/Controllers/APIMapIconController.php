@@ -8,6 +8,7 @@ use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Team;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,10 +19,19 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
+use Throwable;
 
 class APIMapIconController extends APIMappingModelBaseController
 {
     use PublicKeyDungeonRoute;
+
+
+    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
+    {
+        /** @var MapIcon $beforeModel */
+        /** @var MapIcon $afterModel */
+        return $beforeModel->dungeon_route_id === null || $afterModel->dungeon_route_id === null;
+    }
 
     /**
      * @param MapIconFormRequest $request
@@ -29,10 +39,11 @@ class APIMapIconController extends APIMappingModelBaseController
      * @param MapIcon|null $mapIcon
      * @return MapIcon|Model
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function store(MapIconFormRequest $request, ?DungeonRoute $dungeonroute, MapIcon $mapIcon = null): MapIcon
     {
-        $validated = $request->validated();
+        $validated                     = $request->validated();
         $validated['dungeon_route_id'] = optional($dungeonroute)->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
@@ -70,7 +81,7 @@ class APIMapIconController extends APIMappingModelBaseController
             }
 
             // Set the mapping version if it was placed in the context of a dungeon
-            if($dungeonroute === null){
+            if ($dungeonroute === null) {
                 $mapIcon->mapping_version_id = $validated['mapping_version_id'];
                 $mapIcon->save();
             }
