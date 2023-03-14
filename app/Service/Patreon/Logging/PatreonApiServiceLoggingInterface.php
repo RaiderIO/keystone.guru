@@ -22,5 +22,7 @@ interface PatreonApiServiceLoggingInterface
 
     public function getAllPagesPageNr(int $count): void;
 
+    public function getAllPagesUnknownResponse($response): void;
+
     public function getAllPagesError(array $errors): void;
 }

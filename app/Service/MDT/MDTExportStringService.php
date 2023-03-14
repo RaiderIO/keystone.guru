@@ -49,7 +49,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $mapIcon->floor->mdt_sub_level ?? $mapIcon->floor->index,
                     4 => true,
-                    5 => $mapIcon->comment ?? __($mapIcon->mapicontype->name) ?? '',
+                    5 => $mapIcon->comment ?? __(optional($mapIcon->mapicontype)->name) ?? '',
                 ],
             ];
         }

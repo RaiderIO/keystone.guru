@@ -144,13 +144,15 @@ class PatreonApiService implements PatreonApiServiceInterface
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
-            $requestResult = $apiClient->get_data($next);
+            $requestResult = $originalResponse = $apiClient->get_data($next);
             // Insane workaround if you get a 4xx error it won't do json_decode
             if (is_string($requestResult)) {
                 $requestResult = json_decode($requestResult, true);
             }
 
-            if (!isset($requestResult['errors'])) {
+            if ($requestResult === null) {
+                $this->log->getAllPagesUnknownResponse($originalResponse);
+            } else if (!isset($requestResult['errors'])) {
                 // No errors - continue fetching pages
                 $resultData = array_merge($resultData, $requestResult['data']);
 
