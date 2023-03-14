@@ -30,7 +30,7 @@ class APIMapIconController extends APIMappingModelBaseController
     {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
-        return $beforeModel->dungeon_route_id === null || $afterModel->dungeon_route_id === null;
+        return optional($beforeModel)->dungeon_route_id === null || optional($afterModel)->dungeon_route_id === null;
     }
 
     /**
