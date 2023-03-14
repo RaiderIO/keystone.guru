@@ -331,7 +331,7 @@ class DungeonDataSeeder extends Seeder
         DB::table('mountable_areas')->truncate();
         DB::table('dungeon_speedrun_required_npcs')->truncate();
         // Delete all map icons that are always there
-        DB::table('map_icons')->whereNull('dungeon_route_id')->delete();
+        DB::table('map_icons')->whereNull('dungeon_route_id')->whereNotNull('team_id')->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
 

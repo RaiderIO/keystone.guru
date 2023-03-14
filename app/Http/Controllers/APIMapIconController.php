@@ -74,17 +74,18 @@ class APIMapIconController extends APIMappingModelBaseController
             if ($teamId !== null) {
                 $team = Team::find($teamId);
                 if ($team !== null && $team->isUserCollaborator(Auth::user())) {
-                    $mapIcon->team_id          = $teamId;
-                    $mapIcon->dungeon_route_id = null;
-                    $mapIcon->save();
+                    $mapIcon->update([
+                        'team_id'          => $teamId,
+                        'dungeon_route_id' => null,
+                    ]);
                 }
             }
 
-            // Set the mapping version if it was placed in the context of a dungeon
-            if ($dungeonroute === null) {
-                $mapIcon->mapping_version_id = $validated['mapping_version_id'];
-                $mapIcon->save();
-            }
+            // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
+            // of a dungeon
+            $mapIcon->update([
+                'mapping_version_id' => $dungeonroute === null ? $validated['mapping_version_id'] : null,
+            ]);
 
             // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
             if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonroute !== null && $mapIcon->team_id === null) {
@@ -94,7 +95,7 @@ class APIMapIconController extends APIMappingModelBaseController
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
 
-            // Only when icons that are sticky to the map are saved
+            // Only when icons that are not sticky to the map are saved
             if ($dungeonroute !== null) {
                 $dungeonroute->touch();
             }
