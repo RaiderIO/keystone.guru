@@ -455,7 +455,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
 
         // May be performed without being logged in (sandbox functionality)
-        Route::group(['prefix' => '{dungeonroute}'], function () {
+        Route::group(['prefix' => '{dungeonRoute}'], function () {
             Route::post('/brushline', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
 
@@ -485,7 +485,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         // Must be logged in to perform these actions
         Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-            Route::group(['prefix' => '{dungeonroute}'], function () {
+            Route::group(['prefix' => '{dungeonRoute}'], function () {
                 Route::patch('/', [APIDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
                 Route::patch('/pullgradient', [APIDungeonRouteController::class, 'storePullGradient'])->name('api.dungeonroute.pullgradient.update');
                 Route::delete('/', [APIDungeonRouteController::class, 'delete'])->name('api.dungeonroute.delete');
@@ -500,7 +500,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/migrate/{seasonalType}', [APIDungeonRouteController::class, 'migrateToSeasonalType']);
 
-                Route::group(['prefix' => '/live/{livesession}'], function () {
+                Route::group(['prefix' => '/live/{liveSession}'], function () {
                     Route::delete('/', [APILiveSessionController::class, 'delete']);
 
                     Route::post('/overpulledenemy', [APIOverpulledEnemyController::class, 'store']);
@@ -510,7 +510,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::group(['prefix' => 'echo'], function () {
                 // Echo controller misc
-                Route::get('{dungeonroute}/members', [APIEchoController::class, 'members']);
+                Route::get('{dungeonRoute}/members', [APIEchoController::class, 'members']);
             });
 
             // Teams

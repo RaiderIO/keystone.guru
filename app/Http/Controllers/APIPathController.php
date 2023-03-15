@@ -22,21 +22,21 @@ class APIPathController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return Path
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    function store(Request $request, DungeonRoute $dungeonRoute)
     {
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         /** @var Path $path */
         $path = Path::findOrNew($request->get('id'));
 
         try {
-            $path->dungeon_route_id = $dungeonroute->id;
+            $path->dungeon_route_id = $dungeonRoute->id;
             $path->floor_id         = (int)$request->get('floor_id');
 
             // Init to a default value if new
@@ -60,11 +60,11 @@ class APIPathController extends Controller
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $path));
+                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                $dungeonRoute->touch();
             } else {
                 throw new \Exception('Unable to save path!');
             }
@@ -78,26 +78,26 @@ class APIPathController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Path $path
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
+    function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
     {
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         try {
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $path));
+                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

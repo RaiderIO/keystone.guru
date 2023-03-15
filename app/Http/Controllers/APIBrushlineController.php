@@ -22,20 +22,20 @@ class APIBrushlineController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return Brushline
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    function store(Request $request, DungeonRoute $dungeonRoute)
     {
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         /** @var Brushline $brushline */
         $brushline = Brushline::findOrNew($request->get('id'));
 
-        $brushline->dungeon_route_id = $dungeonroute->id;
+        $brushline->dungeon_route_id = $dungeonRoute->id;
         $brushline->floor_id         = (int)$request->get('floor_id');
 
         // Init to a default value if new
@@ -57,11 +57,11 @@ class APIBrushlineController extends Controller
             $brushline->load(['polyline']);
 
             if (Auth::check()) {
-                broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $brushline));
+                broadcast(new ModelChangedEvent($dungeonRoute, Auth::getUser(), $brushline));
             }
 
             // Touch the route so that the thumbnail gets updated
-            $dungeonroute->touch();
+            $dungeonRoute->touch();
         }
 
         return $brushline;
@@ -69,26 +69,26 @@ class APIBrushlineController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Brushline $brushline
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, Brushline $brushline)
+    function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
-        if (!$dungeonroute->isSandbox()) {
+        if (!$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonroute);
+            $this->authorize('edit', $dungeonRoute);
         }
 
         try {
             if ($brushline->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $brushline));
+                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
                 }
 
                 // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

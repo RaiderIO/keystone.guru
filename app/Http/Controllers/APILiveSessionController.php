@@ -16,27 +16,27 @@ class APILiveSessionController extends Controller
 {
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
+     * @param DungeonRoute $dungeonRoute
+     * @param LiveSession $liveSession
      * @return Response|ResponseFactory
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
+    function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
     {
         try {
-            if ($livesession->expires_at === null) {
+            if ($liveSession->expires_at === null) {
                 $expiresHours = config('keystoneguru.live_sessions.expires_hours');
 
-                $livesession->expires_at = now()->addHours($expiresHours);
-                $livesession->save();
+                $liveSession->expires_at = now()->addHours($expiresHours);
+                $liveSession->save();
 
                 if (Auth::check()) {
-                    broadcast(new StopEvent($livesession, Auth::user()));
+                    broadcast(new StopEvent($liveSession, Auth::user()));
                 }
 
                 // Convert to seconds
                 $result = ['expires_in' => $expiresHours * 3600];
             } else {
-                $result = ['expires_in' => $livesession->getExpiresInSeconds()];
+                $result = ['expires_in' => $liveSession->getExpiresInSeconds()];
             }
 
         } catch (Exception $ex) {

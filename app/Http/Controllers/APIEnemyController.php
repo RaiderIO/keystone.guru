@@ -63,25 +63,25 @@ class APIEnemyController extends APIMappingModelBaseController
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Enemy $enemy
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    public function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
+    public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonroute);
+        $this->authorize('edit', $dungeonRoute);
 
         try {
             $raidMarkerName = $request->get('raid_marker_name', '');
 
             // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonroute->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if (!empty($raidMarkerName)) {
                 DungeonRouteEnemyRaidMarker::create([
-                    'dungeon_route_id' => $dungeonroute->id,
+                    'dungeon_route_id' => $dungeonRoute->id,
                     'raid_marker_id'   => RaidMarker::where('name', $raidMarkerName)->first()->id,
                     'enemy_id'         => $enemy->id,
                 ]);
