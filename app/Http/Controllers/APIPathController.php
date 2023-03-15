@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\SavesPolylines;
+use App\Http\Requests\Path\APIPathFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
@@ -21,50 +22,59 @@ class APIPathController extends Controller
     use SavesPolylines;
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param APIPathFormRequest $request
+     * @param DungeonRoute $dungeonRoute
+     * @param Path|null $path
      * @return Path
-     * @throws \Exception
+     * @throws AuthorizationException
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    function store(APIPathFormRequest $request, DungeonRoute $dungeonRoute, ?Path $path = null)
     {
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
+
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
-        /** @var Path $path */
-        $path = Path::findOrNew($request->get('id'));
+        $validated = $request->validated();
+
+        if ($path === null) {
+            $path    = Path::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $validated['floor_id'],
+                'polyline_id'      => -1,
+            ]);
+            $success = $path instanceof Path;
+        } else {
+            $success = $path->update([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $validated['floor_id'],
+            ]);
+        }
 
         try {
-            $path->dungeon_route_id = $dungeonroute->id;
-            $path->floor_id         = (int)$request->get('floor_id');
-
-            // Init to a default value if new
-            if (!$path->exists) {
-                $path->polyline_id = -1;
-            }
-
-            if ($path->save()) {
+            if ($success) {
                 // Create a new polyline and save it
-                $polyline = $this->savePolyline(Polyline::findOrNew($path->polyline_id), $path, $request->get('polyline'));
+                $polyline = $this->savePolyline(Polyline::findOrNew($path->polyline_id), $path, $validated['polyline']);
 
                 // Couple the path to the polyline
-                $path->polyline_id = $polyline->id;
-                $path->save();
+                $path->update([
+                    'polyline_id' => $polyline->id,
+                ]);
 
                 // Load the polyline so it can be echoed back to the user
                 $path->load(['polyline']);
 
                 // Set or unset the linked awakened obelisks now that we have an ID
-                $path->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
+                $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $path));
+                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                $dungeonRoute->touch();
             } else {
                 throw new \Exception('Unable to save path!');
             }
@@ -78,30 +88,32 @@ class APIPathController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Path $path
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
+    function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
     {
+        $dungeonRoute = $path->dungeonRoute;
+
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         try {
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $path));
+                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {
-                $result = response('Unable to save Path', Http::INTERNAL_SERVER_ERROR);
+                $result = response('Unable to delete Path', Http::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

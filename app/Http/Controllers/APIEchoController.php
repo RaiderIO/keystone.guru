@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class APIEchoController extends Controller
 {
-    public function members(Request $request, DungeonRoute $dungeonroute)
+    public function members(Request $request, DungeonRoute $dungeonRoute)
     {
-        dd($dungeonroute);
+        dd($dungeonRoute);
     }
 }

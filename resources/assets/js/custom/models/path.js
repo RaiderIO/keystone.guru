@@ -42,7 +42,7 @@ L.Draw.Path.prototype._getTooltipText = function () {
  */
 class Path extends Polyline {
     constructor(map, layer) {
-        super(map, layer, {name: 'path'});
+        super(map, layer, {name: 'path', hasRouteModelBinding: true});
 
         this.label = 'Path';
         this.decorator = null;

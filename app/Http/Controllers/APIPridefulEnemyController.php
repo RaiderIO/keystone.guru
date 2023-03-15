@@ -18,25 +18,25 @@ class APIPridefulEnemyController extends Controller
 {
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Enemy $enemy
      * @return PridefulEnemy
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
+    function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         /** @var PridefulEnemy $pridefulEnemy */
-        $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
+        $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
 
         if ($pridefulEnemy === null) {
             $pridefulEnemy = new PridefulEnemy();
         }
 
-        $pridefulEnemy->dungeon_route_id = $dungeonroute->id;
+        $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
         $pridefulEnemy->enemy_id         = (int)$enemy->id;
         $pridefulEnemy->floor_id         = (int)$request->get('floor_id');
         $pridefulEnemy->lat              = (float)$request->get('lat');
@@ -47,30 +47,30 @@ class APIPridefulEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
+            broadcast(new ModelChangedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
         }
 
-        $dungeonroute->touch();
+        $dungeonRoute->touch();
 
         return $pridefulEnemy;
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Enemy $enemy
      * @return Response|ResponseFactory
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
+    function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         try {
             /** @var PridefulEnemy $pridefulEnemy */
-            $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
+            $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
-                broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $pridefulEnemy));
+                broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
             }
 
-            $dungeonroute->touch();
+            $dungeonRoute->touch();
 
             $result = response()->noContent();
         } catch (Exception $ex) {

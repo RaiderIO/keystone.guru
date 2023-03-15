@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int|null $linked_awakened_obelisk_id
+ *
  * @property Collection|MapObjectToAwakenedObeliskLink[] $linkedawakenedobelisks
  *
  * @mixin Eloquent
@@ -65,12 +67,12 @@ trait HasLinkedAwakenedObelisk
 
         // Insert new link
         if ($mapIcon !== null && $mapIcon->isAwakenedObelisk()) {
-            $result = (new MapObjectToAwakenedObeliskLink([
+            $result = MapObjectToAwakenedObeliskLink::create([
                 'source_map_object_id'           => $this->id,
                 'source_map_object_class_name'   => get_class($this),
                 'target_map_icon_type_id'        => $mapIcon->map_icon_type_id,
                 'target_map_icon_seasonal_index' => $mapIcon->seasonal_index,
-            ]))->save();
+            ]);
         }
 
         return $result || $mapIcon === null;

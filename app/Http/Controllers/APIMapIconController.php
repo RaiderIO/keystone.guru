@@ -30,31 +30,32 @@ class APIMapIconController extends APIMappingModelBaseController
     {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
-        return $beforeModel->dungeon_route_id === null || $afterModel->dungeon_route_id === null;
+        return optional($beforeModel)->dungeon_route_id === null || optional($afterModel)->dungeon_route_id === null;
     }
 
     /**
      * @param MapIconFormRequest $request
-     * @param ?DungeonRoute $dungeonroute
+     * @param ?DungeonRoute $dungeonRoute
      * @param MapIcon|null $mapIcon
      * @return MapIcon|Model
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function store(MapIconFormRequest $request, ?DungeonRoute $dungeonroute, MapIcon $mapIcon = null): MapIcon
+    public function store(MapIconFormRequest $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon = null): MapIcon
     {
+        $dungeonRoute                  = optional($mapIcon)->dungeonRoute ?? $dungeonRoute;
         $validated                     = $request->validated();
-        $validated['dungeon_route_id'] = optional($dungeonroute)->id;
+        $validated['dungeon_route_id'] = optional($dungeonRoute)->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
-        if ($dungeonroute === null) {
+        if ($dungeonRoute === null) {
             if (!$isUserAdmin) {
                 throw new Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
-        else if (!$dungeonroute->isSandbox()) {
-            $this->authorize('edit', $dungeonroute);
+        else if (!$dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $dungeonRoute);
         }
 
         $mapIconTypeId = $validated['map_icon_type_id'];
@@ -68,7 +69,7 @@ class APIMapIconController extends APIMappingModelBaseController
             }
         }
 
-        return $this->storeModel($validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonroute) {
+        return $this->storeModel($validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonRoute) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $teamId = $validated['team_id'];
             if ($teamId !== null) {
@@ -84,11 +85,11 @@ class APIMapIconController extends APIMappingModelBaseController
             // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
             // of a dungeon
             $mapIcon->update([
-                'mapping_version_id' => $dungeonroute === null ? $validated['mapping_version_id'] : null,
+                'mapping_version_id' => $dungeonRoute === null ? $validated['mapping_version_id'] : null,
             ]);
 
             // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
-            if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonroute !== null && $mapIcon->team_id === null) {
+            if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
                 throw new Exception('Unable to save map icon!');
             }
 
@@ -96,43 +97,45 @@ class APIMapIconController extends APIMappingModelBaseController
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
 
             // Only when icons that are not sticky to the map are saved
-            if ($dungeonroute !== null) {
-                $dungeonroute->touch();
+            if ($dungeonRoute !== null) {
+                $dungeonRoute->touch();
             }
         });
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute|null $dungeonroute
+     * @param DungeonRoute|null $dungeonRoute
      * @param MapIcon $mapIcon
      * @return array|ResponseFactory|Response
      * @throws Exception
      */
-    function delete(Request $request, ?DungeonRoute $dungeonroute, MapIcon $mapIcon)
+    function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon)
     {
+        $dungeonRoute = $mapIcon->dungeonRoute;
+
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
-        if (!$isAdmin && ($dungeonroute === null || $mapIcon->dungeon_route_id === null)) {
+        if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
         } // We're editing a map comment for the user, carry on
-        else if ($dungeonroute !== null && !$dungeonroute->isSandbox()) {
+        else if ($dungeonRoute !== null && !$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonroute);
+            $this->authorize('edit', $dungeonRoute);
         }
 
         try {
             if ($mapIcon->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonroute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
+                    broadcast(new ModelDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
                 }
 
                 // Only when icons that are sticky to the map are saved
-                if ($dungeonroute === null) {
+                if ($dungeonRoute === null) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
                     $this->mappingChanged($mapIcon, null);
                 } else {
-                    $dungeonroute->touch();
+                    $dungeonRoute->touch();
                 }
 
                 $result = response()->noContent();
@@ -151,6 +154,7 @@ class APIMapIconController extends APIMappingModelBaseController
      * @param MapIcon|null $mapIcon
      * @return MapIcon
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function adminStore(MapIconFormRequest $request, MapIcon $mapIcon = null): MapIcon
     {

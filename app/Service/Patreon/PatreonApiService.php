@@ -151,6 +151,7 @@ class PatreonApiService implements PatreonApiServiceInterface
             }
 
             if ($requestResult === null) {
+                $next = null;
                 $this->log->getAllPagesUnknownResponse($originalResponse);
             } else if (!isset($requestResult['errors'])) {
                 // No errors - continue fetching pages

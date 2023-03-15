@@ -31,7 +31,6 @@ use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
-use App\Models\Metrics\Metric;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -41,7 +40,6 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
-use App\Service\Metric\MetricServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -438,43 +436,49 @@ class APIDungeonRouteController extends Controller
      * @param SeasonService $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute|null $dungeonroute
+     * @param DungeonRoute|null $dungeonRoute
      * @return DungeonRoute
      * @throws AuthorizationException
      */
-    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null)
+    function store(
+        APIDungeonRouteFormRequest $request,
+        SeasonService              $seasonService,
+        ExpansionServiceInterface  $expansionService,
+        ThumbnailServiceInterface  $thumbnailService,
+        DungeonRoute               $dungeonRoute = null
+    )
     {
-        $this->authorize('edit', $dungeonroute);
+        $this->authorize('edit', $dungeonRoute);
 
-        if ($dungeonroute === null) {
-            $dungeonroute = new DungeonRoute();
+        if ($dungeonRoute === null) {
+            $dungeonRoute = new DungeonRoute();
         }
 
         // Update or insert it
-        if (!$dungeonroute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
+        if (!$dungeonRoute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
-        return $dungeonroute;
+        return $dungeonRoute;
     }
 
     /**
      * @param Request $request
      * @param SeasonService $seasonService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      *
      * @return Response
      * @throws AuthorizationException
      */
-    function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
+    function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('edit', $dungeonroute);
+        $this->authorize('edit', $dungeonRoute);
 
-        $dungeonroute->pull_gradient              = $request->get('pull_gradient', '');
-        $dungeonroute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
+        $dungeonRoute->pull_gradient              = $request->get('pull_gradient', '');
+        $dungeonRoute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
 
         // Update or insert it
-        if (!$dungeonroute->save()) {
+        if (!$dungeonRoute->save()) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -483,15 +487,15 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
-    function delete(Request $request, DungeonRoute $dungeonroute)
+    function delete(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('delete', $dungeonroute);
+        $this->authorize('delete', $dungeonRoute);
 
-        if (!$dungeonroute->delete()) {
+        if (!$dungeonRoute->delete()) {
             abort(500, 'Unable to delete dungeonroute');
         }
 
@@ -500,26 +504,26 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param PublishFormRequest $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      *
      * @return Response
      * @throws Exception
      */
-    function publishedState(PublishFormRequest $request, DungeonRoute $dungeonroute)
+    function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('publish', $dungeonroute);
+        $this->authorize('publish', $dungeonRoute);
 
         $publishedState = $request->get('published_state', PublishedState::UNPUBLISHED);
 
-        if (!PublishedState::getAvailablePublishedStates($dungeonroute, Auth::user())->contains($publishedState)) {
+        if (!PublishedState::getAvailablePublishedStates($dungeonRoute, Auth::user())->contains($publishedState)) {
             abort(422, 'This sharing state is not available for this route');
         }
 
-        $dungeonroute->published_state_id = PublishedState::ALL[$publishedState];
-        if ($dungeonroute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
-            $dungeonroute->published_at = date('Y-m-d H:i:s', time());
+        $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
+        if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
+            $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
         }
-        $dungeonroute->save();
+        $dungeonRoute->save();
 
         return response()->noContent();
     }
@@ -527,19 +531,19 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Team $team
      * @return Response
      * @throws AuthorizationException
      */
-    function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute, Team $team)
+    function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team)
     {
-        $this->authorize('clone', $dungeonroute);
+        $this->authorize('clone', $dungeonRoute);
 
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonroute->cloneRoute($thumbnailService, false);
+            $newRoute = $dungeonRoute->cloneRoute($thumbnailService, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);
@@ -551,82 +555,86 @@ class APIDungeonRouteController extends Controller
     /**
      * @param ExpansionServiceInterface $expansionService
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param string $seasonalType
      * @return Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function migrateToSeasonalType(ExpansionServiceInterface $expansionService, Request $request, DungeonRoute $dungeonroute, string $seasonalType)
-    {
-        $this->authorize('migrate', $dungeonroute);
+    function migrateToSeasonalType(
+        ExpansionServiceInterface $expansionService,
+        Request                   $request,
+        DungeonRoute              $dungeonRoute,
+        string                    $seasonalType
+    ) {
+        $this->authorize('migrate', $dungeonRoute);
 
-        $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
+        $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
 
         return response('', Http::NO_CONTENT);
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
      */
-    function rate(Request $request, DungeonRoute $dungeonroute)
+    function rate(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('rate', $dungeonroute);
+        $this->authorize('rate', $dungeonRoute);
 
         $value = $request->get('rating', -1);
         if ($value > 0) {
             $user = Auth::user();
 
             /** @var DungeonRouteRating $dungeonRouteRating */
-            $dungeonRouteRating         = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating         = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonRoute->id, 'user_id' => $user->id]);
             $dungeonRouteRating->rating = max(1, min(10, $value));
             $dungeonRouteRating->save();
         }
 
-        $dungeonroute->unsetRelation('ratings');
-        DungeonRoute::dropCaches($dungeonroute->id);
-        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+        $dungeonRoute->unsetRelation('ratings');
+        DungeonRoute::dropCaches($dungeonRoute->id);
+        return ['new_avg_rating' => $dungeonRoute->getAvgRatingAttribute()];
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
      */
-    function rateDelete(Request $request, DungeonRoute $dungeonroute)
+    function rateDelete(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('rate', $dungeonroute);
+        $this->authorize('rate', $dungeonRoute);
 
         $user = Auth::user();
 
         /** @var DungeonRouteRating $dungeonRouteRating */
         $dungeonRouteRating = DungeonRouteRating::firstOrFail()
-            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('dungeon_route_id', $dungeonRoute->id)
             ->where('user_id', $user->id);
         $dungeonRouteRating->delete();
 
-        $dungeonroute->unsetRelation('ratings');
-        DungeonRoute::dropCaches($dungeonroute->id);
-        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+        $dungeonRoute->unsetRelation('ratings');
+        DungeonRoute::dropCaches($dungeonRoute->id);
+        return ['new_avg_rating' => $dungeonRoute->getAvgRatingAttribute()];
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
-    function favorite(Request $request, DungeonRoute $dungeonroute)
+    function favorite(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('favorite', $dungeonroute);
+        $this->authorize('favorite', $dungeonRoute);
 
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
-        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonRoute->id, 'user_id' => $user->id]);
         $dungeonRouteFavorite->save();
 
         return response()->noContent();
@@ -634,19 +642,19 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
-    function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
+    function favoriteDelete(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('favorite', $dungeonroute);
+        $this->authorize('favorite', $dungeonRoute);
 
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
         $dungeonRouteFavorite = DungeonRouteFavorite::firstOrFail()
-            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('dungeon_route_id', $dungeonRoute->id)
             ->where('user_id', $user->id);
         $dungeonRouteFavorite->delete();
 
@@ -716,21 +724,21 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param MDTExportStringServiceInterface $mdtExportStringService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return array|void
      * @throws AuthorizationException
      * @throws Throwable
      */
-    function mdtExport(Request $request,
-                       MDTExportStringServiceInterface     $mdtExportStringService,
-                       DungeonRoute                        $dungeonroute)
+    function mdtExport(Request                         $request,
+                       MDTExportStringServiceInterface $mdtExportStringService,
+                       DungeonRoute                    $dungeonRoute)
     {
-        $this->authorize('view', $dungeonroute);
+        $this->authorize('view', $dungeonRoute);
 
         try {
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
-                ->setDungeonRoute($dungeonroute)
+                ->setDungeonRoute($dungeonRoute)
                 ->getEncodedString($warnings);
 
             $warningResult = [];
@@ -741,11 +749,11 @@ class APIDungeonRouteController extends Controller
 
             return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
         } catch (Exception $ex) {
-            Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonroute]);
+            Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
             return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Throwable $error) {
             Log::critical($error->getMessage(), [
-                'dungeonroute' => $dungeonroute->public_key,
+                'dungeonroute' => $dungeonRoute->public_key,
             ]);
 
             if ($error->getMessage() === "Class 'Lua' not found") {
@@ -759,16 +767,16 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APISimulateFormRequest $request
      * @param RaidEventsServiceInterface $raidEventsService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws AuthorizationException
      */
-    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonroute): array
+    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {
-        $this->authorize('view', $dungeonroute);
+        $this->authorize('view', $dungeonRoute);
 
         $raidEventsCollection = $raidEventsService->getRaidEvents(
-            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonroute)
+            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute)
         );
 
         return [

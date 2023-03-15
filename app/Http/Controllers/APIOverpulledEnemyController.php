@@ -23,19 +23,19 @@ class APIOverpulledEnemyController extends Controller
     /**
      * @param OverpulledEnemyServiceInterface $overpulledEnemyService
      * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
+     * @param DungeonRoute $dungeonRoute
+     * @param LiveSession $liveSession
      * @return array
      * @throws AuthorizationException
      */
     function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession)
+        DungeonRoute                    $dungeonRoute,
+        LiveSession                     $liveSession)
     {
-        $this->authorize('view', $dungeonroute);
-        $this->authorize('view', $livesession);
+        $this->authorize('view', $dungeonRoute);
+        $this->authorize('view', $liveSession);
 
         $validated = $request->validated();
 
@@ -44,11 +44,11 @@ class APIOverpulledEnemyController extends Controller
 
         foreach ($enemies as $enemy) {
             /** @var OverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
                 ->where('npc_id', $enemy->npc_id)
                 ->where('mdt_id', $enemy->mdt_id)
                 ->firstOrNew([
-                    'live_session_id' => $livesession->id,
+                    'live_session_id' => $liveSession->id,
                     'kill_zone_id'    => $validated['kill_zone_id'],
                     'npc_id'          => $enemy->npc_id,
                     'mdt_id'          => $enemy->mdt_id,
@@ -59,11 +59,11 @@ class APIOverpulledEnemyController extends Controller
             }
 
             if (Auth::check()) {
-                broadcast(new OverpulledEnemyChangedEvent($livesession, Auth::getUser(), $overpulledEnemy, $enemy));
+                broadcast(new OverpulledEnemyChangedEvent($liveSession, Auth::getUser(), $overpulledEnemy, $enemy));
             }
         }
 
-        return $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+        return $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
     }
 
     /**

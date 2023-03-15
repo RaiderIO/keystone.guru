@@ -244,17 +244,6 @@ class DrawControls extends MapControl {
     _getDrawControlOptions() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
-        let color = $('#edit_route_freedraw_options_color').val();
-        let weight = $('#edit_route_freedraw_options_weight').val();
-
-        if (typeof color === 'undefined') {
-            color = c.map.polyline.defaultColor();
-        }
-
-        if (typeof weight === 'undefined') {
-            weight = c.map.polyline.defaultWeight;
-        }
-
         let hotkeys = {
             path: this._findHotkeyByCssClass('path'),
             mapicon: this._findHotkeyByCssClass('icon'),
@@ -268,8 +257,8 @@ class DrawControls extends MapControl {
             draw: {
                 path: {
                     shapeOptions: {
-                        color: color,
-                        weight: weight,
+                        color: c.map.polyline.defaultColor(),
+                        weight: c.map.polyline.defaultWeight,
                         opacity: 1.0
                     },
                     zIndexOffset: 1000,
