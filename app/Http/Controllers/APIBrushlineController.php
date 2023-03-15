@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\SavesPolylines;
+use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\Polyline;
@@ -21,61 +22,79 @@ class APIBrushlineController extends Controller
     use SavesPolylines;
 
     /**
-     * @param Request $request
+     * @param APIBrushlineFormRequest $request
      * @param DungeonRoute $dungeonRoute
+     * @param Brushline|null $brushline
      * @return Brushline
-     * @throws Exception
+     * @throws AuthorizationException
      */
-    function store(Request $request, DungeonRoute $dungeonRoute)
+    function store(APIBrushlineFormRequest $request, DungeonRoute $dungeonRoute, ?Brushline $brushline = null)
     {
+        $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
+
         if (!$dungeonRoute->isSandbox()) {
             $this->authorize('edit', $dungeonRoute);
         }
 
-        /** @var Brushline $brushline */
-        $brushline = Brushline::findOrNew($request->get('id'));
+        $validated = $request->validated();
 
-        $brushline->dungeon_route_id = $dungeonRoute->id;
-        $brushline->floor_id         = (int)$request->get('floor_id');
-
-        // Init to a default value if new
-        if (!$brushline->exists) {
-            $brushline->polyline_id = -1;
+        if ($brushline === null) {
+            $brushline = Brushline::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $validated['floor_id'],
+                'polyline_id'      => -1,
+            ]);
+            $success   = $brushline instanceof Brushline;
+        } else {
+            $success = $brushline->update([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $validated['floor_id'],
+            ]);
         }
 
-        if (!$brushline->save()) {
-            throw new Exception("Unable to save brushline!");
-        } else {
-            // Create a new polyline and save it
-            $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
+        try {
+            if ($success) {
+                // Create a new polyline and save it
+                $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $validated['polyline']);
 
-            // Couple the brushline to the polyline
-            $brushline->polyline_id = $polyline->id;
-            $brushline->save();
+                // Couple the path to the polyline
+                $brushline->update([
+                    'polyline_id' => $polyline->id,
+                ]);
 
-            // Refresh the polyline before echoing it out
-            $brushline->load(['polyline']);
+                // Load the polyline so it can be echoed back to the user
+                $brushline->load(['polyline']);
 
-            if (Auth::check()) {
-                broadcast(new ModelChangedEvent($dungeonRoute, Auth::getUser(), $brushline));
+                // Something's updated; broadcast it
+                if (Auth::check()) {
+                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $brushline));
+                }
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
+            } else {
+                throw new \Exception('Unable to save brushline!');
             }
 
-            // Touch the route so that the thumbnail gets updated
-            $dungeonRoute->touch();
+            $result = $brushline;
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
         }
 
-        return $brushline;
+        return $result;
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonRoute
      * @param Brushline $brushline
-     * @return array|ResponseFactory|Response
+     * @return Response|ResponseFactory
      * @throws AuthorizationException
      */
     function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
+        $dungeonRoute = $brushline->dungeonRoute;
+
         if (!$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonRoute);

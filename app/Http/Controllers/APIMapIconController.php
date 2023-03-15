@@ -69,8 +69,6 @@ class APIMapIconController extends APIMappingModelBaseController
             }
         }
 
-        dd('OK to store!');
-
         return $this->storeModel($validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonRoute) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $teamId = $validated['team_id'];
@@ -114,6 +112,8 @@ class APIMapIconController extends APIMappingModelBaseController
      */
     function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon)
     {
+        $dungeonRoute = $mapIcon->dungeonRoute;
+
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
         if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {

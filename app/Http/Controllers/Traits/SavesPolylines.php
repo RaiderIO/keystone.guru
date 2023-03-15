@@ -19,14 +19,15 @@ trait SavesPolylines
     /**
      * @param Polyline $polyline
      * @param Model $ownerModel
-     * @param array $data
+     * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
      *
      * @return Polyline
      */
     private function savePolyline(Polyline $polyline, Model $ownerModel, array $data): Polyline
     {
-        $polyline->setRawAttributes([
-            'id'             => $polyline->id,
+        return Polyline::updateOrCreate([
+            'id' => $polyline->id,
+        ], [
             'model_id'       => $ownerModel->id,
             'model_class'    => get_class($ownerModel),
             'color'          => $data['color'] ?? '#f00',
@@ -34,9 +35,5 @@ trait SavesPolylines
             'weight'         => (int)$data['weight'] ?? 2,
             'vertices_json'  => $data['vertices_json'] ?? '{}',
         ]);
-
-        $polyline->save();
-
-        return $polyline;
     }
 }

@@ -28,7 +28,7 @@ class Polyline extends Model implements MappingModelCloneableInterface
 
     public $timestamps = false;
     public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
-    public $fillable = ['model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
 
     /**
      * @param MappingVersion $mappingVersion

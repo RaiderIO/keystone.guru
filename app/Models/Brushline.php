@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  * @property string $updated_at
  * @property string $created_at
  *
- * @property DungeonRoute $dungeonroute
+ * @property DungeonRoute $dungeonRoute
  * @property Polyline $polyline
  * @property Floor $floor
  *
@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 class Brushline extends Model
 {
     public $visible = ['id', 'floor_id', 'polyline'];
+    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
     public $with = ['polyline'];
 
     /**
@@ -37,7 +38,7 @@ class Brushline extends Model
      *
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }

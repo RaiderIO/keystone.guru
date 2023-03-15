@@ -457,6 +457,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         // May be performed without being logged in (sandbox functionality)
         Route::group(['prefix' => '{dungeonRoute}'], function () {
             Route::post('/brushline', [APIBrushlineController::class, 'store']);
+            Route::put('/brushline/{brushline}', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
 
             Route::put('/killzone/mass', [APIKillZoneController::class, 'storeall']);
@@ -473,6 +474,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);
 
             Route::post('/path', [APIPathController::class, 'store']);
+            Route::put('/path/{path}', [APIPathController::class, 'store']);
             Route::delete('/path/{path}', [APIPathController::class, 'delete']);
 
             Route::post('/raidmarker/{enemy}', [APIEnemyController::class, 'setRaidMarker']);
