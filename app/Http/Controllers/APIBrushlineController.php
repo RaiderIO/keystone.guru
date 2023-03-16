@@ -32,9 +32,7 @@ class APIBrushlineController extends Controller
     {
         $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
 
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        $this->authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -95,10 +93,8 @@ class APIBrushlineController extends Controller
     {
         $dungeonRoute = $brushline->dungeonRoute;
 
-        if (!$dungeonRoute->isSandbox()) {
-            // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonRoute);
-        }
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
+        $this->authorize('edit', $dungeonRoute);
 
         try {
             if ($brushline->delete()) {
