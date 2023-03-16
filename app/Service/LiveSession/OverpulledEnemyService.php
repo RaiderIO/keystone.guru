@@ -43,7 +43,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
                 // Loop over all available kill zones from which we can still potentially subtract enemy forces
                 foreach ($availableKillZones as $availableKillZone) {
-                    $availableKillZone->dungeonroute = $liveSession->dungeonroute;
+                    $availableKillZone->dungeonRoute = $liveSession->dungeonroute;
 
                     $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonroute->teeming);
 

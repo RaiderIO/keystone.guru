@@ -169,13 +169,13 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Sets the color for the polyline.
+     * Sets the color for the killzone.
      * @param color
      */
     _setColor(color) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
-        this.color = color ?? this._getColorDefault();
+        this.color = color || this._getColorDefault();
     }
 
     /**

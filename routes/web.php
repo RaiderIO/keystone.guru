@@ -460,7 +460,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::put('/brushline/{brushline}', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
 
-            Route::put('/killzone/mass', [APIKillZoneController::class, 'storeall']);
+            Route::put('/killzone/mass', [APIKillZoneController::class, 'storeAll']);
             Route::post('/killzone', [APIKillZoneController::class, 'store']);
             Route::put('/killzone/{killZone}', [APIKillZoneController::class, 'store']);
             Route::delete('/killzone/{killZone}', [APIKillZoneController::class, 'delete']);
