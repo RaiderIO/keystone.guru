@@ -30,7 +30,7 @@ class APIKillZoneController extends Controller
      * @return KillZone
      * @throws \Exception
      */
-    private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true)
+    private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true): KillZone
     {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
@@ -39,10 +39,9 @@ class APIKillZoneController extends Controller
         /** @var KillZone $killZone */
         $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id']);
 
+        $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
-        if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $killZone->dungeonRoute);
-        }
+        $this->authorize('edit', $killZone->dungeonRoute);
 
         if (!$killZone->exists) {
             $killZone = KillZone::create($data);
@@ -141,9 +140,7 @@ class APIKillZoneController extends Controller
      */
     public function storeAll(APIKillZoneMassFormRequest $request, DungeonRoute $dungeonRoute)
     {
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        $this->authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 

@@ -118,8 +118,8 @@ class APIMapIconController extends APIMappingModelBaseController
         // Must be an admin to use this endpoint like this!
         if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
-        } // We're editing a map comment for the user, carry on
-        else if ($dungeonRoute !== null && !$dungeonRoute->isSandbox()) {
+        } // We're editing a map icon for the user, carry on
+        else if ($dungeonRoute !== null) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonRoute);
         }

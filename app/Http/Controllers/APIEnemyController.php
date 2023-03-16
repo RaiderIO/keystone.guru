@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Http\Requests\Enemy\EnemyFormRequest;
+use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
@@ -27,13 +27,13 @@ class APIEnemyController extends APIMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param EnemyFormRequest $request
+     * @param APIEnemyFormRequest $request
      * @param Enemy|null $enemy
      * @return Enemy|Model
      * @throws Exception
      * @throws Throwable
      */
-    public function store(EnemyFormRequest $request, Enemy $enemy = null): Enemy
+    public function store(APIEnemyFormRequest $request, Enemy $enemy = null): Enemy
     {
         $validated = $request->validated();
 
@@ -42,6 +42,7 @@ class APIEnemyController extends APIMappingModelBaseController
 
         return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request) {
             $activeAuras = $request->get('active_auras', []);
+
             // Clear current active auras
             $enemy->enemyactiveauras()->delete();
             foreach ($activeAuras as $activeAura) {
@@ -82,7 +83,7 @@ class APIEnemyController extends APIMappingModelBaseController
             if (!empty($raidMarkerName)) {
                 DungeonRouteEnemyRaidMarker::create([
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'raid_marker_id'   => RaidMarker::where('name', $raidMarkerName)->first()->id,
+                    'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
                     'enemy_id'         => $enemy->id,
                 ]);
 

@@ -32,9 +32,7 @@ class APIPathController extends Controller
     {
         $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
 
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        $this->authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -97,10 +95,8 @@ class APIPathController extends Controller
     {
         $dungeonRoute = $path->dungeonRoute;
 
-        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's path
+        $this->authorize('edit', $dungeonRoute);
 
         try {
             if ($path->delete()) {

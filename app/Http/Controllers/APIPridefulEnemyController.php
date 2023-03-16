@@ -8,6 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,9 +26,7 @@ class APIPridefulEnemyController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        $this->authorize('edit', $dungeonRoute);
 
         /** @var PridefulEnemy $pridefulEnemy */
         $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
@@ -60,9 +59,12 @@ class APIPridefulEnemyController extends Controller
      * @param DungeonRoute $dungeonRoute
      * @param Enemy $enemy
      * @return Response|ResponseFactory
+     * @throws AuthorizationException
      */
     function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
+        $this->authorize('edit', $dungeonRoute);
+
         try {
             /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
