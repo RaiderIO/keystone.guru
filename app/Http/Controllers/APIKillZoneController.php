@@ -6,6 +6,7 @@ use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
+use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
@@ -36,7 +37,13 @@ class APIKillZoneController extends Controller
         $data['dungeon_route_id'] = $dungeonroute->id;
 
         /** @var KillZone $killZone */
-        $killZone = KillZone::findOrNew($data['id']);
+        $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id']);
+
+        // Prevent someone from updating different killzones than they are allowed to
+        if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $killZone->dungeonRoute);
+        }
+
         if (!$killZone->exists) {
             $killZone = KillZone::create($data);
             $success  = $killZone instanceof KillZone;
@@ -47,7 +54,7 @@ class APIKillZoneController extends Controller
         if ($success) {
             // Only when the enemies are actually set
             if ($enemyIds !== null) {
-                $killZone->killzoneenemies()->delete();
+                $killZone->killzoneEnemies()->delete();
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $validEnemyIds   = [];
@@ -87,7 +94,7 @@ class APIKillZoneController extends Controller
                 broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $killZone));
             }
         } else {
-            throw new \Exception('Unable to save kill zone!');
+            throw new Exception('Unable to save kill zone!');
         }
 
         return $killZone;
@@ -103,9 +110,7 @@ class APIKillZoneController extends Controller
      */
     function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, KillZone $killZone = null): KillZone
     {
-        if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
-        }
+        $dungeonRoute = optional($killZone)->dungeonRoute ?? $dungeonRoute;
 
         try {
             $data = $request->validated();
@@ -129,21 +134,22 @@ class APIKillZoneController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param APIKillZoneMassFormRequest $request
      * @param DungeonRoute $dungeonRoute
      * @return array|ResponseFactory|Response|null
      * @throws AuthorizationException
-     * @throws \Exception
      */
-    function storeall(Request $request, DungeonRoute $dungeonRoute)
+    public function storeAll(APIKillZoneMassFormRequest $request, DungeonRoute $dungeonRoute)
     {
         if (!$dungeonRoute->isSandbox()) {
             $this->authorize('edit', $dungeonRoute);
         }
 
+        $validated = $request->validated();
+
         // Update killzones
         $killZones = new Collection();
-        foreach ($request->get('killzones', []) as $killZoneData) {
+        foreach ($validated['killzones'] as $killZoneData) {
             try {
                 // Unset the enemies since we're quicker to update that in bulk here
                 $kzDataWithoutEnemies = $killZoneData;
@@ -161,7 +167,7 @@ class APIKillZoneController extends Controller
         $validEnemyIds   = $enemies->pluck('id')->toArray();
 
         // Insert new enemies based on what was sent
-        foreach ($request->get('killzones', []) as $killZoneData) {
+        foreach ($validated['killzones'] as $killZoneData) {
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
@@ -211,6 +217,8 @@ class APIKillZoneController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonRoute, KillZone $killZone)
     {
+        $dungeonRoute = $killZone->dungeonRoute;
+
         if (!$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonRoute);
@@ -233,7 +241,7 @@ class APIKillZoneController extends Controller
                 $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
 
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 
@@ -250,7 +258,9 @@ class APIKillZoneController extends Controller
     {
         $this->authorize('edit', $dungeonRoute);
 
-        if ($request->get('confirm') === 'yes') {
+        $validated = $request->validated();
+
+        if ($validated['confirm'] === 'yes') {
             try {
                 $killZones       = $dungeonRoute->killzones;
                 $pridefulEnemies = $dungeonRoute->pridefulenemies;

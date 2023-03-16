@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\DB;
  * @property double $lat
  * @property double $lng
  *
- * @property DungeonRoute $dungeonroute
+ * @property DungeonRoute $dungeonRoute
  * @property Floor $floor
  *
  * @property Collection|int[] $enemies
- * @property Collection|KillZoneEnemy[] $killzoneenemies
+ * @property Collection|KillZoneEnemy[] $killzoneEnemies
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -68,7 +68,7 @@ class KillZone extends Model
      *
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -76,7 +76,7 @@ class KillZone extends Model
     /**
      * @return HasMany
      */
-    public function killzoneenemies(): HasMany
+    public function killzoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
     }
@@ -114,7 +114,7 @@ class KillZone extends Model
     {
         if (isset($this->floor_id) && $this->floor_id > 0) {
             return $this->floor;
-        } else if ($this->killzoneenemies()->count() > 0) {
+        } else if ($this->killzoneEnemies()->count() > 0) {
             $floorTotals = [];
             foreach ($this->getEnemies() as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
@@ -166,7 +166,7 @@ class KillZone extends Model
      */
     public function getSkippableEnemyForces(bool $teeming): Collection
     {
-        $isShrouded = $this->dungeonroute->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
+        $isShrouded = $this->dungeonRoute->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
 
         // Ignore the shrouded query if we're not shrouded (make it fail)
         $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
@@ -224,7 +224,7 @@ class KillZone extends Model
 
         // Delete kill zone properly if it gets deleted
         static::deleting(function (KillZone $item) {
-            $item->killzoneenemies()->delete();
+            $item->killzoneEnemies()->delete();
         });
     }
 }

@@ -379,7 +379,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
 
                                 // Save enemies to the killzones regardless
-                                $killZone->killzoneenemies->push($kzEnemy);
+                                $killZone->killzoneEnemies->push($kzEnemy);
                                 $killZone->enemies->push($enemy->id);
                                 $totalEnemiesMatched++;
                             } else {
@@ -424,7 +424,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     // pull contains the final boss, and if so, convert all its Awakened enemies to the correct enemies
                     // that are around the boss instead
                     $hasFinalBoss = false;
-                    foreach ($killZone->killzoneenemies as $kzEnemy) {
+                    foreach ($killZone->killzoneEnemies as $kzEnemy) {
                         if ($kzEnemy->npc !== null && $kzEnemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
                             $hasFinalBoss = true;
                             break;
@@ -432,7 +432,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     }
 
                     if ($hasFinalBoss) {
-                        foreach ($killZone->killzoneenemies as $kzEnemy) {
+                        foreach ($killZone->killzoneEnemies as $kzEnemy) {
                             if ($kzEnemy->npc !== null && $kzEnemy->npc->isAwakened()) {
                                 // Find the equivalent Awakened Enemy that's next to the boss.
                                 /** @var Enemy $bossAwakenedEnemy */
