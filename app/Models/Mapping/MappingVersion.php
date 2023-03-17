@@ -144,6 +144,12 @@ class MappingVersion extends Model
         static::created(function (MappingVersion $newMappingVersion) {
             /** @var Collection|MappingVersion[] $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingversions()->get();
+
+            // Nothing to do if we don't have an older mapping version
+            if ($existingMappingVersions->count() < 2) {
+                return;
+            }
+
             // We must get the previous mapping version - that contains the mapping we want to clone
             $previousMappingVersion = $existingMappingVersions[1];
 
