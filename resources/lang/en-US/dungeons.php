@@ -190,6 +190,14 @@ return [
             ],
         ],
     ],
+    'cata'         => [
+        'the_vortex_pinnacle' => [
+            'name'   => 'The Vortex Pinnacle',
+            'floors' => [
+                'cyclone_summit' => 'Cyclone Summit',
+            ],
+        ],
+    ],
     'wod'          => [
         'auchindoun'                => [
             'name'   => 'Auchindoun',

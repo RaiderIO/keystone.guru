@@ -168,7 +168,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_LOST_CITY_OF_THE_TOL_VIR = 'lost_city_of_the_tol_vir';
     const DUNGEON_SHADOWFANG_KEEP_CATA     = 'shadowfang_keep_cataclysm';
     const DUNGEON_THE_STONECORE            = 'the_stonecore';
-    const DUNGEON_THE_VORTEX_PINNACLE      = 'the_vortex_pinnacle';
+    const DUNGEON_THE_VORTEX_PINNACLE      = 'skywall';
     const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides';
     const DUNGEON_WELL_OF_ETERNITY         = 'well_of_eternity';
     const DUNGEON_ZUL_AMAN                 = 'zul_aman';
