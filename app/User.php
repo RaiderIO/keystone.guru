@@ -13,6 +13,7 @@ use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\UserReport;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -261,10 +262,15 @@ class User extends Authenticatable
     {
         $teams = ['teams' => []];
         foreach ($this->teams as $team) {
+            try {
+                $newOwner = $team->getNewAdminUponAdminAccountDeletion($this);
+            } catch (Exception $exception) {
+                $newOwner = null;
+            }
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
-                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this),
+                'new_owner' => $newOwner,
             ];
         }
 
@@ -293,6 +299,9 @@ class User extends Authenticatable
             $user->patreonUserLink()->delete();
 
             foreach ($user->teams as $team) {
+                // Remove ourselves from the team
+                $team->removeMember($user);
+
                 /** @var $team Team */
                 if (!$team->isUserAdmin($user)) {
                     continue;
@@ -304,13 +313,11 @@ class User extends Authenticatable
                     if ($newAdmin !== null) {
                         // Appoint someone else admin
                         $team->changeRole(User::find($newAdmin->id), 'admin');
-                        // Remove ourselves from the team
-                        $team->removeMember($user);
                     } else {
                         // There's no new admin to be appointed - delete the team instead
                         $team->delete();
                     }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     logger()->error($exception->getMessage());
                 }
             }

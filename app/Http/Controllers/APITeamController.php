@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Team;
+use App\Models\TeamUser;
 use App\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -130,13 +131,13 @@ class APITeamController extends Controller
             // Disband if no team members are left
             if ($team->members->isEmpty()) {
                 $team->delete();
-            } else {
+            } else if ($team->isUserAdmin($user)) {
                 // Promote someone else to be the new admin
                 $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                 if ($newAdmin !== null) {
                     $team->changeRole(
                         $newAdmin,
-                        'admin'
+                        TeamUser::ROLE_ADMIN
                     );
                 }
             }
