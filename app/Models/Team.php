@@ -362,7 +362,7 @@ class Team extends Model
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
         if ($this->getUserRole($user) !== TeamUser::ROLE_ADMIN) {
-            return throw new Exception(
+            throw new Exception(
                 sprintf(
                     'User %d is not an admin itself - cannot fetch new admin for team %d!',
                     $user->id, $this->id,
