@@ -17,7 +17,7 @@
 @endsection
 <?php
 /**
- * @var $model \App\Models\Npc
+ * @var $npc \App\Models\Npc
  * @var $floor \App\Models\Floor
  * @var $classifications array
  * @var $spells \App\Models\Spell[]
@@ -71,7 +71,7 @@
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('views/admin.npc.edit.class'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
 

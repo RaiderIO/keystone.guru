@@ -139,6 +139,24 @@ class SeasonsSeeder extends Seeder
                     Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
                     Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
                 ])->get(),
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id'       => null,
+                'index'                   => 1,
+                'start'                   => '2023-07-05 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 3,
+                'dungeons'                => Dungeon::whereIn('key', [
+                    Dungeon::DUNGEON_HALLS_OF_INFUSION,
+                    Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
+                    Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+                    Dungeon::DUNGEON_NELTHARUS,
+                    Dungeon::DUNGEON_NELTHARIONS_LAIR,
+                    Dungeon::DUNGEON_FREEHOLD,
+                    Dungeon::DUNGEON_THE_UNDERROT,
+                    Dungeon::DUNGEON_THE_VORTEX_PINNACLE,
+                ])->get(),
             ],
         ];
 
