@@ -12,15 +12,19 @@ class NpcChangedHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
         let mapContext = getState().getMapContext();
-        let isSameDungeon = e.model.dungeon_id === mapContext.getDungeon().id;
+        let isNpcUpdatedForUs = e.model.dungeon_id === mapContext.getDungeon().id || e.model.dungeon_id === -1;
 
         // Remove any existing NPC
         mapContext.removeRawNpcById(e.model.id);
 
         // Do not add the npc does not belong to this dungeon
-        if (isSameDungeon) {
+        if (isNpcUpdatedForUs) {
             // Add the new NPC
-            mapContext.addRawNpc(e.model);
+            mapContext.addRawNpc({
+                id: e.model.id,
+                name: e.model.name,
+                dungeon_id: e.model.dungeon_id
+            });
         }
 
 
@@ -30,7 +34,7 @@ class NpcChangedHandler extends MessageHandler {
             let enemy = enemyMapObjectGroup.objects[key];
             if (enemy.npc_id === e.model.id) {
                 // Re-assign the enemy if it was just updated, unassign it if is no longer available
-                enemy.setNpc(isSameDungeon ? e.model : null);
+                enemy.setNpc(isNpcUpdatedForUs ? e.model : null);
                 enemy.visual.refresh();
             }
 
