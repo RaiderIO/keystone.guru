@@ -1,7 +1,7 @@
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc ?? null],
     'showAds' => false,
-    'title' => isset($npc) ? __('views/admin.npc.edit.title_edit') : __('views/admin.npc.edit.title_new')
+    'title' => isset($npc) ? __('views/admin.npc.edit.title_edit', ['name' => $npc->name]) : __('views/admin.npc.edit.title_new')
 ])
 
 @include('common.general.inline', ['path' => 'admin/npc/edit', 'options' => [
@@ -13,7 +13,7 @@
 ]])
 
 @section('header-title')
-    {{ isset($npc) ? __('views/admin.npc.edit.header_edit') : __('views/admin.npc.edit.header_new') }}
+    {{ isset($npc) ? __('views/admin.npc.edit.header_edit', ['name' => $npc->name]) : __('views/admin.npc.edit.header_new') }}
 @endsection
 <?php
 /**

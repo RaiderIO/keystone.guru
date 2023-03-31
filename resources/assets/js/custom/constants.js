@@ -173,6 +173,12 @@ let c = {
         unlimited_routes: 'unlimited-routes',
         animated_polylines: 'animated-polylines'
     },
+    gameData: {
+        scalingFactor: 1.08,
+        scalingFactorPast10: 1.10,
+        fortifiedScalingFactor: 1.2,
+        tyrannicalScalingFactor: 1.3,
+    },
     map: {
         settings: {
             minZoom: 1,
@@ -265,12 +271,16 @@ let c = {
                 return Math.ceil(result);
             },
             getKeyScalingFactor(keyLevel, fortified, tyrannical) {
-                let keyLevelFactor = Math.pow(getState().getMapContext().getKeystoneScalingFactor(), (keyLevel - 2));
+                let keyLevelFactor = 1;
+                // 2 because we start counting up at key level 3 (+2 = 0)
+                for (let i = 2; i < keyLevel; i++) {
+                    keyLevelFactor *= (i < 10 ? c.gameData.scalingFactor : c.gameData.scalingFactorPast10);
+                }
 
                 if (fortified) {
-                    keyLevelFactor *= 1.2;
+                    keyLevelFactor *= c.gameData.fortifiedScalingFactor;
                 } else if (tyrannical) {
-                    keyLevelFactor *= 1.3;
+                    keyLevelFactor *= c.gameData.tyrannicalScalingFactor;
                 }
 
                 return Math.round(keyLevelFactor * 100) / 100;

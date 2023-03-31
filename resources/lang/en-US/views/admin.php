@@ -155,8 +155,8 @@ return [
         'edit'  => [
             'title_new'                          => 'New NPC',
             'header_new'                         => 'New NPC',
-            'title_edit'                         => 'Edit NPC',
-            'header_edit'                        => 'Edit NPC',
+            'title_edit'                         => 'Edit NPC :name',
+            'header_edit'                        => 'Edit NPC :name',
             'name'                               => 'Name',
             'game_id'                            => 'Game ID',
             'classification'                     => 'Classification',
