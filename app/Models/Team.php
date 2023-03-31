@@ -245,6 +245,18 @@ class Team extends Model
     }
 
     /**
+     * Gets if a user is an admin and may perform admin actions.
+     *
+     * @param $user User
+     * @return bool
+     */
+    public function isUserAdmin(User $user): bool
+    {
+        $userRole = $this->getUserRole($user);
+        return $userRole === TeamUser::ROLE_ADMIN;
+    }
+
+    /**
      * Checks if the user is a collaborator or higher.
      * @param $user  User
      * @return bool True if the user is, false if not.
@@ -344,20 +356,25 @@ class Team extends Model
      * Get the new owner of this team should a user decide to delete their account.
      *
      * @return User|null Null returned if there was no change in owner.
-     * @var $user User
+     * @throws Exception
+     * @var User $user
      */
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
-        if ($this->getUserRole($user) !== 'admin') {
-            return null;
-        } else {
-            $roles    = TeamUser::ALL_ROLES;
-            $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles) {
-                return $roles[$obj->role];
-            })->first();
-
-            return $newOwner !== null ? $newOwner->user : null;
+        if ($this->getUserRole($user) !== TeamUser::ROLE_ADMIN) {
+            throw new Exception(
+                sprintf(
+                    'User %d is not an admin itself - cannot fetch new admin for team %d!',
+                    $user->id, $this->id,
+                ));
         }
+
+        $roles    = TeamUser::ALL_ROLES;
+        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles) {
+            return $roles[$obj->role];
+        })->first();
+
+        return $newOwner !== null ? $newOwner->user : null;
     }
 
     /**

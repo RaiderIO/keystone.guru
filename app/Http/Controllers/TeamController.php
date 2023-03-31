@@ -13,6 +13,7 @@ use App\Http\Requests\TeamFormRequest;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\TeamUser;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -71,7 +72,7 @@ class TeamController extends Controller
 
             if ($new) {
                 // If saving team + logo was successful, save our own user as its first member
-                $team->addMember(Auth::user(), 'admin');
+                $team->addMember(Auth::user(), TeamUser::ROLE_ADMIN);
             }
         }
 
