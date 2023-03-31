@@ -160,7 +160,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3053,
         "enemy_patrol_id": 843,
-        "npc_id": 45704,
+        "npc_id": 45915,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -178,7 +178,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45704
+            "id": 45915
         }
     },
     {
@@ -186,7 +186,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3053,
         "enemy_patrol_id": 843,
-        "npc_id": 45704,
+        "npc_id": 45915,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -204,7 +204,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45704
+            "id": 45915
         }
     },
     {

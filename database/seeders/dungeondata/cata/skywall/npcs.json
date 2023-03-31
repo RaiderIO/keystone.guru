@@ -147,7 +147,7 @@
         "npc_class_id": 1,
         "display_id": 33828,
         "name": "Armored Mistral",
-        "base_health": 12345,
+        "base_health": 1066849,
         "enemy_forces": -1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
