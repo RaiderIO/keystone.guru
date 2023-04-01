@@ -564,7 +564,7 @@ return [
             ],
         ],
         'neltharus'             => [
-            'name'   => 'Nethalrus',
+            'name'   => 'Neltharus',
             'floors' => [
                 'the_burning_cauldron' => 'The Burning Cauldron',
                 'chamber_of_flames'    => 'Chamber of Flames',
