@@ -6143,7 +6143,7 @@
         "key": "hallsofinfusion",
         "name": "dungeons.dragonflight.halls_of_infusion.name",
         "slug": "halls-of-infusion",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 460,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
