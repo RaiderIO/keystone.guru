@@ -368,7 +368,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3055,
         "enemy_patrol_id": null,
-        "npc_id": 45912,
+        "npc_id": 45477,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -386,7 +386,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45912
+            "id": 45477
         }
     },
     {
@@ -394,7 +394,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3055,
         "enemy_patrol_id": null,
-        "npc_id": 45912,
+        "npc_id": 45477,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -412,7 +412,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45912
+            "id": 45477
         }
     },
     {
@@ -472,7 +472,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3056,
         "enemy_patrol_id": null,
-        "npc_id": 45912,
+        "npc_id": 45477,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -490,7 +490,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45912
+            "id": 45477
         }
     },
     {
@@ -501,7 +501,7 @@
         "npc_id": 45912,
         "floor_id": 173,
         "mdt_id": null,
-        "mdt_npc_id": null,
+        "mdt_npc_id": 45477,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -548,7 +548,7 @@
     {
         "id": 15314,
         "mapping_version_id": 100,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 3100,
         "enemy_patrol_id": null,
         "npc_id": 45917,
         "floor_id": 173,
@@ -574,7 +574,7 @@
     {
         "id": 15315,
         "mapping_version_id": 100,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 3100,
         "enemy_patrol_id": null,
         "npc_id": 45912,
         "floor_id": 173,
@@ -600,7 +600,7 @@
     {
         "id": 15316,
         "mapping_version_id": 100,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 3100,
         "enemy_patrol_id": null,
         "npc_id": 45912,
         "floor_id": 173,
@@ -2006,7 +2006,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3069,
         "enemy_patrol_id": null,
-        "npc_id": 45935,
+        "npc_id": 45930,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -2024,7 +2024,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45935
+            "id": 45930
         }
     },
     {
@@ -2084,7 +2084,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3069,
         "enemy_patrol_id": null,
-        "npc_id": 45930,
+        "npc_id": 45935,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -2102,7 +2102,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45930
+            "id": 45935
         }
     },
     {
@@ -2110,7 +2110,7 @@
         "mapping_version_id": 100,
         "enemy_pack_id": 3069,
         "enemy_patrol_id": null,
-        "npc_id": 45930,
+        "npc_id": 45935,
         "floor_id": 173,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -2128,7 +2128,7 @@
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
-            "id": 45930
+            "id": 45935
         }
     },
     {
