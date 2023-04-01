@@ -27,7 +27,7 @@ class AdminNpcEdit extends InlineCode {
             });
 
         $(this.options.scaledHealthToBaseHealthApplyBtnSelector).on('click', function () {
-            let scaledHealth = parseInt($(self.options.scaledHealthSelector).val());
+            let scaledHealth = parseInt($(self.options.scaledHealthSelector).val().replaceAll(',', ''));
 
             if (scaledHealth <= 0) {
                 return;
