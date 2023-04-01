@@ -53,7 +53,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#11dff2',
                 'released_at' => Carbon::make('2008-11-13 00:00:00'),
             ]), 'expansions.cata.name'               => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_CATACLYSM,
                 'color'       => '#bf5006',
                 'released_at' => Carbon::make('2010-12-07 00:00:00'),
