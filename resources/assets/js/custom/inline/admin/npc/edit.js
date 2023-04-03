@@ -33,9 +33,11 @@ class AdminNpcEdit extends InlineCode {
                 return;
             }
 
+            let percentage = $(self.options.scaledHealthPercentageSelector).val() || 100;
+
             $(self.options.baseHealthSelector).val(
                 c.map.enemy.calculateBaseHealthForKey(
-                    scaledHealth, $input.val(), self._isFortified(), self._isTyrannical()
+                    (scaledHealth / percentage) * 100, $input.val(), self._isFortified(), self._isTyrannical()
                 )
             );
         });
