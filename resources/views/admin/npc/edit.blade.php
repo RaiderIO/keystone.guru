@@ -8,6 +8,7 @@
     'baseHealthSelector' => '#base_health',
     'scaledHealthSelector' => '#scaled_health',
     'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn',
+    'scaledHealthPercentageSelector' => '#scaled_health_percentage',
     'scaledHealthLevelSelector' => '#scaled_health_level',
     'scaledHealthTypeSelector' => '#scaled_health_type'
 ]])
@@ -95,6 +96,13 @@
                             'class' => 'form-control',
                             'placeholder' => __('views/admin.npc.edit.scaled_health_placeholder')
                         ]) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::text('scaled_health_percentage', null, [
+                            'id' => 'scaled_health_percentage',
+                            'class' => 'form-control',
+                            'placeholder' => __('views/admin.npc.edit.scaled_health_percentage_placeholder')
+                            ]) !!}
                     </div>
                     <div class="col">
                         {!! Form::text('scaled_health_level', null, ['id' => 'scaled_health_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
