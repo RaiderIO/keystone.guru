@@ -2225,7 +2225,7 @@
         "classification_id": 1,
         "npc_type_id": 10,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 94426,
         "name": "Soul Fragment",
         "base_health": 12345,
         "enemy_forces": -1,
