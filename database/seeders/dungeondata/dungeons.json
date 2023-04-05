@@ -6537,7 +6537,7 @@
         "key": "uldamanlegacyoftyr",
         "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.name",
         "slug": "uldaman-legacy-of-tyr",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 575,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
