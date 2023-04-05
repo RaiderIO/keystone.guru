@@ -183,14 +183,14 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
             $scaleMapping = [
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL]     => 0.8,
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]      => 0.8,
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]       => 1.2,
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS] => 1.2,
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.2,
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]      => 1,
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]       => 1.6,
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS] => 1.6,
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
             $dungeonEnemy = [
-                'name'         => $npc->name,
+                'name'         => addslashes($npc->name),
                 'id'           => $npc->id,
                 'count'        => $npc->enemy_forces,
                 'health'       => $npc->base_health,
