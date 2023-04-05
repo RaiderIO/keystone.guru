@@ -7,6 +7,7 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\NpcClassification;
 use Illuminate\Support\Collection;
 
 class MDTMappingExportService implements MDTMappingExportServiceInterface
@@ -57,7 +58,7 @@ MDT.mapInfo[dungeonIndex] = {
 --    };
 --  }
 };
-        ', $translationsLua, $mappingVersion->dungeon->mdt_id, __($mappingVersion->dungeon->name));
+        ', $translationsLua, $mappingVersion->dungeon->mdt_id, addslashes(__($mappingVersion->dungeon->name)));
     }
 
     /**
@@ -89,7 +90,7 @@ MDT.dungeonMaps[dungeonIndex] = {
         $subLevels = [];
         $index     = 0;
         foreach ($mappingVersion->dungeon->floors as $floor) {
-            $subLevels[] = sprintf('    [%d] = L["%s"],', ++$index, __($floor->name));
+            $subLevels[] = sprintf('    [%d] = L["%s"],', ++$index, addslashes(__($floor->name)));
             $translations->push(__($floor->name));
         }
 
@@ -165,20 +166,38 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         $savedEnemyPatrols = collect();
 
         $dungeonEnemyIndex = 0;
-        foreach ($mappingVersion->enemies()->with('enemypatrol')->orderBy('mdt_id')->get()->groupBy('npc_id') as $npcId => $enemies) {
+
+        $hasGroupsAlready = false;
+        foreach ($mappingVersion->enemyPacks as $enemyPack) {
+            if ($enemyPack->group !== null) {
+                $hasGroupsAlready = true;
+                break;
+            }
+        }
+
+        $enemiesByNpcId = $mappingVersion->enemies()->with('enemypatrol')->orderBy('mdt_id')->get()->groupBy('npc_id');
+        foreach ($enemiesByNpcId as $npcId => $enemies) {
             /** @var Collection|Enemy[] $enemies */
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
+
+            $scaleMapping = [
+                NpcClassification::NPC_CLASSIFICATION_NORMAL     => 0.8,
+                NpcClassification::NPC_CLASSIFICATION_ELITE      => 0.8,
+                NpcClassification::NPC_CLASSIFICATION_BOSS       => 1.2,
+                NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS => 1.2,
+                NpcClassification::NPC_CLASSIFICATION_RARE       => 1.2,
+            ];
 
             $dungeonEnemy = [
                 'name'         => $npc->name,
                 'id'           => $npc->id,
                 'count'        => $npc->enemy_forces,
                 'health'       => $npc->base_health,
-                'scale'        => 1,
+                'scale'        => $scaleMapping[$npc->classification_id],
                 'displayId'    => $npc->display_id,
                 'creatureType' => $npc->type->type,
-                'level'        => 60,
+                'level'        => 70,
                 //                'characteristics' => [], // @TODO
                 //                'spells'          => [], // @TODO
                 'clones'       => [],
@@ -187,12 +206,14 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
             $cloneIndex = 0;
             foreach ($enemies as $enemy) {
-                $group = $enemyPackGroups->count() + 1;
+                $group = $hasGroupsAlready ? null : $enemyPackGroups->count() + 1;
                 // Individual enemies with no pack
                 if ($enemy->enemy_pack_id === null) {
                     $group = null;
+                } else if ($hasGroupsAlready) {
+                    $group = $enemy->enemyPack->group;
                 } else if (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
-                    $enemyPackGroups->put($enemy->enemy_pack_id, $group);
+                    $enemyPackGroups->put($enemy->enemy_pack_id, $enemy->enemyPack->group ?? $group);
                 } else {
                     $group = $enemyPackGroups->get($enemy->enemy_pack_id);
                 }
@@ -210,7 +231,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 if ($enemy->enemy_patrol_id !== null && !$savedEnemyPatrols->has($enemy->enemy_patrol_id)) {
                     $patrolVertices   = [];
                     $polylineVertices = json_decode($enemy->enemypatrol->polyline->vertices_json, true);
-                    $vertexIndex = 0;
+                    $vertexIndex      = 0;
                     foreach ($polylineVertices as $vertex) {
                         $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertex);
                     }
@@ -237,7 +258,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $lua = [];
         foreach ($translations->unique() as $translation) {
-            $lua[] = sprintf('L["%s"] = "%s"', $translation, $translation);
+            $lua[] = sprintf('L["%s"] = "%s"', addslashes($translation), addslashes($translation));
         }
 
         // Add another EOL at the end of it
