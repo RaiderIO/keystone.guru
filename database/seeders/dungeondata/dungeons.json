@@ -6070,7 +6070,7 @@
     {
         "id": 68,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 13991,
         "map_id": 2520,
         "mdt_id": 48,
         "key": "brackenhide",
@@ -6204,7 +6204,7 @@
     {
         "id": 70,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 14011,
         "map_id": 2519,
         "mdt_id": 0,
         "key": "neltharus",
@@ -6531,17 +6531,17 @@
     {
         "id": 74,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 13968,
         "map_id": 2451,
         "mdt_id": 0,
         "key": "uldamanlegacyoftyr",
         "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.name",
         "slug": "uldaman-legacy-of-tyr",
-        "enemy_forces_required": 0,
+        "enemy_forces_required": 575,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2400,
         "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
