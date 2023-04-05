@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
  * @property double $lat
  * @property double $lng
  *
- * @property EnemyPack|null $enemypack
+ * @property EnemyPack|null $enemyPack
  * @property Npc|null $npc
  * @property Floor $floor
  * @property EnemyPatrol|null $enemypatrol
@@ -140,7 +140,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     /**
      * @return BelongsTo
      */
-    public function enemypack(): BelongsTo
+    public function enemyPack(): BelongsTo
     {
         return $this->belongsTo(EnemyPack::class, 'enemy_pack_id');
     }
