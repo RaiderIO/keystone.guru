@@ -6076,7 +6076,7 @@
         "key": "brackenhide",
         "name": "dungeons.dragonflight.brackenhide_hollow.name",
         "slug": "brackenhide-hollow",
-        "enemy_forces_required": 450,
+        "enemy_forces_required": 750,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
