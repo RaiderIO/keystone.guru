@@ -688,7 +688,7 @@
         "display_id": 107352,
         "name": "Decayed Elder",
         "base_health": 719274,
-        "enemy_forces": -1,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
