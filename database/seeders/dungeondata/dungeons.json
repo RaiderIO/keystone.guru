@@ -6076,11 +6076,11 @@
         "key": "brackenhide",
         "name": "dungeons.dragonflight.brackenhide_hollow.name",
         "slug": "brackenhide-hollow",
-        "enemy_forces_required": 300,
+        "enemy_forces_required": 450,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2160,
         "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [

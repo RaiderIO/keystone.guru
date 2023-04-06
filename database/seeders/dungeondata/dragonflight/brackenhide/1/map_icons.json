@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "mapping_version_id": 103,
+        "floor_id": 147,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -112.71602608408404,
+        "lng": 25.84571298743328,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 103,
+        "floor_id": 147,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -88.29048999923066,
+        "lng": 45.850426136939525,
+        "comment": "Captive Tuskarr",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
