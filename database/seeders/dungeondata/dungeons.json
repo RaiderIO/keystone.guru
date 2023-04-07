@@ -6737,7 +6737,7 @@
         "key": "skywall",
         "name": "dungeons.cata.the_vortex_pinnacle.name",
         "slug": "the-vortex-pinnacle",
-        "enemy_forces_required": 300,
+        "enemy_forces_required": 360,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
