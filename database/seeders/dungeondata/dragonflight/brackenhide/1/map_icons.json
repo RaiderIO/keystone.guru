@@ -310,5 +310,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 103,
+        "floor_id": 147,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -162.65625,
+        "lng": 284.15625,
+        "comment": "Decaying Cauldron",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 103,
+        "floor_id": 147,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -183.71994315233823,
+        "lng": 276.69271625991075,
+        "comment": "Witherlings spawn for the length of this gauntlet.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 103,
+        "floor_id": 147,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -121.625,
+        "lng": 297.84375,
+        "comment": "Altar of Decay",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

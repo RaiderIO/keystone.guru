@@ -906,7 +906,7 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 108586,
-        "name": "Fledgling Slasher",
+        "name": "Wither Slasher",
         "base_health": 12345,
         "enemy_forces": -1,
         "enemy_forces_teeming": -1,
