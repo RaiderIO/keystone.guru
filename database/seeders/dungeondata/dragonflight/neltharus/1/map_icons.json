@@ -1,1 +1,93 @@
-[]
+[
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -53.974134924359696,
+        "lng": 202.18536832552482,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -82.8111223335438,
+        "lng": 171.66168919995445,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -93.3121385033033,
+        "lng": 146.0348569929248,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -121.87707886145736,
+        "lng": 152.50957680743974,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -115.23913081632442,
+        "lng": 165.83988230791164,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -139.10019142542214,
+        "lng": 149.9769289743003,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -154.28454780553918,
+        "lng": 146.92569896883944,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
