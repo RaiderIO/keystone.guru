@@ -89,5 +89,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -177.01612611365817,
+        "lng": 157.0924495943221,
+        "comment": "Unlocks after defeating Chargath.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -184.79684786014795,
+        "lng": 125.49529528342605,
+        "comment": "Qaleshi Goulash",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 104,
+        "floor_id": 151,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -170.94067395299624,
+        "lng": 118.60310515344383,
+        "comment": "Burning Chain",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
