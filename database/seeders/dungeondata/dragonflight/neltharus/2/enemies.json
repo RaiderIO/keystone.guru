@@ -1,1 +1,80 @@
-[]
+[
+    {
+        "id": 16132,
+        "mapping_version_id": 104,
+        "enemy_pack_id": 3257,
+        "enemy_patrol_id": null,
+        "npc_id": 189472,
+        "floor_id": 152,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": -1,
+        "lat": -96.52229370545776,
+        "lng": 152.23752975640969,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 189472
+        }
+    },
+    {
+        "id": 16133,
+        "mapping_version_id": 104,
+        "enemy_pack_id": 3257,
+        "enemy_patrol_id": null,
+        "npc_id": 189470,
+        "floor_id": 152,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": -1,
+        "lat": -97.423979233186,
+        "lng": 148.6846433249287,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 189470
+        }
+    },
+    {
+        "id": 16134,
+        "mapping_version_id": 104,
+        "enemy_pack_id": 3257,
+        "enemy_patrol_id": null,
+        "npc_id": 189470,
+        "floor_id": 152,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": -1,
+        "lat": -94.4086460513188,
+        "lng": 147.6795322643063,
+        "active_auras": [],
+        "enemyactiveauras": [],
+        "npc": {
+            "id": 189470
+        }
+    }
+]
