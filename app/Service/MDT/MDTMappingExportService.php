@@ -202,6 +202,11 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 //                'spells'          => [], // @TODO
                 'clones'       => [],
             ];
+
+            if ($npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                $dungeonEnemy['isBoss'] = true;
+            }
+
             $translations->push($npc->name);
 
             $cloneIndex = 0;
