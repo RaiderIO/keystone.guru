@@ -48,7 +48,7 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     <?php
     $affixIndex = 0;
     foreach($affixGroup->affixes as $affix) {
-    $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
+    $lastColumn = $affixGroup->affixes->count() === 4 && $affixGroup->affixes->count() - 1 === $affixIndex;
     $class = $currentWeekClass . $topBorderClass . $bottomBorderClass;
     $class .= $lastColumn ? 'last_column ' : '';
     $class .= $isFirst ? 'first_row ' : '';

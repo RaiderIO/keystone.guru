@@ -201,6 +201,17 @@ class AffixSeeder extends Seeder
             ['season_id' => 10, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SANGUINE, Affix::AFFIX_EXPLOSIVE, Affix::AFFIX_THUNDERING]],
             ['season_id' => 10, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BOLSTERING, Affix::AFFIX_STORMING, Affix::AFFIX_THUNDERING]],
 
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SPITEFUL, Affix::AFFIX_QUAKING]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BURSTING, Affix::AFFIX_EXPLOSIVE]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BOLSTERING, Affix::AFFIX_VOLCANIC]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_RAGING, Affix::AFFIX_QUAKING]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_BURSTING, Affix::AFFIX_GRIEVOUS]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_VOLCANIC]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_RAGING, Affix::AFFIX_STORMING]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SPITEFUL, Affix::AFFIX_GRIEVOUS]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_SANGUINE, Affix::AFFIX_EXPLOSIVE]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_BOLSTERING, Affix::AFFIX_STORMING]],
+
         ];
 
         foreach ($groups as $groupArr) {

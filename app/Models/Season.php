@@ -74,7 +74,7 @@ class Season extends CacheModel
      */
     public function dungeons(): BelongsToMany
     {
-        return $this->belongsToMany(Dungeon::class, 'season_dungeons');
+        return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');
     }
 
     /**
