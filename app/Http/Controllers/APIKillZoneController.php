@@ -41,7 +41,9 @@ class APIKillZoneController extends Controller
 
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
-        $this->authorize('edit', $killZone->dungeonRoute);
+        if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+            $this->authorize('edit', $killZone->dungeonRoute);
+        }
 
         if (!$killZone->exists) {
             $killZone = KillZone::create($data);
