@@ -56,12 +56,15 @@ $allAffixGroupsWithSeasons = $allAffixGroups
                 @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->shortname])
             @endforeach
         @endif
+
         @foreach($currentSeason->affixgroups as $affixGroup)
             @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $currentSeason, 'expansionKey' => $currentSeason->expansion->shortname])
         @endforeach
+
         @foreach($expansionsData as $expansionData)
-            @foreach($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups() as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'expansionKey' => $expansionData->getExpansion()->shortname])
+            @php($season = $expansionData->getExpansionSeason())
+            @foreach($season->getAffixGroups()->getAllAffixGroups() as $affixGroup)
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $season->getSeason(), 'expansionKey' => $expansionData->getExpansion()->shortname])
             @endforeach
         @endforeach
     </div>
