@@ -20,7 +20,7 @@ class Conversion
         Expansion::EXPANSION_VANILLA      => null,
         Expansion::EXPANSION_TBC          => null,
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
-        Expansion::EXPANSION_CATACLYSM    => null,
+        Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
         Expansion::EXPANSION_MOP          => null,
         Expansion::EXPANSION_WOD          => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION       => 'Legion',
@@ -45,6 +45,10 @@ class Conversion
             Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
             Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
             Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
+        ],
+
+        Expansion::EXPANSION_CATACLYSM => [
+//            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
         ],
 
         Expansion::EXPANSION_MOP => [
@@ -106,6 +110,8 @@ class Conversion
         ],
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
+            // Cata
+            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
             // MoP
             Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
             // WoD

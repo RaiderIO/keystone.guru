@@ -2218,5 +2218,25 @@
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": []
+    },
+    {
+        "id": 186150,
+        "dungeon_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 94426,
+        "name": "Soul Fragment",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

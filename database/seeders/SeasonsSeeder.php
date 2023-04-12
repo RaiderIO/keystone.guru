@@ -111,16 +111,19 @@ class SeasonsSeeder extends Seeder
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 0,
-                'dungeons'                => Dungeon::whereIn('key', [
-                    Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
-                    Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
-                    Dungeon::DUNGEON_MECHAGON_JUNKYARD,
-                    Dungeon::DUNGEON_MECHAGON_WORKSHOP,
-                    Dungeon::DUNGEON_LOWER_KARAZHAN,
-                    Dungeon::DUNGEON_UPPER_KARAZHAN,
-                    Dungeon::DUNGEON_GRIMRAIL_DEPOT,
-                    Dungeon::DUNGEON_IRON_DOCKS,
-                ])->get(),
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('key', [
+                        Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+                        Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+                        Dungeon::DUNGEON_MECHAGON_JUNKYARD,
+                        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
+                        Dungeon::DUNGEON_LOWER_KARAZHAN,
+                        Dungeon::DUNGEON_UPPER_KARAZHAN,
+                        Dungeon::DUNGEON_GRIMRAIL_DEPOT,
+                        Dungeon::DUNGEON_IRON_DOCKS,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => 26,
@@ -129,16 +132,40 @@ class SeasonsSeeder extends Seeder
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
                 'start_affix_group_index' => 3,
-                'dungeons'                => Dungeon::whereIn('key', [
-                    Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-                    Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE,
-                    Dungeon::DUNGEON_RUBY_LIFE_POOLS,
-                    Dungeon::DUNGEON_THE_AZURE_VAULT,
-                    Dungeon::DUNGEON_COURT_OF_STARS,
-                    Dungeon::DUNGEON_HALLS_OF_VALOR,
-                    Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
-                    Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
-                ])->get(),
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('key', [
+                        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+                        Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE,
+                        Dungeon::DUNGEON_RUBY_LIFE_POOLS,
+                        Dungeon::DUNGEON_THE_AZURE_VAULT,
+                        Dungeon::DUNGEON_COURT_OF_STARS,
+                        Dungeon::DUNGEON_HALLS_OF_VALOR,
+                        Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
+                        Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id'       => null,
+                'index'                   => 2,
+                'start'                   => '2023-05-08 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 3,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_HALLS_OF_INFUSION,
+                        Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
+                        Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+                        Dungeon::DUNGEON_NELTHARUS,
+                        Dungeon::DUNGEON_NELTHARIONS_LAIR,
+                        Dungeon::DUNGEON_FREEHOLD,
+                        Dungeon::DUNGEON_THE_UNDERROT,
+                        Dungeon::DUNGEON_THE_VORTEX_PINNACLE,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
             ],
         ];
 

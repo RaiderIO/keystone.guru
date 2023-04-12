@@ -103,24 +103,31 @@ class NpcController extends Controller
             // If no dungeon is set, user selected 'All Dungeons'
             $npcAllDungeon       = ($npc->dungeon === null);
             $npcBeforeAllDungeon = ($npcBefore->dungeon === null);
+
+            // Prevent sending multiple messages for the same dungeon
+            $messagesSentToDungeons = collect();
             if ($npcAllDungeon || $npcBeforeAllDungeon) {
                 // Broadcast the event for all dungeons
                 foreach (Dungeon::all() as $dungeon) {
-                    if ($npc->dungeon === null) {
+                    if ($npc->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                        $messagesSentToDungeons->push($dungeon->id);
                     }
-                    if ($npcBefore->dungeon === null) {
+                    if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
+                        $messagesSentToDungeons->push($dungeon->id);
                     }
                 }
             }
 
             // Let previous dungeon know that this NPC is no longer available
-            if (!$npcAllDungeon) {
+            if (!$npcAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
                 broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+                $messagesSentToDungeons->push($npc->dungeon->id);
             }
-            if (!$npcBeforeAllDungeon) {
+            if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
                 broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
+                $messagesSentToDungeons->push($npc->dungeon->id);
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
@@ -180,7 +187,7 @@ class NpcController extends Controller
                 return [$id => __($name)];
             }),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeon, true)
+            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
     }
 

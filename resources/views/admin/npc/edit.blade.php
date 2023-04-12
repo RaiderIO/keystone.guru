@@ -1,23 +1,24 @@
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc ?? null],
     'showAds' => false,
-    'title' => isset($npc) ? __('views/admin.npc.edit.title_edit') : __('views/admin.npc.edit.title_new')
+    'title' => isset($npc) ? __('views/admin.npc.edit.title_edit', ['name' => $npc->name]) : __('views/admin.npc.edit.title_new')
 ])
 
 @include('common.general.inline', ['path' => 'admin/npc/edit', 'options' => [
     'baseHealthSelector' => '#base_health',
     'scaledHealthSelector' => '#scaled_health',
     'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn',
+    'scaledHealthPercentageSelector' => '#scaled_health_percentage',
     'scaledHealthLevelSelector' => '#scaled_health_level',
     'scaledHealthTypeSelector' => '#scaled_health_type'
 ]])
 
 @section('header-title')
-    {{ isset($npc) ? __('views/admin.npc.edit.header_edit') : __('views/admin.npc.edit.header_new') }}
+    {{ isset($npc) ? __('views/admin.npc.edit.header_edit', ['name' => $npc->name]) : __('views/admin.npc.edit.header_new') }}
 @endsection
 <?php
 /**
- * @var $model \App\Models\Npc
+ * @var $npc \App\Models\Npc
  * @var $floor \App\Models\Floor
  * @var $classifications array
  * @var $spells \App\Models\Spell[]
@@ -71,7 +72,7 @@
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('views/admin.npc.edit.class'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
 
@@ -95,6 +96,13 @@
                             'class' => 'form-control',
                             'placeholder' => __('views/admin.npc.edit.scaled_health_placeholder')
                         ]) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::text('scaled_health_percentage', null, [
+                            'id' => 'scaled_health_percentage',
+                            'class' => 'form-control',
+                            'placeholder' => __('views/admin.npc.edit.scaled_health_percentage_placeholder')
+                            ]) !!}
                     </div>
                     <div class="col">
                         {!! Form::text('scaled_health_level', null, ['id' => 'scaled_health_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}

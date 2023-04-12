@@ -29,13 +29,13 @@ class APIKillZoneMassFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'killzones' => 'array',
-            'killzones.id' => 'int',
-            'killzones.color'     => [
+            'killzones'       => 'array',
+            'killzones.*.id'    => 'int',
+            'killzones.*.color' => [
                 'required',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'killzones.index' => 'int',
+            'killzones.*.index' => 'int',
         ];
     }
 }

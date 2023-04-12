@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Http\Requests\Enemy\EnemyFormRequest;
+use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
@@ -27,13 +27,13 @@ class APIEnemyController extends APIMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param EnemyFormRequest $request
+     * @param APIEnemyFormRequest $request
      * @param Enemy|null $enemy
      * @return Enemy|Model
      * @throws Exception
      * @throws Throwable
      */
-    public function store(EnemyFormRequest $request, Enemy $enemy = null): Enemy
+    public function store(APIEnemyFormRequest $request, Enemy $enemy = null): Enemy
     {
         $validated = $request->validated();
 
@@ -42,6 +42,7 @@ class APIEnemyController extends APIMappingModelBaseController
 
         return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request) {
             $activeAuras = $request->get('active_auras', []);
+
             // Clear current active auras
             $enemy->enemyactiveauras()->delete();
             foreach ($activeAuras as $activeAura) {
@@ -63,26 +64,26 @@ class APIEnemyController extends APIMappingModelBaseController
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute $dungeonRoute
      * @param Enemy $enemy
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    public function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
+    public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonroute);
+        $this->authorize('edit', $dungeonRoute);
 
         try {
             $raidMarkerName = $request->get('raid_marker_name', '');
 
             // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonroute->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if (!empty($raidMarkerName)) {
                 DungeonRouteEnemyRaidMarker::create([
-                    'dungeon_route_id' => $dungeonroute->id,
-                    'raid_marker_id'   => RaidMarker::where('name', $raidMarkerName)->first()->id,
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
                     'enemy_id'         => $enemy->id,
                 ]);
 

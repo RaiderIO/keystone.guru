@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property MappingVersion|null $mappingVersion
  * @property Floor $floor
- * @property DungeonRoute|null $dungeonroute
+ * @property DungeonRoute|null $dungeonRoute
  * @property MapIconType $mapicontype
  *
  * @mixin Eloquent
@@ -53,9 +53,9 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     /**
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class);
+        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
     }
 
     /**

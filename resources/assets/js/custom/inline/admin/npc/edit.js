@@ -27,15 +27,17 @@ class AdminNpcEdit extends InlineCode {
             });
 
         $(this.options.scaledHealthToBaseHealthApplyBtnSelector).on('click', function () {
-            let scaledHealth = parseInt($(self.options.scaledHealthSelector).val());
+            let scaledHealth = parseInt($(self.options.scaledHealthSelector).val().replaceAll(',', ''));
 
             if (scaledHealth <= 0) {
                 return;
             }
 
+            let percentage = $(self.options.scaledHealthPercentageSelector).val() || 100;
+
             $(self.options.baseHealthSelector).val(
                 c.map.enemy.calculateBaseHealthForKey(
-                    scaledHealth, $input.val(), self._isFortified(), self._isTyrannical()
+                    (scaledHealth / percentage) * 100, $input.val(), self._isFortified(), self._isTyrannical()
                 )
             );
         });

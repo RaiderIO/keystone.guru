@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $updated_at
  * @property string $created_at
  *
- * @property DungeonRoute $dungeonroute
+ * @property DungeonRoute $dungeonRoute
  * @property Polyline $polyline
  * @property Floor $floor
  *
@@ -36,7 +36,7 @@ class Path extends Model
      *
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -65,7 +65,7 @@ class Path extends Model
 
         // Delete Path properly if it gets deleted
         static::deleting(function ($item) {
-            /** @var $item HasLinkedAwakenedObelisk */
+            /** @var $item Path */
             $item->linkedawakenedobelisks()->delete();
             $item->polyline()->delete();
         });

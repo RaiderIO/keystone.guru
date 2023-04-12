@@ -13,7 +13,7 @@ use App\Models\Npc;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EnemyFormRequest extends FormRequest
+class APIEnemyFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -48,7 +48,7 @@ class EnemyFormRequest extends FormRequest
             'skippable'                     => 'boolean',
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
-            'dungeon_difficulty'            => [Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, ['', null]))],
+            'dungeon_difficulty'            => [Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, ['-1', '', null]))],
             'lat'                           => 'numeric',
             'lng'                           => 'numeric',
         ];

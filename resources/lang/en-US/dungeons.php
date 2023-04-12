@@ -190,6 +190,14 @@ return [
             ],
         ],
     ],
+    'cata'         => [
+        'the_vortex_pinnacle' => [
+            'name'   => 'The Vortex Pinnacle',
+            'floors' => [
+                'cyclone_summit' => 'Cyclone Summit',
+            ],
+        ],
+    ],
     'wod'          => [
         'auchindoun'                => [
             'name'   => 'Auchindoun',
@@ -556,7 +564,7 @@ return [
             ],
         ],
         'neltharus'             => [
-            'name'   => 'Nethalrus',
+            'name'   => 'Neltharus',
             'floors' => [
                 'the_burning_cauldron' => 'The Burning Cauldron',
                 'chamber_of_flames'    => 'Chamber of Flames',

@@ -114,6 +114,7 @@ class AdminToolsController extends Controller
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     $npcCandidate->enemy_forces = 0;
+                    $npcCandidate->dangerous    = true;
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually

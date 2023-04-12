@@ -13,7 +13,13 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
 });
 
 // });
-
+/**
+ * @property {Number} floor_id
+ * @property {Number|null} group
+ * @property {string} color
+ * @property {String} label
+ * @property {Array} vertices
+ */
 class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
@@ -217,9 +223,15 @@ class EnemyPack extends VersionableMapObject {
         super.bindTooltip();
 
         if (this.layer !== null) {
-            let displayText = `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.enemyForcesManager.getEnemyForcesRequired())}%`;
+            let displayText = '';
 
-            this.layer.bindTooltip(displayText, {
+            if (this.group !== null) {
+                displayText += `G${this.group}: `;
+            }
+
+            displayText += `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.enemyForcesManager.getEnemyForcesRequired())}%`;
+
+            this.layer.bindTooltip(displayText.trim(), {
                 sticky: true,
                 direction: 'top'
             });

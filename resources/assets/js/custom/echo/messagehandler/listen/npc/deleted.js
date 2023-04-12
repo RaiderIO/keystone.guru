@@ -1,7 +1,7 @@
 class NpcDeletedHandler extends MessageHandler {
 
     constructor(echo) {
-        super(echo, '.npc-changed');
+        super(echo, '.npc-deleted');
     }
 
 

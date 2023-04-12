@@ -63,5 +63,70 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-71.143946,\"lng\":196.711591},{\"lat\":-73.464887,\"lng\":227.357485}]"
         }
+    },
+    {
+        "id": 944,
+        "mapping_version_id": 107,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-218.689481,\"lng\":202.016599},{\"lat\":-224.420784,\"lng\":199.269362}]"
+        }
+    },
+    {
+        "id": 945,
+        "mapping_version_id": 107,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-83.639599,\"lng\":227.729449},{\"lat\":-114.295486,\"lng\":226.221782},{\"lat\":-110.346836,\"lng\":190.324959}]"
+        }
+    },
+    {
+        "id": 946,
+        "mapping_version_id": 107,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-71.807072,\"lng\":231.052044},{\"lat\":-39.361265,\"lng\":231.573072},{\"lat\":-42.392698,\"lng\":264.492541}]"
+        }
+    },
+    {
+        "id": 947,
+        "mapping_version_id": 107,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-45.045202,\"lng\":236.688615},{\"lat\":-52.481686,\"lng\":282.870604}]"
+        }
+    },
+    {
+        "id": 951,
+        "mapping_version_id": 107,
+        "floor_id": 24,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-71.143946,\"lng\":196.711591},{\"lat\":-73.464887,\"lng\":227.357485}]"
+        }
     }
 ]
