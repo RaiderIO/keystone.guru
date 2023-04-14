@@ -57,7 +57,6 @@ window.bootstrapselect = require('bootstrap-select');
 window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
-window.owlCarousel = require('owl.carousel');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
