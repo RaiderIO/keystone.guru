@@ -211,6 +211,9 @@ return [
             /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
             'popular_days' => 7,
 
+            /** The amount of days a route can be old before the popularity counter will drop off to 0 */
+            'popular_falloff_days' => 30,
+
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
             'popular'      => [
                 'ttl' => '2 hours',
