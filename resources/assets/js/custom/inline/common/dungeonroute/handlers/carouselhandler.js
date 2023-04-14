@@ -65,6 +65,38 @@ class CarouselHandler {
                 // },
                 // onBeforePrevSlide: function (el) {
                 // }
+
+                //LAZY LOADING
+                onBeforeStart: function (slider) {
+                    for (var i = 1; i <= 2; i++) {
+                        var img = slider.find('li:nth-child(' + i + ') img');
+                        img.attr('src', img.attr('data-src'));
+                    }
+                },
+                onSliderLoad: function (slider) {
+                    $('.aboutSliderHidden').removeClass('aboutSliderHidden');
+                    slider.parent().find('.lSPrev').hide();
+                },
+                onAfterSlide: function (slider, scene) {
+                    for (var i = 0; i <= 1; i++) {
+                        var img = slider.find('img').eq(slider.getCurrentSlideCount() + i);
+                        img.attr('src', img.attr('data-src'));
+                    }
+
+                    var lsPrev = slider.parent().find('.lSPrev');
+                    var lsNext = slider.parent().find('.lSNext');
+
+                    if (slider.getCurrentSlideCount() === 1) {
+                        lsPrev.hide();
+                    }
+                    else if (slider.getCurrentSlideCount() === slider.find('li').length) {
+                        lsNext.hide();
+                    }
+                    else {
+                        lsPrev.show();
+                        lsNext.show();
+                    }
+                }
             };
 
             // $(`${prefix} .light-slider.single`).each(function(item){

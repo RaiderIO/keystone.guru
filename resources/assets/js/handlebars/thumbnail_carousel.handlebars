@@ -2,7 +2,7 @@
     <ul class="light-slider {{#ifCond items.length '==' 1}} single {{else}} multiple {{/ifCond}}">
         {{#items}}
         <li>
-            <img src="{{src}}"/>
+            <img class="thumbnail" data-src="{{src}}" src="//:0"/>
         </li>
         {{/items}}
     </ul>
