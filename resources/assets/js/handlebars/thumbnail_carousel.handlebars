@@ -1,0 +1,9 @@
+<div class="light-slider-container">
+    <ul class="light-slider {{#ifCond items.length '==' 1}} single {{else}} multiple {{/ifCond}}">
+        {{#items}}
+        <li>
+            <img src="{{src}}"/>
+        </li>
+        {{/items}}
+    </ul>
+</div>

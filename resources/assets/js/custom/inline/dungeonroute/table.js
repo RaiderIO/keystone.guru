@@ -12,6 +12,8 @@ class DungeonrouteTable extends InlineCode {
         // Handles the
         this._teamsHandler = new DungeonRouteTableTeam(this);
 
+        this.carouselHandler = new CarouselHandler();
+
         // Init the code
         this.setViewMode(this.options.viewMode);
         let tableView = this.setTableView(this.options.tableView);
@@ -192,15 +194,7 @@ class DungeonrouteTable extends InlineCode {
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
 
-            $('.owl-carousel').owlCarousel({
-                // True to enable overlayed buttons (custom styled, wasted time :( )
-                nav: false,
-                loop: true,
-                dots: false,
-                lazyLoad: true,
-                lazyLoadEager: 1,
-                items: 1
-            });
+            self.carouselHandler.refreshCarousel();
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {

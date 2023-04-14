@@ -46,17 +46,19 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
-        <div class="{{ $owlClass }}">
-            <div class="owl-carousel owl-theme {{ $owlClass }}">
+        <div class="{{ $owlClass }} light-slider-container">
+            <ul class="light-slider {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->dungeon->floors as $floor)
-                        <img class="thumbnail"
-                             src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $floor->index)) }}"/>
+                        <li>
+                            <img class="thumbnail"
+                                 src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $floor->index)) }}"/>
+                        </li>
                     @endforeach
                 @else
                     <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
                 @endif
-            </div>
+            </ul>
         </div>
     </div>
     <div class="col">
@@ -75,7 +77,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                 </div>
                 @if( !$dungeonroute->mappingVersion->isLatestForDungeon() )
                     <div class="col-auto">
-                        <i class="fas fa-exclamation-triangle text-warning" title="{{ __('views/common.dungeonroute.card.outdated_mapping_version') }}"
+                        <i class="fas fa-exclamation-triangle text-warning"
+                           title="{{ __('views/common.dungeonroute.card.outdated_mapping_version') }}"
                            data-toggle="tooltip"></i>
                     </div>
                 @endif

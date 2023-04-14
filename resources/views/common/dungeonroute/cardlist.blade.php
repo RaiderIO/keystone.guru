@@ -16,7 +16,7 @@ $i = 0;
 $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collection, string $header = null)
     use($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $__env) {
     $count = $collection->count();
-    if( $header !== null ) { ?>
+    if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters mt-2">
         <h4 class="col text-center">
             {{ $header }}

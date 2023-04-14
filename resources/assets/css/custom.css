@@ -62,49 +62,29 @@
     cursor: default !important;
 }
 
-/** OWL.CAROUSEL */
-.routes_table .owl-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 192px;
-    height: 128px;
+ul.light-slider {
+    list-style: none outside none;
+    padding-left: 0;
+    margin-bottom:0;
+}
+.light-slider li {
+    display: block;
+    float: left;
+    margin-right: 6px;
+    cursor:pointer;
+}
+.light-slider img {
+    display: block;
+    height: auto;
+    max-width: 100%;
 }
 
-.routes_table .owl-carousel .owl-nav button {
-    width: 48px;
-    height: 128px;
-    font-size: 2em;
-    opacity: 0;
-}
-
-.routes_table .owl-carousel .owl-nav button:focus {
-    outline: none;
-}
-
-.routes_table .owl-carousel .owl-nav button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    opacity: 1;
-}
-
-.routes_table .owl-carousel .owl-nav button.owl-prev {
-    margin-right: 48px;
-    text-align: left;
-    padding-left: 15px !important;
-}
-
-.routes_table .owl-carousel .owl-nav button.owl-next {
-    margin-left: 48px;
-    text-align: right;
-    padding-right: 15px !important;
-}
-
+/** Light Slider */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
     .card_dungeonroute .single,
-    .card_dungeonroute .owl-carousel.single,
+    .card_dungeonroute .light-slider-container,
     .card_dungeonroute .multiple,
-    .card_dungeonroute .owl-carousel.multiple,
     .card_dungeonroute img.thumbnail,
     .card_dungeonroute img.dungeon {
         width: 288px;
@@ -203,34 +183,15 @@
     border-radius: 3px;
 }
 
-.routes_table .owl-carousel {
+.routes_table .light-slider-container {
     width: 192px;
     height: 128px;
 }
 
 @media ( max-width: 600px) {
-    .routes_table .owl-carousel {
+    .routes_table .light-slider-container {
         width: 96px;
         height: 64px;
-    }
-
-    .routes_table .owl-carousel .owl-nav button {
-        width: 48px;
-        height: 64px;
-        font-size: 1em;
-        opacity: 0;
-    }
-
-    .routes_table .owl-carousel .owl-nav button.owl-prev {
-        margin-right: 0;
-        text-align: left;
-        padding-left: 7px !important;
-    }
-
-    .routes_table .owl-carousel .owl-nav button.owl-next {
-        margin-left: 0;
-        text-align: right;
-        padding-right: 7px !important;
     }
 }
 
