@@ -33,7 +33,7 @@ return [
             'max' => 28,
         ],
 
-        'scaling_factor' => 1.08,
+        'scaling_factor'         => 1.08,
         'scaling_factor_past_10' => 1.10,
     ],
 
@@ -198,6 +198,7 @@ return [
             'category'       => 20,
             'affix_overview' => 10,
             'search'         => 20,
+            'per_dungeon'    => 4,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
@@ -213,7 +214,7 @@ return [
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
             'popular'      => [
                 'ttl' => '2 hours',
-            ]
+            ],
 
 
             //            'popular' => [
