@@ -167,8 +167,12 @@ class DiscoverService extends BaseDiscoverService
                 /** @var Collection|Dungeon[] $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
-                    // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withLimit(2)->popularByDungeon($dungeon));
+                    // Limit the amount of results of our queries
+                    $result = $result->merge(
+                        collect([
+                            __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeon($dungeon),
+                        ])
+                    );
                 }
 
                 return $result;
@@ -206,8 +210,12 @@ class DiscoverService extends BaseDiscoverService
                 /** @var Collection|Dungeon[] $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
-                    // Limit the amount of results of our queries to 2
-                    $result = $result->merge($this->withLimit(2)->popularByDungeonAndAffixGroup($dungeon, $affixGroup));
+                    // Limit the amount of results of our queries
+                    $result = $result->merge(
+                        collect([
+                            __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
+                        ])
+                    );
                 }
 
                 return $result;

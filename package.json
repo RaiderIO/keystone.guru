@@ -65,6 +65,7 @@
         "leaflet-gesture-handling": "^1.2.2",
         "leaflet-pather": "github:Wotuu/L.Pather#7e885ee28ec5f946ae97c1cd8aedc56a4b5e23c2",
         "leaflet-polylinedecorator": "^1.6.0",
+        "lightslider": "^1.1.6",
         "noty": "^3.2.0-beta",
         "npm-force-resolutions": "0.0.10",
         "owl.carousel": "^2.3.4",
