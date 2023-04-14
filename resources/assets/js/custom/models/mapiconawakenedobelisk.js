@@ -37,4 +37,12 @@ class MapIconAwakenedObelisk extends MapIcon {
             });
         }
     }
+
+    shouldBeVisible() {
+        if (!getState().getMapContext().hasAffix(AFFIX_AWAKENED)) {
+            return false;
+        }
+
+        return super.shouldBeVisible();
+    }
 }

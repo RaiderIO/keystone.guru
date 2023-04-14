@@ -528,7 +528,7 @@
         "floor_id": 68,
         "mdt_id": 1,
         "mdt_npc_id": null,
-        "seasonal_type": null,
+        "seasonal_type": "awakened",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

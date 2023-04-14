@@ -33,7 +33,7 @@ return [
             'max' => 28,
         ],
 
-        'scaling_factor' => 1.08,
+        'scaling_factor'         => 1.08,
         'scaling_factor_past_10' => 1.10,
     ],
 
@@ -198,6 +198,7 @@ return [
             'category'       => 20,
             'affix_overview' => 10,
             'search'         => 20,
+            'per_dungeon'    => 4,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
@@ -205,15 +206,21 @@ return [
         ],
         'service'  => [
             /** Redis prefix */
-            'cache_prefix' => 'discover',
+            'cache_prefix'                                => 'discover',
 
             /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
-            'popular_days' => 7,
+            'popular_days'                                => 7,
+
+            /** The amount of days a route can be old before the popularity counter will drop off to 0 */
+            'popular_falloff_days'                        => 30,
+
+            /** The penalty that is applied when the mapping version is out of date. This is multiplicative. */
+            'popular_out_of_date_mapping_version_penalty' => 0.25,
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
-            'popular'      => [
+            'popular'                                     => [
                 'ttl' => '2 hours',
-            ]
+            ],
 
 
             //            'popular' => [

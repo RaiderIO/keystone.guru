@@ -4,7 +4,7 @@
      * @returns {*}
      */
     function handlebarsThumbnailCarouselParse(row) {
-        let template = Handlebars.templates['thumbnailcarousel_template'];
+        let template = Handlebars.templates['thumbnail_carousel'];
 
         let items = [];
 
