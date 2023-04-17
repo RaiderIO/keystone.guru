@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Models\GameServerRegion;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Mapping\MappingService;
@@ -42,7 +43,9 @@ class Random extends Command
      */
     public function handle(WowToolsServiceInterface $wowToolsService)
     {
-        dd($wowToolsService->getDisplayId(12345));
+        (new UpdateDungeonRoutePopularity())->__invoke();
+
+//        dd($wowToolsService->getDisplayId(12345));
 
 //        $this->info(
 //            $expansionService->getCurrentAffixGroup(

@@ -41,6 +41,7 @@ class UpdatePrepare extends Command
         $this->shell([
             'npm install',
             'npm audit fix',
+            'node node_modules/puppeteer/install.js'
         ]);
 
         // Install composer here - a next command can then have the updated definitions of the autoloader when called
