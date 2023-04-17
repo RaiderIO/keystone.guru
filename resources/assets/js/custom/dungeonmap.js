@@ -735,6 +735,15 @@ class DungeonMap extends Signalable {
 
         refreshTooltips();
 
+        if ($('#finished_loading').length === 0) {
+            $('body').append(
+                jQuery('<div>').attr('id', 'finished_loading')
+            );
+
+            console.log('done loading');
+        }
+
+
         this._refreshingMap = false;
     }
 
