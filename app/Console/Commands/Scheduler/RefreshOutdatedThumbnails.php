@@ -1,23 +1,48 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wouter
- * Date: 03/12/2018
- * Time: 23:57
- */
 
-namespace App\Logic\Scheduler;
+namespace App\Console\Commands\Scheduler;
 
 use App\Models\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
+use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
-class RefreshOutdatedThumbnails
+class RefreshOutdatedThumbnails extends Command
 {
-    function __invoke()
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'scheduler:refreshoutdatedthumbnails';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Refreshes outdated thumbnails for dungeonroutes';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function handle(ThumbnailServiceInterface $thumbnailService)
     {
         Log::channel('scheduler')->debug('>> Finding thumbnails');
 
@@ -48,12 +73,12 @@ class RefreshOutdatedThumbnails
         Log::channel('scheduler')->debug(sprintf('Scheduling %s routes for thumbnail generation', $routes->count()));
 
         // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
-        /** @var ThumbnailServiceInterface $thumbnailService */
-        $thumbnailService = App::make(ThumbnailServiceInterface::class);
         foreach ($routes as $dungeonRoute) {
             $thumbnailService->queueThumbnailRefresh($dungeonRoute);
         }
 
         Log::channel('scheduler')->debug('OK Finding thumbnails');
+
+        return 0;
     }
 }
