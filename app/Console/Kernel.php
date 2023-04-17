@@ -32,12 +32,12 @@ use App\Console\Commands\Release\ReportRelease;
 use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
+use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
-use App\Logic\Scheduler\RefreshOutdatedThumbnails;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -106,9 +106,10 @@ class Kernel extends ConsoleKernel
         ReleaseSave::class,
 
         // Scheduler
-        RefreshAffixGroupEaseTiers::class,
-        Telemetry::class,
         DeleteExpiredDungeonRoutes::class,
+        RefreshAffixGroupEaseTiers::class,
+        RefreshOutdatedThumbnails::class,
+        Telemetry::class,
 
         // Test
         Random::class,
@@ -134,7 +135,7 @@ class Kernel extends ConsoleKernel
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
-        $schedule->call(new RefreshOutdatedThumbnails)->everyFiveMinutes();
+        $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFiveMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 
         if ($appType === 'mapping') {
