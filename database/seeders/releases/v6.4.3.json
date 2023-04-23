@@ -1,0 +1,39 @@
+{
+    "id": 165,
+    "release_changelog_id": 172,
+    "version": "v6.4.3",
+    "title": "Adjusted Neltharus and Halls of Infusion mapping",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-23T19:38:05+00:00",
+    "updated_at": "2023-04-23T19:38:05+00:00",
+    "changelog": {
+        "id": 172,
+        "release_id": 165,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 172,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Added missing trash before last boss of Neltharus.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 172,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Added missing trash in alternative route in Halls of Infusion.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}

@@ -262,6 +262,8 @@ class AdminToolsController extends Controller
      */
     public function thumbnailsregeneratesubmit(Request $request, ThumbnailService $thumbnailService)
     {
+        set_time_limit(3600);
+
         $dungeonId = (int)$request->get('dungeon_id');
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
