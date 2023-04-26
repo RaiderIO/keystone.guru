@@ -165,6 +165,9 @@ class Enemy extends VersionableMapObject {
                     name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
                 }],
                 default: null,
+                getter: function() {
+                    return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
+                }
             }),
             // new Attribute({
             //     name: 'npc',

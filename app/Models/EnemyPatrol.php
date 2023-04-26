@@ -68,18 +68,19 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
      * @param MappingModelInterface|null $newParent
      * @return Model
      */
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
     {
-        /** @var Model|MappingModelInterface $clone */
-        $clone                     = clone $this;
-        $clone->exists             = false;
-        $clone->id                 = null;
-        $clone->mapping_version_id = $mappingVersion->id;
-        $clone->save();
+        /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
+        $clonedEnemyPatrol                     = clone $this;
+        $clonedEnemyPatrol->exists             = false;
+        $clonedEnemyPatrol->id                 = null;
+        $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
+        $clonedEnemyPatrol->save();
 
-        $this->polyline->cloneForNewMappingVersion($mappingVersion, $clone);
+        $clonedPolyLine = $this->polyline->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $clonedEnemyPatrol->update(['polyline_id' => $clonedPolyLine->id]);
 
-        return $clone;
+        return $clonedEnemyPatrol;
     }
 
 
