@@ -424,9 +424,26 @@ class AdminToolsController extends Controller
     public function dungeonmappingversiontomdtmapping()
     {
         return view('admin.tools.mdt.dungeonmappingversiontomdtmapping', [
-            'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')->get()->mapWithKeys(function (MappingVersion $mappingVersion) {
-                return [$mappingVersion->id => sprintf('%s - Version %d (%d)', __($mappingVersion->dungeon->name), $mappingVersion->version, $mappingVersion->id)];
-            }),
+            'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')
+                ->get()
+                ->groupBy('dungeon_id')
+                ->mapWithKeys(function (Collection $mappingVersionByDungeon, int $id) {
+                    $dungeon = Dungeon::findOrFail($id);
+                    return [
+                        __($dungeon->name) =>
+                            $mappingVersionByDungeon->mapWithKeys(function (MappingVersion $mappingVersion) use ($dungeon) {
+                                return [
+                                    $mappingVersion->id =>
+                                        sprintf('%s Version %d (%d, %s)',
+                                            __($dungeon->name),
+                                            $mappingVersion->version,
+                                            $mappingVersion->id,
+                                            $mappingVersion->created_at
+                                        ),
+                                ];
+                            }),
+                    ];
+                }),
         ]);
     }
 
