@@ -969,7 +969,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-04-23T07:09:27.000000Z",
         "updated_at": "2023-04-23T07:09:27.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 109,
@@ -978,7 +978,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-04-23T07:20:51.000000Z",
         "updated_at": "2023-04-23T07:20:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 110,
