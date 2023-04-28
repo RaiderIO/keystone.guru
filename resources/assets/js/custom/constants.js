@@ -304,7 +304,7 @@ let c = {
         },
         adminenemypatrol: {
             polylineOptions: {
-                color: '#090',
+                color: '#730099',
                 weight: 2,
                 opacity: 1,
             },

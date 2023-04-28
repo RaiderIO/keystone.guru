@@ -148,7 +148,7 @@ class APIKillZoneController extends Controller
 
         // Update killzones
         $killZones = new Collection();
-        foreach ($validated['killzones'] as $killZoneData) {
+        foreach ($validated['killzones'] ?? [] as $killZoneData) {
             try {
                 // Unset the enemies since we're quicker to update that in bulk here
                 $kzDataWithoutEnemies = $killZoneData;
@@ -166,7 +166,7 @@ class APIKillZoneController extends Controller
         $validEnemyIds   = $enemies->pluck('id')->toArray();
 
         // Insert new enemies based on what was sent
-        foreach ($validated['killzones'] as $killZoneData) {
+        foreach ($validated['killzones'] ?? [] as $killZoneData) {
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
