@@ -44,7 +44,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
-        console.log('_onObjectDeleted', data);
         let mapObject = data.context;
 
         let toSave = [];
@@ -61,7 +60,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         // If last pull is deleted, we don't need to change anything to pulls ahead of us (indices)
-        if (toSave.length > 0) {
+        if (toSave.length > 0 && data.mass_save !== true) {
             this.massSave('*', null, toSave);
         }
 
@@ -396,7 +395,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 confirm: 'yes',
             },
             success: function (json) {
-
                 let killZoneObjectsReversed = _.values(self.objects).reverse();
                 for (let i = 0; i < killZoneObjectsReversed.length; i++) {
                     let killZone = killZoneObjectsReversed[i];
