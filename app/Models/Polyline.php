@@ -33,9 +33,9 @@ class Polyline extends Model implements MappingModelCloneableInterface
     /**
      * @param MappingVersion $mappingVersion
      * @param MappingModelInterface|null $newParent
-     * @return Model
+     * @return Polyline
      */
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline
     {
         /** @var Polyline|MappingModelInterface $clone */
         $clone           = clone $this;

@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "mapping_version_id": 110,
+        "floor_id": 150,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -234.78125,
+        "lng": 175.8125,
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 110,
+        "floor_id": 150,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -243.78125,
+        "lng": 156.75,
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 110,
+        "floor_id": 150,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -225.1875,
+        "lng": 141.8125,
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
