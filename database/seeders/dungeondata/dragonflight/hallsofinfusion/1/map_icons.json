@@ -280,7 +280,7 @@
         "map_icon_type_id": 45,
         "lat": -143.80360924767,
         "lng": 315.07958126335,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -293,7 +293,7 @@
         "map_icon_type_id": 45,
         "lat": -143.56677853416,
         "lng": 331.94192806578,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,33 @@
         "map_icon_type_id": 45,
         "lat": -155.21884963921,
         "lng": 319.01097110774,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 111,
+        "floor_id": 149,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -131.95672353028436,
+        "lng": 151.6999765067959,
+        "comment": "Unlocks after entering Infusion Chamber",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 111,
+        "floor_id": 149,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -171.8249174305725,
+        "lng": 137.43817018037558,
+        "comment": "Unlocks after defeating Khajin the Unyielding",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
