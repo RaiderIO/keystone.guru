@@ -175,9 +175,11 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             }
         }
 
-        $enemiesByNpcId = $mappingVersion->enemies()->with('enemypatrol')->orderBy('mdt_id')->get()->groupBy('npc_id');
+        $enemiesByNpcId = $mappingVersion->enemies()->with('enemypatrol')->get()->groupBy('npc_id');
         foreach ($enemiesByNpcId as $npcId => $enemies) {
+            // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
             /** @var Collection|Enemy[] $enemies */
+            $enemies = $enemies->sort(function(Enemy $a, Enemy $b){ return $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id; });
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
