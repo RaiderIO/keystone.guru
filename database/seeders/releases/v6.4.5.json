@@ -1,0 +1,28 @@
+{
+    "id": 167,
+    "release_changelog_id": 174,
+    "version": "v6.4.5",
+    "title": "Halls of Infusion mapping adjusted near gauntlet",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-29T09:18:02+00:00",
+    "updated_at": "2023-04-29T09:18:02+00:00",
+    "changelog": {
+        "id": 174,
+        "release_id": 167,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 174,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Halls of Infusion mapping adjusted near gauntlet - added\/removed enemies according to latest PTR build.(thanks Xtyr!)",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}
