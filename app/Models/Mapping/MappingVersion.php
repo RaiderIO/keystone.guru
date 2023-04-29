@@ -92,7 +92,7 @@ class MappingVersion extends Model
      */
     public function enemies(): HasMany
     {
-        return $this->hasMany(Enemy::class);
+        return $this->hasMany(Enemy::class)->orderBy('id');
     }
 
     /**
