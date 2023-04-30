@@ -37,5 +37,31 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-83.15625,\"lng\":124.3125},{\"lat\":-89.15625,\"lng\":119.53125},{\"lat\":-89.40625,\"lng\":114.3125}]"
         }
+    },
+    {
+        "id": 970,
+        "mapping_version_id": 111,
+        "floor_id": 149,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-83.15625,\"lng\":124.3125},{\"lat\":-89.15625,\"lng\":119.53125},{\"lat\":-89.40625,\"lng\":114.3125}]"
+        }
+    },
+    {
+        "id": 973,
+        "mapping_version_id": 111,
+        "floor_id": 149,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-162.5625,\"lng\":300.8125},{\"lat\":-191.65625,\"lng\":301.3125},{\"lat\":-191.625,\"lng\":303.03125},{\"lat\":-162.53125,\"lng\":302.625},{\"lat\":-162.5625,\"lng\":300.84375}]"
+        }
     }
 ]

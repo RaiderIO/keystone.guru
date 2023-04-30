@@ -452,11 +452,13 @@ class MapObject extends Signalable {
 
                     let typeTemplate = Handlebars.templates[handlebarsString];
 
+                    let label = lang.get(`messages.${mapObjectName}_${name}_label`);
+
                     result += typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
                         property: name,
                         map_object_name: mapObjectName,
-                        label: lang.get(`messages.${mapObjectName}_${name}_label`),
+                        label: getState().isMapAdmin() ? `${label} ${this.id}` : label,
                         value: this._getValue(name, parentAttribute),
                         values: attribute.hasOwnProperty('values') ?
                             (typeof attribute.values === 'function' ? attribute.values() : attribute.values)
