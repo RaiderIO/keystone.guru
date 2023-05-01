@@ -528,7 +528,7 @@
         "display_id": 108666,
         "name": "Qalashi Lavamancer",
         "base_health": 993575,
-        "enemy_forces": 5,
+        "enemy_forces": 15,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
