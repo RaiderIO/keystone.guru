@@ -611,7 +611,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
             // Exclude Beguiling enemies - their health values are wrong at the moment
-            ->whereIntegerNotInRaw('id', [155432, 155433, 155434])
+            ->whereNotIn('npcs.id', [155432, 155433, 155434])
             ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) {
                 // @TODO This should exclude all raids
                 return $builder->where('enemy_forces', '>', 0);
