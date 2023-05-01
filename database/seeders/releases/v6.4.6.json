@@ -1,0 +1,28 @@
+{
+    "id": 168,
+    "release_changelog_id": 175,
+    "version": "v6.4.6",
+    "title": "Updated S2 mapping\/enemy forces of all dungeons according to latest PTR",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-01T15:24:18+00:00",
+    "updated_at": "2023-05-01T15:24:18+00:00",
+    "changelog": {
+        "id": 175,
+        "release_id": 168,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 175,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "All dungeons for season 2 have been revisited and adjusted to latest PTR mapping (thanks Nnoggie)",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}
