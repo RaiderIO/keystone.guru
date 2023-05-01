@@ -217,6 +217,18 @@ class MDTDungeon
                             $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
                         }
 
+                        if ($enemy->npc->isEmissary()) {
+                            $enemy->seasonal_type = Enemy::SEASONAL_TYPE_BEGUILING;
+                        }
+
+                        if ($enemy->npc->isAwakened()) {
+                            $enemy->seasonal_type = Enemy::SEASONAL_TYPE_AWAKENED;
+                        }
+
+                        if ($enemy->npc->isEncrypted()) {
+                            $enemy->seasonal_type = Enemy::SEASONAL_TYPE_ENCRYPTED;
+                        }
+
                         if (isset($clone['inspiring']) && $clone['inspiring']) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_INSPIRING;
                         }

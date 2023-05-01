@@ -85,6 +85,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'lng'                => 'double',
     ];
 
+    const SEASONAL_TYPE_BEGUILING          = 'beguiling';
     const SEASONAL_TYPE_AWAKENED           = 'awakened';
     const SEASONAL_TYPE_INSPIRING          = 'inspiring';
     const SEASONAL_TYPE_PRIDEFUL           = 'prideful';
@@ -96,6 +97,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
 
     const SEASONAL_TYPE_ALL = [
+        self::SEASONAL_TYPE_BEGUILING,
         self::SEASONAL_TYPE_AWAKENED,
         self::SEASONAL_TYPE_INSPIRING,
         self::SEASONAL_TYPE_PRIDEFUL,
