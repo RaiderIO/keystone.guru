@@ -142,6 +142,14 @@ class Npc extends CacheModel implements MappingModelInterface
     /**
      * @return bool
      */
+    public function isEmissary(): bool
+    {
+        return in_array($this->id, [155432, 155433, 155434]);
+    }
+
+    /**
+     * @return bool
+     */
     public function isAwakened(): bool
     {
         return in_array($this->id, [161244, 161243, 161124, 161241]);
