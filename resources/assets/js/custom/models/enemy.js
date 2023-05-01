@@ -166,7 +166,7 @@ class Enemy extends VersionableMapObject {
                     name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
                 }],
                 default: null,
-                getter: function() {
+                getter: function () {
                     return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
                 }
             }),
@@ -757,7 +757,14 @@ class Enemy extends VersionableMapObject {
 
             if (this.hasOwnProperty('dungeon_difficulty')) {
                 // If our dungeon difficulty is null, always show it. Otherwise, only show it when our difficulty matches
+                // console.warn(`Hiding enemy since the dungeon difficulty does not match ${this.id}`);
                 return this.dungeon_difficulty !== null && mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
+            }
+
+            // Hide critters (Freehold)
+            if (this.npc !== null && this.npc.npc_type_id === NPC_TYPE_CRITTER) {
+                // console.warn(`Hiding enemy since it is a critter ${this.id}`);
+                return true;
             }
         }
 
