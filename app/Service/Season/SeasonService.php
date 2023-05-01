@@ -4,6 +4,7 @@ namespace App\Service\Season;
 
 
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -97,18 +98,21 @@ class SeasonService implements SeasonServiceInterface
 
     /**
      * Get the season that was active at a specific date.
-     * @param $date Carbon
+     * @param Carbon $date
+     * @param GameServerRegion $region
      * @param Expansion|null $expansion
      * @return Season|null
      */
-    public function getSeasonAt(Carbon $date, ?Expansion $expansion = null): ?Season
+    public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?Season
     {
         if ($expansion === null) {
             $expansion = $this->expansionService->getCurrentExpansion();
         }
 
         /** @var Season $season */
-        $season = Season::where('start', '<', $date)
+        $season = Season::whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
+            [$region->reset_day_offset, $region->reset_hours_offset, $date]
+        )
             ->where('expansion_id', $expansion->id)
             ->orderBy('start', 'desc')
             ->limit(1)
@@ -135,7 +139,7 @@ class SeasonService implements SeasonServiceInterface
             $expansion = $this->expansionService->getCurrentExpansion();
         }
 
-        return $this->getSeasonAt($this->getUserNow(), $expansion);
+        return $this->getSeasonAt($this->getUserNow(), GameServerRegion::getUserOrDefaultRegion(), $expansion);
     }
 
     /**
@@ -157,16 +161,22 @@ class SeasonService implements SeasonServiceInterface
      * that index, that's up to the current season.
      *
      * @param Carbon $date
+     * @param GameServerRegion $region
      * @param Expansion|null $expansion
      * @return int
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, ?Expansion $expansion = null): int
+    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
     {
-        $season      = $this->getSeasonAt($date, $expansion);
-        $seasonStart = $season->start();
+        $season      = $this->getSeasonAt($date, $region, $expansion);
+        $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
+
+            dd($region);
+
+//            dd($season, $seasonStart->toDateTimeString(), $date->toDateTimeString());
+
             throw new Exception('Season at calculation is wrong; cannot find the affix group at a specific time
             because the season start date is past the target date!');
         }
@@ -197,7 +207,7 @@ class SeasonService implements SeasonServiceInterface
         /** @var Season $currentSeason */
         $currentSeason = $seasons->shift();
         /** @var Season $nextSeason */
-        $nextSeason       = $seasons->shift();
+        $nextSeason = $seasons->shift();
 
         $firstSeasonStart = $currentSeason->start();
 
@@ -216,9 +226,9 @@ class SeasonService implements SeasonServiceInterface
         // Since seasons may start/end at any time during the iteration of affix groups, we need to start at the
         // beginning and add affixes. Once we've simulated everything in the past up until and including the current
         // iteration, we can take off 12 affix groups and return those as those are the affixes we should display!
-        $affixGroups = new Collection();
-        $simulatedTime               = $firstSeasonStart->copy();
-        $totalWeeksToSimulate        = $weeksSinceBeginning + 1;
+        $affixGroups          = new Collection();
+        $simulatedTime        = $firstSeasonStart->copy();
+        $totalWeeksToSimulate = $weeksSinceBeginning + 1;
         for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
             if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
                 // If we should switch to the next season...

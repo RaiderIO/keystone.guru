@@ -201,7 +201,7 @@ class Season extends CacheModel
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt($this->getUserNow());
+            $result = $this->getAffixGroupAt($this->getUserNow(), GameServerRegion::getUserOrDefaultRegion());
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
@@ -220,7 +220,7 @@ class Season extends CacheModel
     public function getNextAffixGroup(): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt($this->getUserNow()->addDays(7));
+            $result = $this->getAffixGroupAt($this->getUserNow()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
@@ -235,11 +235,11 @@ class Season extends CacheModel
      * Get which affix group is active on this region at a specific point in time.
      *
      * @param Carbon $date The date at which you want to know the affix group.
-     * @param GameServerRegion|null $region
+     * @param GameServerRegion $region
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      * @throws Exception
      */
-    public function getAffixGroupAt(Carbon $date, GameServerRegion $region = null): ?AffixGroup
+    public function getAffixGroupAt(Carbon $date, GameServerRegion $region): ?AffixGroup
     {
         /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
@@ -251,7 +251,7 @@ class Season extends CacheModel
             $seasonService = resolve(SeasonService::class);
 
             // Get the affix group which occurs after a few weeks and return that
-            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date);
+            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $region, $this->expansion);
 
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
@@ -268,8 +268,9 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
+        $region = GameServerRegion::getUserOrDefaultRegion();
         $startIndex      = $this->affixgroups->search(
-            $this->getAffixGroupAt($this->start())
+            $this->getAffixGroupAt($this->start($region), $region)
         );
         $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup) {
             return $affixGroupCandidate->id === $affixGroup->id;
