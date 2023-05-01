@@ -388,7 +388,7 @@
         "display_id": 107124,
         "name": "Infuser Sariya",
         "base_health": 1686135,
-        "enemy_forces": 30,
+        "enemy_forces": 50,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
