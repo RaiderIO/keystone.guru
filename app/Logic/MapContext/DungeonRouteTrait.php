@@ -46,7 +46,7 @@ trait DungeonRouteTrait
             'mapIcons'                 => $dungeonRoute->mapicons,
             'paths'                    => $dungeonRoute->paths,
             'brushlines'               => $dungeonRoute->brushlines,
-            'pridefulenemies'          => $dungeonRoute->pridefulEnemies,
+            'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers'         => $dungeonRoute->enemyraidmarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) use ($raidMarkers) {
                 return [
                     'enemy_id'         => $drEnemyRaidMarker->enemy_id,

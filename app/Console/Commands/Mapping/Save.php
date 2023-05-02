@@ -223,7 +223,7 @@ class Save extends Command
                                    'expires_at', 'views', 'views_embed', 'popularity', 'pageviews']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                               'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
-                              'pridefulenemies', 'mapicons']);
+                              'pridefulEnemies', 'mapicons']);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
             // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
