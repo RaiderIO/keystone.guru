@@ -343,7 +343,7 @@
             }
         ],
         "enemyraidmarkers": [],
-        "pridefulenemies": [],
+        "prideful_enemies": [],
         "mapicons": [
             {
                 "floor_id": 51,
@@ -400,7 +400,6 @@
                 "seasonal_index": null,
                 "linkedawakenedobelisks": []
             }
-        ],
-        "prideful_enemies": []
+        ]
     }
 ]

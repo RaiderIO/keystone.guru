@@ -529,7 +529,7 @@
             }
         ],
         "enemyraidmarkers": [],
-        "pridefulenemies": [],
+        "prideful_enemies": [],
         "mapicons": [
             {
                 "floor_id": 45,
@@ -601,7 +601,6 @@
                     }
                 ]
             }
-        ],
-        "prideful_enemies": []
+        ]
     }
 ]
