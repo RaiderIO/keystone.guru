@@ -402,6 +402,7 @@
         ],
         "enemyraidmarkers": [],
         "pridefulenemies": [],
-        "mapicons": []
+        "mapicons": [],
+        "prideful_enemies": []
     }
 ]

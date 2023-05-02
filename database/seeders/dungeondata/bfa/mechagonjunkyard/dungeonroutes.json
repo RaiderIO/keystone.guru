@@ -652,7 +652,8 @@
                 "seasonal_index": null,
                 "linkedawakenedobelisks": []
             }
-        ]
+        ],
+        "prideful_enemies": []
     },
     {
         "public_key": "8PjNdhn",
@@ -1004,6 +1005,7 @@
         ],
         "enemyraidmarkers": [],
         "pridefulenemies": [],
-        "mapicons": []
+        "mapicons": [],
+        "prideful_enemies": []
     }
 ]
