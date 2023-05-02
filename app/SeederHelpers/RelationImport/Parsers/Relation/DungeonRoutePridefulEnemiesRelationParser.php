@@ -31,7 +31,7 @@ class DungeonRoutePridefulEnemiesRelationParser implements RelationParserInterfa
      */
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'pridefulenemies';
+        return $name === 'prideful_enemies';
     }
 
     /**
