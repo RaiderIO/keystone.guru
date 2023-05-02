@@ -263,7 +263,7 @@ class Save extends Command
             foreach ($demoRoute->enemyraidmarkers as $item) {
                 $toHide->add($item);
             }
-            foreach ($demoRoute->pridefulenemies as $item) {
+            foreach ($demoRoute->pridefulEnemies as $item) {
                 $toHide->add($item);
             }
             foreach ($demoRoute->mapicons as $item) {

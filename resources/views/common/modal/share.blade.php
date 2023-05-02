@@ -41,7 +41,8 @@ $showPublish   = $show['publish'] ?? true;
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]),
+                {!! Form::text('map_shareable_link',
+                    route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]),
                 ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
@@ -80,7 +81,9 @@ $showPublish   = $show['publish'] ?? true;
         <div class="row">
             <div class="col input-group">
                 {!! Form::text('map_embedable_link',
-                sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)])),
+                sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>',
+                    route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])
+                ),
                 ['id' => 'map_embedable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"

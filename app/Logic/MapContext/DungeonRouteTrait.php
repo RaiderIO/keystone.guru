@@ -7,7 +7,6 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\RaidMarker;
-use Illuminate\Support\Str;
 
 /**
  * Trait DungeonRouteTrait
@@ -39,7 +38,7 @@ trait DungeonRouteTrait
             'mappingVersionUpgradeUrl' => route('dungeonroute.upgrade', [
                 'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute,
-                'title'        => Str::slug($dungeonRoute->title),
+                'title'        => $dungeonRoute->getTitleSlug(),
             ]),
 
             // Relations
@@ -47,7 +46,7 @@ trait DungeonRouteTrait
             'mapIcons'                 => $dungeonRoute->mapicons,
             'paths'                    => $dungeonRoute->paths,
             'brushlines'               => $dungeonRoute->brushlines,
-            'pridefulenemies'          => $dungeonRoute->pridefulenemies,
+            'pridefulenemies'          => $dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers'         => $dungeonRoute->enemyraidmarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) use ($raidMarkers) {
                 return [
                     'enemy_id'         => $drEnemyRaidMarker->enemy_id,
