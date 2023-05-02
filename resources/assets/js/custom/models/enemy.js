@@ -755,10 +755,10 @@ class Enemy extends VersionableMapObject {
                 }
             }
 
-            if (this.hasOwnProperty('dungeon_difficulty')) {
+            if (this.hasOwnProperty('dungeon_difficulty') && this.dungeon_difficulty !== null) {
                 // If our dungeon difficulty is null, always show it. Otherwise, only show it when our difficulty matches
                 // console.warn(`Hiding enemy since the dungeon difficulty does not match ${this.id}`);
-                return this.dungeon_difficulty !== null && mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
+                return mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
             }
 
             // Hide critters (Freehold)
