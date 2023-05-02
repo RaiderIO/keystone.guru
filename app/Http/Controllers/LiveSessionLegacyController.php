@@ -6,7 +6,6 @@ use App\Models\DungeonRoute;
 use App\Models\LiveSession;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LiveSessionLegacyController extends Controller
 {
@@ -21,7 +20,7 @@ class LiveSessionLegacyController extends Controller
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'livesession'  => $livesession,
         ]);
     }
@@ -38,7 +37,7 @@ class LiveSessionLegacyController extends Controller
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'livesession'  => $livesession,
             'floorindex'   => $floorIndex,
         ]);

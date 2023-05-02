@@ -15,7 +15,7 @@
             <div id="view_route_actions_container" class="mb-2">
                 <div class="row no-gutters">
                     <div class="col">
-                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                            class="btn btn-info">
                             <i class="fas fa-eye"></i>
                             <span class="map_controls_element_label_toggle" style="display: none;">

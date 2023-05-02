@@ -49,12 +49,12 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                             <div class="row">
                                                 <div class="col">
                                                     @if($mayUserEdit)
-                                                        <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                                                        <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                                                            class="btn-sm btn-success w-100">
                                                             <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
                                                         </a>
                                                     @else
-                                                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                                                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                                                            class="btn-sm btn-success w-100">
                                                             <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
                                                         </a>
@@ -149,7 +149,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                 <div class="row justify-content-center align-self-center">
                                     <a class="col" href="{{ route('dungeonroute.claim', [
                                             'dungeon' => $dungeonroute->dungeon,
-                                            'title' => \Illuminate\Support\Str::slug($dungeonroute->title),
+                                            'title' => $dungeonroute->getTitleSlug(),
                                             'dungeonroute' => $dungeonroute]
                                         ) }}">
                                         <button class="btn btn-success btn-sm">
@@ -239,7 +239,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
         <div class="row">
             <div class="col">
-                <a href="{{ route('dungeonroute.livesession.create', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                <a href="{{ route('dungeonroute.livesession.create', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                    class="btn btn-success w-100">
                     <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.create_live_session') }}
                 </a>
@@ -290,12 +290,12 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
             </div>
             <div class="col">
                 @if($mayUserEdit)
-                    <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                    <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                        class="btn btn-success w-100">
                         <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
                     </a>
                 @else
-                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}"
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                        class="btn btn-success w-100">
                         <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
                     </a>

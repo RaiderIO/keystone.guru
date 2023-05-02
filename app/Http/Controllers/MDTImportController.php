@@ -149,7 +149,7 @@ class MDTImportController extends Controller
             $result = redirect()->route('dungeonroute.edit', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => Str::slug($dungeonroute->title),
+                'title'        => $dungeonroute->getTitleSlug(),
             ]);
         } else if ($user === null) {
             return abort(StatusCode::UNAUTHORIZED, __('controller.mdtimport.error.cannot_create_route_must_be_logged_in'));
