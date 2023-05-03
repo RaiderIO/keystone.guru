@@ -22,5 +22,13 @@
         "target_floor_id": 51,
         "lat": -199,
         "lng": 280
+    },
+    {
+        "id": 397,
+        "mapping_version_id": 126,
+        "floor_id": 52,
+        "target_floor_id": 51,
+        "lat": -199,
+        "lng": 280
     }
 ]
