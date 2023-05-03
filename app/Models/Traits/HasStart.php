@@ -15,10 +15,10 @@ trait HasStart
      * @param GameServerRegion|null $region
      * @return Carbon The start date of this object.
      */
-    public function start(GameServerRegion $region = null): Carbon
+    public function start(?GameServerRegion $region = null): Carbon
     {
         $start      = Carbon::createFromTimeString($this->start, 'UTC');
-        $userRegion = GameServerRegion::getUserOrDefaultRegion();
+        $userRegion = $region === null ? GameServerRegion::getUserOrDefaultRegion() : null;
 
         $start->startOfWeek();
         // -1, offset 1 means monday, which we're already at

@@ -70,7 +70,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             <div class="row no-gutters p-2 header">
                 <div class="col">
                     <h4 class="mb-0">
-                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => \Illuminate\Support\Str::slug($dungeonroute->title)]) }}">
+                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
                             {{ $dungeonroute->title }}
                         </a>
                     </h4>

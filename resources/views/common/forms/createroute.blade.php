@@ -80,7 +80,7 @@ $dungeonSelectId = 'dungeon_id_select';
                            href="{{ route('dungeonroute.migrate', [
                                         'dungeon' => $dungeonroute->dungeon,
                                         'dungeonroute' => $dungeonroute,
-                                        'title' => \Illuminate\Support\Str::slug($dungeonroute->title),
+                                        'title' => $dungeonroute->getTitleSlug(),
                                         'seasonalType' => $targetAffix,
                                     ]) }}">
                             {{ __('views/common.forms.createroute.migrate_to_seasonal_type', ['seasonalType' => __(sprintf('affixes.%s.name', $targetAffix))]) }}

@@ -25,7 +25,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -39,7 +39,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -54,7 +54,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'floorindex'   => $floorIndex,
         ]);
     }
@@ -70,7 +70,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.embed', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'floorindex'   => $floorIndex,
         ]);
     }
@@ -86,7 +86,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'floorindex'   => $floorIndex,
         ]);
     }
@@ -102,7 +102,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.preview', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'floorindex'   => $floorIndex,
         ]);
     }
@@ -117,7 +117,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.clone', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -131,7 +131,7 @@ class DungeonRouteLegacyController extends Controller
         return redirect()->route('dungeonroute.claim', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 }

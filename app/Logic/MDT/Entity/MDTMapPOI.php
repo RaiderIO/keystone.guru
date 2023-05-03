@@ -8,10 +8,13 @@ class MDTMapPOI implements Arrayable
 {
     public const TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
     public const TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
+    // Ny'alotha spires
+    public const TEMPLATE_VIGNETTE_PIN = 'VignettePinTemplate';
 
     public const ALL_TEMPLATES = [
         self::TEMPLATE_MAP_LINK_PIN,
         self::TEMPLATE_DEATH_RELEASE_PIN,
+        self::TEMPLATE_VIGNETTE_PIN,
     ];
 
     public const TYPE_MAP_LINK             = 'mapLink';
@@ -19,6 +22,8 @@ class MDTMapPOI implements Arrayable
     public const TYPE_GENERAL_NOTE         = 'generalNote';
     public const TYPE_ZOOM                 = 'zoom';
     public const TYPE_IRON_DOCKS_IRON_STAR = 'ironDocksIronStar';
+    public const TYPE_NYALOTHA_SPIRE       = 'nyalothaSpire';
+    public const TYPE_THE_UNDERROT_SKIP    = 'tuSkip';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -26,6 +31,8 @@ class MDTMapPOI implements Arrayable
         self::TYPE_GENERAL_NOTE,
         self::TYPE_ZOOM,
         self::TYPE_IRON_DOCKS_IRON_STAR,
+        self::TYPE_NYALOTHA_SPIRE,
+        self::TYPE_THE_UNDERROT_SKIP,
     ];
 
     private int $subLevel;

@@ -20,7 +20,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 use Teapot\StatusCode;
 
@@ -77,7 +76,12 @@ class LiveSessionController extends Controller
             }
         }
 
-        return redirect()->route('dungeonroute.livesession.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title), 'livesession' => $liveSession]);
+        return redirect()->route('dungeonroute.livesession.view', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'livesession'  => $liveSession,
+        ]);
     }
 
     /**
@@ -151,14 +155,14 @@ class LiveSessionController extends Controller
             return redirect()->route('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => Str::slug($dungeonroute->title),
+                'title'        => $dungeonroute->getTitleSlug(),
                 'livesession'  => $livesession,
             ]);
         } else {
             return view('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => Str::slug($dungeonroute->title),
+                'title'        => $dungeonroute->getTitleSlug(),
                 'livesession'  => $livesession,
                 'floor'        => $floor,
                 'mapContext'   => (new MapContextLiveSession($livesession, $floor))->getProperties(),

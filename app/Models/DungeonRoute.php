@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -103,7 +104,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
  * @property Collection|KillZone[] $killzones
- * @property Collection|PridefulEnemy[] $pridefulenemies
+ * @property Collection|PridefulEnemy[] $pridefulEnemies
  * @property Collection|OverpulledEnemy[] $overpulledenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
@@ -154,6 +155,14 @@ class DungeonRoute extends Model
     public function getRouteKeyName(): string
     {
         return 'public_key';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleSlug(): string
+    {
+        return Str::slug($this->title, '-', null);
     }
 
     /**
@@ -287,7 +296,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function pridefulenemies(): HasMany
+    public function pridefulEnemies(): HasMany
     {
         return $this->hasMany(PridefulEnemy::class);
     }
@@ -295,7 +304,7 @@ class DungeonRoute extends Model
     /**
      * @return BelongsTo
      */
-    public function publishedstate(): BelongsTo
+    public function publishedState(): BelongsTo
     {
         return $this->belongsTo(PublishedState::class, 'published_state_id');
     }
@@ -917,7 +926,7 @@ class DungeonRoute extends Model
             $this->paths,
             $this->brushlines,
             $this->killzones,
-            $this->pridefulenemies,
+            $this->pridefulEnemies,
             $this->enemyraidmarkers,
             $this->mapicons,
             $this->routeattributesraw,
@@ -1391,7 +1400,7 @@ class DungeonRoute extends Model
                 $killZone->delete();
             }
             $item->mapicons()->delete();
-            $item->pridefulenemies()->delete();
+            $item->pridefulEnemies()->delete();
 
             // External
             $item->ratings()->delete();

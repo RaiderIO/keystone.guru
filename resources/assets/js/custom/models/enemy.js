@@ -24,6 +24,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
     }
 });
 
+let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
@@ -165,7 +166,7 @@ class Enemy extends VersionableMapObject {
                     name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
                 }],
                 default: null,
-                getter: function() {
+                getter: function () {
                     return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
                 }
             }),
@@ -245,6 +246,8 @@ class Enemy extends VersionableMapObject {
                 admin: true,
                 default: null,
                 values: [
+                    // @TODO Translate this
+                    {id: ENEMY_SEASONAL_TYPE_BEGUILING, name: 'Beguiling'},
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
@@ -738,7 +741,8 @@ class Enemy extends VersionableMapObject {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
                 let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
-                if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
+                if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_BEGUILING && !mapContext.hasAffix(AFFIX_BEGUILING)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
@@ -751,9 +755,16 @@ class Enemy extends VersionableMapObject {
                 }
             }
 
-            if (this.hasOwnProperty('dungeon_difficulty')) {
+            if (this.hasOwnProperty('dungeon_difficulty') && this.dungeon_difficulty !== null) {
                 // If our dungeon difficulty is null, always show it. Otherwise, only show it when our difficulty matches
-                return this.dungeon_difficulty !== null && mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
+                // console.warn(`Hiding enemy since the dungeon difficulty does not match ${this.id}`);
+                return mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
+            }
+
+            // Hide critters (Freehold)
+            if (this.npc !== null && this.npc.npc_type_id === NPC_TYPE_CRITTER) {
+                // console.warn(`Hiding enemy since it is a critter ${this.id}`);
+                return true;
             }
         }
 

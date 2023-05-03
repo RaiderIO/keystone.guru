@@ -22,7 +22,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
@@ -80,11 +79,11 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        if (!isset($title) || Str::slug($title) !== $title) {
+        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => Str::slug($dungeonroute->title),
+                'title'        => $dungeonroute->getTitleSlug(),
             ]);
         }
 
@@ -105,12 +104,16 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
+            return redirect()->route('dungeonroute.view', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+            ]);
         } else {
             return view('dungeonroute.view', [
                 'dungeon'        => $dungeonroute->dungeon,
                 'dungeonroute'   => $dungeonroute,
-                'title'          => Str::slug($dungeonroute->title),
+                'title'          => $dungeonroute->getTitleSlug(),
                 'current_report' => $currentReport,
                 'floor'          => $floor,
                 'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
@@ -136,7 +139,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        $titleSlug = Str::slug($dungeonroute->title);
+        $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
                 'dungeon'      => $dungeon,
@@ -264,7 +267,11 @@ class DungeonRouteController extends Controller
         // Regardless of the result, try to claim the route
         $dungeonroute->claim(Auth::id());
 
-        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
+        return redirect()->route('dungeonroute.edit', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+        ]);
     }
 
     /**
@@ -301,7 +308,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        $titleSlug = Str::slug($dungeonroute->title);
+        $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.edit.floor', [
                 'dungeon'      => $dungeon,
@@ -315,12 +322,16 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
+            return redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+            ]);
         } else {
             return view('dungeonroute.edit', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => Str::slug($dungeonroute->title),
+                'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
                 'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             ]);
@@ -362,7 +373,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.embed', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             'embedOptions' => [
@@ -399,7 +410,7 @@ class DungeonRouteController extends Controller
         Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
 
         // Display the edit page
-        return $this->edit($request, $dungeonroute->dungeon, $dungeonroute, Str::slug($dungeonroute->title));
+        return $this->edit($request, $dungeonroute->dungeon, $dungeonroute, $dungeonroute->getTitleSlug());
     }
 
     /**
@@ -418,7 +429,11 @@ class DungeonRouteController extends Controller
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
-        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
+        return redirect()->route('dungeonroute.edit', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+        ]);
     }
 
     /**
@@ -436,7 +451,11 @@ class DungeonRouteController extends Controller
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
-        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => Str::slug($dungeonroute->title)]);
+        return redirect()->route('dungeonroute.edit', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+        ]);
     }
 
     /**
@@ -463,7 +482,7 @@ class DungeonRouteController extends Controller
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => Str::slug($dungeonroute->title),
+            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 }

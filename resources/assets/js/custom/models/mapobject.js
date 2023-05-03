@@ -452,13 +452,11 @@ class MapObject extends Signalable {
 
                     let typeTemplate = Handlebars.templates[handlebarsString];
 
-                    let label = lang.get(`messages.${mapObjectName}_${name}_label`);
-
                     result += typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
                         property: name,
                         map_object_name: mapObjectName,
-                        label: getState().isMapAdmin() ? `${label} ${this.id}` : label,
+                        label: lang.get(`messages.${mapObjectName}_${name}_label`),
                         value: this._getValue(name, parentAttribute),
                         values: attribute.hasOwnProperty('values') ?
                             (typeof attribute.values === 'function' ? attribute.values() : attribute.values)
@@ -477,11 +475,14 @@ class MapObject extends Signalable {
         let popupTemplate = Handlebars.templates['map_popup_template'];
 
         if (parentAttribute === null) {
+            let translatedMapObjectName = lang.get(`messages.${mapObjectName}`);
+            let mapObjectNamePretty = getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName;
+
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                 id: this.id,
                 html: result,
                 map_object_name: mapObjectName,
-                map_object_name_pretty: lang.get(`messages.${mapObjectName}`),
+                map_object_name_pretty: mapObjectNamePretty,
                 readonly: this.map.options.readonly
             }));
         } else {

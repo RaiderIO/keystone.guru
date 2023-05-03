@@ -262,10 +262,10 @@ class APIKillZoneController extends Controller
         if ($validated['confirm'] === 'yes') {
             try {
                 $killZones       = $dungeonRoute->killzones;
-                $pridefulEnemies = $dungeonRoute->pridefulenemies;
+                $pridefulEnemies = $dungeonRoute->pridefulEnemies;
 
                 $dungeonRoute->killzones()->delete();
-                $dungeonRoute->pridefulenemies()->delete();
+                $dungeonRoute->pridefulEnemies()->delete();
 
                 if (Auth::check()) {
                     foreach ($killZones as $killZone) {

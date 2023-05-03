@@ -367,11 +367,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                                 // No point doing this if we're not saving
                                 if ($save && $isRoutePrideful) {
                                     // Do not add more than 5 regardless of circumstance
-                                    if ($dungeonRoute->pridefulenemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
+                                    if ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
                                         // If we should add a prideful enemy in this pull ..
                                         $currentPercentage = ($dungeonRoute->enemy_forces / $enemyForcesRequired) * 100;
                                         // Add one so that we start adding at 20%
-                                        if ($currentPercentage >= ($dungeonRoute->pridefulenemies->count() + $totalPridefulEnemiesToAdd + 1) * (100 / $pridefulEnemyCount)) {
+                                        if ($currentPercentage >= ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd + 1) * (100 / $pridefulEnemyCount)) {
                                             $totalPridefulEnemiesToAdd++;
                                         }
                                     }
@@ -399,7 +399,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 if ($save) {
                     for ($i = 0; $i < $totalPridefulEnemiesToAdd; $i++) {
                         /** @var Enemy $pridefulEnemyEnemy */
-                        $pridefulEnemyEnemy = $pridefulEnemies->slice($dungeonRoute->pridefulenemies->count(), 1)->first();
+                        $pridefulEnemyEnemy = $pridefulEnemies->slice($dungeonRoute->pridefulEnemies->count(), 1)->first();
                         $pridefulEnemy      = PridefulEnemy::create([
                             'dungeon_route_id' => $dungeonRoute->id,
                             'enemy_id'         => $pridefulEnemyEnemy->id,
@@ -408,7 +408,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             'lng'              => $killZone->enemies->avg('lng'),
                         ]);
 
-                        $dungeonRoute->pridefulenemies->push($pridefulEnemy);
+                        $dungeonRoute->pridefulEnemies->push($pridefulEnemy);
 
                         // Couple the prideful enemy to this pull
                         KillZoneEnemy::create([
