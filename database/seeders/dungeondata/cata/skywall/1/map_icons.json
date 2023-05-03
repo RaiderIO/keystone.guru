@@ -397,7 +397,7 @@
         "map_icon_type_id": 44,
         "lat": -140.125,
         "lng": 120.46875,
-        "comment": null,
+        "comment": "Grounding Field",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 44,
         "lat": -135.96875,
         "lng": 114.9375,
-        "comment": null,
+        "comment": "Grounding Field",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -423,7 +423,7 @@
         "map_icon_type_id": 44,
         "lat": -134.90625,
         "lng": 120.75,
-        "comment": null,
+        "comment": "Grounding Field",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
