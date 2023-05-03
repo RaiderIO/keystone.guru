@@ -327,7 +327,7 @@
         "npc_class_id": 1,
         "display_id": 81424,
         "name": "Bilge Rat Buccaneer",
-        "base_health": 715711,
+        "base_health": 768495,
         "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
