@@ -24,9 +24,9 @@
         "name": "nnoggie/mythicdungeontools",
         "version": "4.0.2.5",
         "source": {
-          "url": "https://github.com/Wotuu/MythicDungeonTools.git",
+          "url": "https://github.com/Nnoggie/MythicDungeonTools.git",
           "type": "git",
-          "reference": "edc6e6c3810d9c6dde20755c947514c5936292d8"
+          "reference": "fea3909a39b937fbdfe37353214f5a2a6fbfc948"
         }
       }
     }
