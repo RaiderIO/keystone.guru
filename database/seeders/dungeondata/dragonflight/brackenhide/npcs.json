@@ -1268,7 +1268,7 @@
         "display_id": 105704,
         "name": "Gutstabber",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,

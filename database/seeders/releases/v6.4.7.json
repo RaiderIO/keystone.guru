@@ -1,0 +1,28 @@
+{
+    "id": 169,
+    "release_changelog_id": 176,
+    "version": "v6.4.7",
+    "title": "Updated Freehold enemy forces",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-05T09:09:50+00:00",
+    "updated_at": "2023-05-05T09:09:50+00:00",
+    "changelog": {
+        "id": 176,
+        "release_id": 169,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 176,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Freehold mapping updated to reflect latest PTR changes.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}
