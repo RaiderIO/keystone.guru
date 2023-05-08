@@ -52,7 +52,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeason(Expansion $expansion): ?Season
     {
-        return $expansion->currentseason;
+        return $expansion->currentSeason;
     }
 
     /**

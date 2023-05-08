@@ -28,8 +28,8 @@ use Illuminate\Support\Collection;
  *
  * @property Collection|Dungeon[] $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
- * @property Season|null $currentseason
- * @property Season|null $nextseason
+ * @property Season|null $currentSeason
+ * @property Season|null $nextSeason
  *
  * @mixin Eloquent
  */
@@ -108,11 +108,15 @@ class Expansion extends CacheModel
     /**
      * @return HasOne
      */
-    public function currentseason(): HasOne
+    public function currentSeason(): HasOne
     {
+        $region = GameServerRegion::getUserOrDefaultRegion();
+
         return $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->where('start', '<', $this->getUserNow())
+            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
+                [$region->reset_day_offset, $region->reset_hours_offset, $this->getUserNow()]
+            )
             ->orderBy('start', 'desc')
             ->limit(1);
     }
@@ -120,11 +124,15 @@ class Expansion extends CacheModel
     /**
      * @return HasOne
      */
-    public function nextseason(): HasOne
+    public function nextSeason(): HasOne
     {
+        $region = GameServerRegion::getUserOrDefaultRegion();
+
         return $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->where('start', '>=', $this->getUserNow())
+            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
+                [$region->reset_day_offset, $region->reset_hours_offset, $this->getUserNow()]
+            )
             ->orderBy('start')
             ->limit(1);
     }
