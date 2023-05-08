@@ -1,0 +1,28 @@
+{
+    "id": 170,
+    "release_changelog_id": 177,
+    "version": "v6.4.8",
+    "title": "Fixed incorrect season detection for some S2 dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-08T09:37:26+00:00",
+    "updated_at": "2023-05-08T09:37:26+00:00",
+    "changelog": {
+        "id": 177,
+        "release_id": 170,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 177,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1685,
+                "change": "Calculation for when the current\/next season is for certain dungeons was incorrect and did not take into account timezones etc.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
