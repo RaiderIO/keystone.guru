@@ -69,10 +69,10 @@ class ViewService implements ViewServiceInterface
                 ->where('active', true);
 
             $currentExpansion = $this->expansionService->getCurrentExpansion();
-            $currentSeason    = $currentExpansion->currentseason;
+            $currentSeason    = $currentExpansion->currentSeason;
 
             $nextExpansion = $this->expansionService->getNextExpansion() ?? $currentExpansion;
-            $nextSeason    = $nextExpansion->nextseason;
+            $nextSeason    = $nextExpansion->nextSeason;
 
             /** @var Release $latestRelease */
             $latestRelease          = Release::latest()->first();
