@@ -172,11 +172,6 @@ class SeasonService implements SeasonServiceInterface
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
-
-            dd($region);
-
-//            dd($season, $seasonStart->toDateTimeString(), $date->toDateTimeString());
-
             throw new Exception('Season at calculation is wrong; cannot find the affix group at a specific time
             because the season start date is past the target date!');
         }
