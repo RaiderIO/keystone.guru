@@ -379,6 +379,12 @@ return [
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
+        'print'           => [
+            'title'                  => 'Print',
+            'intro'                  => 'Printing your route generates a snapshot of your route and converts it to a PDF file. You can then print the PDF.',
+            'floors_per_page'        => 'Floors per page',
+            'generate_printable_pdf' => 'Generate printable PDF',
+        ],
         'routesettings'   => [
             'title' => 'Route settings',
         ],

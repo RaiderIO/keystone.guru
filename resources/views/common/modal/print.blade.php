@@ -2,27 +2,39 @@
 /** @var $dungeonroute App\Models\DungeonRoute|null */
 ?>
 
-@include('common.general.inline', [
-    'path' => 'common/dungeonroute/simulate',
-    'options' => [
-        'dependencies' => ['common/maps/map'],
-    ]
-])
+{{--@include('common.general.inline', [--}}
+{{--    'path' => 'common/dungeonroute/simulate',--}}
+{{--    'options' => [--}}
+{{--        'dependencies' => ['common/maps/map'],--}}
+{{--    ]--}}
+{{--])--}}
 
-<h3 class="card-title">{{ __('views/common.modal.simulate.title') }}</h3>
+<h3 class="card-title">{{ __('views/common.modal.print.title') }}</h3>
 
-@component('common.general.alert', ['type' => 'info', 'name' => 'simulate-intro'])
-    {{ __('views/common.modal.simulate.intro') }}
+@component('common.general.alert', ['type' => 'info', 'name' => 'print-intro'])
+    {{ __('views/common.modal.print.intro') }}
 @endcomponent
 
-@include('common.modal.simulateoptions.default')
 
-@include('common.modal.simulateoptions.advanced')
+<!-- General settings -->
+<div class="form-group">
+    <label for="simulate_key_level">
+        {{ __('views/common.modal.print.floors_per_page') }}
+        <i class="fas fa-info-circle" data-toggle="tooltip"
+           title="{{ __('views/common.modal.print.floors_per_page_title') }}"></i>
+    </label>
+    <div class="row">
+        <div class="col">
+            {!! Form::select('floors_per_page', [2, 4], 2, ['id' => 'floors_per_page', 'class' => 'form-control selectpicker']) !!}
+        </div>
+    </div>
+</div>
+
 
 <div class="form-group row">
     <div class="col">
         <div id="simulate_get_string" class="btn btn-success">
-            <i class="fas fa-atom"></i> {{ __('views/common.modal.simulate.get_simulationcraft_string') }}
+            <i class="fas fa-file-pdf"></i> {{ __('views/common.modal.print.generate_printable_pdf') }}
         </div>
     </div>
 </div>

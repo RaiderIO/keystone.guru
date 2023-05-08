@@ -134,6 +134,16 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
+     * @param DungeonRoute $dungeonRoute
+     * @param int $floorIndex
+     * @return bool
+     */
+    public function hasThumbnailForFloor(DungeonRoute $dungeonRoute, int $floorIndex): bool
+    {
+        return file_exists($this->getTargetFilePath($dungeonRoute, $floorIndex));
+    }
+
+    /**
      * @inheritDoc
      */
     function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool

@@ -23,6 +23,8 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DevDiscoverService;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\PDF\PDFExportService;
+use App\Service\DungeonRoute\PDF\PDFExportServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\EchoServer\EchoServerHttpApiService;
@@ -131,6 +133,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
+
+        // Misc
+        $this->app->bind(PDFExportServiceInterface::class, PDFExportService::class);
     }
 
     /**

@@ -35,6 +35,13 @@ interface ThumbnailServiceInterface
     function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string;
 
     /**
+     * @param DungeonRoute $dungeonRoute
+     * @param int $floorIndex
+     * @return bool
+     */
+    public function hasThumbnailForFloor(DungeonRoute $dungeonRoute, int $floorIndex): bool;
+
+    /**
      * @param DungeonRoute $sourceDungeonRoute
      * @param DungeonRoute $targetDungeonRoute
      * @return void

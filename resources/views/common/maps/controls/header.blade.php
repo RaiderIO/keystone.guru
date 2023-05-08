@@ -189,12 +189,23 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         </li>
                     @endif
                 @endisset
-                <li class="nav-item">
+                <li class="nav-item mr-2">
                     <div class="d-flex h-100">
                         <div class="row justify-content-center align-self-center">
                             <div class="col">
                                 <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
                                     <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="d-flex h-100">
+                        <div class="row justify-content-center align-self-center">
+                            <div class="col">
+                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#print_modal">
+                                    <i class="fas fa-print"></i>
                                 </button>
                             </div>
                         </div>
@@ -222,6 +233,10 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
     @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
         @include('common.modal.simulate', ['dungeonroute' => $dungeonroute])
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'print_modal', 'size' => 'xl'])
+        @include('common.modal.print', ['dungeonroute' => $dungeonroute])
     @endcomponent
 
     @component('common.general.modal', ['id' => 'start_live_session_modal'])

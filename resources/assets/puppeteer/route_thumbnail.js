@@ -25,7 +25,7 @@ function delay(timeout) {
     await page.goto(process.argv[2]);
 
     console.log('Waiting for page to load fully');
-    await page.waitForSelector('#finished_loading', {timeout: 5000});
+    await page.waitForSelector('#finished_loading', {timeout: 15000});
 
     console.log('Waiting for animations to complete');
     await delay(500);
