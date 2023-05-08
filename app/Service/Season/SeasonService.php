@@ -152,7 +152,7 @@ class SeasonService implements SeasonServiceInterface
             $expansion = $this->expansionService->getCurrentExpansion();
         }
 
-        return $expansion->nextseason;
+        return $expansion->nextSeason;
     }
 
     /**
