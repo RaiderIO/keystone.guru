@@ -1370,15 +1370,10 @@ class DungeonRoute extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item DungeonRoute */
-
-            // Delete thumbnails
-            $publicPath = public_path('images/route_thumbnails/');
-            foreach ($item->dungeon->floors as $floor) {
-                // @ because we don't care if it fails
-                @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
-            }
+        static::deleting(function (DungeonRoute $item) {
+            /** @var ThumbnailServiceInterface $thumbnailService */
+            $thumbnailService = App::make(ThumbnailServiceInterface::class);
+            $thumbnailService->cleanupThumbnails($item);
 
             // Dungeonroute settings
             $item->affixgroups()->delete();

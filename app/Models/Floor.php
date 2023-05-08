@@ -6,6 +6,7 @@ use App\Logic\Utils\MathUtils;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Service\DungeonRoute\ThumbnailService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -231,6 +232,15 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
             ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return string
+     */
+    public function getDungeonRoutePreviewImageUrl(DungeonRoute $dungeonRoute): string
+    {
+        return url(sprintf('/%s/%s_%s.png', ThumbnailService::THUMBNAIL_FOLDER_PATH, $dungeonRoute->public_key, $this->index));
     }
 
     /**

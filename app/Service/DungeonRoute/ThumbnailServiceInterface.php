@@ -40,4 +40,10 @@ interface ThumbnailServiceInterface
      * @return void
      */
     function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return bool
+     */
+    public function cleanupThumbnails(DungeonRoute $dungeonRoute): bool;
 }

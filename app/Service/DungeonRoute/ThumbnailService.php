@@ -130,7 +130,7 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
-        return public_path(sprintf('images/route_thumbnails/%s', $this->getFilename($dungeonRoute, $floorIndex)));
+        return public_path(sprintf('%s/%s', self::THUMBNAIL_FOLDER_PATH, $this->getFilename($dungeonRoute, $floorIndex)));
     }
 
     /**
@@ -163,6 +163,25 @@ class ThumbnailService implements ThumbnailServiceInterface
                     'exception' => $exception,
                 ]);
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return bool
+     */
+    public function cleanupThumbnails(DungeonRoute $dungeonRoute): bool
+    {
+        // Delete thumbnails
+        $publicPath = public_path('images/route_thumbnails/');
+
+        $result = false;
+
+        foreach ($dungeonRoute->dungeon->floors as $floor) {
+            // @ because we don't care if it fails
+            $result = $result && @unlink(sprintf('%s/%s_%s.png', $publicPath, $dungeonRoute->public_key, $floor->index));
         }
 
         return $result;
