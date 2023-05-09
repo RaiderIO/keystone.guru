@@ -429,7 +429,7 @@ class DungeonRoute extends Model
      */
     public function getPublishedAttribute(): string
     {
-        return $this->publishedState->name;
+        return array_search($this->published_state_id, PublishedState::ALL);
     }
 
     /**
@@ -598,15 +598,15 @@ class DungeonRoute extends Model
     public function mayUserView(?User $user): bool
     {
         $result = false;
-        switch ($this->publishedState->name) {
-            case PublishedState::UNPUBLISHED:
+        switch ($this->published_state_id) {
+            case PublishedState::ALL[PublishedState::UNPUBLISHED]:
                 $result = $this->mayUserEdit($user);
                 break;
-            case PublishedState::TEAM:
+            case PublishedState::ALL[PublishedState::TEAM]:
                 $result = ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole('admin'));
                 break;
-            case PublishedState::WORLD_WITH_LINK:
-            case PublishedState::WORLD:
+            case PublishedState::ALL[PublishedState::WORLD_WITH_LINK]:
+            case PublishedState::ALL[PublishedState::WORLD]:
                 $result = true;
                 break;
         }
@@ -625,7 +625,7 @@ class DungeonRoute extends Model
         } else {
             return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin') ||
                 // Route is part of a team, user is a collaborator, and route is not unpublished
-                ($this->team !== null && $this->team->isUserCollaborator($user) && $this->publishedState->name !== PublishedState::UNPUBLISHED);
+                ($this->team !== null && $this->team->isUserCollaborator($user) && $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]);
         }
     }
 
