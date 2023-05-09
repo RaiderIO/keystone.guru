@@ -732,7 +732,8 @@ class DungeonRoute extends Model
         // Fetch the title if the user set anything
         $this->title       = $request->get('dungeon_route_title', $this->title);
         $this->description = $request->get('dungeon_route_description', $this->description) ?? '';
-        if (empty($this->title)) {
+        // Title slug CAN resolve to empty if they're just using special characters only
+        if (empty($this->title) || empty($this->getTitleSlug())) {
             $this->title = __($this->dungeon->name);
         }
 
