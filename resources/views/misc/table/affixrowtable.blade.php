@@ -47,33 +47,35 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     </td>
     <?php
     $affixIndex = 0;
-    foreach($affixGroup->affixes as $affix) {
-    $lastColumn = $affixGroup->affixes->count() === 4 && $affixGroup->affixes->count() - 1 === $affixIndex;
-    $class = $currentWeekClass . $topBorderClass . $bottomBorderClass;
-    $class .= $lastColumn ? 'last_column ' : '';
-    $class .= $isFirst ? 'first_row ' : '';
-    $class .= $isLast ? 'last_row ' : '';
-    ?>
-    <td class="{{ $class }}">
-        <div class="affix_row">
-            <div class="row no-gutters">
-                <div
-                    class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
-                    data-toggle="tooltip"
-                    title="{{ __($affix->description) }}"
-                    style="height: 24px;">
-                </div>
-                <div class="col d-lg-block d-none pl-1">
-                    @if($lastColumn && $affixGroup->seasonal_index !== null)
-                        {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
-                    @else
-                        {{ __($affix->name) }}
-                    @endif
+    for($i = 0; $i < 4; $i++) {
+        $affix = $affixGroup->affixes->get($i);
+        $lastColumn = $i === 3;
+        $class = $currentWeekClass . $topBorderClass . $bottomBorderClass;
+        $class .= $lastColumn ? 'last_column ' : '';
+        $class .= $isFirst ? 'first_row ' : '';
+        $class .= $isLast ? 'last_row ' : '';
+        ?>
+        <td class="{{ $class }}">
+            @if($affix !== null)
+            <div class="affix_row">
+                <div class="row no-gutters">
+                    <div
+                        class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
+                        data-toggle="tooltip"
+                        title="{{ __($affix->description) }}"
+                        style="height: 24px;">
+                    </div>
+                    <div class="col d-lg-block d-none pl-1">
+                        @if($lastColumn && $affixGroup->seasonal_index !== null)
+                            {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
+                        @else
+                            {{ __($affix->name) }}
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-    </td><?php
-    $affixIndex++;
+            @endif
+        </td><?php
     }
     ?>
 </tr>
