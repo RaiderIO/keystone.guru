@@ -16,8 +16,8 @@ return [
         'start_date'                        => 'Start date (%s)',
         '2'                                 => '+2',
         '7'                                 => '+7',
-        '14'                                 => '+14',
-        'seasonal'                       => 'Seasonal',
+        '14'                                => '+14',
+        'seasonal'                          => 'Seasonal',
         'previous'                          => 'Previous',
         'next'                              => 'Next',
         'updated_at'                        => 'Updated at %s. For more information about affixes and M+, please visit',
@@ -43,7 +43,7 @@ return [
         'title'  => 'Embed a route',
         'header' => 'Keystone.guru embed test on webpage',
     ],
-    'health'     => [
+    'health'    => [
         'title'  => 'Health calculation',
         'header' => 'Health',
     ],
