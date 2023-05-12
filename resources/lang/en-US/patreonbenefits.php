@@ -6,4 +6,5 @@ return [
     'unlisted-routes'         => 'Unlisted routes',
     'animated-polylines'      => 'Animated polylines',
     'advanced-simulation'     => 'Advanced simulation',
+    'ad-free-team-members'     => 'Ad-free for team members',
 ];
