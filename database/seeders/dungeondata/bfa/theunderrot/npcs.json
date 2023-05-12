@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 88361,
         "name": "Fetid Maggot",
-        "base_health": 985834,
+        "base_health": 715866,
         "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
