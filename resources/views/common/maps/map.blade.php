@@ -113,26 +113,20 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            <?php
-                                                                                                             $i = 0;
-                                                                                                         foreach (\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction) {
-                                                                                                             ?>
-            <a class="map_faction_display_control map_controls_custom" href="#"
-               data-faction="{{ strtolower($faction->key) }}"
+            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
                        title="{{ __($faction->name) }}">
-                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
+                        <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                 </a>
-                <?php
-                                                                                                                                                                                                                                                                                                                                                                         $i++;
-                                                                                                                                                                                                                                                                                                                                                                     } ?>
+
+            @endforeach
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
-
-
 
         </script>
     @endif
@@ -145,7 +139,7 @@ if ($isAdmin) {
             'echo' => $echo,
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,
-            'livesession' => $livesession
+            'livesession' => $livesession,
         ])
     @endif
 
@@ -183,7 +177,6 @@ if ($isAdmin) {
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-
 @if(!$noUI)
 
     @if(!$adFree && $showAds)
@@ -199,6 +192,17 @@ if ($isAdmin) {
             @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
         @endif
     </footer>
+
+    <?php
+        /*
+        So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
+        have to fight for height in the sidebar. This will only make it worse, so don't render this ad
+        */?>
+    @if(!$dungeon->speedrun_enabled)
+        <footer class="fixed-bottom container p-0 m-0 mr-2" style="width: 300px; position: absolute; left: auto; right: 0; bottom: 0;">
+            @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
+        </footer>
+    @endif
 
 
 

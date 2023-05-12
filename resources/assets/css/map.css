@@ -279,10 +279,20 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - 158px);
 }
 
-/** Pulls section of the sidebar, when editing, without a speedrun enabled */
-#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+/** Pulls section of the sidebar, with an ad loaded, when editing, without a speedrun enabled */
+#pulls_sidebar.ad_loaded:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+    /** 250px is the height of the ad in the corner */
+    /** 24 px is the height of the report buttons */
     /** 55 px is the height of the buttons at the top in the edit scenario */
-    max-height: calc(100vh - (158px + 55px));
+    max-height: calc(100vh - (236px + 158px + 55px));
+}
+
+/** Pulls section of the sidebar, adblock, when editing, without a speedrun enabled */
+#pulls_sidebar:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+    /** 250px is the height of the ad in the corner */
+    /** 24 px is the height of the report buttons */
+    /** 55 px is the height of the buttons at the top in the edit scenario */
+    max-height: calc(100vh - (142px + 55px));
 }
 
 /** Pulls section of the sidebar, when editing, WITH a speedrun enabled */
@@ -308,7 +318,12 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
-/** Pulls section of the sidebar, when viewing, without a speedrun enabled */
+/** Pulls section of the sidebar, with ad loaded, when viewing, without a speedrun enabled */
+#pulls_sidebar.ad_loaded .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - (250px + 163px));
+}
+
+/** Pulls section of the sidebar, adblock, when viewing, without a speedrun enabled */
 #pulls_sidebar .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - 163px);
 }

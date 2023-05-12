@@ -2,13 +2,15 @@
 /** @var boolean $isMobile */
 /** @var string $id */
 $id   = 'nitropay-' . $id;
-$type = isset($type) ? $type : 'responsive';
+$type = $type ?? 'responsive';
+$map = $map ?? false;
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
-    'responsive' => 'top-right',
-    'header'     => 'bottom-right',
-    'footer'     => 'top-right',
+    'responsive'       => 'top-right',
+    'header'           => 'bottom-right',
+    'footer'           => 'top-right',
+    'footer_map_right' => 'top-right',
 ];
 
 $reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
@@ -49,8 +51,14 @@ if ($isMobile) {
                 // Clear any previously set report links
                 target.innerHTML = '';
                 target.appendChild(reportLink);
+
+                @if($map)
+                    // Add a css class to the pulls sidebar so that we know the ads have loaded and its height can be adjusted accordingly
+                    // The height will stay normal if an adblocker is enabled as a result
+                    let pullsSidebar = document.getElementById(`pulls_sidebar`);
+                    pullsSidebar.setAttribute('class', pullsSidebar.getAttribute('class') + ' ad_loaded');
+                @endif
             } else {
-                // console.log(`Ad ${adId} not found - retrying in 200ms`);
                 setTimeout(nitropayAdRenderedEvents[adId], 200, event, ++count);
             }
         }
@@ -65,19 +73,19 @@ if ($isMobile) {
 </script>
 
 <div>
-@if($hasAdControls && strpos($reportAdPosition, 'top') !== false)
-    @include('common.thirdparty.nitropay.adcontrols', ['id' => $id])
-@endif
+    @if($hasAdControls && strpos($reportAdPosition, 'top') !== false)
+        @include('common.thirdparty.nitropay.adcontrols', ['id' => $id])
+    @endif
 
-@if( $type === 'responsive' )
-    <!-- Responsive ad unit -->
+    @if( $type === 'responsive' )
+        <!-- Responsive ad unit -->
         <div id="{{ $id }}" class="ad_block_me"></div>
 
         <script type="text/javascript">
             window['nitroAds'].createAd('{{ $id }}', {
-                "refreshLimit": 10,
-                "refreshTime": 30,
-
+                "refreshLimit": 20,
+                "refreshTime": 60,
+                "renderVisibleOnly": true,
                 "refreshVisibleOnly": true,
                 "demo": {{$demo}},
                 "report": {
@@ -87,18 +95,18 @@ if ($isMobile) {
                 }
             });
         </script>
-@elseif( $type === 'header' )
-    <!-- Top header ad unit -->
+    @elseif( $type === 'header' )
+        <!-- Top header ad unit -->
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
-             style="min-height: 90px;"
+                 style="min-height: 90px;"
             @endif
         ></div>
         @if( $isMobile )
             <script type="text/javascript">
                 window['nitroAds'].createAd('{{ $id }}', {
-                    "refreshLimit": 10,
-                    "refreshTime": 30,
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
                     "format": "anchor",
                     "anchor": "top",
                     "demo": {{$demo}},
@@ -113,9 +121,9 @@ if ($isMobile) {
         @else
             <script type="text/javascript">
                 window['nitroAds'].createAd('{{ $id }}', {
-                    "refreshLimit": 10,
-                    "refreshTime": 30,
-
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
+                    "renderVisibleOnly": true,
                     "refreshVisibleOnly": true,
                     "demo": {{$demo}},
                     "sizes": [
@@ -133,19 +141,19 @@ if ($isMobile) {
             </script>
         @endif
     @elseif( $type === 'footer' )
-    <!-- Footer ad unit -->
+        <!-- Footer ad unit -->
         @php($height = isset($map) && $map ? 90 : 250)
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
-             style="min-height: {{ $height }}px;"
+                 style="min-height: {{ $height }}px;"
             @endif
         ></div>
 
         @if( $isMobile )
             <script type="text/javascript">
                 window['nitroAds'].createAd('{{ $id }}', {
-                    "refreshLimit": 10,
-                    "refreshTime": 30,
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
                     "demo": {{$demo}},
                     "format": "anchor",
                     "anchor": "bottom",
@@ -161,8 +169,8 @@ if ($isMobile) {
         @else
             <script type="text/javascript">
                 window['nitroAds'].createAd('{{ $id }}', {
-                    "refreshLimit": 10,
-                    "refreshTime": 30,
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
 
                     "refreshVisibleOnly": true,
                     "demo": {{$demo}},
@@ -181,6 +189,32 @@ if ($isMobile) {
                 });
             </script>
         @endif
+    @elseif( $type === 'footer_map_right' && $map && !$isMobile )
+        <!-- Footer ad unit -->
+        @php($height = 250)
+        <div id="{{ $id }}" class="ad_block_me"></div>
+
+        <script type="text/javascript">
+            window['nitroAds'].createAd('{{ $id }}', {
+                "refreshLimit": 20,
+                "refreshTime": 60,
+                "renderVisibleOnly": false,
+                "refreshVisibleOnly": true,
+                "demo": {{$demo}},
+                "sizes": [
+                    [
+                        "300",
+                        "250"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "wording": "Report Ad",
+                    "position": "{{ $reportAdPosition }}"
+                },
+                "mediaQuery": "(min-width: 1025px)"
+            });
+        </script>
     @endif
 </div>
 
