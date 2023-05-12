@@ -23,8 +23,8 @@ class AdminPanelControls extends MapControl {
             let lat = _.round(mouseMoveEvent.latlng.lat, 3);
             let lng = _.round(mouseMoveEvent.latlng.lng, 3);
 
-            let x = lng * 2.185;
-            let y = lat * 2.185;
+            let x = _.round(lng * 2.185, 3);
+            let y = _.round(lat * 2.185, 3);
             $('#admin_panel_mouse_coordinates').html(
                 `lat/lng: ${lat}/${lng}, x/y: ${x}/${y}`
             );
