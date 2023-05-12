@@ -1633,7 +1633,7 @@
         "key": "theunderrot",
         "name": "dungeons.bfa.the_underrot.name",
         "slug": "the-underrot",
-        "enemy_forces_required": 300,
+        "enemy_forces_required": 320,
         "enemy_forces_required_teeming": 286,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,

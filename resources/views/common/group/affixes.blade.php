@@ -24,8 +24,8 @@ else if (empty($defaultSelected)) {
 }
 
 $teemingSelector = $teemingSelector ?? null;
-$names = $names ?? true;
-$id = $id ?? 'route_select_affixes';
+$names           = $names ?? true;
+$id              = $id ?? 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
     ->merge($currentSeason->affixgroups)
@@ -57,14 +57,10 @@ $allAffixGroupsWithSeasons = $allAffixGroups
             @endforeach
         @endif
 
-        @foreach($currentSeason->affixgroups as $affixGroup)
-            @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $currentSeason, 'expansionKey' => $currentSeason->expansion->shortname])
-        @endforeach
-
         @foreach($expansionsData as $expansionData)
-            @php($season = $expansionData->getExpansionSeason())
-            @foreach($season->getAffixGroups()->getAllAffixGroups() as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $season->getSeason(), 'expansionKey' => $expansionData->getExpansion()->shortname])
+            @php($expansionSeason = $expansionData->getExpansionSeason())
+            @foreach($expansionSeason->getAffixGroups()->getAllAffixGroups() as $affixGroup)
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $expansionSeason->getSeason(), 'expansionKey' => $expansionData->getExpansion()->shortname])
             @endforeach
         @endforeach
     </div>

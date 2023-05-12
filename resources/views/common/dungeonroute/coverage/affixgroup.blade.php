@@ -36,11 +36,11 @@ if ($nextSeason !== null) {
     $seasons[] = $nextSeason;
 }
 $routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $currentSeason->id;
-$seasons[] = $currentSeason;
+$seasons[]             = $currentSeason;
 
 $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
     return [$id => __($name)];
-})->toArray();
+});
 ?>
 @include('common.general.inline', ['path' => 'common/dungeonroute/coverage/affixgroup',
     'dependencies' => [
@@ -49,7 +49,7 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($n
     ],
     'options' => [
 
-    ]
+    ],
 ])
 
 <div id="dungeonroute_coverage_affixgroup">
@@ -57,13 +57,23 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($n
         <thead>
         <tr>
             <th class="px-1">
-                {!! Form::select('dungeonroute_coverage_season_id', $seasonSelect, $routeCoverageSeasonId,
-                        ['id' => 'dungeonroute_coverage_season_id', 'class' => 'form-control selectpicker']
-                ) !!}
+                @if( $seasonSelect->count() === 1 )
+                    <div class="text-center">
+                        {{ $seasonSelect->first() }}
+                    </div>
+                @else
+                    {!! Form::select('dungeonroute_coverage_season_id', $seasonSelect->toArray(), $routeCoverageSeasonId,
+                            ['id' => 'dungeonroute_coverage_season_id', 'class' => 'form-control selectpicker']
+                    ) !!}
+                @endif
             </th>
             @foreach($affixgroups as $affixGroup)
                 <th class="p-1 {{ $currentAffixGroup->id === $affixGroup->id ? 'bg-success' : '' }}">
-                    @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'cols' => 2])
+                    @include('common.affixgroup.affixgroup', [
+                        'affixgroup' => $affixGroup,
+                        'showText' => false,
+                        'cols' => $selectedSeason->seasonal_affix_id === null ? 1 : 2,
+                    ])
                 </th>
             @endforeach
         </tr>
@@ -75,18 +85,18 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(function ($n
                     {{ __($dungeon->name) }}
                 </td>
                 @foreach($affixgroups as $affixGroup)
-                    <?php
-                    /** @var \App\Models\Dungeon $dungeon */
-                    /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                        <?php
+                        /** @var \App\Models\Dungeon $dungeon */
+                        /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
 
-                    $availableDungeonRoutes = getDungeonRoutesByDungeonIdAndAffixGroupId($dungeonRoutes, $dungeon, $affixGroup);
-                    $hasEnemyForces = $availableDungeonRoutes->filter(function (\App\Models\DungeonRoute $dungeonRoute) {
-                        return (bool)$dungeonRoute->has_enemy_forces;
-                    })->isNotEmpty();
-                    ?>
+                        $availableDungeonRoutes = getDungeonRoutesByDungeonIdAndAffixGroupId($dungeonRoutes, $dungeon, $affixGroup);
+                        $hasEnemyForces         = $availableDungeonRoutes->filter(function (\App\Models\DungeonRoute $dungeonRoute) {
+                            return (bool)$dungeonRoute->has_enemy_forces;
+                        })->isNotEmpty();
+                        ?>
                     <td
                         @if($availableDungeonRoutes->isNotEmpty())
-                        class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
+                            class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
                         @endif
                     >
                         @if($availableDungeonRoutes->isNotEmpty())

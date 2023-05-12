@@ -15,9 +15,9 @@ return [
         'header'                            => 'Weekly affixes in %s',
         'start_date'                        => 'Start date (%s)',
         '2'                                 => '+2',
-        '4'                                 => '+4',
         '7'                                 => '+7',
-        '10_seasonal'                       => '+10 (Seasonal)',
+        '14'                                => '+14',
+        'seasonal'                          => 'Seasonal',
         'previous'                          => 'Previous',
         'next'                              => 'Next',
         'updated_at'                        => 'Updated at %s. For more information about affixes and M+, please visit',
@@ -43,7 +43,7 @@ return [
         'title'  => 'Embed a route',
         'header' => 'Keystone.guru embed test on webpage',
     ],
-    'health'     => [
+    'health'    => [
         'title'  => 'Health calculation',
         'header' => 'Health',
     ],

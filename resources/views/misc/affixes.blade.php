@@ -37,13 +37,13 @@ $now = \Carbon\Carbon::now();
                             {{ __('views/misc.affixes.2') }}
                         </th>
                         <th width="20%">
-                            {{ __('views/misc.affixes.4') }}
-                        </th>
-                        <th width="20%">
                             {{ __('views/misc.affixes.7') }}
                         </th>
                         <th width="20%">
-                            {{ __('views/misc.affixes.10_seasonal') }}
+                            {{ __('views/misc.affixes.14') }}
+                        </th>
+                        <th width="20%">
+                            {{ __('views/misc.affixes.seasonal') }}
                         </th>
                     </tr>
                     </thead>
