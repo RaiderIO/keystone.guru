@@ -1,0 +1,28 @@
+{
+    "id": 171,
+    "release_changelog_id": 178,
+    "version": "v6.4.9",
+    "title": "Updated enemy counts for Vortex Pinnacle, Halls of Infusion and Brackenhide Hollow",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-09T08:58:25+00:00",
+    "updated_at": "2023-05-09T08:58:25+00:00",
+    "changelog": {
+        "id": 178,
+        "release_id": 171,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 178,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1699,
+                "change": "Fixed crash when adding overpulled enemies in a live session.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

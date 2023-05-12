@@ -135,7 +135,7 @@ class Kernel extends ConsoleKernel
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
-        $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFiveMinutes();
+        $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 
         if ($appType === 'mapping') {
