@@ -885,7 +885,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-169,\"lng\":219},{\"lat\":-157,\"lng\":219},{\"lat\":-157,\"lng\":229},{\"lat\":-169,\"lng\":229}]"
+        "vertices_json": "[{\"lat\":\"-171.5\",\"lng\":\"218.84375\"},{\"lat\":\"-157\",\"lng\":\"219\"},{\"lat\":\"-158.0625\",\"lng\":\"234.09375\"},{\"lat\":\"-171.53125\",\"lng\":\"233.75\"}]"
     },
     {
         "id": 4268,
