@@ -12,7 +12,10 @@
 
         <p class="mt-2">
             <span class="text-info"><i class="fa fa-check-circle"></i></span>
-            {{ __('views/profile.edit.link_to_patreon_success') }}
+            @php(ob_start())
+            @include('common.thirdparty.patreon.fancylink')
+            @php($patreonLink = trim(ob_get_clean()))
+            {!! __('views/profile.edit.link_to_patreon_success', ['patreon' => $patreonLink]) !!}
         </p>
 
         <table class="default_table table-striped">

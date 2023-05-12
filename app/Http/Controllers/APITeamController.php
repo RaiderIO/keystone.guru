@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Models\DungeonRoute;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\User;
@@ -163,5 +165,65 @@ class APITeamController extends Controller
         $team->save();
 
         return ['new_invite_link' => route('team.invite', ['invitecode' => $team->invite_code])];
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @param User $user
+     * @return array|Application|ResponseFactory|Response
+     * @throws AuthorizationException
+     */
+    public function addAdFreeGiveaway(Request $request, Team $team, User $user): PatreonAdFreeGiveaway
+    {
+        $this->authorize('can-ad-free-giveaway', $team);
+
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+
+        if (PatreonAdFreeGiveaway::getCountLeft($currentUser) <= 0) {
+            abort(422, 'Unable to add more ad-free giveaways. Limit reached.');
+        }
+
+        if ($user->hasPatreonBenefit(PatreonBenefit::AD_FREE)) {
+            abort(422, 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.');
+        }
+
+
+        if ($user->hasAdFreeGiveaway()) {
+            abort(422, 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.');
+        }
+
+        return PatreonAdFreeGiveaway::create([
+            'giver_user_id'    => $currentUser->id,
+            'receiver_user_id' => $user->id,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @param User $user
+     * @return array|Application|ResponseFactory|Response
+     * @throws AuthorizationException
+     */
+    public function removeAdFreeGiveaway(Request $request, Team $team, User $user)
+    {
+        $this->authorize('can-ad-free-giveaway', $team);
+
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+
+        if ($user->patreonAdFreeGiveaway === null) {
+            abort(422, 'Unable to remove ad-free giveaway - user does not have any at the moment.');
+        }
+
+        if ($user->patreonAdFreeGiveaway->giver_user_id !== $currentUser->id) {
+            abort(422, 'Unable to remove ad-free giveaways that was not originally given by you.');
+        }
+
+        $user->patreonAdFreeGiveaway->delete();
+
+        return response()->noContent();
     }
 }

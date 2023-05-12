@@ -5,8 +5,32 @@
         {{actions_label}}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownActions_{{user_id}}">
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item text-danger cursor-pointer">
+        {{#if can_current_user_ad_free_giveaway }}
+            <h6 class="dropdown-header">{{ad_free_giveaway_label}}</h6>
+            {{#if has_ad_free }}
+                <a class="dropdown-item">
+                    {{ad_free_giveaway_user_already_ad_free_label}}
+                </a>
+            {{else}}
+                {{#if has_ad_free_giveaway_by_current_user }}
+                    <a class="dropdown-item text-danger ad_free_giveaway_remove" data-userid="{{user_id}}">
+                        <i class="fas fa-handshake-slash"></i> {{ad_free_giveaway_remove_label}}
+                    </a>
+                {{else}}
+                    {{#if has_ad_free_giveaway }}
+                        <a class="dropdown-item text-warning">
+                            {{ad_free_giveaway_user_already_ad_free_giveaway_label}}
+                        </a>
+                    {{else}}
+                        <a class="dropdown-item text-success ad_free_giveaway_add" data-userid="{{user_id}}">
+                            <i class="fas fa-handshake"></i> {{ad_free_giveaway_add_label}}
+                        </a>
+                    {{/if}}
+                {{/if}}
+            {{/if}}
+            <div class="dropdown-divider"></div>
+        {{/if}}
+        <a class="dropdown-item text-danger remove_user_btn" data-userid="{{user_id}}">
             <i class="fas fa-user-minus"></i> {{remove_label}}
         </a>
     </div>

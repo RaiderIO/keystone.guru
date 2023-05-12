@@ -302,13 +302,15 @@ return [
     ],
 
     'patreon' => [
-        'oauth'       => [
+        'oauth'             => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
             // https://docs.patreon.com/#scopes
             'scope'     => 'identity identity[email] identity.memberships campaigns',
         ],
-        'campaign_id' => env('PATREON_CAMPAIGN_ID'),
+        'campaign_id'       => env('PATREON_CAMPAIGN_ID'),
+        // The amount of ad-free giveaways that one may have in total
+        'ad_free_giveaways' => 4,
     ],
 
     'reddit' => [

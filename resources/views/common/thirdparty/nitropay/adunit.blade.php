@@ -13,7 +13,7 @@ $defaultReportAdPosition = [
     'footer_map_right' => 'top-right',
 ];
 
-$reportAdPosition = isset($reportAdPosition) ? $reportAdPosition : $defaultReportAdPosition[$type];
+$reportAdPosition = $reportAdPosition ?? $defaultReportAdPosition[$type];
 
 // If we're on mobile, anchor ads do not have a report button so don't render it
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
@@ -26,7 +26,7 @@ if ($isMobile) {
     nitropayAdRenderedEvents['{{ $id }}'] = (event, count = 0) => {
         let adId = '{{ $id }}';
 
-        // Fail safe just in case
+        // Fail-safe just in case
         if (count > 5) {
             // console.log(`Broke out of too much checking for ${adId}`);
             return;
