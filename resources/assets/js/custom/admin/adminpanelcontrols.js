@@ -20,8 +20,13 @@ class AdminPanelControls extends MapControl {
         };
 
         this.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
+            let lat = _.round(mouseMoveEvent.latlng.lat, 3);
+            let lng = _.round(mouseMoveEvent.latlng.lng, 3);
+
+            let x = lng * 2.185;
+            let y = lat * 2.185;
             $('#admin_panel_mouse_coordinates').html(
-                _.round(mouseMoveEvent.latlng.lat, 3) + ', ' + _.round(mouseMoveEvent.latlng.lng, 3)
+                `lat/lng: ${lat}/${lng}, x/y: ${x}/${y}`
             );
         });
     }
