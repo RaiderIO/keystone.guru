@@ -78,7 +78,7 @@ class MDTNpc implements Arrayable
         }
 
         $this->scale         = (float)$rawMdtNpc['scale'];
-        $this->stealthDetect = (bool)$rawMdtNpc['stealthDetect'];
+        $this->stealthDetect = isset($rawMdtNpc['stealthDetect']) && $rawMdtNpc['stealthDetect'];
         $this->countTeeming  = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
         $this->count         = (int)$rawMdtNpc['count'];
         // May not always be set?
