@@ -657,14 +657,15 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * Gets the dungeon route based on the currently encoded string.
-     * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
-     * @param $sandbox boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
-     * @param $save boolean True to save the route and all associated models, false to not save & couple.
+     * @param  $warnings Collection Collection that is passed by reference in which any warnings are stored.
+     * @param  $sandbox boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
+     * @param  $save bool True to save the route and all associated models, false to not save & couple.
+     * @param  $importAsThisWeek bool True to replace the imported affixes with this week's affixes instead
      * @return DungeonRoute DungeonRoute if the route could be constructed
      * @throws InvalidMDTString
      * @throws Exception
      */
-    public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false): DungeonRoute
+    public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false, bool $importAsThisWeek = false): DungeonRoute
     {
         $lua = $this->getLua();
         // Import it to a table
@@ -718,6 +719,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // Set the affix for this route
         $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon, $decoded['week']);
+
+        // If affix group not found or
+        if ($importAsThisWeek || $affixGroup === null) {
+            $activeSeason = $dungeonRoute->dungeon->getActiveSeason($this->seasonService);
+            if ($activeSeason !== null) {
+                $affixGroup = $activeSeason->getCurrentAffixGroup();
+            }
+        }
 
         if ($affixGroup !== null) {
             if ($save) {
