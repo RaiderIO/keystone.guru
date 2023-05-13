@@ -9633,7 +9633,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
