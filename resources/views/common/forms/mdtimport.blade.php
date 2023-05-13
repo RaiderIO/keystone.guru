@@ -61,7 +61,6 @@
         </label>
         {!! Form::checkbox('mdt_import_sandbox', 1, false, ['id' => 'mdt_import_sandbox', 'class' => 'form-control left_checkbox']) !!}
     </div>
-
     @include('common.team.select', ['id' => 'mdt_import_team_id_select',  'required' => false])
 @endguest
 <div class="form-group">
@@ -70,16 +69,26 @@
         <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.forms.mdtimport.parsing_your_string') }}
     </div>
 </div>
+
 <div class="form-group">
     <div class="import_mdt_string_details">
 
     </div>
 </div>
+
 <div class="form-group">
     <div class="mdt_string_warnings">
 
     </div>
 </div>
+
+<div class="form-group import_as_this_week_container" style="display: none;">
+    <label for="import_as_this_week">
+        {{ __('views/common.forms.mdtimport.import_as_this_week') }}
+    </label>
+    {!! Form::checkbox('import_as_this_week', 1, false, ['id' => 'import_as_this_week', 'class' => 'form-control left_checkbox']) !!}
+</div>
+
 <div class="form-group">
     {!! Form::submit(__('views/common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
     <div class="col-md">
