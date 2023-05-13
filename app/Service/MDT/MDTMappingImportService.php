@@ -148,6 +148,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->enemy_forces         = $mdtNpc->getCount();
                 $npc->enemy_forces_teeming = $mdtNpc->getCountTeeming();
                 $npc->npc_type_id          = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
+                $npc->truesight            = $mdtNpc->getStealthDetect();
+
                 try {
                     if ($npc->save()) {
                         if ($newlyCreated) {
