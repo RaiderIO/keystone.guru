@@ -52,7 +52,6 @@ class EnemyPatrol extends Polyline {
                 type: 'button',
                 buttonType: 'info',
                 buttonText: lang.get('messages.enemypatrol_couple_enemies_button_text_label'),
-                default: getState().getCurrentFloor().id,
                 clicked: function (e) {
                     self.map.leafletMap.closePopup();
 

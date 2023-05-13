@@ -86,4 +86,17 @@ class TeamPolicy
     {
         return $team->isUserModerator($user);
     }
+
+    /**
+     * Determine whether the user can perform ad-free giveaways on a member of a team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return bool
+     */
+    public function canAdFreeGiveaway(User $user, Team $team): bool
+    {
+        // Everyone can view dungeon routes (for now)
+        return $team->isUserMember($user);
+    }
 }

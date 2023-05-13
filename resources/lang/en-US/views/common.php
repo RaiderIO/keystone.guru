@@ -494,6 +494,11 @@ return [
                 'remove_ads' => 'Remove ads',
             ],
         ],
+        'patreon'       => [
+            'fancylink' => [
+                'patreon' => 'Patreon',
+            ],
+        ],
         'cookieconsent' => [
             'learn_more' => 'Learn more',
         ],

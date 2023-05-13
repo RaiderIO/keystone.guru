@@ -15,9 +15,9 @@ return [
         'header'                            => '@todo de: .affixes.header',
         'start_date'                        => '@todo de: .affixes.start_date',
         '2'                                 => '@todo de: .affixes.2',
-        '4'                                 => '@todo de: .affixes.4',
         '7'                                 => '@todo de: .affixes.7',
-        '10_seasonal'                       => '@todo de: .affixes.10_seasonal',
+        '14'                                => '@todo de-DE: .affixes.14',
+        'seasonal'                          => '@todo de-DE: .affixes.seasonal',
         'previous'                          => '@todo de: .affixes.previous',
         'next'                              => '@todo de: .affixes.next',
         'updated_at'                        => '@todo de: .affixes.updated_at',
@@ -43,7 +43,7 @@ return [
         'title'  => '@todo de: .embed.title',
         'header' => '@todo de: .embed.header',
     ],
-    'health'     => [
+    'health'    => [
         'title'  => '@todo de-DE: .health.title',
         'header' => '@todo de-DE: .health.header',
     ],

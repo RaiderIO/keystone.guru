@@ -136,6 +136,40 @@ class TeamEdit extends InlineCode {
         return result;
     }
 
+    _grantAdFreeGiveaway(userId, add) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/team/${self.options.teamPublicKey}/member/${userId}/adfree`,
+            data: add ? {} : {
+                _method: 'DELETE'
+            },
+            dataType: 'json',
+            failed: function () {
+                if (add) {
+                    showErrorNotification(lang.get('messages.ad_free_giveaway_add_failed'));
+                } else {
+                    showErrorNotification(lang.get('messages.ad_free_giveaway_remove_failed'));
+                }
+            },
+            success: function () {
+                if (add) {
+                    showSuccessNotification(lang.get('messages.ad_free_giveaway_add_success'));
+                } else {
+                    showSuccessNotification(lang.get('messages.ad_free_giveaway_remove_success'));
+                }
+
+                // Give user a second to read the notification
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000);
+            }
+        });
+    }
+
+    _removeAdFreeGiveaway
+
     _removeUserFromTeam(userId) {
         let self = this;
 
@@ -275,8 +309,14 @@ class TeamEdit extends InlineCode {
                 }
 
                 if (template !== null) {
+                    let userData = self.getDataByUserId(row.user_id);
+
                     let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
-                        user_id: row.user_id
+                        user_id: row.user_id,
+                        can_current_user_ad_free_giveaway: self.options.adFreeGiveawayLeft > 0,
+                        has_ad_free: userData.has_ad_free,
+                        has_ad_free_giveaway: userData.has_ad_free_giveaway,
+                        has_ad_free_giveaway_by_current_user: userData.has_ad_free_giveaway_by_current_user,
                     });
 
                     result = template(templateData);
@@ -295,6 +335,14 @@ class TeamEdit extends InlineCode {
             }
         });
 
+        $('.ad_free_giveaway_add').unbind('click').bind('click', function (e) {
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), true);
+        });
+
+        $('.ad_free_giveaway_remove').unbind('click').bind('click', function (e) {
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), false);
+        });
+
         $('.remove_user_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
@@ -310,6 +358,25 @@ class TeamEdit extends InlineCode {
                 self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
+    }
+
+    /**
+     *
+     * @param {Number} userId
+     * @returns {Array|null}
+     */
+    getDataByUserId(userId) {
+        let result = null;
+
+        for (let index in this.options.data) {
+            let userData = this.options.data[index];
+            if (userData.user_id === userId) {
+                result = userData;
+                break;
+            }
+        }
+
+        return result;
     }
 
     refreshInviteLink() {

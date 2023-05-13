@@ -5,6 +5,7 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
@@ -45,6 +46,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  *
  * @property PatreonUserLink $patreonUserLink
  * @property GameServerRegion $gameserverregion
+ * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
  * @property boolean $is_admin
  *
@@ -160,6 +162,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasOne
+     */
+    public function patreonAdFreeGiveaway(): HasOne
+    {
+        return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
+    }
+
+    /**
      * @param int|null $categoryId
      * @return HasMany|Tag
      */
@@ -190,7 +200,7 @@ class User extends Authenticatable
      * @param string $key
      * @return bool
      */
-    function hasPatreonBenefit(string $key): bool
+    public function hasPatreonBenefit(string $key): bool
     {
         // True for all admins
         $result = $this->hasRole('admin');
@@ -208,7 +218,7 @@ class User extends Authenticatable
      *
      * @return Collection
      */
-    function getPatreonBenefits(): Collection
+    public function getPatreonBenefits(): Collection
     {
         // Admins have all patreon benefits
         if ($this->hasRole('admin')) {
@@ -223,9 +233,28 @@ class User extends Authenticatable
     }
 
     /**
+     * @return bool
+     */
+    public function hasAdFreeGiveaway(): bool
+    {
+        return PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->exists();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getAdFreeGiveawayUser(): ?User
+    {
+        /** @var User|null $user */
+        $user = PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->first()->giver;
+
+        return $user;
+    }
+
+    /**
      * Checks if this user can create a dungeon route or not (based on free account limits)
      */
-    function canCreateDungeonRoute(): bool
+    public function canCreateDungeonRoute(): bool
     {
         return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
             $this->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
@@ -237,7 +266,7 @@ class User extends Authenticatable
      * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
      * @return int
      */
-    function getRemainingRouteCount(): int
+    public function getRemainingRouteCount(): int
     {
         return (int)max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()

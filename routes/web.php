@@ -523,6 +523,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::delete('/member/{user}', [APITeamController::class, 'removeMember']);
                 Route::delete('/route/{dungeonroute}', [APITeamController::class, 'removeRoute']);
                 Route::get('/refreshlink', [APITeamController::class, 'refreshInviteLink']);
+
+                // Ad-free giveaway
+                Route::post('/member/{user}/adfree', [APITeamController::class, 'addAdFreeGiveaway']);
+                Route::delete('/member/{user}/adfree', [APITeamController::class, 'removeAdFreeGiveaway']);
             });
         });
     });

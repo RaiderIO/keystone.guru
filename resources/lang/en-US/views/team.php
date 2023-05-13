@@ -23,13 +23,16 @@ return [
         'copy_to_clipboard_title'   => 'Copy to clipboard',
         'refresh_invite_link_title' => 'Refresh invite link',
 
+        'ad_free_giveaway_description_not_available' => 'Subscribing to :patreon allows you to give away up to :max ad-free experiences to Keystone.guru to any team member.',
+        'ad_free_giveaway_description_available'     => 'Thank you for subscribing to Keystone.guru\'s :patreon! You can give away :current more ad-free experiences to Keystone.guru to any team member.',
+
         'default_role' => 'Default role',
 
         'team_tags_description' => 'You can manage tags for the team\'s routes here. Everyone that is a member of this team may view the tags attached to the routes.
                         The personal tags that may or may not have been attached by the route owner will not be visible.',
     ],
     'invite' => [
-        'linkpreview_title' => 'Invitation to join team %s',
+        'linkpreview_title'       => 'Invitation to join team %s',
         'linkpreview_description' => 'You have been invited to join team %s. Login or register on Keystone.guru to join the team, it\'s free!',
 
         'title'        => 'Invitation to join team %s',

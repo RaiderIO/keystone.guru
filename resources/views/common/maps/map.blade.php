@@ -198,7 +198,7 @@ if ($isAdmin) {
         So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
         */?>
-    @if(!$dungeon->speedrun_enabled)
+    @if(!$adFree && $showAds && !$dungeon->speedrun_enabled)
         <footer class="fixed-bottom container p-0 m-0 mr-2" style="width: 300px; position: absolute; left: auto; right: 0; bottom: 0;">
             @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
         </footer>

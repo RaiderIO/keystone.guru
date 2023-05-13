@@ -178,7 +178,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
 
             if ($adFree === null) {
-                $adFree = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::AD_FREE);
+                $adFree = Auth::check() && (
+                        Auth::user()->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
+                        Auth::user()->hasAdFreeGiveaway()
+                    );
             }
 
 
@@ -385,7 +388,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
 
             /** @var Season $currentSeason */
-            $currentSeason = $globalViewVariables['currentSeason'];
+            $currentSeason     = $globalViewVariables['currentSeason'];
             $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
 
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
