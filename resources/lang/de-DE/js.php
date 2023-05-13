@@ -392,6 +392,8 @@ return [
     'enemypack_color_animated_label'                                => '@todo de: .enemypack_color_animated_label',
     'enemypack_faction_label'                                       => '@todo de: .enemypack_faction_label',
     'enemypack_teeming_label'                                       => '@todo de: .enemypack_teeming_label',
+    'enemypack_mark_as_skippable_label'                             => '@todo de-DE: .enemypack_mark_as_skippable_label',
+    'enemypack_mark_as_skippable_button_text_label'                 => '@todo de-DE: .enemypack_mark_as_skippable_button_text_label',
 
     // Dungeon floor switch marker
     'dungeonfloorswitchmarker_faction_label'                        => '@todo de: .dungeonfloorswitchmarker_faction_label',
@@ -419,17 +421,22 @@ return [
     'change_role_success'                                           => '@todo de: .change_role_success',
     'change_default_role_success'                                   => '@todo de: .change_default_role_success',
 
-    'team_admin'                    => '@todo de: .team_admin',
-    'team_moderator'                => '@todo de: .team_moderator',
-    'team_collaborator'             => '@todo de: .team_collaborator',
-    'team_member'                   => '@todo de: .team_member',
-    'remove_label'                  => '@todo de: .remove_label',
-    'team_add_route_successful'     => '@todo de: .team_add_route_successful',
-    'team_remove_route_successful'  => '@todo de: .team_remove_route_successful',
+    'team_admin'                                           => '@todo de: .team_admin',
+    'team_moderator'                                       => '@todo de: .team_moderator',
+    'team_collaborator'                                    => '@todo de: .team_collaborator',
+    'team_member'                                          => '@todo de: .team_member',
+    'remove_label'                                         => '@todo de: .remove_label',
+    'team_add_route_successful'                            => '@todo de: .team_add_route_successful',
+    'team_remove_route_successful'                         => '@todo de: .team_remove_route_successful',
+    'ad_free_giveaway_label'                               => '@todo de-DE: .ad_free_giveaway_label',
+    'ad_free_giveaway_user_already_ad_free_label'          => '@todo de-DE: .ad_free_giveaway_user_already_ad_free_label',
+    'ad_free_giveaway_user_already_ad_free_giveaway_label' => '@todo de-DE: .ad_free_giveaway_user_already_ad_free_giveaway_label',
+    'ad_free_giveaway_add_label'                           => '@todo de-DE: .ad_free_giveaway_add_label',
+    'ad_free_giveaway_remove_label'                        => '@todo de-DE: .ad_free_giveaway_remove_label',
 
     // Dungeonroute table headers
-    'datatable_no_teams_in_table'   => '@todo de: .datatable_no_teams_in_table',
-    'datatable_no_members_in_table' => '@todo de: .datatable_no_members_in_table',
+    'datatable_no_teams_in_table'                          => '@todo de: .datatable_no_teams_in_table',
+    'datatable_no_members_in_table'                        => '@todo de: .datatable_no_members_in_table',
 
     'preview_label'       => '@todo de: .preview_label',
     'title_label'         => '@todo de: .title_label',
@@ -458,6 +465,10 @@ return [
     'remove_member_success'            => '@todo de: .remove_member_success',
     'leave_team_confirm_label'         => '@todo de: .leave_team_confirm_label',
     'leave_team_disband_confirm_label' => '@todo de: .leave_team_disband_confirm_label',
+    'ad_free_giveaway_add_success'     => '@todo de-DE: .ad_free_giveaway_add_success',
+    'ad_free_giveaway_add_failed'      => '@todo de-DE: .ad_free_giveaway_add_failed',
+    'ad_free_giveaway_remove_success'  => '@todo de-DE: .ad_free_giveaway_remove_success',
+    'ad_free_giveaway_remove_failed'   => '@todo de-DE: .ad_free_giveaway_remove_failed',
 
     'name_label'             => '@todo de: .name_label',
     'email_label'            => '@todo de: .email_label',

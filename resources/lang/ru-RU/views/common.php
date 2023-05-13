@@ -486,6 +486,11 @@ return [
                 'remove_ads' => 'Убрать рекламу',
             ],
         ],
+        'patreon'       => [
+            'fancylink' => [
+                'patreon' => '@todo ru-RU: .thirdparty.patreon.fancylink.patreon',
+            ],
+        ],
         'cookieconsent' => [
             'learn_more' => 'Дополнительная информация',
         ],

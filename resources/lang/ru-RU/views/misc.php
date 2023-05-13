@@ -15,9 +15,9 @@ return [
         'header'                            => 'Еженедельные аффиксы в %s',
         'start_date'                        => 'Дата начала (%s)',
         '2'                                 => '+2',
-        '4'                                 => '+4',
         '7'                                 => '+7',
-        '10_seasonal'                       => '+10 (Сезонный аффикс)',
+        '14'                                => '@todo ru-RU: .affixes.14',
+        'seasonal'                          => '@todo ru-RU: .affixes.seasonal',
         'previous'                          => 'Предыдущий',
         'next'                              => 'Следующий',
         'updated_at'                        => 'Обновлено %s. Для получения дополнительной информации об аффиксах и M+ посетите',
@@ -43,7 +43,7 @@ return [
         'title'  => 'Встроить маршрут',
         'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
     ],
-    'health'     => [
+    'health'    => [
         'title'  => '@todo ru-RU: .health.title',
         'header' => '@todo ru-RU: .health.header',
     ],

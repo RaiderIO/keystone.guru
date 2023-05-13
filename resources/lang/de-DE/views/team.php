@@ -23,12 +23,15 @@ return [
         'copy_to_clipboard_title'   => '@todo de: .edit.copy_to_clipboard_title',
         'refresh_invite_link_title' => '@todo de: .edit.refresh_invite_link_title',
 
+        'ad_free_giveaway_description_not_available' => '@todo de-DE: .edit.ad_free_giveaway_description_not_available',
+        'ad_free_giveaway_description_available'     => '@todo de-DE: .edit.ad_free_giveaway_description_available',
+
         'default_role' => '@todo de: .edit.default_role',
 
         'team_tags_description' => '@todo de: .edit.team_tags_description',
     ],
     'invite' => [
-        'linkpreview_title' => '@todo de: .invite.linkpreview_title',
+        'linkpreview_title'       => '@todo de: .invite.linkpreview_title',
         'linkpreview_description' => '@todo de: .invite.linkpreview_description',
 
         'title'        => '@todo de: .invite.title',

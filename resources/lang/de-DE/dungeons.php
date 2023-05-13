@@ -190,6 +190,14 @@ return [
             ],
         ],
     ],
+    'cata'         => [
+        'the_vortex_pinnacle' => [
+            'name'   => '@todo de-DE: .cata.the_vortex_pinnacle.name',
+            'floors' => [
+                'cyclone_summit' => '@todo de-DE: .cata.the_vortex_pinnacle.floors.cyclone_summit',
+            ],
+        ],
+    ],
     'wod'          => [
         'auchindoun'                => [
             'name'   => '@todo de: .wod.auchindoun.name',

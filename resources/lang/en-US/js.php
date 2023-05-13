@@ -399,6 +399,8 @@ return [
     'enemypack_color_animated_label'                                => 'Color animated',
     'enemypack_faction_label'                                       => 'Faction',
     'enemypack_teeming_label'                                       => 'Teeming',
+    'enemypack_mark_as_skippable_label'                             => 'Mark enemies as skippable',
+    'enemypack_mark_as_skippable_button_text_label'                 => 'Mark as Skippable',
 
     // Dungeon floor switch marker
     'dungeonfloorswitchmarker_faction_label'                        => 'Faction',
