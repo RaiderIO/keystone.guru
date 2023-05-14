@@ -154,5 +154,44 @@
             "weight": 2,
             "vertices_json": "[{\"lat\":-73,\"lng\":73},{\"lat\":-68,\"lng\":69},{\"lat\":-61,\"lng\":70},{\"lat\":-57,\"lng\":72},{\"lat\":-53,\"lng\":78},{\"lat\":-52,\"lng\":84},{\"lat\":-54,\"lng\":89},{\"lat\":-58,\"lng\":93},{\"lat\":-65,\"lng\":95},{\"lat\":-71,\"lng\":94},{\"lat\":-75,\"lng\":90},{\"lat\":-77,\"lng\":84},{\"lat\":-77,\"lng\":78},{\"lat\":-73,\"lng\":73},{\"lat\":-73,\"lng\":73}]"
         }
+    },
+    {
+        "id": 1194,
+        "mapping_version_id": 132,
+        "floor_id": 161,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-139,\"lng\":324},{\"lat\":-139,\"lng\":325},{\"lat\":-131,\"lng\":325},{\"lat\":-131,\"lng\":308},{\"lat\":-139,\"lng\":308},{\"lat\":-139,\"lng\":310},{\"lat\":-133,\"lng\":310},{\"lat\":-133,\"lng\":324},{\"lat\":-139,\"lng\":324},{\"lat\":-139,\"lng\":324}]"
+        }
+    },
+    {
+        "id": 1195,
+        "mapping_version_id": 132,
+        "floor_id": 161,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-155,\"lng\":196},{\"lat\":-168,\"lng\":195},{\"lat\":-168,\"lng\":196},{\"lat\":-155,\"lng\":197},{\"lat\":-155,\"lng\":196},{\"lat\":-155,\"lng\":196}]"
+        }
+    },
+    {
+        "id": 1197,
+        "mapping_version_id": 132,
+        "floor_id": 161,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-73,\"lng\":73},{\"lat\":-68,\"lng\":69},{\"lat\":-61,\"lng\":70},{\"lat\":-57,\"lng\":72},{\"lat\":-53,\"lng\":78},{\"lat\":-52,\"lng\":84},{\"lat\":-54,\"lng\":89},{\"lat\":-58,\"lng\":93},{\"lat\":-65,\"lng\":95},{\"lat\":-71,\"lng\":94},{\"lat\":-75,\"lng\":90},{\"lat\":-77,\"lng\":84},{\"lat\":-77,\"lng\":78},{\"lat\":-73,\"lng\":73},{\"lat\":-73,\"lng\":73}]"
+        }
     }
 ]
