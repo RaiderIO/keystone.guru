@@ -127,7 +127,7 @@ class MDTImportController extends Controller
 
                 // Ensure team_id is set
                 if (!$sandbox) {
-                    $dungeonRoute->team_id = $validated['team_id'];
+                    $dungeonRoute->team_id = $validated['team_id'] ?? null;
                     $dungeonRoute->save();
                 }
 
