@@ -694,8 +694,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
         $dungeonRoute->title              = empty($decoded['text']) ? 'No title' : $decoded['text'];
         $dungeonRoute->difficulty         = 'Casual';
-        $dungeonRoute->level_min          = $decoded['difficulty'];
-        $dungeonRoute->level_max          = $decoded['difficulty'];
+        $dungeonRoute->level_min          = $decoded['difficulty'] ?? 2;
+        $dungeonRoute->level_max          = $decoded['difficulty'] ?? 2;
 
         // Must expire if we're trying
         if ($sandbox) {
