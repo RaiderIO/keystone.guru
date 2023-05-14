@@ -1356,7 +1356,7 @@
         "name": "dungeons.bfa.freehold.name",
         "slug": "freehold",
         "enemy_forces_required": 400,
-        "enemy_forces_required_teeming": -1,
+        "enemy_forces_required_teeming": 313,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
