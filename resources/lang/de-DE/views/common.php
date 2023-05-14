@@ -486,6 +486,11 @@ return [
                 'remove_ads' => '@todo de: .thirdparty.nitropay.adcontrols.remove_ads',
             ],
         ],
+        'patreon'       => [
+            'fancylink' => [
+                'patreon' => '@todo de-DE: .thirdparty.patreon.fancylink.patreon',
+            ],
+        ],
         'cookieconsent' => [
             'learn_more' => '@todo de: .thirdparty.cookieconsent.learn_more',
         ],

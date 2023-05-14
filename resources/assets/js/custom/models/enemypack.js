@@ -82,6 +82,27 @@ class EnemyPack extends VersionableMapObject {
                 getter: function () {
                     return self.getVertices();
                 }
+            }),
+            new Attribute({
+                name: 'mark_as_skippable',
+                type: 'button',
+                buttonType: 'info',
+                buttonText: lang.get('messages.enemypack_mark_as_skippable_button_text_label'),
+                clicked: function (e) {
+                    self.map.leafletMap.closePopup();
+
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+                    for (let key in enemyMapObjectGroup.objects) {
+                        let enemy = enemyMapObjectGroup.objects[key];
+
+                        // Detach all enemies from this pack if it's deleted
+                        if (enemy.enemy_pack_id === self.id) {
+                            enemy.skippable = !enemy.skippable;
+                            enemy.save();
+                        }
+                    }
+                }
             })
         ]);
     }

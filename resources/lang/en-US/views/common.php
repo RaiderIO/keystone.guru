@@ -123,6 +123,7 @@ return [
             'temporary_route'                        => 'Temporary route',
             'temporary_route_title'                  => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'parsing_your_string'                    => 'Parsing your string...',
+            'import_as_this_week'                    => 'Import with this week\'s affixes instead',
             'import_route'                           => 'Import route',
         ],
         'oauth'                => [
@@ -492,6 +493,11 @@ return [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
+            ],
+        ],
+        'patreon'       => [
+            'fancylink' => [
+                'patreon' => 'Patreon',
             ],
         ],
         'cookieconsent' => [

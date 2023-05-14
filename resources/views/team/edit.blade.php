@@ -1,13 +1,17 @@
 <?php
 /** @var \App\Models\Team $team */
+/** @var bool $userIsModerator */
+/** @var bool $userHasAdFreeTeamMembersPatreonBenefit */
+/** @var int $userAdFreeTeamMembersRemaining */
+/** @var int $userAdFreeTeamMembersMax */
+
 $title = sprintf(__('views/team.edit.title'), $team->name);
 /** @var \App\User $user */
-$user            = Auth::user();
-$userIsModerator = $team->isUserModerator($user);
-$menuItems       = [
+$user      = Auth::user();
+$menuItems = [
     ['icon' => 'far fa-list-alt', 'text' => __('views/team.edit.overview'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('views/team.edit.routes'), 'target' => '#routes'],
-    ['icon' => 'fa-users', 'text' => __('views/team.edit.members'), 'target' => '#members']
+    ['icon' => 'fa-users', 'text' => __('views/team.edit.members'), 'target' => '#members'],
 ];
 // May only edit details when member is a moderator
 if ($userIsModerator) {
@@ -18,13 +22,18 @@ if ($userIsModerator) {
 $data = [];
 foreach ($team->teamusers as $teamuser) {
     /** @var $teamuser \App\Models\TeamUser */
+    $hasAdFreeGiveaway = $teamuser->user->hasAdFreeGiveaway();
+
     $data[] = [
-        'user_id'          => $teamuser->user->id,
-        'name'             => $teamuser->user->name,
-        'join_date'        => $teamuser->created_at->toDateTimeString(),
-        'role'             => $teamuser->role,
+        'user_id'                              => $teamuser->user->id,
+        'name'                                 => $teamuser->user->name,
+        'join_date'                            => $teamuser->created_at->toDateTimeString(),
+        'role'                                 => $teamuser->role,
         // Any and all roles that the user may assign to other users
-        'assignable_roles' => $team->getAssignableRoles($user, $teamuser->user)
+        'assignable_roles'                     => $team->getAssignableRoles($user, $teamuser->user),
+        'has_ad_free'                          => $teamuser->user->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::AD_FREE),
+        'has_ad_free_giveaway'                 => $hasAdFreeGiveaway,
+        'has_ad_free_giveaway_by_current_user' => $hasAdFreeGiveaway && $teamuser->user->getAdFreeGiveawayUser()->id === $user->id,
     ];
 }
 ?>
@@ -37,7 +46,7 @@ foreach ($team->teamusers as $teamuser) {
     'menuModels' => $user->teams,
     'menuModelsRoute' => 'team.edit',
     'menuModelsRouteParameterName' => 'team',
-    'menuModelEdit' => $team
+    'menuModelEdit' => $team,
 ])
 @section('header-title', $title)
 @section('header-addition')
@@ -53,6 +62,7 @@ foreach ($team->teamusers as $teamuser) {
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
     'currentUserRole' => $team->getUserRole($user),
+    'adFreeGiveawayLeft' => $userAdFreeTeamMembersRemaining,
 ]])
 
 @section('scripts')
@@ -201,6 +211,26 @@ foreach ($team->teamusers as $teamuser) {
                             }, array_combine($keys, $keys)), $team->default_role, ['class' => 'form-control selectpicker']) !!}
                     </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <span class="">
+                    @php(ob_start())
+                    @include('common.thirdparty.patreon.fancylink')
+                    @php($patreonLink = trim(ob_get_clean()))
+                    @if( $userHasAdFreeTeamMembersPatreonBenefit )
+                        {!! __('views/team.edit.ad_free_giveaway_description_available', [
+                            'patreon' => $patreonLink,
+                            'current' => $userAdFreeTeamMembersRemaining,
+                            'max' => $userAdFreeTeamMembersMax,
+                        ]) !!}
+                    @else
+                        {!!  __('views/team.edit.ad_free_giveaway_description_not_available', [
+                            'patreon' => $patreonLink,
+                            'max' => $userAdFreeTeamMembersMax,
+                        ]) !!}
+                    @endif
+                </span>
             </div>
 
             <div class="form-group">

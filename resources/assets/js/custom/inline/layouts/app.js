@@ -28,10 +28,11 @@ class LayoutsApp extends InlineCode {
         this.$loader = this.$root.find('.import_mdt_string_loader');
         this.$details = this.$root.find('.import_mdt_string_details');
         this.$warnings = this.$root.find('.mdt_string_warnings');
+        this.$importAsThisWeekContainer = this.$root.find('.import_as_this_week_container');
+        this.$importAsThisWeek = this.$root.find('.import_as_this_week');
         this.$importString = this.$root.find('.import_string');
         this.$submitBtn = this.$root.find('input[type="submit"]');
         this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').unbind('click').bind('click', this._resetMdtModal.bind(this));
-
 
         if (this.options.guest) {
             this._newPassword('#register_password');
@@ -164,7 +165,7 @@ class LayoutsApp extends InlineCode {
                 details.push({key: lang.get('messages.mdt_notes'), value: responseData.notes});
                 details.push({
                     key: lang.get('messages.mdt_enemy_forces'),
-                    value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
+                    value: `${responseData.enemy_forces}/${responseData.enemy_forces_max}`
                 });
 
 
@@ -179,6 +180,15 @@ class LayoutsApp extends InlineCode {
                 if (responseData.warnings.length > 0) {
                     (new MdtStringWarnings(responseData.warnings))
                         .render(self.$warnings);
+                }
+
+                // If the route did not contain this week's affixes, offer to import it as such anyways
+                self.$importAsThisWeek.prop('checked', false);
+
+                if (responseData.has_this_weeks_affix_group) {
+                    self.$importAsThisWeekContainer.hide();
+                } else {
+                    self.$importAsThisWeekContainer.show();
                 }
 
                 // Tooltips may be added above

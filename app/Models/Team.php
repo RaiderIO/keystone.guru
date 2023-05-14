@@ -321,6 +321,11 @@ class Team extends Model
         // Only if the user could be found..
         if ($this->isUserMember($member)) {
             try {
+                // If the user has a ad-free giveaway, see if we need to revoke it because they got removed from this team
+                if ($member->patreonAdFreeGiveaway !== null && $this->members->pluck('id')->search($member->patreonAdFreeGiveaway->giver_user_id)) {
+                    $member->patreonAdFreeGiveaway->delete();
+                }
+
                 $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception $exception) {
@@ -392,21 +397,32 @@ class Team extends Model
         parent::boot();
 
         // Delete team properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item Team */
-
+        static::deleting(function (Team $team) {
             // Delete icons
-            if ($item->iconfile !== null) {
-                $item->iconfile->delete();
+            if ($team->iconfile !== null) {
+                $team->iconfile->delete();
+            }
+
+            // Remove any ad-free giveaways if the giver was part of this team
+            foreach ($team->members as $teamMember) {
+                if ($teamMember->patreonAdFreeGiveaway === null) {
+                    continue;
+                }
+
+                // If the giver of the patreon ad-free giveaway was part of this team
+                if ($team->members->pluck('id')->search($teamMember->patreonAdFreeGiveaway->giver_user_id)) {
+                    // The team connection no longer exists, and this user LOSES their ad-free giveaway connection
+                    $teamMember->patreonAdFreeGiveaway->delete();
+                }
             }
 
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $item->dungeonroutes->pluck('id')->toArray())->delete();
+                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())->delete();
             // Remove all users associated with this team
-            TeamUser::where('team_id', $item->id)->delete();
+            TeamUser::where('team_id', $team->id)->delete();
             // Unassign all routes from this team
-            DungeonRoute::where('team_id', $item->id)->update(['team_id' => null]);
+            DungeonRoute::where('team_id', $team->id)->update(['team_id' => null]);
         });
     }
 }

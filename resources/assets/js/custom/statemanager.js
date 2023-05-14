@@ -436,7 +436,7 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Checks if the patren benefit is enabled for the user or not.
+     * Checks if the patreon benefit is enabled for the user or not.
      * @returns {boolean}
      */
     hasPatreonBenefit(patreonBenefit) {

@@ -393,6 +393,8 @@ return [
     'enemypack_color_animated_label'                                => '@todo ru: .enemypack_color_animated_label',
     'enemypack_faction_label'                                       => 'Фракция',
     'enemypack_teeming_label'                                       => 'Кишащий',
+    'enemypack_mark_as_skippable_label'                             => '@todo ru-RU: .enemypack_mark_as_skippable_label',
+    'enemypack_mark_as_skippable_button_text_label'                 => '@todo ru-RU: .enemypack_mark_as_skippable_button_text_label',
 
     // Dungeon floor switch marker
     'dungeonfloorswitchmarker_faction_label'                        => 'Фракция',
@@ -420,17 +422,22 @@ return [
     'change_role_success'                                           => 'Разрешения обновлены',
     'change_default_role_success'                                   => 'Роль по умолчанию обновлена',
 
-    'team_admin'                    => 'Управление командой',
-    'team_moderator'                => 'Модерировать команду',
-    'team_collaborator'             => 'Редактировать маршрут',
-    'team_member'                   => 'Показать маршрут',
-    'remove_label'                  => 'Удалить',
-    'team_add_route_successful'     => 'Маршрут успешно добавлен в команду',
-    'team_remove_route_successful'  => 'Маршрут успешно удален из команды',
+    'team_admin'                                           => 'Управление командой',
+    'team_moderator'                                       => 'Модерировать команду',
+    'team_collaborator'                                    => 'Редактировать маршрут',
+    'team_member'                                          => 'Показать маршрут',
+    'remove_label'                                         => 'Удалить',
+    'team_add_route_successful'                            => 'Маршрут успешно добавлен в команду',
+    'team_remove_route_successful'                         => 'Маршрут успешно удален из команды',
+    'ad_free_giveaway_label'                               => '@todo ru-RU: .ad_free_giveaway_label',
+    'ad_free_giveaway_user_already_ad_free_label'          => '@todo ru-RU: .ad_free_giveaway_user_already_ad_free_label',
+    'ad_free_giveaway_user_already_ad_free_giveaway_label' => '@todo ru-RU: .ad_free_giveaway_user_already_ad_free_giveaway_label',
+    'ad_free_giveaway_add_label'                           => '@todo ru-RU: .ad_free_giveaway_add_label',
+    'ad_free_giveaway_remove_label'                        => '@todo ru-RU: .ad_free_giveaway_remove_label',
 
     // Dungeonroute table headers
-    'datatable_no_teams_in_table'   => 'Вы еще не состоите ни в одной команде',
-    'datatable_no_members_in_table' => 'В этой команде пока нет участников',
+    'datatable_no_teams_in_table'                          => 'Вы еще не состоите ни в одной команде',
+    'datatable_no_members_in_table'                        => 'В этой команде пока нет участников',
 
     'preview_label'       => 'Предварительный просмотр',
     'title_label'         => 'Название',
@@ -459,6 +466,10 @@ return [
     'remove_member_success'            => 'Участник успешно удален',
     'leave_team_confirm_label'         => 'Вы уверены, что хотите покинуть эту команду?',
     'leave_team_disband_confirm_label' => 'Вы уверены, что хотите покинуть эту команду? ВНИМАНИЕ: это распустит команду.',
+    'ad_free_giveaway_add_success'     => '@todo ru-RU: .ad_free_giveaway_add_success',
+    'ad_free_giveaway_add_failed'      => '@todo ru-RU: .ad_free_giveaway_add_failed',
+    'ad_free_giveaway_remove_success'  => '@todo ru-RU: .ad_free_giveaway_remove_success',
+    'ad_free_giveaway_remove_failed'   => '@todo ru-RU: .ad_free_giveaway_remove_failed',
 
     'name_label'             => 'Имя',
     'email_label'            => 'Электронный адрес',

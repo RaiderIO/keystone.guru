@@ -1,4 +1,12 @@
-<button class="btn btn-danger leave_team_btn" data-userid="{{user_id}}">
-    <span class="d-xl-none"><i class="fas fa-door-open"></i></span>
-    <span class="d-none d-xl-block"><i class="fas fa-door-open"></i> {{leave_label}}</span>
-</button>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownActions_{{user_id}}"
+            data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        {{actions_label}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownActions_{{user_id}}">
+        <a class="dropdown-item text-danger cursor-pointer leave_team_btn" data-userid="{{user_id}}">
+            <i class="fas fa-door-open"></i> {{leave_label}}
+        </a>
+    </div>
+</div>

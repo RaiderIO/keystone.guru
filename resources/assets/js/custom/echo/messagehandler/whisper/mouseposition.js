@@ -30,7 +30,7 @@ class MousePositionHandler extends WhisperMessageHandler {
                     let currTime = (new Date()).getTime();
 
                     // If we should save the mouse location - this event is fired a LOT, we should throttle and interpolate
-                    if (currTime - self.previousPollTime > c.map.echo.mousePollFrequencyMs) {
+                    if (currTime - self.previousPollTime > c.map.echo.mousePollFrequencyMs && typeof mouseMoveEvent.latlng !== 'undefined') {
                         self.mousePositions.push({
                             time: currTime - self.previousSyncTime,
                             lat: mouseMoveEvent.latlng.lat,

@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Http\Requests\TeamFormRequest;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
@@ -97,7 +99,15 @@ class TeamController extends Controller
     {
         $this->authorize('edit', $team);
 
-        return view('team.edit', ['team' => $team]);
+        $user = Auth::user();
+
+        return view('team.edit', [
+            'userHasAdFreeTeamMembersPatreonBenefit' => $user->hasPatreonBenefit(PatreonBenefit::AD_FREE_TEAM_MEMBERS),
+            'userAdFreeTeamMembersRemaining'         => PatreonAdFreeGiveaway::getCountLeft($user),
+            'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
+            'userIsModerator'                        => $team->isUserModerator($user),
+            'team'                                   => $team,
+        ]);
     }
 
     /**

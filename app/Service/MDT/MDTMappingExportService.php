@@ -179,7 +179,9 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         foreach ($enemiesByNpcId as $npcId => $enemies) {
             // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
             /** @var Collection|Enemy[] $enemies */
-            $enemies = $enemies->sort(function(Enemy $a, Enemy $b){ return $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id; });
+            $enemies = $enemies->sort(function (Enemy $a, Enemy $b) {
+                return $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id;
+            });
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
@@ -192,17 +194,18 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             ];
 
             $dungeonEnemy = [
-                'name'         => addslashes($npc->name),
-                'id'           => $npc->id,
-                'count'        => $npc->enemy_forces,
-                'health'       => $npc->base_health,
-                'scale'        => $scaleMapping[$npc->classification_id],
-                'displayId'    => $npc->display_id,
-                'creatureType' => $npc->type->type,
-                'level'        => 70,
+                'name'          => addslashes($npc->name),
+                'id'            => $npc->id,
+                'count'         => $npc->enemy_forces,
+                'health'        => $npc->base_health,
+                'scale'         => $scaleMapping[$npc->classification_id],
+                'stealthDetect' => $npc->truesight,
+                'displayId'     => $npc->display_id,
+                'creatureType'  => $npc->type->type,
+                'level'         => 70,
                 //                'characteristics' => [], // @TODO
                 //                'spells'          => [], // @TODO
-                'clones'       => [],
+                'clones'        => [],
             ];
 
             if ($npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {

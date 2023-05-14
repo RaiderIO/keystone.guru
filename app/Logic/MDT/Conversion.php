@@ -111,7 +111,7 @@ class Conversion
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+            Dungeon::DUNGEON_THE_VORTEX_PINNACLE        => 'TheVortexPinnacle',
             // MoP
             Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
             // WoD
@@ -255,7 +255,8 @@ class Conversion
             return null;
         }
 
-        $affixGroup = $season->affixgroups->get($season->start_affix_group_index - ($mdtWeek - 1));
+        $affixGroup = $season->affixgroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixgroups->count());
+        // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
         if ($affixGroup === null) {
             logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [
                 '$mdtWeek' => $mdtWeek,

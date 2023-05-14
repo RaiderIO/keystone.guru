@@ -20,13 +20,15 @@ class PatreonBenefit extends Model
     public const UNLISTED_ROUTES         = 'unlisted-routes';
     public const ANIMATED_POLYLINES      = 'animated-polylines';
     public const ADVANCED_SIMULATION     = 'advanced-simulation';
+    public const AD_FREE_TEAM_MEMBERS    = 'ad-free-team-members';
 
     public const ALL = [
-        self::AD_FREE             => 1,
+        self::AD_FREE              => 1,
         //        self::UNLIMITED_DUNGEONROUTES => 2, // This was removed - it's now active for everyone
-        self::UNLISTED_ROUTES     => 3,
-        self::ANIMATED_POLYLINES  => 4,
-        self::ADVANCED_SIMULATION => 5,
+        self::UNLISTED_ROUTES      => 3,
+        self::ANIMATED_POLYLINES   => 4,
+        self::ADVANCED_SIMULATION  => 5,
+        self::AD_FREE_TEAM_MEMBERS => 6,
     ];
 
     public $timestamps = false;

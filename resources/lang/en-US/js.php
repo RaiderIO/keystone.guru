@@ -399,6 +399,8 @@ return [
     'enemypack_color_animated_label'                                => 'Color animated',
     'enemypack_faction_label'                                       => 'Faction',
     'enemypack_teeming_label'                                       => 'Teeming',
+    'enemypack_mark_as_skippable_label'                             => 'Mark enemies as skippable',
+    'enemypack_mark_as_skippable_button_text_label'                 => 'Mark as Skippable',
 
     // Dungeon floor switch marker
     'dungeonfloorswitchmarker_faction_label'                        => 'Faction',
@@ -426,17 +428,22 @@ return [
     'change_role_success'                                           => 'Permissions updated',
     'change_default_role_success'                                   => 'Default role updated',
 
-    'team_admin'                    => 'Administrate team',
-    'team_moderator'                => 'Moderate team',
-    'team_collaborator'             => 'Edit routes',
-    'team_member'                   => 'View routes',
-    'remove_label'                  => 'Remove',
-    'team_add_route_successful'     => 'Route successfully added to team',
-    'team_remove_route_successful'  => 'Route successfully removed from team',
+    'team_admin'                                           => 'Administrate team',
+    'team_moderator'                                       => 'Moderate team',
+    'team_collaborator'                                    => 'Edit routes',
+    'team_member'                                          => 'View routes',
+    'remove_label'                                         => 'Remove',
+    'team_add_route_successful'                            => 'Route successfully added to team',
+    'team_remove_route_successful'                         => 'Route successfully removed from team',
+    'ad_free_giveaway_label'                               => 'Ad-free giveaway',
+    'ad_free_giveaway_user_already_ad_free_label'          => 'User is already ad-free',
+    'ad_free_giveaway_user_already_ad_free_giveaway_label' => 'User is already ad-free through a giveaway',
+    'ad_free_giveaway_add_label'                           => 'Make ad-free',
+    'ad_free_giveaway_remove_label'                        => 'Revoke ad-free',
 
     // Dungeonroute table headers
-    'datatable_no_teams_in_table'   => 'You are not a member of any team yet',
-    'datatable_no_members_in_table' => 'This team has no members yet',
+    'datatable_no_teams_in_table'                          => 'You are not a member of any team yet',
+    'datatable_no_members_in_table'                        => 'This team has no members yet',
 
     'preview_label'       => 'Preview',
     'title_label'         => 'Title',
@@ -461,10 +468,14 @@ return [
     'finished_label'                   => 'Finished',
 
     // Teams
-    'remove_member_confirm_label'      => 'Are you sure you want remove this user from the team?',
+    'remove_member_confirm_label'      => 'Are you sure you want remove this user from the team? Any ad-free giveaways to this user will be removed.',
     'remove_member_success'            => 'Member removed successfully',
-    'leave_team_confirm_label'         => 'Are you sure you wish to leave this team?',
-    'leave_team_disband_confirm_label' => 'Are you sure you wish to leave this team? WARNING: this will disband the team.',
+    'leave_team_confirm_label'         => 'Are you sure you wish to leave this team? You may lose any ad-free giveaways awarded to you from team members.',
+    'leave_team_disband_confirm_label' => 'Are you sure you wish to leave this team? You may lose any ad-free giveaways awarded to you from team members. WARNING: this will disband the team.',
+    'ad_free_giveaway_add_success'     => 'Successfully granted ad-free status',
+    'ad_free_giveaway_add_failed'      => 'Failed to grant ad-free status',
+    'ad_free_giveaway_remove_success'  => 'Successfully revoked ad-free status',
+    'ad_free_giveaway_remove_failed'   => 'Failed to revoke ad-free status',
 
     'name_label'             => 'Name',
     'email_label'            => 'Email',
