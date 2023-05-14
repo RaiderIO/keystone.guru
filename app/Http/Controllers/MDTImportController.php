@@ -55,7 +55,13 @@ class MDTImportController extends Controller
                 $warningResult[] = $warning->toArray();
             }
 
-            $currentAffixGroupForDungeon = $seasonService->getCurrentSeason($dungeonRoute->dungeon->expansion)->getCurrentAffixGroup();
+            
+            
+                
+            $currentSeason = $seasonService->getCurrentSeason($dungeonRoute->dungeon->expansion);
+            
+            $currentAffixGroupForDungeon = optional($currentSeason)->getCurrentAffixGroup();
+
 
             $result = [
                 'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
