@@ -1141,14 +1141,5 @@
         "created_at": "2023-05-13T11:50:02.000000Z",
         "updated_at": "2023-05-13T11:50:02.000000Z",
         "merged": false
-    },
-    {
-        "id": 130,
-        "dungeon_id": 77,
-        "version": 4,
-        "mdt_mapping_hash": "c6dd505bfc83f421aa3f22bd1ebac393",
-        "created_at": "2023-05-14T05:58:35.000000Z",
-        "updated_at": "2023-05-14T05:58:35.000000Z",
-        "merged": false
     }
 ]
