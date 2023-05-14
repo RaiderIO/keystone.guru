@@ -76,5 +76,18 @@
             "weight": 2,
             "vertices_json": "[{\"lat\":-83,\"lng\":124},{\"lat\":-89,\"lng\":119},{\"lat\":-89,\"lng\":114},{\"lat\":-83,\"lng\":124}]"
         }
+    },
+    {
+        "id": 1162,
+        "mapping_version_id": 130,
+        "floor_id": 149,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-83,\"lng\":124},{\"lat\":-89,\"lng\":119},{\"lat\":-89,\"lng\":114},{\"lat\":-83,\"lng\":124}]"
+        }
     }
 ]
