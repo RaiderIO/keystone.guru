@@ -34909,8 +34909,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -100.51095481672074,
-        "lng": 71.00184791247143,
+        "lat": -100.51095481672,
+        "lng": 71.001847912471,
         "active_auras": [],
         "enemyactiveauras": [],
         "npc": {
