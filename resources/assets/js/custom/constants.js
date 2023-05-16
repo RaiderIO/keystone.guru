@@ -112,6 +112,9 @@ const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
+const AFFIX_AFFLICTED   = 'Afflicted';
+const AFFIX_ENTANGLING  = 'Entangling';
+const AFFIX_INCORPOREAL = 'Incorporeal';
 
 // Dungeon Speedrun Required Npcs
 const DUNGEON_DIFFICULTY_10_MAN = 1;

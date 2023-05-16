@@ -113,5 +113,17 @@ return [
         'name'        => 'Thundering',
         'description' => 'Enemies have 5% more health. While in combat, players are periodically overcharged with primal power from Raszageth\'s unending storm. This power comes with great risk, and failure to discharge it quickly can have stunning consequences.',
     ],
+    'afflicted'              => [
+        'name'        => 'Afflicted',
+        'description' => 'While in combat, afflicted souls periodically appear and seek the aid of players.',
+    ],
+    'entangling'              => [
+        'name'        => 'Entangling',
+        'description' => 'While in combat, entangling vines periodically appear and snare players.',
+    ],
+    'incorporeal'              => [
+        'name'        => 'Incorporeal',
+        'description' => 'While in combat, incorporeal beings periodically appear and attempt to weaken players.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 ];
