@@ -1,0 +1,39 @@
+{
+    "id": 176,
+    "release_changelog_id": 183,
+    "version": "v6.5.3",
+    "title": "Mapping corrections to Vortex Pinnacle, Freehold and minor updates to other S2 dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-16T21:17:18+00:00",
+    "updated_at": "2023-05-16T21:17:18+00:00",
+    "changelog": {
+        "id": 183,
+        "release_id": 176,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 183,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Updated Freehold mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/458",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 183,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Updated Vortex Pinnacle mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/461",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}
