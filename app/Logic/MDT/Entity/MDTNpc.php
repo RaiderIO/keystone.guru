@@ -50,6 +50,9 @@ class MDTNpc implements Arrayable
     /** @var int */
     private int $health = 0;
 
+    /** @var int|null */
+    private ?int $healthPercentage;
+
     /** @var array */
     private array $characteristics = [];
 
@@ -90,8 +93,9 @@ class MDTNpc implements Arrayable
         if (isset($rawMdtNpc['creatureType'])) {
             $this->creatureType = $rawMdtNpc['creatureType'];
         }
-        $this->level  = (int)$rawMdtNpc['level'];
-        $this->health = (int)$rawMdtNpc['health'];
+        $this->level            = (int)$rawMdtNpc['level'];
+        $this->health           = (int)$rawMdtNpc['health'];
+        $this->healthPercentage = $rawMdtNpc['health_percentage'] ?? null;
 
         if (isset($rawMdtNpc['characteristics'])) {
             $this->recur_ksort($rawMdtNpc['characteristics']);
@@ -256,6 +260,14 @@ class MDTNpc implements Arrayable
     public function getHealth(): int
     {
         return $this->health;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHealthPercentage(): ?int
+    {
+        return $this->healthPercentage;
     }
 
     /**
