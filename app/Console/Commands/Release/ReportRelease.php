@@ -83,10 +83,10 @@ class ReportRelease extends Command
             }
 
             // Log this release so that we don't mention things multiple times
-            (new ReleaseReportLog([
+            ReleaseReportLog::create([
                 'release_id' => $release->id,
                 'platform'   => $platform,
-            ]))->save();
+            ]);
         } else {
             $this->info('Not reporting release; it was already reported in the platform!');
             // Not failed if we already did it
