@@ -6,7 +6,7 @@ class AdminNpcEdit extends InlineCode {
     activate() {
         let self = this;
 
-        let $input = $(this.options.scaledHealthLevelSelector)
+        let $scaledHealthLevelInput = $(this.options.scaledHealthLevelSelector)
             .val(Cookies.get('npc_edit_key_level', '15'))
             .ionRangeSlider({
                 grid: true,
@@ -15,8 +15,17 @@ class AdminNpcEdit extends InlineCode {
                 min: 2,
                 max: 40,
                 onFinish: function (data) {
-                    Cookies.set('npc_edit_key_level', $input.val(), cookieDefaultAttributes);
+                    Cookies.set('npc_edit_key_level', $scaledHealthLevelInput.val(), cookieDefaultAttributes);
                 }
+            });
+
+        let $healthPercentageInput = $(this.options.healthPercentageSelector)
+            .ionRangeSlider({
+                grid: true,
+                grid_snap: true,
+                type: 'single',
+                min: 1,
+                max: 100
             });
 
         // Restore previously set fortified/tyrannical values
@@ -37,7 +46,7 @@ class AdminNpcEdit extends InlineCode {
 
             $(self.options.baseHealthSelector).val(
                 c.map.enemy.calculateBaseHealthForKey(
-                    (scaledHealth / percentage) * 100, $input.val(), self._isFortified(), self._isTyrannical()
+                    (scaledHealth / percentage) * 100, $scaledHealthLevelInput.val(), self._isFortified(), self._isTyrannical()
                 )
             );
         });

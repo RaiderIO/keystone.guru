@@ -418,11 +418,12 @@ class AdminEnemy extends Enemy {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
             enemy_forces: enemy_forces,
             base_health: this.npc === null ? '-' : this.npc.base_health,
+            health_percentage: this.npc === null ? '-' : this.npc.health_percentage,
             teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),
             is_teeming: this.teeming === TEEMING_VISIBLE,
             id: this.id,
             size: c.map.enemy.calculateSize(
-                this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health,
+                this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100),
                 this.map.options.npcsMinHealth,
                 this.map.options.npcsMaxHealth
             ),

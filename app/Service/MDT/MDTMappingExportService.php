@@ -207,7 +207,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
-            $dungeonEnemy = [
+            $dungeonEnemy = array_merge([
                 'name'          => addslashes($npc->name),
                 'id'            => $npc->id,
                 'count'         => $npc->enemy_forces,
@@ -220,7 +220,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 //                'characteristics' => [], // @TODO
                 //                'spells'          => [], // @TODO
                 'clones'        => [],
-            ];
+            ], $npc->health_percentage !== null ? ['healthPercentage' => $npc->health_percentage] : []);
 
             if ($npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                 $dungeonEnemy['isBoss'] = true;

@@ -427,7 +427,7 @@ class Enemy extends VersionableMapObject {
         let result = null;
 
         if (this.npc !== null) {
-            let scaledHealth = this.npc.base_health;
+            let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
             let hasFortified = false;
             let hasTyrannical = false;
 
@@ -437,15 +437,17 @@ class Enemy extends VersionableMapObject {
                 hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
                 hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
 
-                scaledHealth = c.map.enemy.calculateHealthForKey(parseInt(scaledHealth), mapContext.getLevelMin(), hasFortified, hasTyrannical);
+                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical);
                 levelLabel = ` (+${mapContext.getLevelMin()})`;
             }
+
+            let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
 
             result = {info: [], custom: []};
             // @formatter:off
             result.info.push({
                 key: lang.get('messages.sidebar_enemy_health_label') + levelLabel,
-                value: scaledHealth.toLocaleString(),
+                value: scaledHealth.toLocaleString() + percentageString,
                 warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
                     (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
             });

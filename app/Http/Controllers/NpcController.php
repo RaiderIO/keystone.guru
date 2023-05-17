@@ -53,27 +53,29 @@ class NpcController extends Controller
 
         $npcBefore = clone $npc;
 
-        $npc->id                = $request->get('id');
-        $npc->dungeon_id        = $request->get('dungeon_id');
-        $npc->classification_id = $request->get('classification_id');
-        $npc->npc_class_id      = $request->get('npc_class_id');
-        $npc->name              = $request->get('name');
-        // Remove commas or dots in the name; we want the integer value
-        $npc->base_health          = str_replace(',', '', $request->get('base_health'));
-        $npc->base_health          = str_replace('.', '', $npc->base_health);
-        $npc->enemy_forces         = $request->get('enemy_forces');
-        $npc->enemy_forces_teeming = $request->get('enemy_forces_teeming', -1);
-        $npc->aggressiveness       = $request->get('aggressiveness');
-        $npc->dangerous            = $request->get('dangerous', 0);
-        $npc->truesight            = $request->get('truesight', 0);
-        $npc->bursting             = $request->get('bursting', 0);
-        $npc->bolstering           = $request->get('bolstering', 0);
-        $npc->sanguine             = $request->get('sanguine', 0);
+        $validated = $request->validated();
+        $updateResult = $npc->update([
+            'id'                   => $validated['id'],
+            'dungeon_id'           => $validated['dungeon_id'],
+            'classification_id'    => $validated['classification_id'],
+            'npc_class_id'         => $validated['npc_class_id'],
+            'name'                 => $validated['name'],
+            // Remove commas or dots in the name; we want the integer value
+            'base_health'          => str_replace([',', '.'], '', $validated['base_health']),
+            'health_percentage'    => $validated['health_percentage'] ?? 100,
+            'enemy_forces'         => $validated['enemy_forces'],
+            'enemy_forces_teeming' => $validated['enemy_forces_teeming'] ?? -1,
+            'aggressiveness'       => $validated['aggressiveness'],
+            'dangerous'            => $validated['dangerous'] ?? 0,
+            'truesight'            => $validated['truesight'] ?? 0,
+            'bursting'             => $validated['bursting'] ?? 0,
+            'bolstering'           => $validated['bolstering'] ?? 0,
+            'sanguine'             => $validated['sanguine'] ?? 0,
+        ]);
 
-        if ($npc->save()) {
-
+        if ($updateResult) {
             // Bolstering whitelist, if set
-            $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);
+            $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
             // Clear current whitelists
             $npc->npcbolsteringwhitelists()->delete();
             foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
@@ -84,7 +86,7 @@ class NpcController extends Controller
             }
 
             // Spells, if set
-            $spells = $request->get('spells', []);
+            $spells = $validated['spells'] ?? [];
             // Clear current spells
             $npc->npcspells()->delete();
             foreach ($spells as $spellId) {

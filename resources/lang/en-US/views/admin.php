@@ -169,6 +169,7 @@ return [
             'scaled_type_none'                     => 'None',
             'scaled_type_fortified'                => ':affix (trash only)',
             'scaled_type_tyrannical'               => ':affix (bosses only)',
+            'health_percentage'                    => 'Health percentage',
             'enemy_forces'                         => 'Enemy forces (-1 for unknown)',
             'enemy_forces_teeming'                 => 'Enemy forces teeming (-1 for same as normal)',
             'dangerous'                            => 'Dangerous',
