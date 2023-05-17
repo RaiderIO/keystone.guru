@@ -1371,48 +1371,46 @@ class DungeonRoute extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item DungeonRoute */
-
+        static::deleting(function (DungeonRoute $dungeonRoute) {
             // Delete thumbnails
             $publicPath = public_path('images/route_thumbnails/');
-            foreach ($item->dungeon->floors as $floor) {
+            foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
-                @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
+                @unlink(sprintf('%s/%s_%s.png', $publicPath, $dungeonRoute->public_key, $floor->index));
             }
 
             // Dungeonroute settings
-            $item->affixgroups()->delete();
-            $item->routeattributesraw()->delete();
-            $item->playerclasses()->delete();
-            $item->playerraces()->delete();
-            $item->playerspecializations()->delete();
-            $item->tags()->delete();
+            $dungeonRoute->affixgroups()->delete();
+            $dungeonRoute->routeattributesraw()->delete();
+            $dungeonRoute->playerclasses()->delete();
+            $dungeonRoute->playerraces()->delete();
+            $dungeonRoute->playerspecializations()->delete();
+            $dungeonRoute->tags()->delete();
 
             // Mapping related items
-            $item->enemyraidmarkers()->delete();
-            foreach ($item->brushlines as $brushline) {
+            $dungeonRoute->enemyraidmarkers()->delete();
+            foreach ($dungeonRoute->brushlines as $brushline) {
                 $brushline->delete();
             }
-            foreach ($item->paths as $path) {
+            foreach ($dungeonRoute->paths as $path) {
                 $path->delete();
             }
-            foreach ($item->killzones as $killZone) {
+            foreach ($dungeonRoute->killzones as $killZone) {
                 $killZone->delete();
             }
-            $item->mapicons()->delete();
-            $item->pridefulEnemies()->delete();
+            $dungeonRoute->mapicons()->delete();
+            $dungeonRoute->pridefulEnemies()->delete();
 
             // External
-            $item->ratings()->delete();
-            $item->favorites()->delete();
-            foreach ($item->livesessions as $liveSession) {
+            $dungeonRoute->ratings()->delete();
+            $dungeonRoute->favorites()->delete();
+            foreach ($dungeonRoute->livesessions as $liveSession) {
                 $liveSession->delete();
             }
 
-            $item->mdtImport()->delete();
-            $item->metrics()->delete();
-            $item->metricAggregations()->delete();
+            $dungeonRoute->mdtImport()->delete();
+            $dungeonRoute->metrics()->delete();
+            $dungeonRoute->metricAggregations()->delete();
         });
     }
 }
