@@ -145,6 +145,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->display_id           = $mdtNpc->getDisplayId();
                 $npc->name                 = $mdtNpc->getName();
                 $npc->base_health          = $mdtNpc->getHealth();
+                $npc->health_percentage    = $mdtNpc->getHealthPercentage();
                 $npc->enemy_forces         = $mdtNpc->getCount();
                 $npc->enemy_forces_teeming = $mdtNpc->getCountTeeming();
                 $npc->npc_type_id          = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;

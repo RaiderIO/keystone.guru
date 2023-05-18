@@ -58,9 +58,15 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-        if (!$release->silent &&
-            (config('app.type') === 'local' ||
-                ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->doesntExist())) {
+        if ($release->silent) {
+            $this->info('Not reporting release; it was marked as silent!');
+            // Not failed if not necessary
+            $result = true;
+        } else if (config('app.type') === 'local' ||
+            ReleaseReportLog::where('release_id', $release->id)
+                ->where('platform', $platform)
+                ->doesntExist()
+        ) {
             switch ($platform) {
                 case 'reddit':
                     $result = $redditApiService->createPost(
@@ -77,10 +83,10 @@ class ReportRelease extends Command
             }
 
             // Log this release so that we don't mention things multiple times
-            (new ReleaseReportLog([
+            ReleaseReportLog::create([
                 'release_id' => $release->id,
                 'platform'   => $platform,
-            ]))->save();
+            ]);
         } else {
             $this->info('Not reporting release; it was already reported in the platform!');
             // Not failed if we already did it

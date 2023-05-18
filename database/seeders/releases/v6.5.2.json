@@ -2,11 +2,11 @@
     "id": 175,
     "release_changelog_id": 182,
     "version": "v6.5.2",
-    "title": "Mapping corrections to Vortex Pinnacle, Freehold and minor updates to other S2 dungeons",
+    "title": "Brackenhide Hollow mapping updates",
     "silent": 0,
     "spotlight": 0,
-    "created_at": "2023-05-16T21:17:18+00:00",
-    "updated_at": "2023-05-16T21:17:18+00:00",
+    "created_at": "2023-05-15T08:07:47+00:00",
+    "updated_at": "2023-05-15T08:07:47+00:00",
     "changelog": {
         "id": 182,
         "release_id": 175,
@@ -16,7 +16,7 @@
                 "release_changelog_id": 182,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Updated Freehold mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/458",
+                "change": "Updated Brackenhide Hollow to reflect in-game mapping. Removed packs, added ones that were changed and fixed various mapping errors.",
                 "category": {
                     "id": 4,
                     "key": "mapping_changes",
@@ -25,13 +25,13 @@
             },
             {
                 "release_changelog_id": 182,
-                "release_changelog_category_id": 4,
-                "ticket_id": null,
-                "change": "Updated Vortex Pinnacle mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/461",
+                "release_changelog_category_id": 6,
+                "ticket_id": 1728,
+                "change": "Fixed issue with importing certain MDT strings not having their key level set.",
                 "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
+                    "id": 6,
+                    "key": "mdt_importer_changes",
+                    "name": "releasechangelogcategories.mdt_importer_changes"
                 }
             }
         ]

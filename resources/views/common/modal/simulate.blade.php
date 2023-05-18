@@ -1,11 +1,13 @@
 <?php
 /** @var $dungeonroute App\Models\DungeonRoute|null */
+/** @var bool $isThundering */
 ?>
 
 @include('common.general.inline', [
     'path' => 'common/dungeonroute/simulate',
     'options' => [
         'dependencies' => ['common/maps/map'],
+        'isThundering' => $isThundering
     ]
 ])
 
@@ -15,7 +17,7 @@
     {{ __('views/common.modal.simulate.intro') }}
 @endcomponent
 
-@include('common.modal.simulateoptions.default')
+@include('common.modal.simulateoptions.default', ['isThundering' => $isThundering])
 
 @include('common.modal.simulateoptions.advanced')
 

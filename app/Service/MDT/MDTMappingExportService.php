@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
+use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClassification;
@@ -123,29 +124,42 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
      */
     private function getMapPOIs(MappingVersion $mappingVersion): string
     {
-        $dungeonFloorSwitchMarkers = [];
+        $mapPOIs = [];
 
         foreach ($mappingVersion->dungeon->floors as $floor) {
-            $dungeonFloorSwitchMarkersOnFloor = [];
-            $dungeonFloorSwitchMarkerIndex    = 0;
+            $mapPOIsOnFloor = [];
+            $mapPOIIndex    = 0;
 
             foreach ($floor->dungeonfloorswitchmarkers($mappingVersion)->get() as $dungeonFloorSwitchMarker) {
                 /** @var $dungeonFloorSwitchMarker DungeonFloorSwitchMarker */
-                $dungeonFloorSwitchMarkersOnFloor[++$dungeonFloorSwitchMarkerIndex] = array_merge([
+                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
                     'template'        => 'MapLinkPinTemplate',
                     'type'            => 'mapLink',
                     'target'          => $dungeonFloorSwitchMarker->targetfloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetfloor->index,
                     'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
-                    'connectionIndex' => $dungeonFloorSwitchMarkerIndex, // @TODO this is wrong?
+                    'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
                 ], Conversion::convertLatLngToMDTCoordinate(['lat' => $dungeonFloorSwitchMarker->lat, 'lng' => $dungeonFloorSwitchMarker->lng]));
             }
 
-            if (!empty($dungeonFloorSwitchMarkersOnFloor)) {
-                $dungeonFloorSwitchMarkers[$floor->mdt_sub_level ?? $floor->index] = $dungeonFloorSwitchMarkersOnFloor;
+            foreach ($floor->mapicons as $mapIcon) {
+                // Skip all map icon types that are not graveyards
+                if ($mapIcon->map_icon_type_id !== MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD]) {
+                    continue;
+                }
+
+                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
+                    'template'             => 'DeathReleasePinTemplate',
+                    'type'                 => 'graveyard',
+                    'graveyardDescription' => $mapIcon->comment ?? '',
+                ], Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]));
+            }
+
+            if (!empty($mapPOIsOnFloor)) {
+                $mapPOIs[$floor->mdt_sub_level ?? $floor->index] = $mapPOIsOnFloor;
             }
         }
 
-        return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $dungeonFloorSwitchMarkers);
+        return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
     }
 
     /**
@@ -193,7 +207,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
-            $dungeonEnemy = [
+            $dungeonEnemy = array_merge([
                 'name'          => addslashes($npc->name),
                 'id'            => $npc->id,
                 'count'         => $npc->enemy_forces,
@@ -206,7 +220,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 //                'characteristics' => [], // @TODO
                 //                'spells'          => [], // @TODO
                 'clones'        => [],
-            ];
+            ], $npc->health_percentage !== null ? ['healthPercentage' => $npc->health_percentage] : []);
 
             if ($npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                 $dungeonEnemy['isBoss'] = true;

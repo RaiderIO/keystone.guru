@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @property int $display_id
  * @property string $name
  * @property int $base_health
+ * @property int|null $health_percentage Null = 100% health
  * @property int $enemy_forces
  * @property int $enemy_forces_teeming
  * @property string $aggressiveness
@@ -51,9 +52,15 @@ class Npc extends CacheModel implements MappingModelInterface
         'display_id',
         'name',
         'base_health',
+        'health_percentage',
         'enemy_forces',
         'enemy_forces_teeming',
         'aggressiveness',
+        'dangerous',
+        'truesight',
+        'bursting',
+        'bolstering',
+        'sanguine',
     ];
 
     // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
@@ -220,7 +227,7 @@ class Npc extends CacheModel implements MappingModelInterface
     public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
         $thunderingFactor = $thundering && $keyLevel >= 10 ? 1.05 : 1;
-        return round($this->base_health * $this->getScalingFactor($keyLevel, $fortified, $tyrannical, $thundering) * $thunderingFactor);
+        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical) * $thunderingFactor);
     }
 
 

@@ -10,7 +10,8 @@
     'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn',
     'scaledHealthPercentageSelector' => '#scaled_health_percentage',
     'scaledHealthLevelSelector' => '#scaled_health_level',
-    'scaledHealthTypeSelector' => '#scaled_health_type'
+    'scaledHealthTypeSelector' => '#scaled_health_type',
+    'healthPercentageSelector' => '#health_percentage',
 ]])
 
 @section('header-title')
@@ -123,6 +124,12 @@
             </div>
         </div>
         @include('common.forms.form-error', ['key' => 'base_health'])
+    </div>
+
+    <div class="form-group{{ $errors->has('health_percentage') ? ' has-error' : '' }}">
+        {!! Form::label('health_percentage', __('views/admin.npc.edit.health_percentage')) !!}
+        {!! Form::text('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'health_percentage'])
     </div>
 
     <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
