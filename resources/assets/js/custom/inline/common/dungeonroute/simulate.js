@@ -158,14 +158,16 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 max: 40
             });
 
-        let $thunderingClearSecondsSlider = $('#simulate_thundering_clear_seconds')
-            .ionRangeSlider({
-                grid: true,
-                grid_snap: true,
-                type: 'single',
-                min: 0,
-                max: 15
-            });
+        if (this.options.isThundering) {
+            let $thunderingClearSecondsSlider = $('#simulate_thundering_clear_seconds')
+                .ionRangeSlider({
+                    grid: true,
+                    grid_snap: true,
+                    type: 'single',
+                    min: 0,
+                    max: 15
+                });
+        }
 
         let $hpPercentage = $('#simulate_hp_percent')
             .ionRangeSlider({

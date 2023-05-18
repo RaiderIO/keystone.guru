@@ -20,23 +20,22 @@
 </div>
 
 @if($isShrouded)
-<div class="form-group">
-    <label for="simulate_shrouded_bounty_type">
-        {{ __('views/common.modal.simulate.shrouded_bounty_type') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.shrouded_bounty_type_title') }}"></i>
-    </label>
-    <div class="row">
-        <div class="col">
-            {!! Form::select('simulate_shrouded_bounty_type', $shroudedBountyTypes, null, ['id' => 'simulate_shrouded_bounty_type', 'class' => 'form-control selectpicker']) !!}
+    <div class="form-group">
+        <label for="simulate_shrouded_bounty_type">
+            {{ __('views/common.modal.simulate.shrouded_bounty_type') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip"
+               title="{{ __('views/common.modal.simulate.shrouded_bounty_type_title') }}"></i>
+        </label>
+        <div class="row">
+            <div class="col">
+                {!! Form::select('simulate_shrouded_bounty_type', $shroudedBountyTypes, null, ['id' => 'simulate_shrouded_bounty_type', 'class' => 'form-control selectpicker']) !!}
+            </div>
         </div>
     </div>
-</div>
 @else
     {!! Form::hidden('simulate_shrouded_bounty_type', 'none', ['id' => 'simulate_shrouded_bounty_type']) !!}
 @endif
 
-@if($isThundering)
 <div class="form-group row">
     <div class="col">
         <label for="simulate_affix">
@@ -50,22 +49,23 @@
             </div>
         </div>
     </div>
-    <div class="col">
-        <label for="simulate_thundering">
-            {{ __('views/common.modal.simulate.simulate_thundering_clear_seconds') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('views/common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::text('simulate_thundering_clear_seconds', '10', ['id' => 'simulate_thundering_clear_seconds', 'class' => 'form-control']) !!}
+    @if($isThundering)
+        <div class="col">
+            <label for="simulate_thundering">
+                {{ __('views/common.modal.simulate.simulate_thundering_clear_seconds') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip"
+                   title="{{ __('views/common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
+            </label>
+            <div class="row">
+                <div class="col">
+                    {!! Form::text('simulate_thundering_clear_seconds', '10', ['id' => 'simulate_thundering_clear_seconds', 'class' => 'form-control']) !!}
+                </div>
             </div>
         </div>
-    </div>
+    @else
+        {!! Form::hidden('simulate_thundering_clear_seconds', '0', ['id' => 'simulate_thundering_clear_seconds']) !!}
+    @endif
 </div>
-@else
-    {!! Form::hidden('simulate_thundering_clear_seconds', '0', ['id' => 'simulate_thundering_clear_seconds']) !!}
-@endif
 
 <div class="form-group row no-gutters">
     <div class="col">

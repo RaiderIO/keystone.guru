@@ -376,6 +376,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Simulation
+        view()->composer('common.modal.simulate', function (View $view) use ($globalViewVariables) {
+            /** @var Season $currentSeason */
+            $currentSeason     = $globalViewVariables['currentSeason'];
+            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+
+            $view->with('isThundering', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
+        });
+
         view()->composer('common.modal.simulateoptions.default', function (View $view) use ($globalViewVariables) {
             $shroudedBountyTypes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
@@ -394,7 +402,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('isThundering', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
         // Profile pages
