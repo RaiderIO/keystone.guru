@@ -1,12 +1,23 @@
 <?php
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
+/** @var int $routeKeyLevelFrom */
+/** @var int $routeKeyLevelTo */
+
 $teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
 
 // Make sure $model exists
-$dungeonroute    = $dungeonroute ?? null;
-$dungeonSelectId = 'dungeon_id_select';
+$dungeonroute         = $dungeonroute ?? null;
+$dungeonSelectId      = 'dungeon_id_select';
 ?>
+
+@include('common.general.inline', ['path' => 'common/forms/createroute', 'options' => [
+    'levelSelector' => '#dungeon_route_level',
+    'levelMin' => config('keystoneguru.keystone.levels.min'),
+    'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'levelFrom' => $routeKeyLevelFrom,
+    'levelTo' => $routeKeyLevelTo,
+]])
 
 @if(!isset($dungeonroute))
     {{ Form::open(['route' => 'dungeonroute.savenew']) }}
@@ -44,16 +55,18 @@ $dungeonSelectId = 'dungeon_id_select';
             </label>
             {!! Form::textarea('dungeon_route_description', $dungeonroute->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
         </div>
-        <div class="form-group">
-            <label for="dungeon_route_level">
-                {{ __('views/common.forms.createroute.key_levels') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip"
-                   title="{{ __('views/common.forms.createroute.key_levels_title') }}"></i>
-            </label>
-            {!! Form::text('dungeon_route_level', sprintf('%s;%s', $dungeonroute->level_min, $dungeonroute->level_max) ?? '',
-                ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
-        </div>
     @endisset
+    <div class="form-group">
+        <label for="dungeon_route_level">
+            {{ __('views/common.forms.createroute.key_levels') }}
+            <i class="fas fa-info-circle" data-toggle="tooltip"
+               title="{{ __('views/common.forms.createroute.key_levels_title') }}"></i>
+        </label>
+        {!! Form::text('dungeon_route_level', isset($dungeonroute) ?
+                sprintf('%d;%d', $dungeonroute->level_min, $dungeonroute->level_max) ?? '' :
+                sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
+            ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+    </div>
 
     <p>{{ __('views/common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
 

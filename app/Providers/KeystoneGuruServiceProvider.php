@@ -261,6 +261,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
+        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], function (View $view) use ($globalViewVariables) {
+            $routeKeyLevelDefault = '10;15';
+            $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
+
+            $explode = explode(';', $routeKeyLevel);
+            if (count($explode) !== 2) {
+                $routeKeyLevel = $routeKeyLevelDefault;
+                $explode = explode(';', $routeKeyLevel);
+            }
+            $view->with('routeKeyLevelFrom', $explode[0]);
+            $view->with('routeKeyLevelTo', $explode[1]);
+        });
+
         // Displaying a release
         view()->composer('common.release.release', function (View $view) use ($globalViewVariables) {
             $view->with('categories', $globalViewVariables['releaseChangelogCategories']);

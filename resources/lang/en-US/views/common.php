@@ -84,6 +84,8 @@ return [
             'save_settings'                                  => 'Save settings',
         ],
         'createtemporaryroute' => [
+            'key_levels'                => 'Key levels',
+            'key_levels_title'          => 'Indicate for which key levels your route is suited. Setting this will allow the correct calculation enemy health values.',
             'unregistered_user_message' => 'As an unregistered user, all created routes will be temporary routes which expire after %d hours.',
             'registered_user_message'   => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'create_route'              => 'Create route',

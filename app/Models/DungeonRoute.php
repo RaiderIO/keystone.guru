@@ -679,6 +679,12 @@ class DungeonRoute extends Model
         $this->dungeon_difficulty = $request->get('dungeon_difficulty');
 
         $this->title      = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
+
+        $dungeonRouteLevel      = $request->get('dungeon_route_level');
+        $dungeonRouteLevelParts = explode(';', $dungeonRouteLevel);
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
+
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
         $saveResult = $this->save();
@@ -737,8 +743,10 @@ class DungeonRoute extends Model
             $this->title = __($this->dungeon->name);
         }
 
-        $this->level_min = $request->get('level_min', config('keystoneguru.keystone.levels.min'));
-        $this->level_max = $request->get('level_max', config('keystoneguru.keystone.levels.max'));
+        $dungeonRouteLevel      = $request->get('dungeon_route_level');
+        $dungeonRouteLevelParts = explode(';', $dungeonRouteLevel);
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 
         if (User::findOrFail(Auth::id())->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
