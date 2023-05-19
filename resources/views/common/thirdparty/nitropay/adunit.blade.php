@@ -26,6 +26,8 @@ if ($isMobile) {
     nitropayAdRenderedEvents['{{ $id }}'] = (event, count = 0) => {
         let adId = '{{ $id }}';
 
+        console.log(`Loaded ${adId}`);
+
         // Fail-safe just in case
         if (count > 5) {
             // console.log(`Broke out of too much checking for ${adId}`);
@@ -53,10 +55,13 @@ if ($isMobile) {
                 target.appendChild(reportLink);
 
                 @if($map)
-                    // Add a css class to the pulls sidebar so that we know the ads have loaded and its height can be adjusted accordingly
-                    // The height will stay normal if an adblocker is enabled as a result
-                    let pullsSidebar = document.getElementById(`pulls_sidebar`);
-                    pullsSidebar.setAttribute('class', pullsSidebar.getAttribute('class') + ' ad_loaded');
+                // Add a css class to the pulls sidebar so that we know the ads have loaded and its height can be adjusted accordingly
+                // The height will stay normal if an adblocker is enabled as a result
+                let pullsSidebar = document.getElementById(`pulls_sidebar`);
+                let existingClasses = pullsSidebar.getAttribute('class');
+                if (!existingClasses.includes('ad_loaded')) {
+                    pullsSidebar.setAttribute('class', `${existingClasses} ad_loaded`);
+                }
                 @endif
             } else {
                 setTimeout(nitropayAdRenderedEvents[adId], 200, event, ++count);
