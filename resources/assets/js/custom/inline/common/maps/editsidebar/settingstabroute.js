@@ -25,8 +25,6 @@ class SettingsTabRoute extends SettingsTab {
      * @private
      */
     _saveRouteSettings() {
-        let levelSplit = $('#dungeon_route_level').val().split(';');
-
         $.ajax({
             type: 'POST',
             url: `/ajax/${getState().getMapContext().getPublicKey()}`,
@@ -35,8 +33,7 @@ class SettingsTabRoute extends SettingsTab {
                 team_id: $('#team_id_select').val(),
                 dungeon_route_title: $('#dungeon_route_title').val(),
                 dungeon_route_description: $('#dungeon_route_description').val(),
-                level_min: levelSplit[0],
-                level_max: levelSplit[1],
+                dungeon_route_level: $('#dungeon_route_level').val(),
                 // teeming: $('#teeming').is(':checked') ? 1 : 0,
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
@@ -83,6 +80,8 @@ class SettingsTabRoute extends SettingsTab {
                 if ($teeming.length > 0) {
                     mapContext.setTeeming($teeming.is(':checked'));
                 }
+
+                let levelSplit = $('#dungeon_route_level').val().split(';');
 
                 mapContext.setLevelMin(levelSplit[0]);
                 mapContext.setLevelMax(levelSplit[1]);

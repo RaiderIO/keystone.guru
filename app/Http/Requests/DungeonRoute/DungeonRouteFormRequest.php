@@ -3,7 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
-use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Rules\DungeonRouteLevelRule;
 use App\Rules\FactionSelectionRequiredRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -32,8 +32,7 @@ class DungeonRouteFormRequest extends FormRequest
             'dungeon_route_title'       => 'nullable|string|max:80',
             'dungeon_route_description' => 'nullable|string|max:1000',
             'dungeon_route_sandbox'     => 'int',
-            'level_min'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.keystone.levels.min'), config('keystoneguru.keystone.levels.max')),
-            'level_max'                 => sprintf('int|min:%d|max:%d', config('keystoneguru.keystone.levels.min'), config('keystoneguru.keystone.levels.max')),
+            'dungeon_route_level'       => new DungeonRouteLevelRule($this->request),
             // Only active dungeons are allowed
             'dungeon_id'                => ['required', Rule::in(
                 Dungeon::select('dungeons.id')
