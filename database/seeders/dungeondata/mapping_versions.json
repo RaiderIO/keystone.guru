@@ -996,7 +996,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-04-29T08:05:53.000000Z",
         "updated_at": "2023-04-29T08:05:53.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 112,
@@ -1005,7 +1005,7 @@
         "mdt_mapping_hash": "d6f028aa3237546b55aaefa6898b174e",
         "created_at": "2023-05-01T12:19:06.000000Z",
         "updated_at": "2023-05-01T12:19:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 113,
@@ -1014,7 +1014,7 @@
         "mdt_mapping_hash": "7f54b2c5f0b7d21d0461930c4cc0b505",
         "created_at": "2023-05-01T12:19:44.000000Z",
         "updated_at": "2023-05-01T12:19:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 114,
@@ -1023,7 +1023,7 @@
         "mdt_mapping_hash": "21a2613eb47f24774be94e53c19edb48",
         "created_at": "2023-05-01T12:19:51.000000Z",
         "updated_at": "2023-05-01T12:19:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 115,
@@ -1032,7 +1032,7 @@
         "mdt_mapping_hash": "0bf5211502a641a21eca5ef037cc70fa",
         "created_at": "2023-05-01T12:19:59.000000Z",
         "updated_at": "2023-05-01T12:19:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 116,
@@ -1041,7 +1041,7 @@
         "mdt_mapping_hash": "7e8626b145e937e64095239ff298dd90",
         "created_at": "2023-05-01T12:20:06.000000Z",
         "updated_at": "2023-05-01T12:20:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 119,
@@ -1050,7 +1050,7 @@
         "mdt_mapping_hash": "d8099895f28e163eb88f4e6608c57dc6",
         "created_at": "2023-05-01T12:23:48.000000Z",
         "updated_at": "2023-05-01T12:23:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 120,
@@ -1059,7 +1059,7 @@
         "mdt_mapping_hash": "e6ace4ee6de4e2a1a3cec644e47f5735",
         "created_at": "2023-05-01T20:25:05.000000Z",
         "updated_at": "2023-05-01T20:25:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 121,
@@ -1068,7 +1068,7 @@
         "mdt_mapping_hash": "0f0d99b1eebeabe98a582728ecb3bc32",
         "created_at": "2023-05-01T21:18:34.000000Z",
         "updated_at": "2023-05-01T21:18:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 122,
@@ -1077,7 +1077,7 @@
         "mdt_mapping_hash": "0ef147cd7a148480ef612eea560096c7",
         "created_at": "2023-05-03T09:04:31.000000Z",
         "updated_at": "2023-05-03T09:04:31.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 123,
@@ -1086,7 +1086,7 @@
         "mdt_mapping_hash": "9d7d9a8da89b05a58b0befc8c1fabb2f",
         "created_at": "2023-05-03T09:04:39.000000Z",
         "updated_at": "2023-05-03T09:04:39.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 124,
@@ -1095,7 +1095,7 @@
         "mdt_mapping_hash": "11e9b472a4bc099477cea2cc415753b5",
         "created_at": "2023-05-03T09:04:54.000000Z",
         "updated_at": "2023-05-03T09:04:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 125,
@@ -1104,7 +1104,7 @@
         "mdt_mapping_hash": "f6384b8ace0501b02e2aebe43d6b25e3",
         "created_at": "2023-05-03T09:05:00.000000Z",
         "updated_at": "2023-05-03T09:05:00.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 126,
@@ -1113,7 +1113,7 @@
         "mdt_mapping_hash": "31db61b7c93e3487301d6d73a7fd6501",
         "created_at": "2023-05-03T09:05:06.000000Z",
         "updated_at": "2023-05-03T09:05:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 127,
@@ -1122,7 +1122,7 @@
         "mdt_mapping_hash": "ecc0113564d8a122c56d5965005c0ddb",
         "created_at": "2023-05-03T09:05:13.000000Z",
         "updated_at": "2023-05-03T09:05:13.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 128,
@@ -1131,7 +1131,7 @@
         "mdt_mapping_hash": "62d6a88763cf2a6182dcba0c94e8933d",
         "created_at": "2023-05-12T11:15:43.000000Z",
         "updated_at": "2023-05-12T11:15:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 129,
@@ -1140,7 +1140,7 @@
         "mdt_mapping_hash": "38b4d072c23b5b17daf39dec925ab793",
         "created_at": "2023-05-13T11:50:02.000000Z",
         "updated_at": "2023-05-13T11:50:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 130,
@@ -1149,7 +1149,7 @@
         "mdt_mapping_hash": "079daf60afb8bd256781cc881f3b51ea",
         "created_at": "2023-05-14T06:12:41.000000Z",
         "updated_at": "2023-05-14T06:12:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 131,
@@ -1158,7 +1158,7 @@
         "mdt_mapping_hash": "6bb964c08de2270bfe537063dc707676",
         "created_at": "2023-05-14T06:12:49.000000Z",
         "updated_at": "2023-05-14T06:12:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 132,
@@ -1167,7 +1167,7 @@
         "mdt_mapping_hash": "5ae58bbcd0e5df357e5075efec413481",
         "created_at": "2023-05-14T06:12:58.000000Z",
         "updated_at": "2023-05-14T06:12:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 133,
@@ -1176,7 +1176,7 @@
         "mdt_mapping_hash": "cc21a3be2872d63ad19b1422ef88d382",
         "created_at": "2023-05-14T06:13:06.000000Z",
         "updated_at": "2023-05-14T06:13:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 134,
@@ -1185,7 +1185,7 @@
         "mdt_mapping_hash": "dbb0d4afcc6a9baa17e35760db859118",
         "created_at": "2023-05-14T06:13:14.000000Z",
         "updated_at": "2023-05-14T06:13:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 135,
@@ -1194,7 +1194,7 @@
         "mdt_mapping_hash": "e8bb158faad29b3ccc2adec0c1990e12",
         "created_at": "2023-05-14T06:13:22.000000Z",
         "updated_at": "2023-05-14T06:13:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 136,
@@ -1203,7 +1203,7 @@
         "mdt_mapping_hash": "d905d49a1931819375fb85c149eed1e5",
         "created_at": "2023-05-14T06:13:28.000000Z",
         "updated_at": "2023-05-14T06:13:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 137,
@@ -1212,7 +1212,7 @@
         "mdt_mapping_hash": "ea256b86cb57e3b18b9cd1c2d7b560a7",
         "created_at": "2023-05-14T06:13:35.000000Z",
         "updated_at": "2023-05-14T06:13:35.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 138,
@@ -1221,7 +1221,7 @@
         "mdt_mapping_hash": "fbf3da0b5f0af37bacfe1387a95828b3",
         "created_at": "2023-05-15T12:28:19.000000Z",
         "updated_at": "2023-05-15T12:28:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 139,
@@ -1230,7 +1230,7 @@
         "mdt_mapping_hash": "1b5c4970a79e5c4f7eda74eb28b95ea0",
         "created_at": "2023-05-16T21:27:26.000000Z",
         "updated_at": "2023-05-16T21:27:26.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 140,
@@ -1239,7 +1239,7 @@
         "mdt_mapping_hash": "6f21e83a29c739a619f6c444324b0bfd",
         "created_at": "2023-05-16T21:27:31.000000Z",
         "updated_at": "2023-05-16T21:27:31.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 141,
@@ -1248,7 +1248,7 @@
         "mdt_mapping_hash": "a580dda259a21cccb33cc5df95e3126b",
         "created_at": "2023-05-16T21:27:32.000000Z",
         "updated_at": "2023-05-16T21:27:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 142,
@@ -1257,6 +1257,15 @@
         "mdt_mapping_hash": "0a90b9ddac6148cad80f98a59380c22c",
         "created_at": "2023-05-16T21:27:36.000000Z",
         "updated_at": "2023-05-16T21:27:36.000000Z",
+        "merged": true
+    },
+    {
+        "id": 143,
+        "dungeon_id": 10,
+        "version": 6,
+        "mdt_mapping_hash": "903a178fe1d239f03d816ce2d9791b83",
+        "created_at": "2023-05-19T10:57:14.000000Z",
+        "updated_at": "2023-05-19T10:57:14.000000Z",
         "merged": false
     }
 ]
