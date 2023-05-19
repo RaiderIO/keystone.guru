@@ -112,6 +112,10 @@ class MappingService implements MappingServiceInterface
             foreach ($currentMappingVersion->mapIcons as $mapIcon) {
                 $mapIcon->cloneForNewMappingVersion($newMappingVersion);
             }
+
+            foreach ($currentMappingVersion->mountableAreas as $mountableArea) {
+                $mountableArea->cloneForNewMappingVersion($newMappingVersion);
+            }
         }
 
         return $newMappingVersion;
