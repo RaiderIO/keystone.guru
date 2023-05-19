@@ -13,10 +13,10 @@
 .affix_icon_reaping, .affix_icon_relentless, .affix_icon_sanguine, .affix_icon_shrouded, .affix_icon_skittish,
 .affix_icon_spiteful, .affix_icon_storming, .affix_icon_thundering, .affix_icon_teeming, .affix_icon_tormented,
 .affix_icon_tyrannical, .affix_icon_unknown, .affix_icon_volcanic, .affix_icon_afflicted, .affix_icon_entangling,
-.affix_icon_incorporeal{
+.affix_icon_incorporeal {
     max-width: 100% !important;
     background-size: 100% !important;
-    background-image: url('/images/affixes/affixes.png');
+    background-image: url('/images/affixes/affixes-df-s2.png');
 }
 
 .affix_icon_awakened {
