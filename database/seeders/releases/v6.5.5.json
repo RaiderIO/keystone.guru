@@ -1,0 +1,39 @@
+{
+    "id": 178,
+    "release_changelog_id": 185,
+    "version": "v6.5.5",
+    "title": "Neltharion's Lair mapping correction",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-19T10:52:44+00:00",
+    "updated_at": "2023-05-19T10:52:44+00:00",
+    "changelog": {
+        "id": 185,
+        "release_id": 178,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 185,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Neltharion's Lair mapping updated (see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/465).",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 185,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1739,
+                "change": "When new affixes are added, a hard-reload is no longer required to fetch the latest affixes image. If you didn't do this you'd see the wrong images for the affixes until you did.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

@@ -199,7 +199,7 @@ if ($isAdmin) {
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
         */?>
     @if(!$adFree && $showAds && !$dungeon->speedrun_enabled)
-        <footer class="fixed-bottom container p-0 m-0 mr-2" style="width: 300px; position: absolute; left: auto; right: 0; bottom: 0;">
+        <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
             @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
         </footer>
     @endif

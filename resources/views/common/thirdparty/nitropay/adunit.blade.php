@@ -3,7 +3,7 @@
 /** @var string $id */
 $id   = 'nitropay-' . $id;
 $type = $type ?? 'responsive';
-$map = $map ?? false;
+$map  = $map ?? false;
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
@@ -191,10 +191,10 @@ if ($isMobile) {
         @endif
     @elseif( $type === 'footer_map_right' && $map && !$isMobile )
         <!-- Footer ad unit -->
-        @php($height = 250)
         <div id="{{ $id }}" class="ad_block_me"></div>
 
         <script type="text/javascript">
+            nitropayAdSizes['{{ $id }}'] = window.innerHeight > 1000 ? ['336', '280'] : ['300', '250'];
             window['nitroAds'].createAd('{{ $id }}', {
                 "refreshLimit": 20,
                 "refreshTime": 60,
@@ -202,10 +202,7 @@ if ($isMobile) {
                 "refreshVisibleOnly": true,
                 "demo": {{$demo}},
                 "sizes": [
-                    [
-                        "300",
-                        "250"
-                    ]
+                    nitropayAdSizes['{{ $id }}']
                 ],
                 "report": {
                     "enabled": true,
@@ -214,6 +211,12 @@ if ($isMobile) {
                 },
                 "mediaQuery": "(min-width: 1025px)"
             });
+
+            // Bit of a hack to make the bigger ad fit properly
+            if (window.innerHeight > 1000) {
+                var adContainer = document.getElementsByClassName('map_ad_unit_footer_right')[0];
+                adContainer.style = 'width: 336px !important';
+            }
         </script>
     @endif
 </div>

@@ -386,6 +386,14 @@ html, body, #map, #app, .wrapper {
     flex: 1 1 auto;
 }
 
+.map_ad_unit_footer_right {
+    width: 300px !important;
+    position: absolute !important;
+    left: auto !important;
+    right: 0 !important;
+    bottom: 0 !important;
+}
+
 .pull_settings_tools .pickr {
     height: 100%;
 }
