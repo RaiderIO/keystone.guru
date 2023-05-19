@@ -184,7 +184,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                     );
             }
 
-
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
                 $view->with('viewName', $view->getName());
