@@ -47,6 +47,6 @@ class DungeonRouteLevelRule implements Rule
      */
     public function message()
     {
-        return __('rules.faction_selection_required_rule.message');
+        return __('rules.dungeon_route_level_rule.message');
     }
 }
