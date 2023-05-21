@@ -8,12 +8,12 @@
         "key": "arcway",
         "name": "dungeons.legion.arcway.name",
         "slug": "arcway",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 392,
         "enemy_forces_required_teeming": 466,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -44,12 +44,12 @@
         "key": "blackrookhold",
         "name": "dungeons.legion.black_rook_hold.name",
         "slug": "black-rook-hold",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 6,
         "floors": [
             {
@@ -231,12 +231,12 @@
         "key": "cathedralofeternalnight",
         "name": "dungeons.legion.cathedral_of_eternal_night.name",
         "slug": "cathedral-of-eternal-night",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 5,
         "floors": [
             {
@@ -335,12 +335,12 @@
         "key": "courtofstars",
         "name": "dungeons.legion.court_of_stars.name",
         "slug": "court-of-stars",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 190,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -371,12 +371,12 @@
         "key": "darkheartthicket",
         "name": "dungeons.legion.darkheart_thicket.name",
         "slug": "darkheart-thicket",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 280,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -407,12 +407,12 @@
         "key": "eyeofazshara",
         "name": "dungeons.legion.eye_of_azshara.name",
         "slug": "eye-of-azshara",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 206,
         "enemy_forces_required_teeming": 242,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -443,12 +443,12 @@
         "key": "hallsofvalor",
         "name": "dungeons.legion.halls_of_valor.name",
         "slug": "halls-of-valor",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 270,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -540,12 +540,12 @@
         "key": "lowerkarazhan",
         "name": "dungeons.legion.lower_karazhan.name",
         "slug": "lower-karazhan",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 4,
         "enemy_forces_shrouded_zul_gamux": 12,
         "timer_max_seconds": 2340,
-        "speedrun_enabled": 0,
         "floor_count": 6,
         "floors": [
             {
@@ -775,12 +775,12 @@
         "key": "mawofsouls",
         "name": "dungeons.legion.maw_of_souls.name",
         "slug": "maw-of-souls",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -872,12 +872,12 @@
         "key": "neltharionslair",
         "name": "dungeons.legion.neltharions_lair.name",
         "slug": "neltharions-lair",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -908,12 +908,12 @@
         "key": "upperkarazhan",
         "name": "dungeons.legion.upper_karazhan.name",
         "slug": "upper-karazhan",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 169,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 6,
         "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 2100,
-        "speedrun_enabled": 0,
         "floor_count": 8,
         "floors": [
             {
@@ -1155,12 +1155,12 @@
         "key": "theseatofthetriumvirate",
         "name": "dungeons.legion.the_seat_of_the_triumvirate.name",
         "slug": "the-seat-of-the-triumvirate",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -1191,12 +1191,12 @@
         "key": "vaultofthewardens",
         "name": "dungeons.legion.vault_of_the_wardens.name",
         "slug": "vault-of-the-wardens",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 210,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -1288,12 +1288,12 @@
         "key": "ataldazar",
         "name": "dungeons.bfa.atal_dazar.name",
         "slug": "ataldazar",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -1355,12 +1355,12 @@
         "key": "freehold",
         "name": "dungeons.bfa.freehold.name",
         "slug": "freehold",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 313,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -1391,12 +1391,12 @@
         "key": "kingsrest",
         "name": "dungeons.bfa.kings_rest.name",
         "slug": "kings-rest",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2520,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -1427,12 +1427,12 @@
         "key": "shrineofthestorm",
         "name": "dungeons.bfa.shrine_of_the_storm.name",
         "slug": "shrine-of-the-storm",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2520,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -1494,12 +1494,12 @@
         "key": "siegeofboralus",
         "name": "dungeons.bfa.siege_of_boralus.name",
         "slug": "siege-of-boralus",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -1530,12 +1530,12 @@
         "key": "templeofsethraliss",
         "name": "dungeons.bfa.temple_of_sethraliss.name",
         "slug": "temple-of-sethraliss",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -1597,12 +1597,12 @@
         "key": "themotherlode",
         "name": "dungeons.bfa.the_motherlode.name",
         "slug": "the-motherlode",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -1633,12 +1633,12 @@
         "key": "theunderrot",
         "name": "dungeons.bfa.the_underrot.name",
         "slug": "the-underrot",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 320,
         "enemy_forces_required_teeming": 286,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -1700,12 +1700,12 @@
         "key": "toldagor",
         "name": "dungeons.bfa.tol_dagor.name",
         "slug": "tol-dagor",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
-        "speedrun_enabled": 0,
         "floor_count": 7,
         "floors": [
             {
@@ -1917,12 +1917,12 @@
         "key": "waycrestmanor",
         "name": "dungeons.bfa.waycrest_manor.name",
         "slug": "waycrest-manor",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
-        "speedrun_enabled": 0,
         "floor_count": 5,
         "floors": [
             {
@@ -2074,12 +2074,12 @@
         "key": "mechagonjunkyard",
         "name": "dungeons.bfa.mechagon_junkyard.name",
         "slug": "mechagon-junkyard",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
         "enemy_forces_shrouded": 7,
         "enemy_forces_shrouded_zul_gamux": 21,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -2141,12 +2141,12 @@
         "key": "mechagonworkshop",
         "name": "dungeons.bfa.mechagon_workshop.name",
         "slug": "mechagon-workshop",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
         "enemy_forces_shrouded": 3,
         "enemy_forces_shrouded_zul_gamux": 9,
         "timer_max_seconds": 1920,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -2238,12 +2238,12 @@
         "key": "orgrimmarhorrificvision",
         "name": "dungeons.bfa.orgrimmar_horrific_vision.name",
         "slug": "orgrimmar-horrific-vision",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -2305,12 +2305,12 @@
         "key": "stormwindcityhorrificvision",
         "name": "dungeons.bfa.stormwind_horrific_vision.name",
         "slug": "stormwind-city-horrific-vision",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -2341,12 +2341,12 @@
         "key": "deotherside_ardenweald",
         "name": "dungeons.shadowlands.de_other_side.name",
         "slug": "de-other-side",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2580,
-        "speedrun_enabled": 0,
         "floor_count": 4,
         "floors": [
             {
@@ -2468,12 +2468,12 @@
         "key": "hallsofatonement_a",
         "name": "dungeons.shadowlands.halls_of_atonement.name",
         "slug": "halls-of-atonement",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1860,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -2565,12 +2565,12 @@
         "key": "mistsoftirnescithe",
         "name": "dungeons.shadowlands.mists_of_tirna_scithe.name",
         "slug": "mists-of-tirna-scithe",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -2601,12 +2601,12 @@
         "key": "plaguefall",
         "name": "dungeons.shadowlands.plaguefall.name",
         "slug": "plaguefall",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -2668,12 +2668,12 @@
         "key": "sanguinedepths_a",
         "name": "dungeons.shadowlands.sanguine_depths.name",
         "slug": "sanguine-depths",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 364,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2460,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -2735,12 +2735,12 @@
         "key": "spiresofascension_a",
         "name": "dungeons.shadowlands.spires_of_ascension.name",
         "slug": "spires-of-ascension",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2340,
-        "speedrun_enabled": 0,
         "floor_count": 4,
         "floors": [
             {
@@ -2862,12 +2862,12 @@
         "key": "necroticwake_a",
         "name": "dungeons.shadowlands.the_necrotic_wake.name",
         "slug": "the-necrotic-wake",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 283,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -2959,12 +2959,12 @@
         "key": "theaterofpain",
         "name": "dungeons.shadowlands.theater_of_pain.name",
         "slug": "theater-of-pain",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 5,
         "floors": [
             {
@@ -3122,12 +3122,12 @@
         "key": "tazaveshstreetsofwonder",
         "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
         "slug": "tazavesh-streets-of-wonder",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 290,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 3,
         "enemy_forces_shrouded_zul_gamux": 9,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 4,
         "floors": [
             {
@@ -3249,12 +3249,12 @@
         "key": "tazaveshsoleahsgambit",
         "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
         "slug": "tazavesh-so-leahs-gambit",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 346,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 6,
         "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 4,
         "floors": [
             {
@@ -3376,12 +3376,12 @@
         "key": "auchindoun",
         "name": "dungeons.wod.auchindoun.name",
         "slug": "auchindoun",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -3394,12 +3394,12 @@
         "key": "bloodmaul_slag_mines",
         "name": "dungeons.wod.bloodmaul_slag_mines.name",
         "slug": "bloodmaul-slag-mines",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -3412,12 +3412,12 @@
         "key": "irondocks",
         "name": "dungeons.wod.iron_docks.name",
         "slug": "iron-docks",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 4,
         "enemy_forces_shrouded_zul_gamux": 12,
         "timer_max_seconds": 1920,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3448,12 +3448,12 @@
         "key": "grimraildepot",
         "name": "dungeons.wod.grimrail_depot.name",
         "slug": "grimrail-depot",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 6,
         "enemy_forces_shrouded_zul_gamux": 18,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 4,
         "floors": [
             {
@@ -3575,12 +3575,12 @@
         "key": "ahnkahet",
         "name": "dungeons.wotlk.ahn_kahet_the_old_kingdom.name",
         "slug": "ahn-kahet-the-old-kingdom",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3611,12 +3611,12 @@
         "key": "azjolnerub",
         "name": "dungeons.wotlk.azjol_nerub.name",
         "slug": "azjol-nerub",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -3708,12 +3708,12 @@
         "key": "draktharonkeep",
         "name": "dungeons.wotlk.drak_tharon_keep.name",
         "slug": "drak-tharon-keep",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -3775,12 +3775,12 @@
         "key": "gundrak",
         "name": "dungeons.wotlk.gundrak.name",
         "slug": "gundrak",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3811,12 +3811,12 @@
         "key": "hallsoflightning",
         "name": "dungeons.wotlk.halls_of_lightning.name",
         "slug": "halls-of-lightning",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -3878,12 +3878,12 @@
         "key": "hallsofreflection",
         "name": "dungeons.wotlk.halls_of_reflection.name",
         "slug": "halls-of-reflection",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3914,12 +3914,12 @@
         "key": "hallsofstone",
         "name": "dungeons.wotlk.halls_of_stone.name",
         "slug": "halls-of-stone",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3950,12 +3950,12 @@
         "key": "pitofsaron",
         "name": "dungeons.wotlk.pit_of_saron.name",
         "slug": "pit-of-saron",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -3986,12 +3986,12 @@
         "key": "thecullingofstratholme",
         "name": "dungeons.wotlk.the_culling_of_stratholme.name",
         "slug": "the-culling-of-stratholme",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -4053,12 +4053,12 @@
         "key": "theforgeofsouls",
         "name": "dungeons.wotlk.the_forge_of_souls.name",
         "slug": "the-forge-of-souls",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -4089,12 +4089,12 @@
         "key": "thenexus",
         "name": "dungeons.wotlk.the_nexus.name",
         "slug": "the-nexus",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -4125,12 +4125,12 @@
         "key": "theoculus",
         "name": "dungeons.wotlk.the_oculus.name",
         "slug": "the-oculus",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 5,
         "floors": [
             {
@@ -4282,12 +4282,12 @@
         "key": "theviolethold",
         "name": "dungeons.wotlk.the_violet_hold.name",
         "slug": "the-violet-hold",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -4318,12 +4318,12 @@
         "key": "trialofthechampion",
         "name": "dungeons.wotlk.trial_of_the_champion.name",
         "slug": "trial-of-the-champion",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -4354,12 +4354,12 @@
         "key": "utgardekeep",
         "name": "dungeons.wotlk.utgarde_keep.name",
         "slug": "utgarde-keep",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -4451,12 +4451,12 @@
         "key": "utgardepinnacle",
         "name": "dungeons.wotlk.utgarde_pinnacle.name",
         "slug": "utgarde-pinnacle",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -4518,12 +4518,12 @@
         "key": "icecrowncitadel",
         "name": "dungeons.wotlk.icecrown_citadel.name",
         "slug": "icecrown-citadel",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -4536,12 +4536,12 @@
         "key": "onyxiaslair",
         "name": "dungeons.wotlk.onyxias_lair.name",
         "slug": "onyxias-lair",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -4554,12 +4554,12 @@
         "key": "naxxramas",
         "name": "dungeons.wotlk.naxxramas.name",
         "slug": "naxxramas",
+        "speedrun_enabled": 1,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 1,
         "floor_count": 6,
         "floors": [
             {
@@ -5134,12 +5134,12 @@
         "key": "theargentcoliseum",
         "name": "dungeons.wotlk.crusaders_coliseum_trial_of_the_crusader.name",
         "slug": "crusaders-coliseum-trial-of-the-crusader",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -5152,12 +5152,12 @@
         "key": "theeyeofeternity",
         "name": "dungeons.wotlk.the_eye_of_eternity.name",
         "slug": "the-eye-of-eternity",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -5170,12 +5170,12 @@
         "key": "theobsidiansanctum",
         "name": "dungeons.wotlk.the_obsidian_sanctum.name",
         "slug": "the-obsidian-sanctum",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -5188,12 +5188,12 @@
         "key": "therubysanctum",
         "name": "dungeons.wotlk.the_ruby_sanctum.name",
         "slug": "the-ruby-sanctum",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -5206,12 +5206,12 @@
         "key": "ulduar",
         "name": "dungeons.wotlk.ulduar.name",
         "slug": "ulduar",
+        "speedrun_enabled": 1,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 1,
         "floor_count": 6,
         "floors": [
             {
@@ -5961,12 +5961,12 @@
         "key": "vaultofarchavon",
         "name": "dungeons.wotlk.vault_of_archavon.name",
         "slug": "vault-of-archavon",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 0,
-        "speedrun_enabled": 0,
         "floor_count": 0,
         "floors": []
     },
@@ -5979,12 +5979,12 @@
         "key": "dragonacademy",
         "name": "dungeons.dragonflight.algeth_ar_academy.name",
         "slug": "algeth-ar-academy",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 450,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1920,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -6076,12 +6076,12 @@
         "key": "brackenhide",
         "name": "dungeons.dragonflight.brackenhide_hollow.name",
         "slug": "brackenhide-hollow",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 723,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2160,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -6143,12 +6143,12 @@
         "key": "hallsofinfusion",
         "name": "dungeons.dragonflight.halls_of_infusion.name",
         "slug": "halls-of-infusion",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 435,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2280,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -6210,12 +6210,12 @@
         "key": "neltharus",
         "name": "dungeons.dragonflight.neltharus.name",
         "slug": "neltharus",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 525,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2100,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -6277,12 +6277,12 @@
         "key": "nokhudoffensive",
         "name": "dungeons.dragonflight.the_nokhud_offensive.name",
         "slug": "the-nokhud-offensive",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 520,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2400,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -6313,12 +6313,12 @@
         "key": "rubylifepools",
         "name": "dungeons.dragonflight.ruby_life_pools.name",
         "slug": "ruby-life-pools",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 660,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -6380,12 +6380,12 @@
         "key": "theazurevault",
         "name": "dungeons.dragonflight.the_azure_vault.name",
         "slug": "the-azure-vault",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 410,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2040,
-        "speedrun_enabled": 0,
         "floor_count": 5,
         "floors": [
             {
@@ -6537,12 +6537,12 @@
         "key": "uldamanlegacyoftyr",
         "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.name",
         "slug": "uldaman-legacy-of-tyr",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 575,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 2400,
-        "speedrun_enabled": 0,
         "floor_count": 2,
         "floors": [
             {
@@ -6604,12 +6604,12 @@
         "key": "shadowmoonburialgrounds",
         "name": "dungeons.wod.shadowmoon_burial_grounds.name",
         "slug": "shadowmoon-burial-grounds",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 300,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1980,
-        "speedrun_enabled": 0,
         "floor_count": 3,
         "floors": [
             {
@@ -6701,12 +6701,12 @@
         "key": "templeofthejadeserpent",
         "name": "dungeons.mop.temple_of_the_jade_serpent.name",
         "slug": "temple-of-the-jade-serpent",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 410,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
@@ -6737,12 +6737,12 @@
         "key": "skywall",
         "name": "dungeons.cata.the_vortex_pinnacle.name",
         "slug": "the-vortex-pinnacle",
+        "speedrun_enabled": 0,
         "enemy_forces_required": 420,
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": 0,
         "enemy_forces_shrouded_zul_gamux": 0,
         "timer_max_seconds": 1800,
-        "speedrun_enabled": 0,
         "floor_count": 1,
         "floors": [
             {
