@@ -562,8 +562,8 @@ class DungeonRoute extends Model
      */
     public function getEnemyForcesPercentage(): int
     {
-        if ($this->dungeon->enemy_forces_required > 0) {
-            return (int)(($this->enemy_forces / $this->dungeon->enemy_forces_required) * 100);
+        if ($this->mappingVersion->enemy_forces_required > 0) {
+            return (int)(($this->enemy_forces / $this->mappingVersion->enemy_forces_required) * 100);
         } else {
             return 0;
         }
@@ -574,7 +574,7 @@ class DungeonRoute extends Model
      */
     public function getEnemyForcesTooMuch(): int
     {
-        return max(0, $this->enemy_forces - ($this->teeming ? $this->dungeon->enemy_forces_required_teeming : $this->dungeon->enemy_forces_required));
+        return max(0, $this->enemy_forces - ($this->teeming ? $this->mappingVersion->enemy_forces_required_teeming : $this->mappingVersion->enemy_forces_required));
     }
 
     /**

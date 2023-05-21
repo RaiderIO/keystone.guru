@@ -97,9 +97,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                 } catch (Exception $exception) {
                     throw new ImportWarning('Awakened Obelisks',
-                        sprintf(
-                            'Cannot find Awakened Obelisks for your dungeon/week combination. Your Awakened Obelisk skips will not be imported.'
-                        )
+                        __('logic.mdt.io.import_string.unable_to_find_awakened_obelisks')
                     );
                 }
 
@@ -114,10 +112,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                         if (isset($mdtXy['sublevel'])) {
                             throw new ImportWarning('Awakened Obelisks',
-                                sprintf(
-                                    'Unable to import Awakened Obelisk %s, it is on a different floor than the Obelisk itself. Keystone.guru does not support this at this time.',
-                                    $obeliskMapIcon->mapicontype->name
-                                )
+                                __('logic.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor', ['name' => $obeliskMapIcon->mapicontype->name])
                             );
                         }
 
@@ -213,7 +208,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 
         // Required for calculating when to add prideful enemies
-        $enemyForcesRequired = $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required;
+        $enemyForcesRequired = $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required;
 
         // For each pull the user created
         $newPullIndex = 1;
@@ -357,9 +352,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                                 // Keep track of our enemy forces
                                 if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded;
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->mappingVersion->enemy_forces_shrouded;
                                 } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->dungeon->enemy_forces_shrouded_zul_gamux;
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->mappingVersion->enemy_forces_shrouded_zul_gamux;
                                 } else {
                                     $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
                                 }

@@ -40,7 +40,7 @@ class BattleNetLoginController extends OAuthLoginController
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
-        if (GameServerRegion::where('short', $region)->count() === 0) {
+        if (GameServerRegion::where('short', $region)->doesntExist()) {
             abort(404);
         }
 

@@ -55,13 +55,8 @@ class MDTImportController extends Controller
                 $warningResult[] = $warning->toArray();
             }
 
-            
-            
-                
-            $currentSeason = $seasonService->getCurrentSeason($dungeonRoute->dungeon->expansion);
-            
+            $currentSeason               = $seasonService->getCurrentSeason($dungeonRoute->dungeon->expansion);
             $currentAffixGroupForDungeon = optional($currentSeason)->getCurrentAffixGroup();
-
 
             $result = [
                 'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
@@ -72,7 +67,7 @@ class MDTImportController extends Controller
                 'lines'                      => $dungeonRoute->brushlines->count(),
                 'notes'                      => $dungeonRoute->mapicons->count(),
                 'enemy_forces'               => $dungeonRoute->enemy_forces ?? 0,
-                'enemy_forces_max'           => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
+                'enemy_forces_max'           => $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required,
                 'warnings'                   => $warningResult,
             ];
 

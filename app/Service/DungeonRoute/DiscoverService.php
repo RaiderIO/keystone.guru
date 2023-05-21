@@ -69,7 +69,8 @@ class DiscoverService extends BaseDiscoverService
                     )
                     ->orderBy('weightedPopularity', 'desc');
             })
-            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
             // We want the most recent season's routes showing up for this if possible
             ->joinSub(
@@ -89,8 +90,8 @@ class DiscoverService extends BaseDiscoverService
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
-            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->groupBy('dungeon_routes.id');
     }
@@ -109,19 +110,20 @@ class DiscoverService extends BaseDiscoverService
             ->with(['author', 'affixes', 'ratings'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
-            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
             })
             ->when($this->season !== null, function (Builder $builder) {
-                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
+                $builder->join('season_dungeons', 'season_dungeons.dungeon_id', 'dungeons.id')
                     ->where('season_dungeons.season_id', $this->season->id);
             })
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('dungeon_routes.expires_at')
-            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)')
+            ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)')
             ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');
     }
