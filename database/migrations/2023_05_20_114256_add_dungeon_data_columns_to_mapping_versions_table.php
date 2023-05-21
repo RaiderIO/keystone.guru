@@ -14,11 +14,11 @@ class AddDungeonDataColumnsToMappingVersionsTable extends Migration
     public function up()
     {
         Schema::table('mapping_versions', function (Blueprint $table) {
+            $table->integer('timer_max_seconds')->after('version')->default(0);
+            $table->integer('enemy_forces_shrouded_zul_gamux')->after('version')->nullable()->default(null);
+            $table->integer('enemy_forces_shrouded')->after('version')->nullable()->default(null);
+            $table->integer('enemy_forces_required_teeming')->after('version')->nullable()->default(null);
             $table->integer('enemy_forces_required')->after('version')->default(0);
-            $table->integer('enemy_forces_required_teeming')->after('enemy_forces_required')->nullable()->default(null);
-            $table->integer('enemy_forces_shrouded')->after('enemy_forces_required_teeming')->nullable()->default(null);
-            $table->integer('enemy_forces_shrouded_zul_gamux')->after('enemy_forces_shrouded')->nullable()->default(null);
-            $table->integer('timer_max_seconds')->after('enemy_forces_shrouded_zul_gamux')->default(0);
         });
     }
 

@@ -2,6 +2,7 @@
 /** @var $theme string */
 /** @var $dungeonroute \App\Models\DungeonRoute|null */
 /** @var $livesession \App\Models\LiveSession|null */
+/** @var $mappingVersion \App\Models\Mapping\MappingVersion|null */
 /** @var $edit bool */
 $echo        = $echo ?? false;
 $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
@@ -188,6 +189,19 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </li>
                     @endif
+                @else
+                    <li class="nav-item mr-2">
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <div class="col">
+                                    <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                            data-target="#edit_mapping_version_modal">
+                                        <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_mapping_version') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 @endisset
                 <li class="nav-item">
                     <div class="d-flex h-100">
@@ -302,5 +316,9 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @endif
             </div>
         </div>
+    @endcomponent
+@elseif(isset($mappingVersion))
+    @component('common.general.modal', ['id' => 'edit_mapping_version_modal', 'size' => 'xl'])
+        @include('common.modal.mappingversion', ['mappingVersion' => $mappingVersion])
     @endcomponent
 @endisset

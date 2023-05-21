@@ -33,11 +33,6 @@ class DungeonFormRequest extends FormRequest
             'name'                            => ['required', Rule::unique('dungeons', 'name')->ignore($this->get('name'), 'name')],
             'key'                             => ['required', Rule::unique('dungeons', 'key')->ignore($this->get('key'), 'key')],
             'slug'                            => ['required', Rule::unique('dungeons', 'slug')->ignore($this->get('slug'), 'slug')],
-            'enemy_forces_required'           => 'int',
-            'enemy_forces_required_teeming'   => 'int',
-            'enemy_forces_shrouded'           => 'int',
-            'enemy_forces_shrouded_zul_gamux' => 'int',
-            'timer_max_seconds'               => 'int',
         ];
     }
 }

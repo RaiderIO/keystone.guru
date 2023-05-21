@@ -140,6 +140,7 @@ if ($isAdmin) {
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession,
+            'mappingVersion' => $mappingVersion,
         ])
     @endif
 
