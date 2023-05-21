@@ -20,6 +20,11 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $version
+ * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
+ * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
+ * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
+ * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
  * @property bool $merged Not saved in the database
  *
@@ -42,6 +47,11 @@ class MappingVersion extends Model
         'id',
         'dungeon_id',
         'version',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
         'mdt_mapping_hash',
         'merged',
     ];
@@ -49,6 +59,11 @@ class MappingVersion extends Model
     protected $fillable = [
         'dungeon_id',
         'version',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
         'mdt_mapping_hash',
         'updated_at',
         'created_at',
@@ -143,7 +158,7 @@ class MappingVersion extends Model
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
         static::created(function (MappingVersion $newMappingVersion) {
             /** @var Collection|MappingVersion[] $existingMappingVersions */
-            $existingMappingVersions = $newMappingVersion->dungeon->mappingversions()->get();
+            $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
 
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {

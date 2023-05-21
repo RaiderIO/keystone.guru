@@ -86,9 +86,9 @@ class APIDungeonRouteController extends Controller
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
+            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
-            ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -111,8 +111,8 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
         }
 
         $tags = $request->get('tags', []);
@@ -221,7 +221,7 @@ class APIDungeonRouteController extends Controller
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
         // May be modified/adjusted later on
-        $selectRaw = 'dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required';
+        $selectRaw = 'dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required';
         $season    = null;
         $expansion = null;
 
@@ -234,7 +234,8 @@ class APIDungeonRouteController extends Controller
         }
 
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
-            ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('dungeons', 'dungeon_routes.dungeon_id',  'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             ->when($expansion !== null, function (Builder $builder) use ($expansion) {
                 return $builder->where('dungeons.expansion_id', $expansion->id);
             })
@@ -306,8 +307,8 @@ class APIDungeonRouteController extends Controller
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
-            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > dungeons.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > dungeons.enemy_forces_required)');
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
         }
 
         // User handling

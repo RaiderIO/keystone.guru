@@ -33,6 +33,8 @@ return [
                 'unable_to_find_awakened_enemy_for_final_boss_details' => 'This indicates Keystone.guru has a mapping error that will need to be corrected. Send the above warning to me and I\'ll correct it.',
                 'unable_to_find_enemies_pull_skipped'                  => 'Failure to find enemies resulted in a pull being skipped.',
                 'unable_to_find_enemies_pull_skipped_details'          => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.',
+                'unable_to_find_awakened_obelisks'                     => 'Cannot find Awakened Obelisks for your dungeon/week combination. Your Awakened Obelisk skips will not be imported.',
+                'unable_to_find_awakened_obelisk_different_floor'      => 'Unable to import Awakened Obelisk :name, it is on a different floor than the Obelisk itself. Keystone.guru does not support this at this time.',
             ],
         ],
     ],

@@ -108,13 +108,12 @@ MDT.dungeonSubLevels[dungeonIndex] = {
      */
     private function getDungeonTotalCount(MappingVersion $mappingVersion): string
     {
-        $dungeon = $mappingVersion->dungeon;
         return sprintf(
             '
 MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnabled = true }
             ',
-            $dungeon->enemy_forces_required <= 0 ? 300 : $dungeon->enemy_forces_required,
-            $dungeon->enemy_forces_required_teeming <= 0 ? 1000 : $dungeon->enemy_forces_required_teeming
+            $mappingVersion->enemy_forces_required <= 0 ? 300 : $mappingVersion->enemy_forces_required,
+            $mappingVersion->enemy_forces_required_teeming <= 0 ? 1000 : $mappingVersion->enemy_forces_required_teeming
         );
     }
 

@@ -56,7 +56,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
 
-                $this->importDungeon($mdtDungeon, $dungeon);
+                $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
                 $this->importNpcs($mdtDungeon, $dungeon);
                 $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
@@ -94,10 +94,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @param MDTDungeon $mdtDungeon
      * @param Dungeon $dungeon
+     * @param MappingVersion $newMappingVersion
      * @return void
      * @throws Exception
      */
-    private function importDungeon(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    private function importDungeon(MDTDungeon $mdtDungeon, Dungeon $dungeon, MappingVersion $newMappingVersion): void
     {
         try {
             $this->log->importDungeonStart();
@@ -105,10 +106,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importDungeonTotalCounts($mdtDungeon->getMDTDungeonID(), $totalCount['normal'], $totalCount['teeming']);
 
             if ($dungeon->update([
-                'mdt_id'                        => $mdtDungeon->getMDTDungeonID(),
-                'enemy_forces_required'         => $totalCount['normal'],
-                'enemy_forces_required_teeming' => $totalCount['teeming'],
-            ])) {
+                    'mdt_id' => $mdtDungeon->getMDTDungeonID(),
+                ]) && $newMappingVersion->update([
+                    'enemy_forces_required'         => $totalCount['normal'],
+                    'enemy_forces_required_teeming' => $totalCount['teeming'],
+                ])) {
                 $this->log->importDungeonOK();
             } else {
                 $this->log->importDungeonFailed();

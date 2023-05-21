@@ -23,11 +23,6 @@ use Mockery\Exception;
  * @property string $name The name of the dungeon.
  * @property string $slug The url friendly slug of the dungeon.
  * @property string $key Shorthand key of the dungeon
- * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
- * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
- * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
- * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
- * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property boolean $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property boolean $active True if this dungeon is active, false if it is not.
  *
@@ -77,11 +72,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'name',
         'key',
         'slug',
-        'enemy_forces_required',
-        'enemy_forces_required_teeming',
-        'enemy_forces_shrouded',
-        'enemy_forces_shrouded_zul_gamux',
-        'timer_max_seconds',
     ];
 
     public $with = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
@@ -402,7 +392,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return HasMany
      */
-    public function mappingversions(): HasMany
+    public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
@@ -544,7 +534,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getCurrentMappingVersion(): ?MappingVersion
     {
         /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $this->mappingversions()->limit(1)->first();
+        $mappingVersion = $this->mappingVersions()->limit(1)->first();
         return $mappingVersion;
     }
 
