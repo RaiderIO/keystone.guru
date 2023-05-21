@@ -216,6 +216,9 @@ return [
     'datatable_no_routes_in_table'                                   => 'No routes found',
     'cannot_change_sharing_settings_not_all_required_enemies_killed' => 'Unable to change sharing settings: not all required enemies have been killed',
 
+    // Mapping version edit
+    'mapping_version_saved'                                          => 'Mapping version saved successfully',
+
     // Dungeonroute table
     'vote'                                                           => 'vote',
     'votes'                                                          => 'votes',

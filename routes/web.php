@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Api\APIMappingVersionController;
 use App\Http\Controllers\Api\APIMountableAreaController;
 use App\Http\Controllers\Api\APISiteController;
 use App\Http\Controllers\APIBrushlineController;
@@ -417,6 +418,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::group(['prefix' => 'admin'], function () {
+                Route::patch('mappingVersion/{mappingVersion}', [APIMappingVersionController::class, 'store']);
+
                 Route::get('/user', [APIUserController::class, 'list']);
                 Route::get('/npc', [APINpcController::class, 'list']);
 

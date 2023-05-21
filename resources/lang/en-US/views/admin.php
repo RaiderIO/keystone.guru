@@ -16,11 +16,6 @@ return [
             'dungeon_name'                    => 'Dungeon name',
             'key'                             => 'Key',
             'slug'                            => 'Slug',
-            'enemy_forces_required'           => 'Enemy forces required',
-            'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
-            'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
-            'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
-            'timer_max_seconds'               => 'Timer (seconds)',
             'submit'                          => 'Submit',
 
             'floor_management' => [
