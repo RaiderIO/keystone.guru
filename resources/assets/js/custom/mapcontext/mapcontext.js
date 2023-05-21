@@ -359,7 +359,7 @@ class MapContext extends Signalable {
      * @returns {Number}
      */
     getEnemyForcesRequired() {
-        return this._options.dungeon.enemy_forces_required;
+        return this._options.mappingVersion.enemy_forces_required;
     }
 
     /**
@@ -367,7 +367,7 @@ class MapContext extends Signalable {
      * @returns {Number}
      */
     getEnemyForcesRequiredTeeming() {
-        return this._options.dungeon.enemy_forces_required_teeming;
+        return this._options.mappingVersion.enemy_forces_required_teeming;
     }
 
     /**
@@ -375,7 +375,7 @@ class MapContext extends Signalable {
      * @returns {Number}
      */
     getEnemyForcesShrouded() {
-        return this._options.dungeon.enemy_forces_shrouded;
+        return this._options.mappingVersion.enemy_forces_shrouded;
     }
 
     /**
@@ -383,7 +383,7 @@ class MapContext extends Signalable {
      * @returns {Number}
      */
     getEnemyForcesShroudedZulGamux() {
-        return this._options.dungeon.enemy_forces_shrouded_zul_gamux;
+        return this._options.mappingVersion.enemy_forces_shrouded_zul_gamux;
     }
 
     /**
