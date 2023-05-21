@@ -12,6 +12,11 @@ class MigrateDungeonsToDungeonDataTable extends Migration
      */
     public function up()
     {
+        // Don't do anything - this should already be done and the result committed to repository
+        if (config('app.env') === 'production') {
+            return;
+        }
+
         foreach (MappingVersion::all() as $mappingVersion) {
             /** @var $mappingVersion MappingVersion */
 
@@ -36,6 +41,11 @@ class MigrateDungeonsToDungeonDataTable extends Migration
      */
     public function down()
     {
+        // Don't do anything - this should already be done and the result committed to repository
+        if (config('app.env') === 'production') {
+            return;
+        }
+
         foreach (MappingVersion::all() as $mappingVersion) {
             /** @var $mappingVersion MappingVersion */
 

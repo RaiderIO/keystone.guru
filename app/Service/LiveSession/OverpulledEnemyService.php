@@ -108,14 +108,14 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                                           IF(
                                                   enemies.enemy_forces_override_teeming IS NOT NULL,
                                                   enemies.enemy_forces_override_teeming,
-                                                  IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                                                  IF(npc_enemy_forces.enemy_forces_teeming >= 0, npc_enemy_forces.enemy_forces_teeming, npcs.enemy_forces)
                                               )
                                       ),
                                   SUM(
                                           IF(
                                                   enemies.enemy_forces_override IS NOT NULL,
                                                   enemies.enemy_forces_override,
-                                                  npcs.enemy_forces
+                                                  npc_enemy_forces.enemy_forces
                                               )
                                       )
                                    ), 0
@@ -126,6 +126,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                          left join `kill_zones` on `kill_zones`.`id` = `overpulled_enemies`.`kill_zone_id`
                          left join `enemies` on `enemies`.`id` = `overpulled_enemies`.`enemy_id`
                          left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
+                         left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                          left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                 where `live_sessions`.id = :id
                 group by `live_sessions`.id, `kill_zones`.id, `kill_zones`.`index`

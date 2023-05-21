@@ -176,10 +176,10 @@ class KillZone extends Model
                 IF(
                     enemies.seasonal_type = "shrouded_zul_gamux",
                     dungeons.enemy_forces_shrouded_zul_gamux,
-                    npcs.enemy_forces
+                    npc_enemy_forces.enemy_forces
                 )
             )
-        ' : 'npcs.enemy_forces';
+        ' : 'npc_enemy_forces.enemy_forces';
 
         $queryResult = DB::select(sprintf('
             select `kill_zone_enemies`.*,
@@ -191,7 +191,7 @@ class KillZone extends Model
                                       IF(
                                               enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
-                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, %s)
+                                              IF(npc_enemy_forces.enemy_forces_teeming >= 0, npc_enemy_forces.enemy_forces_teeming, %s)
                                           )
                                   ),
                               SUM(
@@ -208,6 +208,7 @@ class KillZone extends Model
                  left join `dungeon_routes` on `dungeon_routes`.`id` = `kill_zones`.`dungeon_route_id`
                  left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                  left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                 left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                  left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
             where kill_zones.id = :kill_zone_id
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id

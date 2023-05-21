@@ -8,6 +8,7 @@ use App\Models\Enemy;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use Illuminate\Support\Collection;
 
@@ -206,10 +207,13 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->get();
+
             $dungeonEnemy = array_merge([
                 'name'          => addslashes($npc->name),
                 'id'            => $npc->id,
-                'count'         => $npc->enemy_forces,
+                'count'         => $npcEnemyForces->enemy_forces,
                 'health'        => $npc->base_health,
                 'scale'         => $scaleMapping[$npc->classification_id],
                 'stealthDetect' => $npc->truesight,

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\EnemyPatrol;
 use App\Models\Expansion;
@@ -323,6 +322,7 @@ class DungeonDataSeeder extends Seeder
         DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
+        DB::table('npc_enemy_forces')->truncate();
         DB::table('npc_spells')->truncate();
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();

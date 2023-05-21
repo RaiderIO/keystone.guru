@@ -39,8 +39,6 @@ class NpcFormRequest extends FormRequest
                 'regex:/^[\d\s,]*$/',
             ],
             'health_percentage'         => 'int',
-            'enemy_forces'              => 'int',
-            'enemy_forces_teeming'      => 'int',
             'dangerous'                 => 'bool',
             'truesight'                 => 'bool',
             'bursting'                  => 'bool',

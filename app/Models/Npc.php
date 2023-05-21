@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Npc\NpcEnemyForces;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,8 +21,6 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property int $base_health
  * @property int|null $health_percentage Null = 100% health
- * @property int $enemy_forces
- * @property int $enemy_forces_teeming
  * @property string $aggressiveness
  * @property bool $dangerous
  * @property bool $truesight
@@ -32,7 +32,9 @@ use Illuminate\Support\Collection;
  * @property NpcClassification $classification
  * @property NpcType $type
  * @property NpcClass $class
+ * @property NpcEnemyForces $enemyForces
  *
+ * @property NpcEnemyForces[]|Collection $npcEnemyForces
  * @property Enemy[]|Collection $enemies
  * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
  *
@@ -63,7 +65,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'sanguine',
     ];
 
-    // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
     public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
     public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
@@ -144,6 +145,40 @@ class Npc extends CacheModel implements MappingModelInterface
     public function npcspells(): HasMany
     {
         return $this->hasMany(NpcSpell::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function npcEnemyForces(): HasMany
+    {
+        return $this->hasMany(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function enemyForces(): HasOne
+    {
+        return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    /**
+     * @param int|null $mappingVersionId
+     * @return HasOne
+     */
+    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): HasOne
+    {
+        $belongsTo = $this->hasOne(NpcEnemyForces::class);
+
+        // Most recent
+        if ($mappingVersionId === null) {
+            $belongsTo->orderByDesc('mapping_version_id')->limit(1);
+        } else {
+            $belongsTo->where('mapping_version_id', $mappingVersionId);
+        }
+
+        return $belongsTo;
     }
 
     /**

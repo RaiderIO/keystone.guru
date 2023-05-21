@@ -132,17 +132,17 @@
         @include('common.forms.form-error', ['key' => 'health_percentage'])
     </div>
 
-    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
-        {!! Form::label('enemy_forces', __('views/admin.npc.edit.enemy_forces')) !!}
-        {!! Form::text('enemy_forces', isset($npc) ? $npc->enemy_forces : -1, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'enemy_forces'])
-    </div>
+{{--    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">--}}
+{{--        {!! Form::label('enemy_forces', __('views/admin.npc.edit.enemy_forces')) !!}--}}
+{{--        {!! Form::text('enemy_forces', isset($npc) ? $npc->enemy_forces : -1, ['class' => 'form-control']) !!}--}}
+{{--        @include('common.forms.form-error', ['key' => 'enemy_forces'])--}}
+{{--    </div>--}}
 
-    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
-        {!! Form::label('enemy_forces_teeming', __('views/admin.npc.edit.enemy_forces_teeming')) !!}
-        {!! Form::text('enemy_forces_teeming', isset($npc) ? $npc->enemy_forces_teeming : -1, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])
-    </div>
+{{--    <div class="form-group{{ $errors->has('enemy_forces_teeming') ? ' has-error' : '' }}">--}}
+{{--        {!! Form::label('enemy_forces_teeming', __('views/admin.npc.edit.enemy_forces_teeming')) !!}--}}
+{{--        {!! Form::text('enemy_forces_teeming', isset($npc) ? $npc->enemy_forces_teeming : -1, ['class' => 'form-control']) !!}--}}
+{{--        @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])--}}
+{{--    </div>--}}
 
     <div class="form-group">
         <div class="row">
@@ -211,7 +211,7 @@
 
 
 
-    <div>
+    <div class="form-group">
         {!! Form::submit(__('views/admin.npc.edit.submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
         @isset($npc)
             <div class="float-right">
@@ -221,4 +221,8 @@
     </div>
 
     {!! Form::close() !!}
+
+    <div class="form-group">
+        @include('admin.npc.enemyforces', ['npc' => $npc])
+    </div>
 @endsection
