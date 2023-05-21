@@ -18,6 +18,7 @@ use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
@@ -356,7 +357,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                                 } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                                     $dungeonRoute->enemy_forces += $dungeonRoute->mappingVersion->enemy_forces_shrouded_zul_gamux;
                                 } else {
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $enemy->npc->enemy_forces_teeming : $enemy->npc->enemy_forces;
+
+                                    /** @var NpcEnemyForces $npcEnemyForces */
+                                    $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($dungeonRoute->mappingVersion->id)->get();
+
+                                    $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $npcEnemyForces->enemy_forces_teeming : $npcEnemyForces->enemy_forces;
                                 }
 
                                 // No point doing this if we're not saving

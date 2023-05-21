@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
@@ -433,13 +434,7 @@ class AdminToolsController extends Controller
                         __($dungeon->name) =>
                             $mappingVersionByDungeon->mapWithKeys(function (MappingVersion $mappingVersion) use ($dungeon) {
                                 return [
-                                    $mappingVersion->id =>
-                                        sprintf('%s Version %d (%d, %s)',
-                                            __($dungeon->name),
-                                            $mappingVersion->version,
-                                            $mappingVersion->id,
-                                            $mappingVersion->created_at
-                                        ),
+                                    $mappingVersion->id => $mappingVersion->getPrettyName(),
                                 ];
                             }),
                     ];
@@ -688,21 +683,23 @@ class AdminToolsController extends Controller
                     }
 
                     // Match enemy forces
-                    if ($npc->enemy_forces !== $mdtNpc->getCount()) {
+                    /** @var NpcEnemyForces $npcEnemyForces */
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->get();
+                    if ($npcEnemyForces->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => $mdtNpc->getCount()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npcEnemyForces->enemy_forces),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
                     }
 
                     // Match enemy forces teeming
-                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
+                    if ($npcEnemyForces->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npcEnemyForces->enemy_forces_teeming),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
                     }

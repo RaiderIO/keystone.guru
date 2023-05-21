@@ -150,6 +150,20 @@ class MappingVersion extends Model
         return $this->dungeon->getCurrentMappingVersion()->version === $this->version;
     }
 
+    /**
+     * @return string
+     */
+    public function getPrettyName(): string
+    {
+        return sprintf('%s Version %d (%s%d, %s)',
+            __($this->dungeon->name),
+            $this->version,
+            $this->merged ? 'readonly, ' : '',
+            $this->id,
+            $this->created_at
+        );
+    }
+
 
     public static function boot()
     {

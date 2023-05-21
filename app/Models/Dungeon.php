@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
@@ -357,7 +358,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    $npcs[$npc->id] = $npc->enemy_forces >= 0;
+                    /** @var NpcEnemyForces $npcEnemyForces */
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->get();
+
+                    $npcs[$npc->id] = $npcEnemyForces->enemy_forces >= 0;
                 }
             }
         } catch (Exception $ex) {

@@ -3,20 +3,20 @@
 return [
     'dungeon'                    => [
         'edit' => [
-            'title_new'                       => 'New dungeon',
-            'title_edit'                      => 'Edit dungeon',
-            'header_new'                      => 'New dungeon',
-            'header_edit'                     => 'Edit dungeon',
-            'active'                          => 'Active',
-            'speedrun_enabled'                => 'Speedrun enabled',
-            'id'                              => 'ID',
-            'zone_id'                         => 'Zone ID',
-            'map_id'                          => 'Map ID',
-            'mdt_id'                          => 'MDT ID',
-            'dungeon_name'                    => 'Dungeon name',
-            'key'                             => 'Key',
-            'slug'                            => 'Slug',
-            'submit'                          => 'Submit',
+            'title_new'        => 'New dungeon',
+            'title_edit'       => 'Edit dungeon',
+            'header_new'       => 'New dungeon',
+            'header_edit'      => 'Edit dungeon',
+            'active'           => 'Active',
+            'speedrun_enabled' => 'Speedrun enabled',
+            'id'               => 'ID',
+            'zone_id'          => 'Zone ID',
+            'map_id'           => 'Map ID',
+            'mdt_id'           => 'MDT ID',
+            'dungeon_name'     => 'Dungeon name',
+            'key'              => 'Key',
+            'slug'             => 'Slug',
+            'submit'           => 'Submit',
 
             'floor_management' => [
                 'title'                => 'Floor management',
@@ -180,6 +180,13 @@ return [
             'save_as_new_npc'                      => 'Save as new npc',
             'all_npcs'                             => 'All npcs',
             'all_dungeons'                         => 'All dungeons',
+            'enemyforces'                          => [
+                'title'                        => 'Enemy forces',
+                'table_header_id'              => 'Id',
+                'table_header_mapping_version' => 'Mapping version',
+                'table_header_enemy_forces'    => 'Enemy forces',
+                'table_header_actions'         => 'Actions',
+            ],
         ],
         'list'  => [
             'all_dungeons'                => 'All',
