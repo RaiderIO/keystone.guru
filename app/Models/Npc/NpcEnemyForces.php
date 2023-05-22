@@ -3,9 +3,12 @@
 namespace App\Models\Npc;
 
 use App\Models\CacheModel;
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -22,8 +25,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @author Wouter
  * @since 21/05/2023
  */
-class NpcEnemyForces extends CacheModel implements MappingModelInterface
+class NpcEnemyForces extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use CloneForNewMappingVersionNoRelations;
+
     public $timestamps = false;
 
     public $fillable = [
@@ -56,5 +61,15 @@ class NpcEnemyForces extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->npc->dungeon_id;
+    }
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    {
+        // TODO: Implement cloneForNewMappingVersion() method.
     }
 }

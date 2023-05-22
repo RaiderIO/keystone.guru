@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Dungeon;
 use App\Models\Npc;
 use App\Models\NpcClass;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,9 +16,9 @@ class NpcFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**
@@ -25,10 +26,10 @@ class NpcFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = [
-            'id'                        => ['required'],
+            'id'                        => 'required',
             'name'                      => 'required',
             'dungeon_id'                => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
             'npc_class_id'              => Rule::in(array_values(NpcClass::ALL)),

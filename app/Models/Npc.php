@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
@@ -55,8 +56,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'name',
         'base_health',
         'health_percentage',
-        'enemy_forces',
-        'enemy_forces_teeming',
         'aggressiveness',
         'dangerous',
         'truesight',
@@ -265,17 +264,41 @@ class Npc extends CacheModel implements MappingModelInterface
         return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical) * $thunderingFactor);
     }
 
+    /**
+     * Upon creation of a new NPC, we must create npc enemy forces for each mapping version
+     * @param int|null $existingEnemyForces
+     * @return  bool
+     */
+    public function createNpcEnemyForcesForExistingMappingVersions(?int $existingEnemyForces = null): bool
+    {
+        $result = true;
+
+        $this->load('dungeon');
+        // Create new enemy forces for this enemy for each relevant mapping version
+        // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
+        $mappingVersions = optional($this->dungeon)->mappingVersions ?? MappingVersion::all();
+        foreach ($mappingVersions as $mappingVersion) {
+            $result = $result && NpcEnemyForces::create([
+                    'npc_id'               => $this->id,
+                    'mapping_version_id'   => $mappingVersion->id,
+                    'enemy_forces'         => $existingEnemyForces ?? 0,
+                    'enemy_forces_teeming' => null,
+                ]);
+        }
+
+        return $result;
+    }
+
 
     public static function boot()
     {
         parent::boot();
 
-        // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item Npc */
-
-            $item->npcbolsteringwhitelists()->delete();
-            $item->npcspells()->delete();
+        // Delete Npc properly if it gets deleted
+        static::deleting(function (Npc $npc) {
+            $npc->npcbolsteringwhitelists()->delete();
+            $npc->npcspells()->delete();
+            $npc->npcEnemyForces()->delete();
         });
     }
 
