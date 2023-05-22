@@ -49,6 +49,7 @@ use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
+use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReleaseController;
@@ -293,10 +294,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             // NPCs
             Route::group(['prefix' => 'npc'], function () {
                 Route::get('new', [NpcController::class, 'new'])->name('admin.npc.new');
-                Route::get('{npc}', [NpcController::class, 'edit'])->name('admin.npc.edit');
 
                 Route::post('new', [NpcController::class, 'savenew'])->name('admin.npc.savenew');
-                Route::patch('{npc}', [NpcController::class, 'update'])->name('admin.npc.update');
+
+                Route::group(['prefix' => '{npc}'], function () {
+                    Route::get('/', [NpcController::class, 'edit'])->name('admin.npc.edit');
+                    Route::patch('/', [NpcController::class, 'update'])->name('admin.npc.update');
+
+                    Route::group(['prefix' => 'npcEnemyForces/{npcEnemyForces}'], function () {
+                        Route::get('/', [NpcEnemyForcesController::class, 'edit'])->name('admin.npcenemyforces.edit');
+                        Route::patch('/', [NpcEnemyForcesController::class, 'update'])->name('admin.npcenemyforces.update');
+                    });
+                });
+
             });
             Route::get('npcs', [NpcController::class, 'list'])->name('admin.npcs');
 

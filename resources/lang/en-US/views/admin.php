@@ -180,13 +180,6 @@ return [
             'save_as_new_npc'                      => 'Save as new npc',
             'all_npcs'                             => 'All npcs',
             'all_dungeons'                         => 'All dungeons',
-            'enemyforces'                          => [
-                'title'                        => 'Enemy forces',
-                'table_header_id'              => 'Id',
-                'table_header_mapping_version' => 'Mapping version',
-                'table_header_enemy_forces'    => 'Enemy forces',
-                'table_header_actions'         => 'Actions',
-            ],
         ],
         'list'  => [
             'all_dungeons'                => 'All',
@@ -200,6 +193,20 @@ return [
             'table_header_enemy_count'    => 'Enemy count',
             'table_header_classification' => 'Classification',
             'table_header_actions'        => 'Action',
+        ],
+    ],
+    'npcenemyforces'             => [
+        'title'                        => 'Enemy forces',
+        'edit_enemy_forces'            => 'Edit enemy forces',
+        'table_header_id'              => 'Id',
+        'table_header_mapping_version' => 'Mapping Version',
+        'table_header_enemy_forces'    => 'Enemy Forces',
+        'table_header_actions'         => 'Actions',
+        'edit'                         => [
+            'header_edit'          => 'Edit enemy forces',
+            'enemy_forces'         => 'Enemy forces',
+            'enemy_forces_teeming' => 'Enemy forces (teeming)',
+            'submit'               => 'Submit',
         ],
     ],
     'release'                    => [
