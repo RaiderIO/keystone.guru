@@ -7,19 +7,21 @@
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_npc_enemy_forces_table').DataTable({});
+            $('#admin_npc_enemy_forces_table').DataTable({
+                'order': [[1, 'desc']]
+            });
         });
     </script>
 @endsection
 
-<h4>{{ __('views/admin.npc.edit.enemyforces.title') }}</h4>
+<h4>{{ __('views/admin.npcenemyforces.title') }}</h4>
 <table id="admin_npc_enemy_forces_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('views/admin.npc.edit.enemyforces.table_header_id') }}</th>
-        <th width="40%">{{ __('views/admin.npc.edit.enemyforces.table_header_mapping_version') }}</th>
-        <th width="10%">{{ __('views/admin.npc.edit.enemyforces.table_header_enemy_forces') }}</th>
-        <th width="20%">{{ __('views/admin.npc.edit.enemyforces.table_header_actions') }}</th>
+        <th width="10%">{{ __('views/admin.npcenemyforces.table_header_id') }}</th>
+        <th width="40%">{{ __('views/admin.npcenemyforces.table_header_mapping_version') }}</th>
+        <th width="10%">{{ __('views/admin.npcenemyforces.table_header_enemy_forces') }}</th>
+        <th width="20%">{{ __('views/admin.npcenemyforces.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -33,7 +35,10 @@
                 @if($npcEnemyForce->mappingVersion->merged)
                     {{ __('Mapping version is read-only') }}
                 @else
-                    {{ __('Edit') }}
+                    <a class="btn btn-info"
+                       href="{{ route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForce]) }}">
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.npcenemyforces.edit_enemy_forces') }}
+                    </a>
                 @endif
             </td>
         </tr>
