@@ -497,18 +497,22 @@ class DungeonRoute extends Model
             $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
                 IF(
                     enemies.seasonal_type = "shrouded",
-                    dungeons.enemy_forces_shrouded,
+                    mapping_versions.enemy_forces_shrouded,
                     IF(
                         enemies.seasonal_type = "shrouded_zul_gamux",
-                        dungeons.enemy_forces_shrouded_zul_gamux,
-                        npcs.enemy_forces
+                        mapping_versions.enemy_forces_shrouded_zul_gamux,
+                        npc_enemy_forces.enemy_forces
                     )
                 )
-            ' : 'npcs.enemy_forces';
+            ' : 'npc_enemy_forces.enemy_forces';
+
+            $ifIsShroudedJoins = $isShrouded ? '
+                left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
+            ' : '';
 
             // This produces a list of enemies with their enemy forces. This also does not count duplicate enemies across
             // the same or multiple pulls twice. This may have been introduced with migration to mapping versions but idk
-            $queryResult = DB::select(sprintf('
+            $queryResult = DB::select("
                 select dungeon_routes.id,
                CAST(
                    CAST(IFNULL(
@@ -518,9 +522,9 @@ class DungeonRoute extends Model
                                               enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
                                               IF(
-                                                  npcs.enemy_forces_teeming >= 0,
-                                                  npcs.enemy_forces_teeming,
-                                                  %s
+                                                  npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
+                                                  npc_enemy_forces.enemy_forces_teeming,
+                                                  {$ifIsShroudedEnemyForcesQuery}
                                               )
                                           )
                                   ),
@@ -528,7 +532,7 @@ class DungeonRoute extends Model
                                       IF(
                                               enemies.enemy_forces_override IS NOT NULL,
                                               enemies.enemy_forces_override,
-                                              %s
+                                              {$ifIsShroudedEnemyForcesQuery}
                                           )
                                   )
                                ), 0
@@ -541,10 +545,12 @@ class DungeonRoute extends Model
                         AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
                         AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
                      left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                     left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
+                     {$ifIsShroudedJoins}
                 where `dungeon_routes`.id = :id
                     AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
             group by `dungeon_routes`.id, concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)
-            ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['id' => $this->id]);
+            ", ['id' => $this->id]);
 
             // Could be if no enemies were assigned yet
             if (!empty($queryResult)) {
