@@ -613,7 +613,7 @@ class Enemy extends VersionableMapObject {
             } else if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming !== null) {
                     result = this.enemy_forces_override_teeming;
-                } else if (this.npc.enemy_forces.enemy_forces_teeming >= 0) {
+                } else if (this.npc.enemy_forces.enemy_forces_teeming !== null) {
                     result = this.npc.enemy_forces.enemy_forces_teeming;
                 }
             } else if (this.enemy_forces_override !== null) {
