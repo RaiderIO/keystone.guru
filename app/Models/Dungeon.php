@@ -29,7 +29,7 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection|MappingVersion[] $mappingversions
+ * @property Collection|MappingVersion[] $mappingVersions
  * @property Collection|Floor[] $floors
  * @property Collection|DungeonRoute[] $dungeonroutes
  * @property Collection|Npc[] $npcs

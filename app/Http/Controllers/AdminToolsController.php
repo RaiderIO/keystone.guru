@@ -19,6 +19,7 @@ use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
+use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -114,7 +115,6 @@ class AdminToolsController extends Controller
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    $npcCandidate->enemy_forces = 0;
                     $npcCandidate->dangerous    = true;
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
@@ -132,6 +132,9 @@ class AdminToolsController extends Controller
                     if ($existed) {
                         $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     } else {
+                        // Now create new enemy forces. Default to 0
+                        $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+
                         $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     }
                 } else {
@@ -408,11 +411,11 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param MDTMappingExportServiceInterface $mdtMappingService
+     * @param MDTMappingImportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
      */
-    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingImportServiceInterface $mdtMappingService)
     {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
@@ -780,12 +783,12 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             case 'mismatched_enemy_forces':
-                $npc->enemy_forces = $value;
-                $npc->save();
+                $npc->enemyForces->enemy_forces = $value;
+                $npc->enemyForces->save();
                 break;
             case 'mismatched_enemy_forces_teeming':
-                $npc->enemy_forces_teeming = $value;
-                $npc->save();
+                $npc->enemyForces->enemy_forces_teeming = $value;
+                $npc->enemyForces->save();
                 break;
             case 'mismatched_enemy_type':
                 $npcType          = NpcType::where('type', $value)->first();

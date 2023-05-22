@@ -9,6 +9,7 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
+use App\Models\Npc\NpcEnemyForces;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,7 @@ use Illuminate\Support\Collection;
  * @property Collection|EnemyPatrol[] $enemyPatrols
  * @property Collection|MapIcon[] $mapIcons
  * @property Collection|MountableArea[] $mountableAreas
+ * @property Collection|NpcEnemyForces[] $npcEnemyForces
  *
  * @mixin Eloquent
  */
@@ -143,6 +145,14 @@ class MappingVersion extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function npcEnemyForces(): HasMany
+    {
+        return $this->hasMany(NpcEnemyForces::class);
+    }
+
+    /**
      * @return bool
      */
     public function isLatestForDungeon(): bool
@@ -189,7 +199,8 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->enemyPacks)
                 ->merge($previousMappingVersion->enemyPatrols)
                 ->merge($previousMappingVersion->mapIcons)
-                ->merge($previousMappingVersion->mountableAreas);
+                ->merge($previousMappingVersion->mountableAreas)
+                ->merge($previousMappingVersion->npcEnemyForces);
 
             $idMapping = collect([
                 DungeonFloorSwitchMarker::class => collect(),
@@ -198,6 +209,7 @@ class MappingVersion extends Model
                 EnemyPatrol::class              => collect(),
                 MapIcon::class                  => collect(),
                 MountableArea::class            => collect(),
+                NpcEnemyForces::class           => collect(),
             ]);
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
