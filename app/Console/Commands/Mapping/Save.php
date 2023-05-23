@@ -318,16 +318,7 @@ class Save extends Command
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->with('npc:id')->get()->values();
-        foreach ($enemies as $enemy) {
-            /** @var $enemy Enemy */
-            if ($enemy->npc !== null) {
-                $enemy->npc->unsetRelation('spells');
-                $enemy->npc->unsetRelation('npcbolsteringwhitelists');
-                $enemy->npc->unsetRelation('type');
-                $enemy->npc->unsetRelation('class');
-            }
-        }
+        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
         $enemyPacks                = $floor->enemyPacksForExport->values();
         $enemyPatrols              = $floor->enemyPatrolsForExport->values();
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
