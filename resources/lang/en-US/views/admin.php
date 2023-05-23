@@ -279,15 +279,22 @@ return [
             ],
         ],
         'dungeonroute' => [
-            'view'         => [
+            'view'            => [
                 'title'      => 'View dungeonroute',
                 'header'     => 'View dungeonroute',
                 'public_key' => 'Dungeonroute public key',
                 'submit'     => 'Submit',
             ],
-            'viewcontents' => [
+            'viewcontents'    => [
                 'title'  => 'View contents for :dungeonRouteTitle',
                 'header' => 'View contents for %s',
+            ],
+            'mappingversions' => [
+                'title'                             => 'View mapping version usage',
+                'header'                            => 'View mapping version usage',
+                'table_header_mapping_version_name' => 'Mapping Version',
+                'table_header_count'                => 'Dungeon Route #',
+                'table_header_actions'              => 'Actions',
             ],
         ],
         'enemyforces'  => [
@@ -366,8 +373,9 @@ return [
             'subheader_import' => 'Import',
             'mass_import_npcs' => 'Mass import NPCs',
 
-            'subheader_dungeonroute'    => 'Dungeonroute',
-            'view_dungeonroute_details' => 'View Dungeonroute details',
+            'subheader_dungeonroute'                  => 'Dungeonroute',
+            'view_dungeonroute_details'               => 'View Dungeonroute details',
+            'view_dungeonroute_mapping_version_usage' => 'View Dungeonroute Mapping Version usage',
 
             'subheader_mdt'                               => 'MDT',
             'view_mdt_string'                             => 'View MDT String contents',

@@ -115,7 +115,7 @@ class AdminToolsController extends Controller
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    $npcCandidate->dangerous    = true;
+                    $npcCandidate->dangerous = true;
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
@@ -173,6 +173,28 @@ class AdminToolsController extends Controller
 
         return view('admin.tools.dungeonroute.viewcontents', [
             'dungeonroute' => $dungeonRoute,
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function dungeonrouteMappingVersions()
+    {
+        $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
+            ->get()
+            ->mapWithKeys(function (MappingVersion $mappingVersion) {
+                return [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()];
+            })
+            ->groupBy(function (int $count, string $key) {
+                return $count === 0;
+            }, true);
+
+        return view('admin.tools.dungeonroute.mappingversions', [
+            'mappingVersionUsage' => collect([
+                'unused' => $mappingVersionUsage[1],
+                'used'   => $mappingVersionUsage[0],
+            ]),
         ]);
     }
 

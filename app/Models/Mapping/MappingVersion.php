@@ -4,6 +4,7 @@ namespace App\Models\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -33,6 +34,7 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  *
  * @property Dungeon $dungeon
+ * @property Collection|DungeonRoute[] $dungeonRoutes
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
  * @property Collection|Enemy[] $enemies
  * @property Collection|EnemyPack[] $enemyPacks
@@ -94,6 +96,14 @@ class MappingVersion extends Model
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonRoutes(): HasMany
+    {
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**
