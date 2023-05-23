@@ -46,7 +46,7 @@ class Npc extends CacheModel implements MappingModelInterface
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    protected $with = ['type', 'class', 'enemyForces', 'npcbolsteringwhitelists', 'spells'];
     protected $fillable = [
         'id',
         'dungeon_id',
@@ -210,6 +210,22 @@ class Npc extends CacheModel implements MappingModelInterface
     public function isPrideful(): bool
     {
         return $this->id === config('keystoneguru.prideful.npc_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShrouded(): bool
+    {
+        return $this->id === config('keystoneguru.shrouded.npc_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShroudedZulGamux(): bool
+    {
+        return $this->id === config('keystoneguru.shrouded.npc_id_zul_gamux');
     }
 
     /**
