@@ -25,7 +25,7 @@ class NpcEnemyForcesFormRequest extends FormRequest
     {
         return [
             'enemy_forces'         => 'required|int',
-            'enemy_forces_teeming' => 'int',
+            'enemy_forces_teeming' => 'nullable|int',
         ];
     }
 }

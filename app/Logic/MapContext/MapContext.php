@@ -97,8 +97,8 @@ abstract class MapContext
             ];
         }, config('keystoneguru.cache.static_data.ttl'));
 
-        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth();
-        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth();
+        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
+        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
         if ($npcMaxHealth <= $npcMinHealth) {

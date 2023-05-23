@@ -7,10 +7,10 @@
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc, $npcEnemyForces],
     'showAds' => false,
-    'title' => __('views/admin.npcenemyforces.edit.title_edit', ['name' => $npc->name]),
+    'title' => __('views/admin.npcenemyforces.edit.title', ['name' => $npc->name]),
 ])
 @section('header-title')
-    {{ __('views/admin.npcenemyforces.edit.header_edit', ['name' => $npc->name]) }}
+    {{ __('views/admin.npcenemyforces.edit.header', ['name' => $npc->name]) }}
 @endsection
 
 @section('content')
@@ -19,14 +19,13 @@
     <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
         {!! Form::label('enemy_forces', __('views/admin.npcenemyforces.edit.enemy_forces'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::text('enemy_forces', null, ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_forces', $npcEnemyForces->enemy_forces, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 
     <div class="form-group{{ $errors->has('enemy_forces_teeming') ? ' has-error' : '' }}">
         {!! Form::label('enemy_forces_teeming', __('views/admin.npcenemyforces.edit.enemy_forces_teeming'), [], false) !!}
-        <span class="form-required">*</span>
-        {!! Form::text('enemy_forces_teeming', null, ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_forces_teeming', $npcEnemyForces->enemy_forces_teeming ?? '', ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])
     </div>
 

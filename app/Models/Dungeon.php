@@ -585,30 +585,41 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
+     * @param MappingVersion $mappingVersion
+     * @return int
      */
-    public function getNpcsMinHealth(): int
+    public function getNpcsMinHealth(MappingVersion $mappingVersion): int
     {
-        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+        return $this->npcs(false)
+            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
                 // @TODO This should exclude all raids
-                return $builder->where('enemy_forces', '>', 0);
+                return $builder
+                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
+                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
+                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
             })
             ->min('base_health') ?? 10000;
     }
 
     /**
      * Get the maximum amount of health of all NPCs in this dungeon.
+     * @param MappingVersion $mappingVersion
+     * @return int
      */
-    public function getNpcsMaxHealth(): int
+    public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
     {
         return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
             // Exclude Beguiling enemies - their health values are wrong at the moment
             ->whereNotIn('npcs.id', [155432, 155433, 155434])
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
                 // @TODO This should exclude all raids
-                return $builder->where('enemy_forces', '>', 0);
+                return $builder
+                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
+                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
+                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
             })
             ->max('base_health') ?? 100000;
     }

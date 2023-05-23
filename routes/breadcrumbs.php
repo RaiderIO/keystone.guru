@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Release;
 use App\Models\Season;
 use App\Models\Spell;
@@ -288,6 +289,15 @@ Breadcrumbs::for('admin.npc.edit', function (Generator $trail, ?Npc $npc) {
     } else {
         $trail->push(__('breadcrumbs.home.admin.npcs.edit_npc'), route('admin.npc.edit', $npc));
     }
+});
+
+// Npc enemy forces
+Breadcrumbs::for('admin.npcenemyforces.edit', function (Generator $trail, Npc $npc, NpcEnemyForces $npcEnemyForces) {
+    $trail->parent('admin.npc.edit', $npc);
+    $trail->push(
+        __('breadcrumbs.home.admin.npcenemyforces.edit_npc_enemy_forces'),
+        route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces])
+    );
 });
 
 // Spells
