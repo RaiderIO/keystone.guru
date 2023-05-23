@@ -211,7 +211,7 @@ class AffixSeeder extends Seeder
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_STORMING, Affix::AFFIX_RAGING]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING]],
-            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]],
+            ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SPITEFUL]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]],
