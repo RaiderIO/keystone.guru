@@ -203,7 +203,8 @@ return [
         'table_header_enemy_forces'    => 'Enemy Forces',
         'table_header_actions'         => 'Actions',
         'edit'                         => [
-            'header_edit'          => 'Edit enemy forces',
+            'title'                => 'Edit enemy forces for :name',
+            'header'               => 'Edit enemy forces for :name',
             'enemy_forces'         => 'Enemy forces',
             'enemy_forces_teeming' => 'Enemy forces (teeming)',
             'submit'               => 'Submit',

@@ -15,8 +15,8 @@ return [
             'this_week_affixes' => 'This week\'s affixes',
             'new'               => 'New',
 
-            'routes_season'            => 'Season :season',
-            'season' => [
+            'routes_season' => 'Season :season',
+            'season'        => [
                 'popular'           => 'Popular',
                 'next_week_affixes' => 'Next week\'s affixes',
                 'this_week_affixes' => 'This week\'s affixes',
@@ -81,6 +81,10 @@ return [
                 'npcs'     => 'NPCs',
                 'new_npc'  => 'New NPC',
                 'edit_npc' => 'Edit NPC',
+            ],
+
+            'npcenemyforces' => [
+                'edit_npc_enemy_forces' => 'Edit NPC enemy forces',
             ],
 
             'spells' => [
