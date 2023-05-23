@@ -25,12 +25,17 @@ class DungeonController extends Controller
      */
     public function store(DungeonFormRequest $request, Dungeon $dungeon = null)
     {
+        $validated = $request->validated();
+
+        $validated['expansion_id'] = Expansion::where('shortname', Dungeon::findExpansionByKey($validated['key']))->firstOrFail()->id;
+
         if ($dungeon === null) {
             $beforeDungeon = new Dungeon();
-            $saveResult    = Dungeon::create($request->validated());
+            $dungeon       = Dungeon::create($validated);
+            $saveResult    = true;
         } else {
             $beforeDungeon = clone $dungeon;
-            $saveResult    = $dungeon->update($request->validated());
+            $saveResult    = $dungeon->update($validated);
         }
 
         if ($saveResult) {
@@ -47,7 +52,25 @@ class DungeonController extends Controller
      */
     public function new()
     {
-        return view('admin.dungeon.edit', ['expansions' => Expansion::all()->pluck('name', 'id')]);
+        $dungeons            = Dungeon::all()->keyBy('key');
+        $availableKeysSelect = collect();
+        foreach (Dungeon::ALL as $expansion => $dungeonKeys) {
+
+            $availableKeysForExpansion = collect();
+            foreach ($dungeonKeys as $dungeonKey) {
+                if (!isset($dungeons[$dungeonKey])) {
+                    $availableKeysForExpansion->put($dungeonKey, $dungeonKey);
+                }
+            }
+
+            if ($availableKeysForExpansion->isNotEmpty()) {
+                $availableKeysSelect->put(Expansion::ALL[$expansion], $availableKeysForExpansion);
+            }
+        }
+
+        return view('admin.dungeon.edit', [
+            'availableKeysSelect' => $availableKeysSelect,
+        ]);
     }
 
     /**
@@ -109,7 +132,7 @@ class DungeonController extends Controller
                 ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
                 ->orderByDesc('expansions.released_at')
                 ->orderBy('dungeons.name')
-                ->get()
+                ->get(),
         ]);
     }
 }

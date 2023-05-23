@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,7 +31,7 @@ class RefreshEnemyForces implements ShouldQueue
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {

@@ -60,16 +60,16 @@ class Expansion extends CacheModel
     const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
     const ALL = [
-        'Classic'                => self::EXPANSION_VANILLA,
-        'The Burning Crusade'    => self::EXPANSION_TBC,
-        'Wrath of the Lich King' => self::EXPANSION_WOTLK,
-        'Cataclysm'              => self::EXPANSION_CATACLYSM,
-        'Mists of Pandaria'      => self::EXPANSION_MOP,
-        'Warlords of Draenor'    => self::EXPANSION_WOD,
-        'Legion'                 => self::EXPANSION_LEGION,
-        'Battle for Azeroth'     => self::EXPANSION_BFA,
-        'Shadowlands'            => self::EXPANSION_SHADOWLANDS,
-        'Dragonflight'           => self::EXPANSION_DRAGONFLIGHT,
+        self::EXPANSION_VANILLA      => 'Classic',
+        self::EXPANSION_TBC          => 'The Burning Crusade',
+        self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
+        self::EXPANSION_CATACLYSM    => 'Cataclysm',
+        self::EXPANSION_MOP          => 'Mists of Pandaria',
+        self::EXPANSION_WOD          => 'Warlords of Draenor',
+        self::EXPANSION_LEGION       => 'Legion',
+        self::EXPANSION_BFA          => 'Battle for Azeroth',
+        self::EXPANSION_SHADOWLANDS  => 'Shadowlands',
+        self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
     ];
 
     /**
