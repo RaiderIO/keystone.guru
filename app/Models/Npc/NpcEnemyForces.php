@@ -62,14 +62,4 @@ class NpcEnemyForces extends CacheModel implements MappingModelInterface, Mappin
     {
         return $this->npc->dungeon_id;
     }
-
-    /**
-     * @param MappingVersion $mappingVersion
-     * @param MappingModelInterface|null $newParent
-     * @return Model
-     */
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
-    {
-        // TODO: Implement cloneForNewMappingVersion() method.
-    }
 }

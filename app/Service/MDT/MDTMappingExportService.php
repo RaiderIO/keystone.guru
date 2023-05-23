@@ -210,10 +210,18 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             /** @var NpcEnemyForces $npcEnemyForces */
             $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->get();
 
+            $enemyForces = $npcEnemyForces->enemy_forces;
+            // These counts are different per mapping version so we need to correct it for MDT here
+            if ($npc->isShrouded()) {
+                $enemyForces = $mappingVersion->enemy_forces_shrouded;
+            } else if ($npc->isShroudedZulGamux()) {
+                $enemyForces = $mappingVersion->enemy_forces_shrouded_zul_gamux;
+            }
+
             $dungeonEnemy = array_merge([
                 'name'          => addslashes($npc->name),
                 'id'            => $npc->id,
-                'count'         => $npcEnemyForces->enemy_forces,
+                'count'         => $enemyForces,
                 'health'        => $npc->base_health,
                 'scale'         => $scaleMapping[$npc->classification_id],
                 'stealthDetect' => $npc->truesight,

@@ -192,6 +192,15 @@ class MappingVersion extends Model
             // We must get the previous mapping version - that contains the mapping we want to clone
             $previousMappingVersion = $existingMappingVersions[1];
 
+            // Update the existing fields of the old mapping version to the new version
+            $newMappingVersion->update([
+                'enemy_forces_required'           => $previousMappingVersion->enemy_forces_required,
+                'enemy_forces_required_teeming'   => $previousMappingVersion->enemy_forces_required_teeming,
+                'enemy_forces_shrouded'           => $previousMappingVersion->enemy_forces_shrouded,
+                'enemy_forces_shrouded_zul_gamux' => $previousMappingVersion->enemy_forces_shrouded_zul_gamux,
+                'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
+            ]);
+
             /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
@@ -265,6 +274,7 @@ class MappingVersion extends Model
             }
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
+            $mappingVersion->npcEnemyForces()->delete();
         });
     }
 }

@@ -14,6 +14,7 @@ use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -474,6 +475,7 @@ class DungeonRouteController extends Controller
         // Store it and show the edit page again
         $dungeonroute->update([
             'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
+            'updated_at'         => Carbon::now()->toDateTimeString(),
         ]);
 
         DungeonRoute::dropCaches($dungeonroute->id);

@@ -187,6 +187,10 @@ return [
         'npc_id' => 173729,
         'count'  => 5,
     ],
+    'shrouded'                            => [
+        'npc_id'           => 189878,
+        'npc_id_zul_gamux' => 190128,
+    ],
 
     /**
      * For the discover section of the site - this controls various variables
