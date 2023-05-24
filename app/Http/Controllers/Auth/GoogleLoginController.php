@@ -6,13 +6,18 @@ use App\User;
 
 class GoogleLoginController extends OAuthLoginController
 {
-    protected function getUser($oauthUser, $oAuthId)
+    /**
+     * @param $oauthUser
+     * @param $oAuthId
+     * @return User
+     */
+    protected function getUser($oauthUser, $oAuthId): User
     {
         return new User([
             'public_key'      => User::generateRandomPublicKey(),
             'oauth_id'        => $oAuthId,
             // Prefer nickname over full name
-            'name'            => isset($oauthUser->nickname) && $oauthUser->nickname !== null ? $oauthUser->nickname : $oauthUser->name,
+            'name'            => $oauthUser->nickname ?? $oauthUser->name,
             'email'           => $oauthUser->email,
             'echo_color'      => randomHexColor(),
             'password'        => '',
@@ -21,8 +26,10 @@ class GoogleLoginController extends OAuthLoginController
         ]);
     }
 
-
-    protected function getDriver()
+    /**
+     * @return string
+     */
+    protected function getDriver(): string
     {
         return 'google';
     }
