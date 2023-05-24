@@ -65,6 +65,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     protected $appends = ['floor_count'];
     protected $fillable = [
+        'expansion_id',
         'active',
         'speedrun_enabled',
         'zone_id',
@@ -237,95 +238,161 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
-    const ALL_WOTLK = [
-        self::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM,
-        self::DUNGEON_AZJOL_NERUB,
-        self::DUNGEON_DRAK_THARON_KEEP,
-        self::DUNGEON_GUNDRAK,
-        self::DUNGEON_HALLS_OF_LIGHTNING,
-        self::DUNGEON_HALLS_OF_REFLECTION,
-        self::DUNGEON_HALLS_OF_STONE,
-        self::DUNGEON_PIT_OF_SARON,
-        self::DUNGEON_THE_CULLING_OF_STRATHOLME,
-        self::DUNGEON_THE_FORGE_OF_SOULS,
-        self::DUNGEON_THE_NEXUS,
-        self::DUNGEON_THE_OCULUS,
-        self::DUNGEON_THE_VIOLET_HOLD,
-        self::DUNGEON_TRIAL_OF_THE_CHAMPION,
-        self::DUNGEON_UTGARDE_KEEP,
-        self::DUNGEON_UTGARDE_PINNACLE,
+    const ALL = [
+        Expansion::EXPANSION_VANILLA      => [
+            self::DUNGEON_BLACKFANTHOM_DEEPS,
+            self::DUNGEON_BLACKROCK_DEPTHS,
+            self::DUNGEON_DEADMINES,
+            self::DUNGEON_DIRE_MAUL,
+            self::DUNGEON_GNOMEREGAN,
+            self::DUNGEON_LOWER_BLACKROCK_SPIRE,
+            self::DUNGEON_MARAUDON,
+            self::DUNGEON_RAGEFIRE_CHASM,
+            self::DUNGEON_RAZORFEN_DOWNS,
+            self::DUNGEON_RAZORFEN_KRAUL,
+            self::DUNGEON_SCARLET_HALLS,
+            self::DUNGEON_SCARLET_MONASTERY,
+            self::DUNGEON_SCHOLOMANCE,
+            self::DUNGEON_SHADOWFANG_KEEP,
+            self::DUNGEON_STRATHOLME,
+            self::DUNGEON_THE_STOCKADE,
+            self::DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR,
+            self::DUNGEON_ULDAMAN,
+            self::DUNGEON_WAILING_CAVERNS,
+            self::DUNGEON_ZUL_FARRAK,
+        ],
+        Expansion::EXPANSION_TBC          => [
+            self::DUNGEON_ACHENAI_CRYPTS,
+            self::DUNGEON_HELLFIRE_RAMPARTS,
+            self::DUNGEON_MAGISTERS_TERRACE,
+            self::DUNGEON_MANA_TOMBS,
+            self::DUNGEON_OLD_HILLSBRAD_FOOTHILLS,
+            self::DUNGEON_SETHEKK_HALLS,
+            self::DUNGEON_SHADOW_LABYRINTH,
+            self::DUNGEON_THE_ARCATRAZ,
+            self::DUNGEON_THE_BLACK_MORASS,
+            self::DUNGEON_THE_BLOOD_FURNACE,
+            self::DUNGEON_THE_BOTANICA,
+            self::DUNGEON_THE_MECHANAR,
+            self::DUNGEON_THE_SHATTERED_HALLS,
+            self::DUNGEON_THE_SLAVE_PENS,
+            self::DUNGEON_THE_STEAMVAULT,
+            self::DUNGEON_THE_UNDERBOG,
+        ],
+        Expansion::EXPANSION_WOTLK        => [
+            self::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM,
+            self::DUNGEON_AZJOL_NERUB,
+            self::DUNGEON_DRAK_THARON_KEEP,
+            self::DUNGEON_GUNDRAK,
+            self::DUNGEON_HALLS_OF_LIGHTNING,
+            self::DUNGEON_HALLS_OF_REFLECTION,
+            self::DUNGEON_HALLS_OF_STONE,
+            self::DUNGEON_PIT_OF_SARON,
+            self::DUNGEON_THE_CULLING_OF_STRATHOLME,
+            self::DUNGEON_THE_FORGE_OF_SOULS,
+            self::DUNGEON_THE_NEXUS,
+            self::DUNGEON_THE_OCULUS,
+            self::DUNGEON_THE_VIOLET_HOLD,
+            self::DUNGEON_TRIAL_OF_THE_CHAMPION,
+            self::DUNGEON_UTGARDE_KEEP,
+            self::DUNGEON_UTGARDE_PINNACLE,
+        ],
+        Expansion::EXPANSION_CATACLYSM    => [
+            self::DUNGEON_BLACKROCK_CAVERNS,
+            self::DUNGEON_DEADMINES_CATACLYSM,
+            self::DUNGEON_END_TIME,
+            self::DUNGEON_GRIM_BATOL,
+            self::DUNGEON_HALLS_OF_ORIGINATION,
+            self::DUNGEON_HOUR_OF_TWILIGHT,
+            self::DUNGEON_LOST_CITY_OF_THE_TOL_VIR,
+            self::DUNGEON_SHADOWFANG_KEEP_CATA,
+            self::DUNGEON_THE_STONECORE,
+            self::DUNGEON_THE_VORTEX_PINNACLE,
+            self::DUNGEON_THRONE_OF_THE_TIDES,
+            self::DUNGEON_WELL_OF_ETERNITY,
+            self::DUNGEON_ZUL_AMAN,
+            self::DUNGEON_ZUL_GURUB,
+        ],
+        Expansion::EXPANSION_MOP          => [
+            self::DUNGEON_GATE_OF_THE_SETTING_SUN,
+            self::DUNGEON_MOGU_SHAN_PALACE,
+            self::DUNGEON_SCARLET_HALLS_MOP,
+            self::DUNGEON_SCARLET_MONASTERY_MOP,
+            self::DUNGEON_SCHOLOMANCE_MOP,
+            self::DUNGEON_SHADO_PAN_MONASTERY,
+            self::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
+            self::DUNGEON_STORMSTOUT_BREWERY,
+            self::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+        ],
+        Expansion::EXPANSION_WOD          => [
+            self::DUNGEON_IRON_DOCKS,
+            self::DUNGEON_GRIMRAIL_DEPOT,
+        ],
+        Expansion::EXPANSION_LEGION       => [
+            self::DUNGEON_ARCWAY,
+            self::DUNGEON_BLACK_ROOK_HOLD,
+            self::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT,
+            self::DUNGEON_COURT_OF_STARS,
+            self::DUNGEON_DARKHEART_THICKET,
+            self::DUNGEON_EYE_OF_AZSHARA,
+            self::DUNGEON_HALLS_OF_VALOR,
+            self::DUNGEON_LOWER_KARAZHAN,
+            self::DUNGEON_MAW_OF_SOULS,
+            self::DUNGEON_NELTHARIONS_LAIR,
+            self::DUNGEON_UPPER_KARAZHAN,
+            self::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
+            self::DUNGEON_VAULT_OF_THE_WARDENS,
+        ],
+        Expansion::EXPANSION_BFA          => [
+            self::DUNGEON_ATAL_DAZAR,
+            self::DUNGEON_FREEHOLD,
+            self::DUNGEON_KINGS_REST,
+            self::DUNGEON_SHRINE_OF_THE_STORM,
+            self::DUNGEON_SIEGE_OF_BORALUS,
+            self::DUNGEON_TEMPLE_OF_SETHRALISS,
+            self::DUNGEON_THE_MOTHERLODE,
+            self::DUNGEON_THE_UNDERROT,
+            self::DUNGEON_TOL_DAGOR,
+            self::DUNGEON_WAYCREST_MANOR,
+            self::DUNGEON_MECHAGON_JUNKYARD,
+            self::DUNGEON_MECHAGON_WORKSHOP,
+        ],
+        Expansion::EXPANSION_SHADOWLANDS  => [
+            self::DUNGEON_DE_OTHER_SIDE,
+            self::DUNGEON_HALLS_OF_ATONEMENT,
+            self::DUNGEON_MISTS_OF_TIRNA_SCITHE,
+            self::DUNGEON_PLAGUEFALL,
+            self::DUNGEON_SANGUINE_DEPTHS,
+            self::DUNGEON_SPIRES_OF_ASCENSION,
+            self::DUNGEON_THE_NECROTIC_WAKE,
+            self::DUNGEON_THEATER_OF_PAIN,
+            self::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+            self::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+        ],
+        Expansion::EXPANSION_DRAGONFLIGHT => [
+            self::DUNGEON_BRACKENHIDE_HOLLOW,
+            self::DUNGEON_HALLS_OF_INFUSION,
+            self::DUNGEON_NELTHARUS,
+            self::DUNGEON_RUBY_LIFE_POOLS,
+            self::DUNGEON_ALGETH_AR_ACADEMY,
+            self::DUNGEON_THE_AZURE_VAULT,
+            self::DUNGEON_THE_NOKHUD_OFFENSIVE,
+            self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+        ],
     ];
 
-    const ALL_WOTLK_RAID = [
-        self::RAID_ICECROWN_CITADEL,
-        self::RAID_NAXXRAMAS,
-        self::RAID_ONYXIAS_LAIR,
-        self::RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER,
-        self::RAID_THE_EYE_OF_ETERNITY,
-        self::RAID_THE_OBSIDIAN_SANCTUM,
-        self::RAID_THE_RUBY_SANCTUM,
-        self::RAID_ULDUAR,
-        self::RAID_VAULT_OF_ARCHAVON,
-    ];
-
-    const ALL_WOD = [
-        self::DUNGEON_IRON_DOCKS,
-        self::DUNGEON_GRIMRAIL_DEPOT,
-    ];
-
-    const ALL_LEGION = [
-        self::DUNGEON_ARCWAY,
-        self::DUNGEON_BLACK_ROOK_HOLD,
-        self::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT,
-        self::DUNGEON_COURT_OF_STARS,
-        self::DUNGEON_DARKHEART_THICKET,
-        self::DUNGEON_EYE_OF_AZSHARA,
-        self::DUNGEON_HALLS_OF_VALOR,
-        self::DUNGEON_LOWER_KARAZHAN,
-        self::DUNGEON_MAW_OF_SOULS,
-        self::DUNGEON_NELTHARIONS_LAIR,
-        self::DUNGEON_UPPER_KARAZHAN,
-        self::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
-        self::DUNGEON_VAULT_OF_THE_WARDENS,
-    ];
-
-    const ALL_BFA = [
-        self::DUNGEON_ATAL_DAZAR,
-        self::DUNGEON_FREEHOLD,
-        self::DUNGEON_KINGS_REST,
-        self::DUNGEON_SHRINE_OF_THE_STORM,
-        self::DUNGEON_SIEGE_OF_BORALUS,
-        self::DUNGEON_TEMPLE_OF_SETHRALISS,
-        self::DUNGEON_THE_MOTHERLODE,
-        self::DUNGEON_THE_UNDERROT,
-        self::DUNGEON_TOL_DAGOR,
-        self::DUNGEON_WAYCREST_MANOR,
-        self::DUNGEON_MECHAGON_JUNKYARD,
-        self::DUNGEON_MECHAGON_WORKSHOP,
-    ];
-
-    const ALL_SHADOWLANDS = [
-        self::DUNGEON_DE_OTHER_SIDE,
-        self::DUNGEON_HALLS_OF_ATONEMENT,
-        self::DUNGEON_MISTS_OF_TIRNA_SCITHE,
-        self::DUNGEON_PLAGUEFALL,
-        self::DUNGEON_SANGUINE_DEPTHS,
-        self::DUNGEON_SPIRES_OF_ASCENSION,
-        self::DUNGEON_THE_NECROTIC_WAKE,
-        self::DUNGEON_THEATER_OF_PAIN,
-        self::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
-        self::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
-    ];
-
-    const ALL_DRAGONFLIGHT = [
-        self::DUNGEON_BRACKENHIDE_HOLLOW,
-        self::DUNGEON_HALLS_OF_INFUSION,
-        self::DUNGEON_NELTHARUS,
-        self::DUNGEON_RUBY_LIFE_POOLS,
-        self::DUNGEON_ALGETH_AR_ACADEMY,
-        self::DUNGEON_THE_AZURE_VAULT,
-        self::DUNGEON_THE_NOKHUD_OFFENSIVE,
-        self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+    const ALL_RAID = [
+        Expansion::EXPANSION_WOTLK => [
+            self::RAID_ICECROWN_CITADEL,
+            self::RAID_NAXXRAMAS,
+            self::RAID_ONYXIAS_LAIR,
+            self::RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER,
+            self::RAID_THE_EYE_OF_ETERNITY,
+            self::RAID_THE_OBSIDIAN_SANCTUM,
+            self::RAID_THE_RUBY_SANCTUM,
+            self::RAID_ULDUAR,
+            self::RAID_VAULT_OF_ARCHAVON,
+        ],
     ];
 
     /**
@@ -709,8 +776,27 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
+    public static function findExpansionByKey(string $key): ?string
+    {
+        $result = null;
 
-    public static function boot()
+        foreach (self::ALL as $expansion => $dungeonKeys) {
+            if (in_array($key, $dungeonKeys)) {
+                $result = $expansion;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+
+    public
+    static function boot()
     {
         parent::boot();
 
@@ -723,7 +809,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return int|null
      */
-    public function getDungeonId(): ?int
+    public
+    function getDungeonId(): ?int
     {
         return $this->id;
     }

@@ -144,7 +144,7 @@ class DungeonRoute extends Model
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at',
                          'published_at', 'published_state_id', 'published_state'];
 
-    protected $fillable = ['mapping_version_id', 'enemy_forces'];
+    protected $fillable = ['title', 'mapping_version_id', 'enemy_forces'];
 
     protected $with = ['faction', 'specializations', 'classes', 'races', 'affixes'];
 

@@ -191,18 +191,21 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection
     {
+        // @TODO Hacky fix to push it to the correct page
+        $iterationOffset++;
         $seasons = Season::selectRaw('seasons.*')
             ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
             ->whereNull('timewalking_events.id')
-            ->orderBy('start')->get();
-
-        // Add two weeks so that we can show an additional affix before and after the list so that we can always see what's coming up next
-        $affixesToDisplay = 12 + 2;
+            ->orderBy('start')
+            ->get();
 
         /** @var Season $currentSeason */
         $currentSeason = $seasons->shift();
         /** @var Season $nextSeason */
         $nextSeason = $seasons->shift();
+
+        // Add two weeks so that we can show an additional affix before and after the list so that we can always see what's coming up next
+        $affixesToDisplay = 10;
 
         $firstSeasonStart = $currentSeason->start();
 

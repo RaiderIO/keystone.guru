@@ -32,13 +32,13 @@ class ConversionTest extends TestCase
     public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
         $result = [];
-        foreach (Dungeon::ALL_LEGION as $dungeonKey) {
+        foreach (Dungeon::ALL[Expansion::EXPANSION_LEGION] as $dungeonKey) {
             $result[] = [$dungeonKey, Expansion::EXPANSION_LEGION];
         }
-        foreach (Dungeon::ALL_BFA as $dungeonKey) {
+        foreach (Dungeon::ALL[Expansion::EXPANSION_BFA] as $dungeonKey) {
             $result[] = [$dungeonKey, Expansion::EXPANSION_BFA];
         }
-        foreach (Dungeon::ALL_SHADOWLANDS as $dungeonKey) {
+        foreach (Dungeon::ALL[Expansion::EXPANSION_SHADOWLANDS] as $dungeonKey) {
             $result[] = [$dungeonKey, Expansion::EXPANSION_SHADOWLANDS];
         }
         return $result;

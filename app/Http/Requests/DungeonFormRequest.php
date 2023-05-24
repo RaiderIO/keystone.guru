@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dungeon;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,9 +14,9 @@ class DungeonFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**
@@ -22,17 +24,21 @@ class DungeonFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'active'                          => 'boolean',
-            'speedrun_enabled'                => 'boolean',
-            'zone_id'                         => 'int',
-            'map_id'                          => 'int',
-            'mdt_id'                          => 'int',
-            'name'                            => ['required', Rule::unique('dungeons', 'name')->ignore($this->get('name'), 'name')],
-            'key'                             => ['required', Rule::unique('dungeons', 'key')->ignore($this->get('key'), 'key')],
-            'slug'                            => ['required', Rule::unique('dungeons', 'slug')->ignore($this->get('slug'), 'slug')],
+            'active'           => 'boolean',
+            'speedrun_enabled' => 'boolean',
+            'zone_id'          => 'int',
+            'map_id'           => 'int',
+            'mdt_id'           => 'int',
+            'name'             => ['required', Rule::unique('dungeons', 'name')->ignore($this->get('name'), 'name')],
+            'key'              => [
+                'required',
+                Rule::unique('dungeons', 'key')->ignore($this->get('key'), 'key'),
+                Rule::in(collect(Dungeon::ALL)->flatten()),
+            ],
+            'slug'             => ['required', Rule::unique('dungeons', 'slug')->ignore($this->get('slug'), 'slug')],
         ];
     }
 }
