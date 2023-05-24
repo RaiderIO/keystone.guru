@@ -20,10 +20,7 @@
         "lat": -114.25,
         "lng": 158,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 173016
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4715,
@@ -46,10 +43,7 @@
         "lat": -109.88,
         "lng": 160.38,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 165911
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4716,
@@ -72,10 +66,7 @@
         "lat": -106.5,
         "lng": 158.12,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 165872
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4717,
@@ -98,10 +89,7 @@
         "lat": -111.38,
         "lng": 153.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4718,
@@ -124,10 +112,7 @@
         "lat": -111,
         "lng": 148,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4719,
@@ -150,10 +135,7 @@
         "lat": -188.88,
         "lng": 143.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 173016
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4720,
@@ -176,10 +158,7 @@
         "lat": -191.88,
         "lng": 149.75,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4721,
@@ -202,10 +181,7 @@
         "lat": -184.88,
         "lng": 147.38,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4723,
@@ -228,10 +204,7 @@
         "lat": -180.25,
         "lng": 192.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4724,
@@ -254,10 +227,7 @@
         "lat": -183.75,
         "lng": 196,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4725,
@@ -280,10 +250,7 @@
         "lat": -179,
         "lng": 197.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4726,
@@ -306,10 +273,7 @@
         "lat": -182.75,
         "lng": 201,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4727,
@@ -332,10 +296,7 @@
         "lat": -178,
         "lng": 202.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4728,
@@ -358,10 +319,7 @@
         "lat": -173.75,
         "lng": 200,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4729,
@@ -384,10 +342,7 @@
         "lat": -140.62,
         "lng": 162.25,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4730,
@@ -410,10 +365,7 @@
         "lat": -151.75,
         "lng": 154.38,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 173016
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4731,
@@ -436,10 +388,7 @@
         "lat": -145,
         "lng": 153,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4732,
@@ -462,10 +411,7 @@
         "lat": -146.38,
         "lng": 163.62,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4733,
@@ -488,10 +434,7 @@
         "lat": -146.38,
         "lng": 157.75,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 172981
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4734,
@@ -514,10 +457,7 @@
         "lat": -111.12,
         "lng": 224.25,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 172981
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4735,
@@ -540,10 +480,7 @@
         "lat": -113.62,
         "lng": 229.38,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4736,
@@ -566,10 +503,7 @@
         "lat": -110.88,
         "lng": 237,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 173016
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4737,
@@ -592,10 +526,7 @@
         "lat": -117,
         "lng": 238,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162729
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4738,
@@ -618,10 +549,7 @@
         "lat": -190.12,
         "lng": 237,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 165872
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4739,
@@ -644,10 +572,7 @@
         "lat": -186.38,
         "lng": 241.62,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 165911
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4740,
@@ -670,10 +595,7 @@
         "lat": -141.88,
         "lng": 157.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 166264
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4741,
@@ -696,10 +618,7 @@
         "lat": -93.5,
         "lng": 195.75,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 162689
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4742,
@@ -722,10 +641,7 @@
         "lat": -126.38,
         "lng": 183.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 173044
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4743,
@@ -748,10 +664,7 @@
         "lat": -126.25,
         "lng": 206.75,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 167731
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4744,
@@ -774,10 +687,7 @@
         "lat": -92.38,
         "lng": 143.62,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163621
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4745,
@@ -800,10 +710,7 @@
         "lat": -98.62,
         "lng": 142.25,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163622
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4746,
@@ -826,10 +733,7 @@
         "lat": -102.25,
         "lng": 138.88,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163622
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4747,
@@ -852,10 +756,7 @@
         "lat": -106.88,
         "lng": 137.5,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163622
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4748,
@@ -878,10 +779,7 @@
         "lat": -91.62,
         "lng": 235.38,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163623
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4749,
@@ -904,10 +802,7 @@
         "lat": -94.5,
         "lng": 240,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163623
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4750,
@@ -930,10 +825,7 @@
         "lat": -92.62,
         "lng": 247.88,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163620
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 4751,
@@ -956,10 +848,7 @@
         "lat": -100,
         "lng": 249.88,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 163623
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 5842,
@@ -982,10 +871,7 @@
         "lat": -93.69,
         "lng": 208.88,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 164578
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 5912,
@@ -1008,10 +894,7 @@
         "lat": -146.47,
         "lng": 249.63,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 179891
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 5938,
@@ -1034,10 +917,7 @@
         "lat": -142.62,
         "lng": 249.56,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 179892
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7515,
@@ -1060,10 +940,7 @@
         "lat": -187.59680010045,
         "lng": 232.68321053409,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185680
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7516,
@@ -1086,10 +963,7 @@
         "lat": -184.79684786015,
         "lng": 235.77033736314,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185683
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7517,
@@ -1112,10 +986,7 @@
         "lat": -181.35075279516,
         "lng": 239.86257525282,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185685
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7518,
@@ -1138,10 +1009,7 @@
         "lat": -108.09375,
         "lng": 245.5625,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185680
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7519,
@@ -1164,10 +1032,7 @@
         "lat": -113.25,
         "lng": 245.25,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185683
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7520,
@@ -1190,10 +1055,7 @@
         "lat": -120.0625,
         "lng": 244.40625,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185685
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7521,
@@ -1216,10 +1078,7 @@
         "lat": -98.125,
         "lng": 185.875,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185680
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7522,
@@ -1242,10 +1101,7 @@
         "lat": -100,
         "lng": 195.75,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185683
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7523,
@@ -1268,9 +1124,6 @@
         "lat": -98.5,
         "lng": 205.9375,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185685
-        }
+        "enemyactiveauras": []
     }
 ]
