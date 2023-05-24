@@ -20,9 +20,6 @@
         "lat": -53.807938111119,
         "lng": 181.50705883962,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 27656
-        }
+        "enemyactiveauras": []
     }
 ]
