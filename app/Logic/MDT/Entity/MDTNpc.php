@@ -74,8 +74,10 @@ class MDTNpc implements Arrayable
         $this->id = (int)$rawMdtNpc['id'];
 
         if (isset($rawMdtNpc['spells'])) {
-            $this->recur_ksort($rawMdtNpc['spells']);
-            $this->spells = $rawMdtNpc['spells'];
+            // #1760
+//            $this->recur_ksort($rawMdtNpc['spells']);
+//            $this->spells = $rawMdtNpc['spells'];
+            $this->spells = [];
         } else {
             $this->spells = [];
         }
@@ -98,8 +100,9 @@ class MDTNpc implements Arrayable
         $this->healthPercentage = $rawMdtNpc['health_percentage'] ?? null;
 
         if (isset($rawMdtNpc['characteristics'])) {
-            $this->recur_ksort($rawMdtNpc['characteristics']);
-            $this->characteristics = $rawMdtNpc['characteristics'];
+//            $this->recur_ksort($rawMdtNpc['characteristics']);
+//            $this->characteristics = $rawMdtNpc['characteristics'];
+            $this->characteristics = [];
         } else {
             $this->characteristics = [];
         }
