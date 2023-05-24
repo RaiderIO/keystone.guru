@@ -14,6 +14,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcType;
 use App\Models\Polyline;
 use App\Service\Mapping\MappingServiceInterface;
@@ -155,11 +156,17 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 try {
                     if ($npc->save()) {
                         if ($newlyCreated) {
+                            // For new NPCs go back and create enemy forces for all historical mapping versions
                             $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
+
                             $this->log->importNpcsSaveNewNpc($npc->id);
                         } else {
-                            $npc->enemyForces->update([
-                                'enemy_forces' => $mdtNpc->getCount(),
+                            // Create new enemy forces for this NPC for this new mapping version
+                            NpcEnemyForces::create([
+                                'npc_id'               => $npc->id,
+                                'mapping_version_id'   => $newMappingVersion->id,
+                                'enemy_forces'         => $mdtNpc->getCount(),
+                                'enemy_forces_teeming' => null,
                             ]);
 
                             $this->log->importNpcsUpdateExistingNpc($npc->id);
