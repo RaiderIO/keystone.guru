@@ -119,7 +119,6 @@ class APIDungeonRouteController extends Controller
 
         // Must have these tags
         if (!empty($tags)) {
-
             $routes = $routes
                 ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
                 ->where('tags.tag_category_id', $tagCategoryId)

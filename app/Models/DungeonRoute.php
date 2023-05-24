@@ -461,7 +461,7 @@ class DungeonRoute extends Model
      */
     public function getViewsAttribute(): int
     {
-        return $this->pageviews->count();
+        return $this->pageviews()->count();
     }
 
     /**
@@ -469,7 +469,7 @@ class DungeonRoute extends Model
      */
     public function getRatingCountAttribute(): int
     {
-        return $this->ratings->count();
+        return $this->ratings()->count();
     }
 
     /**
