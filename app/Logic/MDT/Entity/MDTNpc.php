@@ -100,6 +100,7 @@ class MDTNpc implements Arrayable
         $this->healthPercentage = $rawMdtNpc['health_percentage'] ?? null;
 
         if (isset($rawMdtNpc['characteristics'])) {
+            // #1761
 //            $this->recur_ksort($rawMdtNpc['characteristics']);
 //            $this->characteristics = $rawMdtNpc['characteristics'];
             $this->characteristics = [];
