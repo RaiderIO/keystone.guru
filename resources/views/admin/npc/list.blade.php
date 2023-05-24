@@ -54,7 +54,10 @@
                         'title': lang.get('messages.enemy_forces_label'),
                         'data': 'enemy_forces',
                         'name': 'enemy_forces',
-                        'searchable': false
+                        'searchable': false,
+                        'render': function (data, type, row, meta) {
+                            return lang.get(row.enemy_forces.enemy_forces);
+                        },
                     },
                     {
                         'title': lang.get('messages.enemy_count_label'),

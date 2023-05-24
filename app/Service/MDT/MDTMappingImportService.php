@@ -163,8 +163,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         } else {
                             // Create new enemy forces for this NPC for this new mapping version
                             NpcEnemyForces::create([
-                                'npc_id'               => $npc->id,
                                 'mapping_version_id'   => $newMappingVersion->id,
+                                'npc_id'               => $npc->id,
                                 'enemy_forces'         => $mdtNpc->getCount(),
                                 'enemy_forces_teeming' => null,
                             ]);
