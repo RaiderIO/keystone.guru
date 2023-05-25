@@ -204,6 +204,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         // Profile routes
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::get('collections', [ProfileController::class, 'collections'])->name('profile.collections');
             Route::get('routes', [ProfileController::class, 'routes'])->name('profile.routes');
             Route::get('favorites', [ProfileController::class, 'favorites'])->name('profile.favorites');
             Route::get('tags', [ProfileController::class, 'tags'])->name('profile.tags');

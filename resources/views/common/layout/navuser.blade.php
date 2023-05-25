@@ -20,6 +20,7 @@ $user = Auth::user();
         </a>
         <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole('admin'))
+                <h6 class="dropdown-header">{{ __('views/common.layout.navuser.header_admin') }}</h6>
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
                        href="{{ route('telescope') }}">
@@ -30,7 +31,6 @@ $user = Auth::user();
                    href="{{ route('admin.tools') }}">
                     <i class="fa fa-hammer"></i> {{__('views/common.layout.navuser.tools')}}
                 </a>
-                <div class="dropdown-divider"></div>
                 <a class="dropdown-item"
                    href="{{ route('admin.releases') }}">{{__('views/common.layout.navuser.view_releases')}}</a>
                 @if( $user->isAbleTo('read-expansions') )
@@ -57,11 +57,17 @@ $user = Auth::user();
                 </a>
                 <div class="dropdown-divider"></div>
             @endif
-            <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
-                <i class="fa fa-route"></i> {{ __('views/common.layout.navuser.my_profile') }}
+            <h6 class="dropdown-header">{{ __('views/common.layout.navuser.header_routes') }}</h6>
+            <a class="dropdown-item" href="{{ route('profile.favorites') }}">
+                <i class="fa fa-route"></i> {{ __('views/common.layout.navuser.my_route_collections') }}
             </a>
             <a class="dropdown-item" href="{{ route('profile.favorites') }}">
                 <i class="fa fa-star"></i> {{ __('views/common.layout.navuser.my_favorites') }}
+            </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">{{ __('views/common.layout.navuser.header_manage') }}</h6>
+            <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
+                <i class="fa fa-user"></i> {{ __('views/common.layout.navuser.my_profile') }}
             </a>
             <a class="dropdown-item" href="{{ route('profile.tags') }}">
                 <i class="fa fa-tag"></i> {{ __('views/common.layout.navuser.my_tags') }}
@@ -69,7 +75,6 @@ $user = Auth::user();
             <a class="dropdown-item" href="{{ route('team.list') }}">
                 <i class="fa fa-users"></i> {{ __('views/common.layout.navuser.my_teams') }}
             </a>
-            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('profile.edit') }}">
                 <i class="fa fa-cog"></i> {{ __('views/common.layout.navuser.account_settings') }}
             </a>

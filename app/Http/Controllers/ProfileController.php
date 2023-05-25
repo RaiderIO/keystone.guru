@@ -45,6 +45,15 @@ class ProfileController extends Controller
 
     /**
      * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function collections(Request $request)
+    {
+        return view('profile.collections');
+    }
+
+    /**
+     * @param Request $request
      * @return RedirectResponse
      */
     public function routes(Request $request)
