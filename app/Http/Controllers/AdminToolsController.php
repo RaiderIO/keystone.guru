@@ -709,7 +709,7 @@ class AdminToolsController extends Controller
 
                     // Match enemy forces
                     /** @var NpcEnemyForces $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->get();
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
                     if ($npcEnemyForces->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',

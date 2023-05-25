@@ -359,7 +359,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                                 } else {
 
                                     /** @var NpcEnemyForces $npcEnemyForces */
-                                    $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($dungeonRoute->mappingVersion->id)->get();
+                                    $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($dungeonRoute->mappingVersion->id)->first();
 
                                     $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $npcEnemyForces->enemy_forces_teeming : $npcEnemyForces->enemy_forces;
                                 }
