@@ -4,6 +4,7 @@ namespace App;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameServerRegion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
@@ -45,16 +46,17 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property boolean $changed_username
  *
  * @property PatreonUserLink $patreonUserLink
- * @property GameServerRegion $gameserverregion
+ * @property GameServerRegion $gameServerRegion
  * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
  * @property boolean $is_admin
  *
- * @property DungeonRoute[]|Collection $dungeonroutes
- * @property UserReport[]|Collection $reports
- * @property Team[]|Collection $teams
- * @property Role[]|Collection $roles
- * @property Tag[]|Collection $tags
+ * @property Collection|DungeonRoute[] $dungeonRoutes
+ * @property Collection|DungeonRouteCollection[] $dungeonRouteCollections
+ * @property Collection|UserReport[] $reports
+ * @property Collection|Team[] $teams
+ * @property Collection|Role[] $roles
+ * @property Collection|Tag[] $tags
  *
  * @mixin Eloquent
  */
@@ -123,9 +125,17 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonRouteCollections(): HasMany
+    {
+        return $this->hasMany(DungeonRouteCollection::class);
     }
 
     /**
@@ -147,10 +157,10 @@ class User extends Authenticatable
     /**
      * @return BelongsTo
      */
-    public function gameserverregion(): BelongsTo
+    public function gameServerRegion(): BelongsTo
     {
         // Don't know why it won't work without the foreign key specified..
-        return $this->belongsTo(GameServerRegion::class, 'game_server_region_id');
+        return $this->belongsTo(GameServerRegion::class);
     }
 
     /**
@@ -308,7 +318,7 @@ class User extends Authenticatable
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes()->count() - $this->dungeonroutes()->isSandbox()->count()),
+                'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
             'reports'       => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),
@@ -322,7 +332,7 @@ class User extends Authenticatable
 
         // Delete user properly if it gets deleted
         static::deleting(function (User $user) {
-            $user->dungeonroutes()->delete();
+            $user->dungeonRoutes()->delete();
             $user->reports()->delete();
 
             $user->patreonUserLink()->delete();
