@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
@@ -18,6 +19,7 @@ use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
+use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -113,8 +115,7 @@ class AdminToolsController extends Controller
                 $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    $npcCandidate->enemy_forces = 0;
-                    $npcCandidate->dangerous    = true;
+                    $npcCandidate->dangerous = true;
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
@@ -131,6 +132,9 @@ class AdminToolsController extends Controller
                     if ($existed) {
                         $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     } else {
+                        // Now create new enemy forces. Default to 0
+                        $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+
                         $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
                     }
                 } else {
@@ -169,6 +173,28 @@ class AdminToolsController extends Controller
 
         return view('admin.tools.dungeonroute.viewcontents', [
             'dungeonroute' => $dungeonRoute,
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function dungeonrouteMappingVersions()
+    {
+        $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
+            ->get()
+            ->mapWithKeys(function (MappingVersion $mappingVersion) {
+                return [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()];
+            })
+            ->groupBy(function (int $count, string $key) {
+                return $count === 0;
+            }, true);
+
+        return view('admin.tools.dungeonroute.mappingversions', [
+            'mappingVersionUsage' => collect([
+                'unused' => $mappingVersionUsage[1],
+                'used'   => $mappingVersionUsage[0],
+            ]),
         ]);
     }
 
@@ -407,11 +433,11 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
-     * @param MDTMappingExportServiceInterface $mdtMappingService
+     * @param MDTMappingImportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
      */
-    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingImportServiceInterface $mdtMappingService)
     {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
@@ -433,13 +459,7 @@ class AdminToolsController extends Controller
                         __($dungeon->name) =>
                             $mappingVersionByDungeon->mapWithKeys(function (MappingVersion $mappingVersion) use ($dungeon) {
                                 return [
-                                    $mappingVersion->id =>
-                                        sprintf('%s Version %d (%d, %s)',
-                                            __($dungeon->name),
-                                            $mappingVersion->version,
-                                            $mappingVersion->id,
-                                            $mappingVersion->created_at
-                                        ),
+                                    $mappingVersion->id => $mappingVersion->getPrettyName(),
                                 ];
                             }),
                     ];
@@ -688,21 +708,23 @@ class AdminToolsController extends Controller
                     }
 
                     // Match enemy forces
-                    if ($npc->enemy_forces !== $mdtNpc->getCount()) {
+                    /** @var NpcEnemyForces $npcEnemyForces */
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->get();
+                    if ($npcEnemyForces->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => $mdtNpc->getCount()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npcEnemyForces->enemy_forces),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
                     }
 
                     // Match enemy forces teeming
-                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
+                    if ($npcEnemyForces->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npcEnemyForces->enemy_forces_teeming),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
                     }
@@ -783,12 +805,12 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             case 'mismatched_enemy_forces':
-                $npc->enemy_forces = $value;
-                $npc->save();
+                $npc->enemyForces->enemy_forces = $value;
+                $npc->enemyForces->save();
                 break;
             case 'mismatched_enemy_forces_teeming':
-                $npc->enemy_forces_teeming = $value;
-                $npc->save();
+                $npc->enemyForces->enemy_forces_teeming = $value;
+                $npc->enemyForces->save();
                 break;
             case 'mismatched_enemy_type':
                 $npcType          = NpcType::where('type', $value)->first();

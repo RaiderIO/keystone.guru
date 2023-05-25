@@ -9,8 +9,6 @@
         "name": "Tirathon Saltheril",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 813,
+                "mapping_version_id": 13,
+                "npc_id": 95885,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 95886,
@@ -30,8 +37,6 @@
         "name": "Ash'Golm",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 814,
+                "mapping_version_id": 13,
+                "npc_id": 95886,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 95887,
@@ -51,8 +65,6 @@
         "name": "Glazer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 815,
+                "mapping_version_id": 13,
+                "npc_id": 95887,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 95888,
@@ -72,8 +93,6 @@
         "name": "Cordana Felsong",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 816,
+                "mapping_version_id": 13,
+                "npc_id": 95888,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96015,
@@ -93,8 +121,6 @@
         "name": "Inquisitor Tormentorum",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 817,
+                "mapping_version_id": 13,
+                "npc_id": 96015,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96480,
@@ -114,8 +149,6 @@
         "name": "Viletongue Belcher",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 818,
+                "mapping_version_id": 13,
+                "npc_id": 96480,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96579,
@@ -135,8 +177,6 @@
         "name": "Frenzied Animus",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 819,
+                "mapping_version_id": 13,
+                "npc_id": 96579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96584,
@@ -156,8 +205,6 @@
         "name": "Immoliant Fury",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 820,
+                "mapping_version_id": 13,
+                "npc_id": 96584,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96587,
@@ -177,8 +233,6 @@
         "name": "Felsworn Infester",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 821,
+                "mapping_version_id": 13,
+                "npc_id": 96587,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96657,
@@ -198,8 +261,6 @@
         "name": "Blade Dancer Illianna",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 822,
+                "mapping_version_id": 13,
+                "npc_id": 96657,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97677,
@@ -219,8 +289,6 @@
         "name": "Barbed Spiderling",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 823,
+                "mapping_version_id": 13,
+                "npc_id": 97677,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97678,
@@ -240,8 +317,6 @@
         "name": "Aranasi Broodmother",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 824,
+                "mapping_version_id": 13,
+                "npc_id": 97678,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97681,
@@ -261,8 +345,6 @@
         "name": "Demon Spider",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 825,
+                "mapping_version_id": 13,
+                "npc_id": 97681,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98082,
@@ -282,8 +373,6 @@
         "name": "Lens",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 826,
+                "mapping_version_id": 13,
+                "npc_id": 98082,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98177,
@@ -303,8 +401,6 @@
         "name": "Glayvianna Soulrender",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 827,
+                "mapping_version_id": 13,
+                "npc_id": 98177,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98533,
@@ -324,8 +429,6 @@
         "name": "Foul Mother",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 828,
+                "mapping_version_id": 13,
+                "npc_id": 98533,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98926,
@@ -345,8 +457,6 @@
         "name": "Shadow Hunter",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 829,
+                "mapping_version_id": 13,
+                "npc_id": 98926,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98954,
@@ -366,8 +485,6 @@
         "name": "Felsworn Myrmidon",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 830,
+                "mapping_version_id": 13,
+                "npc_id": 98954,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98963,
@@ -387,8 +513,6 @@
         "name": "Blazing Imp",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 831,
+                "mapping_version_id": 13,
+                "npc_id": 98963,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99013,
@@ -408,8 +541,6 @@
         "name": "Drelanim Whisperwind",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 832,
+                "mapping_version_id": 13,
+                "npc_id": 99013,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99233,
@@ -429,8 +569,6 @@
         "name": "Ember",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 833,
+                "mapping_version_id": 13,
+                "npc_id": 99233,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99644,
@@ -450,8 +597,6 @@
         "name": "Felguard Annihilator",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 834,
+                "mapping_version_id": 13,
+                "npc_id": 99644,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99645,
@@ -471,8 +625,6 @@
         "name": "Shadowmoon Technician",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 835,
+                "mapping_version_id": 13,
+                "npc_id": 99645,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99649,
@@ -492,8 +653,6 @@
         "name": "Dreadlord Mendacius",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 836,
+                "mapping_version_id": 13,
+                "npc_id": 99649,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99651,
@@ -513,8 +681,6 @@
         "name": "Faceless Voidcaster",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 837,
+                "mapping_version_id": 13,
+                "npc_id": 99651,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99655,
@@ -534,8 +709,6 @@
         "name": "Void-Touched Juggernaut",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 838,
+                "mapping_version_id": 13,
+                "npc_id": 99655,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99657,
@@ -555,8 +737,6 @@
         "name": "Deranged Mindflayer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 839,
+                "mapping_version_id": 13,
+                "npc_id": 99657,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99675,
@@ -576,8 +765,6 @@
         "name": "Enormous Stone Quilen",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 840,
+                "mapping_version_id": 13,
+                "npc_id": 99675,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99676,
@@ -597,8 +793,6 @@
         "name": "Mogu'shan Secret-Keeper",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 841,
+                "mapping_version_id": 13,
+                "npc_id": 99676,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99678,
@@ -618,8 +821,6 @@
         "name": "Lingering Corruption",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -627,7 +828,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 842,
+                "mapping_version_id": 13,
+                "npc_id": 99678,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99704,
@@ -639,8 +849,6 @@
         "name": "Shadowmoon Warlock",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -648,7 +856,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 843,
+                "mapping_version_id": 13,
+                "npc_id": 99704,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99728,
@@ -660,8 +877,6 @@
         "name": "Grimguard",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -669,7 +884,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 844,
+                "mapping_version_id": 13,
+                "npc_id": 99728,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99865,
@@ -681,8 +905,6 @@
         "name": "Glazer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -690,7 +912,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 845,
+                "mapping_version_id": 13,
+                "npc_id": 99865,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99956,
@@ -702,8 +933,6 @@
         "name": "Fel-Infused Fury",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -711,7 +940,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 846,
+                "mapping_version_id": 13,
+                "npc_id": 99956,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 100351,
@@ -723,8 +961,6 @@
         "name": "Avatar of Vengeance",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -732,7 +968,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 847,
+                "mapping_version_id": 13,
+                "npc_id": 100351,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 100364,
@@ -744,8 +989,6 @@
         "name": "Spirit of Vengeance",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -753,7 +996,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 848,
+                "mapping_version_id": 13,
+                "npc_id": 100364,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 102566,
@@ -765,8 +1017,6 @@
         "name": "Grimhorn the Enslaver",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -774,7 +1024,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 849,
+                "mapping_version_id": 13,
+                "npc_id": 102566,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 102583,
@@ -786,8 +1045,6 @@
         "name": "Fel Scorcher",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -795,7 +1052,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 850,
+                "mapping_version_id": 13,
+                "npc_id": 102583,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 102584,
@@ -807,8 +1073,6 @@
         "name": "Malignant Defiler",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -816,7 +1080,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 851,
+                "mapping_version_id": 13,
+                "npc_id": 102584,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 103860,
@@ -828,8 +1101,6 @@
         "name": "Drelanim Whisperwind",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -837,7 +1108,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 852,
+                "mapping_version_id": 13,
+                "npc_id": 103860,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 104293,
@@ -849,8 +1129,6 @@
         "name": "Avatar of Shadow",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -858,7 +1136,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 853,
+                "mapping_version_id": 13,
+                "npc_id": 104293,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 105824,
@@ -870,8 +1157,6 @@
         "name": "Grimoira",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -879,7 +1164,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 854,
+                "mapping_version_id": 13,
+                "npc_id": 105824,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 107101,
@@ -891,8 +1185,6 @@
         "name": "Fel Fury",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -900,7 +1192,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 855,
+                "mapping_version_id": 13,
+                "npc_id": 107101,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 107114,
@@ -912,8 +1213,6 @@
         "name": "Tormenting Orb",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -921,7 +1220,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 856,
+                "mapping_version_id": 13,
+                "npc_id": 107114,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 109016,
@@ -933,8 +1241,6 @@
         "name": "Tirathon Saltheril",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -942,7 +1248,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 857,
+                "mapping_version_id": 13,
+                "npc_id": 109016,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 109017,
@@ -954,8 +1269,6 @@
         "name": "Cordana Felsong",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -963,7 +1276,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 858,
+                "mapping_version_id": 13,
+                "npc_id": 109017,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 109077,
@@ -975,8 +1297,6 @@
         "name": "Avatar of Shadow",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -984,7 +1304,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 859,
+                "mapping_version_id": 13,
+                "npc_id": 109077,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 109080,
@@ -996,8 +1325,6 @@
         "name": "Inquisitor Tormentorum",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1005,7 +1332,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 860,
+                "mapping_version_id": 13,
+                "npc_id": 109080,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 109081,
@@ -1017,8 +1353,6 @@
         "name": "Tormenting Orb",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1026,7 +1360,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 861,
+                "mapping_version_id": 13,
+                "npc_id": 109081,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 113552,
@@ -1038,8 +1381,6 @@
         "name": "Overloaded Lens",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1047,6 +1388,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 862,
+                "mapping_version_id": 13,
+                "npc_id": 113552,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

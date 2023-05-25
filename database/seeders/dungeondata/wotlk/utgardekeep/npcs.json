@@ -9,8 +9,6 @@
         "name": "Prince Keleseth",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3171,
+                "mapping_version_id": 56,
+                "npc_id": 23953,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23954,
@@ -30,8 +37,6 @@
         "name": "Ingvar the Plunderer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3172,
+                "mapping_version_id": 56,
+                "npc_id": 23954,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23956,
@@ -51,8 +65,6 @@
         "name": "Dragonflayer Strategist",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3173,
+                "mapping_version_id": 56,
+                "npc_id": 23956,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23960,
@@ -72,8 +93,6 @@
         "name": "Dragonflayer Runecaster",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3174,
+                "mapping_version_id": 56,
+                "npc_id": 23960,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23961,
@@ -93,8 +121,6 @@
         "name": "Dragonflayer Ironhelm",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3175,
+                "mapping_version_id": 56,
+                "npc_id": 23961,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23965,
@@ -114,8 +149,6 @@
         "name": "Frost Tomb",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3176,
+                "mapping_version_id": 56,
+                "npc_id": 23965,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 23970,
@@ -135,8 +177,6 @@
         "name": "Vrykul Skeleton",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3177,
+                "mapping_version_id": 56,
+                "npc_id": 23970,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24068,
@@ -156,8 +205,6 @@
         "name": "Annhylde the Caller",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3178,
+                "mapping_version_id": 56,
+                "npc_id": 24068,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24069,
@@ -177,8 +233,6 @@
         "name": "Dragonflayer Bonecrusher",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3179,
+                "mapping_version_id": 56,
+                "npc_id": 24069,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24071,
@@ -198,8 +261,6 @@
         "name": "Dragonflayer Heartsplitter",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3180,
+                "mapping_version_id": 56,
+                "npc_id": 24071,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24078,
@@ -219,8 +289,6 @@
         "name": "Dragonflayer Metalworker",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3181,
+                "mapping_version_id": 56,
+                "npc_id": 24078,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24079,
@@ -240,8 +317,6 @@
         "name": "Dragonflayer Forge Master",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3182,
+                "mapping_version_id": 56,
+                "npc_id": 24079,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24080,
@@ -261,8 +345,6 @@
         "name": "Dragonflayer Weaponsmith",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3183,
+                "mapping_version_id": 56,
+                "npc_id": 24080,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24082,
@@ -282,8 +373,6 @@
         "name": "Proto-Drake Handler",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3184,
+                "mapping_version_id": 56,
+                "npc_id": 24082,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24083,
@@ -303,8 +401,6 @@
         "name": "Enslaved Proto-Drake",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3185,
+                "mapping_version_id": 56,
+                "npc_id": 24083,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24084,
@@ -324,8 +429,6 @@
         "name": "Tunneling Ghoul",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3186,
+                "mapping_version_id": 56,
+                "npc_id": 24084,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24085,
@@ -345,8 +457,6 @@
         "name": "Dragonflayer Overseer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3187,
+                "mapping_version_id": 56,
+                "npc_id": 24085,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24111,
@@ -366,8 +485,6 @@
         "name": "Defender Mordun",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3188,
+                "mapping_version_id": 56,
+                "npc_id": 24111,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24137,
@@ -387,8 +513,6 @@
         "name": "Dark Ranger Marrah",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3189,
+                "mapping_version_id": 56,
+                "npc_id": 24137,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24200,
@@ -408,8 +541,6 @@
         "name": "Skarvald the Constructor",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3190,
+                "mapping_version_id": 56,
+                "npc_id": 24200,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24201,
@@ -429,8 +569,6 @@
         "name": "Dalronn the Controller",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3191,
+                "mapping_version_id": 56,
+                "npc_id": 24201,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24849,
@@ -450,8 +597,6 @@
         "name": "Proto-Drake Rider",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3192,
+                "mapping_version_id": 56,
+                "npc_id": 24849,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 24864,
@@ -471,8 +625,6 @@
         "name": "Dragonflayer Worker",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3193,
+                "mapping_version_id": 56,
+                "npc_id": 24864,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 27389,
@@ -492,8 +653,6 @@
         "name": "Dalronn the Controller",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3194,
+                "mapping_version_id": 56,
+                "npc_id": 27389,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 27390,
@@ -513,8 +681,6 @@
         "name": "Skarvald the Constructor",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3195,
+                "mapping_version_id": 56,
+                "npc_id": 27390,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 28410,
@@ -534,8 +709,6 @@
         "name": "Dragonflayer Spiritualist",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3196,
+                "mapping_version_id": 56,
+                "npc_id": 28410,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 28419,
@@ -555,8 +737,6 @@
         "name": "Frenzied Geist",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3197,
+                "mapping_version_id": 56,
+                "npc_id": 28419,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 29735,
@@ -576,8 +765,6 @@
         "name": "Savage Worg",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3198,
+                "mapping_version_id": 56,
+                "npc_id": 29735,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 30531,
@@ -597,8 +793,6 @@
         "name": "Elder Jarten",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -606,6 +800,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 3199,
+                "mapping_version_id": 56,
+                "npc_id": 30531,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

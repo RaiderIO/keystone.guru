@@ -9,8 +9,6 @@
         "name": "Soulguard Watchman",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2887,
+                "mapping_version_id": 51,
+                "npc_id": 36478,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36497,
@@ -30,8 +37,6 @@
         "name": "Bronjahm",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2888,
+                "mapping_version_id": 51,
+                "npc_id": 36497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36499,
@@ -51,8 +65,6 @@
         "name": "Soulguard Reaper",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2889,
+                "mapping_version_id": 51,
+                "npc_id": 36499,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36502,
@@ -72,8 +93,6 @@
         "name": "Devourer of Souls",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2890,
+                "mapping_version_id": 51,
+                "npc_id": 36502,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36516,
@@ -93,8 +121,6 @@
         "name": "Soulguard Animator",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2891,
+                "mapping_version_id": 51,
+                "npc_id": 36516,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36522,
@@ -114,8 +149,6 @@
         "name": "Soul Horror",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2892,
+                "mapping_version_id": 51,
+                "npc_id": 36522,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36535,
@@ -135,8 +177,6 @@
         "name": "Corrupted Soul Fragment",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2893,
+                "mapping_version_id": 51,
+                "npc_id": 36535,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36551,
@@ -156,8 +205,6 @@
         "name": "Spiteful Apparition",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2894,
+                "mapping_version_id": 51,
+                "npc_id": 36551,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36564,
@@ -177,8 +233,6 @@
         "name": "Soulguard Bonecaster",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2895,
+                "mapping_version_id": 51,
+                "npc_id": 36564,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36620,
@@ -198,8 +261,6 @@
         "name": "Soulguard Adept",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2896,
+                "mapping_version_id": 51,
+                "npc_id": 36620,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36666,
@@ -219,8 +289,6 @@
         "name": "Spectral Warden",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2897,
+                "mapping_version_id": 51,
+                "npc_id": 36666,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 36916,
@@ -240,8 +317,6 @@
         "name": "Ghoul Minion",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2898,
+                "mapping_version_id": 51,
+                "npc_id": 36916,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37094,
@@ -261,8 +345,6 @@
         "name": "Crucible of Souls",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2899,
+                "mapping_version_id": 51,
+                "npc_id": 37094,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37583,
@@ -282,8 +373,6 @@
         "name": "Dark Ranger Kalira",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2900,
+                "mapping_version_id": 51,
+                "npc_id": 37583,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37588,
@@ -303,8 +401,6 @@
         "name": "Coliseum Champion",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2901,
+                "mapping_version_id": 51,
+                "npc_id": 37588,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37596,
@@ -324,8 +429,6 @@
         "name": "Lady Sylvanas Windrunner",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2902,
+                "mapping_version_id": 51,
+                "npc_id": 37596,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37597,
@@ -345,8 +457,6 @@
         "name": "Lady Jaina Proudmoore",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2903,
+                "mapping_version_id": 51,
+                "npc_id": 37597,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37774,
@@ -366,8 +485,6 @@
         "name": "Archmage Elandra",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2904,
+                "mapping_version_id": 51,
+                "npc_id": 37774,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 37779,
@@ -387,8 +513,6 @@
         "name": "Dark Ranger Loralen",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2905,
+                "mapping_version_id": 51,
+                "npc_id": 37779,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 38160,
@@ -408,8 +541,6 @@
         "name": "Lady Jaina Proudmoore",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2906,
+                "mapping_version_id": 51,
+                "npc_id": 38160,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 38161,
@@ -429,8 +569,6 @@
         "name": "Lady Sylvanas Windrunner",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,6 +576,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2907,
+                "mapping_version_id": 51,
+                "npc_id": 38161,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

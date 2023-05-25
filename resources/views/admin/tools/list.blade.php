@@ -13,6 +13,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.dungeonroute.view') }}">{{ __('views/admin.tools.list.view_dungeonroute_details') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.dungeonroute.mappingversionusage') }}">{{ __('views/admin.tools.list.view_dungeonroute_mapping_version_usage') }}</a>
+    </div>
 
     <h4>{{ __('views/admin.tools.list.subheader_mdt') }}</h4>
     <div class="form-group">

@@ -14,6 +14,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcType;
 use App\Models\Polyline;
 use App\Service\Mapping\MappingServiceInterface;
@@ -56,8 +57,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
 
-                $this->importDungeon($mdtDungeon, $dungeon);
-                $this->importNpcs($mdtDungeon, $dungeon);
+                $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
+                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon);
                 $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
@@ -94,10 +95,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @param MDTDungeon $mdtDungeon
      * @param Dungeon $dungeon
+     * @param MappingVersion $newMappingVersion
      * @return void
      * @throws Exception
      */
-    private function importDungeon(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    private function importDungeon(MDTDungeon $mdtDungeon, Dungeon $dungeon, MappingVersion $newMappingVersion): void
     {
         try {
             $this->log->importDungeonStart();
@@ -105,10 +107,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importDungeonTotalCounts($mdtDungeon->getMDTDungeonID(), $totalCount['normal'], $totalCount['teeming']);
 
             if ($dungeon->update([
-                'mdt_id'                        => $mdtDungeon->getMDTDungeonID(),
-                'enemy_forces_required'         => $totalCount['normal'],
-                'enemy_forces_required_teeming' => $totalCount['teeming'],
-            ])) {
+                    'mdt_id' => $mdtDungeon->getMDTDungeonID(),
+                ]) && $newMappingVersion->update([
+                    'enemy_forces_required'         => $totalCount['normal'],
+                    'enemy_forces_required_teeming' => $totalCount['teeming'],
+                ])) {
                 $this->log->importDungeonOK();
             } else {
                 $this->log->importDungeonFailed();
@@ -120,12 +123,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param MappingVersion $newMappingVersion
      * @param MDTDungeon $mdtDungeon
      * @param Dungeon $dungeon
      * @return void
      * @throws Exception
      */
-    private function importNpcs(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    private function importNpcs(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon): void
     {
         try {
             $this->log->importNpcsStart();
@@ -141,22 +145,42 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $npc->id = $mdtNpc->getId();
                 // Allow manual override to -1
-                $npc->dungeon_id           = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
-                $npc->display_id           = $mdtNpc->getDisplayId();
-                $npc->name                 = $mdtNpc->getName();
-                $npc->base_health          = $mdtNpc->getHealth();
-                $npc->health_percentage    = $mdtNpc->getHealthPercentage();
-                $npc->enemy_forces         = $mdtNpc->getCount();
-                $npc->enemy_forces_teeming = $mdtNpc->getCountTeeming();
-                $npc->npc_type_id          = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
-                $npc->truesight            = $mdtNpc->getStealthDetect();
+                $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
+                $npc->display_id        = $mdtNpc->getDisplayId();
+                $npc->name              = $mdtNpc->getName();
+                $npc->base_health       = $mdtNpc->getHealth();
+                $npc->health_percentage = $mdtNpc->getHealthPercentage();
+                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
+                $npc->truesight         = $mdtNpc->getStealthDetect();
 
                 try {
                     if ($npc->save()) {
                         if ($newlyCreated) {
+                            // For new NPCs go back and create enemy forces for all historical mapping versions
+                            $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
+
                             $this->log->importNpcsSaveNewNpc($npc->id);
                         } else {
+                            // Create new enemy forces for this NPC for this new mapping version
+                            NpcEnemyForces::create([
+                                'mapping_version_id'   => $newMappingVersion->id,
+                                'npc_id'               => $npc->id,
+                                'enemy_forces'         => $mdtNpc->getCount(),
+                                'enemy_forces_teeming' => null,
+                            ]);
+
                             $this->log->importNpcsUpdateExistingNpc($npc->id);
+                        }
+
+                        // If shrouded (zul'gamux) update the mapping version to account for that
+                        if ($npc->isShrouded()) {
+                            $newMappingVersion->update([
+                                'enemy_forces_shrouded' => $mdtNpc->getCount(),
+                            ]);
+                        } else if ($npc->isShroudedZulGamux()) {
+                            $newMappingVersion->update([
+                                'enemy_forces_shrouded_zul_gamux' => $mdtNpc->getCount(),
+                            ]);
                         }
                     } else {
                         throw new Exception(sprintf('Unable to save npc %d!', $npc->id));

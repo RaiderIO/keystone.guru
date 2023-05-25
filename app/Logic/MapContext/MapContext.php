@@ -14,6 +14,7 @@ use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -68,7 +69,13 @@ abstract class MapContext
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'latestMappingVersion'      => $dungeon->getCurrentMappingVersion(),
                 'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
-                'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
+                'npcs'                      => $dungeon->npcs()->with([
+                    'spells',
+                    // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                    'enemyForces' => function (HasOne $query) {
+                        return $query->where('mapping_version_id', $this->mappingVersion->id);
+                    },
+                ])->get(),
                 'auras'                     => Spell::where('aura', true)->get(),
                 'enemyPacks'                => $this->mappingVersion->enemyPacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $this->mappingVersion->enemyPatrols,
@@ -90,8 +97,8 @@ abstract class MapContext
             ];
         }, config('keystoneguru.cache.static_data.ttl'));
 
-        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth();
-        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth();
+        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
+        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
         if ($npcMaxHealth <= $npcMinHealth) {

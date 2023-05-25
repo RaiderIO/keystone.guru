@@ -9,8 +9,6 @@
         "name": "Scrapbone Trashtosser",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1381,
+                "mapping_version_id": 24,
+                "npc_id": 150142,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150143,
@@ -30,8 +37,6 @@
         "name": "Scrapbone Grinder",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1382,
+                "mapping_version_id": 24,
+                "npc_id": 150143,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150146,
@@ -51,8 +65,6 @@
         "name": "Scrapbone Shaman",
         "base_health": 170172,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1383,
+                "mapping_version_id": 24,
+                "npc_id": 150146,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150154,
@@ -72,8 +93,6 @@
         "name": "Saurolisk Bonenipper",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1384,
+                "mapping_version_id": 24,
+                "npc_id": 150154,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150159,
@@ -93,8 +121,6 @@
         "name": "King Gobbamak",
         "base_health": 1491350,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1385,
+                "mapping_version_id": 24,
+                "npc_id": 150159,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150160,
@@ -114,8 +149,6 @@
         "name": "Scrapbone Bully",
         "base_health": 340343,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1386,
+                "mapping_version_id": 24,
+                "npc_id": 150160,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150165,
@@ -135,8 +177,6 @@
         "name": "Slime Elemental",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1387,
+                "mapping_version_id": 24,
+                "npc_id": 150165,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150168,
@@ -156,8 +205,6 @@
         "name": "Toxic Monstrosity",
         "base_health": 382886,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1388,
+                "mapping_version_id": 24,
+                "npc_id": 150168,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150169,
@@ -177,8 +233,6 @@
         "name": "Toxic Lurker",
         "base_health": 221223,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1389,
+                "mapping_version_id": 24,
+                "npc_id": 150169,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150190,
@@ -198,8 +261,6 @@
         "name": "HK-8 Aerial Oppression Unit",
         "base_health": 1661790,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1390,
+                "mapping_version_id": 24,
+                "npc_id": 150190,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150195,
@@ -219,8 +289,6 @@
         "name": "Gnome-Eating Slime",
         "base_health": 106357,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1391,
+                "mapping_version_id": 24,
+                "npc_id": 150195,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150222,
@@ -240,8 +317,6 @@
         "name": "Gunker",
         "base_health": 1491350,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1392,
+                "mapping_version_id": 24,
+                "npc_id": 150222,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150249,
@@ -261,8 +345,6 @@
         "name": "Pistonhead Scrapper",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1393,
+                "mapping_version_id": 24,
+                "npc_id": 150249,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150250,
@@ -282,8 +373,6 @@
         "name": "Pistonhead Blaster",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1394,
+                "mapping_version_id": 24,
+                "npc_id": 150250,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150251,
@@ -303,8 +401,6 @@
         "name": "Pistonhead Mechanic",
         "base_health": 255257,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1395,
+                "mapping_version_id": 24,
+                "npc_id": 150251,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150253,
@@ -324,8 +429,6 @@
         "name": "Weaponized Crawler",
         "base_health": 425429,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1396,
+                "mapping_version_id": 24,
+                "npc_id": 150253,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150254,
@@ -345,8 +457,6 @@
         "name": "Scraphound",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1397,
+                "mapping_version_id": 24,
+                "npc_id": 150254,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150276,
@@ -366,8 +485,6 @@
         "name": "Heavy Scrapbot",
         "base_health": 340343,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1398,
+                "mapping_version_id": 24,
+                "npc_id": 150276,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150292,
@@ -387,8 +513,6 @@
         "name": "Mechagon Cavalry",
         "base_health": 340343,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1399,
+                "mapping_version_id": 24,
+                "npc_id": 150292,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150293,
@@ -408,8 +541,6 @@
         "name": "Mechagon Prowler",
         "base_health": 213311,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1400,
+                "mapping_version_id": 24,
+                "npc_id": 150293,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150295,
@@ -429,8 +569,6 @@
         "name": "Tank Buster MK1",
         "base_health": 681760,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -438,7 +576,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1401,
+                "mapping_version_id": 24,
+                "npc_id": 150295,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150297,
@@ -450,8 +597,6 @@
         "name": "Mechagon Renormalizer",
         "base_health": 170172,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1402,
+                "mapping_version_id": 24,
+                "npc_id": 150297,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150547,
@@ -471,8 +625,6 @@
         "name": "Scrapbone Grunter",
         "base_health": 106357,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1403,
+                "mapping_version_id": 24,
+                "npc_id": 150547,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 150712,
@@ -492,8 +653,6 @@
         "name": "Trixie Tazer",
         "base_health": 766980,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1404,
+                "mapping_version_id": 24,
+                "npc_id": 150712,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 152009,
@@ -513,8 +681,6 @@
         "name": "Malfunctioning Scrapbot",
         "base_health": 340343,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1405,
+                "mapping_version_id": 24,
+                "npc_id": 152009,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 153755,
@@ -534,8 +709,6 @@
         "name": "Naeno Megacrash",
         "base_health": 575235,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1406,
+                "mapping_version_id": 24,
+                "npc_id": 153755,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 154663,
@@ -555,8 +737,6 @@
         "name": "Gnome-Eating Droplet",
         "base_health": 144491,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1407,
+                "mapping_version_id": 24,
+                "npc_id": 154663,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 154741,
@@ -576,8 +765,6 @@
         "name": "Squirt Bot",
         "base_health": 15412300,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1408,
+                "mapping_version_id": 24,
+                "npc_id": 154741,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 155090,
@@ -597,8 +793,6 @@
         "name": "Anodized Coilbearer",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1409,
+                "mapping_version_id": 24,
+                "npc_id": 155090,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 155094,
@@ -618,8 +821,6 @@
         "name": "Mechagon Trooper",
         "base_health": 212714,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -627,6 +828,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1410,
+                "mapping_version_id": 24,
+                "npc_id": 155094,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

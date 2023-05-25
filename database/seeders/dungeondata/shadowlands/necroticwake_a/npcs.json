@@ -9,8 +9,6 @@
         "name": "Surgeon Stitchflesh",
         "base_health": 713642,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1861,
+                "mapping_version_id": 34,
+                "npc_id": 162689,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162691,
@@ -30,8 +37,6 @@
         "name": "Blightbone",
         "base_health": 1156365,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1862,
+                "mapping_version_id": 34,
+                "npc_id": 162691,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162692,
@@ -51,8 +65,6 @@
         "name": "Amarth",
         "base_health": 808192,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": 0,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1863,
+                "mapping_version_id": 34,
+                "npc_id": 162692,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162693,
@@ -72,8 +93,6 @@
         "name": "Nalthor the Rimebinder",
         "base_health": 1057248,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1864,
+                "mapping_version_id": 34,
+                "npc_id": 162693,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162729,
@@ -93,8 +121,6 @@
         "name": "Patchwerk Soldier",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1865,
+                "mapping_version_id": 34,
+                "npc_id": 162729,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163121,
@@ -114,8 +149,6 @@
         "name": "Stitched Vanguard",
         "base_health": 198477,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1866,
+                "mapping_version_id": 34,
+                "npc_id": 163121,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163122,
@@ -135,8 +177,6 @@
         "name": "Brittlebone Warrior",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1867,
+                "mapping_version_id": 34,
+                "npc_id": 163122,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163126,
@@ -156,8 +205,6 @@
         "name": "Brittlebone Mage",
         "base_health": 74429,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1868,
+                "mapping_version_id": 34,
+                "npc_id": 163126,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163128,
@@ -177,8 +233,6 @@
         "name": "Zolramus Sorcerer",
         "base_health": 148858,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1869,
+                "mapping_version_id": 34,
+                "npc_id": 163128,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163157,
@@ -198,8 +261,6 @@
         "name": "Amarth",
         "base_health": 991170,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1870,
+                "mapping_version_id": 34,
+                "npc_id": 163157,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163618,
@@ -219,8 +289,6 @@
         "name": "Zolramus Necromancer",
         "base_health": 231557,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1871,
+                "mapping_version_id": 34,
+                "npc_id": 163618,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163619,
@@ -240,8 +317,6 @@
         "name": "Zolramus Bonecarver",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1872,
+                "mapping_version_id": 34,
+                "npc_id": 163619,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163620,
@@ -261,8 +345,6 @@
         "name": "Rotspew",
         "base_health": 396955,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1873,
+                "mapping_version_id": 34,
+                "npc_id": 163620,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163621,
@@ -282,8 +373,6 @@
         "name": "Goregrind",
         "base_health": 463113,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1874,
+                "mapping_version_id": 34,
+                "npc_id": 163621,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163622,
@@ -303,8 +401,6 @@
         "name": "Goregrind Bits",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1875,
+                "mapping_version_id": 34,
+                "npc_id": 163622,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163623,
@@ -324,8 +429,6 @@
         "name": "Rotspew Leftovers",
         "base_health": 132318,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1876,
+                "mapping_version_id": 34,
+                "npc_id": 163623,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164414,
@@ -345,8 +457,6 @@
         "name": "Reanimated Mage",
         "base_health": 30307,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1877,
+                "mapping_version_id": 34,
+                "npc_id": 164414,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164427,
@@ -366,8 +485,6 @@
         "name": "Reanimated Warrior",
         "base_health": 45460,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1878,
+                "mapping_version_id": 34,
+                "npc_id": 164427,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164479,
@@ -387,8 +513,6 @@
         "name": "Bonefang",
         "base_health": 808192,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1879,
+                "mapping_version_id": 34,
+                "npc_id": 164479,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164578,
@@ -408,8 +541,6 @@
         "name": "Stitchflesh's Creation",
         "base_health": 330795,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1880,
+                "mapping_version_id": 34,
+                "npc_id": 164578,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164702,
@@ -429,8 +569,6 @@
         "name": "Carrion Worm",
         "base_health": 37884,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1881,
+                "mapping_version_id": 34,
+                "npc_id": 164702,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164814,
@@ -450,8 +597,6 @@
         "name": "Gilded Champion",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1882,
+                "mapping_version_id": 34,
+                "npc_id": 164814,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164815,
@@ -471,8 +625,6 @@
         "name": "Zolramus Siphoner",
         "base_health": 17679,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1883,
+                "mapping_version_id": 34,
+                "npc_id": 164815,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165137,
@@ -492,8 +653,6 @@
         "name": "Zolramus Gatekeeper",
         "base_health": 297716,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1884,
+                "mapping_version_id": 34,
+                "npc_id": 165137,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165138,
@@ -513,8 +681,6 @@
         "name": "Blight Bag",
         "base_health": 66159,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1885,
+                "mapping_version_id": 34,
+                "npc_id": 165138,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165197,
@@ -534,8 +709,6 @@
         "name": "Skeletal Monstrosity",
         "base_health": 396955,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1886,
+                "mapping_version_id": 34,
+                "npc_id": 165197,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165222,
@@ -555,8 +737,6 @@
         "name": "Zolramus Bonemender",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1887,
+                "mapping_version_id": 34,
+                "npc_id": 165222,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165528,
@@ -576,8 +765,6 @@
         "name": "Gilded Champion",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1888,
+                "mapping_version_id": 34,
+                "npc_id": 165528,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165597,
@@ -597,8 +793,6 @@
         "name": "Patchwerk Soldier",
         "base_health": 75768,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1889,
+                "mapping_version_id": 34,
+                "npc_id": 165597,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165605,
@@ -618,8 +821,6 @@
         "name": "Winged Champion",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -627,7 +828,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1890,
+                "mapping_version_id": 34,
+                "npc_id": 165605,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165824,
@@ -639,8 +849,6 @@
         "name": "Nar'zudah",
         "base_health": 396955,
         "health_percentage": null,
-        "enemy_forces": 15,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -648,7 +856,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1891,
+                "mapping_version_id": 34,
+                "npc_id": 165824,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165872,
@@ -660,8 +877,6 @@
         "name": "Flesh Crafter",
         "base_health": 231557,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -669,7 +884,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1892,
+                "mapping_version_id": 34,
+                "npc_id": 165872,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165911,
@@ -681,8 +905,6 @@
         "name": "Loyal Creation",
         "base_health": 215017,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -690,7 +912,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1893,
+                "mapping_version_id": 34,
+                "npc_id": 165911,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165919,
@@ -702,8 +933,6 @@
         "name": "Skeletal Marauder",
         "base_health": 330795,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -711,7 +940,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1894,
+                "mapping_version_id": 34,
+                "npc_id": 165919,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166079,
@@ -723,8 +961,6 @@
         "name": "Brittlebone Crossbowman",
         "base_health": 82699,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -732,7 +968,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1895,
+                "mapping_version_id": 34,
+                "npc_id": 166079,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166264,
@@ -744,8 +989,6 @@
         "name": "Spare Parts",
         "base_health": 16540,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -753,7 +996,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1896,
+                "mapping_version_id": 34,
+                "npc_id": 166264,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166266,
@@ -765,8 +1017,6 @@
         "name": "Spare Parts",
         "base_health": 12628,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -774,7 +1024,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1897,
+                "mapping_version_id": 34,
+                "npc_id": 166266,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166302,
@@ -786,8 +1045,6 @@
         "name": "Corpse Harvester",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -795,7 +1052,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1898,
+                "mapping_version_id": 34,
+                "npc_id": 166302,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166880,
@@ -807,8 +1073,6 @@
         "name": "Blightbone",
         "base_health": 808192,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -816,7 +1080,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1899,
+                "mapping_version_id": 34,
+                "npc_id": 166880,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166882,
@@ -828,8 +1101,6 @@
         "name": "Surgeon Stitchflesh",
         "base_health": 808192,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -837,7 +1108,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1900,
+                "mapping_version_id": 34,
+                "npc_id": 166882,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166945,
@@ -849,8 +1129,6 @@
         "name": "Nalthor the Rimebinder",
         "base_health": 808192,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -858,7 +1136,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1901,
+                "mapping_version_id": 34,
+                "npc_id": 166945,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167731,
@@ -870,8 +1157,6 @@
         "name": "Separation Assistant",
         "base_health": 330795,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -879,7 +1164,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1902,
+                "mapping_version_id": 34,
+                "npc_id": 167731,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168246,
@@ -891,8 +1185,6 @@
         "name": "Reanimated Crossbowman",
         "base_health": 20204,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -900,7 +1192,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1903,
+                "mapping_version_id": 34,
+                "npc_id": 168246,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168343,
@@ -912,8 +1213,6 @@
         "name": "Patchwerk Soldier",
         "base_health": 75768,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -921,7 +1220,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1904,
+                "mapping_version_id": 34,
+                "npc_id": 168343,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168357,
@@ -933,8 +1241,6 @@
         "name": "Zolramus Sorcerer",
         "base_health": 113652,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -942,7 +1248,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1905,
+                "mapping_version_id": 34,
+                "npc_id": 168357,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168384,
@@ -954,8 +1269,6 @@
         "name": "Flesh Construct",
         "base_health": 303072,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -963,7 +1276,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1906,
+                "mapping_version_id": 34,
+                "npc_id": 168384,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168443,
@@ -975,8 +1297,6 @@
         "name": "Zolramus Necromancer",
         "base_health": 176792,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -984,7 +1304,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1907,
+                "mapping_version_id": 34,
+                "npc_id": 168443,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168445,
@@ -996,8 +1325,6 @@
         "name": "Brittlebone Warrior",
         "base_health": 75768,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1005,7 +1332,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1908,
+                "mapping_version_id": 34,
+                "npc_id": 168445,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168607,
@@ -1017,8 +1353,6 @@
         "name": "Xandria",
         "base_health": 7576800,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -1026,7 +1360,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1909,
+                "mapping_version_id": 34,
+                "npc_id": 168607,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 171095,
@@ -1038,8 +1381,6 @@
         "name": "Grisly Colossus",
         "base_health": 404096,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1047,7 +1388,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1911,
+                "mapping_version_id": 34,
+                "npc_id": 171095,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 171500,
@@ -1059,8 +1409,6 @@
         "name": "Shuffling Corpse",
         "base_health": 59543,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1068,7 +1416,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1913,
+                "mapping_version_id": 34,
+                "npc_id": 171500,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 171750,
@@ -1080,8 +1437,6 @@
         "name": "Malfunctioning Goliath",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1089,7 +1444,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1914,
+                "mapping_version_id": 34,
+                "npc_id": 171750,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 171752,
@@ -1101,8 +1465,6 @@
         "name": "Ascended Captive",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1110,7 +1472,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1915,
+                "mapping_version_id": 34,
+                "npc_id": 171752,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 172981,
@@ -1122,8 +1493,6 @@
         "name": "Kyrian Stitchwerk",
         "base_health": 297716,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1131,7 +1500,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1916,
+                "mapping_version_id": 34,
+                "npc_id": 172981,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 173016,
@@ -1143,8 +1521,6 @@
         "name": "Corpse Collector",
         "base_health": 165398,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1152,7 +1528,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1917,
+                "mapping_version_id": 34,
+                "npc_id": 173016,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 173044,
@@ -1164,8 +1549,6 @@
         "name": "Stitching Assistant",
         "base_health": 330795,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1173,6 +1556,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1918,
+                "mapping_version_id": 34,
+                "npc_id": 173044,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

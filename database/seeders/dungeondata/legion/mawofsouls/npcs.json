@@ -9,8 +9,6 @@
         "name": "Harbaron",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 613,
+                "mapping_version_id": 9,
+                "npc_id": 96754,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96756,
@@ -30,8 +37,6 @@
         "name": "Ymiron, the Fallen King",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 614,
+                "mapping_version_id": 9,
+                "npc_id": 96756,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 96759,
@@ -51,8 +65,6 @@
         "name": "Helya",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 615,
+                "mapping_version_id": 9,
+                "npc_id": 96759,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97043,
@@ -72,8 +93,6 @@
         "name": "Seacursed Slaver",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 616,
+                "mapping_version_id": 9,
+                "npc_id": 97043,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97097,
@@ -93,8 +121,6 @@
         "name": "Helarjar Champion",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 617,
+                "mapping_version_id": 9,
+                "npc_id": 97097,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97119,
@@ -114,8 +149,6 @@
         "name": "Shroud Hound",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 618,
+                "mapping_version_id": 9,
+                "npc_id": 97119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97163,
@@ -135,8 +177,6 @@
         "name": "Cursed Falke",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 619,
+                "mapping_version_id": 9,
+                "npc_id": 97163,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97182,
@@ -156,8 +205,6 @@
         "name": "Night Watch Mariner",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 620,
+                "mapping_version_id": 9,
+                "npc_id": 97182,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97185,
@@ -177,8 +233,6 @@
         "name": "The Grimewalker",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 621,
+                "mapping_version_id": 9,
+                "npc_id": 97185,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97200,
@@ -198,8 +261,6 @@
         "name": "Seacursed Soulkeeper",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 622,
+                "mapping_version_id": 9,
+                "npc_id": 97200,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 97365,
@@ -219,8 +289,6 @@
         "name": "Seacursed Mistmender",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 623,
+                "mapping_version_id": 9,
+                "npc_id": 97365,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98246,
@@ -240,8 +317,6 @@
         "name": "Risen Warrior",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 624,
+                "mapping_version_id": 9,
+                "npc_id": 98246,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98363,
@@ -261,8 +345,6 @@
         "name": "Grasping Tentacle",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 625,
+                "mapping_version_id": 9,
+                "npc_id": 98363,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98693,
@@ -282,8 +373,6 @@
         "name": "Shackled Servitor",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 626,
+                "mapping_version_id": 9,
+                "npc_id": 98693,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98761,
@@ -303,8 +401,6 @@
         "name": "Soul Fragment",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 627,
+                "mapping_version_id": 9,
+                "npc_id": 98761,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98919,
@@ -324,8 +429,6 @@
         "name": "Seacursed Swiftblade",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 628,
+                "mapping_version_id": 9,
+                "npc_id": 98919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98973,
@@ -345,8 +457,6 @@
         "name": "Skeletal Warrior",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 629,
+                "mapping_version_id": 9,
+                "npc_id": 98973,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99033,
@@ -366,8 +485,6 @@
         "name": "Helarjar Mistcaller",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 630,
+                "mapping_version_id": 9,
+                "npc_id": 99033,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99188,
@@ -387,8 +513,6 @@
         "name": "Waterlogged Soul Guard",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 631,
+                "mapping_version_id": 9,
+                "npc_id": 99188,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99307,
@@ -408,8 +541,6 @@
         "name": "Skjal",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 632,
+                "mapping_version_id": 9,
+                "npc_id": 99307,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99801,
@@ -429,8 +569,6 @@
         "name": "Destructor Tentacle",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 633,
+                "mapping_version_id": 9,
+                "npc_id": 99801,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 100354,
@@ -450,8 +597,6 @@
         "name": "Grasping Tentacle",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 634,
+                "mapping_version_id": 9,
+                "npc_id": 100354,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 100360,
@@ -471,8 +625,6 @@
         "name": "Grasping Tentacle",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 635,
+                "mapping_version_id": 9,
+                "npc_id": 100360,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 100362,
@@ -492,8 +653,6 @@
         "name": "Grasping Tentacle",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 636,
+                "mapping_version_id": 9,
+                "npc_id": 100362,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 102104,
@@ -513,8 +681,6 @@
         "name": "Enslaved Shieldmaiden",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 637,
+                "mapping_version_id": 9,
+                "npc_id": 102104,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 102375,
@@ -534,8 +709,6 @@
         "name": "Runecarver Slave",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 638,
+                "mapping_version_id": 9,
+                "npc_id": 102375,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 103045,
@@ -555,8 +737,6 @@
         "name": "Plaguemaw",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 639,
+                "mapping_version_id": 9,
+                "npc_id": 103045,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 103605,
@@ -576,8 +765,6 @@
         "name": "Shroudseeker",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 640,
+                "mapping_version_id": 9,
+                "npc_id": 103605,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 108494,
@@ -597,8 +793,6 @@
         "name": "Soulfiend Tagerma",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 641,
+                "mapping_version_id": 9,
+                "npc_id": 108494,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 108727,
@@ -618,8 +821,6 @@
         "name": "Diseased Pustule",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -627,7 +828,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 642,
+                "mapping_version_id": 9,
+                "npc_id": 108727,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 108794,
@@ -639,8 +849,6 @@
         "name": "Shroudseeker's Shadow",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -648,7 +856,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 643,
+                "mapping_version_id": 9,
+                "npc_id": 108794,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 114288,
@@ -660,8 +877,6 @@
         "name": "Skeletal Warrior",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -669,7 +884,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 644,
+                "mapping_version_id": 9,
+                "npc_id": 114288,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 114289,
@@ -681,8 +905,6 @@
         "name": "Skeletal Sorcerer",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -690,7 +912,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 645,
+                "mapping_version_id": 9,
+                "npc_id": 114289,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 114712,
@@ -702,8 +933,6 @@
         "name": "Runecarver Slave",
         "base_health": 12345,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -711,6 +940,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 647,
+                "mapping_version_id": 9,
+                "npc_id": 114712,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

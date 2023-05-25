@@ -1,0 +1,94 @@
+{
+    "id": 179,
+    "release_changelog_id": 186,
+    "version": "v6.6",
+    "title": "Enemy forces are now tied to a mapping version",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-05-24T20:43:45+00:00",
+    "updated_at": "2023-05-24T20:44:12+00:00",
+    "changelog": {
+        "id": 186,
+        "release_id": 179,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1721,
+                "change": "When creating a temporary route you can now select a key level so you can get the correct health values in your route.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1700,
+                "change": "Enemy forces are now tied to a mapping version. This will allow updates to enemy forces without affecting existing routes.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Updated mapping of all S2 dungeons with the latest fixes.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1753,
+                "change": "Viewing a public profile now properly shows routes of the current season (thanks Omicron).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1678,
+                "change": "Routes that only have special characters in their titles can now be viewed again.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1740,
+                "change": "Public profiles of authors who have many views to their routes no longer load very slowly.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 186,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1764,
+                "change": "Rejecting permission to access account data when logging in through an OAuth2 provider (Discord, Battle.net, Google) no longer produces a 500 Internal Server Error.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

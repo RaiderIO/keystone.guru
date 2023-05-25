@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\GameServerRegion;
 use App\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use SocialiteProviders\Battlenet\Provider;
@@ -26,21 +27,21 @@ class BattleNetLoginController extends OAuthLoginController
         ]);
     }
 
-    protected function getDriver()
+    protected function getDriver(): string
     {
         return 'battlenet';
     }
 
     /**
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
-    public function redirectToProvider(Request $request)
+    public function redirectToProvider(Request $request): RedirectResponse
     {
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
-        if (GameServerRegion::where('short', $region)->count() === 0) {
+        if (GameServerRegion::where('short', $region)->doesntExist()) {
             abort(404);
         }
 

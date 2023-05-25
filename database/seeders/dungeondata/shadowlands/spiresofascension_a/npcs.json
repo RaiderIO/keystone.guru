@@ -9,8 +9,6 @@
         "name": "Ventunax",
         "base_health": 991450,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1815,
+                "mapping_version_id": 33,
+                "npc_id": 162058,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162059,
@@ -30,8 +37,6 @@
         "name": "Kin-Tara",
         "base_health": 1321934,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1816,
+                "mapping_version_id": 33,
+                "npc_id": 162059,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162060,
@@ -51,8 +65,6 @@
         "name": "Oryphrion",
         "base_health": 1817659,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1817,
+                "mapping_version_id": 33,
+                "npc_id": 162060,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162061,
@@ -72,8 +93,6 @@
         "name": "Devos",
         "base_health": 1982901,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1818,
+                "mapping_version_id": 33,
+                "npc_id": 162061,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163077,
@@ -93,8 +121,6 @@
         "name": "Azules",
         "base_health": 1718028,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1819,
+                "mapping_version_id": 33,
+                "npc_id": 163077,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163457,
@@ -114,8 +149,6 @@
         "name": "Forsworn Vanguard",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1820,
+                "mapping_version_id": 33,
+                "npc_id": 163457,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163458,
@@ -135,8 +177,6 @@
         "name": "Forsworn Castigator",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1821,
+                "mapping_version_id": 33,
+                "npc_id": 163458,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163459,
@@ -156,8 +205,6 @@
         "name": "Forsworn Mender",
         "base_health": 132156,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1822,
+                "mapping_version_id": 33,
+                "npc_id": 163459,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163501,
@@ -177,8 +233,6 @@
         "name": "Forsworn Skirmisher",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1823,
+                "mapping_version_id": 33,
+                "npc_id": 163501,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163503,
@@ -198,8 +261,6 @@
         "name": "Etherdiver",
         "base_health": 99117,
         "health_percentage": null,
-        "enemy_forces": 2,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1824,
+                "mapping_version_id": 33,
+                "npc_id": 163503,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163506,
@@ -219,8 +289,6 @@
         "name": "Forsworn Stealthclaw",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1825,
+                "mapping_version_id": 33,
+                "npc_id": 163506,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163520,
@@ -240,8 +317,6 @@
         "name": "Forsworn Squad-Leader",
         "base_health": 264312,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1826,
+                "mapping_version_id": 33,
+                "npc_id": 163520,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163524,
@@ -261,8 +345,6 @@
         "name": "Kyrian Dark-Praetor",
         "base_health": 148676,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1827,
+                "mapping_version_id": 33,
+                "npc_id": 163524,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163589,
@@ -282,8 +373,6 @@
         "name": "Kyrian Ascendant",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1828,
+                "mapping_version_id": 33,
+                "npc_id": 163589,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166411,
@@ -303,8 +401,6 @@
         "name": "Forsworn Usurper",
         "base_health": 33039,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1829,
+                "mapping_version_id": 33,
+                "npc_id": 166411,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167410,
@@ -324,8 +429,6 @@
         "name": "Devos",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1830,
+                "mapping_version_id": 33,
+                "npc_id": 167410,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168318,
@@ -345,8 +457,6 @@
         "name": "Forsworn Goliath",
         "base_health": 264312,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1831,
+                "mapping_version_id": 33,
+                "npc_id": 168318,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168418,
@@ -366,8 +485,6 @@
         "name": "Forsworn Inquisitor",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1832,
+                "mapping_version_id": 33,
+                "npc_id": 168418,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168420,
@@ -387,8 +513,6 @@
         "name": "Forsworn Champion",
         "base_health": 132156,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1833,
+                "mapping_version_id": 33,
+                "npc_id": 168420,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168425,
@@ -408,8 +541,6 @@
         "name": "Forsworn Annihilator",
         "base_health": 277816,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1834,
+                "mapping_version_id": 33,
+                "npc_id": 168425,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168658,
@@ -429,8 +569,6 @@
         "name": "Forsworn Devastator",
         "base_health": 277816,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1835,
+                "mapping_version_id": 33,
+                "npc_id": 168658,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168681,
@@ -450,8 +597,6 @@
         "name": "Forsworn Helion",
         "base_health": 264312,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1836,
+                "mapping_version_id": 33,
+                "npc_id": 168681,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168717,
@@ -471,8 +625,6 @@
         "name": "Forsworn Justicar",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1837,
+                "mapping_version_id": 33,
+                "npc_id": 168717,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168718,
@@ -492,8 +653,6 @@
         "name": "Forsworn Warden",
         "base_health": 148676,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1838,
+                "mapping_version_id": 33,
+                "npc_id": 168718,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168843,
@@ -513,8 +681,6 @@
         "name": "Klotos",
         "base_health": 495585,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1839,
+                "mapping_version_id": 33,
+                "npc_id": 168843,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168844,
@@ -534,8 +709,6 @@
         "name": "Lakesis",
         "base_health": 495585,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1840,
+                "mapping_version_id": 33,
+                "npc_id": 168844,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 168845,
@@ -555,8 +737,6 @@
         "name": "Astronos",
         "base_health": 495585,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -564,6 +744,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1841,
+                "mapping_version_id": 33,
+                "npc_id": 168845,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

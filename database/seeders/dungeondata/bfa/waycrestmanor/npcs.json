@@ -9,8 +9,6 @@
         "name": "Lord Waycrest",
         "base_health": 1383291,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1326,
+                "mapping_version_id": 23,
+                "npc_id": 131527,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131545,
@@ -30,8 +37,6 @@
         "name": "Lady Waycrest",
         "base_health": 15369900,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1327,
+                "mapping_version_id": 23,
+                "npc_id": 131545,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131585,
@@ -51,8 +65,6 @@
         "name": "Enthralled Guard",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1328,
+                "mapping_version_id": 23,
+                "npc_id": 131585,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131586,
@@ -72,8 +93,6 @@
         "name": "Banquet Steward",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1329,
+                "mapping_version_id": 23,
+                "npc_id": 131586,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131587,
@@ -93,8 +121,6 @@
         "name": "Bewitched Captain",
         "base_health": 1229592,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1330,
+                "mapping_version_id": 23,
+                "npc_id": 131587,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131666,
@@ -114,8 +149,6 @@
         "name": "Coven Thornshaper",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1331,
+                "mapping_version_id": 23,
+                "npc_id": 131666,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131667,
@@ -135,8 +177,6 @@
         "name": "Soulbound Goliath",
         "base_health": 5379465,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1332,
+                "mapping_version_id": 23,
+                "npc_id": 131667,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131669,
@@ -156,8 +205,6 @@
         "name": "Jagged Hound",
         "base_health": 153699,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1333,
+                "mapping_version_id": 23,
+                "npc_id": 131669,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131670,
@@ -177,8 +233,6 @@
         "name": "Heartsbane Vinetwister",
         "base_health": 1229590,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1334,
+                "mapping_version_id": 23,
+                "npc_id": 131670,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131677,
@@ -198,8 +261,6 @@
         "name": "Heartsbane Runeweaver",
         "base_health": 1229590,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1335,
+                "mapping_version_id": 23,
+                "npc_id": 131677,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131685,
@@ -219,8 +289,6 @@
         "name": "Runic Disciple",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1336,
+                "mapping_version_id": 23,
+                "npc_id": 131685,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131812,
@@ -240,8 +317,6 @@
         "name": "Heartsbane Soulcharmer",
         "base_health": 1229592,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1337,
+                "mapping_version_id": 23,
+                "npc_id": 131812,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131818,
@@ -261,8 +345,6 @@
         "name": "Marked Sister",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1338,
+                "mapping_version_id": 23,
+                "npc_id": 131818,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131819,
@@ -282,8 +373,6 @@
         "name": "Coven Diviner",
         "base_health": 768494,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1339,
+                "mapping_version_id": 23,
+                "npc_id": 131819,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131821,
@@ -303,8 +401,6 @@
         "name": "Faceless Maiden",
         "base_health": 461097,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1340,
+                "mapping_version_id": 23,
+                "npc_id": 131821,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131823,
@@ -324,8 +429,6 @@
         "name": "Sister Malady",
         "base_health": 1460141,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1341,
+                "mapping_version_id": 23,
+                "npc_id": 131823,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131824,
@@ -345,8 +457,6 @@
         "name": "Sister Solena",
         "base_health": 1460141,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1342,
+                "mapping_version_id": 23,
+                "npc_id": 131824,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131825,
@@ -366,8 +485,6 @@
         "name": "Sister Briar",
         "base_health": 1460141,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1343,
+                "mapping_version_id": 23,
+                "npc_id": 131825,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131847,
@@ -387,8 +513,6 @@
         "name": "Waycrest Reveler",
         "base_health": 461097,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1344,
+                "mapping_version_id": 23,
+                "npc_id": 131847,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131849,
@@ -408,8 +541,6 @@
         "name": "Crazed Marksman",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1345,
+                "mapping_version_id": 23,
+                "npc_id": 131849,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131850,
@@ -429,8 +569,6 @@
         "name": "Maddened Survivalist",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1346,
+                "mapping_version_id": 23,
+                "npc_id": 131850,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131858,
@@ -450,8 +597,6 @@
         "name": "Thornguard",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1347,
+                "mapping_version_id": 23,
+                "npc_id": 131858,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131863,
@@ -471,8 +625,6 @@
         "name": "Raal the Gluttonous",
         "base_health": 5225766,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1348,
+                "mapping_version_id": 23,
+                "npc_id": 131863,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 131864,
@@ -492,8 +653,6 @@
         "name": "Gorak Tul",
         "base_health": 4918368,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1349,
+                "mapping_version_id": 23,
+                "npc_id": 131864,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134024,
@@ -513,8 +681,6 @@
         "name": "Devouring Maggot",
         "base_health": 153699,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1350,
+                "mapping_version_id": 23,
+                "npc_id": 134024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134041,
@@ -534,8 +709,6 @@
         "name": "Infected Peasant",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1351,
+                "mapping_version_id": 23,
+                "npc_id": 134041,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135048,
@@ -555,8 +737,6 @@
         "name": "Gorestained Piglet",
         "base_health": 384248,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1352,
+                "mapping_version_id": 23,
+                "npc_id": 135048,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135049,
@@ -576,8 +765,6 @@
         "name": "Dreadwing Raven",
         "base_health": 461097,
         "health_percentage": null,
-        "enemy_forces": 2,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1353,
+                "mapping_version_id": 23,
+                "npc_id": 135049,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135052,
@@ -597,8 +793,6 @@
         "name": "Blight Toad",
         "base_health": 153699,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1354,
+                "mapping_version_id": 23,
+                "npc_id": 135052,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135234,
@@ -618,8 +821,6 @@
         "name": "Diseased Mastiff",
         "base_health": 461097,
         "health_percentage": null,
-        "enemy_forces": 3,
-        "enemy_forces_teeming": 2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -627,7 +828,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1355,
+                "mapping_version_id": 23,
+                "npc_id": 135234,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": 2
+            }
+        ]
     },
     {
         "id": 135240,
@@ -639,8 +849,6 @@
         "name": "Soul Essence",
         "base_health": 461097,
         "health_percentage": null,
-        "enemy_forces": 2,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -648,7 +856,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1356,
+                "mapping_version_id": 23,
+                "npc_id": 135240,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135329,
@@ -660,8 +877,6 @@
         "name": "Matron Bryndle",
         "base_health": 1844388,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -669,7 +884,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1357,
+                "mapping_version_id": 23,
+                "npc_id": 135329,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135365,
@@ -681,8 +905,6 @@
         "name": "Matron Alma",
         "base_health": 1844386,
         "health_percentage": null,
-        "enemy_forces": 16,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -690,7 +912,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1358,
+                "mapping_version_id": 23,
+                "npc_id": 135365,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 135474,
@@ -702,8 +933,6 @@
         "name": "Thistle Acolyte",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -711,7 +940,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1359,
+                "mapping_version_id": 23,
+                "npc_id": 135474,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 137830,
@@ -723,8 +961,6 @@
         "name": "Pallid Gorger",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -732,7 +968,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1360,
+                "mapping_version_id": 23,
+                "npc_id": 137830,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 139269,
@@ -744,8 +989,6 @@
         "name": "Gloom Horror",
         "base_health": 768494,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -753,6 +996,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1361,
+                "mapping_version_id": 23,
+                "npc_id": 139269,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

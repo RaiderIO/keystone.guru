@@ -172,16 +172,20 @@ class KillZone extends Model
         $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
             IF(
                 enemies.seasonal_type = "shrouded",
-                dungeons.enemy_forces_shrouded,
+                mapping_versions.enemy_forces_shrouded,
                 IF(
                     enemies.seasonal_type = "shrouded_zul_gamux",
-                    dungeons.enemy_forces_shrouded_zul_gamux,
-                    npcs.enemy_forces
+                    mapping_versions.enemy_forces_shrouded_zul_gamux,
+                    npc_enemy_forces.enemy_forces
                 )
             )
-        ' : 'npcs.enemy_forces';
+        ' : 'npc_enemy_forces.enemy_forces';
 
-        $queryResult = DB::select(sprintf('
+        $ifIsShroudedJoins = $isShrouded ? '
+                left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
+            ' : '';
+
+        $queryResult = DB::select("
             select `kill_zone_enemies`.*,
                     enemies.id as enemy_id,
                     enemies.enemy_pack_id,
@@ -191,14 +195,18 @@ class KillZone extends Model
                                       IF(
                                               enemies.enemy_forces_override_teeming IS NOT NULL,
                                               enemies.enemy_forces_override_teeming,
-                                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, %s)
+                                              IF(
+                                                  npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
+                                                  npc_enemy_forces.enemy_forces_teeming,
+                                                  {$ifIsShroudedEnemyForcesQuery}
+                                                  )
                                           )
                                   ),
                               SUM(
                                       IF(
                                               enemies.enemy_forces_override IS NOT NULL,
                                               enemies.enemy_forces_override,
-                                              %s
+                                              {$ifIsShroudedEnemyForcesQuery}
                                           )
                                   )
                                ), 0
@@ -208,12 +216,14 @@ class KillZone extends Model
                  left join `dungeon_routes` on `dungeon_routes`.`id` = `kill_zones`.`dungeon_route_id`
                  left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                  left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                 left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                  left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                    {$ifIsShroudedJoins}
             where kill_zones.id = :kill_zone_id
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ', $ifIsShroudedEnemyForcesQuery, $ifIsShroudedEnemyForcesQuery), ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
+            ", ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
         return collect($queryResult);
     }

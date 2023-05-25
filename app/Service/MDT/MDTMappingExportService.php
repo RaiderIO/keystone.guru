@@ -8,6 +8,7 @@ use App\Models\Enemy;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use Illuminate\Support\Collection;
 
@@ -108,13 +109,12 @@ MDT.dungeonSubLevels[dungeonIndex] = {
      */
     private function getDungeonTotalCount(MappingVersion $mappingVersion): string
     {
-        $dungeon = $mappingVersion->dungeon;
         return sprintf(
             '
 MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnabled = true }
             ',
-            $dungeon->enemy_forces_required <= 0 ? 300 : $dungeon->enemy_forces_required,
-            $dungeon->enemy_forces_required_teeming <= 0 ? 1000 : $dungeon->enemy_forces_required_teeming
+            $mappingVersion->enemy_forces_required <= 0 ? 300 : $mappingVersion->enemy_forces_required,
+            $mappingVersion->enemy_forces_required_teeming <= 0 ? 1000 : $mappingVersion->enemy_forces_required_teeming
         );
     }
 
@@ -207,10 +207,21 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->get();
+
+            $enemyForces = $npcEnemyForces->enemy_forces;
+            // These counts are different per mapping version so we need to correct it for MDT here
+            if ($npc->isShrouded()) {
+                $enemyForces = $mappingVersion->enemy_forces_shrouded;
+            } else if ($npc->isShroudedZulGamux()) {
+                $enemyForces = $mappingVersion->enemy_forces_shrouded_zul_gamux;
+            }
+
             $dungeonEnemy = array_merge([
                 'name'          => addslashes($npc->name),
                 'id'            => $npc->id,
-                'count'         => $npc->enemy_forces,
+                'count'         => $enemyForces,
                 'health'        => $npc->base_health,
                 'scale'         => $scaleMapping[$npc->classification_id],
                 'stealthDetect' => $npc->truesight,

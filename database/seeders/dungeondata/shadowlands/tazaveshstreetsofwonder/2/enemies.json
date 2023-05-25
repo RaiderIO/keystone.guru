@@ -20,10 +20,7 @@
         "lat": -149.25071565857,
         "lng": 183.68590140398,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 176556
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7197,
@@ -46,10 +43,7 @@
         "lat": -145.5561565277,
         "lng": 189.74876767002,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185680
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7198,
@@ -72,10 +66,7 @@
         "lat": -134.5198452778,
         "lng": 193.585425229,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185685
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7199,
@@ -98,10 +89,7 @@
         "lat": -139.25645954814,
         "lng": 202.86918919888,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 185683
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7200,
@@ -124,10 +112,7 @@
         "lat": -133.43042399562,
         "lng": 208.6952247514,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 176555
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 7201,
@@ -150,10 +135,7 @@
         "lat": -128.55171129716,
         "lng": 189.60666924191,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 176705
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 8489,
@@ -176,10 +158,7 @@
         "lat": -62.841564250559,
         "lng": 174.66985968856,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 189878
-        }
+        "enemyactiveauras": []
     },
     {
         "id": 10508,
@@ -202,9 +181,6 @@
         "lat": -68.229400398334,
         "lng": 177.15703963076,
         "active_auras": [],
-        "enemyactiveauras": [],
-        "npc": {
-            "id": 180315
-        }
+        "enemyactiveauras": []
     }
 ]

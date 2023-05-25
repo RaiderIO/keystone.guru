@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRoute\DungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\EmbedFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
+use App\Jobs\RefreshEnemyForces;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
@@ -14,6 +15,7 @@ use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -466,15 +468,20 @@ class DungeonRouteController extends Controller
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function upgrade(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title)
     {
         $this->authorize('edit', $dungeonroute);
 
-        // Store it and show the edit page again
+        // Store it
         $dungeonroute->update([
             'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
+            'updated_at'         => Carbon::now()->toDateTimeString(),
         ]);
+
+        // Refresh the enemy forces
+        (new RefreshEnemyForces($dungeonroute->id))->handle();
 
         DungeonRoute::dropCaches($dungeonroute->id);
 

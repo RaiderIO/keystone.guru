@@ -17,6 +17,7 @@ $edit             = isset($edit) && $edit;
 $mapClasses       = $mapClasses ?? '';
 $dungeonroute     = $dungeonroute ?? null;
 $livesession      = $livesession ?? null;
+$mappingVersion   = $mappingVersion ?? null;
 $show['controls'] = $show['controls'] ?? [];
 
 // Set the key to 'sandbox' if sandbox mode is enabled
@@ -140,6 +141,7 @@ if ($isAdmin) {
             'edit' => $edit,
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession,
+            'mappingVersion' => $mappingVersion,
         ])
     @endif
 

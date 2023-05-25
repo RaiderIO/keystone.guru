@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Api\APIMappingVersionController;
 use App\Http\Controllers\Api\APIMountableAreaController;
 use App\Http\Controllers\Api\APISiteController;
 use App\Http\Controllers\APIBrushlineController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
+use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReleaseController;
@@ -292,10 +294,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             // NPCs
             Route::group(['prefix' => 'npc'], function () {
                 Route::get('new', [NpcController::class, 'new'])->name('admin.npc.new');
-                Route::get('{npc}', [NpcController::class, 'edit'])->name('admin.npc.edit');
 
                 Route::post('new', [NpcController::class, 'savenew'])->name('admin.npc.savenew');
-                Route::patch('{npc}', [NpcController::class, 'update'])->name('admin.npc.update');
+
+                Route::group(['prefix' => '{npc}'], function () {
+                    Route::get('/', [NpcController::class, 'edit'])->name('admin.npc.edit');
+                    Route::patch('/', [NpcController::class, 'update'])->name('admin.npc.update');
+
+                    Route::group(['prefix' => 'npcEnemyForces/{npcEnemyForces}'], function () {
+                        Route::get('/', [NpcEnemyForcesController::class, 'edit'])->name('admin.npcenemyforces.edit');
+                        Route::patch('/', [NpcEnemyForcesController::class, 'update'])->name('admin.npcenemyforces.update');
+                    });
+                });
+
             });
             Route::get('npcs', [NpcController::class, 'list'])->name('admin.npcs');
 
@@ -328,6 +339,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('/dungeonroute', [AdminToolsController::class, 'dungeonroute'])->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', [AdminToolsController::class, 'dungeonroutesubmit'])->name('admin.tools.dungeonroute.view.submit');
 
+                Route::get('/dungeonroute/mappingversions', [AdminToolsController::class, 'dungeonrouteMappingVersions'])->name('admin.tools.dungeonroute.mappingversionusage');
 
                 // Import enemy forces
                 Route::get('enemyforces/import', [AdminToolsController::class, 'enemyforcesimport'])->name('admin.tools.enemyforces.import.view');
@@ -417,6 +429,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::group(['prefix' => 'admin'], function () {
+                Route::patch('mappingVersion/{mappingVersion}', [APIMappingVersionController::class, 'store']);
+
                 Route::get('/user', [APIUserController::class, 'list']);
                 Route::get('/npc', [APINpcController::class, 'list']);
 

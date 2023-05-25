@@ -138,9 +138,6 @@ class Save extends Command
                 'key',
                 'name',
                 'slug',
-                'enemy_forces_required',
-                'enemy_forces_required_teeming',
-                'timer_max_seconds',
                 'speedrun_enabled',
             ])->toArray(),
             $dungeonDataDir,
@@ -157,7 +154,7 @@ class Save extends Command
         $this->info('Saving global NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', -1)->get()->values();
+        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', -1)->get()->values();
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -299,7 +296,7 @@ class Save extends Command
      */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
-        $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', $dungeon->id)->get()->values();
+        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', $dungeon->id)->get()->values();
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -321,16 +318,7 @@ class Save extends Command
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->with('npc:id')->get()->values();
-        foreach ($enemies as $enemy) {
-            /** @var $enemy Enemy */
-            if ($enemy->npc !== null) {
-                $enemy->npc->unsetRelation('spells');
-                $enemy->npc->unsetRelation('npcbolsteringwhitelists');
-                $enemy->npc->unsetRelation('type');
-                $enemy->npc->unsetRelation('class');
-            }
-        }
+        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
         $enemyPacks                = $floor->enemyPacksForExport->values();
         $enemyPatrols              = $floor->enemyPatrolsForExport->values();
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();

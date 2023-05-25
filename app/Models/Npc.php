@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,8 +22,6 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property int $base_health
  * @property int|null $health_percentage Null = 100% health
- * @property int $enemy_forces
- * @property int $enemy_forces_teeming
  * @property string $aggressiveness
  * @property bool $dangerous
  * @property bool $truesight
@@ -32,7 +33,9 @@ use Illuminate\Support\Collection;
  * @property NpcClassification $classification
  * @property NpcType $type
  * @property NpcClass $class
+ * @property NpcEnemyForces $enemyForces
  *
+ * @property NpcEnemyForces[]|Collection $npcEnemyForces
  * @property Enemy[]|Collection $enemies
  * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
  *
@@ -43,7 +46,7 @@ class Npc extends CacheModel implements MappingModelInterface
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    protected $with = ['type', 'class', 'enemyForces', 'npcbolsteringwhitelists', 'spells'];
     protected $fillable = [
         'id',
         'dungeon_id',
@@ -53,8 +56,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'name',
         'base_health',
         'health_percentage',
-        'enemy_forces',
-        'enemy_forces_teeming',
         'aggressiveness',
         'dangerous',
         'truesight',
@@ -63,7 +64,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'sanguine',
     ];
 
-    // 'aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
     public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
     public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
@@ -147,6 +147,40 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @return HasMany
+     */
+    public function npcEnemyForces(): HasMany
+    {
+        return $this->hasMany(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function enemyForces(): HasOne
+    {
+        return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    /**
+     * @param int|null $mappingVersionId
+     * @return HasOne
+     */
+    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): HasOne
+    {
+        $belongsTo = $this->hasOne(NpcEnemyForces::class);
+
+        // Most recent
+        if ($mappingVersionId === null) {
+            $belongsTo->orderByDesc('mapping_version_id')->limit(1);
+        } else {
+            $belongsTo->where('mapping_version_id', $mappingVersionId);
+        }
+
+        return $belongsTo;
+    }
+
+    /**
      * @return bool
      */
     public function isEmissary(): bool
@@ -176,6 +210,22 @@ class Npc extends CacheModel implements MappingModelInterface
     public function isPrideful(): bool
     {
         return $this->id === config('keystoneguru.prideful.npc_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShrouded(): bool
+    {
+        return $this->id === config('keystoneguru.shrouded.npc_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShroudedZulGamux(): bool
+    {
+        return $this->id === config('keystoneguru.shrouded.npc_id_zul_gamux');
     }
 
     /**
@@ -230,17 +280,41 @@ class Npc extends CacheModel implements MappingModelInterface
         return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical) * $thunderingFactor);
     }
 
+    /**
+     * Upon creation of a new NPC, we must create npc enemy forces for each mapping version
+     * @param int|null $existingEnemyForces
+     * @return  bool
+     */
+    public function createNpcEnemyForcesForExistingMappingVersions(?int $existingEnemyForces = null): bool
+    {
+        $result = true;
+
+        $this->load('dungeon');
+        // Create new enemy forces for this enemy for each relevant mapping version
+        // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
+        $mappingVersions = optional($this->dungeon)->mappingVersions ?? MappingVersion::all();
+        foreach ($mappingVersions as $mappingVersion) {
+            $result = $result && NpcEnemyForces::create([
+                    'npc_id'               => $this->id,
+                    'mapping_version_id'   => $mappingVersion->id,
+                    'enemy_forces'         => $existingEnemyForces ?? 0,
+                    'enemy_forces_teeming' => null,
+                ]);
+        }
+
+        return $result;
+    }
+
 
     public static function boot()
     {
         parent::boot();
 
-        // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item Npc */
-
-            $item->npcbolsteringwhitelists()->delete();
-            $item->npcspells()->delete();
+        // Delete Npc properly if it gets deleted
+        static::deleting(function (Npc $npc) {
+            $npc->npcbolsteringwhitelists()->delete();
+            $npc->npcspells()->delete();
+            $npc->npcEnemyForces()->delete();
         });
     }
 

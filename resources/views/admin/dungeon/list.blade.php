@@ -3,6 +3,12 @@
 @section('header-title')
     {{ __('views/admin.dungeon.list.header') }}
 @endsection
+{{--Disabled since dungeons should only be created through seeders--}}
+@section('header-addition')
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
+        <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
+    </a>
+@endsection
 <?php
 /**
  * @var $models \App\Models\Dungeon
@@ -43,7 +49,10 @@
 
         <tbody>
         @foreach ($models as $dungeon)
-            <?php /** @var $dungeon \App\Models\Dungeon */?>
+            <?php
+                /** @var $dungeon \App\Models\Dungeon */
+                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                ?>
             <tr>
                 @if($dungeon->active)
                     <td data-order="{{ $dungeon->id }}">
@@ -61,9 +70,9 @@
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>
-                <td>{{ $dungeon->enemy_forces_required }}</td>
-                <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
-                <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>
+                <td>{{ optional($mappingVersion)->enemy_forces_required }}</td>
+                <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>
+                <td data-order="{{optional($mappingVersion)->timer_max_seconds}}">{{ gmdate('i:s', optional($mappingVersion)->timer_max_seconds) }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->slug]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.list.edit') }}

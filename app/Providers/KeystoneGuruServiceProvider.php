@@ -184,7 +184,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                     );
             }
 
-
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
                 $view->with('viewName', $view->getName());
@@ -260,6 +259,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer(['common.forms.oauth', 'common.forms.register'], function (View $view) use ($globalViewVariables) {
             $view->with('allRegions', $globalViewVariables['allRegions']);
+        });
+
+        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], function (View $view) use ($globalViewVariables) {
+            $routeKeyLevelDefault = '10;15';
+            $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
+
+            $explode = explode(';', $routeKeyLevel);
+            if (count($explode) !== 2) {
+                $routeKeyLevel = $routeKeyLevelDefault;
+                $explode = explode(';', $routeKeyLevel);
+            }
+            $view->with('routeKeyLevelFrom', $explode[0]);
+            $view->with('routeKeyLevelTo', $explode[1]);
         });
 
         // Displaying a release

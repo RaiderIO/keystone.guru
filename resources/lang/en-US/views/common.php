@@ -84,6 +84,8 @@ return [
             'save_settings'                                  => 'Save settings',
         ],
         'createtemporaryroute' => [
+            'key_levels'                => 'Key levels',
+            'key_levels_title'          => 'Indicate for which key levels your route is suited. Setting this will allow the correct calculation enemy health values.',
             'unregistered_user_message' => 'As an unregistered user, all created routes will be temporary routes which expire after %d hours.',
             'registered_user_message'   => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'create_route'              => 'Create route',
@@ -299,6 +301,7 @@ return [
                 'save_to_profile'                => 'Save to profile',
                 'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
+                'edit_mapping_version'           => 'Edit mapping version',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
@@ -379,6 +382,14 @@ return [
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
+        ],
+        'mappingversion'  => [
+            'enemy_forces_required'           => 'Enemy forces required',
+            'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
+            'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
+            'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
+            'timer_max_seconds'               => 'Timer (seconds)',
+            'save'                            => 'Save',
         ],
         'routesettings'   => [
             'title' => 'Route settings',

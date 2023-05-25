@@ -9,8 +9,6 @@
         "name": "Aqu'sirr",
         "base_health": 6147954,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1031,
+                "mapping_version_id": 17,
+                "npc_id": 134056,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134058,
@@ -30,8 +37,6 @@
         "name": "Galecaller Faye",
         "base_health": 4034595,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1032,
+                "mapping_version_id": 17,
+                "npc_id": 134058,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134060,
@@ -51,8 +65,6 @@
         "name": "Lord Stormsong",
         "base_health": 5379459,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1033,
+                "mapping_version_id": 17,
+                "npc_id": 134060,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134063,
@@ -72,8 +93,6 @@
         "name": "Brother Ironhull",
         "base_health": 4034599,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1034,
+                "mapping_version_id": 17,
+                "npc_id": 134063,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134069,
@@ -93,8 +121,6 @@
         "name": "Vol'zith the Whisperer",
         "base_health": 4918363,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -102,7 +128,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1035,
+                "mapping_version_id": 17,
+                "npc_id": 134069,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134137,
@@ -114,8 +149,6 @@
         "name": "Temple Attendant",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1036,
+                "mapping_version_id": 17,
+                "npc_id": 134137,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134139,
@@ -135,8 +177,6 @@
         "name": "Shrine Templar",
         "base_health": 922194,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1037,
+                "mapping_version_id": 17,
+                "npc_id": 134139,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134144,
@@ -156,8 +205,6 @@
         "name": "Living Current",
         "base_health": 1229592,
         "health_percentage": null,
-        "enemy_forces": 18,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -165,7 +212,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1038,
+                "mapping_version_id": 17,
+                "npc_id": 134144,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134150,
@@ -177,8 +233,6 @@
         "name": "Runecarver Sorn",
         "base_health": 2459184,
         "health_percentage": null,
-        "enemy_forces": 36,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1039,
+                "mapping_version_id": 17,
+                "npc_id": 134150,
+                "enemy_forces": 36,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134173,
@@ -198,8 +261,6 @@
         "name": "Animated Droplet",
         "base_health": 107589,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1040,
+                "mapping_version_id": 17,
+                "npc_id": 134173,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134338,
@@ -219,8 +289,6 @@
         "name": "Tidesage Enforcer",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1041,
+                "mapping_version_id": 17,
+                "npc_id": 134338,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134417,
@@ -240,8 +317,6 @@
         "name": "Deepsea Ritualist",
         "base_health": 1690689,
         "health_percentage": null,
-        "enemy_forces": 12,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1042,
+                "mapping_version_id": 17,
+                "npc_id": 134417,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134418,
@@ -261,8 +345,6 @@
         "name": "Drowned Depthbringer",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1043,
+                "mapping_version_id": 17,
+                "npc_id": 134418,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134423,
@@ -282,8 +373,6 @@
         "name": "Abyss Dweller",
         "base_health": 107589,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1044,
+                "mapping_version_id": 17,
+                "npc_id": 134423,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 134514,
@@ -303,8 +401,6 @@
         "name": "Abyssal Cultist",
         "base_health": 768494,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1045,
+                "mapping_version_id": 17,
+                "npc_id": 134514,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136186,
@@ -324,8 +429,6 @@
         "name": "Tidesage Spiritualist",
         "base_health": 922194,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1046,
+                "mapping_version_id": 17,
+                "npc_id": 136186,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136214,
@@ -345,8 +457,6 @@
         "name": "Windspeaker Heldis",
         "base_health": 2766582,
         "health_percentage": null,
-        "enemy_forces": 36,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1047,
+                "mapping_version_id": 17,
+                "npc_id": 136214,
+                "enemy_forces": 36,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136249,
@@ -366,8 +485,6 @@
         "name": "Guardian Elemental",
         "base_health": 2305485,
         "health_percentage": null,
-        "enemy_forces": 36,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1048,
+                "mapping_version_id": 17,
+                "npc_id": 136249,
+                "enemy_forces": 36,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136295,
@@ -387,8 +513,6 @@
         "name": "Sunken Denizen",
         "base_health": 1229590,
         "health_percentage": null,
-        "enemy_forces": 13,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1049,
+                "mapping_version_id": 17,
+                "npc_id": 136295,
+                "enemy_forces": 13,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136297,
@@ -408,8 +541,6 @@
         "name": "Forgotten Denizen",
         "base_health": 768494,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1050,
+                "mapping_version_id": 17,
+                "npc_id": 136297,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136347,
@@ -429,8 +569,6 @@
         "name": "Tidesage Initiate",
         "base_health": 153699,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1051,
+                "mapping_version_id": 17,
+                "npc_id": 136347,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 136353,
@@ -450,8 +597,6 @@
         "name": "Colossal Tentacle",
         "base_health": 845343,
         "health_percentage": null,
-        "enemy_forces": 10,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1052,
+                "mapping_version_id": 17,
+                "npc_id": 136353,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 139626,
@@ -471,8 +625,6 @@
         "name": "Dredged Sailor",
         "base_health": 38425,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1053,
+                "mapping_version_id": 17,
+                "npc_id": 139626,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 139799,
@@ -492,8 +653,6 @@
         "name": "Ironhull Apprentice",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1054,
+                "mapping_version_id": 17,
+                "npc_id": 139799,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 139800,
@@ -513,8 +681,6 @@
         "name": "Galecaller Apprentice",
         "base_health": 768495,
         "health_percentage": null,
-        "enemy_forces": 9,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1055,
+                "mapping_version_id": 17,
+                "npc_id": 139800,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 140038,
@@ -534,8 +709,6 @@
         "name": "Abyssal Eel",
         "base_health": 307397,
         "health_percentage": null,
-        "enemy_forces": 2,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,6 +716,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1056,
+                "mapping_version_id": 17,
+                "npc_id": 140038,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

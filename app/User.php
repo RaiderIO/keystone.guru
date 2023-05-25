@@ -298,7 +298,7 @@ class User extends Authenticatable
             }
             /** @var $team Team */
             $teams['teams'][$team->name] = [
-                'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
+                'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
                 'new_owner' => $newOwner,
             ];
         }
@@ -308,7 +308,7 @@ class User extends Authenticatable
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count()),
+                'delete_count' => ($this->dungeonroutes()->count() - $this->dungeonroutes()->isSandbox()->count()),
             ],
             'reports'       => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),

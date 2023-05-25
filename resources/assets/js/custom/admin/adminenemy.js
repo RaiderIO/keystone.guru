@@ -399,7 +399,7 @@ class AdminEnemy extends Enemy {
 
         let data = {};
         // Determine what to show for enemy forces based on override or not
-        let enemy_forces = this.npc === null ? -1 : this.npc.enemy_forces;
+        let enemy_forces = this.npc === null ? -1 : this.npc.enemy_forces.enemy_forces;
 
         // Admin maps have 0 enemy forces
         if (this.enemy_forces_override !== null || enemy_forces >= 1) {

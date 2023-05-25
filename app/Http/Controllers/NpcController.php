@@ -8,6 +8,7 @@ use App\Http\Requests\NpcFormRequest;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use App\Models\NpcSpell;
@@ -53,27 +54,33 @@ class NpcController extends Controller
 
         $npcBefore = clone $npc;
 
-        $validated = $request->validated();
-        $updateResult = $npc->update([
-            'id'                   => $validated['id'],
-            'dungeon_id'           => $validated['dungeon_id'],
-            'classification_id'    => $validated['classification_id'],
-            'npc_class_id'         => $validated['npc_class_id'],
-            'name'                 => $validated['name'],
+        $validated  = $request->validated();
+        $attributes = [
+            'id'                => $validated['id'],
+            'dungeon_id'        => $validated['dungeon_id'],
+            'classification_id' => $validated['classification_id'],
+            'npc_class_id'      => $validated['npc_class_id'],
+            'name'              => $validated['name'],
+            'display_id'        => null,
             // Remove commas or dots in the name; we want the integer value
-            'base_health'          => str_replace([',', '.'], '', $validated['base_health']),
-            'health_percentage'    => $validated['health_percentage'] ?? 100,
-            'enemy_forces'         => $validated['enemy_forces'],
-            'enemy_forces_teeming' => $validated['enemy_forces_teeming'] ?? -1,
-            'aggressiveness'       => $validated['aggressiveness'],
-            'dangerous'            => $validated['dangerous'] ?? 0,
-            'truesight'            => $validated['truesight'] ?? 0,
-            'bursting'             => $validated['bursting'] ?? 0,
-            'bolstering'           => $validated['bolstering'] ?? 0,
-            'sanguine'             => $validated['sanguine'] ?? 0,
-        ]);
+            'base_health'       => str_replace([',', '.'], '', $validated['base_health']),
+            'health_percentage' => $validated['health_percentage'] ?? 100,
+            'aggressiveness'    => $validated['aggressiveness'],
+            'dangerous'         => $validated['dangerous'] ?? 0,
+            'truesight'         => $validated['truesight'] ?? 0,
+            'bursting'          => $validated['bursting'] ?? 0,
+            'bolstering'        => $validated['bolstering'] ?? 0,
+            'sanguine'          => $validated['sanguine'] ?? 0,
+        ];
 
-        if ($updateResult) {
+        if ($oldId === null) {
+            $npc->setRawAttributes($attributes);
+            $saveResult = $npc->save();
+        } else {
+            $saveResult = $npc->update($attributes);
+        }
+
+        if ($saveResult) {
             // Bolstering whitelist, if set
             $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
             // Clear current whitelists
@@ -97,9 +104,23 @@ class NpcController extends Controller
             }
 
 
+            $existingEnemyForces = 0;
             if ($oldId !== null) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+                NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+
+                $changes = $npc->getChanges();
+                if (isset($changes['dungeon_id'])) {
+                    // Fetch the existing enemy forces for the most recent mapping so we can propagate that to the
+                    // new dungeon
+                    $existingEnemyForces = $npc->enemyForces->enemy_forces;
+                    // Get rid of all existing enemy forces
+                    $npc->npcEnemyForces()->delete();
+                }
             }
+
+            // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
+            $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
 
             // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
@@ -122,14 +143,18 @@ class NpcController extends Controller
                 }
             }
 
-            // Let previous dungeon know that this NPC is no longer available
-            if (!$npcAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
-                $messagesSentToDungeons->push($npc->dungeon->id);
-            }
-            if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
-                $messagesSentToDungeons->push($npc->dungeon->id);
+            // If we're now for all dungeons we don't have a current dungeon so we can't do these checks
+            // We already sent messages above in this case so we're already good
+            if (!$npcAllDungeon) {
+                // Let previous dungeon know that this NPC is no longer available
+                if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
+                    broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+                    $messagesSentToDungeons->push($npc->dungeon->id);
+                }
+                if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
+                    broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
+                    $messagesSentToDungeons->push($npc->dungeon->id);
+                }
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
@@ -189,7 +214,7 @@ class NpcController extends Controller
                 return [$id => __($name)];
             }),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeon, true),
+            'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
     }
 

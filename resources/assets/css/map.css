@@ -151,12 +151,17 @@ html, body, #map, #app, .wrapper {
 }
 
 .header_embed {
+    height: 150px;
     padding: 0 20px 10px 20px;
     text-shadow: black 2px 2px;
+    border-bottom: 1px black solid;
 }
 
-.header_embed {
-    border-bottom: 1px black solid;
+.header_embed_text_ellipsis > a,
+.header_embed_text_ellipsis > a > h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #embed_copy_mdt_string {
@@ -287,6 +292,16 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - (236px + 158px + 55px));
 }
 
+@media (min-height: 1000px) {
+    /** Pulls section of the sidebar, with a big ad loaded, when editing, without a speedrun enabled */
+    #pulls_sidebar.ad_loaded:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+        /** 280px is the height of the ad in the corner */
+        /** 24 px is the height of the report buttons */
+        /** 55 px is the height of the buttons at the top in the edit scenario */
+        max-height: calc(100vh - (266px + 158px + 55px));
+    }
+}
+
 /** Pulls section of the sidebar, adblock, when editing, without a speedrun enabled */
 #pulls_sidebar:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
     /** 250px is the height of the ad in the corner */
@@ -323,9 +338,21 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - (250px + 163px));
 }
 
+@media (min-height: 1000px) {
+    /** Pulls section of the sidebar, with a big ad loaded, when viewing, without a speedrun enabled */
+    #pulls_sidebar.ad_loaded .pulls_container:not(.has_speedrun) {
+        max-height: calc(100vh - (280px + 163px));
+    }
+}
+
 /** Pulls section of the sidebar, adblock, when viewing, without a speedrun enabled */
 #pulls_sidebar .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - 163px);
+}
+
+/** When embedding a route */
+#pulls_sidebar.embed .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - 150px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */

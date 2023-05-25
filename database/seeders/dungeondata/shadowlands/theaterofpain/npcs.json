@@ -9,8 +9,6 @@
         "name": "Maniacal Soulbinder",
         "base_health": 148676,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -18,7 +16,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1932,
+                "mapping_version_id": 35,
+                "npc_id": 160495,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162309,
@@ -30,8 +37,6 @@
         "name": "Kul'tharok",
         "base_health": 1388364,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -39,7 +44,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1937,
+                "mapping_version_id": 35,
+                "npc_id": 162309,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162317,
@@ -51,8 +65,6 @@
         "name": "Gorechop",
         "base_health": 1156970,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -60,7 +72,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1938,
+                "mapping_version_id": 35,
+                "npc_id": 162317,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162329,
@@ -72,8 +93,6 @@
         "name": "Xav the Unfallen",
         "base_health": 1041274,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -81,7 +100,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1939,
+                "mapping_version_id": 35,
+                "npc_id": 162329,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162744,
@@ -93,8 +121,6 @@
         "name": "Nekthara the Mangler",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -102,7 +128,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1940,
+                "mapping_version_id": 35,
+                "npc_id": 162744,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 162763,
@@ -114,8 +149,6 @@
         "name": "Soulforged Bonereaver",
         "base_health": 330390,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -123,7 +156,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1941,
+                "mapping_version_id": 35,
+                "npc_id": 162763,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163086,
@@ -135,8 +177,6 @@
         "name": "Rancid Gasbag",
         "base_health": 313871,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -144,7 +184,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1942,
+                "mapping_version_id": 35,
+                "npc_id": 163086,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 163089,
@@ -156,8 +205,6 @@
         "name": "Disgusting Refuse",
         "base_health": 41299,
         "health_percentage": null,
-        "enemy_forces": 1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -165,7 +212,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1943,
+                "mapping_version_id": 35,
+                "npc_id": 163089,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164451,
@@ -177,8 +233,6 @@
         "name": "Dessia the Decapitator",
         "base_health": 595013,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -186,7 +240,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1944,
+                "mapping_version_id": 35,
+                "npc_id": 164451,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164461,
@@ -198,8 +261,6 @@
         "name": "Sathel the Accursed",
         "base_health": 462788,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -207,7 +268,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1945,
+                "mapping_version_id": 35,
+                "npc_id": 164461,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164463,
@@ -219,8 +289,6 @@
         "name": "Paceran the Virulent",
         "base_health": 528901,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -228,7 +296,16 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1946,
+                "mapping_version_id": 35,
+                "npc_id": 164463,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164464,
@@ -240,8 +317,6 @@
         "name": "Xira the Underhanded",
         "base_health": 67427,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -249,7 +324,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1947,
+                "mapping_version_id": 35,
+                "npc_id": 164464,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164506,
@@ -261,8 +345,6 @@
         "name": "Ancient Captain",
         "base_health": 198234,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -270,7 +352,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1948,
+                "mapping_version_id": 35,
+                "npc_id": 164506,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 164510,
@@ -282,8 +373,6 @@
         "name": "Shambling Arbalest",
         "base_health": 140416,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -291,7 +380,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1949,
+                "mapping_version_id": 35,
+                "npc_id": 164510,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165260,
@@ -303,8 +401,6 @@
         "name": "Oozing Leftovers",
         "base_health": 63140,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,7 +408,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1950,
+                "mapping_version_id": 35,
+                "npc_id": 165260,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 165946,
@@ -324,8 +429,6 @@
         "name": "Mordretha, the Endless Empress",
         "base_health": 1322252,
         "health_percentage": null,
-        "enemy_forces": 0,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -333,7 +436,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1951,
+                "mapping_version_id": 35,
+                "npc_id": 165946,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 166524,
@@ -345,8 +457,6 @@
         "name": "Deathwalker",
         "base_health": 25256,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +464,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1952,
+                "mapping_version_id": 35,
+                "npc_id": 166524,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167532,
@@ -366,8 +485,6 @@
         "name": "Heavin the Breaker",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -375,7 +492,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1953,
+                "mapping_version_id": 35,
+                "npc_id": 167532,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167533,
@@ -387,8 +513,6 @@
         "name": "Advent Nevermore",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -396,7 +520,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1954,
+                "mapping_version_id": 35,
+                "npc_id": 167533,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167534,
@@ -408,8 +541,6 @@
         "name": "Rek the Hardened",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -417,7 +548,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1955,
+                "mapping_version_id": 35,
+                "npc_id": 167534,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167536,
@@ -429,8 +569,6 @@
         "name": "Harugia the Bloodthirsty",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -438,7 +576,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1956,
+                "mapping_version_id": 35,
+                "npc_id": 167536,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167538,
@@ -450,8 +597,6 @@
         "name": "Dokigg the Brutalizer",
         "base_health": 528624,
         "health_percentage": null,
-        "enemy_forces": 20,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -459,7 +604,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1957,
+                "mapping_version_id": 35,
+                "npc_id": 167538,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167994,
@@ -471,8 +625,6 @@
         "name": "Ossified Conscript",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -480,7 +632,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1958,
+                "mapping_version_id": 35,
+                "npc_id": 167994,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 167998,
@@ -492,8 +653,6 @@
         "name": "Portal Guardian",
         "base_health": 247793,
         "health_percentage": null,
-        "enemy_forces": 8,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -501,7 +660,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1959,
+                "mapping_version_id": 35,
+                "npc_id": 167998,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 169838,
@@ -513,8 +681,6 @@
         "name": "Nefarious Darkspeaker",
         "base_health": 7576,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -522,7 +688,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1961,
+                "mapping_version_id": 35,
+                "npc_id": 169838,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 169875,
@@ -534,8 +709,6 @@
         "name": "Shackled Soul",
         "base_health": 99117,
         "health_percentage": null,
-        "enemy_forces": 2,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -543,7 +716,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1962,
+                "mapping_version_id": 35,
+                "npc_id": 169875,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 169893,
@@ -555,8 +737,6 @@
         "name": "Nefarious Darkspeaker",
         "base_health": 231273,
         "health_percentage": null,
-        "enemy_forces": 6,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -564,7 +744,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1963,
+                "mapping_version_id": 35,
+                "npc_id": 169893,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 169927,
@@ -576,8 +765,6 @@
         "name": "Putrid Butcher",
         "base_health": 198234,
         "health_percentage": null,
-        "enemy_forces": 5,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -585,7 +772,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1964,
+                "mapping_version_id": 35,
+                "npc_id": 169927,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170671,
@@ -597,8 +793,6 @@
         "name": "Grandmaster Vole",
         "base_health": 2525600,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -606,7 +800,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1965,
+                "mapping_version_id": 35,
+                "npc_id": 170671,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170690,
@@ -618,8 +821,6 @@
         "name": "Diseased Horror",
         "base_health": 165195,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -627,7 +828,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1966,
+                "mapping_version_id": 35,
+                "npc_id": 170690,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170750,
@@ -639,8 +849,6 @@
         "name": "Battlefield Reaper",
         "base_health": 113652,
         "health_percentage": null,
-        "enemy_forces": -1,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -648,7 +856,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1967,
+                "mapping_version_id": 35,
+                "npc_id": 170750,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170838,
@@ -660,8 +877,6 @@
         "name": "Unyielding Contender",
         "base_health": 189974,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -669,7 +884,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1968,
+                "mapping_version_id": 35,
+                "npc_id": 170838,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170850,
@@ -681,8 +905,6 @@
         "name": "Raging Bloodhorn",
         "base_health": 297351,
         "health_percentage": null,
-        "enemy_forces": 7,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -690,7 +912,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1969,
+                "mapping_version_id": 35,
+                "npc_id": 170850,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 170882,
@@ -702,8 +933,6 @@
         "name": "Bone Magus",
         "base_health": 82598,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -717,6 +946,15 @@
                 "npc_id": 170882,
                 "spell_id": 333293
             }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 1970,
+                "mapping_version_id": 35,
+                "npc_id": 170882,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
         ]
     },
     {
@@ -729,8 +967,6 @@
         "name": "Battlefield Ritualist",
         "base_health": 148676,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -738,7 +974,16 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1973,
+                "mapping_version_id": 35,
+                "npc_id": 174197,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 174210,
@@ -750,8 +995,6 @@
         "name": "Blighted Sludge-Spewer",
         "base_health": 132156,
         "health_percentage": null,
-        "enemy_forces": 4,
-        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -759,6 +1002,15 @@
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
-        "npcspells": []
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 1974,
+                "mapping_version_id": 35,
+                "npc_id": 174210,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

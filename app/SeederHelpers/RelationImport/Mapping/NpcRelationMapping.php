@@ -6,6 +6,7 @@ namespace App\SeederHelpers\RelationImport\Mapping;
 
 use App\Models\Npc;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcBolsteringWhitelistRelationParser;
+use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcEnemyForcesRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcSpellsRelationParser;
 
 class NpcRelationMapping extends RelationMapping
@@ -20,6 +21,7 @@ class NpcRelationMapping extends RelationMapping
         $this->setPreSaveRelationParsers(collect([
             new NpcNpcBolsteringWhitelistRelationParser(),
             new NpcNpcSpellsRelationParser(),
+            new NpcNpcEnemyForcesRelationParser(),
         ]));
     }
 }

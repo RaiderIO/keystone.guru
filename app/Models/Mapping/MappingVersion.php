@@ -4,11 +4,13 @@ namespace App\Models\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
+use App\Models\Npc\NpcEnemyForces;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,11 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $version
+ * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
+ * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
+ * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
+ * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
  * @property bool $merged Not saved in the database
  *
@@ -27,12 +34,14 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  *
  * @property Dungeon $dungeon
+ * @property Collection|DungeonRoute[] $dungeonRoutes
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
  * @property Collection|Enemy[] $enemies
  * @property Collection|EnemyPack[] $enemyPacks
  * @property Collection|EnemyPatrol[] $enemyPatrols
  * @property Collection|MapIcon[] $mapIcons
  * @property Collection|MountableArea[] $mountableAreas
+ * @property Collection|NpcEnemyForces[] $npcEnemyForces
  *
  * @mixin Eloquent
  */
@@ -42,6 +51,11 @@ class MappingVersion extends Model
         'id',
         'dungeon_id',
         'version',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
         'mdt_mapping_hash',
         'merged',
     ];
@@ -49,6 +63,11 @@ class MappingVersion extends Model
     protected $fillable = [
         'dungeon_id',
         'version',
+        'enemy_forces_required',
+        'enemy_forces_required_teeming',
+        'enemy_forces_shrouded',
+        'enemy_forces_shrouded_zul_gamux',
+        'timer_max_seconds',
         'mdt_mapping_hash',
         'updated_at',
         'created_at',
@@ -77,6 +96,14 @@ class MappingVersion extends Model
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonRoutes(): HasMany
+    {
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**
@@ -128,11 +155,33 @@ class MappingVersion extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function npcEnemyForces(): HasMany
+    {
+        return $this->hasMany(NpcEnemyForces::class);
+    }
+
+    /**
      * @return bool
      */
     public function isLatestForDungeon(): bool
     {
         return $this->dungeon->getCurrentMappingVersion()->version === $this->version;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrettyName(): string
+    {
+        return sprintf('%s Version %d (%s%d, %s)',
+            __($this->dungeon->name),
+            $this->version,
+            $this->merged ? 'readonly, ' : '',
+            $this->id,
+            $this->created_at
+        );
     }
 
 
@@ -143,7 +192,7 @@ class MappingVersion extends Model
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
         static::created(function (MappingVersion $newMappingVersion) {
             /** @var Collection|MappingVersion[] $existingMappingVersions */
-            $existingMappingVersions = $newMappingVersion->dungeon->mappingversions()->get();
+            $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
 
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {
@@ -153,6 +202,15 @@ class MappingVersion extends Model
             // We must get the previous mapping version - that contains the mapping we want to clone
             $previousMappingVersion = $existingMappingVersions[1];
 
+            // Update the existing fields of the old mapping version to the new version
+            $newMappingVersion->update([
+                'enemy_forces_required'           => $previousMappingVersion->enemy_forces_required,
+                'enemy_forces_required_teeming'   => $previousMappingVersion->enemy_forces_required_teeming,
+                'enemy_forces_shrouded'           => $previousMappingVersion->enemy_forces_shrouded,
+                'enemy_forces_shrouded_zul_gamux' => $previousMappingVersion->enemy_forces_shrouded_zul_gamux,
+                'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
+            ]);
+
             /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
@@ -160,7 +218,8 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->enemyPacks)
                 ->merge($previousMappingVersion->enemyPatrols)
                 ->merge($previousMappingVersion->mapIcons)
-                ->merge($previousMappingVersion->mountableAreas);
+                ->merge($previousMappingVersion->mountableAreas)
+                ->merge($previousMappingVersion->npcEnemyForces);
 
             $idMapping = collect([
                 DungeonFloorSwitchMarker::class => collect(),
@@ -169,6 +228,7 @@ class MappingVersion extends Model
                 EnemyPatrol::class              => collect(),
                 MapIcon::class                  => collect(),
                 MountableArea::class            => collect(),
+                NpcEnemyForces::class           => collect(),
             ]);
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
@@ -224,6 +284,7 @@ class MappingVersion extends Model
             }
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
+            $mappingVersion->npcEnemyForces()->delete();
         });
     }
 }

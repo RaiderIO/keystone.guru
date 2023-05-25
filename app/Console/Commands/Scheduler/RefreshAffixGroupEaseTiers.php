@@ -129,8 +129,9 @@ class RefreshAffixGroupEaseTiers extends Command
         $currentSeasonAffixGroups = $currentSeason->affixgroups;
 
         $affixes = collect(explode(', ', $affixString));
+
         // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === $currentSeason->affix_group_count) {
+        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
             $invalidAffixes = $affixes->filter(function (string $affixName) use ($affixList) {
                 // Find the affix in the list and match by translated name - must be found to continue

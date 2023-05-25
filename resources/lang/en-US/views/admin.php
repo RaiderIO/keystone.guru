@@ -3,25 +3,20 @@
 return [
     'dungeon'                    => [
         'edit' => [
-            'title_new'                       => 'New dungeon',
-            'title_edit'                      => 'Edit dungeon',
-            'header_new'                      => 'New dungeon',
-            'header_edit'                     => 'Edit dungeon',
-            'active'                          => 'Active',
-            'speedrun_enabled'                => 'Speedrun enabled',
-            'id'                              => 'ID',
-            'zone_id'                         => 'Zone ID',
-            'map_id'                          => 'Map ID',
-            'mdt_id'                          => 'MDT ID',
-            'dungeon_name'                    => 'Dungeon name',
-            'key'                             => 'Key',
-            'slug'                            => 'Slug',
-            'enemy_forces_required'           => 'Enemy forces required',
-            'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
-            'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
-            'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
-            'timer_max_seconds'               => 'Timer (seconds)',
-            'submit'                          => 'Submit',
+            'title_new'        => 'New dungeon',
+            'title_edit'       => 'Edit dungeon',
+            'header_new'       => 'New dungeon',
+            'header_edit'      => 'Edit dungeon',
+            'active'           => 'Active',
+            'speedrun_enabled' => 'Speedrun enabled',
+            'id'               => 'ID',
+            'zone_id'          => 'Zone ID',
+            'map_id'           => 'Map ID',
+            'mdt_id'           => 'MDT ID',
+            'dungeon_name'     => 'Dungeon name',
+            'key'              => 'Key',
+            'slug'             => 'Slug',
+            'submit'           => 'Submit',
 
             'floor_management' => [
                 'title'                => 'Floor management',
@@ -200,6 +195,21 @@ return [
             'table_header_actions'        => 'Action',
         ],
     ],
+    'npcenemyforces'             => [
+        'title'                        => 'Enemy forces',
+        'edit_enemy_forces'            => 'Edit enemy forces',
+        'table_header_id'              => 'Id',
+        'table_header_mapping_version' => 'Mapping Version',
+        'table_header_enemy_forces'    => 'Enemy Forces',
+        'table_header_actions'         => 'Actions',
+        'edit'                         => [
+            'title'                => 'Edit enemy forces for :name',
+            'header'               => 'Edit enemy forces for :name',
+            'enemy_forces'         => 'Enemy forces',
+            'enemy_forces_teeming' => 'Enemy forces (teeming)',
+            'submit'               => 'Submit',
+        ],
+    ],
     'release'                    => [
         'edit' => [
             'title_new'   => 'New release',
@@ -269,15 +279,22 @@ return [
             ],
         ],
         'dungeonroute' => [
-            'view'         => [
+            'view'            => [
                 'title'      => 'View dungeonroute',
                 'header'     => 'View dungeonroute',
                 'public_key' => 'Dungeonroute public key',
                 'submit'     => 'Submit',
             ],
-            'viewcontents' => [
+            'viewcontents'    => [
                 'title'  => 'View contents for :dungeonRouteTitle',
                 'header' => 'View contents for %s',
+            ],
+            'mappingversions' => [
+                'title'                             => 'View mapping version usage',
+                'header'                            => 'View mapping version usage',
+                'table_header_mapping_version_name' => 'Mapping Version',
+                'table_header_count'                => 'Dungeon Route #',
+                'table_header_actions'              => 'Actions',
             ],
         ],
         'enemyforces'  => [
@@ -356,8 +373,9 @@ return [
             'subheader_import' => 'Import',
             'mass_import_npcs' => 'Mass import NPCs',
 
-            'subheader_dungeonroute'    => 'Dungeonroute',
-            'view_dungeonroute_details' => 'View Dungeonroute details',
+            'subheader_dungeonroute'                  => 'Dungeonroute',
+            'view_dungeonroute_details'               => 'View Dungeonroute details',
+            'view_dungeonroute_mapping_version_usage' => 'View Dungeonroute Mapping Version usage',
 
             'subheader_mdt'                               => 'MDT',
             'view_mdt_string'                             => 'View MDT String contents',
