@@ -316,8 +316,8 @@ class RowElementKillZone extends RowElement {
             let data = $.extend({}, getHandlebarsDefaultVariables(), {
                 'id': index,
                 'pull_color': this.killZone.color,
-                'enemy_forces': npc.enemy_forces.enemy_forces,
-                'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
+                'enemy_forces': npc.enemy_forces,
+                'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
                 'count': npc.count,
                 'name': npc.name,
                 'awakened': npc.awakened,
