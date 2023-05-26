@@ -92,13 +92,13 @@ class MDTImportController extends Controller
                 report($ex);
             }
 
-            Log::error($ex->getMessage(), ['string' => $string]);
+            Log::error($ex->getMessage());
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
                 return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
             }
-            Log::error($error->getMessage(), ['string' => $string]);
+            Log::error($error->getMessage());
 
             throw $error;
         }
@@ -149,7 +149,7 @@ class MDTImportController extends Controller
                 if (config('app.debug')) {
                     throw $ex;
                 } else {
-                    Log::error($ex->getMessage(), ['string' => $string]);
+                    Log::error($ex->getMessage());
 
                     return abort(400, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage()));
                 }

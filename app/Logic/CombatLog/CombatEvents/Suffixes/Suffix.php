@@ -2,11 +2,14 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use Illuminate\Support\Str;
 
-abstract class Suffix extends GenericData
+abstract class Suffix implements HasParameters
 {
+    use ValidatesParameterCount;
+
     public const SUFFIX_DAMAGE                = 'DAMAGE';
     public const SUFFIX_MISSED                = 'MISSED';
     public const SUFFIX_HEAL_ABSORBED         = 'HEAL_ABSORBED';
@@ -36,9 +39,42 @@ abstract class Suffix extends GenericData
     public const SUFFIX_CREATE                = 'CREATE';
     public const SUFFIX_SUMMON                = 'SUMMON';
     public const SUFFIX_RESURRECT             = 'RESURRECT';
-    public const PREFIX_ENVIRONMENTAL_DAMAGE  = 'ENVIRONMENTAL_DAMAGE';
+    public const SUFFIX_ENVIRONMENTAL_DAMAGE  = 'ENVIRONMENTAL_DAMAGE';
 
-    public const SUFFIX_CLASS_MAPPING = [
+    public const SUFFIX_ALL = [
+        self::SUFFIX_DAMAGE,
+        self::SUFFIX_MISSED,
+        self::SUFFIX_HEAL_ABSORBED,
+        self::SUFFIX_HEAL,
+        self::SUFFIX_ABSORBED,
+        self::SUFFIX_ENERGIZE,
+        self::SUFFIX_DRAIN,
+        self::SUFFIX_LEECH,
+        self::SUFFIX_INTERRUPT,
+        self::SUFFIX_DISPEL_FAILED,
+        self::SUFFIX_DISPEL,
+        self::SUFFIX_STOLEN,
+        self::SUFFIX_EXTRA_ATTACKS,
+        self::SUFFIX_AURA_APPLIED,
+        self::SUFFIX_AURA_REMOVED,
+        self::SUFFIX_AURA_APPLIED_DOSE,
+        self::SUFFIX_AURA_REMOVED_DOSE,
+        self::SUFFIX_AURA_REFRESH,
+        self::SUFFIX_AURA_BROKEN_SPELL,
+        self::SUFFIX_AURA_BROKEN,
+        self::SUFFIX_CAST_START,
+        self::SUFFIX_CAST_SUCCESS,
+        self::SUFFIX_CAST_FAILED,
+        self::SUFFIX_INSTAKILL,
+        self::SUFFIX_DURABILITY_DAMAGE_ALL,
+        self::SUFFIX_DURABILITY_DAMAGE,
+        self::SUFFIX_CREATE,
+        self::SUFFIX_SUMMON,
+        self::SUFFIX_RESURRECT,
+        self::SUFFIX_ENVIRONMENTAL_DAMAGE,
+    ];
+
+    private const SUFFIX_CLASS_MAPPING = [
         self::SUFFIX_DAMAGE                => Damage::class,
         self::SUFFIX_MISSED                => Missed::class,
         self::SUFFIX_HEAL_ABSORBED         => HealAbsorbed::class,
@@ -68,9 +104,20 @@ abstract class Suffix extends GenericData
         self::SUFFIX_CREATE                => Create::class,
         self::SUFFIX_SUMMON                => Summon::class,
         self::SUFFIX_RESURRECT             => Resurrect::class,
-        self::PREFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamage::class,
+        self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamage::class,
     ];
 
+
+    /**
+     * @param array $parameters
+     * @return self
+     */
+    public function setParameters(array $parameters): HasParameters
+    {
+        $this->validateParameters($parameters);
+
+        return $this;
+    }
 
     /**
      * @param string $eventName

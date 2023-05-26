@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Traits;
+namespace Tests\Unit\Fixtures\Traits;
 
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Tests\TestCase;

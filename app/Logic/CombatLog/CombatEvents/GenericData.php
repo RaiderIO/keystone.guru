@@ -3,10 +3,12 @@
 namespace App\Logic\CombatLog\CombatEvents;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use InvalidArgumentException;
 
 class GenericData implements HasParameters
 {
+    use ValidatesParameterCount;
 
     private string $sourceGUID;
 
@@ -94,18 +96,16 @@ class GenericData implements HasParameters
      */
     public function setParameters(array $parameters): HasParameters
     {
-        if (($parameterCount = count($parameters)) !== $this->getParameterCount()) {
-            throw new InvalidArgumentException(sprintf('Invalid parameter count - wanted %d, got %d', $this->getParameterCount(), $parameterCount));
-        }
+        $this->validateParameters($parameters);
 
-        $this->sourceGUID      = $parameters[1];
-        $this->sourceName      = $parameters[2];
-        $this->sourceFlags     = $parameters[3];
-        $this->sourceRaidFlags = $parameters[4];
-        $this->destGUID        = $parameters[5];
-        $this->destName        = $parameters[6];
-        $this->destFlags       = $parameters[7];
-        $this->destRaidFlags   = $parameters[8];
+        $this->sourceGUID      = $parameters[0];
+        $this->sourceName      = $parameters[1];
+        $this->sourceFlags     = $parameters[2];
+        $this->sourceRaidFlags = $parameters[3];
+        $this->destGUID        = $parameters[4];
+        $this->destName        = $parameters[5];
+        $this->destFlags       = $parameters[6];
+        $this->destRaidFlags   = $parameters[7];
 
         return $this;
     }

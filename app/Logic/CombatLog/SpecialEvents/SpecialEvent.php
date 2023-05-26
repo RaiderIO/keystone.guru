@@ -14,6 +14,15 @@ abstract class SpecialEvent extends BaseEvent
     public const SPECIAL_EVENT_CHALLENGE_MODE_END   = 'CHALLENGE_MODE_END';
     public const SPECIAL_EVENT_COMBATANT_INFO       = 'COMBATANT_INFO';
 
+    public const SPECIAL_EVENT_ALL = [
+        self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
+        self::SPECIAL_EVENT_ZONE_CHANGE,
+        self::SPECIAL_EVENT_MAP_CHANGE,
+        self::SPECIAL_EVENT_CHALLENGE_MODE_START,
+        self::SPECIAL_EVENT_CHALLENGE_MODE_END,
+        self::SPECIAL_EVENT_COMBATANT_INFO,
+    ];
+
     private const SPECIAL_EVENT_CLASS_MAPPING = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION   => CombatLogVersion::class,
         self::SPECIAL_EVENT_ZONE_CHANGE          => ZoneChange::class,

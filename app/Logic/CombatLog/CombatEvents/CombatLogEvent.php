@@ -8,7 +8,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 
 class CombatLogEvent extends BaseEvent
 {
-    protected GenericData $baseEvent;
+    protected GenericData $genericData;
 
     protected Prefix $prefix;
 
@@ -20,15 +20,15 @@ class CombatLogEvent extends BaseEvent
      */
     public function setParameters(array $parameters): CombatLogEvent
     {
-        $this->baseEvent = (new GenericData());
-        $this->baseEvent->setParameters(array_slice($parameters, 0, $this->baseEvent->getParameterCount()));
+        $this->genericData = (new GenericData());
+        $this->genericData->setParameters(array_slice($parameters, 0, $this->genericData->getParameterCount()));
 
         $this->prefix = Prefix::createFromEventName($this->getEventName());
-        $this->prefix->setParameters(array_slice($parameters, $this->baseEvent->getParameterCount(), $this->prefix->getParameterCount()));
+        $this->prefix->setParameters(array_slice($parameters, $this->genericData->getParameterCount(), $this->prefix->getParameterCount()));
 
         $this->suffix = Suffix::createFromEventName($this->getEventName());
         $this->suffix->setParameters(
-            array_slice($parameters, $this->baseEvent->getParameterCount() + $this->prefix->getParameterCount())
+            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount())
         );
 
         return $this;
@@ -37,9 +37,9 @@ class CombatLogEvent extends BaseEvent
     /**
      * @return GenericData
      */
-    public function getBaseEvent(): GenericData
+    public function getGenericData(): GenericData
     {
-        return $this->baseEvent;
+        return $this->genericData;
     }
 
     /**
@@ -57,4 +57,25 @@ class CombatLogEvent extends BaseEvent
     {
         return $this->suffix;
     }
+//
+//
+//    /**
+//     * @param string $eventName
+//     * @return bool
+//     */
+//    public static function canParseEventName(string $eventName): bool
+//    {
+//        $result = false;
+//
+//        foreach (Prefix::PREFIX_ALL as $prefix) {
+//            foreach (Suffix::SUFFIX_ALL as $suffix) {
+//                if ($eventName === sprintf('%s_%s', $prefix, $suffix)) {
+//                    $result = true;
+//                    break 2;
+//                }
+//            }
+//        }
+//
+//        return $result;
+//    }
 }
