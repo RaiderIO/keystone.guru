@@ -6,9 +6,9 @@
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.changelog.title')])
 
 @section('header-title', __('views/misc.changelog.header'))
+<?php // Only add the releases when we're an admin, otherwise empty it ?>
 @include('common.general.inline', ['path' => 'release/view', 'options' => array_merge(
     ['max_release' => $releases->first()->id],
-     // Only add the releases when we're an admin, otherwise empty it
      $isUserAdmin ? ['releases' => $releases->all()] : []
 )])
 
