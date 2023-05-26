@@ -47,6 +47,13 @@
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
     ])
+
+    @if( !$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
+
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
@@ -72,13 +79,19 @@
         'link' => isset($season) ?
             route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
             route('dungeonroutes.nextweek', ['expansion' => $expansion]),
-        // The next week's affix group is current for that week
         'currentAffixGroup' => $nextAffixGroup,
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
         'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => true,
     ])
+
+    @if( !$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
+
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.discover.newly_published_routes'),

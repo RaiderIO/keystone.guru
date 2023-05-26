@@ -208,7 +208,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             ];
 
             /** @var NpcEnemyForces $npcEnemyForces */
-            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->get();
+            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
 
             $enemyForces = $npcEnemyForces->enemy_forces;
             // These counts are different per mapping version so we need to correct it for MDT here
