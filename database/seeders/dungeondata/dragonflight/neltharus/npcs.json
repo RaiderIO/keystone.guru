@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 102604,
         "name": "Magmatusk",
-        "base_health": 6905734,
+        "base_health": 6916035,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -18,6 +18,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8527,
+                "mapping_version_id": 147,
+                "npc_id": 181861,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7739,
                 "mapping_version_id": 133,
@@ -56,7 +63,7 @@
         "npc_class_id": 1,
         "display_id": 108349,
         "name": "Qalashi Hunter",
-        "base_health": 1185606,
+        "base_health": 1186059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -67,6 +74,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8516,
+                "mapping_version_id": 147,
+                "npc_id": 189227,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7744,
                 "mapping_version_id": 133,
@@ -105,7 +119,7 @@
         "npc_class_id": 1,
         "display_id": 108366,
         "name": "Overseer Lahar",
-        "base_health": 2371212,
+        "base_health": 2372119,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -116,6 +130,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8518,
+                "mapping_version_id": 147,
+                "npc_id": 189235,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7745,
                 "mapping_version_id": 133,
@@ -154,7 +175,7 @@
         "npc_class_id": 1,
         "display_id": 109230,
         "name": "Tamed Phoenix",
-        "base_health": 395202,
+        "base_health": 395353,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -165,6 +186,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8517,
+                "mapping_version_id": 147,
+                "npc_id": 189247,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7746,
                 "mapping_version_id": 133,
@@ -203,7 +231,7 @@
         "npc_class_id": 4,
         "display_id": 108347,
         "name": "Qalashi Bonetender",
-        "base_health": 1185606,
+        "base_health": 1186059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -214,6 +242,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8520,
+                "mapping_version_id": 147,
+                "npc_id": 189265,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7747,
                 "mapping_version_id": 133,
@@ -252,7 +287,7 @@
         "npc_class_id": 1,
         "display_id": 108344,
         "name": "Qalashi Trainee",
-        "base_health": 988005,
+        "base_health": 988383,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -263,6 +298,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8519,
+                "mapping_version_id": 147,
+                "npc_id": 189266,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7748,
                 "mapping_version_id": 133,
@@ -301,7 +343,7 @@
         "npc_class_id": 1,
         "display_id": 108248,
         "name": "Chargath, Bane of Scales",
-        "base_health": 7892268,
+        "base_health": 7904040,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -312,6 +354,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8521,
+                "mapping_version_id": 147,
+                "npc_id": 189340,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7749,
                 "mapping_version_id": 133,
@@ -399,7 +448,7 @@
         "npc_class_id": 1,
         "display_id": 101960,
         "name": "Qalashi Irontorch",
-        "base_health": 1383207,
+        "base_health": 1383736,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -410,6 +459,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8531,
+                "mapping_version_id": 147,
+                "npc_id": 189464,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7751,
                 "mapping_version_id": 133,
@@ -448,7 +504,7 @@
         "npc_class_id": 1,
         "display_id": 111190,
         "name": "Irontorch Commander",
-        "base_health": 2568813,
+        "base_health": 2569795,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -459,6 +515,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8532,
+                "mapping_version_id": 147,
+                "npc_id": 189466,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7752,
                 "mapping_version_id": 133,
@@ -497,7 +560,7 @@
         "npc_class_id": 1,
         "display_id": 111189,
         "name": "Qalashi Bonesplitter",
-        "base_health": 1284407,
+        "base_health": 1284898,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -508,6 +571,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8530,
+                "mapping_version_id": 147,
+                "npc_id": 189467,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7753,
                 "mapping_version_id": 133,
@@ -546,7 +616,7 @@
         "npc_class_id": 1,
         "display_id": 102505,
         "name": "Lava Flare",
-        "base_health": 790404,
+        "base_health": 790706,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -557,6 +627,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8529,
+                "mapping_version_id": 147,
+                "npc_id": 189470,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7754,
                 "mapping_version_id": 133,
@@ -595,7 +672,7 @@
         "npc_class_id": 1,
         "display_id": 109595,
         "name": "Qalashi Blacksmith",
-        "base_health": 1383207,
+        "base_health": 1383736,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -606,6 +683,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8533,
+                "mapping_version_id": 147,
+                "npc_id": 189471,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7755,
                 "mapping_version_id": 133,
@@ -644,7 +728,7 @@
         "npc_class_id": 1,
         "display_id": 108665,
         "name": "Qalashi Lavabearer",
-        "base_health": 1778409,
+        "base_health": 1779089,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -655,6 +739,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8528,
+                "mapping_version_id": 147,
+                "npc_id": 189472,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7756,
                 "mapping_version_id": 133,
@@ -693,7 +784,7 @@
         "npc_class_id": 1,
         "display_id": 107189,
         "name": "Forgemaster Gorek",
-        "base_health": 6905734,
+        "base_health": 6916035,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -704,6 +795,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8534,
+                "mapping_version_id": 147,
+                "npc_id": 189478,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7757,
                 "mapping_version_id": 133,
@@ -791,7 +889,7 @@
         "npc_class_id": 1,
         "display_id": 107029,
         "name": "Warlord Sargha",
-        "base_health": 7892268,
+        "base_health": 7904040,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -802,6 +900,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8522,
+                "mapping_version_id": 147,
+                "npc_id": 189901,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7760,
                 "mapping_version_id": 133,
@@ -987,7 +1092,7 @@
         "npc_class_id": 1,
         "display_id": 109407,
         "name": "Ore Elemental",
-        "base_health": 790404,
+        "base_health": 790706,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -998,6 +1103,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8524,
+                "mapping_version_id": 147,
+                "npc_id": 192781,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7765,
                 "mapping_version_id": 133,
@@ -1036,7 +1148,7 @@
         "npc_class_id": 1,
         "display_id": 108663,
         "name": "Qalashi Plunderer",
-        "base_health": 1284407,
+        "base_health": 1284898,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1047,6 +1159,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8525,
+                "mapping_version_id": 147,
+                "npc_id": 192786,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7766,
                 "mapping_version_id": 133,
@@ -1085,7 +1204,7 @@
         "npc_class_id": 1,
         "display_id": 108029,
         "name": "Qalashi Spinecrusher",
-        "base_health": 1383207,
+        "base_health": 1383736,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1096,6 +1215,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8523,
+                "mapping_version_id": 147,
+                "npc_id": 192787,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7767,
                 "mapping_version_id": 133,
@@ -1134,7 +1260,7 @@
         "npc_class_id": 1,
         "display_id": 107985,
         "name": "Qalashi Thaumaturge",
-        "base_health": 948486,
+        "base_health": 948849,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1145,6 +1271,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8526,
+                "mapping_version_id": 147,
+                "npc_id": 192788,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7768,
                 "mapping_version_id": 133,
@@ -1183,7 +1316,7 @@
         "npc_class_id": 1,
         "display_id": 104578,
         "name": "Apex Blazewing",
-        "base_health": 1580808,
+        "base_health": 1581412,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1194,6 +1327,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8514,
+                "mapping_version_id": 147,
+                "npc_id": 193291,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7769,
                 "mapping_version_id": 133,
@@ -1232,7 +1372,7 @@
         "npc_class_id": 1,
         "display_id": 111187,
         "name": "Qalashi Warden",
-        "base_health": 1778409,
+        "base_health": 1779089,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1243,6 +1383,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8513,
+                "mapping_version_id": 147,
+                "npc_id": 193293,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7770,
                 "mapping_version_id": 133,
@@ -1281,7 +1428,7 @@
         "npc_class_id": 1,
         "display_id": 108666,
         "name": "Qalashi Lavamancer",
-        "base_health": 1383207,
+        "base_health": 1383736,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1292,6 +1439,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8515,
+                "mapping_version_id": 147,
+                "npc_id": 193944,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7771,
                 "mapping_version_id": 133,
@@ -1428,7 +1582,7 @@
         "npc_class_id": 1,
         "display_id": 108693,
         "name": "Forgewrought Monstrosity",
-        "base_health": 1580808,
+        "base_health": 1581412,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1439,6 +1593,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8535,
+                "mapping_version_id": 147,
+                "npc_id": 194816,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 7774,
                 "mapping_version_id": 133,
