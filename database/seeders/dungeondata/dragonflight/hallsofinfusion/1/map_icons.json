@@ -631,7 +631,7 @@
         "map_icon_type_id": 45,
         "lat": -143.80360924767,
         "lng": 315.07958126335,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -644,7 +644,7 @@
         "map_icon_type_id": 45,
         "lat": -143.56677853416,
         "lng": 331.94192806578,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -657,7 +657,7 @@
         "map_icon_type_id": 45,
         "lat": -155.21884963921,
         "lng": 319.01097110774,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

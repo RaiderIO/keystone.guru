@@ -310,5 +310,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 146,
+        "floor_id": 161,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 50,
+        "lat": -119.70070245321706,
+        "lng": 311.00418873754035,
+        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 146,
+        "floor_id": 161,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 50,
+        "lat": -224.71086415081203,
+        "lng": 282.49365778959225,
+        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 146,
+        "floor_id": 161,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 50,
+        "lat": -173.45719973675273,
+        "lng": 218.83464784856318,
+        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

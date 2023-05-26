@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "mapping_version_id": 147,
+        "floor_id": 152,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 51,
+        "lat": -168.76556645239208,
+        "lng": 130.30425857719075,
+        "comment": "Blazing Aegis: one party member can pick up the Blazing Aegis, gaining a one-time use extra action button. When pressed, deals damage and an additional damage-over-time effect. In addition, it will also spawn eruptions in four directions. Requires 25 Dragonflight Blacksmithing to pick up.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

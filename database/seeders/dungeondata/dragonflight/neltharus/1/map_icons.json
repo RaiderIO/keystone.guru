@@ -683,7 +683,7 @@
         "map_icon_type_id": 45,
         "lat": -184.79684786015,
         "lng": 125.49529528343,
-        "comment": "Qaleshi Goulash",
+        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
