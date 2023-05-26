@@ -11,13 +11,26 @@ use InvalidArgumentException;
 trait ValidatesParameterCount
 {
     /**
+     * @return int
+     */
+    public function getOptionalParameterCount(): int
+    {
+        return 0;
+    }
+
+    /**
      * @param array $parameters
      * @return void
      */
     public function validateParameters(array $parameters): void
     {
-        if (($parameterCount = count($parameters)) !== $this->getParameterCount()) {
-            throw new InvalidArgumentException(sprintf('Invalid parameter count - wanted %d, got %d', $this->getParameterCount(), $parameterCount));
+        $parameterCount = count($parameters);
+
+        if ($parameterCount < $this->getParameterCount() - $this->getOptionalParameterCount() ||
+            $parameterCount > $this->getParameterCount()) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid parameter count for %s - wanted %d, got %d', get_class($this), $this->getParameterCount(), $parameterCount)
+            );
         }
     }
 }

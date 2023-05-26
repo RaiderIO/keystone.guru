@@ -5,9 +5,9 @@ namespace Tests\Unit\App\Logic\CombatLog\ChallengeModeStart;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
-use Tests\TestCase;
+use Tests\PublicTestCase;
 
-class ChallengeModeStartTest extends TestCase
+class ChallengeModeStartTest extends PublicTestCase
 {
 
     /**

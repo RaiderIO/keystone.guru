@@ -2,6 +2,7 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-class AuraRemovedDose extends AuraBase
+class DamageLanded extends Damage
 {
+
 }

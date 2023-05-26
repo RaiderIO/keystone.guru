@@ -6,9 +6,9 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
-use Tests\TestCase;
+use Tests\PublicTestCase;
 
-class GenericDataTest extends TestCase
+class GenericDataTest extends PublicTestCase
 {
 
     /**

@@ -10,6 +10,7 @@ abstract class Suffix implements HasParameters
 {
     use ValidatesParameterCount;
 
+    public const SUFFIX_DAMAGE_LANDED         = 'DAMAGE_LANDED';
     public const SUFFIX_DAMAGE                = 'DAMAGE';
     public const SUFFIX_MISSED                = 'MISSED';
     public const SUFFIX_HEAL_ABSORBED         = 'HEAL_ABSORBED';
@@ -42,6 +43,7 @@ abstract class Suffix implements HasParameters
     public const SUFFIX_ENVIRONMENTAL_DAMAGE  = 'ENVIRONMENTAL_DAMAGE';
 
     public const SUFFIX_ALL = [
+        self::SUFFIX_DAMAGE_LANDED,
         self::SUFFIX_DAMAGE,
         self::SUFFIX_MISSED,
         self::SUFFIX_HEAL_ABSORBED,
@@ -75,6 +77,7 @@ abstract class Suffix implements HasParameters
     ];
 
     private const SUFFIX_CLASS_MAPPING = [
+        self::SUFFIX_DAMAGE_LANDED         => DamageLanded::class,
         self::SUFFIX_DAMAGE                => Damage::class,
         self::SUFFIX_MISSED                => Missed::class,
         self::SUFFIX_HEAL_ABSORBED         => HealAbsorbed::class,

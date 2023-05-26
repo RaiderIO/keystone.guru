@@ -2,7 +2,8 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-class AuraApplied extends Suffix
-{
+use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
+class AuraApplied extends AuraBase
+{
 }

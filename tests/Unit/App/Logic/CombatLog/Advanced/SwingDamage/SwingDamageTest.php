@@ -9,9 +9,9 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
-use Tests\TestCase;
+use Tests\PublicTestCase;
 
-class SwingDamageTest extends TestCase
+class SwingDamageTest extends PublicTestCase
 {
 
     /**

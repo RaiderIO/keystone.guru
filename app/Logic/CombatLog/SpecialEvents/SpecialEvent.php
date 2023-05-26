@@ -13,6 +13,12 @@ abstract class SpecialEvent extends BaseEvent
     public const SPECIAL_EVENT_CHALLENGE_MODE_START = 'CHALLENGE_MODE_START';
     public const SPECIAL_EVENT_CHALLENGE_MODE_END   = 'CHALLENGE_MODE_END';
     public const SPECIAL_EVENT_COMBATANT_INFO       = 'COMBATANT_INFO';
+    public const SPECIAL_EVENT_PARTY_KILL           = 'PARTY_KILL';
+    public const SPECIAL_EVENT_UNIT_DESTROYED       = 'UNIT_DESTROYED';
+    public const SPECIAL_EVENT_UNIT_DIED            = 'UNIT_DIED';
+    public const SPECIAL_EVENT_UNIT_DISSIPATES      = 'UNIT_DISSIPATES';
+    // Putting it here since it's a weird event that I don't want to decypher at the moment
+    public const SPECIAL_EVENT_SPELL_ABSORBED = 'SPELL_ABSORBED';
 
     public const SPECIAL_EVENT_ALL = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
@@ -21,6 +27,12 @@ abstract class SpecialEvent extends BaseEvent
         self::SPECIAL_EVENT_CHALLENGE_MODE_START,
         self::SPECIAL_EVENT_CHALLENGE_MODE_END,
         self::SPECIAL_EVENT_COMBATANT_INFO,
+        self::SPECIAL_EVENT_PARTY_KILL,
+        self::SPECIAL_EVENT_UNIT_DESTROYED,
+        self::SPECIAL_EVENT_UNIT_DIED,
+        self::SPECIAL_EVENT_UNIT_DISSIPATES,
+
+        self::SPECIAL_EVENT_SPELL_ABSORBED,
     ];
 
     private const SPECIAL_EVENT_CLASS_MAPPING = [
@@ -30,6 +42,12 @@ abstract class SpecialEvent extends BaseEvent
         self::SPECIAL_EVENT_CHALLENGE_MODE_START => ChallengeModeStart::class,
         self::SPECIAL_EVENT_CHALLENGE_MODE_END   => ChallengeModeEnd::class,
         self::SPECIAL_EVENT_COMBATANT_INFO       => CombatantInfo::class,
+        self::SPECIAL_EVENT_PARTY_KILL           => PartyKill::class,
+        self::SPECIAL_EVENT_UNIT_DESTROYED       => UnitDestroyed::class,
+        self::SPECIAL_EVENT_UNIT_DIED            => UnitDied::class,
+        self::SPECIAL_EVENT_UNIT_DISSIPATES      => UnitDissipates::class,
+
+        self::SPECIAL_EVENT_SPELL_ABSORBED => SpellAbsorbed::class,
     ];
 
 

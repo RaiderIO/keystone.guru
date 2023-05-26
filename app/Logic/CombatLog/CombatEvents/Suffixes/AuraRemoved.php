@@ -2,7 +2,6 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-class AuraRemoved extends Suffix
+class AuraRemoved extends AuraBase
 {
-
 }

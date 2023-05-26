@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Service\CombatLog\Logging\CombatLogServiceLogging;
+use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonApiServiceLogging;
@@ -20,6 +22,9 @@ class LoggingServiceProvider extends ServiceProvider
     public function register()
     {
         parent::register();
+
+        // Combat log
+        $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);

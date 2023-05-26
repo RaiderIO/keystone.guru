@@ -9,9 +9,9 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
-use Tests\TestCase;
+use Tests\PublicTestCase;
 
-class RangeDamageTest extends TestCase
+class RangeDamageTest extends PublicTestCase
 {
 
     /**
