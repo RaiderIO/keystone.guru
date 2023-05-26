@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 34265,
         "name": "Altairus",
-        "base_health": 8879550,
+        "base_health": 8892045,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -18,6 +18,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8631,
+                "mapping_version_id": 151,
+                "npc_id": 43873,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8304,
                 "mapping_version_id": 142,
@@ -63,7 +70,7 @@
         "npc_class_id": 1,
         "display_id": 35388,
         "name": "Asaad",
-        "base_health": 7892933,
+        "base_health": 7904040,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -74,6 +81,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8635,
+                "mapping_version_id": 151,
+                "npc_id": 43875,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8305,
                 "mapping_version_id": 142,
@@ -119,7 +133,7 @@
         "npc_class_id": 1,
         "display_id": 35181,
         "name": "Grand Vizier Ertan",
-        "base_health": 6906317,
+        "base_health": 6916035,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -130,6 +144,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8625,
+                "mapping_version_id": 151,
+                "npc_id": 43878,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8306,
                 "mapping_version_id": 142,
@@ -175,7 +196,7 @@
         "npc_class_id": 1,
         "display_id": 37224,
         "name": "Gust Soldier",
-        "base_health": 988005,
+        "base_health": 988383,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -186,6 +207,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8639,
+                "mapping_version_id": 151,
+                "npc_id": 45477,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8307,
                 "mapping_version_id": 142,
@@ -287,7 +315,7 @@
         "npc_class_id": 1,
         "display_id": 13629,
         "name": "Lurking Tempest",
-        "base_health": 2371212,
+        "base_health": 2372119,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -298,6 +326,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8638,
+                "mapping_version_id": 151,
+                "npc_id": 45704,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8309,
                 "mapping_version_id": 142,
@@ -343,7 +378,7 @@
         "npc_class_id": 1,
         "display_id": 36060,
         "name": "Wild Vortex",
-        "base_health": 889205,
+        "base_health": 889545,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -354,6 +389,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8636,
+                "mapping_version_id": 151,
+                "npc_id": 45912,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8310,
                 "mapping_version_id": 142,
@@ -399,7 +441,7 @@
         "npc_class_id": 1,
         "display_id": 33828,
         "name": "Armored Mistral",
-        "base_health": 1778409,
+        "base_health": 1779089,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -410,6 +452,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8640,
+                "mapping_version_id": 151,
+                "npc_id": 45915,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8311,
                 "mapping_version_id": 142,
@@ -455,7 +504,7 @@
         "npc_class_id": 1,
         "display_id": 36061,
         "name": "Cloud Prince",
-        "base_health": 1580808,
+        "base_health": 1581412,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -466,6 +515,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8637,
+                "mapping_version_id": 151,
+                "npc_id": 45917,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8312,
                 "mapping_version_id": 142,
@@ -511,7 +567,7 @@
         "npc_class_id": 1,
         "display_id": 34771,
         "name": "Young Storm Dragon",
-        "base_health": 2371212,
+        "base_health": 2372119,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -522,6 +578,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8633,
+                "mapping_version_id": 151,
+                "npc_id": 45919,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8313,
                 "mapping_version_id": 142,
@@ -567,7 +630,7 @@
         "npc_class_id": 1,
         "display_id": 19673,
         "name": "Empyrean Assassin",
-        "base_health": 988005,
+        "base_health": 988383,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -578,6 +641,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8634,
+                "mapping_version_id": 151,
+                "npc_id": 45922,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8314,
                 "mapping_version_id": 142,
@@ -635,6 +705,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 8632,
+                "mapping_version_id": 151,
+                "npc_id": 45924,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 8315,
                 "mapping_version_id": 142,
                 "npc_id": 45924,
@@ -679,7 +756,7 @@
         "npc_class_id": 1,
         "display_id": 34745,
         "name": "Servant of Asaad",
-        "base_health": 1185606,
+        "base_health": 1186059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -690,6 +767,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8630,
+                "mapping_version_id": 151,
+                "npc_id": 45926,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8316,
                 "mapping_version_id": 142,
@@ -735,7 +819,7 @@
         "npc_class_id": 1,
         "display_id": 34735,
         "name": "Executor of the Caliph",
-        "base_health": 1580808,
+        "base_health": 1581412,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -746,6 +830,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8629,
+                "mapping_version_id": 151,
+                "npc_id": 45928,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8317,
                 "mapping_version_id": 142,
@@ -791,7 +882,7 @@
         "npc_class_id": 1,
         "display_id": 34790,
         "name": "Minister of Air",
-        "base_health": 2173611,
+        "base_health": 2174442,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -802,6 +893,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8628,
+                "mapping_version_id": 151,
+                "npc_id": 45930,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8318,
                 "mapping_version_id": 142,
@@ -847,7 +945,7 @@
         "npc_class_id": 1,
         "display_id": 37225,
         "name": "Skyfall Star",
-        "base_health": 98801,
+        "base_health": 98839,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -858,6 +956,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8627,
+                "mapping_version_id": 151,
+                "npc_id": 45932,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8319,
                 "mapping_version_id": 142,
@@ -903,7 +1008,7 @@
         "npc_class_id": 1,
         "display_id": 34736,
         "name": "Temple Adept",
-        "base_health": 790404,
+        "base_health": 790706,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -914,6 +1019,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8626,
+                "mapping_version_id": 151,
+                "npc_id": 45935,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8320,
                 "mapping_version_id": 142,
