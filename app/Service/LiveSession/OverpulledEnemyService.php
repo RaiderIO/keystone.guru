@@ -108,7 +108,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                                           IF(
                                                   enemies.enemy_forces_override_teeming IS NOT NULL,
                                                   enemies.enemy_forces_override_teeming,
-                                                  IF(npc_enemy_forces.enemy_forces_teeming >= 0, npc_enemy_forces.enemy_forces_teeming, npcs.enemy_forces)
+                                                  IF(npc_enemy_forces.enemy_forces_teeming >= 0, npc_enemy_forces.enemy_forces_teeming, npc_enemy_forces.enemy_forces)
                                               )
                                       ),
                                   SUM(

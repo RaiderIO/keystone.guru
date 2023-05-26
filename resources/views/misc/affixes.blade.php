@@ -141,12 +141,11 @@ $now = \Carbon\Carbon::now();
             'showDungeonImage' => true,
         ])
 
-
+        <?php /* The next week's affix group is current for that week */ ?>
         @include('dungeonroute.discover.panel', [
             'expansion' => $expansion,
             'title' => __('views/misc.affixes.popular_routes_by_next_affixes'),
             'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
-            // The next week's affix group is current for that week
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
