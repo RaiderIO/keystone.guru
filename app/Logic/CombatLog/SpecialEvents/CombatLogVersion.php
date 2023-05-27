@@ -52,18 +52,27 @@ class CombatLogVersion extends SpecialEvent
     }
 
 
-
     /**
      * @param array $parameters
      * @return self
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
         $this->version            = $parameters[0];
         $this->advancedLogEnabled = $parameters[2];
         $this->buildVersion       = $parameters[4];
         $this->projectID          = $parameters[6];
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 7;
     }
 }

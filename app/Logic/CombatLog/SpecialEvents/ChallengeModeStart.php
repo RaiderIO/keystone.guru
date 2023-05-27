@@ -19,7 +19,7 @@ class ChallengeModeStart extends SpecialEvent
 
     private int $keystoneLevel;
 
-    private string $affixIDs;
+    private array $affixIDs = [];
 
     /**
      * @return string
@@ -54,9 +54,9 @@ class ChallengeModeStart extends SpecialEvent
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getAffixIDs(): string
+    public function getAffixIDs(): array
     {
         return $this->affixIDs;
     }
@@ -68,12 +68,35 @@ class ChallengeModeStart extends SpecialEvent
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
         $this->zoneName        = $parameters[0];
         $this->instanceID      = $parameters[1];
         $this->challengeModeID = $parameters[2];
         $this->keystoneLevel   = $parameters[3];
-        $this->affixIDs        = $parameters[4];
+
+
+        $affixIds = array_slice($parameters, 4);
+        foreach ($affixIds as $affixId) {
+            $this->affixIDs[] = (int)$affixId;
+        }
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOptionalParameterCount(): int
+    {
+        return 3;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 8;
     }
 }

@@ -57,11 +57,21 @@ class Energize extends Suffix
         $this->amount       = $parameters[0];
         $this->overEnergize = $parameters[1];
         $this->powerType    = $parameters[2];
-        $this->maxPower     = $parameters[3];
+
+        if (isset($parameters[3])) {
+            $this->maxPower = $parameters[3];
+        }
 
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getOptionalParameterCount(): int
+    {
+        return 1;
+    }
 
     /**
      * @return int

@@ -17,7 +17,19 @@ class UnitDied extends SpecialEvent
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 9;
+    }
+
+
 }

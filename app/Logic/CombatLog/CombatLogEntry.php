@@ -12,6 +12,10 @@ use InvalidArgumentException;
 
 class CombatLogEntry
 {
+    private const RAW_EVENT_IGNORE = [
+        'Search the gold piles for magic items!',
+    ];
+
     private Carbon $timestamp;
 
     private string $rawEvent;
@@ -33,7 +37,11 @@ class CombatLogEntry
     {
         $matches = [];
         if (!preg_match('/(.+)\s\s(.+)/', $this->rawEvent, $matches)) {
-            throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
+            if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
+                throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
+            }
+
+            return null;
         }
 
         $this->timestamp = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
@@ -54,7 +62,9 @@ class CombatLogEntry
                 $this->parsedEvent = (new CombatLogEvent($eventName))->setParameters($parameters);
             }
         } catch (\Error|Exception $exception) {
-            echo sprintf('\n\n%s parsing: %s', $exception->getMessage(), $this->rawEvent);
+            echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
+
+            throw $exception;
         }
 
         return $this->parsedEvent;

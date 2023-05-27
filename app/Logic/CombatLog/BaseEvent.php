@@ -21,10 +21,4 @@ abstract class BaseEvent
     {
         return $this->eventName;
     }
-
-    /**
-     * @param array $parameters
-     * @return self
-     */
-    abstract public function setParameters(array $parameters): self;
 }

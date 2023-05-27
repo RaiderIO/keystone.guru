@@ -2,7 +2,7 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-class DispelFailed extends Suffix
+class DispelFailed extends SpellBase
 {
 
 }

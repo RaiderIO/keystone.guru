@@ -2,7 +2,7 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
-class Interrupt extends Suffix
+class Interrupt extends SpellBase
 {
 
 }

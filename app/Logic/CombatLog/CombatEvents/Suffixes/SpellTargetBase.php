@@ -4,27 +4,27 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
-class ExtraAttacks extends Suffix
+abstract class SpellTargetBase extends SpellBase
 {
-    private int $amount;
+    private string $auraType;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getAmount(): int
+    public function getAuraType(): string
     {
-        return $this->amount;
+        return $this->auraType;
     }
 
     /**
      * @param array $parameters
-     * @return HasParameters
+     * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
 
-        $this->amount = $parameters[0];
+        $this->auraType = $parameters[3];
 
         return $this;
     }
@@ -34,6 +34,6 @@ class ExtraAttacks extends Suffix
      */
     public function getParameterCount(): int
     {
-        return 1;
+        return 4;
     }
 }

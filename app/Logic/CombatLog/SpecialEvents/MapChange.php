@@ -70,6 +70,8 @@ class MapChange extends SpecialEvent
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
         $this->uiMapID   = $parameters[0];
         $this->uiMapName = $parameters[1];
         $this->x0        = $parameters[2];
@@ -79,4 +81,14 @@ class MapChange extends SpecialEvent
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 6;
+    }
+
+
 }

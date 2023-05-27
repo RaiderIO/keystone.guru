@@ -3,13 +3,13 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 /**
- * SPELL_ABSORBED,Creature-0-4242-1841-14566-131402-0005E285EB,"Underrot Tick",0xa48,0x0,Player-1084-0A5F4542,"Paltalin-TarrenMill",0x10512,0x0,Player-1084-0A5F4542,"Paltalin-TarrenMill",0x10512,0x0,229976,"Blessed Hammer",0x1,1511,7947,nil
+ * EMOTE,Creature-0-4242-1841-14566-131318-00006285EA,"Elder Leaxa",0000000000000000,nil,|TINTERFACE\ICONS\INV_TikiMan2_Bloodtroll.blp:20|t Elder Leaxa begins to cast |cFFF00000|Hspell:264603|h[Blood Mirror]|h|r
  *
  * @package App\Logic\CombatLog\SpecialEvents
  * @author Wouter
  * @since 26/05/2023
  */
-class SpellAbsorbed extends SpecialEvent
+class Emote extends SpecialEvent
 {
     /**
      * @param array $parameters
@@ -26,19 +26,8 @@ class SpellAbsorbed extends SpecialEvent
     /**
      * @return int
      */
-    public function getOptionalParameterCount(): int
-    {
-        return 3;
-    }
-
-
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
-        return 21;
+        return 5;
     }
-
-
 }

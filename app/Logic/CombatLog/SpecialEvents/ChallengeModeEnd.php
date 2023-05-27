@@ -79,6 +79,8 @@ class ChallengeModeEnd extends SpecialEvent
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
         $this->instanceId    = $parameters[0];
         $this->success       = $parameters[1];
         $this->keystoneLevel = $parameters[2];
@@ -89,4 +91,11 @@ class ChallengeModeEnd extends SpecialEvent
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 6;
+    }
 }

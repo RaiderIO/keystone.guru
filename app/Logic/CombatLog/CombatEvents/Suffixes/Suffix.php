@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
+use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage;
 use Illuminate\Support\Str;
 
 abstract class Suffix implements HasParameters

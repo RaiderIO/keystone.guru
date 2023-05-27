@@ -40,10 +40,20 @@ class ZoneChange extends SpecialEvent
      */
     public function setParameters(array $parameters): self
     {
+        parent::setParameters($parameters);
+
         $this->zoneId       = $parameters[0];
         $this->zoneName     = $parameters[1];
         $this->difficultyId = $parameters[2];
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParameterCount(): int
+    {
+        return 3;
     }
 }
