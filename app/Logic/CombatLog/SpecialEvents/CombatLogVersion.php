@@ -13,7 +13,7 @@ class CombatLogVersion extends SpecialEvent
 {
     private int $version;
 
-    private int $advancedLogEnabled;
+    private bool $advancedLogEnabled;
 
     private string $buildVersion;
 
@@ -28,9 +28,9 @@ class CombatLogVersion extends SpecialEvent
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getAdvancedLogEnabled(): int
+    public function isAdvancedLogEnabled(): bool
     {
         return $this->advancedLogEnabled;
     }

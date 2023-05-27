@@ -4,13 +4,13 @@ namespace App\Logic\CombatLog\CombatEvents;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
-use InvalidArgumentException;
+use App\Logic\CombatLog\Guid\Guid;
 
 class GenericData implements HasParameters
 {
     use ValidatesParameterCount;
 
-    private string $sourceGUID;
+    private ?Guid $sourceGuid;
 
     private string $sourceName;
 
@@ -18,7 +18,7 @@ class GenericData implements HasParameters
 
     private string $sourceRaidFlags;
 
-    private string $destGUID;
+    private ?Guid $destGuid;
 
     private string $destName;
 
@@ -27,11 +27,11 @@ class GenericData implements HasParameters
     private string $destRaidFlags;
 
     /**
-     * @return string
+     * @return Guid|null
      */
-    public function getSourceGUID(): string
+    public function getSourceGuid(): ?Guid
     {
-        return $this->sourceGUID;
+        return $this->sourceGuid;
     }
 
     /**
@@ -59,11 +59,11 @@ class GenericData implements HasParameters
     }
 
     /**
-     * @return string
+     * @return Guid|null
      */
-    public function getDestGUID(): string
+    public function getDestGuid(): ?Guid
     {
-        return $this->destGUID;
+        return $this->destGuid;
     }
 
     /**
@@ -98,11 +98,11 @@ class GenericData implements HasParameters
     {
         $this->validateParameters($parameters);
 
-        $this->sourceGUID      = $parameters[0];
+        $this->sourceGuid      = Guid::createFromGuidString($parameters[0]);
         $this->sourceName      = $parameters[1];
         $this->sourceFlags     = $parameters[2];
         $this->sourceRaidFlags = $parameters[3];
-        $this->destGUID        = $parameters[4];
+        $this->destGuid        = Guid::createFromGuidString($parameters[4]);
         $this->destName        = $parameters[5];
         $this->destFlags       = $parameters[6];
         $this->destRaidFlags   = $parameters[7];

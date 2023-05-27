@@ -16,6 +16,8 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\CombatLog\CombatLogDungeonRouteService;
+use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\Discord\DiscordApiService;
@@ -98,6 +100,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
+        $this->app->bind(CombatLogDungeonRouteServiceInterface::class, CombatLogDungeonRouteService::class);
+
 
         // Model helpers
         if (config('app.env') === 'local') {

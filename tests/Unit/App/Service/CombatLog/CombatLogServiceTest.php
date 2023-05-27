@@ -17,14 +17,14 @@ class CombatLogServiceTest extends PublicTestCase
      * @return void
      *
      * @group CombatLogService
-     * @dataProvider parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider
+     * @dataProvider parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog_DataProvider
      */
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath)
+    public function parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog(string $combatLogPath)
     {
         // Arrange
         ini_set('memory_limit', '1G');
         $log              = LoggingFixtures::createCombatLogServiceLogging($this);
-        $combatLogService = ServiceFixtures::getCombatLogServiceMock($this, $log, ['parseCombatLogToEvents']);
+        $combatLogService = ServiceFixtures::getCombatLogServiceMock($this, $log);
 
         // Act
         $events = $combatLogService->parseCombatLogToEvents(
@@ -39,7 +39,7 @@ class CombatLogServiceTest extends PublicTestCase
         gc_collect_cycles();
     }
 
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
+    public function parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog_DataProvider(): array
     {
         return [
 //            [

@@ -23,10 +23,26 @@ class AdminPanelControls extends MapControl {
             let lat = _.round(mouseMoveEvent.latlng.lat, 3);
             let lng = _.round(mouseMoveEvent.latlng.lng, 3);
 
-            let x = _.round(lng * 2.185, 3);
-            let y = _.round(lat * 2.185, 3);
+            let mdtX = _.round(lng * 2.185, 3);
+            let mdtY = _.round(lat * 2.185, 3);
+
+            let floor = getState().getCurrentFloor()
+            let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
+            let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
+
+            // Max lat, max lng
+            let factorLat = (lat / -256);
+            let factorLng = (lng / 384);
+
+            let ingameX = _.round((ingameMapSizeX * factorLng) + floor.ingame_min_x, 3);
+            let ingameY = _.round((ingameMapSizeY * factorLat) + floor.ingame_min_y, 3);
+
             $('#admin_panel_mouse_coordinates').html(
-                `lat/lng: ${lat}/${lng}, x/y: ${x}/${y}`
+                `<span style="font-size: 16px">
+                 lat/lng: ${lat}/${lng}<br>
+                 MDT x/y: ${mdtX}/${mdtY}<br>
+                 x/y: ${ingameX}/${ingameY}
+                </span>`
             );
         });
     }

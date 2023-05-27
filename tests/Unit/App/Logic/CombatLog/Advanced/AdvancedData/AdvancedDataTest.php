@@ -71,8 +71,8 @@ class AdvancedDataTest extends PublicTestCase
         $advancedData     = $parseEventResult->getAdvancedData();
 
         // Assert
-        Assert::assertEquals($expectedInfoGUID, $advancedData->getInfoGUID());
-        Assert::assertEquals($expectedOwnerGUID, $advancedData->getOwnerGUID());
+        Assert::assertEquals($expectedInfoGUID, $advancedData->getInfoGuid());
+        Assert::assertEquals($expectedOwnerGUID, $advancedData->getOwnerGuid());
         Assert::assertEquals($expectedCurrentHP, $advancedData->getCurrentHP());
         Assert::assertEquals($expectedMaxHP, $advancedData->getMaxHP());
         Assert::assertEquals($expectedAttackPower, $advancedData->getAttackPower());

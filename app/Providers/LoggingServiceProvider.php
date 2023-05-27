@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLogging;
+use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
@@ -25,6 +27,7 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
+        $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);

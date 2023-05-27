@@ -62,11 +62,11 @@ class GenericDataTest extends PublicTestCase
         $genericData      = $parseEventResult->getGenericData();
 
         // Assert
-        Assert::assertEquals($expectedSourceGuid, $genericData->getSourceGUID());
+        Assert::assertEquals($expectedSourceGuid, $genericData->getSourceGuid());
         Assert::assertEquals($expectedSourceName, $genericData->getSourceName());
         Assert::assertEquals($expectedSourceFlags, $genericData->getSourceFlags());
         Assert::assertEquals($expectedSourceRaidFlags, $genericData->getSourceRaidFlags());
-        Assert::assertEquals($expectedDestGuid, $genericData->getDestGUID());
+        Assert::assertEquals($expectedDestGuid, $genericData->getDestGuid());
         Assert::assertEquals($expectedDestName, $genericData->getDestName());
         Assert::assertEquals($expectedDestFlags, $genericData->getDestFlags());
         Assert::assertEquals($expectedDestRaidFlags, $genericData->getDestRaidFlags());

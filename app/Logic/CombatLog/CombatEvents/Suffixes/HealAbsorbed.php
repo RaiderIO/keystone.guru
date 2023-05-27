@@ -3,10 +3,11 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\Guid\Guid;
 
 class HealAbsorbed extends Suffix
 {
-    private string $extraGUID;
+    private ?Guid $extraGUID;
 
     private string $extraName;
 
@@ -25,9 +26,9 @@ class HealAbsorbed extends Suffix
     private int $totalAmount;
 
     /**
-     * @return string
+     * @return Guid|null
      */
-    public function getExtraGUID(): string
+    public function getExtraGUID(): ?Guid
     {
         return $this->extraGUID;
     }
@@ -104,7 +105,7 @@ class HealAbsorbed extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->extraGUID      = $parameters[0];
+        $this->extraGUID      = Guid::createFromGuidString($parameters[0]);
         $this->extraName      = $parameters[1];
         $this->extraFlags     = $parameters[2];
         $this->extraRaidFlags = $parameters[3];

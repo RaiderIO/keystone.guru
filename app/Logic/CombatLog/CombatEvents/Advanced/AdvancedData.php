@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Advanced;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\Guid\Guid;
 
 /**
  * SPELL_CAST_SUCCESS,Player-1084-0A6D63A6,"Sadarøn-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-131436-0000E285EA,"Chosen Blood Matron",0x10a48,0x0,22568,"Ferocious Bite",0x1,Player-1084-0A6D63A6,0000000000000000,295296,370660,8542,2087,3228,0,3|4,47|5,100|5,25|5,685.25,1257.08,1041,5.7142,407
@@ -13,8 +14,8 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
  */
 class AdvancedData implements HasParameters
 {
-    private string $infoGUID;
-    private string $ownerGUID;
+    private ?Guid $infoGuid;
+    private ?Guid $ownerGuid;
     private int $currentHP;
     private int $maxHP;
     private int $attackPower;
@@ -36,19 +37,19 @@ class AdvancedData implements HasParameters
     private int $level;
 
     /**
-     * @return string
+     * @return Guid|null
      */
-    public function getInfoGUID(): string
+    public function getInfoGuid(): ?Guid
     {
-        return $this->infoGUID;
+        return $this->infoGuid;
     }
 
     /**
-     * @return string
+     * @return Guid|null
      */
-    public function getOwnerGUID(): string
+    public function getOwnerGuid(): ?Guid
     {
-        return $this->ownerGUID;
+        return $this->ownerGuid;
     }
 
     /**
@@ -177,8 +178,8 @@ class AdvancedData implements HasParameters
      */
     public function setParameters(array $parameters): HasParameters
     {
-        $this->infoGUID     = $parameters[0];
-        $this->ownerGUID    = $parameters[1];
+        $this->infoGuid     = Guid::createFromGuidString($parameters[0]);
+        $this->ownerGuid    = Guid::createFromGuidString($parameters[1]);
         $this->currentHP    = $parameters[2];
         $this->maxHP        = $parameters[3];
         $this->attackPower  = $parameters[4];
