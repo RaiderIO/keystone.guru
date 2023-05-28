@@ -190,8 +190,14 @@ class AdvancedData implements HasParameters
         $this->currentPower = explode('|', $parameters[9]);
         $this->maxPower     = explode('|', $parameters[10]);
         $this->powerCost    = explode('|', $parameters[11]);
-        $this->positionX    = $parameters[12];
-        $this->positionY    = $parameters[13];
+        // https://forums.combatlogforums.com/t/unit-positions-from-combat-log-solved/822
+        // Be aware also that the coordinates are rotated 90 degrees for some crazy reason. This means that for the two numbers listed, pos1 and pos2, the following rules apply:
+        //
+        // x-position = -pos2
+        // y-position = pos1
+        // This fixes the above issue. X and Y are fine after this
+        $this->positionX    = $parameters[13] * -1;
+        $this->positionY    = $parameters[12];
         $this->uiMapId      = $parameters[14];
         $this->facing       = $parameters[15];
         $this->level        = $parameters[16];

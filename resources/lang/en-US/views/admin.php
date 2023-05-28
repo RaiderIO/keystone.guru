@@ -107,6 +107,7 @@ return [
             'header_edit'             => 'Edit Floor - %s',
             'index'                   => 'Index',
             'mdt_sub_level'           => 'MDT sub level',
+            'ui_map_id'               => 'UI Map ID',
             'floor_name'              => 'Floor name',
             'min_enemy_size'          => 'Minimum enemy size (empty for default (%s))',
             'max_enemy_size'          => 'Maximum enemy size (empty for default (%s))',

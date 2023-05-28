@@ -2,13 +2,20 @@
 
 namespace App\Service\CombatLog;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
+use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
+use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\NoChallangeModeStartFoundException;
@@ -47,13 +54,29 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     {
         $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
 
-        $dungeonRoute               = $this->initDungeonRoute($combatLogEvents);
-        $enemiesFirstShowingsEvents = $this->findEnemiesFirstShowingEvents($dungeonRoute, $combatLogEvents);
+        $dungeonRoute                = $this->initDungeonRoute($combatLogEvents);
+        $enemiesFirstSightingsEvents = $this->findEnemiesFirstSightingEvents($dungeonRoute, $combatLogEvents);
 //        $killZones                  = $this->getKillZonesByEnemiesFirstShowings($enemiesFirstShowingsEvents);
 
 
         return $dungeonRoute;
     }
+
+    /**
+     * @param string $combatLogFilePath
+     * @return Collection
+     * @throws AdvancedLogNotEnabledException
+     * @throws DungeonNotSupportedException
+     * @throws NoChallangeModeStartFoundException
+     */
+    public function convertCombatLogToEnemyFirstSightingEvents(string $combatLogFilePath): Collection
+    {
+        $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
+
+        $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
+        return $this->findEnemiesFirstSightingEvents($dungeonRoute, $combatLogEvents);
+    }
+
 
     /**
      * @param Collection $combatLogEvents
@@ -107,7 +130,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @param Collection $combatLogEvents
      * @return Collection
      */
-    public function findEnemiesFirstShowingEvents(DungeonRoute $dungeonRoute, Collection $combatLogEvents): Collection
+    public function findEnemiesFirstSightingEvents(DungeonRoute $dungeonRoute, Collection $combatLogEvents): Collection
     {
         $validNpcIds = $dungeonRoute->dungeon->npcs()->pluck('id');
 
@@ -115,8 +138,12 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         $resultEvents = collect();
 
         foreach ($combatLogEvents as $combatLogEvent) {
-            // We skip all non-advanced combat log events, we need positional information of NPCs.
-            if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+            if ($combatLogEvent instanceof MapChange) {
+                $resultEvents->push($combatLogEvent);
+                continue;
+            }
+
+            if (!$this->isEnemyCombatLogEntry($combatLogEvent)) {
                 continue;
             }
 
@@ -125,30 +152,54 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             }
         }
 
-        dd($resultEvents->map(function (AdvancedCombatLogEvent $event) {
-            $sourceGuid = $event->getGenericData()->getSourceGuid();
-            $destGuid   = $event->getGenericData()->getDestGuid();
-            if ($sourceGuid instanceof Creature) {
-                return sprintf(
-                    'source: %s -> %s @ %s,%s',
-                    $sourceGuid->getGuid(),
-                    $event->getGenericData()->getSourceName(),
-                    $event->getAdvancedData()->getPositionX(),
-                    $event->getAdvancedData()->getPositionY(),
-                );
-            } else if ($destGuid instanceof Creature) {
-                return sprintf(
-                    'dest: %s -> %s @ %s,%s',
-                    $destGuid->getGuid(),
-                    $event->getGenericData()->getDestName(),
-                    $event->getAdvancedData()->getPositionX(),
-                    $event->getAdvancedData()->getPositionY(),
-                );
-            }
-        }));
+//        dd($resultEvents->map(function (BaseEvent $event) {
+//            if ($event instanceof MapChange) {
+//                return $event->getUiMapName();
+//            }
+//
+//            $sourceGuid = $event->getGenericData()->getSourceGuid();
+//            $destGuid   = $event->getGenericData()->getDestGuid();
+//            if ($sourceGuid instanceof Creature) {
+//                return sprintf(
+//                    'source: %s -> %s @ %s,%s',
+//                    $sourceGuid->getGuid(),
+//                    $event->getGenericData()->getSourceName(),
+//                    $event->getAdvancedData()->getPositionX(),
+//                    $event->getAdvancedData()->getPositionY(),
+//                );
+//            } else if ($destGuid instanceof Creature) {
+//                return sprintf(
+//                    'dest: %s -> %s @ %s,%s',
+//                    $destGuid->getGuid(),
+//                    $event->getGenericData()->getDestName(),
+//                    $event->getAdvancedData()->getPositionX(),
+//                    $event->getAdvancedData()->getPositionY(),
+//                );
+//            }
+//        }));
 
         return $resultEvents;
     }
+
+    /**
+     * @param BaseEvent $combatLogEvent
+     * @return bool
+     */
+    private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
+    {
+        // We skip all non-advanced combat log events, we need positional information of NPCs.
+        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+            return false;
+        }
+
+        // Skip events that are not damage - they contain the location of the source (the player usually)
+        if (!($combatLogEvent->getSuffix() instanceof Damage)) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * @param Collection $validNpcIds
@@ -180,6 +231,77 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 $result = true;
                 // Don't break - we MAY find 2 new enemies if there's perhaps a combat log event between two enemies
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @param MappingVersion $mappingVersion
+     * @param Collection|AdvancedCombatLogEvent[] $combatLogEvents
+     * @return Collection
+     */
+    public function generateMapIconsFromEvents(Dungeon $dungeon, MappingVersion $mappingVersion, Collection $combatLogEvents): Collection
+    {
+        $result = collect();
+
+        $id           = 10000000;
+        $currentFloor = null;
+        foreach ($combatLogEvents as $combatLogEvent) {
+            if ($combatLogEvent instanceof MapChange) {
+                $currentFloor = Floor::where('ui_map_id', $combatLogEvent->getUiMapID())->firstOrFail();
+                continue;
+            } else if ($currentFloor === null) {
+                continue;
+            }
+
+            /** @var AdvancedCombatLogEvent $combatLogEvent */
+
+            $latLng = $currentFloor->calculateMapLocationForIngameLocation(
+                $combatLogEvent->getAdvancedData()->getPositionX(),
+                $combatLogEvent->getAdvancedData()->getPositionY(),
+            );
+
+            $comment    = '';
+            $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
+            $destGuid   = $combatLogEvent->getGenericData()->getDestGuid();
+            if ($sourceGuid instanceof Creature) {
+                $comment = sprintf(
+                    'source: %s -> %s @ %s,%s',
+                    $sourceGuid->getGuid(),
+                    $combatLogEvent->getGenericData()->getSourceName(),
+                    $combatLogEvent->getAdvancedData()->getPositionX(),
+                    $combatLogEvent->getAdvancedData()->getPositionY(),
+                );
+            } else if ($destGuid instanceof Creature) {
+                $comment = sprintf(
+                    'dest: %s -> %s @ %s,%s',
+                    $destGuid->getGuid(),
+                    $combatLogEvent->getGenericData()->getDestName(),
+                    $combatLogEvent->getAdvancedData()->getPositionX(),
+                    $combatLogEvent->getAdvancedData()->getPositionY(),
+                );
+            }
+
+            $mapIcon = new MapIcon([
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $currentFloor->id,
+                'dungeon_route_id'   => null,
+                'team_id'            => null,
+                'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
+                'lat'                => $latLng['lat'],
+                'lng'                => $latLng['lng'],
+                'comment'            => $comment,
+                'permanent_tooltip'  => 0,
+            ]);
+
+            $mapIcon->id             = $id;
+            $mapIcon->seasonal_index = null;
+
+            $result->push($mapIcon);
+
+            $id++;
         }
 
         return $result;
