@@ -10,9 +10,12 @@ abstract class Guid
     private const GUID_TYPE_CLIENT_ACTOR  = 'ClientActor';
     private const GUID_TYPE_CREATURE      = 'Creature';
     private const GUID_TYPE_FOLLOWER      = 'Follower';
+    private const GUID_TYPE_GAME_OBJECT   = 'GameObject';
     private const GUID_TYPE_ITEM          = 'Item';
+    private const GUID_TYPE_PET           = 'Pet';
     private const GUID_TYPE_PLAYER        = 'Player';
     private const GUID_TYPE_VIGNETTE      = 'Vignette';
+    private const GUID_TYPE_VEHICLE       = 'Vehicle';
 
     private const GUID_TYPE_CLASS_MAPPING = [
         self::GUID_TYPE_BATTLE_PET    => BattlePet::class,
@@ -21,9 +24,12 @@ abstract class Guid
         self::GUID_TYPE_CLIENT_ACTOR  => ClientActor::class,
         self::GUID_TYPE_CREATURE      => Creature::class,
         self::GUID_TYPE_FOLLOWER      => Follower::class,
+        self::GUID_TYPE_GAME_OBJECT   => Creature::class,
         self::GUID_TYPE_ITEM          => Item::class,
+        self::GUID_TYPE_PET           => Creature::class,
         self::GUID_TYPE_PLAYER        => Player::class,
         self::GUID_TYPE_VIGNETTE      => Vignette::class,
+        self::GUID_TYPE_VEHICLE       => Creature::class,
     ];
 
     private string $guid;

@@ -16,8 +16,6 @@ class CombatLogEntry
         'Search the gold piles for magic items!',
     ];
 
-    private Carbon $timestamp;
-
     private string $rawEvent;
 
     private ?BaseEvent $parsedEvent;
@@ -44,22 +42,22 @@ class CombatLogEntry
             return null;
         }
 
-        $this->timestamp = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
-        $eventData       = $matches[2];
-        $parameters      = str_getcsv($eventData);
+        $timestamp  = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
+        $eventData  = $matches[2];
+        $parameters = str_getcsv($eventData);
 
         $eventName = array_shift($parameters);
 
         try {
             if (in_array($eventName, SpecialEvent::SPECIAL_EVENT_ALL)) {
-                $this->parsedEvent = SpecialEvent::createFromEventName($eventName, $parameters);
+                $this->parsedEvent = SpecialEvent::createFromEventName($timestamp, $eventName, $parameters);
             }
             // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
             // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
             else if (count($parameters) > 23) {
-                $this->parsedEvent = (new AdvancedCombatLogEvent($eventName))->setParameters($parameters);
+                $this->parsedEvent = (new AdvancedCombatLogEvent($timestamp, $eventName))->setParameters($parameters);
             } else {
-                $this->parsedEvent = (new CombatLogEvent($eventName))->setParameters($parameters);
+                $this->parsedEvent = (new CombatLogEvent($timestamp, $eventName))->setParameters($parameters);
             }
         } catch (\Error|Exception $exception) {
             echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
@@ -68,14 +66,6 @@ class CombatLogEntry
         }
 
         return $this->parsedEvent;
-    }
-
-    /**
-     * @return Carbon
-     */
-    public function getTimestamp(): Carbon
-    {
-        return $this->timestamp;
     }
 
     /**

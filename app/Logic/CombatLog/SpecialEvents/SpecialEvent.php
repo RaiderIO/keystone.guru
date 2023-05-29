@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 abstract class SpecialEvent extends BaseEvent implements HasParameters
@@ -81,9 +82,9 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     ];
 
 
-    private function __construct(string $eventName, array $parameters)
+    private function __construct(Carbon $timestamp, string $eventName, array $parameters)
     {
-        parent::__construct($eventName);
+        parent::__construct($timestamp, $eventName);
 
         $this->setParameters($parameters);
     }
@@ -101,17 +102,18 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
 
     /**
+     * @param Carbon $timestamp
      * @param string $eventName
      * @param array $parameters
      * @return void
      */
-    public static function createFromEventName(string $eventName, array $parameters): ?SpecialEvent
+    public static function createFromEventName(Carbon $timestamp, string $eventName, array $parameters): ?SpecialEvent
     {
         $result = null;
 
         foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {
             if (Str::startsWith($eventName, $specialEvent)) {
-                $result = new $className($eventName, $parameters);
+                $result = new $className($timestamp, $eventName, $parameters);
                 break;
             }
         }
