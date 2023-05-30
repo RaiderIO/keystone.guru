@@ -28,6 +28,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     public const SPECIAL_EVENT_SPELL_ABSORBED       = 'SPELL_ABSORBED';
     public const SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE = 'ENVIRONMENTAL_DAMAGE';
     public const SPECIAL_EVENT_DAMAGE_SPLIT         = 'DAMAGE_SPLIT';
+    public const SPECIAL_EVENT_SPELL_RESURRECT      = 'SPELL_RESURRECT';
 
     public const SPECIAL_EVENT_EMOTE = 'EMOTE';
 
@@ -52,6 +53,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_ABSORBED,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE,
         self::SPECIAL_EVENT_DAMAGE_SPLIT,
+        self::SPECIAL_EVENT_SPELL_RESURRECT,
 
         self::SPECIAL_EVENT_EMOTE,
     ];
@@ -77,6 +79,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbed::class,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamage::class,
         self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
+        self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
         self::SPECIAL_EVENT_EMOTE => Emote::class,
     ];

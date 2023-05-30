@@ -11,19 +11,10 @@ use App\Logic\CombatLog\CombatEvents\GenericData;
  * @author Wouter
  * @since 26/05/2023
  */
-class UnitDied extends SpecialEvent
+class UnitDied extends GenericSpecialEvent
 {
-    private GenericData $genericData;
 
     private bool $unconsciousOnDeath;
-
-    /**
-     * @return GenericData
-     */
-    public function getGenericData(): GenericData
-    {
-        return $this->genericData;
-    }
 
     /**
      * @return bool
@@ -41,9 +32,6 @@ class UnitDied extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->genericData = new GenericData();
-        $this->genericData->setParameters(array_slice($parameters, 0, $this->genericData->getParameterCount()));
-
         $this->unconsciousOnDeath = (bool)$parameters[8];
 
         return $this;
@@ -56,6 +44,4 @@ class UnitDied extends SpecialEvent
     {
         return 9;
     }
-
-
 }

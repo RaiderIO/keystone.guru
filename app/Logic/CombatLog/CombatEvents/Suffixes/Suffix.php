@@ -40,7 +40,6 @@ abstract class Suffix implements HasParameters
     public const SUFFIX_DURABILITY_DAMAGE_ALL = 'DURABILITY_DAMAGE_ALL';
     public const SUFFIX_CREATE                = 'CREATE';
     public const SUFFIX_SUMMON                = 'SUMMON';
-    public const SUFFIX_RESURRECT             = 'RESURRECT';
     public const SUFFIX_ENVIRONMENTAL_DAMAGE  = 'ENVIRONMENTAL_DAMAGE';
 
     public const SUFFIX_ALL = [
@@ -73,7 +72,6 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE,
         self::SUFFIX_CREATE,
         self::SUFFIX_SUMMON,
-        self::SUFFIX_RESURRECT,
         self::SUFFIX_ENVIRONMENTAL_DAMAGE,
     ];
 
@@ -107,7 +105,6 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE     => DurabilityDamage::class,
         self::SUFFIX_CREATE                => Create::class,
         self::SUFFIX_SUMMON                => Summon::class,
-        self::SUFFIX_RESURRECT             => Resurrect::class,
         self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamage::class,
     ];
 

@@ -293,7 +293,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param float $x
      * @param float $y
-     * @return array{x: float, y: float}
+     * @return array{lat: float, lng: float}
      */
     public function calculateMapLocationForIngameLocation(float $x, float $y): array
     {

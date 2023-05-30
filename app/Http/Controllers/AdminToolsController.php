@@ -15,6 +15,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -46,6 +47,25 @@ class AdminToolsController extends Controller
     public function index()
     {
         return view('admin.tools.list');
+    }
+
+    /**
+     * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
+     * @return RedirectResponse
+     */
+    public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): RedirectResponse
+    {
+        $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
+            base_path(
+                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
+            )
+        );
+
+        return redirect()->route('dungeonroute.view', [
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
+        ]);
     }
 
     /**

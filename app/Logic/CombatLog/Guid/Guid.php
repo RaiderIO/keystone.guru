@@ -16,6 +16,9 @@ abstract class Guid
     private const GUID_TYPE_PLAYER        = 'Player';
     private const GUID_TYPE_VIGNETTE      = 'Vignette';
     private const GUID_TYPE_VEHICLE       = 'Vehicle';
+    // This GUID is a bit of a hack because evading enemies have their InfoGUID set to EVADE. This ensures we can still
+    // use strongly typed GUIDs while still supporting this
+    private const GUID_TYPE_EVADE = 'EVADE';
 
     private const GUID_TYPE_CLASS_MAPPING = [
         self::GUID_TYPE_BATTLE_PET    => BattlePet::class,
@@ -30,6 +33,7 @@ abstract class Guid
         self::GUID_TYPE_PLAYER        => Player::class,
         self::GUID_TYPE_VIGNETTE      => Vignette::class,
         self::GUID_TYPE_VEHICLE       => Creature::class,
+        self::GUID_TYPE_EVADE         => Evade::class,
     ];
 
     private string $guid;

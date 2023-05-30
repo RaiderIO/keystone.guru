@@ -70,40 +70,40 @@ abstract class MapContext
             $mapIcons = $this->mappingVersion->mapIcons;
 
 
-            $combatLogFilePath = null;
+//            $combatLogFilePath = null;
+//
+//            if ($this->floor->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR) {
+//                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log';
+//            } else if ($this->floor->dungeon->key === Dungeon::DUNGEON_THE_UNDERROT) {
+//                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log';
+//            }
 
-            if ($this->floor->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR) {
-                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log';
-            } else if ($this->floor->dungeon->key === Dungeon::DUNGEON_THE_UNDERROT) {
-                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log';
-            }
-
-            if ($combatLogFilePath !== null) {
-
-                try {
-                    /** @var CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService */
-                    $combatLogDungeonRouteService = App::make(CombatLogDungeonRouteServiceInterface::class);
-                    $events                       = $combatLogDungeonRouteService->convertCombatLogToEventsOfEnemiesFirstSightingAndDeaths(
-                        base_path($combatLogFilePath)
-                    );
+//            if ($combatLogFilePath !== null) {
+//
+//                try {
+//                    /** @var CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService */
+//                    $combatLogDungeonRouteService = App::make(CombatLogDungeonRouteServiceInterface::class);
+//                    $events                       = $combatLogDungeonRouteService->convertCombatLogToEventsOfEnemiesFirstSightingAndDeaths(
+//                        base_path($combatLogFilePath)
+//                    );
 
 //                    $events = $combatLogDungeonRouteService->convertCombatLogToEventsOfSpecificEnemy(
 //                        base_path($combatLogFilePath),
 //                        'Creature-0-3886-1458-23501-91000-0000F260EC'
 //                    );
 
-                    $eventMapIcons                = $combatLogDungeonRouteService->generateMapIconsFromEvents(
-                        $this->floor->dungeon,
-                        $this->mappingVersion,
-                        $events
-                    );
+//                    $eventMapIcons                = $combatLogDungeonRouteService->generateMapIconsFromEvents(
+//                        $this->floor->dungeon,
+//                        $this->mappingVersion,
+//                        $events
+//                    );
 
-                    $mapIcons = $mapIcons->merge($eventMapIcons);
-
-                } catch (\Exception $exception) {
-                    dd($exception);
-                }
-            }
+//                    $mapIcons = $mapIcons->merge($eventMapIcons);
+//
+//                } catch (\Exception $exception) {
+//                    dd($exception);
+//                }
+//            }
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [

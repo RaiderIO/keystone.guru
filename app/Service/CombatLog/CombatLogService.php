@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use Illuminate\Support\Collection;
@@ -21,7 +22,7 @@ class CombatLogService implements CombatLogServiceInterface
 
     /**
      * @param string $filePath
-     * @return Collection
+     * @return Collection|BaseEvent[]
      */
     public function parseCombatLogToEvents(string $filePath): Collection
     {

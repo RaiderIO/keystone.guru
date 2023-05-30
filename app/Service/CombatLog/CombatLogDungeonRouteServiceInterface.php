@@ -11,7 +11,5 @@ interface CombatLogDungeonRouteServiceInterface
 {
     public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute;
 
-    public function convertCombatLogToEventsOfEnemiesFirstSightingAndDeaths(string $combatLogFilePath): Collection;
-
     public function generateMapIconsFromEvents(Dungeon $dungeon, MappingVersion $mappingVersion, Collection $combatLogEvents): Collection;
 }

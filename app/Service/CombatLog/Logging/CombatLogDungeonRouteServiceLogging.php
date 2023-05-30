@@ -2,7 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
-class CombatLogDungeonRouteServiceLogging implements CombatLogDungeonRouteServiceLoggingInterface
+use App\Logging\StructuredLogging;
+use Exception;
+
+class CombatLogDungeonRouteServiceLogging extends StructuredLogging implements CombatLogDungeonRouteServiceLoggingInterface
 {
 
 }

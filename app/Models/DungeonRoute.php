@@ -144,7 +144,19 @@ class DungeonRoute extends Model
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at',
                          'published_at', 'published_state_id', 'published_state'];
 
-    protected $fillable = ['title', 'mapping_version_id', 'enemy_forces'];
+    protected $fillable = [
+        'public_key',
+        'author_id',
+        'dungeon_id',
+        'mapping_version_id',
+        'faction_id',
+        'published_state_id',
+        'title',
+        'level_min',
+        'level_max',
+        'expires_at',
+        'enemy_forces',
+    ];
 
     protected $with = ['faction', 'specializations', 'classes', 'races', 'affixes'];
 
@@ -684,7 +696,7 @@ class DungeonRoute extends Model
 
         $this->dungeon_difficulty = $request->get('dungeon_difficulty');
 
-        $this->title      = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
+        $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
         $dungeonRouteLevelParts = explode(';', $dungeonRouteLevel);
