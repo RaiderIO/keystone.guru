@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage;
+use Exception;
 use Illuminate\Support\Str;
 
 abstract class Suffix implements HasParameters
@@ -122,20 +123,18 @@ abstract class Suffix implements HasParameters
 
     /**
      * @param string $eventName
-     * @return Suffix|null
+     * @return Suffix
+     * @throws Exception
      */
-    public static function createFromEventName(string $eventName): ?Suffix
+    public static function createFromEventName(string $eventName): Suffix
     {
-        $result = null;
-
         foreach (self::SUFFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::endsWith($eventName, $prefix)) {
-                $result = new $className();
-                break;
+                return new $className();
             }
         }
 
-        return $result;
+        throw new Exception(sprintf('Unable to find suffix for %s!', $eventName));
     }
 
 }

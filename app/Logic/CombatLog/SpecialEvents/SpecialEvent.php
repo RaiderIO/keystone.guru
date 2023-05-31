@@ -6,6 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 
 abstract class SpecialEvent extends BaseEvent implements HasParameters
@@ -32,6 +33,8 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
     public const SPECIAL_EVENT_EMOTE = 'EMOTE';
 
+    public const SPECIAL_EVENT_ENCHANT_REMOVED = 'ENCHANT_REMOVED';
+
     public const SPECIAL_EVENT_ALL = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         self::SPECIAL_EVENT_ZONE_CHANGE,
@@ -56,6 +59,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_RESURRECT,
 
         self::SPECIAL_EVENT_EMOTE,
+        self::SPECIAL_EVENT_ENCHANT_REMOVED,
     ];
 
     private const SPECIAL_EVENT_CLASS_MAPPING = [
@@ -81,7 +85,8 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
         self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
-        self::SPECIAL_EVENT_EMOTE => Emote::class,
+        self::SPECIAL_EVENT_EMOTE           => Emote::class,
+        self::SPECIAL_EVENT_ENCHANT_REMOVED => EnchantRemoved::class,
     ];
 
 
@@ -108,19 +113,17 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
      * @param Carbon $timestamp
      * @param string $eventName
      * @param array $parameters
-     * @return void
+     * @return SpecialEvent
+     * @throws Exception
      */
-    public static function createFromEventName(Carbon $timestamp, string $eventName, array $parameters): ?SpecialEvent
+    public static function createFromEventName(Carbon $timestamp, string $eventName, array $parameters): SpecialEvent
     {
-        $result = null;
-
         foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {
             if (Str::startsWith($eventName, $specialEvent)) {
-                $result = new $className($timestamp, $eventName, $parameters);
-                break;
+                return new $className($timestamp, $eventName, $parameters);
             }
         }
 
-        return $result;
+        throw new Exception(sprintf('Unable to find special event for %s!', $eventName));
     }
 }

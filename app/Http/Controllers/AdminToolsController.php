@@ -57,7 +57,9 @@ class AdminToolsController extends Controller
     {
         $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
             base_path(
-                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
+            'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
             )
         );
 

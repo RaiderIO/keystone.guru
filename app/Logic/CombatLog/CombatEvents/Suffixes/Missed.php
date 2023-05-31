@@ -67,9 +67,16 @@ class Missed extends Suffix
 
         $this->missType  = $parameters[0];
         $this->isOffHand = $parameters[1] !== 'nil';
+        // May be set for absorbs, blocks
         if (isset($parameters[2])) {
             $this->amountMissed = $parameters[2];
+        }
+        // May be set for absorbs
+        if (isset($parameters[3])) {
             $this->unknown1     = $parameters[3];
+        }
+        // May be set for absorbs
+        if (isset($parameters[4])) {
             $this->critical     = $parameters[4] !== 'nil';
         }
 

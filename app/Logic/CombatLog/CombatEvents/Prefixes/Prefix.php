@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Prefixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
+use Exception;
 use Illuminate\Support\Str;
 
 abstract class Prefix implements HasParameters
@@ -46,19 +47,17 @@ abstract class Prefix implements HasParameters
 
     /**
      * @param string $eventName
-     * @return Prefix|null
+     * @return Prefix
+     * @throws Exception
      */
-    public static function createFromEventName(string $eventName): ?Prefix
+    public static function createFromEventName(string $eventName): Prefix
     {
-        $result = null;
-
         foreach (self::PREFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::startsWith($eventName, $prefix)) {
-                $result = new $className();
-                break;
+                return new $className();
             }
         }
 
-        return $result;
+        throw new Exception(sprintf('Unable to find prefix for %s!', $eventName));
     }
 }
