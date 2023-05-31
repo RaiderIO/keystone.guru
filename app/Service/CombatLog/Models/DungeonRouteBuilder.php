@@ -194,6 +194,11 @@ class DungeonRouteBuilder
                 continue;
             }
 
+            // Ignore teeming enemies..
+            if ($availableEnemy->teeming !== null) {
+                continue;
+            }
+
             $distance = App\Logic\Utils\MathUtils::distanceBetweenPoints(
                 $availableEnemy->lng,
                 $latLng['lng'],
