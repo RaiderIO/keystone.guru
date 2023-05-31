@@ -8,7 +8,7 @@ interface DungeonRouteBuilderLoggingInterface
 {
     public function buildStart(string $toDateTimeString, string $eventName): void;
 
-    public function buildNoFloorForUiMapIdFound(Exception $exception, int $uitMapId): void;
+    public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
     public function buildNoFloorFoundYet(): void;
 

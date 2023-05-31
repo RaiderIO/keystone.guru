@@ -3,7 +3,12 @@
 namespace App\Service\CombatLog\Models;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
+use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Heal;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Resurrect;
+use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd;
 use App\Logic\CombatLog\SpecialEvents\EncounterStart;
@@ -54,6 +59,21 @@ class PartyState
         } else if ($combatLogEvent instanceof SpellResurrect) {
             $aliveGuid = $combatLogEvent->getGenericData()->getDestGuid()->getGuid();
             $this->playerResurrected($aliveGuid);
+        } else if ($combatLogEvent instanceof AdvancedCombatLogEvent) {
+            // Check if a dead player released and they've come back in the fray (we do not get events for this)
+            $guid = $combatLogEvent->getGenericData()->getSourceGuid();
+            if ($guid instanceof Player) {
+                if ($this->deadPartyMembers->has($guid->getGuid())) {
+                    // If they start casting, gain a buff or perform a heal we can say that they live again
+                    // There's probably more but this is good enough for now
+                    if ($combatLogEvent->getSuffix() instanceof CastSuccess ||
+                        $combatLogEvent->getSuffix() instanceof AuraApplied ||
+                        $combatLogEvent->getSuffix() instanceof Heal) {
+                        // If the player did anything except periodic damage - they are alive again!
+                        $this->playerResurrected($guid->getGuid());
+                    }
+                }
+            }
         }
     }
 

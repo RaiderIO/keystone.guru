@@ -23,7 +23,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      * @param int $uitMapId
      * @return void
      */
-    public function buildNoFloorForUiMapIdFound(Exception $exception, int $uitMapId): void
+    public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void
     {
         $this->critical(__METHOD__, get_defined_vars());
     }

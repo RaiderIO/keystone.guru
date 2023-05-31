@@ -31,7 +31,7 @@ use Mockery\Exception;
  *
  * @property Collection|MappingVersion[] $mappingVersions
  * @property Collection|Floor[] $floors
- * @property Collection|DungeonRoute[] $dungeonroutes
+ * @property Collection|DungeonRoute[] $dungeonRoutes
  * @property Collection|Npc[] $npcs
  *
  * @property Collection|Enemy[] $enemies
@@ -479,7 +479,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return HasMany
      */
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
@@ -689,6 +689,26 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     ->where('npc_enemy_forces.enemy_forces', '>', 0);
             })
             ->max('base_health') ?? 100000;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getNpcIdsWithEnemyForces(): Collection
+    {
+        return Npc::select('npcs.id')
+            ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
+            ->where(function (Builder $builder) {
+                return $builder->where('npcs.dungeon_id', $this->id)
+                    ->orWhere('npcs.dungeon_id', -1);
+            })
+            ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
+            ->where(function (Builder $builder) {
+                $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
+                    ->orWhere('npcs.classification_id', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]);
+            })
+            ->get()
+            ->pluck('id');
     }
 
     /**

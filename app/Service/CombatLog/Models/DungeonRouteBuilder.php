@@ -61,8 +61,6 @@ class DungeonRouteBuilder
      */
     public function build(): DungeonRoute
     {
-
-
         foreach ($this->resultEvents as $resultEvent) {
             try {
                 $baseEvent = $resultEvent->getBaseEvent();
@@ -73,13 +71,7 @@ class DungeonRouteBuilder
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var $baseEvent MapChangeCombatLogEvent */
-                    try {
-                        $this->currentFloor = Floor::where('ui_map_id', $baseEvent->getUiMapID())->firstOrFail();
-                    } catch (Exception $exception) {
-                        $this->log->buildNoFloorForUiMapIdFound($exception, $baseEvent->getUiMapID());
-
-                        throw $exception;
-                    }
+                    $this->currentFloor = $this->findFloorByUiMapId($baseEvent->getUiMapID());
                 } else if ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
                     continue;
@@ -92,6 +84,7 @@ class DungeonRouteBuilder
                     $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
                 } else if ($resultEvent instanceof EnemyKilled) {
                     /** @var $baseEvent UnitDied */
+                    // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
                     $guid = $baseEvent->getGenericData()->getDestGuid()->getGuid();
                     if ($this->currentEnemiesInCombat->has($guid)) {
@@ -103,6 +96,7 @@ class DungeonRouteBuilder
                         $this->log->buildUnitDiedNotInCombat($guid);
                     }
 
+                    // If we just killed the last enemy that we were in combat with, we just completed a pull
                     if ($this->currentEnemiesInCombat->isEmpty()) {
                         $this->log->buildCreateNewPull($this->enemiesKilledInCurrentPull->keys()->toArray());
 
@@ -114,9 +108,29 @@ class DungeonRouteBuilder
             }
         }
 
-        $this->log->buildCreateNewFinalPull($this->enemiesKilledInCurrentPull->keys()->toArray());
+        // Ensure that we create a final pull if need be
+        if ($this->enemiesKilledInCurrentPull->isNotEmpty()) {
+            $this->log->buildCreateNewFinalPull($this->enemiesKilledInCurrentPull->keys()->toArray());
+            $this->createPull();
+        }
 
         return $this->dungeonRoute;
+    }
+
+    /**
+     * @param int $uiMapId
+     * @return Floor
+     * @throws Exception
+     */
+    private function findFloorByUiMapId(int $uiMapId): Floor
+    {
+        try {
+            return Floor::where('ui_map_id', $uiMapId)->firstOrFail();
+        } catch (Exception $exception) {
+            $this->log->findFloorByUiMapIdNoFloorFound($exception, $uiMapId);
+
+            throw $exception;
+        }
     }
 
     /**
@@ -129,6 +143,7 @@ class DungeonRouteBuilder
             'color'            => randomHexColor(),
             'index'            => $this->killZoneIndex,
         ]);
+
         foreach ($this->enemiesKilledInCurrentPull as $guid => $enemyEngagedEvent) {
             /** @var EnemyEngaged $enemyEngagedEvent */
             $advancedData = $enemyEngagedEvent->getEngagedEvent()->getAdvancedData();

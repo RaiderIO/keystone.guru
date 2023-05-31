@@ -14,12 +14,15 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Spell;
+use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
 
 class CurrentPull
 {
+    /** @var Collection|BaseResultEvent[] */
+    private Collection $resultEvents;
     /** @var Collection|int[] */
     private Collection $validNpcIds;
     private Collection $currentPull;
@@ -28,19 +31,19 @@ class CurrentPull
     /** @var bool */
     private bool $challengeModeStarted = false;
 
-    public function __construct(Collection $validNpcIds)
+    public function __construct(Collection $resultEvents, Collection $validNpcIds)
     {
+        $this->resultEvents = $resultEvents;
         $this->validNpcIds   = $validNpcIds;
         $this->currentPull   = collect();
         $this->killedEnemies = collect();
     }
 
     /**
-     * @param Collection $resultEvents
      * @param BaseEvent $combatLogEvent
      * @return bool
      */
-    public function parse(Collection $resultEvents, BaseEvent $combatLogEvent): bool
+    public function parse(BaseEvent $combatLogEvent): bool
     {
         // First, we wait for the challenge mode to start
         if ($combatLogEvent instanceof ChallengeModeStart) {
@@ -69,9 +72,9 @@ class CurrentPull
                 // Then we're interested in the first time we saw this enemy
                 $engagedEvent = $this->currentPull->get($destGuid->getGuid());
                 // Push a new result event - we successfully killed this enemy, and it gave count!
-                $resultEvents->push((new EnemyEngaged($engagedEvent, $destGuid)));
+                $this->resultEvents->push((new EnemyEngaged($engagedEvent, $destGuid)));
                 // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
-                $resultEvents->push((new EnemyKilled($combatLogEvent)));
+                $this->resultEvents->push((new EnemyKilled($combatLogEvent)));
                 // This enemy is no longer part of our current pull
                 $this->currentPull->forget($destGuid->getGuid());
 
@@ -181,12 +184,12 @@ class CurrentPull
             }
 
             // Invalid NPC ID, ignore it since it can never be part of the route anyways
-            if (!$this->validNpcIds->search($guid->getId())) {
+            if ($this->validNpcIds->search($guid->getId()) === false) {
                 continue;
             }
 
             // We already killed this enemy - don't aggro it again (we may have dots from this enemy on our players)
-            if ($this->killedEnemies->search($guid->getGuid())) {
+            if ($this->killedEnemies->search($guid->getGuid()) !== false) {
                 continue;
             }
 

@@ -60,10 +60,10 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         ini_set('memory_limit', '2G');
         $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
 
-        $dungeonRoute                = $this->initDungeonRoute($combatLogEvents);
-        $dungeonRouteCombatLogEvents = (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
+        $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
+        $resultEvents = (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
 
-        return (new DungeonRouteBuilder($dungeonRoute, $dungeonRouteCombatLogEvents))->build();
+        return (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
     }
 
     /**

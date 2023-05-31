@@ -207,7 +207,7 @@ class Save extends Command
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
-        $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
+        $demoRoutes = $dungeon->dungeonRoutes->where('demo', true)->values();
         foreach ($demoRoutes as $demoRoute) {
             /** @var $demoRoute DungeonRoute */
             unset($demoRoute->relations);
