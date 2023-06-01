@@ -9,6 +9,7 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
+use App\Models\CombatLog\EnemyPosition;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Faction;
@@ -23,6 +24,9 @@ use App\Service\CombatLog\Exceptions\NoChallangeModeStartFoundException;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Models\DungeonRouteBuilder;
+use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
+use App\Service\CombatLog\Models\ResultEvents\MapChange as MapChangeResultEvent;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -62,6 +66,9 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
         $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
         $resultEvents = (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
+
+        // Store found enemy positions in the database for analyzing
+        $this->saveEnemyPositions($resultEvents);
 
         return (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
     }
@@ -142,6 +149,46 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         }
 
         return $dungeonRoute;
+    }
+
+    /**
+     * @param Collection|BaseResultEvent[] $resultEvents
+     * @return void
+     */
+    private function saveEnemyPositions(Collection $resultEvents): void
+    {
+        // Save each enemy
+        $enemyPositionAttributes = [];
+        $currentFloor            = null;
+
+        $now = Carbon::now()->toDateTimeString();
+
+        foreach ($resultEvents as $resultEvent) {
+            // Keep track of the current floor
+            if ($resultEvent instanceof MapChangeResultEvent) {
+                $currentFloor = $resultEvent->getFloor();
+                continue;
+            }
+            // Only looking for points of engagement
+            if (!($resultEvent instanceof EnemyEngaged) || $currentFloor === null) {
+                continue;
+            }
+
+            $latLng = $currentFloor->calculateMapLocationForIngameLocation(
+                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
+                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+            );
+
+            $enemyPositionAttributes[] = [
+                'guid'       => $resultEvent->getGuid()->getGuid(),
+                'floor_id'   => $currentFloor->id,
+                'npc_id'     => $resultEvent->getGuid()->getId(),
+                'lat'        => $latLng['lat'],
+                'lng'        => $latLng['lng'],
+                'created_at' => $now,
+            ];
+        }
+        EnemyPosition::insertOrIgnore($enemyPositionAttributes);
     }
 
 //    public function findEventsForSpecificEnemy(DungeonRoute $dungeonRoute, Collection $combatLogEvents, string $guid): Collection

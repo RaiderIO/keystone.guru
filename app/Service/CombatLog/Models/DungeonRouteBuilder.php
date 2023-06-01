@@ -71,7 +71,7 @@ class DungeonRouteBuilder
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var $baseEvent MapChangeCombatLogEvent */
-                    $this->currentFloor = $this->findFloorByUiMapId($baseEvent->getUiMapID());
+                    $this->currentFloor = $resultEvent->getFloor();
                 } else if ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
                     continue;
@@ -115,22 +115,6 @@ class DungeonRouteBuilder
         }
 
         return $this->dungeonRoute;
-    }
-
-    /**
-     * @param int $uiMapId
-     * @return Floor
-     * @throws Exception
-     */
-    private function findFloorByUiMapId(int $uiMapId): Floor
-    {
-        try {
-            return Floor::where('ui_map_id', $uiMapId)->firstOrFail();
-        } catch (Exception $exception) {
-            $this->log->findFloorByUiMapIdNoFloorFound($exception, $uiMapId);
-
-            throw $exception;
-        }
     }
 
     /**

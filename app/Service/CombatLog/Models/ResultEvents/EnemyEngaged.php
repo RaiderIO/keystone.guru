@@ -5,6 +5,11 @@ namespace App\Service\CombatLog\Models\ResultEvents;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 
+/**
+ * @package App\Service\CombatLog\Models\ResultEvents
+ * @author Wouter
+ * @since 01/06/2023
+ */
 class EnemyEngaged extends BaseResultEvent
 {
     private Creature $guid;

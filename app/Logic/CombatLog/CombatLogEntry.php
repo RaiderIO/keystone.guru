@@ -14,6 +14,7 @@ class CombatLogEntry
 {
     private const RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
+        'Everyone within 10 yards will be consumed!',
     ];
 
     private string $rawEvent;
@@ -67,7 +68,7 @@ class CombatLogEntry
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
-                elseif (count($parameters) > 23) {
+                else if (count($parameters) > 23) {
                     $this->parsedEvent = (new AdvancedCombatLogEvent($timestamp, $eventName))->setParameters($parameters);
                 } else {
                     $this->parsedEvent = (new CombatLogEvent($timestamp, $eventName))->setParameters($parameters);

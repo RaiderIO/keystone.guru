@@ -22,20 +22,10 @@ class RedisClearIdleKeys extends Command
     protected $description = 'Clears all idle keys in redis that have not been accessed in a specific time in seconds';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $seconds = (int)$this->argument('seconds');
 
