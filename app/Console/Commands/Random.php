@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -36,11 +36,11 @@ class Random extends Command
      *
      * @return int
      */
-    public function handle(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService)
+    public function handle(CombatLogServiceInterface $combatLogService)
     {
-        $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
-            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log')
-        );
+        dd($combatLogService->getChallengeModes(
+            base_path('combat.log')
+        ));
 
 //        (new UpdateDungeonRoutePopularity())->__invoke();
 
