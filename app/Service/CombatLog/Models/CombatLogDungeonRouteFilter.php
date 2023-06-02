@@ -3,9 +3,13 @@
 namespace App\Service\CombatLog\Models;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
+use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Models\DungeonRoute;
 use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\Models\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
+use App\Service\CombatLog\Models\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\Models\ResultEvents\MapChange as MapChangeResultEvent;
 use Illuminate\Support\Collection;
 
@@ -48,11 +52,7 @@ class CombatLogDungeonRouteFilter
         $currentPull = new CurrentPull($resultEvents, $validNpcIds);
 
         foreach ($this->combatLogEvents as $combatLogEvent) {
-            // Map changes yes please
-            if ($combatLogEvent instanceof MapChange) {
-                $resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
-                continue;
-            }
+            $this->filterSpecialEvents($resultEvents, $combatLogEvent);
 
             // Keep our party state up to date with relevant events
             $partyState->parse($combatLogEvent);
@@ -75,5 +75,26 @@ class CombatLogDungeonRouteFilter
         $currentPull->noMoreEvents();
 
         return $resultEvents;
+    }
+
+    /**
+     * @param Collection $resultEvents
+     * @param BaseEvent $combatLogEvent
+     * @return void
+     */
+    private function filterSpecialEvents(Collection $resultEvents, BaseEvent $combatLogEvent)
+    {
+        // Starts
+        if ($combatLogEvent instanceof ChallengeModeStart) {
+            $resultEvents->push((new ChallengeModeStartResultEvent($combatLogEvent)));
+        }
+        // Ends
+        else  if ($combatLogEvent instanceof ChallengeModeEnd) {
+            $resultEvents->push((new ChallengeModeEndResultEvent($combatLogEvent)));
+        }
+        // Map changes yes please
+        else if ($combatLogEvent instanceof MapChange) {
+            $resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
+        }
     }
 }

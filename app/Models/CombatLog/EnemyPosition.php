@@ -7,14 +7,14 @@ use App\Models\Npc;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @var int $id
- * @var string $guid
+ * @var int $challenge_mode_run_id
  * @var int $floor_id
  * @var int $npc_id
+ * @var string $guid
  * @var float $lat
  * @var float $lng
  *
@@ -32,9 +32,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class EnemyPosition extends Model
 {
     protected $fillable = [
-        'guid',
+        'challenge_mode_run_id',
         'floor_id',
         'npc_id',
+        'guid',
         'lat',
         'lng',
         'created_at',
@@ -42,12 +43,22 @@ class EnemyPosition extends Model
 
     protected $connection = 'combatlog';
 
+    public $timestamps = false;
+
     /**
-     * @return BelongsTo
+     * @return HasOne
      */
-    public function floor(): BelongsTo
+    public function challengeModeRun(): HasOne
     {
-        return $this->belongsTo(Floor::class);
+        return $this->hasOne(ChallengeModeRun::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function floor(): HasOne
+    {
+        return $this->hasOne(HasOne::class);
     }
 
     /**

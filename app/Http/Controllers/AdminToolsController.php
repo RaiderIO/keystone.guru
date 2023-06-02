@@ -55,13 +55,17 @@ class AdminToolsController extends Controller
      */
     public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): RedirectResponse
     {
-        $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
-            base_path(
+        try {
+            $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
+                base_path(
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
-            'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
-            )
-        );
+                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
+                )
+            );
+        } catch (Exception $exception) {
+            dd($exception);
+        }
 
         return redirect()->route('dungeonroute.view', [
             'dungeon'      => $dungeonRoute->dungeon,

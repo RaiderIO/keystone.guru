@@ -78,7 +78,7 @@ class ChallengeModeStart extends SpecialEvent
 
         $affixIds = array_slice($parameters, 4);
         foreach ($affixIds as $affixId) {
-            $this->affixIDs[] = (int)$affixId;
+            $this->affixIDs[] = (int)str_replace(['[', ']'], '', $affixId);
         }
 
         return $this;
