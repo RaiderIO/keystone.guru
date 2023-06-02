@@ -29,6 +29,7 @@ class CombatLogService implements CombatLogServiceInterface
      * @param string $filePath
      *
      * @return Collection|BaseEvent[]
+     * @throws \Exception
      */
     public function parseCombatLogToEvents(string $filePath): Collection
     {
@@ -47,10 +48,12 @@ class CombatLogService implements CombatLogServiceInterface
 
         return $events;
     }
+
     /**
      * @param string $filePath
      *
      * @return Collection|ChallengeMode
+     * @throws \Exception
      */
     public function getChallengeModes(string $filePath): Collection
     {
@@ -73,26 +76,74 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
+     * @param string $filePath
+     *
+     * @return string|null Null if the file was not a zip file and was not extracted
+     */
+    private function extractCombatLog(string $filePath): ?string
+    {
+        if (!Str::endsWith($filePath, '.zip')) {
+            return null;
+        }
+
+        $this->log->extractCombatLogExtractingArchive();
+        $zip = new \ZipArchive();
+        try {
+            $status = $zip->open($filePath);
+            if ($status !== true) {
+                $this->log->extractCombatLogInvalidZipFile();
+                throw new InvalidArgumentException('File is not a valid .zip file');
+            }
+
+            $storageDestinationPath = '/tmp';
+            if (!\File::exists($storageDestinationPath)) {
+                \File::makeDirectory($storageDestinationPath, 0755, true);
+            }
+
+            $zip->extractTo($storageDestinationPath);
+
+            $extractedFilePath = sprintf('%s/%s.txt', $storageDestinationPath, basename($filePath, '.zip'));
+            $this->log->extractCombatLogExtractedArchive($extractedFilePath);
+        }
+        finally {
+            $zip->close();
+        }
+
+        return $extractedFilePath;
+    }
+
+    /**
      * @param string   $filePath
      * @param callable $callback
      *
      * @return void
+     * @throws \Exception
      */
     private function parseCombatLog(string $filePath, callable $callback): void
     {
-        $handle = fopen($filePath, 'r');
+        // Extracts the file if necessary
+        $extractedFilePath = $this->extractCombatLog($filePath);
+
+        $targetFilePath = $extractedFilePath ?? $filePath;
+
+        $handle = fopen($targetFilePath, 'r');
         if (!$handle) {
-            throw new InvalidArgumentException(sprintf('Unable to read file %s', $filePath));
+            throw new InvalidArgumentException(sprintf('Unable to read file %s', $targetFilePath));
         }
 
-        $events = new Collection();
         try {
+            $this->log->parseCombatLogParseEventsStart();
             while (($rawEvent = fgets($handle)) !== false) {
                 $callback($rawEvent);
             }
-        }
-        finally {
+        } finally {
+            $this->log->parseCombatLogParseEventsEnd();
+            
             fclose($handle);
+
+            if (file_exists($extractedFilePath)) {
+                unlink($extractedFilePath);
+            }
         }
     }
 }

@@ -68,34 +68,7 @@ class EnsureChallengeMode extends Command
             return -1;
         }
 
-        if (Str::endsWith($filePath, '.zip')) {
-            $this->comment('Extracting archive..');
-            $zip = new \ZipArchive();
-            try {
-                $status = $zip->open($filePath);
-                if ($status !== true) {
-                    $this->error('File is not a valid .zip file');
-                    return -2;
-                }
-
-                $storageDestinationPath = '/tmp';
-                if (!\File::exists($storageDestinationPath)) {
-                    \File::makeDirectory($storageDestinationPath, 0755, true);
-                }
-
-                $zip->extractTo($storageDestinationPath);
-
-                $extractedFilePath = sprintf('%s/%s.txt', $storageDestinationPath, basename($filePath, '.zip'));
-                $this->comment(sprintf('Extracted archive to %s', $extractedFilePath));
-            } finally {
-                $zip->close();
-            }
-        }
-
-        $fileToAnalyze = $extractedFilePath ?? $filePath;
-
-
-        if (($challengeModes = $combatLogService->getChallengeModes($fileToAnalyze))->isEmpty()) {
+        if (($challengeModes = $combatLogService->getChallengeModes($filePath))->isEmpty()) {
             $this->info('Does NOT contain challenge modes!');
             $this->removeFile($filePath);
         } else {
