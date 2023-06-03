@@ -6,9 +6,14 @@ interface CombatLogServiceLoggingInterface
 {
 
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void;
-    public function extractCombatLogExtractingArchive(): void;
+    public function extractCombatLogExtractingArchiveStart(): void;
     public function extractCombatLogInvalidZipFile(): void;
     public function extractCombatLogExtractedArchive(string $extractedFilePath): void;
+    public function extractCombatLogExtractingArchiveEnd(): void;
     public function parseCombatLogParseEventsStart(): void;
     public function parseCombatLogParseEventsEnd(): void;
+    public function compressCombatLogCompressingArchiveStart(): void;
+    public function compressCombatLogInvalidZipFile(): void;
+    public function compressCombatLogCompressedArchive(string $targetFilePath): void;
+    public function compressCombatLogCompressingArchiveEnd(): void;
 }

@@ -20,9 +20,9 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     /**
      * @return void
      */
-    public function extractCombatLogExtractingArchive(): void
+    public function extractCombatLogExtractingArchiveStart(): void
     {
-        $this->debug(__METHOD__);
+        $this->start(__METHOD__);
     }
 
     /**
@@ -46,6 +46,14 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     /**
      * @return void
      */
+    public function extractCombatLogExtractingArchiveEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    /**
+     * @return void
+     */
     public function parseCombatLogParseEventsStart(): void
     {
         $this->start(__METHOD__);
@@ -58,4 +66,39 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     {
         $this->end(__METHOD__);
     }
+
+    /**
+     * @return void
+     */
+    public function compressCombatLogCompressingArchiveStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    /**
+     * @return void
+     */
+    public function compressCombatLogInvalidZipFile(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    /**
+     * @param string $targetFilePath
+     * @return void
+     */
+    public function compressCombatLogCompressedArchive(string $targetFilePath): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function compressCombatLogCompressingArchiveEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+
 }

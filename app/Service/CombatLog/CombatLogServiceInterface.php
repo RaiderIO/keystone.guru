@@ -21,4 +21,10 @@ interface CombatLogServiceInterface
      * @return Collection|ChallengeMode[]
      */
     public function getChallengeModes(string $filePath): Collection;
+
+    /**
+     * @param string $filePath
+     * @return Collection A list of file paths that the logs were saved to
+     */
+    public function splitCombatLogOnChallengeModes(string $filePath): Collection;
 }

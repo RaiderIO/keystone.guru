@@ -38,8 +38,8 @@ class Random extends Command
      */
     public function handle(CombatLogServiceInterface $combatLogService)
     {
-        dd($combatLogService->getChallengeModes(
-            base_path('combat.log')
+        dd($combatLogService->splitCombatLogOnChallengeModes(
+            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.txt')
         ));
 
 //        (new UpdateDungeonRoutePopularity())->__invoke();
