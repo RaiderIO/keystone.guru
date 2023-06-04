@@ -8,19 +8,23 @@ use Exception;
 
 class MapChange extends BaseResultEvent
 {
-    private Floor $floor;
+    private ?Floor $floor = null;
 
     public function __construct(MapChangeCombatLogEvent $baseEvent)
     {
         parent::__construct($baseEvent);
 
-        $this->floor = Floor::where('ui_map_id', $baseEvent->getUiMapID())->firstOrFail();
+        try {
+            $this->floor = Floor::where('ui_map_id', $baseEvent->getUiMapID())->firstOrFail();
+        } catch (Exception $exception) {
+//            throw new Exception(sprintf('Unable to find floor for UI Map %s (%d)', $baseEvent->getUiMapName(), $baseEvent->getUiMapID()));
+        }
     }
 
     /**
-     * @return Floor
+     * @return Floor|null
      */
-    public function getFloor(): Floor
+    public function getFloor(): ?Floor
     {
         return $this->floor;
     }

@@ -19,7 +19,7 @@ class CombatLogEntry
 
     private string $rawEvent;
 
-    private Carbon $parsedTimestamp;
+    private ?Carbon $parsedTimestamp = null;
 
     private ?BaseEvent $parsedEvent = null;
 
@@ -95,9 +95,10 @@ class CombatLogEntry
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null Can be null if accessed before event was parsed, or if event was part of RAW_EVENT_IGNORE
+     * and it didn't have any timestamp as a result.
      */
-    public function getParsedTimestamp(): Carbon
+    public function getParsedTimestamp(): ?Carbon
     {
         return $this->parsedTimestamp;
     }

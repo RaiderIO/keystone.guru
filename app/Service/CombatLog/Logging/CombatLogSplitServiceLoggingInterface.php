@@ -2,22 +2,24 @@
 
 namespace App\Service\CombatLog\Logging;
 
-interface CombatLogSplitServiceLoggingInterface
+use App\Logging\StructuredLoggingInterface;
+
+interface CombatLogSplitServiceLoggingInterface extends StructuredLoggingInterface
 {
 
     public function splitCombatLogOnChallengeModesStart(string $filePath): void;
 
     public function splitCombatLogOnChallengeModesNoChallengeModesFound(): void;
 
-    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds): void;
+    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void;
 
-    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(string $rawEvent): void;
+    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(): void;
 
-    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(string $rawEvent): void;
+    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(): void;
 
-    public function splitCombatLogOnChallengeModesZoneChangeEvent(string $rawEvent): void;
+    public function splitCombatLogOnChallengeModesZoneChangeEvent(): void;
 
-    public function splitCombatLogOnChallengeModesMapChangeEvent(string $rawEvent): void;
+    public function splitCombatLogOnChallengeModesMapChangeEvent(): void;
 
     public function splitCombatLogOnChallengeModesLastRunNotCompleted(): void;
 
@@ -28,4 +30,6 @@ interface CombatLogSplitServiceLoggingInterface
     public function reset(): void;
 
     public function generateTargetCombatLogFileNameAttempt(string $saveFilePath): void;
+
+    public function splitCombatLogOnChallengeModesTimestampNotSet(): void;
 }

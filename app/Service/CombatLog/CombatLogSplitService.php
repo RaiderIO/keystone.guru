@@ -72,17 +72,29 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 return $result->push($targetFilePath);
             }
 
-            $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent)
+            $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
             use ($filePath, $targetFilePath, &$result) {
+                $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+
                 $combatLogEntry = (new CombatLogEntry($rawEvent));
                 $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP);
+
+                if ($combatLogEntry->getParsedTimestamp() === null) {
+                    $this->log->splitCombatLogOnChallengeModesTimestampNotSet();
+                    return;
+                }
 
                 // If we have started a challenge mode
                 if ($this->lastChallengeModeStartEvent instanceof ChallengeModeStartEvent) {
                     // If there's too much of a gap between the last entry and the next one, just ditch the run
                     if ($this->lastTimestamp instanceof Carbon &&
                         ($seconds = $this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp())) > self::MAX_TIMESTAMP_GAP_SECONDS) {
-                        $this->log->splitCombatLogOnChallengeModesTooBigTimestampGap($seconds);
+                        $this->log->splitCombatLogOnChallengeModesTooBigTimestampGap(
+                            $seconds,
+                            $this->lastTimestamp->toDateTimeString(),
+                            $combatLogEntry->getParsedTimestamp()->toDateTimeString()
+                        );
+
                         // Reset variables
                         $this->resetCurrentChallengeMode();
                         return;
@@ -90,6 +102,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
                     // Save ALL events that come through after the challenge mode start event has been given
                     $this->rawEvents->push($rawEvent);
+                    $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
 
                     // And it's ended
                     if ($parsedEvent instanceof ChallengeModeEndEvent) {
@@ -105,12 +118,10 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         unlink($saveFilePath);
 
                         // Reset variables
-                        $this->reset();
+                        $this->resetCurrentChallengeMode();
                     }
-
-                    $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
                 } else if ($parsedEvent instanceof ChallengeModeStartEvent) {
-                    $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent($rawEvent);
+                    $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
 
                     $this->lastChallengeModeStartEvent = $parsedEvent;
 
@@ -119,13 +130,13 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                     $this->rawEvents->push($this->lastMapChange);
                     $this->rawEvents->push($rawEvent);
                 } else if ($parsedEvent instanceof CombatLogVersionEvent) {
-                    $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent($rawEvent);
+                    $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent();
                     $this->lastCombatLogVersion = $rawEvent;
                 } else if ($parsedEvent instanceof ZoneChangeEvent) {
-                    $this->log->splitCombatLogOnChallengeModesZoneChangeEvent($rawEvent);
+                    $this->log->splitCombatLogOnChallengeModesZoneChangeEvent();
                     $this->lastZoneChange = $rawEvent;
                 } else if ($parsedEvent instanceof MapChangeEvent) {
-                    $this->log->splitCombatLogOnChallengeModesMapChangeEvent($rawEvent);
+                    $this->log->splitCombatLogOnChallengeModesMapChangeEvent();
                     $this->lastMapChange = $rawEvent;
                 }
             });

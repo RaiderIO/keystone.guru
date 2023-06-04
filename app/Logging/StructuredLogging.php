@@ -5,7 +5,7 @@ namespace App\Logging;
 use App\Logic\Utils\Stopwatch;
 use Monolog\Logger;
 
-class StructuredLogging
+class StructuredLogging implements StructuredLoggingInterface
 {
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
@@ -14,6 +14,28 @@ class StructuredLogging
     private array $cachedContext = [];
 
     private ?string $channel = null;
+
+    /**
+     * @param string $key
+     * @param array $context
+     * @return void
+     */
+    public function addContext(string $key, ...$context): void
+    {
+        // Add all variables from $context, but remove key (our first parameter) since we don't need it
+        $this->groupedContexts[$key] = $context;
+        $this->cachedContext         = call_user_func_array('array_merge', $this->groupedContexts);
+    }
+
+    /**
+     * @param string $key
+     * @return void
+     */
+    public function removeContext(string $key): void
+    {
+        unset($this->groupedContexts[$key]);
+        $this->cachedContext = call_user_func_array('array_merge', $this->groupedContexts);
+    }
 
     /**
      * @return string|null
@@ -48,8 +70,7 @@ class StructuredLogging
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }
-        $this->groupedContexts[$targetKey] = $context;
-        $this->cachedContext               = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->addContext($targetKey, $context);
         Stopwatch::start($targetKey);
 
         $this->log(Logger::INFO, $functionName, $context);
@@ -74,8 +95,7 @@ class StructuredLogging
             );
         }
 
-        unset($this->groupedContexts[$targetKey]);
-        $this->cachedContext = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->removeContext($targetKey);
     }
 
     /**

@@ -57,12 +57,13 @@ class AdminToolsController extends Controller
     {
         try {
             $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
-                base_path(
+                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
+//                base_path(
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
-                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
 //                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
-                )
+//                )
             );
         } catch (Exception $exception) {
             dd($exception);

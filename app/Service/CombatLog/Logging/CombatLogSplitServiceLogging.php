@@ -17,29 +17,34 @@ class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLo
         $this->info(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds): void
+    public function splitCombatLogOnChallengeModesTimestampNotSet(): void
+    {
+        $this->info(__METHOD__);
+    }
+
+    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(string $rawEvent): void
+    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(string $rawEvent): void
+    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesZoneChangeEvent(string $rawEvent): void
+    public function splitCombatLogOnChallengeModesZoneChangeEvent(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesMapChangeEvent(string $rawEvent): void
+    public function splitCombatLogOnChallengeModesMapChangeEvent(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
     }
 
     public function splitCombatLogOnChallengeModesLastRunNotCompleted(): void
@@ -66,4 +71,6 @@ class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLo
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+
 }
