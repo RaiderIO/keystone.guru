@@ -24,7 +24,29 @@ interface CombatLogServiceInterface
 
     /**
      * @param string $filePath
-     * @return Collection A list of file paths that the logs were saved to
+     * @return string|null
      */
-    public function splitCombatLogOnChallengeModes(string $filePath): Collection;
+    public function extractCombatLog(string $filePath): ?string;
+
+    /**
+     * @param string $filePathToTxt
+     * @return string
+     */
+    public function compressCombatLog(string $filePathToTxt): string;
+
+    /**
+     * @param string $filePath
+     * @param callable $callback
+     * @return void
+     */
+    public function parseCombatLog(string $filePath, callable $callback): void;
+
+    /**
+     * @param Collection $rawEvents
+     * @param string $filePath
+     * @return bool
+     */
+    public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool;
+
+
 }

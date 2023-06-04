@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -36,10 +37,10 @@ class Random extends Command
      *
      * @return int
      */
-    public function handle(CombatLogServiceInterface $combatLogService)
+    public function handle(CombatLogSplitServiceInterface $combatLogSplitService)
     {
-        dd($combatLogService->splitCombatLogOnChallengeModes(
-            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.txt')
+        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
+            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')
         ));
 
 //        (new UpdateDungeonRoutePopularity())->__invoke();

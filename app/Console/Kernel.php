@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
+use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
@@ -63,6 +64,7 @@ class Kernel extends ConsoleKernel
 
         // CombatLog
         EnsureChallengeMode::class,
+        SplitChallengeMode::class,
 
         // Database
         Backup::class,

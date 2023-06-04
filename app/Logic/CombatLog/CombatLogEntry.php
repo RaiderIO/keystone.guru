@@ -19,6 +19,8 @@ class CombatLogEntry
 
     private string $rawEvent;
 
+    private Carbon $parsedTimestamp;
+
     private ?BaseEvent $parsedEvent = null;
 
     /**
@@ -45,8 +47,9 @@ class CombatLogEntry
             return null;
         }
 
-        $eventData     = $matches[2];
-        $mayParseEvent = empty($eventWhiteList);
+        $this->parsedTimestamp = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
+        $eventData             = $matches[2];
+        $mayParseEvent         = empty($eventWhiteList);
 
         if (!$mayParseEvent) {
             foreach ($eventWhiteList as $whiteListedName) {
@@ -57,21 +60,20 @@ class CombatLogEntry
         }
 
         if ($mayParseEvent) {
-            $timestamp  = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
             $parameters = str_getcsv($eventData);
 
             $eventName = array_shift($parameters);
 
             try {
                 if (in_array($eventName, SpecialEvent::SPECIAL_EVENT_ALL)) {
-                    $this->parsedEvent = SpecialEvent::createFromEventName($timestamp, $eventName, $parameters);
+                    $this->parsedEvent = SpecialEvent::createFromEventName($this->parsedTimestamp, $eventName, $parameters);
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
                 else if (count($parameters) > 23) {
-                    $this->parsedEvent = (new AdvancedCombatLogEvent($timestamp, $eventName))->setParameters($parameters);
+                    $this->parsedEvent = (new AdvancedCombatLogEvent($this->parsedTimestamp, $eventName))->setParameters($parameters);
                 } else {
-                    $this->parsedEvent = (new CombatLogEvent($timestamp, $eventName))->setParameters($parameters);
+                    $this->parsedEvent = (new CombatLogEvent($this->parsedTimestamp, $eventName))->setParameters($parameters);
                 }
 
             } catch (\Error|Exception $exception) {
@@ -90,6 +92,14 @@ class CombatLogEntry
     public function getRawEvent(): string
     {
         return $this->rawEvent;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getParsedTimestamp(): Carbon
+    {
+        return $this->parsedTimestamp;
     }
 
     /**

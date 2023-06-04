@@ -29,6 +29,8 @@ class EnsureChallengeMode extends Command
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
     {
+        ini_set('memory_limit', '2G');
+
         $filePath = $this->argument('filePath');
         // Assume error
         $result = -1;

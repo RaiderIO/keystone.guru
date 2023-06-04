@@ -13,6 +13,8 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange as ZoneChangeEvent;
 use App\Models\Dungeon;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLog\Models\ChallengeMode;
+use App\Service\CombatLog\Models\CombatLogChallengeModeSplitter;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -78,97 +80,13 @@ class CombatLogService implements CombatLogServiceInterface
         return $events;
     }
 
-    /**
-     * @param string $filePath
-     * @return Collection
-     * @throws \Exception
-     */
-    public function splitCombatLogOnChallengeModes(string $filePath): Collection
-    {
-        $filePath  = $this->extractCombatLog($filePath) ?? $filePath;
-        $rawEvents = collect();
-        $result    = collect();
-
-        // We don't need to do anything if there was just one run
-        if ($this->getChallengeModes($filePath)->count() <= 1) {
-            return $result->push($filePath);
-        }
-
-        // The events we want to keep OUTSIDE OF challenge modes
-        $eventsToKeep = [
-            SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
-            SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
-            SpecialEvent::SPECIAL_EVENT_MAP_CHANGE,
-            SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START,
-            SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_END,
-        ];
-
-        // Keep track of the most recent occurrences of these events
-        $lastCombatLogVersion        = null;
-        $lastChallengeModeStartEvent = null;
-        $lastZoneChange              = null;
-        $lastMapChange               = null;
-
-        $this->parseCombatLog($filePath, function (string $rawEvent)
-        use (
-            $filePath, &$result, &$rawEvents, &$eventsToKeep,
-            &$lastCombatLogVersion, &$lastChallengeModeStartEvent, &$lastZoneChange, &$lastMapChange
-        ) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent($eventsToKeep);
-
-            // If we have started a challenge mode
-            if ($lastChallengeModeStartEvent instanceof ChallengeModeStartEvent) {
-                // Save ALL events that come through after the challenge mode start event has been given
-                $rawEvents->push($rawEvent);
-
-                // And it's ended
-                if ($parsedEvent instanceof ChallengeModeEndEvent) {
-                    $targetFilePath = sprintf('%s/%s_%d_%s.txt',
-                        dirname($filePath),
-                        pathinfo($filePath, PATHINFO_FILENAME),
-                        $lastChallengeModeStartEvent->getKeystoneLevel(),
-                        Str::slug($lastChallengeModeStartEvent->getZoneName())
-                    );
-
-                    $this->saveCombatLogToFile($rawEvents, $targetFilePath);
-
-                    // Add the .txt to a .zip
-                    $compressedTargetFilePath = $this->compressCombatLog($targetFilePath);
-                    $result->push($compressedTargetFilePath);
-
-                    // remove the .txt
-                    unlink($targetFilePath);
-
-                    // Reset variables
-                    $lastChallengeModeStartEvent = null;
-                    $rawEvents                   = collect();
-                }
-            } else if ($parsedEvent instanceof ChallengeModeStartEvent) {
-                $lastChallengeModeStartEvent = $parsedEvent;
-
-                $rawEvents->push($lastCombatLogVersion);
-                $rawEvents->push($lastZoneChange);
-                $rawEvents->push($lastMapChange);
-                $rawEvents->push($rawEvent);
-            } else if ($parsedEvent instanceof CombatLogVersionEvent) {
-                $lastCombatLogVersion = $rawEvent;
-            } else if ($parsedEvent instanceof ZoneChangeEvent) {
-                $lastZoneChange = $rawEvent;
-            } else if ($parsedEvent instanceof MapChangeEvent) {
-                $lastMapChange = $rawEvent;
-            }
-        });
-
-        return $result;
-    }
-
 
     /**
      * @param string $filePath
      *
      * @return string|null Null if the file was not a zip file and was not extracted
      */
-    private function extractCombatLog(string $filePath): ?string
+    public function extractCombatLog(string $filePath): ?string
     {
         if (!Str::endsWith($filePath, '.zip')) {
             return null;
@@ -204,7 +122,7 @@ class CombatLogService implements CombatLogServiceInterface
      * @param string $filePathToTxt
      * @return string
      */
-    private function compressCombatLog(string $filePathToTxt): string
+    public function compressCombatLog(string $filePathToTxt): string
     {
         if (Str::endsWith($filePathToTxt, '.zip')) {
             return $filePathToTxt;
@@ -242,7 +160,7 @@ class CombatLogService implements CombatLogServiceInterface
      * @return void
      * @throws \Exception
      */
-    private function parseCombatLog(string $filePath, callable $callback): void
+    public function parseCombatLog(string $filePath, callable $callback): void
     {
         // Extracts the file if necessary
         $extractedFilePath = $this->extractCombatLog($filePath);
@@ -256,8 +174,9 @@ class CombatLogService implements CombatLogServiceInterface
 
         try {
             $this->log->parseCombatLogParseEventsStart();
+            $lineNr = 1;
             while (($rawEvent = fgets($handle)) !== false) {
-                $callback($rawEvent);
+                $callback($rawEvent, $lineNr++);
             }
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
@@ -275,7 +194,7 @@ class CombatLogService implements CombatLogServiceInterface
      * @param string $filePath
      * @return bool
      */
-    private function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
+    public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
         $fileHandle = fopen($filePath, 'w');
         if ($fileHandle === false) {
