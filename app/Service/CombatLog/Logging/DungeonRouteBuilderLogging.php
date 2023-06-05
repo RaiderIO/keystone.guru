@@ -11,6 +11,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     /**
      * @param string $toDateTimeString
      * @param string $eventName
+     *
      * @return void
      */
     public function buildStart(string $toDateTimeString, string $eventName): void
@@ -20,7 +21,8 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param Exception $exception
-     * @param int $uitMapId
+     * @param int       $uitMapId
+     *
      * @return void
      */
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void
@@ -46,6 +48,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param string $guid
+     *
      * @return void
      */
     public function buildInCombatWithEnemy(string $guid): void
@@ -55,6 +58,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param string $guid
+     *
      * @return void
      */
     public function buildNoEnemyFoundToPutInCombat(string $guid): void
@@ -64,6 +68,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param string $guid
+     *
      * @return void
      */
     public function buildUnitDiedNoLongerInCombat(string $guid): void
@@ -73,6 +78,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param string $guid
+     *
      * @return void
      */
     public function buildUnitDiedNotInCombat(string $guid): void
@@ -82,6 +88,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param array $keys
+     *
      * @return void
      */
     public function buildCreateNewPull(array $keys): void
@@ -91,6 +98,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param array $keys
+     *
      * @return void
      */
     public function buildCreateNewFinalPull(array $keys): void
@@ -99,9 +107,10 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
+     *
      * @return void
      */
     public function buildEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void
@@ -110,9 +119,10 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
+     *
      * @return void
      */
     public function buildEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void
@@ -120,12 +130,53 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-
     /**
      * @return void
      */
     public function buildEnd(): void
     {
         $this->end(__METHOD__);
+    }
+    
+    /**
+     * @param int|null $id
+     * @param float    $closestEnemyDistance
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $id, float $closestEnemyDistance): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int|null $id
+     * @param float    $closestEnemyDistance
+     * @param int      $maxDistance
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $id, float $closestEnemyDistance, int $maxDistance): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int   $id
+     * @param float $closestEnemyDistance
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $id, float $closestEnemyDistance): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 }

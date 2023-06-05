@@ -7,6 +7,7 @@ use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
@@ -20,6 +21,12 @@ use Illuminate\Support\Collection;
 
 class DungeonRouteBuilder
 {
+    /** @var int How much yards the closest enemy must be away from in order to consider if we maybe aggroed a patrol */
+    private const MAX_AGGRO_DISTANCE_FOR_PATROLS = 50;
+
+    /** @var int The distance in yards that an enemy must be away from before we completely ignore him - it must be an error. */
+    private const MAX_DISTANCE_IGNORE = 100;
+
     private DungeonRoute $dungeonRoute;
 
     /** @var Collection|BaseResultEvent[] */
@@ -41,18 +48,23 @@ class DungeonRouteBuilder
     private Collection $availableEnemies;
 
     /**
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute                 $dungeonRoute
      * @param Collection|BaseResultEvent[] $resultEvents
      */
     public function __construct(DungeonRoute $dungeonRoute, Collection $resultEvents)
     {
         $this->dungeonRoute               = $dungeonRoute;
         $this->resultEvents               = $resultEvents;
-        $this->log                        = App::make(DungeonRouteBuilderLoggingInterface::class);
+        /** @var DungeonRouteBuilderLoggingInterface $log */
+        $log = App::make(DungeonRouteBuilderLoggingInterface::class);
+        $this->log                        = $log;
         $this->enemiesKilledInCurrentPull = collect();
         $this->currentEnemiesInCombat     = collect();
         $this->currentFloor               = null;
-        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies->keyBy('id');
+        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies->sort(function (Enemy $enemy)
+        {
+            return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
+        })->keyBy('id');
     }
 
     /**
@@ -72,7 +84,7 @@ class DungeonRouteBuilder
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var $baseEvent MapChangeCombatLogEvent */
                     $this->currentFloor = $resultEvent->getFloor();
-                } else if ($this->currentFloor === null) {
+                } elseif ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
                     continue;
                 }
@@ -82,7 +94,7 @@ class DungeonRouteBuilder
                     $this->currentEnemiesInCombat->put($resultEvent->getGuid()->getGuid(), $resultEvent);
 
                     $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
-                } else if ($resultEvent instanceof EnemyKilled) {
+                } elseif ($resultEvent instanceof EnemyKilled) {
                     /** @var $baseEvent UnitDied */
                     // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
@@ -103,7 +115,8 @@ class DungeonRouteBuilder
                         $this->createPull();
                     }
                 }
-            } finally {
+            }
+            finally {
                 $this->log->buildEnd();
             }
         }
@@ -172,40 +185,48 @@ class DungeonRouteBuilder
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
+     *
      * @return Enemy|null
      */
     private function findUnkilledEnemyForNpcAtIngameLocation(
-        int   $npcId,
+        int $npcId,
         float $ingameX,
         float $ingameY
-    ): ?Enemy
-    {
-        $latLng = $this->currentFloor->calculateMapLocationForIngameLocation($ingameX, $ingameY);
+    ): ?Enemy {
+        //        $latLng = $this->currentFloor->calculateMapLocationForIngameLocation($ingameX, $ingameY);
 
         // Find the closest Enemy with the same NPC ID that is not killed yet
         $closestEnemyDistance = 99999999999;
         $closestEnemy         = null;
-        foreach ($this->availableEnemies as $availableEnemy) {
+
+        $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId)
+        {
             if ($availableEnemy->npc_id !== $npcId) {
-                continue;
+                return false;
             }
 
             if ($availableEnemy->teeming !== null) {
-                continue;
+                return false;
             }
 
             if ($availableEnemy->floor_id !== $this->currentFloor->id) {
-                continue;
+                return false;
             }
 
+            return true;
+        });
+
+        foreach ($filteredEnemies as $availableEnemy) {
+            $enemyXY = $this->currentFloor->calculateIngameLocationForMapLocation($availableEnemy->lat, $availableEnemy->lng);
+
             $distance = App\Logic\Utils\MathUtils::distanceBetweenPoints(
-                $availableEnemy->lng,
-                $latLng['lng'],
-                $availableEnemy->lat,
-                $latLng['lat']
+                $enemyXY['x'],
+                $ingameX,
+                $enemyXY['y'],
+                $ingameY
             );
 
             if ($closestEnemyDistance > $distance) {
@@ -214,10 +235,55 @@ class DungeonRouteBuilder
             }
         }
 
-        if ($closestEnemy !== null) {
-            $this->availableEnemies->forget($closestEnemy->id);
+        $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
+            optional($closestEnemy)->id, $closestEnemyDistance
+        );
+
+        // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
+        if ($closestEnemyDistance > self::MAX_AGGRO_DISTANCE_FOR_PATROLS) {
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols();
+            
+            foreach ($filteredEnemies as $availableEnemy) {
+                if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
+                    continue;
+                }
+
+                // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
+                $points   = [];
+                $vertices = json_decode($availableEnemy->enemyPatrol->polyline->vertices_json, true);
+                foreach ($vertices as $vertex) {
+                    $points[] = $vertex;
+                }
+
+                foreach ($points as $pointLatLng) {
+                    $enemyXY = $this->currentFloor->calculateIngameLocationForMapLocation($pointLatLng['lat'], $pointLatLng['lng']);
+
+                    $distance = App\Logic\Utils\MathUtils::distanceBetweenPoints(
+                        $enemyXY['x'],
+                        $ingameX,
+                        $enemyXY['y'],
+                        $ingameY
+                    );
+
+                    if ($closestEnemyDistance > $distance) {
+                        $closestEnemyDistance = $distance;
+                        $closestEnemy         = $availableEnemy;
+                    }
+                }
+            }
         }
 
+        if ($closestEnemyDistance > self::MAX_DISTANCE_IGNORE) {
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
+                optional($closestEnemy)->id, $closestEnemyDistance, self::MAX_DISTANCE_IGNORE
+            );
+        } elseif ($closestEnemy !== null) {
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
+                $closestEnemy->id, $closestEnemyDistance
+            );
+            
+            $this->availableEnemies->forget($closestEnemy->id);
+        }
 
         return $closestEnemy;
     }

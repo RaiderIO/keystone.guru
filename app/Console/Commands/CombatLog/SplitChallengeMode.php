@@ -23,7 +23,9 @@ class SplitChallengeMode extends Command
 
     /**
      * Execute the console command.
+     *
      * @param CombatLogSplitServiceInterface $combatLogSplitService
+     *
      * @return int
      */
     public function handle(CombatLogSplitServiceInterface $combatLogSplitService): int
@@ -33,8 +35,6 @@ class SplitChallengeMode extends Command
         $filePath = $this->argument('filePath');
         // Assume error
         $result = -1;
-
-        $resultCombatLogs = collect();
 
         if (is_dir($filePath)) {
             $this->info(sprintf('%s is a dir, parsing all files in the dir..', $filePath));
@@ -51,7 +51,8 @@ class SplitChallengeMode extends Command
 
     /**
      * @param CombatLogSplitServiceInterface $combatLogSplitService
-     * @param string $filePath
+     * @param string                         $filePath
+     *
      * @return void
      */
     private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): void
@@ -61,6 +62,7 @@ class SplitChallengeMode extends Command
         // While have a successful result, keep parsing
         if (!is_file($filePath)) {
             $this->warn('- Is a dir - cannot parse');
+
             return;
         }
 
@@ -71,8 +73,8 @@ class SplitChallengeMode extends Command
 
         // Delete the original file AFTER it was split, if nothing was done, don't do it
         if ($resultingFiles->count() > 1) {
-            $this->info(sprintf('Deleting original file %s', $filePath));
-            //            unlink($filePath);
+            $this->info(sprintf('Renaming original file %s', $filePath));
+            rename($filePath, str_replace('.zip', '.bak', $filePath));
         }
     }
 }

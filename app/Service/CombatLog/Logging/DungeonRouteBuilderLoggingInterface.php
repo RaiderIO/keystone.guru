@@ -29,4 +29,8 @@ interface DungeonRouteBuilderLoggingInterface
     public function buildCreateNewFinalPull(array $keys): void;
 
     public function buildEnd(): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $id, float $closestEnemyDistance): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $id, float $closestEnemyDistance, int $maxDistance): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $id, float $closestEnemyDistance): void;
 }
