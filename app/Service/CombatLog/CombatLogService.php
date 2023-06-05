@@ -80,6 +80,27 @@ class CombatLogService implements CombatLogServiceInterface
         return $events;
     }
 
+    /**
+     * @param string $filePath
+     *
+     * @return Collection|ChallengeMode
+     * @throws \Exception
+     */
+    public function getUiMapIds(string $filePath): Collection
+    {
+        $result = new Collection();
+
+        $this->parseCombatLog($filePath, function (string $rawEvent) use ($result) {
+            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE]);
+
+            if ($parsedEvent instanceof MapChangeEvent) {
+                $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
+            }
+        });
+
+        return $result;
+    }
+
 
     /**
      * @param string $filePath

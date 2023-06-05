@@ -24,6 +24,13 @@ interface CombatLogServiceInterface
 
     /**
      * @param string $filePath
+     *
+     * @return Collection|ChallengeMode[]
+     */
+    public function getUiMapIds(string $filePath): Collection;
+
+    /**
+     * @param string $filePath
      * @return string|null
      */
     public function extractCombatLog(string $filePath): ?string;
