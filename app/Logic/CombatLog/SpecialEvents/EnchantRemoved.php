@@ -9,58 +9,6 @@ namespace App\Logic\CombatLog\SpecialEvents;
  * @author Wouter
  * @since 26/05/2023
  */
-class EnchantRemoved extends SpecialEvent
+class EnchantRemoved extends EnchantBase
 {
-    private string $spellName;
-
-    private int $itemId;
-
-    private string $itemName;
-
-    /**
-     * @return string
-     */
-    public function getSpellName(): string
-    {
-        return $this->spellName;
-    }
-
-    /**
-     * @return int
-     */
-    public function getItemId(): int
-    {
-        return $this->itemId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getItemName(): string
-    {
-        return $this->itemName;
-    }
-
-    /**
-     * @param array $parameters
-     * @return self
-     */
-    public function setParameters(array $parameters): self
-    {
-        parent::setParameters($parameters);
-
-        $this->spellName = $parameters[0];
-        $this->itemId    = (int)$parameters[1];
-        $this->itemName  = $parameters[2];
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getParameterCount(): int
-    {
-        return 11;
-    }
 }

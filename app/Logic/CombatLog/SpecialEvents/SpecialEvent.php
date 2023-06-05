@@ -33,7 +33,10 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
     public const SPECIAL_EVENT_EMOTE = 'EMOTE';
 
-    public const SPECIAL_EVENT_ENCHANT_REMOVED = 'ENCHANT_REMOVED';
+    public const SPECIAL_EVENT_ENCHANT_APPLIED      = 'ENCHANT_APPLIED';
+    public const SPECIAL_EVENT_ENCHANT_REMOVED      = 'ENCHANT_REMOVED';
+    public const SPECIAL_EVENT_WORLD_MARKER_PLACED  = 'WORLD_MARKER_PLACED';
+    public const SPECIAL_EVENT_WORLD_MARKER_REMOVED = 'WORLD_MARKER_REMOVED';
 
     public const SPECIAL_EVENT_ALL = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
@@ -59,7 +62,11 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_RESURRECT,
 
         self::SPECIAL_EVENT_EMOTE,
+        self::SPECIAL_EVENT_ENCHANT_APPLIED,
         self::SPECIAL_EVENT_ENCHANT_REMOVED,
+
+        self::SPECIAL_EVENT_WORLD_MARKER_PLACED,
+        self::SPECIAL_EVENT_WORLD_MARKER_REMOVED,
     ];
 
     private const SPECIAL_EVENT_CLASS_MAPPING = [
@@ -86,9 +93,12 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
         self::SPECIAL_EVENT_EMOTE           => Emote::class,
+        self::SPECIAL_EVENT_ENCHANT_APPLIED => EnchantApplied::class,
         self::SPECIAL_EVENT_ENCHANT_REMOVED => EnchantRemoved::class,
-    ];
 
+        self::SPECIAL_EVENT_WORLD_MARKER_PLACED  => WorldMarkerPlaced::class,
+        self::SPECIAL_EVENT_WORLD_MARKER_REMOVED => WorldMarkerRemoved::class,
+    ];
 
     private function __construct(Carbon $timestamp, string $eventName, array $parameters)
     {
@@ -99,6 +109,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
     /**
      * @param array $parameters
+     *
      * @return self
      */
     public function setParameters(array $parameters): HasParameters
@@ -108,11 +119,11 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         return $this;
     }
 
-
     /**
      * @param Carbon $timestamp
      * @param string $eventName
-     * @param array $parameters
+     * @param array  $parameters
+     *
      * @return SpecialEvent
      * @throws Exception
      */
