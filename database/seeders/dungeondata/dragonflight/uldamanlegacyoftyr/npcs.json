@@ -491,10 +491,10 @@
         "display_id": 108686,
         "name": "Runic Protector",
         "base_health": 1582136,
-        "health_percentage": null,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -509,10 +509,24 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 8641,
+                "mapping_version_id": 146,
+                "npc_id": 184107,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 7685,
                 "mapping_version_id": 132,
                 "npc_id": 184107,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8642,
+                "mapping_version_id": 132,
+                "npc_id": 184107,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
@@ -523,10 +537,24 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 8643,
+                "mapping_version_id": 129,
+                "npc_id": 184107,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 7170,
                 "mapping_version_id": 123,
                 "npc_id": 184107,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8644,
+                "mapping_version_id": 123,
+                "npc_id": 184107,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
@@ -537,10 +565,24 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 8645,
+                "mapping_version_id": 114,
+                "npc_id": 184107,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 6000,
                 "mapping_version_id": 102,
                 "npc_id": 184107,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8646,
+                "mapping_version_id": 102,
+                "npc_id": 184107,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
         ]
@@ -2360,10 +2402,10 @@
         "display_id": 108686,
         "name": "Runic Protector",
         "base_health": 1147152,
-        "health_percentage": null,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -2371,10 +2413,24 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 8647,
+                "mapping_version_id": 146,
+                "npc_id": 195343,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 7722,
                 "mapping_version_id": 132,
                 "npc_id": 195343,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8648,
+                "mapping_version_id": 132,
+                "npc_id": 195343,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
@@ -2385,10 +2441,24 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 8649,
+                "mapping_version_id": 129,
+                "npc_id": 195343,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 7207,
                 "mapping_version_id": 123,
                 "npc_id": 195343,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8650,
+                "mapping_version_id": 123,
+                "npc_id": 195343,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
@@ -2399,10 +2469,24 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 8651,
+                "mapping_version_id": 114,
+                "npc_id": 195343,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 6037,
                 "mapping_version_id": 102,
                 "npc_id": 195343,
                 "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8652,
+                "mapping_version_id": 102,
+                "npc_id": 195343,
+                "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
         ]
