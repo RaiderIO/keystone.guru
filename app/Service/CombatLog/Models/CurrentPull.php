@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Models;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
@@ -13,7 +14,6 @@ use App\Logic\CombatLog\Guid\Evade;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
-use App\Models\Spell;
 use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
@@ -21,6 +21,17 @@ use Illuminate\Support\Collection;
 
 class CurrentPull
 {
+    /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
+    private const DEFEATED_PERCENTAGE = [
+        // Uldaman: Lost Dwarves
+        184580 => 0.1,
+        184581 => 0.1,
+        184582 => 0.1,
+
+        // Uldaman: Chrono-Lord Deios
+        184125 => 0.02,
+    ];
+
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
     /** @var Collection|int[] */
@@ -33,7 +44,7 @@ class CurrentPull
 
     public function __construct(Collection $resultEvents, Collection $validNpcIds)
     {
-        $this->resultEvents = $resultEvents;
+        $this->resultEvents  = $resultEvents;
         $this->validNpcIds   = $validNpcIds;
         $this->currentPull   = collect();
         $this->killedEnemies = collect();
@@ -41,6 +52,7 @@ class CurrentPull
 
     /**
      * @param BaseEvent $combatLogEvent
+     *
      * @return bool
      */
     public function parse(BaseEvent $combatLogEvent): bool
@@ -49,6 +61,7 @@ class CurrentPull
         if ($combatLogEvent instanceof ChallengeModeStart) {
             $this->currentPull          = collect();
             $this->challengeModeStarted = true;
+
             return false;
         }
 
@@ -61,14 +74,15 @@ class CurrentPull
         if ($combatLogEvent instanceof ChallengeModeEnd) {
             $this->currentPull          = collect();
             $this->challengeModeStarted = false;
+
             return false;
         }
 
-        // If a unit has died..
-        if ($combatLogEvent instanceof UnitDied) {
+        // If a unit has died/is defeated
+        if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
-            // And it's part of our current pull (it usually will be but doesn't have to be)
-            if ($this->currentPull->has($destGuid->getGuid())) {
+            // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already
+            if ($this->currentPull->has($destGuid->getGuid()) && $this->killedEnemies->search($destGuid->getGuid()) === false) {
                 // Then we're interested in the first time we saw this enemy
                 $engagedEvent = $this->currentPull->get($destGuid->getGuid());
                 // Push a new result event - we successfully killed this enemy, and it gave count!
@@ -80,6 +94,7 @@ class CurrentPull
 
                 // We have officially killed this enemy
                 $this->killedEnemies->push($combatLogEvent->getGenericData()->getDestGuid());
+
                 return true;
             }
         }
@@ -90,6 +105,7 @@ class CurrentPull
             // Evade means we are no longer in combat with this enemy, so we must drop aggro
             if ($combatLogEvent->getAdvancedData()->getInfoGuid() instanceof Evade) {
                 $this->currentPull->forget($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+
                 return false;
             }
 
@@ -98,10 +114,10 @@ class CurrentPull
             if ($newEnemyGuid !== null) {
                 // If it does we want to keep this event
                 $this->currentPull->put($newEnemyGuid, $combatLogEvent);
+
                 return true;
             }
         }
-
 
         return false;
     }
@@ -129,9 +145,9 @@ class CurrentPull
         }
     }
 
-
     /**
      * @param BaseEvent $combatLogEvent
+     *
      * @return bool
      */
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
@@ -161,12 +177,12 @@ class CurrentPull
             }
         }
 
-
         return true;
     }
 
     /**
      * @param GenericData $genericData
+     *
      * @return string|null
      */
     private function hasGenericDataNewEnemy(GenericData $genericData): ?string
@@ -203,5 +219,56 @@ class CurrentPull
         }
 
         return $result;
+    }
+
+    /**
+     * @param BaseEvent $combatLogEvent
+     *
+     * @return bool
+     */
+    private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
+    {
+        return false;
+
+        //        if (!($combatLogEvent instanceof CombatLogEvent)) {
+        //            return false;
+        //        }
+        //        if (!($combatLogEvent->getSuffix() instanceof AuraApplied)) {
+        //            return false;
+        //        }
+        //        $prefix = $combatLogEvent->getPrefix();
+        //        if (!($prefix instanceof Spell)) {
+        //            return false;
+        //        }
+        //
+        //        return in_array($prefix->getSpellId(), [
+        //            // Recovering... (Uldaman: Legacy of Tyr first boss(es))
+        //            375339,
+        //        ]);
+    }
+
+    /**
+     * @param BaseEvent $combatLogEvent
+     *
+     * @return bool
+     */
+    private function isEnemyDefeated(BaseEvent $combatLogEvent): bool
+    {
+        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+            return false;
+        }
+
+        $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+        if (!($destGuid instanceof Creature)) {
+            return false;
+        }
+
+        if (!isset(self::DEFEATED_PERCENTAGE[$destGuid->getId()])) {
+            return false;
+        }
+
+        $advancedData = $combatLogEvent->getAdvancedData();
+
+        return ($advancedData->getCurrentHP() / $advancedData->getMaxHP()) <= self::DEFEATED_PERCENTAGE[$destGuid->getId()];
     }
 }

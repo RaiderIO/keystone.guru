@@ -59,7 +59,8 @@ class AdminToolsController extends Controller
             $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
 //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
                 base_path(
-                    'WoWCombatLog-050923_172619_7_freehold.zip'
+//                    'WoWCombatLog-050923_172619_7_freehold.zip'
+                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
