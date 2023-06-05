@@ -17,6 +17,7 @@ class CombatLogEvent extends BaseEvent
     /**
      * @param array $parameters
      * @return $this
+     * @throws \Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
     {

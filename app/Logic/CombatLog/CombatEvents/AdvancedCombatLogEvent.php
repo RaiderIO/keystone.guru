@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\CombatEvents;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
+use Exception;
 
 class AdvancedCombatLogEvent extends CombatLogEvent
 {
@@ -13,6 +14,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     /**
      * @param array $parameters
      * @return CombatLogEvent
+     * @throws Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
     {

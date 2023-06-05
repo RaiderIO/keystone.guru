@@ -21,6 +21,7 @@ abstract class Suffix implements HasParameters
     public const SUFFIX_ENERGIZE              = 'ENERGIZE';
     public const SUFFIX_DRAIN                 = 'DRAIN';
     public const SUFFIX_LEECH                 = 'LEECH';
+    public const SUFFIX_EMPOWER_INTERRUPT     = 'EMPOWER_INTERRUPT';
     public const SUFFIX_INTERRUPT             = 'INTERRUPT';
     public const SUFFIX_DISPEL_FAILED         = 'DISPEL_FAILED';
     public const SUFFIX_DISPEL                = 'DISPEL';
@@ -42,6 +43,8 @@ abstract class Suffix implements HasParameters
     public const SUFFIX_CREATE                = 'CREATE';
     public const SUFFIX_SUMMON                = 'SUMMON';
     public const SUFFIX_ENVIRONMENTAL_DAMAGE  = 'ENVIRONMENTAL_DAMAGE';
+    public const SUFFIX_EMPOWER_START         = 'EMPOWER_START';
+    public const SUFFIX_EMPOWER_END           = 'EMPOWER_END';
 
     public const SUFFIX_ALL = [
         self::SUFFIX_DAMAGE_LANDED,
@@ -53,6 +56,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_ENERGIZE,
         self::SUFFIX_DRAIN,
         self::SUFFIX_LEECH,
+        self::SUFFIX_EMPOWER_INTERRUPT,
         self::SUFFIX_INTERRUPT,
         self::SUFFIX_DISPEL_FAILED,
         self::SUFFIX_DISPEL,
@@ -74,6 +78,8 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_CREATE,
         self::SUFFIX_SUMMON,
         self::SUFFIX_ENVIRONMENTAL_DAMAGE,
+        self::SUFFIX_EMPOWER_START,
+        self::SUFFIX_EMPOWER_END,
     ];
 
     private const SUFFIX_CLASS_MAPPING = [
@@ -86,6 +92,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_ENERGIZE              => Energize::class,
         self::SUFFIX_DRAIN                 => Drain::class,
         self::SUFFIX_LEECH                 => Leech::class,
+        self::SUFFIX_EMPOWER_INTERRUPT     => EmpowerInterrupt::class,
         self::SUFFIX_INTERRUPT             => Interrupt::class,
         self::SUFFIX_DISPEL_FAILED         => DispelFailed::class,
         self::SUFFIX_DISPEL                => Dispel::class,
@@ -107,6 +114,8 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_CREATE                => Create::class,
         self::SUFFIX_SUMMON                => Summon::class,
         self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamage::class,
+        self::SUFFIX_EMPOWER_START         => EmpowerStart::class,
+        self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
 
 

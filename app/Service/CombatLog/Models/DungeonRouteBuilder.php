@@ -193,8 +193,11 @@ class DungeonRouteBuilder
                 continue;
             }
 
-            // Ignore teeming enemies..
             if ($availableEnemy->teeming !== null) {
+                continue;
+            }
+
+            if ($availableEnemy->floor_id !== $this->currentFloor->id) {
                 continue;
             }
 
