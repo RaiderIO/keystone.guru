@@ -61,7 +61,8 @@ class AdminToolsController extends Controller
                 base_path(
 //                    'WoWCombatLog-050923_172619_7_freehold.zip'
 //                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
-                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
+//                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
+                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'

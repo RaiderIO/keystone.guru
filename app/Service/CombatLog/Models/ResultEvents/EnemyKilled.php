@@ -2,15 +2,18 @@
 
 namespace App\Service\CombatLog\Models\ResultEvents;
 
-use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\SpecialEvents\UnitDied;
 
 class EnemyKilled extends BaseResultEvent
 {
     /**
-     * @return BaseEvent
+     * @return UnitDied
      */
-    public function getUnitDiedEvent(): BaseEvent
+    public function getUnitDiedEvent(): UnitDied
     {
-        return $this->getBaseEvent();
+        /** @var UnitDied $unitDiedEvent */
+        $unitDiedEvent = $this->getBaseEvent();
+
+        return $unitDiedEvent;
     }
 }

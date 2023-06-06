@@ -137,18 +137,30 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     {
         $this->end(__METHOD__);
     }
-    
+
     /**
-     * @param int|null $id
+     * @param int   $npcId
+     * @param float $ingameX
+     * @param float $ingameY
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int|null $enemyId
      * @param float    $closestEnemyDistance
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $id, float $closestEnemyDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $closestEnemyDistance): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @return void
      */
@@ -156,27 +168,35 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
-     * @param int|null $id
+     * @param int|null $enemyId
      * @param float    $closestEnemyDistance
      * @param int      $maxDistance
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $id, float $closestEnemyDistance, int $maxDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
-    
+
     /**
-     * @param int   $id
+     * @param int   $enemyId
      * @param float $closestEnemyDistance
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $id, float $closestEnemyDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void
+    {
+        $this->end(__METHOD__);
     }
 }

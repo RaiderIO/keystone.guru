@@ -705,7 +705,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
             ->where(function (Builder $builder) {
                 $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
-                    ->orWhere('npcs.classification_id', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]);
+                    ->orWhereIn('npcs.classification_id', [
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]
+                    ]);
             })
             ->get()
             ->pluck('id');
