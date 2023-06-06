@@ -57,10 +57,17 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null)
+    public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
     {
-        $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
-        return $this->viewfloor($request, $dungeon, $dungeonroute, $title ?? '', optional($defaultFloor)->index ?? '1');
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+        return redirect()->route('dungeonroute.view.floor', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'floorindex'   => optional($defaultFloor)->index ?? '1',
+        ]);
     }
 
     /**
@@ -106,10 +113,14 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.view', [
+            /** @var Floor $defaultFloor */
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+            return redirect()->route('dungeonroute.view.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
+                'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
             return view('dungeonroute.view', [
@@ -281,15 +292,22 @@ class DungeonRouteController extends Controller
      * @param Dungeon $dungeon
      * @param DungeonRoute $dungeonroute
      * @param string|null $title
-     * @return Factory|View
+     *
+     * @return \Illuminate\Http\RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null)
+    public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
     {
         /** @var Floor $defaultFloor */
-        $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
-        return $this->editfloor($request, $dungeon, $dungeonroute, $title, optional($defaultFloor)->index ?? '1');
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+        return redirect()->route('dungeonroute.edit.floor', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'floorindex'   => optional($defaultFloor)->index ?? '1',
+        ]);
     }
 
     /**
@@ -324,10 +342,14 @@ class DungeonRouteController extends Controller
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
-            return redirect()->route('dungeonroute.edit', [
+            /** @var Floor $defaultFloor */
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+            return redirect()->route('dungeonroute.edit.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
+                'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
             return view('dungeonroute.edit', [
@@ -336,6 +358,7 @@ class DungeonRouteController extends Controller
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
                 'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+                'floorindex'   => $floorIndex,
             ]);
         }
     }
