@@ -120,7 +120,9 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         // Reset variables
                         $this->resetCurrentChallengeMode();
                     }
-                } else if ($parsedEvent instanceof ChallengeModeStartEvent) {
+                } 
+                // If we're going to start a challenge mode event
+                else if ($parsedEvent instanceof ChallengeModeStartEvent) {
                     $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
 
                     $this->lastChallengeModeStartEvent = $parsedEvent;
@@ -129,7 +131,10 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                     $this->rawEvents->push($this->lastZoneChange);
                     $this->rawEvents->push($this->lastMapChange);
                     $this->rawEvents->push($rawEvent);
-                } else if ($parsedEvent instanceof CombatLogVersionEvent) {
+                } 
+                
+                // Always keep track of these events
+                if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent();
                     $this->lastCombatLogVersion = $rawEvent;
                 } else if ($parsedEvent instanceof ZoneChangeEvent) {
