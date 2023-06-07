@@ -1,11 +1,11 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
@@ -64,46 +64,43 @@ abstract class MapContext
         $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function ()
+        {
             $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons', 'mountableareas']);
 
             $mapIcons = $this->mappingVersion->mapIcons;
 
+            $combatLogFilePath = null;
 
-//            $combatLogFilePath = null;
-//
-//            if ($this->floor->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR) {
-//                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log';
-//            } else if ($this->floor->dungeon->key === Dungeon::DUNGEON_THE_UNDERROT) {
-//                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log';
-//            }
+            if ($this->floor->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR) {
+                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log';
+            } elseif ($this->floor->dungeon->key === Dungeon::DUNGEON_THE_UNDERROT) {
+                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log';
+            } elseif ($this->floor->dungeon->key === Dungeon::DUNGEON_BRACKENHIDE_HOLLOW) {
+                $combatLogFilePath = base_path('WoWCombatLog-060223_181049_20_brackenhide-hollow.zip');
+            }
 
-//            if ($combatLogFilePath !== null) {
-//
-//                try {
-//                    /** @var CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService */
-//                    $combatLogDungeonRouteService = App::make(CombatLogDungeonRouteServiceInterface::class);
-//                    $events                       = $combatLogDungeonRouteService->convertCombatLogToEventsOfEnemiesFirstSightingAndDeaths(
-//                        base_path($combatLogFilePath)
-//                    );
+            if ($combatLogFilePath !== null) {
 
-//                    $events = $combatLogDungeonRouteService->convertCombatLogToEventsOfSpecificEnemy(
-//                        base_path($combatLogFilePath),
-//                        'Creature-0-3886-1458-23501-91000-0000F260EC'
-//                    );
+                try {
+                    /** @var CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService */
+                    $combatLogDungeonRouteService = App::make(CombatLogDungeonRouteServiceInterface::class);
 
-//                    $eventMapIcons                = $combatLogDungeonRouteService->generateMapIconsFromEvents(
-//                        $this->floor->dungeon,
-//                        $this->mappingVersion,
-//                        $events
-//                    );
+                    $resultEvents  = $combatLogDungeonRouteService->getResultEvents($combatLogFilePath);
+                    $dungeonRoute  = $this->context instanceof DungeonRoute ? $this->context : null;
+                    $eventMapIcons = $combatLogDungeonRouteService->generateMapIconsFromEvents(
+                        $this->floor->dungeon,
+                        $this->mappingVersion,
+                        $resultEvents,
+                        $dungeonRoute
+                    );
 
-//                    $mapIcons = $mapIcons->merge($eventMapIcons);
-//
-//                } catch (\Exception $exception) {
-//                    dd($exception);
-//                }
-//            }
+                    $mapIcons = $mapIcons->merge($eventMapIcons);
+
+                } catch (\Exception $exception) {
+                    dd($exception);
+                }
+            }
 
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
@@ -112,7 +109,8 @@ abstract class MapContext
                 'npcs'                      => $dungeon->npcs()->with([
                     'spells',
                     // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                    'enemyForces' => function (HasOne $query) {
+                    'enemyForces' => function (HasOne $query)
+                    {
                         return $query->where('mapping_version_id', $this->mappingVersion->id);
                     },
                 ])->get(),
@@ -125,7 +123,8 @@ abstract class MapContext
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $cacheService->remember('static_data', function () {
+        $static = $cacheService->remember('static_data', function ()
+        {
             return [
                 'mapIconTypes'                      => MapIconType::all(),
                 'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),

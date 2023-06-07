@@ -50,6 +50,10 @@ class APINpcController extends Controller
             ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
             ->groupBy('npcs.id');
+//            ->leftJoin('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
+//            ->whereColumn('enemies.mapping_version_id', 'mapping_versions.id')
+//            ->groupBy('npcs.id', 'mapping_versions.dungeon_id')
+//            ->orderByDesc('mapping_versions.version');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([

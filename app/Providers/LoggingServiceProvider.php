@@ -8,6 +8,8 @@ use App\Service\CombatLog\Logging\CombatLogServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLoggingInterface;
+use App\Service\CombatLog\Logging\CurrentPullLogging;
+use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
@@ -34,6 +36,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
         $this->app->bind(DungeonRouteBuilderLoggingInterface::class, DungeonRouteBuilderLogging::class);
         $this->app->bind(CombatLogSplitServiceLoggingInterface::class, CombatLogSplitServiceLogging::class);
+        $this->app->bind(CurrentPullLoggingInterface::class, CurrentPullLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);

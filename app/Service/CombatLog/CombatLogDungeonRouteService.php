@@ -4,12 +4,9 @@ namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
-use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
@@ -62,6 +59,23 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         $this->seasonService    = $seasonService;
         $this->log              = $log;
     }
+    /**
+     * @param string $combatLogFilePath
+     *
+     * @return Collection
+     * @throws AdvancedLogNotEnabledException
+     * @throws DungeonNotSupportedException
+     * @throws NoChallangeModeStartFoundException
+     */
+    public function getResultEvents(string $combatLogFilePath): Collection
+    {
+        ini_set('memory_limit', '2G');
+        $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
+
+        $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
+
+        return (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
+    }
 
     /**
      * @param string $combatLogFilePath
@@ -80,14 +94,23 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
 
         $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
+
         $resultEvents = (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
 
 //        dd($resultEvents->map(function (BaseResultEvent $resultEvent)
 //        {
 //            if ($resultEvent instanceof EnemyEngaged) {
-//                return sprintf('%s: %s', get_class($resultEvent), $resultEvent->getGuid()->getGuid());
+//                return sprintf('%s: %s -> %s',
+//                    $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
+//                    get_class($resultEvent),
+//                    $resultEvent->getGuid()->getGuid()
+//                );
 //            } elseif ($resultEvent instanceof EnemyKilled) {
-//                return sprintf('%s: %s', get_class($resultEvent), $resultEvent->getUnitDiedEvent()->getGenericData()->getDestGuid()->getGuid());
+//                return sprintf('%s: %s -> %s',
+//                    $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
+//                    get_class($resultEvent),
+//                    $resultEvent->getUnitDiedEvent()->getGenericData()->getDestGuid()->getGuid()
+//                );
 //            } else {
 //                return get_class($resultEvent);
 //            }
@@ -291,36 +314,44 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     //    }
 
     /**
-     * @param Dungeon                             $dungeon
-     * @param MappingVersion                      $mappingVersion
-     * @param Collection|AdvancedCombatLogEvent[] $combatLogEvents
+     * @param Dungeon                      $dungeon
+     * @param MappingVersion               $mappingVersion
+     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param DungeonRoute|null            $dungeonRoute
      *
      * @return Collection
      */
-    public function generateMapIconsFromEvents(Dungeon $dungeon, MappingVersion $mappingVersion, Collection $combatLogEvents): Collection
-    {
+    public function generateMapIconsFromEvents(
+        Dungeon $dungeon,
+        MappingVersion $mappingVersion,
+        Collection $resultEvents,
+        ?DungeonRoute $dungeonRoute = null
+    ): Collection {
         $result = collect();
 
         $id           = 10000000;
         $currentFloor = null;
-        foreach ($combatLogEvents as $combatLogEvent) {
-            if ($combatLogEvent instanceof MapChange) {
+        foreach ($resultEvents as $resultEvent) {
+            if ($resultEvent instanceof MapChangeResultEvent) {
                 try {
-                    $currentFloor = Floor::where('ui_map_id', $combatLogEvent->getUiMapID())->firstOrFail();
+                    $currentFloor = Floor
+                        ::where('ui_map_id', $resultEvent->getMapChangeEvent()->getUiMapID())
+                        ->firstOrFail();
                 } catch (Exception $exception) {
-                    dd($combatLogEvent->getUiMapID());
+                    dd($resultEvent->getMapChangeEvent()->getUiMapID());
                 }
                 continue;
             } elseif ($currentFloor === null) {
                 continue;
-            } elseif ($combatLogEvent instanceof ChallengeModeEnd) {
+            } elseif ($resultEvent instanceof ChallengeModeEndResultEvent) {
                 break;
-            } elseif (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+            } elseif (!($resultEvent->getBaseEvent() instanceof AdvancedCombatLogEvent)) {
                 // Non-advanced combat logs don't have the info we need
                 continue;
             }
 
             /** @var AdvancedCombatLogEvent $combatLogEvent */
+            $combatLogEvent = $resultEvent->getBaseEvent();
 
             $latLng = $currentFloor->calculateMapLocationForIngameLocation(
                 $combatLogEvent->getAdvancedData()->getPositionX(),
@@ -330,7 +361,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             $comment    = '';
             $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
             $destGuid   = $combatLogEvent->getGenericData()->getDestGuid();
-            if ($sourceGuid instanceof Creature) {
+            if ($sourceGuid instanceof Creature && $sourceGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
                 $comment = sprintf(
                     '%s: source: %s -> %s @ %s,%s',
                     $combatLogEvent->getTimestamp()->toDateTimeString('millisecond'),
@@ -353,7 +384,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             $mapIcon = new MapIcon([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => null,
+                'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
                 'lat'                => $latLng['lat'],

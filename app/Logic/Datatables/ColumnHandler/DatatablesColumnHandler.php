@@ -67,10 +67,12 @@ abstract class DatatablesColumnHandler
     }
 
     /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     *
      * @return $this
-     * @throws Exception
+     * @throws \Exception
      */
-    public function applyToBuilder(): self
+    public function applyToBuilder(Builder $builder): self
     {
         $request = $this->dtHandler->getRequest();
 
@@ -100,7 +102,7 @@ abstract class DatatablesColumnHandler
             $order = $order['column'] == $columnIndex ? $order : null;
 
             // Handle the filtering of this column
-            $this->applyFilter($this->dtHandler->getBuilder(), $column, $order, $generalSearch);
+            $this->applyFilter($builder, $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
 

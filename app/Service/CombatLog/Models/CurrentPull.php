@@ -14,10 +14,12 @@ use App\Logic\CombatLog\Guid\Evade;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
+use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
 use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 class CurrentPull
 {
@@ -41,6 +43,8 @@ class CurrentPull
 
     /** @var bool */
     private bool $challengeModeStarted = false;
+    /** @var CurrentPullLoggingInterface */
+    protected $log;
 
     public function __construct(Collection $resultEvents, Collection $validNpcIds)
     {
@@ -48,6 +52,10 @@ class CurrentPull
         $this->validNpcIds   = $validNpcIds;
         $this->currentPull   = collect();
         $this->killedEnemies = collect();
+
+        /** @var CurrentPullLoggingInterface $log */
+        $log       = App::make(CurrentPullLoggingInterface::class);
+        $this->log = $log;
     }
 
     /**
@@ -59,6 +67,7 @@ class CurrentPull
     {
         // First, we wait for the challenge mode to start
         if ($combatLogEvent instanceof ChallengeModeStart) {
+            $this->log->parseChallengeModeStarted();
             $this->currentPull          = collect();
             $this->challengeModeStarted = true;
 
@@ -72,6 +81,7 @@ class CurrentPull
 
         // If we ended it, stop all processing and drop combat of all enemies
         if ($combatLogEvent instanceof ChallengeModeEnd) {
+            $this->log->parseChallengeModeEnded();
             $this->currentPull          = collect();
             $this->challengeModeStarted = false;
 
@@ -81,6 +91,7 @@ class CurrentPull
         // If a unit has died/is defeated
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+            $this->log->parseUnitDied($destGuid->getGuid());
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already
             if ($this->currentPull->has($destGuid->getGuid()) && $this->killedEnemies->search($destGuid->getGuid()) === false) {
                 // Then we're interested in the first time we saw this enemy
@@ -95,6 +106,8 @@ class CurrentPull
                 // We have officially killed this enemy
                 $this->killedEnemies->push($combatLogEvent->getGenericData()->getDestGuid());
 
+                $this->log->parseUnitInCurrentPullKilled($destGuid->getGuid());
+
                 return true;
             }
         }
@@ -105,6 +118,7 @@ class CurrentPull
             // Evade means we are no longer in combat with this enemy, so we must drop aggro
             if ($combatLogEvent->getAdvancedData()->getInfoGuid() instanceof Evade) {
                 $this->currentPull->forget($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+                $this->log->parseUnitEvadedRemovedFromCurrentPull($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
 
                 return false;
             }
@@ -114,6 +128,7 @@ class CurrentPull
             if ($newEnemyGuid !== null) {
                 // If it does we want to keep this event
                 $this->currentPull->put($newEnemyGuid, $combatLogEvent);
+                $this->log->parseUnitAddedToCurrentPull($newEnemyGuid);
 
                 return true;
             }

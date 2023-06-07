@@ -61,16 +61,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      *
      * @return void
      */
-    public function buildNoEnemyFoundToPutInCombat(string $guid): void
-    {
-        $this->warning(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @param string $guid
-     *
-     * @return void
-     */
     public function buildUnitDiedNoLongerInCombat(string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -105,17 +95,15 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-
+    
     /**
-     * @param int   $npcId
-     * @param float $ingameX
-     * @param float $ingameY
+     * @param string $guid
      *
      * @return void
      */
-    public function buildEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void
+    public function createPullFindEnemyForGuidStart(string $guid): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__, get_defined_vars());
     }
 
     /**
@@ -125,7 +113,27 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      *
      * @return void
      */
-    public function buildEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void
+    public function createPullEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @return void
+     */
+    public function createPullFindEnemyForGuidEnd(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    /**
+     * @param int   $npcId
+     * @param float $ingameX
+     * @param float $ingameY
+     *
+     * @return void
+     */
+    public function createPullEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -148,6 +156,18 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void
     {
         $this->start(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int $id
+     * @param int $closestEnemyDistance
+     * @param int $group
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     /**

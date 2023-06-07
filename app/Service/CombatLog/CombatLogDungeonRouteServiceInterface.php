@@ -9,7 +9,14 @@ use Illuminate\Support\Collection;
 
 interface CombatLogDungeonRouteServiceInterface
 {
+    public function getResultEvents(string $combatLogFilePath): Collection;
+    
     public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute;
 
-    public function generateMapIconsFromEvents(Dungeon $dungeon, MappingVersion $mappingVersion, Collection $combatLogEvents): Collection;
+    public function generateMapIconsFromEvents(
+        Dungeon $dungeon, 
+        MappingVersion $mappingVersion, 
+        Collection $resultEvents,
+        ?DungeonRoute $dungeonRoute = null
+    ): Collection;
 }
