@@ -4,11 +4,13 @@ namespace App\Service\CombatLog\Models;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Evade;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
@@ -36,9 +38,17 @@ class CurrentPull
 
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
+
     /** @var Collection|int[] */
     private Collection $validNpcIds;
+
+    /** @var Collection|string[] List of GUIDs for all enemies that we are currently in combat with. */
     private Collection $currentPull;
+
+    /** @var Collection|string[] List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
+    private Collection $summonedEnemies;
+
+    /** @var Collection|string[] List of GUIDs for all enemies that we have currently killed. */
     private Collection $killedEnemies;
 
     /** @var bool */
@@ -48,10 +58,11 @@ class CurrentPull
 
     public function __construct(Collection $resultEvents, Collection $validNpcIds)
     {
-        $this->resultEvents  = $resultEvents;
-        $this->validNpcIds   = $validNpcIds;
-        $this->currentPull   = collect();
-        $this->killedEnemies = collect();
+        $this->resultEvents    = $resultEvents;
+        $this->validNpcIds     = $validNpcIds;
+        $this->currentPull     = collect();
+        $this->summonedEnemies = collect();
+        $this->killedEnemies   = collect();
 
         /** @var CurrentPullLoggingInterface $log */
         $log       = App::make(CurrentPullLoggingInterface::class);
@@ -92,8 +103,10 @@ class CurrentPull
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
             $this->log->parseUnitDied($destGuid->getGuid());
-            // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already
-            if ($this->currentPull->has($destGuid->getGuid()) && $this->killedEnemies->search($destGuid->getGuid()) === false) {
+            // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
+            if ($this->currentPull->has($destGuid->getGuid()) &&
+                $this->killedEnemies->search($destGuid->getGuid()) === false &&
+                $this->summonedEnemies->search($destGuid->getGuid()) === false) {
                 // Then we're interested in the first time we saw this enemy
                 $engagedEvent = $this->currentPull->get($destGuid->getGuid());
                 // Push a new result event - we successfully killed this enemy, and it gave count!
@@ -104,21 +117,31 @@ class CurrentPull
                 $this->currentPull->forget($destGuid->getGuid());
 
                 // We have officially killed this enemy
-                $this->killedEnemies->push($combatLogEvent->getGenericData()->getDestGuid());
+                $this->killedEnemies->push($destGuid);
 
                 $this->log->parseUnitInCurrentPullKilled($destGuid->getGuid());
 
                 return true;
             }
         }
+        
+        // Specially handle summons
+        if ($combatLogEvent instanceof CombatLogEvent && $combatLogEvent->getSuffix() instanceof Summon) {
+            $this->summonedEnemies->push($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+            $this->log->parseUnitSummoned($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+
+            return false;
+        }
 
         // Ignore all irrelevant non-combat events going forward
         if ($this->isEnemyCombatLogEntry($combatLogEvent)) {
             /** @var AdvancedCombatLogEvent $combatLogEvent */
+            $destGuid = $combatLogEvent->getGenericData()->getDestGuid()->getGuid();
+
             // Evade means we are no longer in combat with this enemy, so we must drop aggro
             if ($combatLogEvent->getAdvancedData()->getInfoGuid() instanceof Evade) {
-                $this->currentPull->forget($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
-                $this->log->parseUnitEvadedRemovedFromCurrentPull($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+                $this->currentPull->forget($destGuid);
+                $this->log->parseUnitEvadedRemovedFromCurrentPull($destGuid);
 
                 return false;
             }

@@ -41,6 +41,16 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    /**
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitSummoned(string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
     
     /**
      * @param string $guid
